@@ -1,0 +1,56 @@
+.nav_container{
+  position: relative;
+}
+
+.nav_content{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+}
+
+.status_bar{
+  height: 40rpx;
+}
+
+.nav_bar{
+  min-height: 88rpx;
+}
+
+.nav_default{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.back_icon{
+  position: absolute;
+  top: 28rpx;
+  left: 20rpx;
+}
+
+.back_icon_home{
+  top: 16rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 174rpx;
+  height: 64rpx;
+  border: 4rpx solid #ddd;
+  border-radius: 64rpx;
+}
+
+.back_icon_line{
+  width: 4rpx;
+  height: 36rpx;
+  margin-right: 20rpx;
+  margin-left: 10rpx;
+  background-color: #333;
+}
+
+.nav_title{
+  text-align: center;
+  line-height: 60rpx;
+}

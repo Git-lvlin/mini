@@ -1,0 +1,8 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "nav-bar": "/components/common/nav-bar/index",
+    "van-image": "/miniprogram_npm/@vant/weapp/image/index",
+    "custom-scroll": "/components/common/custom-scroll/index"
+  }
+}

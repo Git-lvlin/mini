@@ -1,0 +1,25 @@
+
+/*单行溢出省略*/
+.text_one_line {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  word-break: break-all;
+}
+
+/* 多行省略号 */
+.text_two_line {
+  word-break: break-all;
+  white-space: normal;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  overflow: hidden;
+}
+
+.img_middle{
+  vertical-align: middle;
+}
