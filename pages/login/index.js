@@ -10,7 +10,7 @@ create.Page(store, {
   ],
 
   data: {
-    showTreaty: true,
+    showTreaty: false,
   },
 
   onLoad(options) {
