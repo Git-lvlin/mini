@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/login/index",
+    "pages/user/index",
     "pages/list/index"
   ],
   "subpackages": [
@@ -26,7 +27,7 @@
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "Weixin",
+    "navigationBarTitleText": "约购",
     "navigationBarTextStyle": "black"
   },
   "style": "v2",

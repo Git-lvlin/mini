@@ -1,0 +1,24 @@
+<view >
+  <van-button open-type="getUserInfo" type="primary" bind:getuserinfo="handleGetUerInfo" wx:if="{{!userAuth}}">授权登录</van-button>
+  <van-panel 
+    title="用户信息"
+    custom-class="panel_title"
+    wx:else="{{!userAuth}}"
+  >
+    <van-cell-group custom-class="cell_group_title">
+      <van-cell 
+        title="昵称" 
+        value="{{userInfo.nickName}}" 
+        bind:click="onClickHead"
+      />
+      <van-cell title="头像" center custom-class="cell_back">
+        <van-image fit="cover" custom-class="avatar_image" round width="60" height="60" src="{{userInfo.avatarUrl}}" data-src="{{userInfo.avatarUrl}}" bind:click="onClickImg" />
+        <!-- <image mode="scaleToFill" style="width: 120rpx;height:120rpx;border-radius: 50%" src="{{userInfo.avatarUrl}}" /> -->
+      </van-cell>
+      <van-cell title="地区" value="{{userInfo.country + userInfo.province + userInfo.city}}" border="{{ false }}" />
+      <van-cell title="全局变量" value="{{motto}}" bind:click="onClickOther"/>
+      <!-- <van-cell title="全局变量" value="{{title}}" /> -->
+    </van-cell-group>
+  </van-panel>
+</view>
+

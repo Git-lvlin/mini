@@ -5,24 +5,27 @@ import day from 'dayjs'
 import { getList } from '../../apis/home'
 
 create.Page(store, {
+
+  /**
+   * 页面的初始数据
+   */
   use: [
     'motto'
   ],
 
-  data: {
-    showTreaty: true,
-  },
-
-  onLoad(options) {
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function (options) {
     this.getUserSetting();
   },
   
   // 进入页面获取用户授权情况
-  getUserSetting() {
+  getUserSetting () {
     var that = this;
     //查看是否授权
     wx.getSetting({
-      success(res) {
+      success: function(res) {
         if (res.authSetting['scope.userInfo']) {
           console.log("用户授权了");
           wx.getUserInfo({
@@ -52,24 +55,30 @@ create.Page(store, {
   },
 
   // 获取用户openid 登录
-  getCodeLogin(userInfo) {
+  getCodeLogin (userInfo) {
     console.log(userInfo);
     this.setData({ userAuth : true, userInfo: userInfo})
   },
 
-  // 关闭条款弹窗
-  onClickTreaty() {
-    console.log(this)
-    this.setData({
-      showTreaty: true
+  // 点击图片
+  onClickImg(event) {
+    console.log(event);
+    wx.previewImage({
+      urls: [event.target.dataset.src] // 需要预览的图片http链接列表
     })
   },
 
-  // 关闭条款弹窗
-  onCloseTreaty() {
-    this.setData({
-      showTreaty: false
+  // 点击头部
+  onClickHead() {
+    wx.navigateTo({
+      url: '/dokit/index/index',
+    })
+  },
+
+  // 点击全局
+  onClickOther() {
+    router.push({
+      name: "list"
     })
   }
-
 })
