@@ -1,0 +1,3 @@
+<!--pages/home/index.wxml-->
+<text>首页</text>
+<view bindtap="onToClass" >跳转分类页</view>

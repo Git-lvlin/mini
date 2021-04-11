@@ -1,0 +1,10 @@
+{
+  "usingComponents": {
+    "van-button": "/miniprogram_npm/@vant/weapp/button/index",
+    "van-radio": "/miniprogram_npm/@vant/weapp/radio/index",
+    "van-radio-group": "/miniprogram_npm/@vant/weapp/radio-group/index",
+    "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
+    "van-image": "/miniprogram_npm/@vant/weapp/image/index",
+    "treaty-popup": "/components/common/treaty-popup/index"
+  }
+}

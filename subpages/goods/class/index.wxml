@@ -1,0 +1,7 @@
+<view class="container">
+  <nav-bar titleIsSearch useCustomBack >
+    <view slot="slot_back" class="back"></view>
+  </nav-bar>
+
+  <view class="content">分类</view>
+</view>

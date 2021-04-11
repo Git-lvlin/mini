@@ -1,0 +1,16 @@
+/* pages/login/login.wxss */
+.panel_title{
+  font-weight: bold;
+}
+
+.cell_group_title{
+  font-weight: normal;
+}
+
+.cell_back{
+  /* background-color: gray !important; */
+}
+
+.avatar_image{
+  vertical-align: middle;
+}

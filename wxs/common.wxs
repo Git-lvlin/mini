@@ -1,0 +1,11 @@
+var IMG_CDN = "http://dev-yeahgo-oss.waiad.icu/"
+
+// 格式化图片路径
+var getImgUrl = function (url) {
+  return IMG_CDN + url;
+}
+
+
+module.exports = {
+  getImgUrl: getImgUrl,
+}

@@ -1,0 +1,40 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="container">
+  <view class="header">
+    <van-image width="72rpx" height="72rpx" src="{{tools.getImgUrl('miniprogram/common/wechat.png')}}" custom-class="bind_right" />
+    <van-image width="48rpx" height="48rpx" src="{{tools.getImgUrl('miniprogram/common/link.png')}}" custom-class="bind_right" />
+    <van-image width="72rpx" height="72rpx" src="{{tools.getImgUrl('miniprogram/common/logo.png')}}" />
+  </view>
+  <view class="bind">
+    <view class="input">
+      <input type="number" class="input_num" placeholder-class="input_num_pla" placeholder="请输入手机号" />
+    </view>
+    <view class="phone_code">
+      <view class="code_list">
+        <input type="number" maxlength="1" class="code_item" data-index="1" bindtap="onInputCode"/>
+        <input type="number" maxlength="1" class="code_item" data-index="2" bindtap="onInputCode" />
+        <input type="number" maxlength="1" class="code_item" data-index="3" bindtap="onInputCode"/>
+        <input type="number" maxlength="1" class="code_item" data-index="4" bindtap="onInputCode"/>
+      </view>
+      <view class="get_code">获取验证码</view>
+      <input hidden type="number" focus="{{inputFocus}}" bindinput="handleInputCode"/>
+    </view>
+    <van-button
+      color="#E5352F"
+      custom-class="login_btn"
+      open-type="getUserInfo"
+      type="primary"
+      block
+      loading-type="spinner"
+      loading-text="绑定中..."
+      bind:getuserinfo="handleGetUerInfo"
+    >完成绑定</van-button>
+    <button class="get_phone" bind:getphonenumber="handleGetPhone" open-type="getPhoneNumber">获取手机号，快速绑定</button>
+  </view>
+  <view class="help">
+    <van-icon name="{{tools.getImgUrl('miniprogram/common/ask.png')}}" size="32rpx" custom-class="icon" />
+    <text class="text">帮助</text>
+  </view>
+</view>
+
