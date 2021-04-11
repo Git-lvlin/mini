@@ -1,7 +1,11 @@
 {
   "pages": [
-    "pages/login/index",
+    "pages/home/index",
+    "pages/community/index",
+    "pages/cart/index",
     "pages/user/index",
+    "pages/login/main/index",
+    "pages/login/bindPhone/index",
     "pages/list/index"
   ],
   "subpackages": [
@@ -16,12 +20,43 @@
         "index/index",
         "debug/debug"
       ]
+    },
+    {
+      "root": "subpages/goods",
+      "pages": [
+        "detail/index",
+        "class/index"
+      ]
+    },
+    {
+      "root": "subpages/community",
+      "pages": [
+        "main/index"
+      ]
+    },
+    {
+      "root": "subpages/cart",
+      "pages": [
+        "main/index"
+      ]
+    },
+    {
+      "root": "subpages/user",
+      "pages": [
+        "main/index"
+      ]
     }
   ],
   "preloadRule": {
-    "pages/login/index": {
+    "pages/home/index": {
       "network": "all",
-      "packages": ["dokit"]
+      "packages": [
+        "subpages/goods",
+        "subpages/community",
+        "subpages/user",
+        "subpages/cart",
+        "dokit"
+      ]
     }
   },
   "window": {
@@ -29,6 +64,38 @@
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "约购",
     "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#000000",
+    "selectedColor": "#000000",
+    "backgroundColor": "#000000",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "",
+        "selectedIconPath": ""
+      },
+      {
+        "pagePath": "pages/community/index",
+        "text": "社区",
+        "iconPath": "",
+        "selectedIconPath": ""
+      },
+      {
+        "pagePath": "pages/cart/index",
+        "text": "购物车",
+        "iconPath": "",
+        "selectedIconPath": ""
+      },
+      {
+        "pagePath": "pages/user/index",
+        "text": "我的",
+        "iconPath": "",
+        "selectedIconPath": ""
+      }
+    ]
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"

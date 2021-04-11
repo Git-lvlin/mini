@@ -3,6 +3,10 @@ import create from '../../../utils/create'
 import store from '../../../store/index'
 
 create.Component(store, {
+  options: {
+    // 在组件定义时的选项中启用多slot支持
+    multipleSlots: true
+  },
   use: [
     "systemInfo"
   ],
@@ -15,6 +19,7 @@ create.Component(store, {
       type: Boolean,
       value: false
     },
+    // 导航栏文字颜色
     fontColor: {
       type: String,
       value: "#fff"
@@ -31,6 +36,21 @@ create.Component(store, {
       observer(now, old) {
         if(now != old) this.setStatusBarColor();
       }
+    },
+    // 导航栏标题
+    title: {
+      type: String,
+      value: "约购"
+    },
+    // 导航栏是否显示搜索框
+    titleIsSearch: {
+      type: Boolean,
+      value: false
+    },
+    // 是否自定义背景
+    useCustomBack: {
+      type: Boolean,
+      value: false
     },
     // 是否显示搜索框
     showSearch: {

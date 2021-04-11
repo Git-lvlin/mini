@@ -13,14 +13,14 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/login/index",
-          "pathName": "pages/login/index",
+          "name": "pages/list/index",
+          "pathName": "pages/list/index",
           "query": "",
           "scene": null
         },
         {
-          "name": "pages/list/index",
-          "pathName": "pages/list/index",
+          "name": "分类页",
+          "pathName": "subpages/goods/class/index",
           "query": "",
           "scene": null
         }
