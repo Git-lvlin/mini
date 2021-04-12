@@ -10,9 +10,15 @@ export const getBaseApiUrl = () => {
 export const getSystemInfo = () => {
   let systemInfo = {}
   let data = wx.getSystemInfoSync();
+  // 得到右上角菜单的位置尺寸
+  const menuButtonObject = wx.getMenuButtonBoundingClientRect();
+  const { top, height } = menuButtonObject;
+  let rpxRatio = 750/data.windowWidth;
   systemInfo = {
     // 像素比
     pixelRatio: data.pixelRatio,
+    // 宽度像素比
+    rpxRatio,
     // 屏幕宽度 px
     screenWidth: data.screenWidth,
     // 屏幕高度 px
@@ -29,16 +35,16 @@ export const getSystemInfo = () => {
     SDKVersion: data.SDKVersion,
     // 在竖屏正方向下的安全区域
     safeArea: data.safeArea,
+    // 右上角按钮参数 px
+    menuButton: menuButtonObject,
     // 操作系统及版本
     system: data.system
   };
-  // 得到右上角菜单的位置尺寸
-  const menuButtonObject = wx.getMenuButtonBoundingClientRect();
-  const { top, height } = menuButtonObject;
   // 计算导航栏的高度
-  // 此高度基于右上角菜单在导航栏位置垂直居中计算得到
-  systemInfo.navBarHeight = height + (top - systemInfo.statusBarHeight) * 2;
-  systemInfo.statusHeight = systemInfo.statusBarHeight * 2;
+  // 此高度基于右上角菜单在导航栏位置垂直居中计算得到 单位rpx
+  systemInfo.navBarHeight = (height + (top - systemInfo.statusBarHeight) * 2) * rpxRatio;
+  systemInfo.statusHeight = systemInfo.statusBarHeight * rpxRatio;
+  systemInfo.navTotalHeight = systemInfo.statusHeight + systemInfo.navBarHeight;
   if(data.system.indexOf("iOS")) {
     // iOS 苹果手机
     systemInfo.phoneType = 1

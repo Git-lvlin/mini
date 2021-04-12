@@ -74,28 +74,31 @@
       {
         "pagePath": "pages/home/index",
         "text": "首页",
-        "iconPath": "",
-        "selectedIconPath": ""
+        "iconPath": "/images/tabbar/home@3x.png",
+        "selectedIconPath": "/images/tabbar/actHome@3x.png"
       },
       {
         "pagePath": "pages/community/index",
         "text": "社区",
-        "iconPath": "",
-        "selectedIconPath": ""
+        "iconPath": "/images/tabbar/community@3x.png",
+        "selectedIconPath": "/images/tabbar/actCommunity@3x.png"
       },
       {
         "pagePath": "pages/cart/index",
         "text": "购物车",
-        "iconPath": "",
-        "selectedIconPath": ""
+        "iconPath": "/images/tabbar/cart@3x.png",
+        "selectedIconPath": "/images/tabbar/actCart@3x.png"
       },
       {
         "pagePath": "pages/user/index",
         "text": "我的",
-        "iconPath": "",
-        "selectedIconPath": ""
+        "iconPath": "/images/tabbar/me@3x.png",
+        "selectedIconPath": "/images/tabbar/actMe@3x.png"
       }
     ]
+  },
+  "usingComponents": {
+    "van-image": "/miniprogram_npm/@vant/weapp/image/index"
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"

@@ -75,7 +75,7 @@ create.Component(store, {
 
   ready() {
     // 设置nav区域占位高度
-    let navTotalHeight = this.data.$.systemInfo.statusBarHeight + this.data.$.systemInfo.navBarHeight;
+    let navTotalHeight = this.data.$.systemInfo.navTotalHeight;
     navTotalHeight = this.properties.showSearch ? navTotalHeight + 54 : navTotalHeight
     this.setData({
       navTotalHeight

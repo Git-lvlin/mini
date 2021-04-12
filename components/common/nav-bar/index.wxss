@@ -11,16 +11,20 @@
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 5;
   width: 100%;
   z-index: 9999;
+  overflow: hidden;
 }
 
 .status_bar{
+  position: relative;
+  z-index: 2;
   height: 40rpx;
 }
 
 .nav_bar{
+  position: relative;
+  z-index: 3;
   min-height: 88rpx;
 }
 
