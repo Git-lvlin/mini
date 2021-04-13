@@ -25,7 +25,8 @@
       "root": "subpages/goods",
       "pages": [
         "detail/index",
-        "class/index"
+        "class/index",
+        "search/index"
       ]
     },
     {

@@ -1,4 +1,4 @@
-
+import router from '../../utils/router'
 
 Page({
 
@@ -30,8 +30,14 @@ Page({
 
   // 
   onToClass() {
-    wx.navigateTo({
-      url: '/subpages/goods/class/index',
+    router.push({
+      name: 'classList',
     });
-  }
+  },
+
+  onToDetail() {
+    router.push({
+      name: 'detail',
+    });
+  },
 })

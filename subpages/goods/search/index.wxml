@@ -1,0 +1,50 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="container">
+  <view class="search_content">
+    <van-search
+      value="{{ value }}"
+      shape="round"
+      use-action-slot
+      use-left-icon-slot
+      placeholder="搜索想要的商品"
+    >
+      <image slot="left-icon" class="search_icon" src="{{tools.getImgUrl('miniprogram/common/search@2x.png')}}" />
+      <view slot="action" bind:tap="onSearch">搜索</view>
+    </van-search>
+  </view>
+  <view class="search_history">
+    <view class="history_clear">
+      <view class="title">历史记录</view>
+      <view class="clear">
+        <image class="clear_icon" src="{{tools.getImgUrl('miniprogram/common/delete@2x.png')}}" />
+        清空
+      </view>
+    </view>
+    <view class="option_list">
+      <view class="item">大白菜</view>
+      <view class="item">大白菜白</view>
+      <view class="item">大白菜</view>
+      <view class="item">大白菜白</view>
+      <view class="item">大白菜白白白</view>
+      <view class="item">大白菜白</view>
+      <view class="item">大白菜白白白白白白白白</view>
+      <view class="item">大白菜白</view>
+      <view class="item">大白菜白</view>
+    </view>
+    <view class="hot_search">
+      <view class="hot_title">热门搜索</view>
+      <view class="option_list">
+        <view class="item"><image class="icon" src="{{tools.getImgUrl('miniprogram/cart/hot.png')}}" />大白菜</view>
+        <view class="item"><image class="icon" src="{{tools.getImgUrl('miniprogram/cart/hot.png')}}" />大白菜白</view>
+        <view class="item"><image class="icon" src="{{tools.getImgUrl('miniprogram/cart/hot.png')}}" />大白菜</view>
+        <view class="item"><image class="icon" src="{{tools.getImgUrl('miniprogram/cart/hot.png')}}" />大白菜白</view>
+        <view class="item">大白菜白白白</view>
+        <view class="item">大白菜白</view>
+        <view class="item">大白菜白白白白白白白白</view>
+        <view class="item">大白菜白</view>
+        <view class="item">大白菜白</view>
+      </view>
+    </view>
+  </view>
+</view>

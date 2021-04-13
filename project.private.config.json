@@ -23,6 +23,17 @@
           "pathName": "subpages/goods/class/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "搜索",
+          "pathName": "subpages/goods/search/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "商品详情",
+          "pathName": "subpages/goods/detail/index",
+          "scene": null
         }
       ]
     }

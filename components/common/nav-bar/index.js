@@ -1,6 +1,7 @@
 
 import create from '../../../utils/create'
 import store from '../../../store/index'
+import router from '../../../utils/router'
 
 create.Component(store, {
   options: {
@@ -125,5 +126,11 @@ create.Component(store, {
         },
       })
     },
+
+    onToSearch() {
+      router.push({
+        name: 'search'
+      })
+    }
   }
 })

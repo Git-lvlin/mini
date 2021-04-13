@@ -14,7 +14,7 @@
           </block>
         </view>
         <view class="nav_title" wx:if="{{!titleIsSearch}}">{{title}}</view>
-        <view class="head_search" wx:if="{{titleIsSearch}}">
+        <view class="head_search" wx:if="{{titleIsSearch}}" bindtap="onToSearch" >
           <image class="search_icon" src="{{tools.getImgUrl('miniprogram/common/search%402x.png')}}" />
           <text>搜索</text>
         </view>

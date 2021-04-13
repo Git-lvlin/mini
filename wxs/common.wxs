@@ -5,7 +5,19 @@ var getImgUrl = function (url) {
   return IMG_CDN + url;
 }
 
+// 拆解价格
+var getPriceSplit = function (price, type) {
+  var str = price.toString();
+  var strArr = str.split(".");
+  if(!type) {
+    return strArr[0];
+  } else {
+    return !!strArr[1] ? "." + strArr[1] : "";
+  }
+}
+
 
 module.exports = {
   getImgUrl: getImgUrl,
+  getPriceSplit: getPriceSplit,
 }

@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "商品搜索",
+  "usingComponents": {
+    "van-search": "/miniprogram_npm/@vant/weapp/search/index"
+  }
+}

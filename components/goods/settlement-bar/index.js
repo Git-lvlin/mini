@@ -31,7 +31,7 @@ create.Component(store, {
     const {
       systemInfo
     } = this.data.$;
-    let bottomBarHeight = (systemInfo.windowHeight - systemInfo.safeArea.bottom) * systemInfo.rpxRatio + 104;
+    let bottomBarHeight = systemInfo.bottomBarHeight + 104;
     this.setData({
       bottomBarHeight
     });
