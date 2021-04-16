@@ -1,4 +1,4 @@
-// subpages/goods/search/index.js
+
 Page({
 
   /**

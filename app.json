@@ -22,14 +22,6 @@
       ]
     },
     {
-      "root": "subpages/goods",
-      "pages": [
-        "detail/index",
-        "class/index",
-        "search/index"
-      ]
-    },
-    {
       "root": "subpages/community",
       "pages": [
         "main/index"
@@ -38,7 +30,11 @@
     {
       "root": "subpages/cart",
       "pages": [
-        "main/index"
+        "main/index",
+        "create/index",
+        "detail/index",
+        "class/index",
+        "search/index"
       ]
     },
     {
@@ -52,7 +48,6 @@
     "pages/home/index": {
       "network": "all",
       "packages": [
-        "subpages/goods",
         "subpages/community",
         "subpages/user",
         "subpages/cart",

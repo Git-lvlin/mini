@@ -15,6 +15,7 @@ export default {
   user: {
     path: "/subpagespages/user/index",
   },
+
   // 登录
   login: {
     path: "/pages/login/main/index"
@@ -23,18 +24,26 @@ export default {
   bindPhone: {
     path: "/pages/login/bindPhone/index"
   },
+
+  
   // 分类列表
   classList: {
-    path: "/subpages/goods/class/index"
+    path: "/subpages/cart/class/index"
   },
   // 搜索
   search: {
-    path: "/subpages/goods/search/index"
+    path: "/subpages/cart/search/index"
   },
   // 商品详情
   detail: {
-    path: "/subpages/goods/detail/index"
+    path: "/subpages/cart/detail/index"
   },
+  // 创建订单
+  createOrder: {
+    path: "/subpages/cart/create/index"
+  },
+
+
   list: {
     path: "/pages/list/index"
   }

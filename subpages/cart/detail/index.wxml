@@ -93,5 +93,7 @@
 
   <view style="height: {{$.systemInfo.bottomBarHeight + 104}}rpx" />
 
-  <join-cart />
+  <spec-panel />
+
+  <settlement-bar />
 </view>

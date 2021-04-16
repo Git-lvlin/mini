@@ -45,7 +45,7 @@ export const getSystemInfo = () => {
   systemInfo.navBarHeight = (height + (top - systemInfo.statusBarHeight) * 2) * rpxRatio;
   systemInfo.statusHeight = systemInfo.statusBarHeight * rpxRatio;
   systemInfo.navTotalHeight = systemInfo.statusHeight + systemInfo.navBarHeight;
-  systemInfo.bottomBarHeight = (data.windowHeight - data.safeArea.bottom) * rpxRatio
+  systemInfo.bottomBarHeight = (data.screenHeight - data.safeArea.bottom) * rpxRatio
   if(data.system.indexOf("iOS")) {
     // iOS 苹果手机
     systemInfo.phoneType = 1

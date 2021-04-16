@@ -19,20 +19,9 @@
           "scene": null
         },
         {
-          "name": "分类页",
-          "pathName": "subpages/goods/class/index",
+          "name": "创建订单",
+          "pathName": "subpages/cart/create/index",
           "query": "",
-          "scene": null
-        },
-        {
-          "name": "搜索",
-          "pathName": "subpages/goods/search/index",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "商品详情",
-          "pathName": "subpages/goods/detail/index",
           "scene": null
         }
       ]

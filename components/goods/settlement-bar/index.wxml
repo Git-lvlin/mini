@@ -13,7 +13,7 @@
       </view>
       <view class="delivery">免配送费</view>
     </view>
-    <view class="settlement_btn">去下单</view>
+    <view class="settlement_btn" bindtap="onToCreateOrder">去下单</view>
   </view>
   <van-popup
     round

@@ -1,5 +1,6 @@
 import create from '../../../utils/create'
 import store from '../../../store/index'
+import router from '../../../utils/router'
 import { IMG_CDN } from '../../../constants/index'
 
 create.Component(store, {
@@ -51,6 +52,12 @@ create.Component(store, {
     onCloseCart() {
       this.setData({
         showClassPopup: false,
+      })
+    },
+
+    onToCreateOrder() {
+      router.push({
+        name: "createOrder"
       })
     }
   }

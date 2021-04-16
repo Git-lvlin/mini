@@ -1,11 +1,11 @@
 import create from '../../../utils/create'
-import store from '../../../store/index'
+import store from '../../../store/good'
 import routes from '../../../constants/routes'
 
 
 create.Page(store, {
   use: [
-    "systemInfo"
+    "systemInfo",
   ],
 
   /**
@@ -18,6 +18,7 @@ create.Page(store, {
     imgUrls: [
       1,1,1
     ],
+    showSpec: false,
     parameterList: [
       {
         name: "品种",
@@ -97,6 +98,7 @@ create.Page(store, {
     this.setData({
       stock
     });
+    store.onChangeSpecState(true);
   },
 
   reduceStock() {

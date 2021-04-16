@@ -1,0 +1,8 @@
+{
+  "navigationBarTextStyle": "white",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "settlement-bar": "/components/goods/settlement-bar/index",
+    "spec-panel": "/components/goods/spec-panel/index"
+  }
+}
