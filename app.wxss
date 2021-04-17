@@ -6,6 +6,10 @@ page{
     sans-serif;
 }
 
+image {
+  vertical-align: middle;
+}
+
 /*单行溢出省略*/
 .text_one_line {
   text-overflow: ellipsis;

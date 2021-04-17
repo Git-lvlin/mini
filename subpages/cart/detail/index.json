@@ -2,7 +2,7 @@
   "navigationBarTextStyle": "white",
   "navigationStyle": "custom",
   "usingComponents": {
-    "settlement-bar": "/components/goods/settlement-bar/index",
-    "spec-panel": "/components/goods/spec-panel/index"
+    "settlement-bar": "/components/cart/settlement-bar/index",
+    "spec-panel": "/components/cart/spec-panel/index"
   }
 }

@@ -1,3 +1,7 @@
 {
-  "usingComponents": {}
+  "navigationStyle": "custom",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "shop-card": "/components/cart/shop-card/index"
+  }
 }

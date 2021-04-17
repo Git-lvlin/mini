@@ -3,8 +3,8 @@
   "usingComponents": {
     "van-tree-select": "/miniprogram_npm/@vant/weapp/tree-select/index",
     "nav-bar": "/components/common/nav-bar/index",
-    "join-card": "/components/goods/join-card/index",
-    "settlement-bar": "/components/goods/settlement-bar/index",
-    "class-list": "/components/goods/class-list/index"
+    "join-card": "/components/cart/join-card/index",
+    "settlement-bar": "/components/cart/settlement-bar/index",
+    "class-list": "/components/cart/class-list/index"
   }
 }
