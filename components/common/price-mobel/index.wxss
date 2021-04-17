@@ -1,0 +1,17 @@
+
+.price_mobel {
+  display: flex;
+  align-items: center;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+
+.price {
+  color: #e5352f;
+  font-weight: 600;
+}
+
+.max_price {
+  font-size: 40rpx;
+}

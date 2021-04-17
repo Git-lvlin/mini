@@ -5,12 +5,17 @@
     class="nav_head"
     style="height: {{$.systemInfo.navTotalHeight}}rpx;background: url({{tools.getImgUrl('miniprogram/cart/order/order_back.png')}})"
   >
-    <view class="head">
+    <view class="head" style="bottom: {{$.systemInfo.menuToNavHeight}}rpx">
       <image class="head_img" src="{{tools.getImgUrl('miniprogram/cart/order/smile.png')}}"/>
       <view class="head_title">确认订单</view>
     </view>
+    <image
+      class="nav_back"
+      style="bottom: {{$.systemInfo.menuToNavHeight}}rpx"
+      src="{{tools.getImgUrl('miniprogram/common/back_white%402x.png')}}"
+      bindtap="onBack"
+    />
   </view>
-  <image class="nav_back" style="top: {{backTopHeight}}rpx" src="{{tools.getImgUrl('miniprogram/common/back_white%402x.png')}}" />
 
   <view class="body" >
     <view class="nav_height" style="height: {{$.systemInfo.navTotalHeight}}rpx;">
@@ -35,7 +40,6 @@
 
       <view class="shop_list">
         <shop-card data="{{shop[0]}}" />
-        <shop-card data="{{shop[0]}}" />
       </view>
 
       <view class="order_price">
@@ -45,8 +49,9 @@
         </view>
         <view class="cell_item">
           <view class="cell_name">优惠券</view>
-          <view class="coupon">
-            <text class="coupon_text">优惠券不可用</text>
+          <view class="coupon" bindtap="onOpenCoupon">
+            <text class="coupon_text" wx:if="{{!useCoupon}}">优惠券不可用</text>
+            <text class="coupon_money {{!!couponMoney ? 'coupon_money_more' : ''}}" wx:else>{{!!couponMoney ? '-' : ''}}￥{{couponMoney}}</text>
             <image class="coupon_jump right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
           </view>
         </view>
@@ -57,10 +62,22 @@
         <view class="cell_item">
           <view class="cell_name">给商家留言</view>
           <view class="cell_value">
-            <input class="input_msg" placeholder="留言" placeholder-class="input_placeholder" bindinput="handleMsgInput" />
+            <input class="input_msg" placeholder="留言,10个字以内" maxlength="10" placeholder-class="input_placeholder" bindinput="handleMsgInput" />
           </view>
         </view>
       </view>
     </view>
   </view>
+
+  <view class="submit_order">
+    <view class="submit_total_price">
+      <price-mobel
+        title="合计金额："
+        money="{{22.23}}"
+      />
+      <view class="submit_btn">去支付</view>
+    </view>
+  </view>
+
+  <coupon-popup show="{{couponPopup}}" bind:close="handleCloseCoupon" />
 </view>

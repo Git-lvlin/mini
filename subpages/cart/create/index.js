@@ -1,5 +1,6 @@
 import create from '../../../utils/create'
 import store from '../../../store/index'
+import router from '../../../utils/router'
 
 create.Page(store, {
   use: [
@@ -8,6 +9,9 @@ create.Page(store, {
 
   data: {
     backTopHeight: 120,
+    useCoupon: true,
+    couponMoney: 2,
+    couponPopup: false,
     shop:[
       {
         shopName: "RAP",
@@ -52,4 +56,19 @@ create.Page(store, {
 
   },
 
+  onBack() {
+    router.go();
+  },
+
+  onOpenCoupon() {
+    this.setData({
+      couponPopup: true
+    })
+  },
+
+  handleCloseCoupon() {
+    this.setData({
+      couponPopup: false
+    })
+  }
 })

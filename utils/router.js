@@ -15,10 +15,24 @@ const push = ({ name, data }) => {
     url: `${url}?encodedData=${dataStr}`,
   });
 }
+
+const go = (delta = 1) => {
+  const pages = getCurrentPages();
+  if (pages.length < 2) {
+    wx.switchTab({
+      url: routes.home.path, // 注意tab页面是不支持传参的
+    });
+    return;
+  }
+  wx.navigateBack({
+    delta
+  });
+}
  
 const extract = options => JSON.parse(decodeURIComponent(options.encodedData));
 
 export default {
+  go,
   push,
   extract,
 }

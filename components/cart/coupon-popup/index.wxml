@@ -1,0 +1,10 @@
+<van-popup
+  show="{{show}}"
+  round
+  closeable
+  position="bottom"
+  custom-class="popup"
+  bind:close="onClose"
+>
+
+</van-popup>
