@@ -28,6 +28,12 @@ const go = (delta = 1) => {
     delta
   });
 }
+
+const goTabbar = (name = 'home') => {
+  wx.switchTab({
+    url: routes[name].path, // 注意tab页面是不支持传参的
+  });
+}
  
 const extract = options => JSON.parse(decodeURIComponent(options.encodedData));
 

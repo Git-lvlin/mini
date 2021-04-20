@@ -105,26 +105,12 @@ create.Component(store, {
     },
     // 点击返回按钮
     onClickBack() {
-      wx.navigateBack({
-        delta: 1,
-        success: (res) => {},
-        fail: (res) => {},
-        complete: (res) => {
-          console.log(res);
-        },
-      })
+      router.go();
     },
 
     // 点击返回首页
     onClickHome() {
-      wx.switchTab({
-        url: 'url',
-        success: (res) => {},
-        fail: (res) => {},
-        complete: (res) => {
-          console.log(res);
-        },
-      })
+      router.goTabbar();
     },
 
     onToSearch() {
