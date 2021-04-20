@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "navigationBarTitleText": "我的收货地址",
+  "usingComponents": {
+    "nodata": "/components/common/nodata/index"
+  }
 }

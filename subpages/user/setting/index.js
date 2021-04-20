@@ -1,4 +1,4 @@
-// subpages/user/address/index.js
+// subpages/user/setting/index.js
 Page({
 
   /**

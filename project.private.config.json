@@ -29,6 +29,24 @@
           "pathName": "subpages/cart/cashier/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "用户中心",
+          "pathName": "pages/user/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "地址",
+          "pathName": "subpages/cart/address/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "编辑地址",
+          "pathName": "subpages/cart/editAddress/index",
+          "query": "",
+          "scene": null
         }
       ]
     }

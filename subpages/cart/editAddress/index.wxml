@@ -1,0 +1,58 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="container">
+  <view class="content_view">
+    <view class="form_item" >
+      <view class="form_name">收货人</view>
+      <input
+        class="form_input"
+        placeholder="请输入姓名"
+        placeholder-class="form_placeholder"
+      />
+    </view>
+    <view class="form_item" >
+      <view class="form_name">手机号码</view>
+      <input
+        type="number"
+        class="form_input"
+        placeholder="请输入手机号码"
+        placeholder-class="form_placeholder"
+      />
+    </view>
+    <view class="form_item" >
+      <view class="form_name">所在地区</view>
+      <input
+        class="form_input"
+        placeholder="省市区县、乡镇等"
+        placeholder-class="form_placeholder"
+      />
+      <view class="location" wx:if="{{false}}">
+        <image class="location_icon" src="{{tools.getImgUrl('miniprogram/common/location.png')}}" />定位
+      </view>
+    </view>
+    <view class="form_item" >
+      <view class="form_name">详细地址</view>
+      <textarea
+        class="form_input form_textarea"
+        placeholder="请输入街道地址，例如：西街108号101"
+        placeholder-class="form_placeholder"
+      />
+    </view>
+  </view>
+
+  <view class="set_default content_view">
+    <view class="set_info">
+      <view class="default_title">设为默认地址</view>
+      <view class="explain">提醒：每次下单会自动默认推荐使用该地址</view>
+    </view>
+    <van-switch
+      size="36rpx"
+      checked="{{ isDefault }}"
+      active-color="#e5352f"
+      inactive-color="#eeeeee"
+      bind:change="handleSwitch"
+    />
+  </view>
+
+  <view class="save_btn" bindtap="onSave">保存</view>
+</view>

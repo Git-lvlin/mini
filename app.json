@@ -36,13 +36,15 @@
         "class/index",
         "address/index",
         "search/index",
-        "cashier/index"
+        "cashier/index",
+        "editAddress/index"
       ]
     },
     {
       "root": "subpages/user",
       "pages": [
-        "main/index"
+        "main/index",
+        "setting/index"
       ]
     }
   ],
@@ -52,7 +54,13 @@
       "packages": [
         "subpages/community",
         "subpages/user",
-        "subpages/cart",
+        "subpages/cart"
+      ]
+    },
+    "pages/user/index": {
+      "network": "all",
+      "packages": [
+        "subpages/user",
         "dokit"
       ]
     }

@@ -13,7 +13,7 @@ export default {
   },
   // 用户中心
   user: {
-    path: "/subpagespages/user/index",
+    path: "/pages/user/index",
   },
   // 登录
   login: {
@@ -45,11 +45,20 @@ export default {
   address: {
     path: "/subpages/cart/address/index"
   },
+  // 添加/编辑收货地址
+  editAddress: {
+    path: "/subpages/cart/editAddress/index"
+  },
   // 收银台
   cashier: {
     path: "/subpages/cart/cashier/index"
   },
 
+
+  // 用户中心
+  setting: {
+    path: "/subpages/user/setting/index"
+  },
 
   list: {
     path: "/pages/list/index"

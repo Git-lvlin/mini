@@ -1,8 +1,8 @@
 import create from '../../utils/create'
 import store from '../../store/index'
 import router from '../../utils/router'
-import day from 'dayjs' 
-import { getList } from '../../apis/home'
+import { orderList, otherSetting } from '../../constants/user'
+import { getResourceDetail } from '../../apis/common'
 
 create.Page(store, {
 
@@ -10,14 +10,71 @@ create.Page(store, {
    * 页面的初始数据
    */
   use: [
+    'systemInfo',
+    'userInfo',
     'motto'
   ],
+
+  data: {
+    orderTypeList: orderList,
+    otherSetting,
+    userAuth: true,
+    canUseUserProfile: true,
+    banner: "",
+    showPopup: false,
+  },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.getUserSetting();
+    getResourceDetail({
+      resourceKey: "USERBANNER"
+    }).then(res => {
+      this.setData({
+        banner: res.data.banner
+      })
+    })
+
+    // this.getUserSetting();
+    // if (wx.getUserProfile) {
+    //   this.setData({
+    //   })
+    // }
+  },
+
+  onToLogin() {
+    router.push({
+      name: "login"
+    })
+  },
+
+  onToOtherSet({
+    currentTarget
+  }) {
+    const {
+      type,
+      path
+    } = currentTarget.dataset;
+    if(type === 1) {
+      router.push({
+        name: path
+      })
+    } else {
+      this.showPopup();
+    }
+  },
+
+  showPopup() {
+    this.setData({
+      showPopup: true,
+    })
+  },
+
+  onHidePopup() {
+    this.setData({
+      showPopup: false,
+    })
   },
   
   // 进入页面获取用户授权情况
@@ -26,14 +83,15 @@ create.Page(store, {
     //查看是否授权
     wx.getSetting({
       success: function(res) {
+      console.log("🚀 ~ file: index.js ~ line 36 ~ getUserSetting ~ res", res)
         if (res.authSetting['scope.userInfo']) {
           console.log("用户授权了");
-          wx.getUserInfo({
-            lang: "zh_CN",
-            success (res) {
-              that.getCodeLogin(res.userInfo);
-            }
-          })
+          // wx.getUserInfo({
+          //   lang: "zh_CN",
+          //   success (res) {
+          //     that.getCodeLogin(res.userInfo);
+          //   }
+          // })
         } else {
           //用户没有授权
           console.log("用户没有授权");
@@ -52,6 +110,20 @@ create.Page(store, {
     } else { // 没有返回用户信息
       console.log("用户按了拒绝按钮")
     }
+  },
+
+  onGetUserProfile() {
+    // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+    wx.getUserProfile({
+      desc: '用于完善会员资料',
+      success: (res) => {
+        this.getCodeLogin(res.userInfo);
+        // this.setData({
+        //   userInfo: res.userInfo,
+        //   hasUserInfo: true
+        // })
+      }
+    })
   },
 
   // 获取用户openid 登录
