@@ -28,8 +28,8 @@ export function Reqeust(params) {
         const data = !!params.dataPackage ? res.data : res.data.data;
         //数据请求成功判断
         if (res.statusCode===200 && res.data.code===0) {
-           resolve(data)
-           wx.hideLoading()
+          resolve(data)
+          wx.hideLoading()
         }else {
           // 返回错误码处理
           wx.showToast({

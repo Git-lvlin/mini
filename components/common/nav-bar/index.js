@@ -25,10 +25,10 @@ create.Component(store, {
       type: String,
       value: "#fff"
     },
-    // 状态栏背景颜色 只支持十六进制
+    // 状态栏背景颜色 只支持十六进制 #FA0D1E 主题色
     background: {
       type: String,
-      value: '#ff0000'
+      value: '#FA0D1E'
     },
     // 状态栏文字颜色 支持 white / black
     statusColor: {

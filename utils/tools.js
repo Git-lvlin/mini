@@ -12,7 +12,6 @@ export const getSystemInfo = () => {
   let data = wx.getSystemInfoSync();
   // 得到右上角菜单的位置尺寸
   const menuButtonObject = wx.getMenuButtonBoundingClientRect();
-  console.log("🚀 ~ file: tools.js ~ line 15 ~ getSystemInfo ~ menuButtonObject", menuButtonObject)
   const { top, height } = menuButtonObject;
   let rpxRatio = 750/data.windowWidth;
   systemInfo = {

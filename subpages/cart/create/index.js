@@ -70,5 +70,17 @@ create.Page(store, {
     this.setData({
       couponPopup: false
     })
+  },
+
+  onToAddress() {
+    router.push({
+      name: "address"
+    })
+  },
+
+  onToCashier() {
+    router.push({
+      name: "cashier"
+    })
   }
 })

@@ -1,0 +1,75 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="container">
+  <view class="nav_bar">
+    <nav-bar title="收银台" />
+  </view>
+
+  <view class="content" wx:if="{{false}}">
+    <view class="def_head_back" />
+    <view class="head" style="background-image: url({{tools.getImgUrl('miniprogram/cart/order/cashier.png')}})">
+      <price-mobel
+        money="14476.00"
+        color="#fff"
+        minSize="{{40}}"
+        maxSize="{{72}}"
+        bold="{{400}}"
+      />
+      <view class="pay_time">支付剩余时间：01:06:06</view>
+    </view>
+
+    <view class="pay_content">
+      <view class="pay_title">支付方式</view>
+      <view class="pay_list" wx:for="{{payList}}" wx:key="payType">
+        <view
+          class="pay_item"
+          data-index="{{index}}"
+          bindtap="onChangeType"
+        >
+          <image class="pay_icon" src="{{item.icon}}" />
+          <view class="pay_name">{{item.name}}</view>
+          <image class="pay_choose" wx:if="{{!disableChoose}}" src="{{!!item.default ? chooseIcon : defChooseIcon }}" />
+          <image class="pay_choose" wx:if="{{disableChoose}}" src="{{tools.getImgUrl('miniprogram/common/dis_choose.png')}}" />
+        </view>
+      </view>
+    </view>
+
+    <view class="bottom_confirm">
+      <view class="comfirm_btn">确定支付￥72.36</view>
+    </view>
+  </view>
+
+  <view class="content content_gray">
+    <view class="def_head_back" />
+    
+    <view class="success_head" style="background-image: url({{tools.getImgUrl('miniprogram/cart/order/success_back.png')}})">
+      <view class="success_tip">
+        <image class="success_img" src="{{tools.getImgUrl('miniprogram/cart/order/pay_success.png')}}" />
+        <view class="success_title">
+          <view class="text">支付成功！</view>
+          <view class="explain">感谢您的购买</view>
+        </view>
+      </view>
+
+      <view class="success_price">
+        <price-mobel
+          money="14476.00"
+          color="#333"
+          minSize="{{28}}"
+          maxSize="{{60}}"
+          bold="{{400}}"
+        />
+      </view>
+    </view>
+
+    <view class="order_info">
+      <view class="info_item">订单编号：<text class="info_text">{{23156456231244552}}</text></view>
+      <view class="info_item">下单时间：<text class="info_text">{{'2021-02-02 12:12:12'}}</text></view>
+      <view class="info_item">支付方式：<text class="info_text">{{'微信支付'}}</text></view>
+    </view>
+
+    <view class="bottom_confirm">
+      <view class="comfirm_btn">完成</view>
+    </view>
+  </view>
+</view>

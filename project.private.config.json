@@ -23,6 +23,12 @@
           "pathName": "subpages/cart/create/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "收银",
+          "pathName": "subpages/cart/cashier/index",
+          "query": "",
+          "scene": null
         }
       ]
     }

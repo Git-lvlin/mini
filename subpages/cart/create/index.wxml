@@ -23,7 +23,7 @@
     </view>
     
     <view class="content">
-      <view class="address">
+      <view class="address" bindtap="onToAddress">
         <view class="no_address" wx:if="{{false}}">
           <image class="add_address" src="{{tools.getImgUrl('miniprogram/cart/add_address.png')}}" />
           <view class="no_address_title">添加收货地址</view>
@@ -75,7 +75,7 @@
         title="合计金额："
         money="{{22.23}}"
       />
-      <view class="submit_btn">去支付</view>
+      <view class="submit_btn" bindtap="onToCashier">去支付</view>
     </view>
   </view>
 

@@ -15,7 +15,6 @@ export default {
   user: {
     path: "/subpagespages/user/index",
   },
-
   // 登录
   login: {
     path: "/pages/login/main/index"
@@ -41,6 +40,14 @@ export default {
   // 创建订单
   createOrder: {
     path: "/subpages/cart/create/index"
+  },
+  // 收货地址
+  address: {
+    path: "/subpages/cart/address/index"
+  },
+  // 收银台
+  cashier: {
+    path: "/subpages/cart/cashier/index"
   },
 
 

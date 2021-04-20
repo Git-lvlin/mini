@@ -26,8 +26,8 @@ Component({
       value: 0
     },
     bold: {
-      type: Boolean,
-      value: true
+      type: Number,
+      value: 0
     }
   },
 

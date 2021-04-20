@@ -34,7 +34,9 @@
         "create/index",
         "detail/index",
         "class/index",
-        "search/index"
+        "address/index",
+        "search/index",
+        "cashier/index"
       ]
     },
     {
