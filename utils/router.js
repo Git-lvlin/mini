@@ -39,6 +39,7 @@ const extract = options => JSON.parse(decodeURIComponent(options.encodedData));
 
 export default {
   go,
+  goTabbar,
   push,
   extract,
 }

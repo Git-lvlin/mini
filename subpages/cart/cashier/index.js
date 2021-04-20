@@ -51,5 +51,9 @@ create.Page(store, {
     this.setData({
       payList,
     })
+  },
+
+  onSuccess() {
+    router.goTabbar();
   }
 })

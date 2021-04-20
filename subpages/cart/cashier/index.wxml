@@ -69,7 +69,7 @@
     </view>
 
     <view class="bottom_confirm">
-      <view class="comfirm_btn">完成</view>
+      <view class="comfirm_btn" bindtap="onSuccess">完成</view>
     </view>
   </view>
 </view>
