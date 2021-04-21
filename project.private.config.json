@@ -47,6 +47,18 @@
           "pathName": "subpages/cart/editAddress/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "登录",
+          "pathName": "pages/login/main/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "绑定手机号码",
+          "pathName": "pages/login/bindPhone/index",
+          "query": "",
+          "scene": null
         }
       ]
     }

@@ -3,7 +3,7 @@ import store from '../../../store/index'
 import router from '../../../utils/router'
 import { IMG_CDN } from '../../../constants/common'
 import day from 'dayjs' 
-import { getList } from '../../../apis/home'
+import { getCode } from '../../../apis/login'
 
 create.Page(store, {
   use: [
@@ -12,22 +12,65 @@ create.Page(store, {
 
   data: {
     inputFocus: false,
+    inputNum: [],
+    downTime: 0,
+    timeData: {},
   },
 
   onLoad(options) {
   },
 
-  // 点击获取验证码
+  // 点击输入验证码
   onInputCode() {
     this.setData({
       inputFocus: true,
     })
   },
 
+  // 监听时间变化
+  onChangeTime(e) {
+    this.setData({
+      timeData: e.detail,
+    });
+    if(e.detail.seconds === 0) {
+      this.setData({
+        downTime: 0,
+      });
+    }
+  },
+
+  // 点击获取验证码
+  onGetCode() {
+    const phoneNumber = this.data.phoneNumber;
+    if(!phoneNumber) {
+      wx.showToast({
+        title: "请获取/输入手机号码",
+        icon: "none"
+      })
+      return
+    }
+    getCode({
+      phoneNumber,
+    }).then(res => {
+      wx.showToast({
+        title: "验证码已发送，请查收",
+        icon: "none"
+      })
+      this.setData({
+        downTime: 60,
+      });
+    });
+  },
+
   // 监听输入验证码
   handleInputCode(event) {
-  console.log("🚀 ~ file: index.js ~ line 28 ~ handleInputCode ~ event", event)
-    
+  console.log("🚀 ~ event", event.detail.value)
+    let value = event.detail.value
+    let inputNum = value.split("");
+    this.setData({
+      inputNum
+    })
+    console.log("🚀 ~ handleInputCode ~ inputNum", this.data.inputNum)
   },
 
   // 点击获取手机号

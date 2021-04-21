@@ -3,8 +3,7 @@ import routes from "../constants/routes"
 const push = ({ name, data }) => {
   const dataStr = encodeURIComponent(JSON.stringify(data));
   const route = routes[name];
-  console.log(name);
-  const url = route ? route.path : `pages/${name.replace(/\./g, '/')}/index`;
+  const url = route ? route.path : `/pages/${name.replace(/\./g, '/')}/index`;
   if (route.type === 'tab') {
     wx.switchTab({
       url: `${url}`, // 注意tab页面是不支持传参的
@@ -27,6 +26,28 @@ const go = (delta = 1) => {
   wx.navigateBack({
     delta
   });
+}
+
+const replace = ({ name, data, frist }) => {
+  const dataStr = encodeURIComponent(JSON.stringify(data));
+  const route = routes[name];
+  const url = route ? route.path : `/pages/${name.replace(/\./g, '/')}/index`;
+  if(route.type == 'tab') {
+    wx.switchTab({
+      url, // 注意tab页面是不支持传参的
+    });
+    return
+  }
+  if (frist) {
+    wx.reLaunch({
+      url: `${url}?encodedData=${dataStr}`,
+    });
+    return;
+  } else {
+    wx.redirectTo({
+      url: `${url}?encodedData=${dataStr}`,
+    });
+  }
 }
 
 const goTabbar = (name = 'home') => {

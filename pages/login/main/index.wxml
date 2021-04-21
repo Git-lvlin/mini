@@ -14,8 +14,19 @@
       block
       loading-type="spinner"
       loading-text="登录中..."
+      wx:if="{{!canUseProfile}}"
       bind:getuserinfo="handleGetUerInfo"
-    >登录</van-button>
+    >登录-</van-button>
+    <van-button
+      color="#E5352F"
+      custom-class="login_btn"
+      type="primary"
+      block
+      loading-type="spinner"
+      loading-text="登录中..."
+      wx:if="{{canUseProfile}}"
+      bindtap="onLogin"
+    >登录+</van-button>
     <view class="on_login">不登录，先看看</view>
   </view>
   <view class="other_login" />
