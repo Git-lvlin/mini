@@ -1,7 +1,7 @@
 import Request from '../utils/request.js'
 
 const url = {
-  resource: "cms/open/json/selByResourceKey"
+  resource: "/cms/open/json/selByResourceKey"
 }
 
 // 获取资源位数据

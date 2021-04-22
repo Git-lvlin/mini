@@ -51,7 +51,7 @@
         {
           "name": "登录",
           "pathName": "pages/login/main/index",
-          "query": "",
+          "query": "name=bak",
           "scene": null
         },
         {

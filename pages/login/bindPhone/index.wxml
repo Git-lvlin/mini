@@ -8,7 +8,14 @@
   </view>
   <view class="bind">
     <view class="input">
-      <input type="number" class="input_num" maxlength="11" placeholder-class="input_num_pla" placeholder="请输入手机号" />
+      <input
+        type="number"
+        class="input_num"
+        maxlength="11"
+        placeholder-class="input_num_pla"
+        placeholder="请输入手机号"
+        bindinput="handleInputPhone"
+      />
     </view>
     <view class="phone_code">
       <view class="code_list">
@@ -34,17 +41,16 @@
     <van-button
       color="#E5352F"
       custom-class="login_btn"
-      open-type="getUserInfo"
       type="primary"
       block
       loading-type="spinner"
       loading-text="绑定中..."
-      bind:getuserinfo="handleGetUerInfo"
+      bind:click="onBindPhone"
     >完成绑定</van-button>
     <button class="get_phone" bind:getphonenumber="handleGetPhone" open-type="getPhoneNumber">获取手机号，快速绑定</button>
   </view>
   <view class="help">
-    <van-icon name="{{tools.getImgUrl('miniprogram/common/ask.png')}}" size="32rpx" custom-class="icon" />
+    <van-image width="32rpx" height="32rpx" src="{{tools.getImgUrl('miniprogram/common/ask.png')}}" custom-class="icon" />
     <text class="text">帮助</text>
   </view>
 </view>

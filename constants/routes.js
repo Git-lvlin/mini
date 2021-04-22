@@ -1,18 +1,22 @@
 export default {
   // 首页
   home: {
+    type: "tabbar",
     path: "/pages/home/index",
   },
   // 社区
   community: {
+    type: "tabbar",
     path: "/pages/community/index",
   },
   // 购物车
   cart: {
+    type: "tabbar",
     path: "/pages/cart/index",
   },
   // 用户中心
   user: {
+    type: "tabbar",
     path: "/pages/user/index",
   },
   // 登录

@@ -7,6 +7,14 @@ export const getBaseApiUrl = () => {
   return url;
 }
 
+// 提示信息
+const showErrorMsg = (msg, icon) => {
+  wx.showToast({
+    title: !!msg ? msg : '哎呀，出错啦，请重试',
+    icon: !!icon ? icon : "none",
+    duration: 2000,
+  });
+};
 
 // 错误码处理
 export const handleErrorCode = ({
@@ -61,7 +69,7 @@ export const handleErrorCode = ({
       showErrorMsg(msg);
       break;
     default:
-      showErrorMsg()
+      showErrorMsg(!!msg ? msg : "")
   }
 };
 

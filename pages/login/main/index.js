@@ -24,6 +24,8 @@ create.Page(store, {
     } else {
       this.getUserSetting();
     }
+    
+    router.loginTo();
   },
 
   // 新API登录

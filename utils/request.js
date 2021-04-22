@@ -2,14 +2,6 @@ import { getBaseApiUrl, handleErrorCode } from './tools'
 import { HTTP_TIMEOUT, VERSION } from '../constants/index'
 import router from '../utils/router'
 
-const showErrorMsg = (msg, icon) => {
-  wx.showToast({
-    title: '哎呀，出错啦，请重试',
-    icon: !!icon ? icon : "none",
-    duration: 2000,
-  });
-};
-
 /**
  * 请求接口
  * header        object   请求头信息

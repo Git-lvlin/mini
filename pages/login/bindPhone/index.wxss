@@ -112,11 +112,16 @@
   left: 50%;
   display: flex;
   justify-content: center;
+  align-items: center;
   font-size: 20rpx;
   color: #999999;
   text-align: center;
-  line-height: 28rpx;
-  margin-left: -48rpx;
+  line-height: 32rpx;
+  transform: translateX(-48rpx);
+}
+
+.icon {
+  vertical-align: middle;
 }
 
 .help .text {
