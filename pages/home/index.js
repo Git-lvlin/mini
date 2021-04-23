@@ -4,7 +4,8 @@ import router from '../../utils/router'
 
 create.Page(store, {
   use: [
-    "userInfo"
+    "userInfo",
+    "systemInfo"
   ],
   
   data: {

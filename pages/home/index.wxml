@@ -1,4 +1,53 @@
-<!--pages/home/index.wxml-->
-<text>首页</text>
+<wxs module="tools" src="../../wxs/common.wxs" />
+
+<view class="container">
+  <!-- 导航栏地址 -->
+  <view class="nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx">
+    <view class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx">
+      <view class="nav_location">
+        <image class="location_icon" src="{{tools.getImgUrl('miniprogram/home/location.png')}}" />
+        <view class="address text_one_line">中粮商务公园店中粮商务公园店</view>
+        <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/back_white%402x.png')}}" />
+      </view>
+      <view class="search_content">
+        <view class="search_body">
+          <image class="search_icon" src="{{tools.getImgUrl('miniprogram/home/search.png')}}" />
+          <view class="search_text">请输入商品名称</view>
+          <view class="search_btn">搜索</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
 <view bindtap="onToClass" >跳转分类页</view>
 <view bindtap="onToDetail" >跳转商品详情页</view>
