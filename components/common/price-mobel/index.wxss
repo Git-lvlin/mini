@@ -15,3 +15,10 @@
 .max_price {
   font-size: 40rpx;
 }
+
+.market_money {
+  color: #b2b2b2;
+  text-decoration: line-through;
+  line-height: 28rpx;
+  margin-left: 12rpx;
+}

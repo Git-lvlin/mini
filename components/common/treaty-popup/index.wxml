@@ -1,6 +1,8 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
 <view class="popup">
   <view class="close" bindtap="onClose">
-    <van-image width="48rpx" height="48rpx" src="" />
+    <van-image width="48rpx" height="48rpx" src="{{tools.getImgUrl('miniprogram/common/white_close.png')}}" />
     <view class="line" />
   </view>
   <view class="content">

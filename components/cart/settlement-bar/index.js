@@ -1,7 +1,7 @@
 import create from '../../../utils/create'
 import store from '../../../store/index'
 import router from '../../../utils/router'
-import { IMG_CDN } from '../../../constants/index'
+import { IMG_CDN } from '../../../constants/common'
 
 create.Component(store, {
   use: [

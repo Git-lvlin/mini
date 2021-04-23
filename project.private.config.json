@@ -59,6 +59,12 @@
           "pathName": "pages/login/bindPhone/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "搜搜",
+          "pathName": "subpages/cart/search/index",
+          "query": "name=bak",
+          "scene": null
         }
       ]
     }

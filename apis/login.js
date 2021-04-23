@@ -5,31 +5,33 @@ const url = {
   code: "/member/open/getAuthCode",
   checkBind: "/member/open/checkNumPhoneBlind",
   bindPhone: "/member/open/wxBlind",
-}
-
-// 微信登录
-export const userLogin = (params, option) => {
-  return Request.post(url.login, params, option);
-}
-
-// 检查手机是否已被绑定
-export const checkBindPhone = (params, option) => {
-  return Request.post(url.checkBind, params, option);
-}
-
-// 获取短信验证码
-export const getCode = (params, option) => {
-  return Request.post(url.code, params, option);
-}
-
-// 绑定手机号
-export const bindPhone = (params, option) => {
-  return Request.post(url.bindPhone, params, option);
+  getPhone: "/member/open/memberInfo/minProgramDecrypt"
 }
 
 export default {
-  userLogin,
-  checkBindPhone,
-  getCode,
-  bindPhone,
+  // 微信登录
+  userLogin(params, option) {
+    return Request.post(url.login, params, option);
+  },
+
+  // 检查手机是否已被绑定
+    checkBindPhone(params, option) {
+    return Request.post(url.checkBind, params, option);
+  },
+
+  // 获取短信验证码
+  getCode(params, option) {
+    return Request.post(url.code, params, option);
+  },
+
+  // 绑定手机号
+  bindPhone(params, option) {
+    return Request.post(url.bindPhone, params, option);
+  },
+
+  // 解密手机号
+  getPhoneNumber(params, option) {
+    return Request.post(url.getPhone, params, option);
+  },
+
 }

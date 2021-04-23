@@ -1,28 +1,38 @@
 
 Page({
 
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    searchText: "",
+    showAssociation: false,
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
 
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow: function () {
 
   },
 
   onSearch() {
     console.log("search")
+    this.setData({
+      showAssociation: false,
+    })
+  },
+
+  handleSearchFocus() {
+    this.setData({
+      showAssociation: true,
+    })
+  },
+  
+  onCloseAssociation({
+    currentTarget
+  }) {
+    this.setData({
+      showAssociation: false,
+      searchText: currentTarget.dataset.text,
+    })
   }
 })

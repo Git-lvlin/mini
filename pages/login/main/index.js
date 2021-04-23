@@ -3,7 +3,7 @@ import store from '../../../store/index'
 import router from '../../../utils/router'
 import { getUserInfo, handleErrorCode } from '../../../utils/tools'
 import { SOURCE_TYPE } from '../../../constants/index'
-import { userLogin } from '../../../apis/login'
+import loginApis from '../../../apis/login'
 
 create.Page(store, {
   use: [
@@ -86,14 +86,25 @@ create.Page(store, {
     console.log(userInfo);
     wx.login({
       success: (result)=>{
-        userLogin({
+        loginApis.userLogin({
           code: result.code,
           sourceType: SOURCE_TYPE,
         }, {
           notErrorMsg: true,
         }).then(res => {
-        console.log("🚀 ~ file: index.js ~ line 84 ~ getCodeLogin ~ res", res)
-          
+          const loginToData = wx.getStorageSync("LOGIN_TO_DATA");
+          store.data.userInfo = res.memberInfo;
+          store.data.defUserInfo = res.memberInfo;
+          wx.setStorageSync("ACCESS_TOKEN", res.acessToken);
+          wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
+          if(loginToData) {
+            router.loginTo(loginToData);
+          } else {
+            router.loginTo({
+              type: "back",
+              delta: 1,
+            });
+          }
         }).catch(err => {
           if(err.code === 200102) {
             wx.setStorageSync("LOGIN_INFO", err.data);

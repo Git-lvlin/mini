@@ -1,0 +1,14 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="good_card" style="width: {{size}}">
+  <van-image width="{{size}}" height="{{size}}" custom-class="good_cover" src="{{tools.getImgUrl('miniprogram/cart/666.jpg')}}" />
+  <view class="good_title text_one_line">最多10个字多的用… 代替最多10个字多的用… 代替</view>
+  <view class="good_sku text_one_line">最多12个字多的用…代替最多10个字多的用… 代替</view>
+  <view class="good_price">
+    <price-mobel money="8.89" marketMoney="{{12.89}}" />
+    <view class="cart" wx:if="{{false}}">
+      <image class="cart_icon" src="{{tools.getImgUrl('miniprogram/common/good_cart.png')}}" />
+      <view class="cart_num">2</view>
+    </view>
+  </view>
+</view>

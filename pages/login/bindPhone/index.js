@@ -19,13 +19,6 @@ create.Page(store, {
   },
 
   onLoad(options) {
-    wx.login({
-      timeout:10000,
-      success: (result)=>{
-      console.log("🚀 ~ file: index.js ~ line 24 ~ onLoad ~ result", result)
-        
-      },
-    });
   },
 
   handleInputPhone(e) {
@@ -70,7 +63,7 @@ create.Page(store, {
       })
       return
     }
-    debounce(this.checkBindPhone(phoneNumber), 2000)
+    this.checkBindPhone(phoneNumber);
   },
 
   // 检查手机是否已被绑定
@@ -80,13 +73,13 @@ create.Page(store, {
     }).then(res => {
       this.getMsgCode(phoneNumber);
     }).catch(err => {
-      
-      console.log("🚀 ~ file: index.js ~ line 86 ~ checkBindPhone ~ err", err)
+      console.log("checkBindPhone ~ err", err)
     });
   },
 
   // 获取短信验证码
   getMsgCode(phoneNumber) {
+    let that = this;
     loginApis.getCode({
       phoneNumber,
     }).then(res => {
@@ -94,9 +87,11 @@ create.Page(store, {
         title: "验证码已发送，请查收",
         icon: "none"
       })
-      this.setData({
-        downTime: 60,
+      that.setData({
+        downTime: 59999,
       });
+    }).catch(err => {
+
     });
   },
 
@@ -107,9 +102,7 @@ create.Page(store, {
       code,
     } = this.data;
     let userInfo = this.data.$.userInfo;
-    console.log("🚀 ~ file: index.js ~ line 110 ~ onBindPhone ~ userInfo", userInfo)
     let loginInfo = wx.getStorageSync("LOGIN_INFO");
-    console.log("🚀 ~ file: index.js ~ line 111 ~ onBindPhone ~ loginInfo", loginInfo)
     if(!phoneNumber) {
       wx.showToast({
         title: "请获取/输入手机号码",
@@ -138,7 +131,6 @@ create.Page(store, {
       })
       return
     }
-    console.log("提交");
     loginApis.bindPhone({
       phoneNumber,
       sourceType: 4,
@@ -148,13 +140,17 @@ create.Page(store, {
       gender: userInfo.gender,
       authCode: code,
     }).then(res => {
-      console.log("🚀 ~ 绑定手机号 ~ res", res)
-      const data = res.data;
-      const loginTo = wx.getStorageSync("LOGIN_TO");
+      const data = res;
+      const loginToData = wx.getStorageSync("LOGIN_TO_DATA");
       wx.setStorageSync("ACCESS_TOKEN", data.acessToken);
       wx.setStorageSync("REFRESH_TOKEN", data.refreshToken);
       store.data.userInfo = data.memberInfo;
-      if(loginTo) {}
+      store.data.defUserInfo = data.memberInfo;
+      if(loginToData) {
+        router.loginTo(loginToData);
+      } else {
+        router.loginTo();
+      }
     });
   },
 
@@ -171,23 +167,18 @@ create.Page(store, {
   // 点击获取手机号
   handleGetPhone(event) {
     var that = this;
-    console.log(event.detail.errMsg);
     if (event.detail.errMsg == "getPhoneNumber:ok") {
       let data = event.detail;
-      console.log(data)
-      // wx.request({
-      //   url: 'http://localhost/index/users/decodePhone',
-      //   data: {
-      //     encryptedData: e.detail.encryptedData,
-      //     iv: e.detail.iv,
-      //     sessionKey: that.data.session_key,
-      //     uid: "",
-      //   },
-      //   method: "post",
-      //   success: function (res) {
-      //     console.log(res);
-      //   }
-      // })
+      let loginInfo = wx.getStorageSync("LOGIN_INFO");
+      loginApis.getPhoneNumber({
+        encryptedData: data.encryptedData,
+        iv: data.iv,
+        wxUId: loginInfo.wxUId,
+      }).then(res => {
+        that.setData({
+          phoneNumber: res.phoneNumber
+        })
+      })
     }
   },
 

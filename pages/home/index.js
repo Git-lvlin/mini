@@ -1,7 +1,11 @@
+import create from '../../utils/create'
+import store from '../../store/index'
 import router from '../../utils/router'
 
-Page({
-
+create.Page(store, {
+  use: [
+    "userInfo"
+  ],
   
   data: {
 
@@ -11,7 +15,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    console.log("home", this.data.$)
   },
 
   /**

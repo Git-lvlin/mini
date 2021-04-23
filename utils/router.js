@@ -58,15 +58,16 @@ const goTabbar = (name = 'home') => {
 
 /**
  * 登录完成 - 跳转
+ * routerData    object 跳转配置 { type: "back", delta: 1, router: {type: "tabbar", path: "/pages/home/index"}
  * LOGIN_TO_DATA object 跳转配置 { type: "back", delta: 1, router: {type: "tabbar", path: "/pages/home/index"}
  * delta         number 返回层级 type 为back 时生效
  * type          string back 返回一页/多页 home 返回首页 page 跳转指定页面
  * router        object 为路由表 routes 下的各路由信息     type 页面类型  path 页面路由  data 页面数据
  */
-const loginTo = () => {
+const loginTo = (routerData) => {
   const pages = getCurrentPages();
   const pagesLen = pages.length - 1;
-  const loginToData = wx.getStorageSync("LOGIN_TO_DATA");
+  const loginToData = !!routerData ? routerData : wx.getStorageSync("LOGIN_TO_DATA");
   if(!!loginToData) {
     let {
       type,

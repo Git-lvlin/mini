@@ -9,6 +9,10 @@ Component({
       type: Number,
       value: 0
     },
+    marketMoney: {
+      type: Number,
+      value: 0
+    },
     defaultColor: {
       type: String,
       value: "#333"

@@ -12,6 +12,7 @@
         type="number"
         class="input_num"
         maxlength="11"
+        value="{{phoneNumber}}"
         placeholder-class="input_num_pla"
         placeholder="请输入手机号"
         bindinput="handleInputPhone"
@@ -30,7 +31,7 @@
           time="{{ downTime }}"
           auto-start
           use-slot
-          wx:if="{{!!downTime}}"
+          wx:if="{{downTime > 0}}"
           bind:change="onChangeTime"
         >
           <text class="down_time">重新获取 {{timeData.seconds}}s</text>
