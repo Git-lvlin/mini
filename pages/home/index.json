@@ -1,5 +1,14 @@
 {
   "navigationBarTextStyle": "white",
   "navigationStyle": "custom",
-  "usingComponents": {}
+  "usingComponents": {
+    "appointment": "/components/home/appointment/index",
+    "coupon": "/components/home/coupon/index",
+    "beancurd-cube": "/components/home/beancurd-cube/index",
+    "banner": "/components/home/banner/index",
+    "message": "/components/home/message/index",
+    "seckill": "/components/home/seckill/index",
+    "vipgood": "/components/home/vipgood/index",
+    "hotgoods": "/components/home/hotgoods/index"
+  }
 }

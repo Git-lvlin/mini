@@ -1,0 +1,45 @@
+
+.panel-title {
+  display: flex;
+  align-items: flex-end;
+}
+
+.center {
+  align-items: center;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 32rpx;
+  letter-spacing: 1.6rpx;
+  line-height: 44rpx;
+}
+
+.desc {
+  font-size: 24rpx;
+  line-height: 36rpx;
+  margin-left: 12rpx;
+}
+
+.slot {
+  flex: 1;
+  margin-left: 12rpx;
+}
+
+.more {
+  display: flex;
+  align-items: center;
+  color: #333333;
+  font-size: 24rpx;
+  line-height: 36rpx;
+  margin-right: 12rpx;
+}
+
+.more_arrow {
+  width: 12rpx;
+  height: 12rpx;
+  margin-top: -2rpx;
+  border-top: 2rpx solid;
+  border-right: 2rpx solid;
+  transform: rotate(45deg);
+}

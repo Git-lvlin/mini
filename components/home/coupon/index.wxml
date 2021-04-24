@@ -1,0 +1,36 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="coupon">
+  <panel-title
+    title="新人专享188元券包"
+    desc="限时领取"
+    color="#fff"
+  />
+  <view class="coupon_list">
+    <view class="coupon_item" style="background-image: url('{{coupon}}');">
+      <price-mobel
+        money="3"
+        maxSize="{{48}}"
+      />
+      <view class="desc">满18可用</view>
+    </view>
+    <view class="coupon_item" style="background-image: url('{{couponSelect}}');">
+      <price-mobel
+        money="3"
+        maxSize="{{48}}"
+      />
+      <view class="desc">满18可用</view>
+    </view>
+    <view class="coupon_item" style="background-image: url('{{coupon}}');">
+      <price-mobel
+        money="3"
+        maxSize="{{48}}"
+      />
+      <view class="desc">满18可用</view>
+    </view>
+  </view>
+
+  <view class="receive">
+    <image class="receive_btn" src="{{tools.getImgUrl('miniprogram/home/receive_coupon.png')}}" />
+  </view>
+</view>

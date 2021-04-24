@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "panel-title": "/components/home/panel-title/index",
+    "price-mobel": "/components/common/price-mobel/index"
+  }
+}

@@ -18,36 +18,23 @@
       </view>
     </view>
   </view>
+
+  <!-- 约购商品 -->
+  <!-- <appointment /> -->
+  <!-- 优惠券 -->
+  <!-- <coupon /> -->
+  <!-- 豆腐块 -->
+  <!-- <beancurd-cube /> -->
+  <!-- banner 轮播 -->
+  <banner />
+  <!-- 快讯 -->
+  <message />
+  <!-- 秒杀 -->
+  <seckill />
+  <!-- 会员 / 店主专享 -->
+  <vipgood />
+  <!-- 热销商品 -->
+  <hotgoods />
 </view>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
 <view bindtap="onToClass" >跳转分类页</view>
-<view bindtap="onToDetail" >跳转商品详情页</view>
