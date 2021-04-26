@@ -52,9 +52,9 @@
     "pages/home/index": {
       "network": "all",
       "packages": [
-        "subpages/community",
+        "subpages/cart",
         "subpages/user",
-        "subpages/cart"
+        "subpages/community"
       ]
     },
     "pages/user/index": {

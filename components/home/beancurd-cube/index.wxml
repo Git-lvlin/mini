@@ -9,7 +9,13 @@
     >
       <view class="beancurd_body">
         <view class="beancurd_list" wx:for="{{list}}" wx:key="index">
-          <view class="beancurd_item" wx:for="{{item}}" wx:for-item="child" wx:key="id">
+          <view
+            class="beancurd_item"
+            wx:for="{{item}}"
+            wx:for-item="child"
+            wx:key="id"
+            bindtap="onToClass"
+          >
             <image class="beancurd_img" src="{{tools.getImgUrl('miniprogram/home/Fruits.png')}}" />
             <view class="name">时令果蔬</view>
           </view>

@@ -1,4 +1,6 @@
 {
   "component": true,
-  "usingComponents": {}
+  "usingComponents": {
+    "panel-title": "/components/home/panel-title/index"
+  }
 }

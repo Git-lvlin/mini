@@ -1,2 +1,31 @@
-<!--components/home/hotgoods/index.wxml-->
-<view>components/home/hotgoods/index.wxml</view>
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="hotgoods">
+  <view class="head" style="background-image: url({{tools.getImgUrl('miniprogram/home/seckill_back.png')}})">
+    <image class="hot_icon" src="{{tools.getImgUrl('miniprogram/home/fire.png')}}" />
+    <view class="hot_title">
+      <panel-title 
+        title="热销好货"
+        desc="每天不重样"
+        more
+      />
+    </view>
+  </view>
+  <view class="good_list">
+    <view class="good_item">
+      <good-card
+        size="344rpx"
+      />
+    </view>
+    <view class="good_item">
+      <good-card
+        size="344rpx"
+      />
+    </view>
+    <view class="good_item">
+      <good-card
+        size="344rpx"
+      />
+    </view>
+  </view>
+</view>

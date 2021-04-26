@@ -1,14 +1,19 @@
 
 .good_card {
   overflow: hidden;
-  padding-bottom: 40rpx;
+  margin-bottom: 14rpx;
 }
 
 .good_cover {
   overflow: hidden;
   vertical-align: middle;
-  border-radius: 16rpx;
-  margin-bottom: 14rpx;
+  border-radius: 16rpx 16rpx 0 0;
+}
+
+.good_info {
+  padding: 14rpx 16rpx 16rpx;
+  background-color: #fff;
+  border-radius: 0 0 16rpx 16rpx;
 }
 
 .good_title {

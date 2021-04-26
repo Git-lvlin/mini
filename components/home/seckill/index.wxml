@@ -1,2 +1,59 @@
-<!--components/home/seckill/index.wxml-->
-<view>components/home/seckill/index.wxml</view>
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="seckill" style="background-image: url({{tools.getImgUrl('miniprogram/home/seckill_back.png')}})">
+  <view class="sec_body">
+    <view class="head">
+      <panel-title 
+        title="正在疯抢"
+        desc="限时秒杀"
+        more
+      />
+    </view>
+  <scroll-view scroll-x class="good_scroll">
+    <view class="good_list">
+      <view class="good_item">
+        <van-image width="150rpx" height="150rpx" fit="cover" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/Fruits.png" />
+        <view class="price" style="background-image: url({{tools.getImgUrl('miniprogram/home/kill_price.png')}})">
+          <view class="sale">￥<text class="sale_text">9.9</text></view>
+          <view class="market">￥12.2</view>
+        </view>
+      </view>
+      <view class="good_item">
+        <van-image width="150rpx" height="150rpx" fit="cover" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/Fruits.png" />
+        <view class="price" style="background-image: url({{tools.getImgUrl('miniprogram/home/kill_price.png')}})">
+          <view class="sale">￥<text class="sale_text">9.9</text></view>
+          <view class="market">￥12.2</view>
+        </view>
+      </view>
+      <view class="good_item">
+        <van-image width="150rpx" height="150rpx" fit="cover" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/Fruits.png" />
+        <view class="price" style="background-image: url({{tools.getImgUrl('miniprogram/home/kill_price.png')}})">
+          <view class="sale">￥<text class="sale_text">9.9</text></view>
+          <view class="market">￥12.2</view>
+        </view>
+      </view>
+      <view class="good_item">
+        <van-image width="150rpx" height="150rpx" fit="cover" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/Fruits.png" />
+        <view class="price" style="background-image: url({{tools.getImgUrl('miniprogram/home/kill_price.png')}})">
+          <view class="sale">￥<text class="sale_text">9.9</text></view>
+          <view class="market">￥12.2</view>
+        </view>
+      </view>
+      <view class="good_item">
+        <van-image width="150rpx" height="150rpx" fit="cover" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/Fruits.png" />
+        <view class="price" style="background-image: url({{tools.getImgUrl('miniprogram/home/kill_price.png')}})">
+          <view class="sale">￥<text class="sale_text">9.9</text></view>
+          <view class="market">￥12.2</view>
+        </view>
+      </view>
+      <view class="good_item">
+        <van-image width="150rpx" height="150rpx" fit="cover" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/Fruits.png" />
+        <view class="price" style="background-image: url({{tools.getImgUrl('miniprogram/home/kill_price.png')}})">
+          <view class="sale">￥<text class="sale_text">9.9</text></view>
+          <view class="market">￥12.2</view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+  </view>
+</view>

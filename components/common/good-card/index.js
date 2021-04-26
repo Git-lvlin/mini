@@ -7,7 +7,7 @@ Component({
   properties: {
     size: {
       type: String,
-      value: "318rpx"
+      value: "344rpx"
     },
   },
 

@@ -124,8 +124,10 @@
 
 .good_content {
   width: 100%;
-  height: calc(100vh - 108rpx);
-  padding: 24rpx 0;
+  /* height: calc(100vh - 108rpx); */
+  padding-top: 24rpx;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
   background: #f5f5f5;
   box-sizing: border-box;
 }
@@ -135,9 +137,9 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  padding: 24rpx 12rpx;
+  /* padding: 24rpx 12rpx; */
   margin: 0 auto;
-  background: #FFFFFF;
+  /* background: #FFFFFF; */
   border-radius: 16rpx 16rpx 0 0;
   box-sizing: border-box;
 }

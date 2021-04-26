@@ -1,3 +1,5 @@
+import router from '../../../utils/router'
+
 
 Component({
   timer: null,
@@ -62,6 +64,13 @@ Component({
       this.setData({
         scrollListWidth,
       })
-    }
+    },
+
+    // 跳转
+    onToClass() {
+      router.push({
+        name: 'classList',
+      });
+    },
   }
 })
