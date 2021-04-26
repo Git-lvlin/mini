@@ -1,0 +1,24 @@
+var IMG_CDN = "http://dev-yeahgo-oss.waiad.icu/"
+
+// 格式化图片路径
+var getImgUrl = function (url) {
+  return IMG_CDN + url;
+}
+
+// 拆解价格
+var getPriceSplit = function (price, type) {
+  // var str = price.toString();
+  var str = price + "";
+  var strArr = str.split(".");
+  if(!type) {
+    return strArr[0];
+  } else {
+    return !!strArr[1] ? "." + strArr[1] : "";
+  }
+}
+
+
+module.exports = {
+  getImgUrl: getImgUrl,
+  getPriceSplit: getPriceSplit,
+}

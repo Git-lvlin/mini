@@ -1,0 +1,42 @@
+
+.message {
+  padding: 24rpx 24rpx 0;
+}
+
+.message_content {
+  display: flex;
+  width: 702rpx;
+  height: 68rpx;
+  box-sizing: border-box;
+  padding: 20rpx 16rpx;
+  background-color:#ffffff;
+  border-radius: 16rpx;
+  box-shadow: 2rpx 0rpx 8rpx rgba(0, 0, 0, 0.02);
+}
+
+.massage_icon {
+  width: 120rpx;
+  height: 28rpx;
+}
+
+.line {
+  height: 32rpx;
+  margin: 0 16rpx;
+  border-right: 2rpx solid #EFEEEE;
+}
+
+.message_body {
+  flex: 1;
+  height: 32rpx;
+  overflow: hidden;
+}
+
+.message_list {
+  display: inline-block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  color: #333333;
+  font-size: 24rpx;
+  line-height: 32rpx;
+}

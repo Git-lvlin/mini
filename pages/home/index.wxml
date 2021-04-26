@@ -1,0 +1,63 @@
+<wxs module="tools" src="../../wxs/common.wxs" />
+
+<view
+  class="container"
+  bindtouchmove="handleTouchMove"
+  bindtouchend="handleTouchEnd"
+>
+  <!-- 导航栏地址 -->
+  <view class="nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx">
+    <view class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx">
+      <view class="nav_location">
+        <image class="location_icon" src="{{tools.getImgUrl('miniprogram/home/location.png')}}" />
+        <view class="address text_one_line">中粮商务公园店中粮商务公园店</view>
+        <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/back_white%402x.png')}}" />
+      </view>
+      <view class="search_content">
+        <view class="search_body" bindtap="onToSearch">
+          <image class="search_icon" src="{{tools.getImgUrl('miniprogram/home/search.png')}}" />
+          <view class="search_text">请输入商品名称</view>
+          <view class="search_btn">搜索</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 约购商品 -->
+  <appointment />
+
+  <!-- 优惠券 -->
+  <coupon />
+
+  <!-- 豆腐块 -->
+  <beancurd-cube />
+
+  <!-- banner 轮播 -->
+  <banner />
+
+  <!-- 快讯 -->
+  <message />
+
+  <!-- 秒杀 -->
+  <seckill />
+
+  <!-- 会员 / 店主专享 -->
+  <vipgood />
+
+  <!-- 热销商品 -->
+  <view id="hotGoods">
+    <hotgoods />
+  </view>
+
+  <!-- 固定位 -->
+  <view class="fixation {{((!isOnGoods && scrolling) || isOnGoods) ? 'fixation_action' : ''}}">
+    <image
+      id="fixation"
+      class="fixation_img"
+      src="{{tools.getImgUrl('miniprogram/home/receive_coupon.gif')}}"
+    />
+  </view>
+
+  <!-- 底部占位 -->
+  <view class="bar_height" />
+</view>

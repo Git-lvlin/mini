@@ -1,0 +1,53 @@
+
+
+.title_img {
+  width: 250rpx;
+  height: 40rpx;
+}
+
+.appointment {
+  width: 100%;
+  padding: 12rpx 24rpx 24rpx;
+  box-sizing: border-box;
+  background-image: url('https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/appointment_back.png');
+  background-size: 100% 100%;
+}
+
+.list {
+  width: 100%;
+  margin-top: 8rpx;
+  background-color: #fff;
+  border-radius: 12rpx;
+}
+
+.good_list {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  padding: 20rpx 16rpx 28rpx 16rpx;
+}
+
+.good_item {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 200rpx;
+}
+
+.good_item:not(:last-child) {
+  margin-right: 12rpx;
+}
+
+.cover_img{
+  width: 200rpx;
+  height: 200rpx;
+  overflow: hidden;
+  margin-bottom: 8rpx;
+  border-radius: 8rpx;
+}
+
+.title {
+  color: #333333;
+  font-size: 24rpx;
+  line-height: 28rpx;
+  margin-bottom: 12rpx;
+}

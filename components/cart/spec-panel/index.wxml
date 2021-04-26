@@ -1,0 +1,58 @@
+<wxs module="tools" src="../../../wxs/common.wxs"></wxs>
+
+<van-popup
+  show="{{$.showSpecPopup}}"
+  round
+  z-index="{{1000}}"
+  position="bottom"
+  closeable
+  custom-style="min-height: 20%;padding-bottom: 0;"
+  bind:close="onClose"
+>
+  <view class="spec_content" style="padding-bottom: {{$.systemInfo.bottomBarHeight + 24}}rpx">
+    <view class="spec_head">
+      <van-image width="236rpx" height="236rpx" class="spec_img" src="" />
+      <view class="price">￥<text class="text">88</text>.23</view>
+    </view>
+    <view class="spec_body">
+      <view class="sku_head">颜色</view>
+      <view class="sku_list">
+        <view class="item item_act">黑色</view>
+        <view class="item">红色</view>
+        <view class="item">白色</view>
+        <view class="item">黄色</view>
+        <view class="item">拼色混搭</view>
+        <view class="item">拼色混搭</view>
+      </view>
+    </view>
+    <view class="spec_body">
+      <view class="sku_head">尺码</view>
+      <view class="sku_list">
+        <view class="item item_act">28</view>
+        <view class="item">29</view>
+        <view class="item">30</view>
+        <view class="item">31</view>
+        <view class="item">32</view>
+        <view class="item">33</view>
+      </view>
+    </view>
+    <view class="spec_body">
+      <view class="sku_head">
+        <text>数量</text>
+        <view class="num">
+          <view class="controller" bindtap="onReduceNum">
+            <image class="controller_img" wx:if="{{stock > 1}}" src="{{tools.getImgUrl('miniprogram/cart/reduce.png')}}" />
+            <image class="controller_img" wx:else src="{{tools.getImgUrl('miniprogram/cart/reduce_gray.png')}}" />
+          </view>
+          <view class="value">{{stock}}</view>
+          <view class="controller" bindtap="onAddNum">
+            <image class="controller_img" src="{{tools.getImgUrl('miniprogram/cart/add.png')}}" />
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="btn_content">
+      <view class="btn">确定</view>
+    </view>
+  </view>
+</van-popup>

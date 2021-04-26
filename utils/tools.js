@@ -1,18 +1,92 @@
 import { apiUrl } from "../constants/index"
 
+
 // 获取当前环境接口域名
 export const getBaseApiUrl = () => {
   let url = apiUrl
   return url;
 }
 
+// 提示信息
+const showErrorMsg = (msg, icon) => {
+  wx.showToast({
+    title: !!msg ? msg : '哎呀，出错啦，请重试',
+    icon: !!icon ? icon : "none",
+    duration: 2000,
+  });
+};
+
+// 错误码处理
+export const handleErrorCode = ({
+  code,
+  msg,
+  mustLogin = false,
+}) => {
+  switch(code) {
+    case 10010:
+      // 未登录
+      if(mustLogin) {
+        showLogin();
+      } else {
+        showErrorMsg("您还未登录，请登录");
+      }
+      break;
+    case 10011:
+      // 服务不可用
+      showErrorMsg("服务暂不可用，请稍后重试");
+      break;
+    case 10012:
+      // 限流
+      showErrorMsg("当前访问人数较多，请稍后重试");
+      // router
+      break;
+    case 10013:
+      // 系统升级 服务不可用
+      showErrorMsg("系统升级中，请稍后重试");
+      break;
+    case 10014:
+      // accessToken 无效
+      showErrorMsg("刷新token");
+      break;
+    case 10015:
+      // refreshToken 无效
+      showErrorMsg("刷新token");
+      break;
+    case 10016:
+      // 请求地址不存在
+      showErrorMsg("服务暂不可用，请稍后重试");
+      break;
+    case 10017:
+      // 黑名单用户
+      showErrorMsg("暂不可用，请联系客服");
+      break;
+    case 10018:
+      // 系统异常
+      showErrorMsg("系统异常");
+      break;
+    case 10110:
+      // 业务错误
+      showErrorMsg(msg);
+      break;
+    default:
+      showErrorMsg(!!msg ? msg : "")
+  }
+};
+
+
 // 获取/更新系统信息
 export const getSystemInfo = () => {
   let systemInfo = {}
   let data = wx.getSystemInfoSync();
+  // 得到右上角菜单的位置尺寸
+  const menuButtonObject = wx.getMenuButtonBoundingClientRect();
+  const { top, height } = menuButtonObject;
+  let rpxRatio = 750/data.windowWidth;
   systemInfo = {
     // 像素比
     pixelRatio: data.pixelRatio,
+    // 宽度像素比
+    rpxRatio,
     // 屏幕宽度 px
     screenWidth: data.screenWidth,
     // 屏幕高度 px
@@ -29,16 +103,19 @@ export const getSystemInfo = () => {
     SDKVersion: data.SDKVersion,
     // 在竖屏正方向下的安全区域
     safeArea: data.safeArea,
+    // 右上角按钮参数 px
+    menuButton: menuButtonObject,
     // 操作系统及版本
     system: data.system
   };
-  // 得到右上角菜单的位置尺寸
-  const menuButtonObject = wx.getMenuButtonBoundingClientRect();
-  const { top, height } = menuButtonObject;
   // 计算导航栏的高度
-  // 此高度基于右上角菜单在导航栏位置垂直居中计算得到
-  systemInfo.navBarHeight = height + (top - systemInfo.statusBarHeight) * 2;
-  systemInfo.statusHeight = systemInfo.statusBarHeight * 2;
+  // 此高度基于右上角菜单在导航栏位置垂直居中计算得到 单位rpx
+  // systemInfo.menuToNavHeight = (top - systemInfo.statusBarHeight) * rpxRatio;
+  systemInfo.menuToNavHeight = (top - systemInfo.statusBarHeight) * data.pixelRatio;
+  systemInfo.navBarHeight = (height + (top - systemInfo.statusBarHeight) * 2) * rpxRatio;
+  systemInfo.statusHeight = systemInfo.statusBarHeight * rpxRatio;
+  systemInfo.navTotalHeight = systemInfo.statusHeight + systemInfo.navBarHeight;
+  systemInfo.bottomBarHeight = (data.screenHeight - data.safeArea.bottom) * rpxRatio
   if(data.system.indexOf("iOS")) {
     // iOS 苹果手机
     systemInfo.phoneType = 1
@@ -51,6 +128,27 @@ export const getSystemInfo = () => {
   }
   return systemInfo
 }
+
+
+/**
+ * profile boolean 自定义使用获取用户信息API
+*/
+export const getUserInfo = (profile) => {
+  let useProfile = !!wx.getUserProfile ? true : false;
+  if(profile !== undefined) {
+    useProfile = !!profile
+  };
+  if(useProfile) {
+    return wx.getUserProfile({
+      desc: '用于完善您的会员资料',
+      lang: 'zh_CN',
+    });
+  } else {
+    return wx.getUserInfo({
+      lang: "zh_CN",
+    });
+  }
+};
 
 
 // 防抖
@@ -71,6 +169,7 @@ export const debounce = (func, wait) => {
     }, wait);
   }
 }
+
 
 // 节流
 export const throttle = (func, wait) => {
@@ -96,6 +195,7 @@ export const throttle = (func, wait) => {
     }, wait)
   }
 }
+
 
 // 取url参数
 export const getQueryString = (name) => {

@@ -1,0 +1,67 @@
+
+.good_card {
+  overflow: hidden;
+  margin-bottom: 14rpx;
+}
+
+.good_cover {
+  overflow: hidden;
+  vertical-align: middle;
+  border-radius: 16rpx 16rpx 0 0;
+}
+
+.good_info {
+  padding: 14rpx 16rpx 16rpx;
+  background-color: #fff;
+  border-radius: 0 0 16rpx 16rpx;
+}
+
+.good_title {
+  height: 40rpx;
+  font-weight: 500;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin-bottom: 12rpx;
+}
+
+.good_sku {
+  height: 30rpx;
+  color: #999999;
+  font-size: 24rpx;
+  line-height: 30rpx;
+  margin-bottom: 16rpx;
+}
+
+.good_price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cart {
+  position: relative;
+}
+
+.cart_icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 12rpx;
+}
+
+.cart_num {
+  position: absolute;
+  top: -10rpx;
+  right: 4rpx;
+  min-width: 12rpx;
+  height: 22rpx;
+  font-weight: 500;
+  color: #c73e30;
+  font-size: 16rpx;
+  line-height: 22rpx;
+  text-align: center;
+  padding: 0 4rpx;
+  background-color: #ffffff;
+  border: 2rpx solid #c73e30;
+  border-radius: 20rpx;
+}

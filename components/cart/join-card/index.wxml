@@ -1,0 +1,24 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="join_card {{border ? 'join_card_border' : ''}}" style="width: {{width}}">
+  <van-image width="160rpx" height="160rpx" fit="cover" custom-class="good_img" src="{{tools.getImgUrl('miniprogram/cart/add%402x.png')}}"/>
+  <view class="card_info">
+    <view class="title text_one_line">圣诞快乐自行车MVMV猫砂盆多伦多浪费了森岛帆高森岛帆高</view>
+    <view class="desc">oneonelike asdfasd</view>
+    <view class="sale">月销 188件</view>
+    <view class="price">
+      <view class="text"><text class="unit">￥</text>88.89<view class="market_price">¥10.11 </view></view>
+      <view class="num_controller">
+        <image class="icon" wx:if="{{stock}}" src="{{tools.getImgUrl('miniprogram/cart/reduce%402x.png')}}" bindtap="reduceStock" />
+        <!-- <input
+          class="num_input"
+          value="{{stock}}"
+          wx:if="{{stock}}"
+        /> -->
+        <view class="num_input" wx:if="{{stock}}" >{{stock}}</view>
+        <image class="icon" src="{{tools.getImgUrl('miniprogram/cart/add%402x.png')}}" bindtap="addStock" />
+      </view>
+    </view>
+  </view>
+  <!-- <view class="right_space" /> -->
+</view>

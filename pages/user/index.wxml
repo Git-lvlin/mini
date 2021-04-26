@@ -1,24 +1,91 @@
-<view >
-  <van-button open-type="getUserInfo" type="primary" bind:getuserinfo="handleGetUerInfo" wx:if="{{!userAuth}}">授权登录</van-button>
-  <van-panel 
-    title="用户信息"
-    custom-class="panel_title"
-    wx:else="{{!userAuth}}"
-  >
-    <van-cell-group custom-class="cell_group_title">
+<wxs module="tools" src="../../wxs/common.wxs" />
+
+<view class="container">
+  <view class="nav_back" style="padding-top: {{$.systemInfo.statusHeight}}rpx">
+    <image mode="widthFix" class="nav_back_img" src="{{tools.getImgUrl('miniprogram/user/user_back.png')}}" />
+  </view>
+  <view class="content">
+    <view class="nav_height" style="height: {{$.systemInfo.statusHeight + $.systemInfo.navBarHeight}}rpx" />
+
+    <view class="user_head">
+      <van-image
+        width="120rpx"
+        height="120rpx"
+        fit="cover"
+        round
+        custom-class="user_avatar"
+        src="{{tools.getImgUrl('miniprogram/user/user_back.png')}}"
+      />
+      <view class="head_text" wx:if="{{!$.userInfo.nickName}}" bindtap="onToLogin">登录/注册</view>
+      <view class="user_info" wx:else >
+        <view class="head_text">momo</view>
+        <view class="user_level">
+          <image class="level_icon" src="" />
+          <view class="level_name">普通会员</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="order">
       <van-cell 
-        title="昵称" 
-        value="{{userInfo.nickName}}" 
+        title="我的订单"
+        value="查看全部"
+        is-link
+        border="{{false}}"
+        title-style="font-weight:600;color:#333333;font-size: 28rpx;"
         bind:click="onClickHead"
       />
-      <van-cell title="头像" center custom-class="cell_back">
-        <van-image fit="cover" custom-class="avatar_image" round width="60" height="60" src="{{userInfo.avatarUrl}}" data-src="{{userInfo.avatarUrl}}" bind:click="onClickImg" />
-        <!-- <image mode="scaleToFill" style="width: 120rpx;height:120rpx;border-radius: 50%" src="{{userInfo.avatarUrl}}" /> -->
-      </van-cell>
-      <van-cell title="地区" value="{{userInfo.country + userInfo.province + userInfo.city}}" border="{{ false }}" />
-      <van-cell title="全局变量" value="{{motto}}" bind:click="onClickOther"/>
-      <!-- <van-cell title="全局变量" value="{{title}}" /> -->
-    </van-cell-group>
-  </van-panel>
+      <view class="order_list">
+        <view class="order_item" wx:for="{{orderTypeList}}" wx:key="name">
+          <view class="sub_num" wx:if="{{item.subNum > 0}}">{{item.subNum}}</view>
+          <image class="item_img" src="{{item.icon}}" />
+          <view class="item_name">{{item.name}}</view>
+        </view>
+      </view>
+    </view>
+
+    <image mode="widthFix" class="banner_img" src="{{banner}}" />
+
+    <view class="other_setting">
+      <view
+        class="other_item"
+        wx:for="{{otherSetting}}"
+        wx:key="name"
+        data-type="{{item.type}}"
+        data-path="{{item.path}}"
+        bindtap="onToOtherSet"
+      >
+        <image class="setting_icon" slot="icon" src="{{item.icon}}" />
+        <view class="settting_name">{{item.name}}</view>
+        <image class="setting_arrow" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
+      </view>
+    </view>
+
+    <van-popup show="{{ showPopup }}" closeable round bind:close="onHidePopup">
+      <view class="popup_content">请下载APP体验完整功能</view>
+    </van-popup>
+
+    <!-- <van-button wx:else open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </van-button> -->
+    <!-- <van-button wx:if="{{canUseUserProfile}}" bindtap="onGetUserProfile"> 授权登录 --- </van-button>
+    <van-button wx:if="{{!canUseUserProfile}}" open-type="getUserInfo" bind:getuserinfo="handleGetUernfo">授权登录</van-button>
+    <van-panel 
+      title="用户信息"
+      custom-class="panel_title"
+      wx:else="{{!userAuth}}"
+    >
+      <van-cell-group title="用户信息" custom-class="cell_group_title">
+        <van-cell 
+          title="昵称" 
+          value="{{$.userInfo.nickName}}" 
+          bind:click="onClickHead"
+        />
+        <van-cell title="头像" center custom-class="cell_back">
+          <van-image fit="cover" custom-class="avatar_image" round width="60" height="60" src="{{$.userInfo.avatarUrl}}" data-src="{{$.userInfo.avatarUrl}}" bind:click="onClickImg" />
+        </van-cell>
+        <van-cell title="地区" value="{{$.userInfo.country + $.userInfo.province + $.userInfo.city}}" border="{{ false }}" />
+        <van-cell title="全局变量" value="{{motto}}" bind:click="onClickOther"/>
+      </van-cell-group>
+    </van-panel> -->
+  </view>
 </view>
 

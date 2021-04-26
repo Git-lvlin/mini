@@ -1,0 +1,28 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="message">
+  <view class="message_content">
+    <image class="massage_icon" src="{{tools.getImgUrl('miniprogram/home/message_icon.png')}}" />
+    <view class="line" />
+    <view class="message_body">
+      <swiper 
+        class="message_list"
+        circular
+        vertical
+        autoplay
+        interval="3000"
+        duration="800"
+      >
+        <swiper-item class="message_item text_one_line">
+          <text>多亏有了vivo S9手机，超过20字显示内容超过20字显示内容超过20字显示内容</text>
+        </swiper-item>
+        <swiper-item class="message_item text_one_line">
+          <text>多亏有了vivo S9手机，超过20字显示内容超过20字显示内容超过20字显示内容</text>
+        </swiper-item>
+        <swiper-item class="message_item text_one_line">
+          <text>多亏有了vivo S9手机，超过20字显示内容超过20字显示内容超过20字显示内容</text>
+        </swiper-item>
+      </swiper>
+    </view>
+  </view>
+</view>

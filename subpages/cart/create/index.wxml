@@ -1,0 +1,83 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="container">
+  <view 
+    class="nav_head"
+    style="height: {{$.systemInfo.navTotalHeight}}rpx;background: url({{tools.getImgUrl('miniprogram/cart/order/order_back.png')}})"
+  >
+    <view class="head" style="bottom: {{$.systemInfo.menuToNavHeight}}rpx">
+      <image class="head_img" src="{{tools.getImgUrl('miniprogram/cart/order/smile.png')}}"/>
+      <view class="head_title">确认订单</view>
+    </view>
+    <image
+      class="nav_back"
+      style="bottom: {{$.systemInfo.menuToNavHeight}}rpx"
+      src="{{tools.getImgUrl('miniprogram/common/back_white%402x.png')}}"
+      bindtap="onBack"
+    />
+  </view>
+
+  <view class="body" >
+    <view class="nav_height" style="height: {{$.systemInfo.navTotalHeight}}rpx;">
+      <image slot="slot_back"  mode="widthFix" class="back" src="{{tools.getImgUrl('miniprogram/cart/order/order_back.png')}}" />
+    </view>
+    
+    <view class="content">
+      <view class="address" bindtap="onToAddress">
+        <view class="no_address" wx:if="{{false}}">
+          <image class="add_address" src="{{tools.getImgUrl('miniprogram/cart/add_address.png')}}" />
+          <view class="no_address_title">添加收货地址</view>
+        </view>
+        <view class="select_view">
+          <image class="location_icon" src="{{tools.getImgUrl('miniprogram/common/location_icon.png')}}" />
+          <view class="address_info">
+            <view class="name">司马<text class="phone">12341234123</text></view>
+            <view class="address_detail text_two_line">广东省深圳市宝安区西乡街道易方达社区光头佬大厦1102</view>
+          </view>
+          <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
+        </view>
+      </view>
+
+      <view class="shop_list">
+        <shop-card data="{{shop[0]}}" />
+      </view>
+
+      <view class="order_price">
+        <view class="cell_item">
+          <view class="cell_name">商品金额</view>
+          <view class="cell_value">￥218.80</view>
+        </view>
+        <view class="cell_item">
+          <view class="cell_name">优惠券</view>
+          <view class="coupon" bindtap="onOpenCoupon">
+            <text class="coupon_text" wx:if="{{!useCoupon}}">优惠券不可用</text>
+            <text class="coupon_money {{!!couponMoney ? 'coupon_money_more' : ''}}" wx:else>{{!!couponMoney ? '-' : ''}}￥{{couponMoney}}</text>
+            <image class="coupon_jump right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
+          </view>
+        </view>
+        <view class="cell_item">
+          <view class="cell_name">运费</view>
+          <view class="cell_value">￥218.80</view>
+        </view>
+        <view class="cell_item">
+          <view class="cell_name">给商家留言</view>
+          <view class="cell_value">
+            <input class="input_msg" placeholder="留言,10个字以内" maxlength="10" placeholder-class="input_placeholder" bindinput="handleMsgInput" />
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="submit_order">
+    <view class="submit_total_price">
+      <price-mobel
+        title="合计金额："
+        money="{{22.23}}"
+      />
+      <view class="submit_btn" bindtap="onToCashier">去支付</view>
+    </view>
+  </view>
+
+  <coupon-popup show="{{couponPopup}}" bind:close="handleCloseCoupon" />
+</view>

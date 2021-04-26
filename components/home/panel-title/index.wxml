@@ -1,0 +1,12 @@
+<view class="panel-title {{!!center ? 'center' : ''}}" style="color: {{color}};">
+  <view class="title" wx:if="{{title && !useTitleSlot}}">{{title}}</view>
+  <slot wx:if="{{useTitleSlot}}" name="title" />
+  <view class="desc" wx:if="{{desc}}">{{desc}}</view>
+  <view class="slot">
+    <slot name="body" />
+  </view>
+  <view class="more" wx:if="{{more}}" style="color: {{moreColor}}">
+    <view>查看更多</view>
+    <view class="more_arrow" style="border-color: {{moreColor}}" />
+  </view>
+</view>

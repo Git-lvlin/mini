@@ -1,0 +1,29 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="beancurd">
+  <view class="beancurd_content">
+    <scroll-view
+      scroll-x
+      class="beancurd_scroll"
+      bindscroll="handleScroll"
+    >
+      <view class="beancurd_body">
+        <view class="beancurd_list" wx:for="{{list}}" wx:key="index">
+          <view
+            class="beancurd_item"
+            wx:for="{{item}}"
+            wx:for-item="child"
+            wx:key="id"
+            bindtap="onToClass"
+          >
+            <image class="beancurd_img" src="{{tools.getImgUrl('miniprogram/home/Fruits.png')}}" />
+            <view class="name">时令果蔬</view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="progress_back">
+      <view class="progress" style="left: {{scrollListWidth}}rpx" />
+    </view>
+  </view>
+</view>

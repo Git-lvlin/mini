@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "nav-bar": "/components/common/nav-bar/index",
+    "price-mobel": "/components/common/price-mobel/index"
+  }
+}

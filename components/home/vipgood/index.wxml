@@ -1,0 +1,33 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="vipgood">
+  <view class="good_panel">
+    <view class="good_head">
+      <view class="title">会员约购专享</view>
+      <view
+        class="label label_orgin"
+        style="background-image: url({{tools.getImgUrl('miniprogram/home/vip_origin.png')}})"
+      >每日特惠</view>
+    </view>
+    <view class="desc desc_origin">爆款限时特卖</view>
+    <view class="good_list">
+      <van-image width="130rpx" height="130rpx" fit="cover" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/Fruits.png" />
+      <van-image width="130rpx" height="130rpx" fit="cover" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/Fruits.png" />
+    </view> 
+  </view>
+  <view class="good_panel">
+    <view class="good_head">
+      <view class="title">会员店约购专享</view>
+      <view
+        class="label label_red"
+        style="background-image: url({{tools.getImgUrl('miniprogram/home/vip_red.png')}})"
+      >大折扣</view>
+    </view>
+    <view class="desc desc_red">全网最低价</view>
+    <view class="good_list">
+      <van-image width="130rpx" height="130rpx" fit="cover" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/Fruits.png" />
+      <van-image width="130rpx" height="130rpx" fit="cover" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/Fruits.png" />
+    </view>
+  </view>
+</view>
+ 

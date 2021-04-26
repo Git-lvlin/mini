@@ -1,0 +1,17 @@
+
+.nodata_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.img {
+  width: 400rpx;
+  height: 400rpx;
+}
+
+.title {
+  font-size: 28rpx;
+  color: #999999;
+  margin-top: 16rpx;
+}

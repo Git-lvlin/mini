@@ -1,8 +1,13 @@
 
 import create from '../../../utils/create'
 import store from '../../../store/index'
+import router from '../../../utils/router'
 
 create.Component(store, {
+  options: {
+    // 在组件定义时的选项中启用多slot支持
+    multipleSlots: true
+  },
   use: [
     "systemInfo"
   ],
@@ -15,14 +20,15 @@ create.Component(store, {
       type: Boolean,
       value: false
     },
+    // 导航栏文字颜色
     fontColor: {
       type: String,
       value: "#fff"
     },
-    // 状态栏背景颜色 只支持十六进制
+    // 状态栏背景颜色 只支持十六进制 #FA0D1E 主题色
     background: {
       type: String,
-      value: '#ff0000'
+      value: '#FA0D1E'
     },
     // 状态栏文字颜色 支持 white / black
     statusColor: {
@@ -31,6 +37,21 @@ create.Component(store, {
       observer(now, old) {
         if(now != old) this.setStatusBarColor();
       }
+    },
+    // 导航栏标题
+    title: {
+      type: String,
+      value: "约购"
+    },
+    // 导航栏是否显示搜索框
+    titleIsSearch: {
+      type: Boolean,
+      value: false
+    },
+    // 是否自定义背景
+    useCustomBack: {
+      type: Boolean,
+      value: false
     },
     // 是否显示搜索框
     showSearch: {
@@ -55,7 +76,7 @@ create.Component(store, {
 
   ready() {
     // 设置nav区域占位高度
-    let navTotalHeight = this.data.$.systemInfo.statusBarHeight + this.data.$.systemInfo.navBarHeight;
+    let navTotalHeight = this.data.$.systemInfo.navTotalHeight;
     navTotalHeight = this.properties.showSearch ? navTotalHeight + 54 : navTotalHeight
     this.setData({
       navTotalHeight
@@ -84,26 +105,18 @@ create.Component(store, {
     },
     // 点击返回按钮
     onClickBack() {
-      wx.navigateBack({
-        delta: 1,
-        success: (res) => {},
-        fail: (res) => {},
-        complete: (res) => {
-          console.log(res);
-        },
-      })
+      router.go();
     },
 
     // 点击返回首页
     onClickHome() {
-      wx.switchTab({
-        url: 'url',
-        success: (res) => {},
-        fail: (res) => {},
-        complete: (res) => {
-          console.log(res);
-        },
-      })
+      router.goTabbar();
     },
+
+    onToSearch() {
+      router.push({
+        name: 'search'
+      })
+    }
   }
 })

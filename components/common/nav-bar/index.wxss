@@ -1,5 +1,11 @@
+
 .nav_container{
   position: relative;
+}
+
+.seize_seat {
+  position: relative;
+  z-index: 2;
 }
 
 .nav_content{
@@ -8,13 +14,18 @@
   left: 0;
   width: 100%;
   z-index: 9999;
+  overflow: hidden;
 }
 
 .status_bar{
+  position: relative;
+  z-index: 2;
   height: 40rpx;
 }
 
 .nav_bar{
+  position: relative;
+  z-index: 3;
   min-height: 88rpx;
 }
 
@@ -27,8 +38,8 @@
 
 .back_icon{
   position: absolute;
-  top: 28rpx;
-  left: 20rpx;
+  top: 20rpx;
+  left: 24rpx;
 }
 
 .back_icon_home{
@@ -53,4 +64,26 @@
 .nav_title{
   text-align: center;
   line-height: 60rpx;
+}
+
+.head_search {
+  position: absolute;
+  left: 88rpx;
+  bottom: 10rpx;
+  width: calc(100vw - 150px - 64rpx);
+  height: 58rpx;
+  font-size: 28rpx;
+  color: #CCCCCC;
+  line-height: 58rpx;
+  padding-left: 64rpx;
+  background: #FFFFFF;
+  border-radius: 28rpx;
+}
+
+.search_icon {
+  position: absolute;
+  top: 10rpx;
+  left: 16rpx;
+  width: 40rpx;
+  height: 40rpx;
 }

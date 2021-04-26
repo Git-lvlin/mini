@@ -1,0 +1,72 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="container">
+  <view class="search_content">
+    <view class="search_height" />
+    <van-search
+      value="{{ searchText }}"
+      shape="round"
+      use-action-slot
+      use-left-icon-slot
+      custom-class="search"
+      placeholder="搜索想要的商品"
+      bind:focus="handleSearchFocus"
+    >
+      <image slot="left-icon" class="search_icon" src="{{tools.getImgUrl('miniprogram/common/search@2x.png')}}" />
+      <view slot="action" bind:tap="onSearch">搜索</view>
+    </van-search>
+    <view class="search_association" wx:if="{{showAssociation}}">
+      <view class="association_item" bindtap="onCloseAssociation" data-text="青菜">青菜</view>
+      <view class="association_item" bindtap="onCloseAssociation" data-text="白菜">白菜</view>
+      <view class="association_item" bindtap="onCloseAssociation" data-text="空心菜">空心菜</view>
+      <view class="association_item" bindtap="onCloseAssociation" data-text="酸菜鱼">酸菜鱼</view>
+      <view class="association_item" bindtap="onCloseAssociation" data-text="菜菜鸡">菜菜鸡</view>
+    </view>
+  </view>
+  <view class="search_history" wx:if="{{false}}">
+    <view class="history_clear">
+      <view class="title">历史记录</view>
+      <view class="clear">
+        <image class="clear_icon" src="{{tools.getImgUrl('miniprogram/common/delete@2x.png')}}" />
+        清空
+      </view>
+    </view>
+    <view class="option_list">
+      <view class="item">大白菜</view>
+      <view class="item">大白菜白</view>
+      <view class="item">大白菜</view>
+      <view class="item">大白菜白</view>
+      <view class="item">大白菜白白白</view>
+      <view class="item">大白菜白</view>
+      <view class="item">大白菜白白白白白白白白</view>
+      <view class="item">大白菜白</view>
+      <view class="item">大白菜白</view>
+    </view>
+    <view class="hot_search">
+      <view class="hot_title">热门搜索</view>
+      <view class="option_list">
+        <view class="item"><image class="icon" src="{{tools.getImgUrl('miniprogram/cart/hot.png')}}" />大白菜</view>
+        <view class="item"><image class="icon" src="{{tools.getImgUrl('miniprogram/cart/hot.png')}}" />大白菜白</view>
+        <view class="item"><image class="icon" src="{{tools.getImgUrl('miniprogram/cart/hot.png')}}" />大白菜</view>
+        <view class="item"><image class="icon" src="{{tools.getImgUrl('miniprogram/cart/hot.png')}}" />大白菜白</view>
+        <view class="item">大白菜白白白</view>
+        <view class="item">大白菜白</view>
+        <view class="item">大白菜白白白白白白白白</view>
+        <view class="item">大白菜白</view>
+        <view class="item">大白菜白</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="good_content">
+    <view class="good_list">
+      <good-card />
+      <good-card />
+      <good-card />
+      <good-card />
+      <good-card />
+    </view>
+  </view>
+
+  <notdata wx:if="{{false}}" />
+</view>

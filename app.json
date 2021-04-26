@@ -1,7 +1,11 @@
 {
   "pages": [
-    "pages/login/index",
+    "pages/home/index",
+    "pages/community/index",
+    "pages/cart/index",
     "pages/user/index",
+    "pages/login/main/index",
+    "pages/login/bindPhone/index",
     "pages/list/index"
   ],
   "subpackages": [
@@ -16,12 +20,49 @@
         "index/index",
         "debug/debug"
       ]
+    },
+    {
+      "root": "subpages/community",
+      "pages": [
+        "main/index"
+      ]
+    },
+    {
+      "root": "subpages/cart",
+      "pages": [
+        "main/index",
+        "create/index",
+        "detail/index",
+        "class/index",
+        "address/index",
+        "search/index",
+        "cashier/index",
+        "editAddress/index"
+      ]
+    },
+    {
+      "root": "subpages/user",
+      "pages": [
+        "main/index",
+        "setting/index"
+      ]
     }
   ],
   "preloadRule": {
-    "pages/login/index": {
+    "pages/home/index": {
       "network": "all",
-      "packages": ["dokit"]
+      "packages": [
+        "subpages/cart",
+        "subpages/user",
+        "subpages/community"
+      ]
+    },
+    "pages/user/index": {
+      "network": "all",
+      "packages": [
+        "subpages/user",
+        "dokit"
+      ]
     }
   },
   "window": {
@@ -29,6 +70,41 @@
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "约购",
     "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#000000",
+    "selectedColor": "#000000",
+    "backgroundColor": "#000000",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "/images/tabbar/home@3x.png",
+        "selectedIconPath": "/images/tabbar/actHome@3x.png"
+      },
+      {
+        "pagePath": "pages/community/index",
+        "text": "社区",
+        "iconPath": "/images/tabbar/community@3x.png",
+        "selectedIconPath": "/images/tabbar/actCommunity@3x.png"
+      },
+      {
+        "pagePath": "pages/cart/index",
+        "text": "购物车",
+        "iconPath": "/images/tabbar/cart@3x.png",
+        "selectedIconPath": "/images/tabbar/actCart@3x.png"
+      },
+      {
+        "pagePath": "pages/user/index",
+        "text": "我的",
+        "iconPath": "/images/tabbar/me@3x.png",
+        "selectedIconPath": "/images/tabbar/actMe@3x.png"
+      }
+    ]
+  },
+  "usingComponents": {
+    "van-image": "/miniprogram_npm/@vant/weapp/image/index"
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"

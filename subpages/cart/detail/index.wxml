@@ -1,0 +1,99 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="container">
+  <view class="banner_content">
+    <image
+      class="back_icon"
+      style="top: {{backTopHeight}}rpx"
+      src="{{tools.getImgUrl('miniprogram/cart/good_back.png')}}"
+      bindtap="onToBack"
+    />
+    <swiper
+      class="banner"
+      indicator-dots="{{true}}"
+      circular
+      indicator-dots="{{false}}"
+      autoplay="{{true}}"
+      interval="{{3000}}"
+      duration="{{800}}"
+      bindanimationfinish="handleSwiperChange"
+    >
+      <block wx:for="{{imgUrls}}">
+        <swiper-item class="banner_item">
+          <van-image
+            width="750rpx"
+            height="750rpx"
+            fit="cover"
+            src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/cart/666.jpg"
+          />
+        </swiper-item>
+      </block>
+    </swiper>
+    <view class="swiper_num">{{swiperCurrent}}/{{imgUrls.length}}</view>
+  </view>
+
+  <view class="good_head">
+    <view class="good_price">
+      <view class="price">
+        ￥<text class="max_text">{{tools.getPriceSplit(88.65)}}</text>{{tools.getPriceSplit(88.65, 1)}}
+        <view class="market_price ">￥12.63</view>
+      </view>
+      <view class="sales">月售188件</view>
+    </view>
+    <view class="good_info">
+      <view class="good_title">
+        <view class="text text_one_line">优质番茄 500g*1盒子（最多16字）</view>
+        <view class="text_one_line">优质番茄 500g*1盒子（最多16字）</view>
+      </view>
+      <view class="add_cart">
+        <view class="cart_btn" wx:if="{{!stock}}" bindtap="addStock">加入购物车</view>
+        <view class="num_controller" wx:else>
+          <image class="icon" src="{{tools.getImgUrl('miniprogram/cart/reduce%402x.png')}}" bindtap="reduceStock" />
+          <!-- <input
+            class="num_input"
+            value="{{stock}}"
+            wx:if="{{stock}}"
+          /> -->
+          <view class="num_input" >{{stock}}</view>
+          <image class="icon" src="{{tools.getImgUrl('miniprogram/cart/add%402x.png')}}" bindtap="addStock" />
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="space_20" />
+
+  <view class="info_card">
+    <view class="info_title">商品参数</view>
+    <view class="parameter_list">
+      <view
+        class="parameter_item"
+        wx:for="{{parameterList}}"
+        wx:key="name"
+      >
+        <view class="parameter_name">{{item.name}}</view>
+        <view class="parameter_value">{{item.value}}</view>
+      </view>
+    </view>
+  </view>
+  
+  <view class="space_20" />
+
+  <view class="info_card">
+    <view class="info_title">商品详情</view>
+    <view class="detail">
+      <van-image width="100%" fit="widthFix" custom-class="detail_image" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/cart/666.jpg" />
+      <van-image width="100%" fit="widthFix" custom-class="detail_image" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/cart/666.jpg" />
+      <van-image width="100%" fit="widthFix" custom-class="detail_image" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/cart/666.jpg" />
+      <van-image width="100%" fit="widthFix" custom-class="detail_image" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/cart/666.jpg" />
+      <van-image width="100%" fit="widthFix" custom-class="detail_image" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/cart/666.jpg" />
+      <van-image width="100%" fit="widthFix" custom-class="detail_image" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/cart/666.jpg" />
+    </view>
+  </view>
+
+  <view style="height: {{$.systemInfo.bottomBarHeight + 104}}rpx" />
+
+  <spec-panel />
+
+  <settlement-bar />
+</view>
