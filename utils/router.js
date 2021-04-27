@@ -1,9 +1,20 @@
 import routes from "../constants/routes"
  
+const paramToStr = (data) => {
+  let str = "";
+  for(let key in data) {
+    str += `${key}=${data[key]}&`
+  }
+  str = str.substring(0, str.length - 1);;
+  return str
+};
+
 const push = ({ name, data }) => {
-  const dataStr = encodeURIComponent(JSON.stringify(data));
+  // const dataStr = encodeURIComponent(JSON.stringify(data));
+  const dataStr = paramToStr(data);
   const route = routes[name];
-  const url = route ? route.path : `/pages/${name.replace(/\./g, '/')}/index`;
+  // const url = route ? route.path : `/pages/${name.replace(/\./g, '/')}/index`;
+  const url = route ? route.path : name;
   if (route.type === 'tab') {
     wx.switchTab({
       url: `${url}`,
@@ -11,9 +22,10 @@ const push = ({ name, data }) => {
     return;
   }
   wx.navigateTo({
-    url: `${url}?encodedData=${dataStr}`,
+    url: `${url}?${dataStr}`,
+    // url: `${url}?encodedData=${dataStr}`,
   });
-}
+};
 
 const go = (delta = 1) => {
   const pages = getCurrentPages();
@@ -26,12 +38,12 @@ const go = (delta = 1) => {
   wx.navigateBack({
     delta
   });
-}
+};
 
 const replace = ({ name, data, frist }) => {
-  const dataStr = encodeURIComponent(JSON.stringify(data));
+  const dataStr = paramToStr(data);
   const route = routes[name];
-  const url = route ? route.path : `/pages/${name.replace(/\./g, '/')}/index`;
+  const url = route ? route.path : name;
   if(route.type == 'tab') {
     wx.switchTab({
       url,
@@ -40,21 +52,21 @@ const replace = ({ name, data, frist }) => {
   }
   if (frist) {
     wx.reLaunch({
-      url: `${url}?encodedData=${dataStr}`,
+      url: `${url}?${dataStr}`,
     });
     return;
   } else {
     wx.redirectTo({
-      url: `${url}?encodedData=${dataStr}`,
+      url: `${url}?${dataStr}`,
     });
   }
-}
+};
 
 const goTabbar = (name = 'home') => {
   wx.switchTab({
     url: routes[name].path,
   });
-}
+};
 
 /**
  * 登录完成 - 跳转
@@ -100,10 +112,11 @@ const loginTo = (routerData) => {
       if(delta > 1) {
         go(delta);
       } else {
-        const dataStr = encodeURIComponent(JSON.stringify(data));
+        // const dataStr = encodeURIComponent(JSON.stringify(data));
+        const dataStr = paramToStr(data);
         if(routes.login.path === pages[pagesLen].route) {
           wx.redirectTo({
-            url: `${router}?encodedData=${dataStr}`,
+            url: `${router}?${dataStr}`,
           });
         } else {
           // 不是登录页面，先返回登录页面再重置页面
@@ -113,7 +126,7 @@ const loginTo = (routerData) => {
             delta,
             successs() {
               wx.redirectTo({
-                url: `${router}?encodedData=${dataStr}`,
+                url: `${router}?${dataStr}`,
               });
             }
           });
@@ -121,7 +134,7 @@ const loginTo = (routerData) => {
       } 
     }
   }
-}
+};
  
 const extract = options => JSON.parse(decodeURIComponent(options.encodedData));
 

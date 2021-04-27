@@ -1,4 +1,7 @@
 import { apiUrl } from "../constants/index"
+import routes from "../constants/routes"
+import commonApi from '../apis/common'
+import router from "../utils/router"
 
 
 // 获取当前环境接口域名
@@ -18,6 +21,7 @@ const showErrorMsg = (msg, icon) => {
 
 // 错误码处理
 export const handleErrorCode = ({
+  params,
   code,
   msg,
   mustLogin = false,
@@ -28,7 +32,16 @@ export const handleErrorCode = ({
       if(mustLogin) {
         showLogin();
       } else {
-        showErrorMsg("您还未登录，请登录");
+        // showErrorMsg("您还未登录，请登录");
+        showModal({
+          content: "您还未登录，请登录",
+          confirmText: "去登录",
+          ok() {
+            router.push({
+              name: "login"
+            })
+          }
+        })
       }
       break;
     case 10011:
@@ -46,7 +59,13 @@ export const handleErrorCode = ({
       break;
     case 10014:
       // accessToken 无效
-      showErrorMsg("刷新token");
+      wx.setStorageSync("LOGIN_OVER", true);
+      commonApi.refreshToken();
+      let overList = wx.getStorageSync("OVER_LIST");
+      overList = !!overList ? overList : [];
+      overList.push(params);
+      wx.setStorageSync("OVER_LIST", overList);
+      // showErrorMsg("刷新token");
       break;
     case 10015:
       // refreshToken 无效
@@ -72,6 +91,45 @@ export const handleErrorCode = ({
       showErrorMsg(!!msg ? msg : "")
   }
 };
+
+// 显示toast 提示
+export const showToast = ({
+  title,
+  icon,
+}) => {
+  wx.showToast({
+    title,
+    icon,
+  })
+}
+
+// 显示Modal提示
+export const showModal = ({
+  title = "",
+  content,
+  cancelColor = "#999",
+  cancelText = "取消",
+  confirmColor = "#D7291D",
+  confirmText = "确定",
+  ok = () => {},
+  cancel = () => {},
+}) => {
+  wx.showModal({
+    title,
+    content,
+    cancelText,
+    cancelColor,
+    confirmText,
+    confirmColor,
+    success(res) {
+      if (res.confirm) {
+        ok();
+      } else if(res.cancel) {
+        cancel();
+      }
+    }
+  })
+}
 
 
 // 获取/更新系统信息
@@ -203,4 +261,19 @@ export const getQueryString = (name) => {
   var r = window.location.search.substr(1).match(reg);
   if (r != null) return unescape(r[2]);
   return null;
+}
+
+
+// 取url参数
+export const setLoginRouter = (path) => {
+  let url = path;
+  if(!!url) {
+    const pages = getCurrentPages();
+    url = pages[pages.length - 1].route;
+  }
+  for(let key in routes) {
+    if(routes[key].path === url) {
+      wx.setStorageSync("LOGIN_TO_DATA", routes[key]);
+    }
+  }
 }

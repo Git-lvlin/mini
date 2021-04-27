@@ -1,6 +1,7 @@
 import create from '../../../utils/create'
 import store from '../../../store/index'
 import router from '../../../utils/router'
+import goodApi from '../../../apis/good'
 import { IMG_CDN } from '../../../constants/common'
 
 create.Component(store, {
@@ -36,6 +37,11 @@ create.Component(store, {
     this.setData({
       bottomBarHeight
     });
+
+    goodApi.getCartList({}, { showloading: false}).then(res => {
+    console.log("🚀 ~ file: index.js ~ line 42 ~ goodApi.getCartList ~ res", res)
+
+    })
   },
 
   /**

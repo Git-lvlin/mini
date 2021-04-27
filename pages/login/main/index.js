@@ -4,6 +4,7 @@ import router from '../../../utils/router'
 import { getUserInfo, handleErrorCode } from '../../../utils/tools'
 import { SOURCE_TYPE } from '../../../constants/index'
 import loginApis from '../../../apis/login'
+import commonApis from '../../../apis/common'
 
 create.Page(store, {
   use: [
@@ -105,6 +106,7 @@ create.Page(store, {
               delta: 1,
             });
           }
+          // commonApis.runOverList();
         }).catch(err => {
           if(err.code === 200102) {
             wx.setStorageSync("LOGIN_INFO", err.data);

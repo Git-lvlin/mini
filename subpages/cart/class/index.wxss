@@ -98,6 +98,7 @@
   flex: 1;
   height: 100%;
   padding: 16rpx 0 16rpx 16rpx;
+  box-sizing: border-box;
   background-color: #fff;
 }
 

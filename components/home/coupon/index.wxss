@@ -45,7 +45,7 @@
   height: 98rpx; */
   width: 320rpx;
   height: 89rpx;
-  animation: receiveAction 1.4s linear infinite;
+  animation: receiveAction 1.4s ease-out infinite;
 }
 
 @keyframes receiveAction {

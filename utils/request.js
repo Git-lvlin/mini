@@ -17,7 +17,15 @@ import router from '../utils/router'
 */
 const Reqeust = (params) => {
   const baseUrl = getBaseApiUrl();
-  const token = wx.getStorageSync("SYS_TOKEN");
+  const token = wx.getStorageSync("ACCESS_TOKEN");
+  const loginOver = wx.getStorageSync("LOGIN_OVER");
+  if(loginOver && params.needLogin) {
+    let overList = wx.getStorageSync("OVER_LIST");
+    overList = !!overList ? overList : [];
+    overList.push(params);
+    wx.setStorageSync("OVER_LIST", overList);
+    return ;
+  }
   const header = {
     'content-type': !params.contentType ? 'application/json' : params.contentType,
     v: VERSION,
@@ -52,6 +60,7 @@ const Reqeust = (params) => {
           // 返回错误码处理
           if(!params.notErrorMsg) {
             handleErrorCode({
+              params,
               code: res.data.code,
               msg: res.data.msg,
               mustLogin: params.mustLogin,
@@ -65,6 +74,7 @@ const Reqeust = (params) => {
       fail(error) {
         if(!params.notErrorMsg) {
           handleErrorCode({
+            params,
             code: res.data.code,
             msg: res.data.msg,
             mustLogin: params.mustLogin,

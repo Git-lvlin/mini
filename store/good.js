@@ -5,6 +5,7 @@ const store = {
     systemInfo: main.data.systemInfo,
     userInfo: main.data.userInfo,
     showSpecPopup: false,
+    cartList: [],
   },
   // 设置规格弹窗状态
   onChangeSpecState(state) {

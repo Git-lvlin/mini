@@ -65,6 +65,11 @@
           "pathName": "subpages/cart/search/index",
           "query": "name=bak",
           "scene": null
+        },
+        {
+          "name": "分类",
+          "pathName": "subpages/cart/class/index",
+          "scene": null
         }
       ]
     }

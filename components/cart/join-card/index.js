@@ -1,4 +1,4 @@
-
+import router from '../../../utils/router'
 
 Component({
   options: {
@@ -6,6 +6,10 @@ Component({
   },
 
   properties: {
+    good: {
+      type: Object,
+      value: {},
+    },
     border: {
       type: Boolean,
       value: false,
@@ -49,6 +53,18 @@ Component({
 
     handleInputNum(event) {
       let value = event.detail.value;
-    }
+    },
+
+    onToDetail() {
+      const {
+        good
+      } = this.data;
+      router.push({
+        name: "detail",
+        data: {
+          id: good.id,
+        }
+      })
+    },
   }
 })
