@@ -19,7 +19,7 @@ const Reqeust = (params) => {
   const baseUrl = getBaseApiUrl();
   const token = wx.getStorageSync("ACCESS_TOKEN");
   const loginOver = wx.getStorageSync("LOGIN_OVER");
-  if(loginOver && params.needLogin) {
+  if(!!loginOver && params.mustLogin) {
     let overList = wx.getStorageSync("OVER_LIST");
     overList = !!overList ? overList : [];
     overList.push(params);
@@ -27,7 +27,7 @@ const Reqeust = (params) => {
     return ;
   }
   const header = {
-    'content-type': !params.contentType ? 'application/json' : params.contentType,
+    'Content-Type': !params.contentType ? 'application/json' : params.contentType,
     v: VERSION,
     t: new Date().getTime(),
     ...params.header
@@ -52,6 +52,7 @@ const Reqeust = (params) => {
       success(res){
         // 判断是否返回数据包
         const data = !!params.dataPackage ? res.data : res.data.data;
+        // console.log(params.url, res.data)
         //数据请求成功判断
         if (res.statusCode === 200 && res.data.code === 0 && res.data.success) {
           resolve(data);
@@ -65,9 +66,8 @@ const Reqeust = (params) => {
               msg: res.data.msg,
               mustLogin: params.mustLogin,
             });
-          } else {
-            wx.hideLoading();
           }
+          wx.hideLoading();
           reject(res.data);
         }
       },
@@ -79,9 +79,8 @@ const Reqeust = (params) => {
             msg: res.data.msg,
             mustLogin: params.mustLogin,
           });
-        } else {
-          wx.hideLoading();
         }
+        wx.hideLoading();
         reject(error);
       }
     })

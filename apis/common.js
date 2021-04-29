@@ -1,7 +1,7 @@
-import Request from '../utils/request.js'
+import Request from '../utils/request'
 import store from '../store/index'
-import { showModal, setLoginRouter } from '../utils/tools'
-import router from '../utils/router.js'
+import { showModal, setLoginRouter, getStorageUserInfo } from '../utils/tools'
+import router from '../utils/router'
 
 const url = {
   resource: "/cms/open/json/selByResourceKey",
@@ -40,8 +40,9 @@ export default {
 
   // 刷新token 
   refreshToken() {
-    const postData = {};
-    const userInfo = store.data.userInfo;
+    let postData = {};
+    // const userInfo = store.data.userInfo;
+    const userInfo = getStorageUserInfo();
     if(!userInfo) {
       showModal({
         content: "您的登录已过期，请登录",
@@ -59,7 +60,7 @@ export default {
       refreshToken: wx.getStorageSync("REFRESH_TOKEN"),
       id: userInfo.id,
     }
-    Request.get(url.refreshToken, postData).then(res => {
+    Request.post(url.refreshToken, postData).then(res => {
       wx.setStorageSync("ACCESS_TOKEN", res.acessToken);
       wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
       this.runOverList();
@@ -71,6 +72,7 @@ export default {
     const overList = wx.getStorageSync("OVER_LIST");
     if(!!overList) return ;
     overList.forEach(item => {
+    console.log("🚀 ~ file: common.js ~ line 76 ~ runOverList ~ item", item)
       if(item.method === "GET") {
         Reqeust.get({
           ...item,

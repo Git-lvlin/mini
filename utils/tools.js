@@ -95,7 +95,7 @@ export const handleErrorCode = ({
 // 显示toast 提示
 export const showToast = ({
   title,
-  icon,
+  icon = "none",
 }) => {
   wx.showToast({
     title,
@@ -206,6 +206,34 @@ export const getUserInfo = (profile) => {
       lang: "zh_CN",
     });
   }
+};
+
+/**
+ * 获取本地用户信息
+ * showLogin boolean 是否显示登录提醒
+*/
+export const getStorageUserInfo = showLogin => {
+  const userInfo = wx.getStorageSync("USER_INFO");
+  if(showLogin && !userInfo) {
+    showModal({
+      content: "您还未登录，请登录",
+      confirmText: "去登录",
+      ok() {
+        router.push({
+          name: "login"
+        })
+      }
+    })
+  }
+  return userInfo;
+};
+
+/**
+ * 设置本地用户信息
+ * userInfo object 用户信息
+*/
+export const setStorageUserInfo = userInfo => {
+  wx.setStorageSync("USER_INFO", userInfo);
 };
 
 

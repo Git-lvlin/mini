@@ -1,27 +1,37 @@
 import create from '../../../utils/create'
-import store from '../../../store/index'
+import store from '../../../store/good'
 import router from '../../../utils/router'
-import goodApi from '../../../apis/good'
+import { getStorageUserInfo, showModal } from '../../../utils/tools'
 import { IMG_CDN } from '../../../constants/common'
+import goodApi from '../../../apis/good'
 
 create.Component(store, {
   use: [
-    "systemInfo"
+    "systemInfo",
+    "cartList",
+    "cartListTotal",
   ],
 
-  /**
-   * 组件的属性列表
-   */
-  properties: {
-    classPopupState: {
-      type: Boolean,
-      value: false,
+  // store 属性计算
+  computed: {
+    selectAll() {
+      let state = true;
+      this.cartList.forEach(item => {
+        if(!item.isChecked) {
+          state = false
+        }
+      })
+      return state;
     }
   },
 
-  /**
-   * 组件的初始数据
-   */
+  properties: {
+    classPopupState: {
+      type: Boolean,
+      value: true,
+    }
+  },
+
   data: {
     showClassPopup: false,
     bottomBarHeight: 104,
@@ -38,32 +48,81 @@ create.Component(store, {
       bottomBarHeight
     });
 
-    goodApi.getCartList({}, { showloading: false}).then(res => {
-    console.log("🚀 ~ file: index.js ~ line 42 ~ goodApi.getCartList ~ res", res)
-
-    })
+    
   },
 
-  /**
-   * 组件的方法列表
-   */
-  methods: {
-
-    onOpenCart() {
-      this.setData({
-        showClassPopup: true,
-      })
+  pageLifetimes: {
+    show() {
+      let userInfo = getStorageUserInfo();
+      if(!!userInfo) {
+        this.store.getCartList();
+        this.store.getCartTotal();
+      }
     },
 
+    hide() {},
+  },
+
+  methods: {
+    // 检查是否有登录
+    checkLogin(showLogin) {
+      let userInfo = getStorageUserInfo(showLogin);
+      return !!userInfo ? true : false;
+    },
+    // 打开购物车
+    onOpenCart() {
+      if(!this.checkLogin(true)) return ;
+      this.setData({
+        showClassPopup: !this.data.showClassPopup,
+      })
+    },
+    // 关闭购物车
     onCloseCart() {
       this.setData({
         showClassPopup: false,
       })
     },
-
+    // 跳转下单
     onToCreateOrder() {
+      if(!this.checkLogin(true)) return ;
       router.push({
         name: "createOrder"
+      })
+    },
+    // 勾选或取消商品
+    onSelectGood({
+      currentTarget
+    }) {
+      let {
+        id: skuId,
+        checked: isChecked,
+      } = currentTarget.dataset;
+      goodApi.checkedCart({
+        skuId,
+      }).then(res => {
+        this.store.updateCart();
+      })
+    },
+    // 清空购物车
+    onClearCart() {
+      showModal({
+        content: "确定清空购物车？",
+        ok() {
+          goodApi.checkedAllCart({
+            isChecked: false,
+          }).then(res => {
+            this.store.updateCart();
+          })
+        }
+      })
+    },
+    // 购物车全选
+    onSelectCard() {
+      let selectAll = this.data.selectAll;
+      goodApi.checkedAllCart({
+        isChecked: !selectAll,
+      }).then(res => {
+        this.store.updateCart();
       })
     }
   }

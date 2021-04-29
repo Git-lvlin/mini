@@ -146,6 +146,7 @@ create.Page(store, {
       wx.setStorageSync("REFRESH_TOKEN", data.refreshToken);
       store.data.userInfo = data.memberInfo;
       store.data.defUserInfo = data.memberInfo;
+      setStorageUserInfo(data.memberInfo);
       if(loginToData) {
         router.loginTo(loginToData);
       } else {

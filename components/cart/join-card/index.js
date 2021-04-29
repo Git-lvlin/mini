@@ -1,14 +1,29 @@
+import create from '../../../utils/create'
+import store from '../../../store/good'
 import router from '../../../utils/router'
+import { showModal } from '../../../utils/tools'
 
-Component({
+create.Component(store, {
   options: {
     addGlobalClass: true
   },
 
+  use: [
+    "cartList"
+  ],
+
   properties: {
+    source: {
+      type: String,
+      value: "good"
+    },
     good: {
       type: Object,
       value: {},
+    },
+    quantity: {
+      type: Number,
+      value: 0,
     },
     border: {
       type: Boolean,
@@ -24,7 +39,8 @@ Component({
    * 组件的初始数据
    */
   data: {
-    stock: 0
+    goodIsChange: false,
+    nowGood: {},
   },
 
   /**
@@ -32,23 +48,31 @@ Component({
    */
   methods: {
     addStock() {
-      let stock = this.data.stock;
-      stock += 1;
-      this.setData({
-        stock
-      });
-      this.handleChangeNum(stock);
+      // let stock = this.data.good.quantity + 1;
+      const {
+        quantity
+      } = this.data;
+      this.handleChangeNum(1, quantity < 1);
     },
     reduceStock() {
-      let stock = this.data.stock;
-      stock -= 1;
-      this.setData({
-        stock
-      })
-      this.handleChangeNum(stock);
+      const that = this;
+      let quantity = this.data.quantity;
+      if(quantity === 1) {
+        showModal({
+          content: "您确定要删除该商品吗？",
+          ok() {
+            that.handleChangeNum(-1);
+          }
+        })
+        return ;
+      }
+      this.handleChangeNum(-1);
     },
-    handleChangeNum(num) {
-      this.triggerEvent("handleNum", { num });
+    handleChangeNum(num, showMsg) {
+      let good = this.data.good;
+      good.quantity = num;
+      // this.triggerEvent("handleNum", good);
+      this.store.addCart(good, showMsg);
     },
 
     handleInputNum(event) {

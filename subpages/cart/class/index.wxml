@@ -1,4 +1,5 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
+<wxs module="util" src="./index.wxs" />
 
 <view class="container">
   <nav-bar titleIsSearch useCustomBack >
@@ -49,10 +50,10 @@
             <view class="detail_list">
               <join-card
                 good="{{item}}"
+                quantity="{{util.getQuantity(item, $.cartList)}}"
                 border="{{index != goodsList.length - 1}}"
                 wx:for="{{goodsList}}"
                 wx:key="id"
-                bind:handleNum="handleNum"
               />
             </view>
           </view>

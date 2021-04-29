@@ -1,6 +1,7 @@
 import create from '../../../utils/create'
-import store from '../../../store/index'
+import store from '../../../store/good'
 import goodApi from '../../../apis/good'
+import { showToast } from '../../../utils/tools'
 
 const defaultSecondCategory = [{
   id: 999999999,
@@ -11,6 +12,7 @@ const defaultSecondCategory = [{
 create.Page(store, {
   use: [
     "systemInfo",
+    "cartList",
   ],
 
   /**
@@ -40,6 +42,9 @@ create.Page(store, {
     this.setData({
       classScrollHeight
     });
+  },
+
+  onShow() {
     this.getCategory({
       params: {
         gcParentId: 0
@@ -47,16 +52,12 @@ create.Page(store, {
     });
   },
 
-  onShow() {
-
-  },
-
   // 获取一级二级分类
   getCategory({
     second,
     params
   }) {
-    goodApi.getCategory(params, { showloading: !!second ? true : false }).then(res => {
+    goodApi.getCategory(params, { showLoading: !!second ? true : false }).then(res => {
       const classId = res.records[0].id
       if(!second) {
         this.setData({
@@ -92,9 +93,10 @@ create.Page(store, {
     }
     if(!!next) params.next = next;
     goodApi.getRecommends(params).then(res => {
+      let goodsList = this.goodListMap(res.records);
       this.setData({
         recommendsNext: res.hasNext ? res.next : "",
-        goodsList: res.records
+        goodsList,
       })
     })
   },
@@ -116,11 +118,43 @@ create.Page(store, {
       return
     }
     goodApi.getGoodsList(params).then(res => {
+      let goodsList = this.goodListMap(res.records);
+      // let cartList = this.data.$.cartList;
+      // goodsList.forEach(item => {
+      //   cartList.forEach(child => {
+      //     if(item.spuId === child.spuId) {
+      //       item.quantity = child.quantity
+      //     }
+      //   })
+      // })
       this.setData({
-        goodsList: res.records,
+        goodsList,
         goodsNext: res.hasNext ? res.next : "",
       })
     });
+  },
+
+  // 格式化商品数据 - 字段映射
+  goodListMap(list) {
+    let goodsList = [];
+    list.forEach(item => {
+      goodsList.push({
+        spuId: item.id,
+        skuId: item.defaultSkuId,
+        goodsName: item.goodsName,
+        skuName: item.goodsDesc,
+        marketPrice: item.goodsMarketPrice,
+        salePrice: item.goodsSaleMinPrice,
+        quantity: 0,
+        thumbnail: item.goodsImageUrl,
+        goodsSaleNum: item.goodsSaleNum,
+        isMultiSpec: item.isMultiSpec,
+        goodsState: item.goodsState,
+        goodsVerifyState: item.goodsVerifyState,
+        isFreeFreight: item.isFreeFreight,
+      })
+    })
+    return goodsList;
   },
 
   // 打开分类下拉
@@ -166,11 +200,6 @@ create.Page(store, {
     }, () => {
       this.getGoodsList();
     })
-  },
-
-  handleNum({ detail }) {
-  // console.log("🚀 ~ file: index.js ~ line 139 ~ handleNum ~ detail", detail)
-
   },
 
   handleClassPopupShow({ detail }) {
