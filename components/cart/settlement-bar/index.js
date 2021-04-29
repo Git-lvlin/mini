@@ -1,7 +1,7 @@
 import create from '../../../utils/create'
 import store from '../../../store/good'
 import router from '../../../utils/router'
-import { getStorageUserInfo, showModal } from '../../../utils/tools'
+import { getStorageUserInfo, showModal, showToast } from '../../../utils/tools'
 import { IMG_CDN } from '../../../constants/common'
 import goodApi from '../../../apis/good'
 
@@ -26,10 +26,10 @@ create.Component(store, {
   },
 
   properties: {
-    classPopupState: {
-      type: Boolean,
-      value: true,
-    }
+    barIndex: {
+      type: Number,
+      value: 999,
+    },
   },
 
   data: {
@@ -48,7 +48,6 @@ create.Component(store, {
       bottomBarHeight
     });
 
-    
   },
 
   pageLifetimes: {
@@ -85,9 +84,52 @@ create.Component(store, {
     // 跳转下单
     onToCreateOrder() {
       if(!this.checkLogin(true)) return ;
+      const {
+        cartList
+      } = this.data.$;
+      let goodList = [];
+      let hasStore = false;
+      cartList.forEach(item => {
+        hasStore = false;
+        if(item.isChecked) {
+          goodList.forEach(child => {
+            if(item.storeNo === child.storeNo) {
+              hasStore = true;
+              child.goodsInfos.push({
+                ...this.getGoodOrderInfo(item),
+              });
+            }
+          });
+          if(!hasStore) {
+            goodList.push({
+              storeNo: item.storeNo,
+              goodsInfos: [{
+                ...this.getGoodOrderInfo(item),
+              }],
+            });
+          }
+        }
+      });
+      if(goodList.length < 1) {
+        showToast({
+          title: "请选择需要下单的商品",
+        })
+        return ;
+      }
+      console.log("🚀 goodList", goodList)
+      store.data.orderGoodList = goodList;
+      wx.setStorageSync("GOOD_LIST", goodList);
       router.push({
         name: "createOrder"
       })
+    },
+    // 提交订单商品数据
+    getGoodOrderInfo(good) {
+      return {
+        spuId: good.spuId,
+        skuId: good.skuId,
+        skuNum: good.quantity,
+      }
     },
     // 勾选或取消商品
     onSelectGood({

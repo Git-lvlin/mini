@@ -69,6 +69,13 @@
         {
           "name": "分类",
           "pathName": "subpages/cart/class/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "商详",
+          "pathName": "subpages/cart/detail/index",
+          "query": "id=2040&skuId=45&quantity=4",
           "scene": null
         }
       ]

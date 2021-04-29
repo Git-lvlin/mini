@@ -7,8 +7,7 @@ var getImgUrl = function (url) {
 
 // 拆解价格
 var getPriceSplit = function (price, type) {
-  var str = price.toString();
-  // var str = price + "";
+  var str = price !== undefined ? price.toString() : "0";
   var strArr = str.split(".");
   if(!type) {
     return strArr[0];

@@ -1,4 +1,5 @@
 import router from '../../../utils/router'
+import cartApi from '../../../apis/cart'
 
 Page({
 
@@ -11,7 +12,10 @@ Page({
   },
 
   onShow: function () {
-
+    cartApi.getAddressList().then(res => {
+    console.log("🚀 ~ file: index.js ~ line 15 ~ this.getAddressList ~ res", res)
+      
+    })
   },
 
   

@@ -6,9 +6,20 @@ const store = {
   data:{
     systemInfo: main.data.systemInfo,
     userInfo: main.data.userInfo,
+    // 显示选择规格弹窗
     showSpecPopup: false,
+    // 购物车列表
     cartList: [],
-    cartListTotal: {},
+    // 购物车汇总数据
+    cartListTotal: {
+      "quantity": 0,
+      "subtotal": 0,
+      "subtotalPromotion": 0,
+      "freight": 0,
+      "checkedQuantity": 0
+    },
+    // 确认订单提交的商品数据
+    orderGoodList: [],
   },
   // 设置规格弹窗状态
   onChangeSpecState(state) {

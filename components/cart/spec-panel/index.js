@@ -1,5 +1,6 @@
 import create from '../../../utils/create'
 import store from '../../../store/good'
+import goodApi from '../../../apis/good'
 
 
 create.Component(store, {
@@ -9,25 +10,40 @@ create.Component(store, {
   ],
   
   properties: {
-    show: {
-      type: Boolean,
-      value: true
-    }
+    good: {
+      type: Object,
+      value: {},
+      observer(now, old) {
+        if(now.id !== old.id && now.isMultiSpec == 1) {
+          this.getSkuList(now.id);
+        }
+      }
+    },
   },
 
   data: {
-    show: true,
     stock: 1,
+    skuList: [],
   },
 
   ready() {
-    // console.log("🚀 systemInfo", this.data.$.systemInfo)
+    
   },
 
-  /**
-   * 组件的方法列表
-   */
   methods: {
+    // 获取sku列表
+    getSkuList(id) {
+      return ;
+      goodApi.getSkuList({
+        spuId: id
+      }).then(res => {
+        console.log("🚀 ~ file: index.js ~ line 49 ~ ready ~ res", res)
+        this.setData({
+          skuList: res.records
+        })
+      })
+    },
+
     onClose() {
       store.onChangeSpecState(false)
     },

@@ -1,7 +1,6 @@
 import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
-import { showToast } from '../../../utils/tools'
 
 const defaultSecondCategory = [{
   id: 999999999,
@@ -42,14 +41,15 @@ create.Page(store, {
     this.setData({
       classScrollHeight
     });
-  },
-
-  onShow() {
     this.getCategory({
       params: {
         gcParentId: 0
       }
     });
+  },
+
+  onShow() {
+    
   },
 
   // 获取一级二级分类
@@ -119,14 +119,6 @@ create.Page(store, {
     }
     goodApi.getGoodsList(params).then(res => {
       let goodsList = this.goodListMap(res.records);
-      // let cartList = this.data.$.cartList;
-      // goodsList.forEach(item => {
-      //   cartList.forEach(child => {
-      //     if(item.spuId === child.spuId) {
-      //       item.quantity = child.quantity
-      //     }
-      //   })
-      // })
       this.setData({
         goodsList,
         goodsNext: res.hasNext ? res.next : "",

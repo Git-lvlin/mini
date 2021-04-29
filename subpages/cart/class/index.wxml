@@ -50,6 +50,7 @@
             <view class="detail_list">
               <join-card
                 good="{{item}}"
+                canJump="{{true}}"
                 quantity="{{util.getQuantity(item, $.cartList)}}"
                 border="{{index != goodsList.length - 1}}"
                 wx:for="{{goodsList}}"
@@ -61,7 +62,9 @@
       </view>
       <!-- 结算 -->
       <view class="settlement">
-        <settlement-bar classPopupState="{{classPopupState}}" />
+        <settlement-bar
+          barIndex="{{!classPopupState ? 999 : 9}}"
+        />
       </view>
     </view>
   </view>

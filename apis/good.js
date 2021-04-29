@@ -4,7 +4,6 @@ const url = {
   category: "/goods/open/category",
   goodList: "/goods/open/list",
   recommends: "/goods/open/recommends",
-  detail: "/goods/open/info",
   
   addCart: "/cart/auth/cart/addCart",
   cartList: "/cart/auth/cart/list",
@@ -13,6 +12,11 @@ const url = {
   checkedCart: "/cart/auth/cart/checkedCart",
   checkedAllCart: "/cart/auth/cart/checkedAllCart",
   subtotal: "/cart/auth/cart/subtotal",
+
+  detail: "/goods/open/info",
+  detailImg: "/goods/open/detailImages",
+  skuList: "/goods/open/skus",
+  checkSku: "/goods/open/checkSku",
 }
 
 export default {
@@ -60,9 +64,21 @@ export default {
   },
 
   
+  // 获取详情图片
+  getDetailImg(params, option) {
+    return Request.get(url.detailImg, params, option);
+  },
   // 获取商品详情
-  getDetail(params, option) {
+  getGoodDetail(params, option) {
     return Request.get(url.detail, params, option);
+  },
+  // 获取sku列表
+  getSkuList(params, option) {
+    return Request.get(url.skuList, params, option);
+  },
+  // 选择sku
+  getCheckSku(params, option) {
+    return Request.get(url.checkSku, params, option);
   },
 
 }

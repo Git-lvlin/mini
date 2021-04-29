@@ -32,6 +32,10 @@ create.Component(store, {
     width: {
       type: String,
       value: "542rpx"
+    },
+    canJump: {
+      type: Boolean,
+      value: false,
     }
   },
 
@@ -81,12 +85,17 @@ create.Component(store, {
 
     onToDetail() {
       const {
-        good
+        good,
+        quantity,
+        canJump,
       } = this.data;
+      if(!canJump) return; 
       router.push({
         name: "detail",
         data: {
-          id: good.id,
+          id: good.spuId,
+          skuId: good.skuId,
+          quantity,
         }
       })
     },
