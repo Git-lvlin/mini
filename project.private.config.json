@@ -77,6 +77,12 @@
           "pathName": "subpages/cart/detail/index",
           "query": "id=2040&skuId=45&quantity=4",
           "scene": null
+        },
+        {
+          "name": "添加地址",
+          "pathName": "subpages/cart/editAddress/index",
+          "query": "id=2040&skuId=45&quantity=4",
+          "scene": null
         }
       ]
     }

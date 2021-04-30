@@ -6,7 +6,7 @@ export default {
   },
   // 检查是不是验证码
   checkSmsCode(value) {
-    return /^\d{6}$/.test(value)
+    return /^\d{4}$/.test(value)
   },
   // 检查是不是图片
   checkImgCode(value) {

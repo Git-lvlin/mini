@@ -1,7 +1,7 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
 <view class="container">
-  <block wx:if="{{false}}">
+  <block wx:if="{{addressList.length}}">
     <view class="address_list">
       <view class="address_item">
         <view class="address_head">
@@ -28,7 +28,12 @@
     </view>
   </block>
 
-  <nodata
-    title="您还没有收货地址，请点击下方+新建"
-  />
+  <view class="no_address" wx:if="{{listLoad && !addressList.length}}">
+    <nodata
+      title="您还没有收货地址，请点击下方+新建"
+    />
+    <view class="no_data_btn" bindtap="onToEditAddress">
+      <image class="btn_icon" src="{{tools.getImgUrl('miniprogram/common/white_add.png')}}" />添加收货地址
+    </view>
+  </view>
 </view>

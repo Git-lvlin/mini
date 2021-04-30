@@ -43,11 +43,11 @@ create.Component(store, {
 
   ready() {
     const pages = getCurrentPages();
+    if(!pages.length) return; 
     const pagePath = `/${pages[pages.length - 1].route}`;
     this.setData({
       pagePath
     });
-    console.log(this.data.$);
   },
 
   /**

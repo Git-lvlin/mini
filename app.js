@@ -7,7 +7,7 @@ App({
     setTimeout(() => {
       store.data.motto = "改变了"
       console.log(store.data)
-    }, 5000)
+    }, 2000)
     
     // 获取设置系统信息
     let systemInfo = getSystemInfo();
