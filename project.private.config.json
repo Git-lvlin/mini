@@ -37,18 +37,6 @@
           "scene": null
         },
         {
-          "name": "地址",
-          "pathName": "subpages/cart/address/index",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "编辑地址",
-          "pathName": "subpages/cart/editAddress/index",
-          "query": "",
-          "scene": null
-        },
-        {
           "name": "登录",
           "pathName": "pages/login/main/index",
           "query": "name=bak",
@@ -75,12 +63,6 @@
         {
           "name": "商详",
           "pathName": "subpages/cart/detail/index",
-          "query": "id=2040&skuId=45&quantity=4",
-          "scene": null
-        },
-        {
-          "name": "添加地址",
-          "pathName": "subpages/cart/editAddress/index",
           "query": "id=2040&skuId=45&quantity=4",
           "scene": null
         }

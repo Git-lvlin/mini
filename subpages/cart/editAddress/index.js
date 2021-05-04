@@ -2,7 +2,7 @@ import router from "../../../utils/router"
 import cartApi from "../../../apis/cart"
 import { getPinYin } from '../../../utils/pinyin'
 import format from '../../../utils/format'
-import { showToast } from '../../../utils/tools'
+import { showModal, showToast } from '../../../utils/tools'
 
 const defaultAreaList = [];
 const defaultIndex = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
@@ -14,15 +14,18 @@ defaultIndex.forEach(item => {
 });
 
 Page({
-  areaIdx: "",
-  areaParentIdx: "",
+  // 是否是编辑状态
+  isEdit: false,
+  editFristLoad: true,
 
   data: {
     isDefault: false,
     provinceList: [],
     areaList: {},
     showPopup: false,
-    postData: {},
+    postData: {
+      isDefault: false
+    },
     letterList: defaultIndex,
     areaList: defaultAreaList,
     areaData: {
@@ -37,29 +40,53 @@ Page({
       city: {},
       area: {},
       areaStr: "",
-    }
+    },
+    editData: {},
   },
 
   onLoad: function (options) {
-    this.getProvince();
-  },
-
-  onAreaScroll(event) {
-    // console.log("🚀 ~ file: index.js ~ line 34 ~ onAreaScroll ~ event", event)
-    // this.setData({
-    //   scrollTop: event.detail.scrollTop
-    // })
+    // let editData = wx.getStorageSync("EDIT_ADDRESS");
+    let editData = options.data;
+    if(!!editData) {
+      editData = JSON.parse(editData);
+      let {
+        postData
+      } = this.data;
+      this.isEdit = true;
+      postData = {
+        consignee: editData.consignee,
+        phone: editData.phone,
+        address: editData.address,
+        isDefault: editData.isDefault
+      }
+      this.setData({
+        editData,
+        postData,
+      }, () => {
+        this.getProvince();
+      })
+    } else {
+      this.getProvince();
+    }
   },
 
   // 获取省份
   getProvince() {
     cartApi.getProvince().then(res => {
       const {
-        areaData
+        areaData,
+        editData,
       } = this.data;
-      let areaList = this.mapAddreass(res);
+      let selectData = {};
+      if(this.isEdit) {
+        selectData = {
+          id: editData.provinceId,
+          type: "province",
+        }
+        this.getArea(editData.provinceId);
+      }
+      let areaList = this.mapAddreass(res, selectData);
       areaData.province = areaList;
-      // this.getArea(res[0].id);
       this.setData({
         areaData,
         areaList,
@@ -69,17 +96,32 @@ Page({
 
   // 获取地级市
   getArea(id, isCity = true) {
+    const {
+      editData
+    } = this.data;
     cartApi.getArea({
       id
     }).then(res => {
       let areaData = this.data.areaData;
-      let areaList = this.mapAddreass(res);
+      let selectData = {};
+      if(this.isEdit && isCity && this.editFristLoad) {
+        selectData = {
+          id: editData.cityId,
+          type: "city",
+        }
+        this.getArea(editData.cityId, false);
+      } else if(this.isEdit && !isCity) {
+        selectData = {
+          id: editData.districtId,
+          type: "area",
+        }
+      }
+      let areaList = this.mapAddreass(res, selectData);
       if(isCity) {
         areaData.city = areaList;
       } else {
         areaData.area = areaList;
       }
-      // this.getArea(res[0].id, false);
       this.setData({
         areaList,
         areaData
@@ -88,22 +130,35 @@ Page({
   },
 
   // 格式化区域数据
-  mapAddreass(list = []) {
+  mapAddreass(list = [], selectData = {}) {
     let letterList = [];
+    let selectAddress = this.data.selectAddress;
     let areaList = JSON.stringify(defaultAreaList);
     areaList = JSON.parse(areaList);
     let hasLetter = false;
     list.forEach(item => {
       let letter = getPinYin(item.name);
-      areaList.forEach(child => {
+      areaList.forEach((child, pidx) => {
         hasLetter = false;
         if(child.letter === letter) {
           child.children.push({
             name: item.name,
             id: item.id,
-            select: false,
             data: item,
           });
+          if(!!selectData.type && selectData.id === item.id && this.editFristLoad) {
+            selectAddress[selectData.type] = {
+              ...selectAddress[selectData.type],
+              ...item,
+            }
+            selectAddress[selectData.type].pidx = pidx;
+            selectAddress[selectData.type].idx = child.children.length - 1;
+            if(selectData.type === "area") {
+              selectAddress.areaStr = `${selectAddress.province.name} ${selectAddress.city.name} ${selectAddress.area.name}`
+              selectAddress.isAct = "area";
+              this.editFristLoad = false;
+            }
+          }
           letterList.forEach(item => {
             if(item === child.letter) {
               hasLetter = true;
@@ -119,6 +174,7 @@ Page({
     this.setData({
       letterList,
       areaList,
+      selectAddress,
     });
     return areaList;
   },
@@ -144,7 +200,7 @@ Page({
   // 打开默认按钮
   handleSwitch() {
     this.setData({
-      isDefault: !this.data.isDefault
+      "postData.isDefault": !this.data.postData.isDefault
     })
   },
   
@@ -241,7 +297,76 @@ Page({
 
   // 保存地址
   onSave() {
-    // router.go();
-  }
+    const {
+      postData,
+      selectAddress,
+      areaData,
+      editData,
+    } = this.data;
+    const provinceData = areaData.province[selectAddress.province.pidx].children[selectAddress.province.idx];
+    const cityData = areaData.city[selectAddress.city.pidx].children[selectAddress.city.idx];
+    const properData = areaData.area[selectAddress.area.pidx].children[selectAddress.area.idx];
+    postData.provinceName = provinceData.name;
+    postData.cityName = cityData.name;
+    postData.districtName = properData.name;
+    if(format.checkEmpty(postData.consignee)) {
+      showToast({ title: "请输入姓名"});
+      return;
+    } else if(format.checkEmpty(postData.phone)) {
+      showToast({ title: "请输入手机号码"});
+      return;
+    } else if(!format.checkMobile(postData.phone)) {
+      showToast({ title: "请输入正确手机号码"});
+      return;
+    } else if(format.checkEmpty(postData.districtName)) {
+      showToast({ title: "请选择所在地区"});
+      return;
+    } else if(format.checkEmpty(postData.address)) {
+      showToast({ title: "请输入详细地址"});
+      return;
+    }
+    if(this.isEdit) {
+      postData.id = editData.id;
+      cartApi.updateAddress(postData).then(res => {
+        showToast({ 
+          title: "保存成功", 
+          ok() {
+            router.go();
+          } 
+        })
+      });
+    } else {
+      cartApi.addAddress(postData).then(res => {
+        showToast({ 
+          title: "添加成功", 
+          ok() {
+            router.go();
+          } 
+        })
+      });
+    }
+  },
 
+  // 删除地址
+  onDeleteAddress() {
+    const {
+      editData
+    } = this.data;
+    const ids = [editData.id]
+    showModal({
+      content: "您确定要删除地址吗？",
+      ok() {
+        cartApi.removeAddress({
+          ids
+        }).then(res => {
+          showToast({ 
+            title: "删除成功", 
+            ok() {
+              router.go();
+            } 
+          })
+        })
+      }
+    })
+  },
 })

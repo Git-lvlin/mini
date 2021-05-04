@@ -10,6 +10,8 @@ create.Page(store, {
 
   data: {
     backTopHeight: 120,
+    addressInfo: {},
+    orderInfo: {},
     useCoupon: true,
     couponMoney: 2,
     couponPopup: false,
@@ -48,11 +50,11 @@ create.Page(store, {
       backTopHeight
     })
 
-    this.getDefaultAddress();
   },
   
   onShow: function () {
-
+    this.getDefaultAddress();
+    this.getConfirmInfo();
   },
 
   onHide: function () {
@@ -61,10 +63,36 @@ create.Page(store, {
 
   // 获取默认地址
   getDefaultAddress() {
-    cartApi.getDefaultAddress().then(res => {
-    console.log("🚀 ~ file: index.js ~ line 62 ~ cartApi.getDefaultAddress ~ res", res)
-      
+    const chooseAddress = wx.getStorageSync("CHOOSE_ADDRESS");
+    if(chooseAddress) {
+      this.setData({
+        addressInfo: chooseAddress
+      })
+      wx.removeStorage({
+        key: "CHOOSE_ADDRESS"
+      });
+      return;
+    }
+    cartApi.getDefaultAddress({}, {
+      showLoading: false,
+    }).then(res => {
+      this.setData({
+        addressInfo: res,
+      })
     });
+  },
+
+  getConfirmInfo() {
+    const goodList = wx.getStorageSync("GOOD_LIST");
+    const postData = {
+      orderType: 1,
+      storeGoodsInfos: goodList
+    }
+    cartApi.getConfirmInfo(postData).then(res => {
+      this.setData({
+        orderInfo: res,
+      })
+    })
   },
 
   // 返回上一页
@@ -89,7 +117,10 @@ create.Page(store, {
   // 跳转选择地址
   onToAddress() {
     router.push({
-      name: "address"
+      name: "address",
+      data: {
+        isChoose: true,
+      }
     })
   },
 

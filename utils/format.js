@@ -18,7 +18,8 @@ export default {
   },
   // 检查是不是空值
   checkEmpty(value) {
-    return !!value
+    return !value;
+    // return !!value
   },
   // 检查密码
   checkPassword(value) {

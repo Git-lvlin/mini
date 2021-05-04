@@ -89,12 +89,20 @@ page {
   font-size: 32rpx;
   line-height: 96rpx;
   text-align: center;
-  margin: 80rpx auto;
+  margin: 80rpx auto 0;
   background-color: #e5352f;
   border-radius: 16rpx;
   box-shadow: 0rpx 6rpx 12rpx rgba(229, 53, 47, 0.4);
 }
 
+
+.delete_btn {
+  color: #999999;
+  font-size: 32rpx;
+  line-height: 44rpx;
+  text-align: center;
+  margin-top: 32rpx;
+}
 
 
 .address_content {

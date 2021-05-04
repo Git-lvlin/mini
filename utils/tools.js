@@ -96,10 +96,16 @@ export const handleErrorCode = ({
 export const showToast = ({
   title,
   icon = "none",
+  ok = () => {},
 }) => {
   wx.showToast({
     title,
     icon,
+    success() {
+      const timer = setTimeout(() => {
+        ok();
+      }, 1500)
+    }
   })
 }
 

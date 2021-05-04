@@ -41,7 +41,7 @@ page {
 }
 
 .address {
-  height: 84rpx;
+  max-height: 84rpx;
   color: #333333;
   font-size: 28rpx;
   line-height: 42rpx;
