@@ -1,10 +1,12 @@
 import Request from '../utils/request.js'
 
 const url = {
-  list: "?search=列表"
+  floorList: "/cms/open/home/list"
 }
 
-export const getList = () => {
-  console.log(11)
-  return Request.get(url.list, { })
+export default {
+  // 首页楼层通用接口数据
+  getFloorList(params, optipns) {
+    return Request.get(url.floorList, params, optipns)
+  }
 }

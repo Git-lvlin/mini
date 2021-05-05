@@ -10,6 +10,7 @@ const url = {
   area: "/member/open/area/findChildren",
 
   confirmOrder: "/order/auth/confirmOrder",
+  createOrder: "/order/auth/createOrder",
   orderAmount: "/order/auth/orderAmount",
 }
 
@@ -47,6 +48,10 @@ export default {
   // 获取确认订单明细
   getConfirmInfo(params, option) {
     return Request.post(url.confirmOrder, params, option);
+  },
+  // 创建订单
+  createOrder(params, option) {
+    return Request.post(url.createOrder, params, option);
   },
   // 获取确认订单金额明细
   getOrderAmount(params, option) {

@@ -107,6 +107,9 @@ create.Page(store, {
               delta: 1,
             });
           }
+          wx.removeStorage({
+            key: 'LOGIN_INFO',
+          });
           // commonApis.runOverList();
         }).catch(err => {
           if(err.code === 200102) {

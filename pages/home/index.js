@@ -1,6 +1,7 @@
 import create from '../../utils/create'
 import store from '../../store/index'
 import router from '../../utils/router'
+import homeApi from '../../apis/home'
 
 create.Page(store, {
   touchTimer: null,

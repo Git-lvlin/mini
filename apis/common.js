@@ -70,7 +70,7 @@ export default {
   // 重新调需要登录接口
   runOverList() {
     const overList = wx.getStorageSync("OVER_LIST");
-    if(!!overList) return ;
+    if(!overList.length) return ;
     overList.forEach(item => {
     console.log("🚀 ~ file: common.js ~ line 76 ~ runOverList ~ item", item)
       if(item.method === "GET") {

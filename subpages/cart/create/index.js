@@ -2,6 +2,7 @@ import create from '../../../utils/create'
 import store from '../../../store/index'
 import router from '../../../utils/router'
 import cartApi from '../../../apis/cart'
+import { showToast } from '../../../utils/tools'
 
 create.Page(store, {
   use: [
@@ -13,34 +14,8 @@ create.Page(store, {
     addressInfo: {},
     orderInfo: {},
     useCoupon: true,
-    couponMoney: 2,
     couponPopup: false,
-    shop:[
-      {
-        shopName: "RAP",
-        shopAvatar: "https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/common/logo.png",
-        total: 33.80,
-        otherPrice: 5,
-        goods: [
-          {
-            cover: "https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/common/logo.png",
-            name: "乐事无限清新清爽翡翠黄瓜味乐事无限清新清爽翡翠黄瓜味",
-            sku: "翡翠黄瓜味",
-            price: 28.80,
-            num: 1,
-            stock: 3,
-          },
-          {
-            cover: "https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/common/logo.png",
-            name: "乐事无限清新清爽翡翠黄瓜味乐事无限清新清爽翡翠黄瓜味",
-            sku: "翡翠黄瓜味",
-            price: 28.80,
-            num: 1,
-            stock: 3,
-          }
-        ]
-      }
-    ]
+    note: "",
   },
 
   onLoad: function (options) {
@@ -99,21 +74,7 @@ create.Page(store, {
   onBack() {
     router.go();
   },
-
-  // 打开优惠券弹窗
-  onOpenCoupon() {
-    this.setData({
-      couponPopup: true
-    })
-  },
-
-  // 监听优惠券弹窗关闭
-  handleCloseCoupon() {
-    this.setData({
-      couponPopup: false
-    })
-  },
-
+  
   // 跳转选择地址
   onToAddress() {
     router.push({
@@ -124,10 +85,100 @@ create.Page(store, {
     })
   },
 
+  // 监听下单数量
+  handleChangeNum({
+    detail
+  }) {
+    const orderInfo = this.data.orderInfo;
+    orderInfo.storeGoodsInfos[detail.idx] = detail.data;
+    this.setData({
+      orderInfo
+    })
+  },
+
+  // 打开优惠券弹窗
+  onOpenCoupon() {
+    // this.setData({
+    //   couponPopup: true
+    // })
+  },
+
+  // 监听优惠券弹窗关闭
+  handleCloseCoupon() {
+    this.setData({
+      couponPopup: false
+    })
+  },
+
+  // 输入留言
+  handleMsgInput({
+    detail
+  }) {
+    this.setData({
+      note: detail.value
+    })
+  },
+
   // 确认下单 跳转收银台
   onToCashier() {
-    router.push({
-      name: "cashier"
+    const {
+      addressInfo,
+      orderInfo,
+      note,
+    } = this.data;
+    if(!addressInfo.consignee) {
+      showToast({ title: "请选择收货地址" });
+      return;
+    }
+    if(orderInfo.storeGoodsInfos.length < 1) {
+      showToast({ title: "未获取到商品信息，请重试" });
+      return;
+    }
+    const postData = {
+      orderType: 1,
+      payType: 0,
+      token: orderInfo.token,
+      totalAmount: orderInfo.token,
+      payAmount: orderInfo.payAmount,
+      note: note,
+      shippingFeeAmount: orderInfo.shippingFeeAmount || 0,
+      deliveryInfo: {
+        consignee: addressInfo.consignee,
+        phone: addressInfo.phone,
+        address: addressInfo.address,
+        provinceId: addressInfo.provinceId,
+        provinceName: addressInfo.provinceName,
+        cityId: addressInfo.cityId,
+        cityName: addressInfo.cityName,
+        districtName: addressInfo.districtName,
+        fullAddress: addressInfo.fullAddress,
+        streetName: addressInfo.streetName || "",
+      },
+      storeGoodsInfos: [],
+    };
+    orderInfo.storeGoodsInfos.forEach(item => {
+      let storeGood = {
+        storeNo: item.storeNo,
+        goodsInfos: []
+      };
+      item.goodsInfos.forEach(child => {
+        storeGood.goodsInfos.push({
+          spuId: child.spuId,
+          skuId: child.skuId,
+          skuNum: child.skuNum,
+          sourceId: 4,
+        });
+      });
+      postData.storeGoodsInfos.push(storeGood);
     })
+    
+    console.log("🚀 ~ postData", postData)
+
+    cartApi.createOrder(postData).then(res => {
+      console.log("🚀 ~ createOrder ~ res", res)
+      router.push({
+        name: "cashier"
+      })
+    });
   }
 })

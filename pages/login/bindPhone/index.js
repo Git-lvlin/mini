@@ -152,6 +152,9 @@ create.Page(store, {
       } else {
         router.loginTo();
       }
+      wx.removeStorage({
+        key: 'LOGIN_INFO',
+      });
     });
   },
 

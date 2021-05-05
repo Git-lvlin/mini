@@ -23,7 +23,7 @@
     </view>
     
     <view class="content">
-      <view class="address" bindtap="onToAddress">
+      <view class="address" wx:if="{{addressInfo.consignee}}" bindtap="onToAddress">
         <view class="no_address" wx:if="{{!addressInfo.id}}">
           <image class="add_address" src="{{tools.getImgUrl('miniprogram/cart/add_address.png')}}" />
           <view class="no_address_title">添加收货地址</view>
@@ -39,25 +39,31 @@
       </view>
 
       <view class="shop_list">
-        <shop-card data="{{shop[0]}}" />
+        <shop-card
+          wx:for="{{orderInfo.storeGoodsInfos}}"
+          wx:key="storeNo"
+          data="{{item}}"
+          idx="{{index}}"
+          bind:changeNum="handleChangeNum"
+        />
       </view>
 
-      <view class="order_price">
+      <view class="order_price" wx:if="{{orderInfo.token}}">
         <view class="cell_item">
           <view class="cell_name">商品金额</view>
-          <view class="cell_value">￥218.80</view>
+          <view class="cell_value">￥{{orderInfo.totalAmount}}</view>
         </view>
         <view class="cell_item">
           <view class="cell_name">优惠券</view>
           <view class="coupon" bindtap="onOpenCoupon">
             <text class="coupon_text" wx:if="{{!useCoupon}}">优惠券不可用</text>
-            <text class="coupon_money {{!!couponMoney ? 'coupon_money_more' : ''}}" wx:else>{{!!couponMoney ? '-' : ''}}￥{{couponMoney}}</text>
+            <text class="coupon_money {{!!orderInfo.reduceAmount ? 'coupon_money_more' : ''}}" wx:else>{{!!orderInfo.reduceAmount ? '-' : ''}}￥{{orderInfo.reduceAmount}}</text>
             <image class="coupon_jump right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
           </view>
         </view>
         <view class="cell_item">
           <view class="cell_name">运费</view>
-          <view class="cell_value">￥218.80</view>
+          <view class="cell_value">￥{{orderInfo.shippingFeeAmount || 0}}</view>
         </view>
         <view class="cell_item">
           <view class="cell_name">给商家留言</view>
@@ -73,7 +79,7 @@
     <view class="submit_total_price">
       <price-mobel
         title="合计金额："
-        money="{{22.23}}"
+        money="{{orderInfo.payAmount}}"
       />
       <view class="submit_btn" bindtap="onToCashier">去支付</view>
     </view>
