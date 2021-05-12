@@ -44,7 +44,7 @@ const Reqeust = (params) => {
   }
   return new Promise((resolve, reject) => {
     wx.request({
-      url: baseUrl + params.url,
+      url: !!params.hasBase ? params.url : baseUrl + params.url,
       method: params.method.toUpperCase() || 'GET',
       data: params.data || {},
       header,
@@ -75,8 +75,8 @@ const Reqeust = (params) => {
         if(!params.notErrorMsg) {
           handleErrorCode({
             params,
-            code: res.data.code,
-            msg: res.data.msg,
+            code: 10018,
+            msg: "",
             mustLogin: params.mustLogin,
           });
         }

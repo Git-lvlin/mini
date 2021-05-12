@@ -1,0 +1,31 @@
+<van-popup
+  round
+  show="{{ show }}"
+  position="bottom"
+  closeable
+  custom-style="bottom: {{bottomBarHeight}}rpx;"
+  custom-class="coupon_price_popup"
+  bind:close="onClose"
+>
+  <view class="price_popup_title">订单明细</view>
+  <view class="popup_cell">
+    <view class="popup_cell_name">商品总金额</view>
+    <view class="popup_cell_value">¥11.5</view>
+  </view>
+  <view class="popup_cell">
+    <view class="popup_cell_name">优惠明细</view>
+  </view>
+  <view class="popup_cell">
+    <view class="popup_cell_name gray_text">优惠券</view>
+    <view class="popup_cell_value">-¥11.5</view>
+  </view>
+  <view class="coupon_line" />
+  <view class="popup_cell red_cell">
+    <view class="popup_cell_name ">优惠明细</view>
+    <view class="popup_cell_value">-¥11.5</view>
+  </view>
+  <view class="popup_cell">
+    <view class="popup_cell_name">合计</view>
+    <view class="popup_cell_value">¥11.5</view>
+  </view>
+</van-popup>

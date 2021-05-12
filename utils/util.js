@@ -38,8 +38,8 @@ const toInteger = (floatNum) => {
   *
   */
 const operation = (a, b, op) => {
-  var o1 = toInteger(a);
-  var o2 = toInteger(b);
+  var o1 = toInteger(+a);
+  var o2 = toInteger(+b);
   var n1 = o1.num;
   var n2 = o2.num;
   var t1 = o1.times;
@@ -75,16 +75,19 @@ const operation = (a, b, op) => {
 }
 
 export default {
-  // 加减乘除
+  // 加
   add(a, b) {
     return operation(a, b, 'add')
   },
+  // 减
   reduce(a, b) {
     return operation(a, b, 'reduce')
   },
+  // 乘
   multiply(a, b) {
     return operation(a, b, 'multiply')
   },
+  // 除
   divide(a, b) {
     return operation(a, b, 'divide')
   },

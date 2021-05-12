@@ -2,20 +2,27 @@
 
 <view class="container">
   <view class="nav_bar">
-    <nav-bar title="收银台" />
+    <nav-bar title="收银台" delta="{{isPay ? 2 : 1}}" />
   </view>
 
-  <view class="content" wx:if="{{false}}">
+  <view class="content" wx:if="{{!isPay}}">
     <view class="def_head_back" />
     <view class="head" style="background-image: url({{tools.getImgUrl('miniprogram/cart/order/cashier.png')}})">
       <price-mobel
-        money="14476.00"
+        money="{{payAmount}}"
         color="#fff"
         minSize="{{40}}"
         maxSize="{{72}}"
         bold="{{400}}"
       />
-      <view class="pay_time">支付剩余时间：01:06:06</view>
+      <view class="pay_time">
+        支付剩余时间：
+        <van-count-down time="{{ downTime }}" use-slot bind:change="handleChangeTime">
+          <text class="time_item">{{ timeData.hours < 10 ? "0" + timeData.hours : timeData.hours }}:</text>
+          <text class="time_item">{{ timeData.minutes < 10 ? "0" + timeData.minutes : timeData.minutes }}:</text>
+          <text class="time_item">{{ timeData.seconds < 10 ? "0" + timeData.seconds : timeData.seconds }}</text>
+        </van-count-down>
+      </view>
     </view>
 
     <view class="pay_content">
@@ -35,11 +42,11 @@
     </view>
 
     <view class="bottom_confirm">
-      <view class="comfirm_btn">确定支付￥72.36</view>
+      <view class="comfirm_btn" bindtap="onPay">确定支付￥{{payAmount}}</view>
     </view>
   </view>
 
-  <view class="content content_gray">
+  <view class="content content_gray" wx:if="{{isPay}}">
     <view class="def_head_back" />
     
     <view class="success_head" style="background-image: url({{tools.getImgUrl('miniprogram/cart/order/success_back.png')}})">
@@ -53,7 +60,7 @@
 
       <view class="success_price">
         <price-mobel
-          money="14476.00"
+          money="{{payAmount}}"
           color="#333"
           minSize="{{28}}"
           maxSize="{{60}}"
@@ -63,8 +70,8 @@
     </view>
 
     <view class="order_info">
-      <view class="info_item">订单编号：<text class="info_text">{{23156456231244552}}</text></view>
-      <view class="info_item">下单时间：<text class="info_text">{{'2021-02-02 12:12:12'}}</text></view>
+      <view class="info_item">订单编号：<text class="info_text">{{payData.orderSn}}</text></view>
+      <view class="info_item">下单时间：<text class="info_text">{{orderCreateTime}}</text></view>
       <view class="info_item">支付方式：<text class="info_text">{{'微信支付'}}</text></view>
     </view>
 

@@ -45,10 +45,16 @@
 }
 
 .pay_time {
+  display: flex;
+  align-items: flex-start;
   color: #ffffff;
   font-size: 24rpx;
-  line-height: 34rpx;
+  line-height: 40rpx;
   margin-top: 32rpx;
+}
+
+.time_item {
+  color: #fff;
 }
 
 

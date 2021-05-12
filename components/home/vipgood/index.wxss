@@ -12,6 +12,7 @@
   flex-grow: 0;
   flex-shrink: 0;
   width: calc(50% - 12rpx);
+  height: 242rpx;
 }
 
 .good_head {

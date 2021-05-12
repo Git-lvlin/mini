@@ -3,6 +3,7 @@ import store from '../../../store/good'
 import routes from '../../../constants/routes'
 import goodApi from '../../../apis/good'
 import { showModal } from '../../../utils/tools'
+import util from '../../../utils/util'
 
 
 create.Page(store, {
@@ -50,10 +51,6 @@ create.Page(store, {
     this.getDetailImg();
   },
 
-  onShow: function () {
-
-  },
-
   onShareAppMessage: function () {
 
   },
@@ -74,8 +71,11 @@ create.Page(store, {
     goodApi.getGoodDetail({
       id: this.goodId
     }).then(res => {
+      let good = res;
+      good.goodsSaleMinPrice = util.divide(good.goodsSaleMinPrice, 100);
+      good.goodsMarketPrice = util.divide(good.goodsMarketPrice, 100);
       this.setData({
-        good: res
+        good
       })
     });
   },

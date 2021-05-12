@@ -12,6 +12,9 @@ const url = {
   confirmOrder: "/order/auth/confirmOrder",
   createOrder: "/order/auth/createOrder",
   orderAmount: "/order/auth/orderAmount",
+  payInfo: "/order/auth/prepayOrder",
+  orderDetail: "/order/auth/order/orderDetail",
+  
 }
 
 export default {
@@ -57,5 +60,13 @@ export default {
   getOrderAmount(params, option) {
     return Request.post(url.orderAmount, params, option);
   },
+  // 获取订单详情
+  getOrderDetail(params, option) {
+    return Request.get(url.orderDetail, params, option);
+  },
 
+  // 获取支付信息 /order/auth/prepayOrder
+  getPayInfo(params, option) {
+    return Request.post(url.payInfo, params, option);
+  },
 }

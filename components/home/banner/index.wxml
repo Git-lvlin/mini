@@ -10,28 +10,18 @@
     duration="1000"
     circular
   >
-    <swiper-item class="swiper_item">
+    <swiper-item
+      class="swiper_item"
+      wx:for="{{bannerList}}"
+      wx:key="id"
+      data-data="{{item}}"
+      bindtap="onBanner"
+    >
       <van-image
         width="702rpx"
         height="200rpx"
         fit="cover"
-        src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/banner.png"
-      />
-    </swiper-item>
-    <swiper-item class="swiper_item">
-      <van-image
-        width="702rpx"
-        height="200rpx"
-        fit="cover"
-        src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/banner.png"
-      />
-    </swiper-item>
-    <swiper-item class="swiper_item">
-      <van-image
-        width="702rpx"
-        height="200rpx"
-        fit="cover"
-        src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/banner.png"
+        src="{{item.image}}"
       />
     </swiper-item>
   </swiper>

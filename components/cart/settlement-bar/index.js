@@ -92,6 +92,9 @@ create.Component(store, {
       cartList.forEach(item => {
         hasStore = false;
         if(item.isChecked) {
+          // goodList[0].goodsInfos.push({
+          //   ...this.getGoodOrderInfo(item),
+          // });
           goodList.forEach(child => {
             if(item.storeNo === child.storeNo) {
               hasStore = true;
@@ -116,7 +119,6 @@ create.Component(store, {
         })
         return ;
       }
-      console.log("🚀 goodList", goodList)
       store.data.orderGoodList = goodList;
       wx.setStorageSync("GOOD_LIST", goodList);
       router.push({
@@ -128,6 +130,7 @@ create.Component(store, {
       return {
         spuId: good.spuId,
         skuId: good.skuId,
+        // skuId: 1,
         skuNum: good.quantity,
       }
     },

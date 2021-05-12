@@ -1,0 +1,10 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<!-- 导航栏地址 -->
+<view class="nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx;{{headBackCss}}">
+  <view class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx;{{headBackCss}}">
+    <view class="nav_location">
+      <slot name="content" />
+    </view>
+  </view>
+</view>

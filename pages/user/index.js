@@ -2,7 +2,7 @@ import create from '../../utils/create'
 import store from '../../store/index'
 import router from '../../utils/router'
 import { orderList, otherSetting } from '../../constants/user'
-import { getResourceDetail } from '../../apis/common'
+import commonApi from '../../apis/common'
 
 create.Page(store, {
 
@@ -28,7 +28,7 @@ create.Page(store, {
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    getResourceDetail({
+    commonApi.getResourceDetail({
       resourceKey: "USERBANNER"
     }).then(res => {
       this.setData({
@@ -41,6 +41,11 @@ create.Page(store, {
     //   this.setData({
     //   })
     // }
+  },
+
+  onShow() {
+    // 更新tabbar显示
+    router.updateSelectTabbar(this, 3);
   },
 
   onToLogin() {

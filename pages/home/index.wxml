@@ -2,15 +2,15 @@
 
 <view
   class="container"
-  bindtouchmove="handleTouchMove"
-  bindtouchend="handleTouchEnd"
+    bindtouchmove="handleTouchMove"
+    bindtouchend="handleTouchEnd"
 >
   <!-- 导航栏地址 -->
-  <view class="nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx">
-    <view class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx">
+  <view class="nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx;{{headBackCss}}">
+    <view class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx;{{headBackCss}}">
       <view class="nav_location">
         <image class="location_icon" src="{{tools.getImgUrl('miniprogram/home/location.png')}}" />
-        <view class="address text_one_line">中粮商务公园店中粮商务公园店</view>
+        <view class="address text_one_line" bindtap="onToLocation">中粮商务公园店中粮商务公园店</view>
         <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/back_white%402x.png')}}" />
       </view>
       <view class="search_content">
@@ -23,38 +23,75 @@
     </view>
   </view>
 
-  <!-- 约购商品 -->
-  <appointment />
+  <block
+    wx:for="{{floor.floors}}"
+    wx:key="floorId"
+  >
+    <!-- 约购商品 -->
+    <appointment
+      floor="{{item}}"
+      wx:if="{{item.floorType === 1}}"
+    />
 
-  <!-- 优惠券 -->
-  <coupon />
+    <!-- 优惠券 -->
+    <coupon
+      floor="{{item}}"
+      wx:if="{{item.floorType === 2}}"
+    />
 
-  <!-- 豆腐块 -->
-  <beancurd-cube />
+    <!-- 豆腐块 -->
+    <beancurd-cube
+      floor="{{item}}"
+      wx:if="{{item.floorType === 3}}"
+    />
 
-  <!-- banner 轮播 -->
-  <banner />
+    <!-- banner 轮播 -->
+    <banner
+      floor="{{item}}"
+      wx:if="{{item.floorType === 4}}"
+    />
 
-  <!-- 快讯 -->
-  <message />
+    <!-- 快讯 -->
+    <message
+      floor="{{item}}"
+      wx:if="{{item.floorType === 5}}"
+    />
 
-  <!-- 秒杀 -->
-  <seckill />
+    <!-- 秒杀 -->
+    <seckill
+      floor="{{item}}"
+      wx:if="{{item.floorType === 6}}"
+    />
 
-  <!-- 会员 / 店主专享 -->
-  <vipgood />
+    <!-- 会员 / 店主专享 -->
+    <vipgood
+      floor="{{item}}"
+      wx:if="{{item.floorType === 7}}"
+    />
 
-  <!-- 热销商品 -->
-  <view id="hotGoods">
-    <hotgoods />
-  </view>
+    <!-- 热销商品 -->
+    <view id="hotGoods"
+      wx:if="{{item.floorType === 8}}"
+    >
+      <hotgoods
+        scrollBottom="{{scrollBottom}}"
+        floor="{{item}}"
+      />
+    </view>
+  </block>
 
-  <!-- 固定位 -->
-  <view class="fixation {{((!isOnGoods && scrolling) || isOnGoods) ? 'fixation_action' : ''}}">
+  <!-- 固定位 tools.getImgUrl('miniprogram/home/receive_coupon.gif') -->
+  <!-- ((!isOnGoods && scrolling) || isOnGoods) -->
+  <view
+    class="fixation {{scrolling ? 'fixation_action' : ''}}"
+    wx:if="{{!!floor.bannerFloat.image}}"
+  >
     <image
       id="fixation"
       class="fixation_img"
-      src="{{tools.getImgUrl('miniprogram/home/receive_coupon.gif')}}"
+      data-url="{{floor.bannerFloat.actionUrl}}"
+      src="{{!!floor.bannerFloat.image ? floor.bannerFloat.image : floor.bannerFloattools.getImgUrl('miniprogram/home/receive_coupon.gif')}}"
+      bindtap="onFixation"
     />
   </view>
 

@@ -1,0 +1,39 @@
+
+.modal_content {
+  padding: 96rpx 64rpx 48rpx;
+}
+
+.title {
+  color: #333333;
+  font-size: 32rpx;
+  line-height: 42rpx;
+  text-align: center;
+  margin-bottom: 48rpx;
+}
+
+.btn_content {
+  display: flex;
+  align-items: center;
+}
+
+.btn {
+  width: 216rpx;
+  height: 72rpx;
+  font-weight: 600;
+  font-size: 28rpx;
+  line-height: 72rpx;
+  text-align: center;
+  box-sizing: border-box;
+  border-radius: 36rpx;
+}
+
+.cancel {
+  color: #333;
+  margin-right: 30rpx;
+  border: 2rpx solid #ccc;
+}
+
+.confirm {
+  color: #fff;
+  background-color: #e5352f;
+}

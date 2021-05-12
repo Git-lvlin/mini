@@ -1,7 +1,7 @@
 import create from '../../../utils/create'
 import store from '../../../store/index'
 import router from '../../../utils/router'
-import { debounce } from '../../../utils/tools'
+import { debounce, setStorageUserInfo } from '../../../utils/tools'
 import loginApis from '../../../apis/login'
 
 create.Page(store, {
@@ -150,7 +150,10 @@ create.Page(store, {
       if(loginToData) {
         router.loginTo(loginToData);
       } else {
-        router.loginTo();
+        router.loginTo({
+          type: "back",
+          delta: 2,
+        });
       }
       wx.removeStorage({
         key: 'LOGIN_INFO',
@@ -177,7 +180,7 @@ create.Page(store, {
       loginApis.getPhoneNumber({
         encryptedData: data.encryptedData,
         iv: data.iv,
-        wxUId: loginInfo.wxUId,
+        openId: loginInfo.memberInfo.openId,
       }).then(res => {
         that.setData({
           phoneNumber: res.phoneNumber

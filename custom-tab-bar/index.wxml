@@ -1,6 +1,13 @@
 <view class="bar_container">
-  <view class="bar_item" wx:for="{{tabList}}" wx:key="index" data-path="{{item.pagePath}}" bindtap="onToPath">
-    <image class="bar_icon" src="{{pagePath === item.pagePath ? item.selectedIconPath : item.iconPath}}" />
-    <view class="bar_title {{pagePath === item.pagePath ? 'bar_title_act' : ''}}">{{item.name}}</view>
+  <view
+    class="bar_item"
+    wx:for="{{tabList}}"
+    wx:key="index"
+    data-path="{{item.pagePath}}"
+    data-index="{{item.index}}"
+    bindtap="onToPath"
+  >
+    <image class="bar_icon" src="{{selectedIndex === item.index ? item.selectedIconPath : item.iconPath}}" />
+    <view class="bar_title {{selectedIndex === item.index ? 'bar_title_act' : ''}}">{{item.name}}</view>
   </view>
 </view>

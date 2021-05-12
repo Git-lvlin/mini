@@ -1,6 +1,7 @@
 import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
+import util from '../../../utils/util'
 
 const defaultSecondCategory = [{
   id: 999999999,
@@ -135,8 +136,8 @@ create.Page(store, {
         skuId: item.defaultSkuId,
         goodsName: item.goodsName,
         skuName: item.goodsDesc,
-        marketPrice: item.goodsMarketPrice,
-        salePrice: item.goodsSaleMinPrice,
+        marketPrice: util.divide(item.goodsMarketPrice, 100),
+        salePrice: util.divide(item.goodsSaleMinPrice, 100),
         quantity: 0,
         thumbnail: item.goodsImageUrl,
         goodsSaleNum: item.goodsSaleNum,

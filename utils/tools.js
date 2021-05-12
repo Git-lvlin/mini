@@ -2,7 +2,7 @@ import { apiUrl } from "../constants/index"
 import routes from "../constants/routes"
 import commonApi from '../apis/common'
 import router from "../utils/router"
-
+import util from "./util"
 
 // 获取当前环境接口域名
 export const getBaseApiUrl = () => {
@@ -311,3 +311,22 @@ export const setLoginRouter = (path) => {
     }
   }
 }
+
+// 转为浮点数
+export const mapNum = (list = []) => {
+  list.forEach(item => {
+    if(item.marketPrice) {
+      item.marketPrice = util.divide(item.marketPrice, 100);
+    }
+    if(item.salePrice) {
+      item.salePrice = util.divide(item.salePrice, 100);
+    }
+    if(item.freeAmount) {
+      item.freeAmount = util.divide(item.freeAmount, 100);
+    }
+    if(item.usefulAmount) {
+      item.usefulAmount = util.divide(item.usefulAmount, 100);
+    }
+  })
+  return list
+};

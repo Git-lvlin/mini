@@ -1,0 +1,14 @@
+
+<van-popup
+  round
+  show="{{ show }}"
+  bind:close="onClose"
+>
+  <view class="modal_content">
+    <view class="title">{{content}}</view>
+    <view class="btn_content">
+      <view class="btn cancel" bindtap="onClose">{{cancelText}}</view>
+      <view class="btn confirm" bindtap="onOk">{{confirmText}}</view>
+    </view>
+  </view>
+</van-popup>

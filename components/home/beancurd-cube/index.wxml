@@ -1,29 +1,34 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
+<wxs module="utils" src="../../../wxs/homeFloor.wxs" />
 
-<view class="beancurd">
-  <view class="beancurd_content">
+<view class="beancurd" >
+  <view
+    class="beancurd_content"
+    style="{{utils.getHeadBackCss(floor.style, tools.getImgUrl('miniprogram/home/appointment_back.png'))}}"
+  >
     <scroll-view
       scroll-x
       class="beancurd_scroll"
       bindscroll="handleScroll"
     >
       <view class="beancurd_body">
-        <view class="beancurd_list" wx:for="{{list}}" wx:key="index">
+        <view class="beancurd_list" wx:for="{{goodTypeList}}" wx:key="index">
           <view
             class="beancurd_item"
             wx:for="{{item}}"
             wx:for-item="child"
             wx:key="id"
+            data-data="{{child}}"
             bindtap="onToClass"
           >
-            <image class="beancurd_img" src="{{tools.getImgUrl('miniprogram/home/Fruits.png')}}" />
-            <view class="name">时令果蔬</view>
+            <image class="beancurd_img" src="{{child.image}}" />
+            <view class="name text_one_line">{{child.title}}</view>
           </view>
         </view>
       </view>
     </scroll-view>
     <view class="progress_back">
-      <view class="progress" style="left: {{scrollListWidth}}rpx" />
+      <view class="progress {{goodTypeList.length < 2 ? 'progress_full' : ''}}" style="left: {{scrollListWidth}}rpx" />
     </view>
   </view>
 </view>

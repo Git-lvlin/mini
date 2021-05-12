@@ -3,6 +3,7 @@ import store from '../../../store/index'
 import router from '../../../utils/router'
 import cartApi from '../../../apis/cart'
 import { showToast } from '../../../utils/tools'
+import util from '../../../utils/util'
 
 create.Page(store, {
   use: [
@@ -39,6 +40,7 @@ create.Page(store, {
   // 获取默认地址
   getDefaultAddress() {
     const chooseAddress = wx.getStorageSync("CHOOSE_ADDRESS");
+    const addressInfo = this.data.addressInfo;
     if(chooseAddress) {
       this.setData({
         addressInfo: chooseAddress
@@ -51,9 +53,11 @@ create.Page(store, {
     cartApi.getDefaultAddress({}, {
       showLoading: false,
     }).then(res => {
-      this.setData({
-        addressInfo: res,
-      })
+      if(!addressInfo.consignee) {
+        this.setData({
+          addressInfo: res,
+        })
+      }
     });
   },
 
@@ -64,8 +68,22 @@ create.Page(store, {
       storeGoodsInfos: goodList
     }
     cartApi.getConfirmInfo(postData).then(res => {
+      let orderInfo = res;
+      // let storeGood = orderInfo.storeGoodsInfos;
+      orderInfo.reduceAmount = util.divide(orderInfo.reduceAmount, 100);
+      orderInfo.shippingFeeAmount = util.divide(orderInfo.shippingFeeAmount, 100);
+      orderInfo.payAmount = util.divide(orderInfo.payAmount, 100);
+      orderInfo.totalAmount = util.divide(orderInfo.totalAmount, 100);
+      orderInfo.storeGoodsInfos.forEach(item => {
+        item.totalAmount = util.divide(item.totalAmount, 100);
+        item.payAmount = util.divide(item.payAmount, 100);
+        item.shippingFeeAmount = util.divide(item.shippingFeeAmount, 100);
+        item.goodsInfos.forEach(child => {
+          child.skuSalePrice = util.divide(child.skuSalePrice, 100);
+        });
+      })
       this.setData({
-        orderInfo: res,
+        orderInfo,
       })
     })
   },
@@ -137,9 +155,12 @@ create.Page(store, {
     const postData = {
       orderType: 1,
       payType: 0,
+      activityId: "",
+      objectId: "",
+      sourceId: "miniprogram",
       token: orderInfo.token,
-      totalAmount: orderInfo.token,
-      payAmount: orderInfo.payAmount,
+      totalAmount: util.multiply(orderInfo.totalAmount, 100),
+      payAmount: util.multiply(orderInfo.payAmount, 100),
       note: note,
       shippingFeeAmount: orderInfo.shippingFeeAmount || 0,
       deliveryInfo: {
@@ -157,6 +178,7 @@ create.Page(store, {
       storeGoodsInfos: [],
     };
     orderInfo.storeGoodsInfos.forEach(item => {
+      // let storeGood = {"goodsInfos":[{"skuId":1,"skuNum":1,"spuId":2015}],"storeNo":"store_m_1"}
       let storeGood = {
         storeNo: item.storeNo,
         goodsInfos: []
@@ -166,18 +188,15 @@ create.Page(store, {
           spuId: child.spuId,
           skuId: child.skuId,
           skuNum: child.skuNum,
-          sourceId: 4,
         });
       });
       postData.storeGoodsInfos.push(storeGood);
     })
-    
-    console.log("🚀 ~ postData", postData)
-
     cartApi.createOrder(postData).then(res => {
-      console.log("🚀 ~ createOrder ~ res", res)
+      wx.setStorageSync("order_info", res);
       router.push({
-        name: "cashier"
+        name: "cashier",
+        data: res,
       })
     });
   }

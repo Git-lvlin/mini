@@ -135,6 +135,18 @@ const loginTo = (routerData) => {
     }
   }
 };
+
+const updateSelectTabbar = (that, index) => {
+  // tabbar添加选中效果
+  if (typeof that.getTabBar === "function" && that.getTabBar()) {
+    //自定义组件的getTabBar 方法，可获取当前页面下的自定义 tabBar 组件实例。
+    const Tabbar = that.getTabBar();
+    //这个是tabBar中当前页对应的下标
+    Tabbar.setData({
+      selectedIndex: index
+    })
+  }
+}
  
 const extract = options => JSON.parse(decodeURIComponent(options.encodedData));
 
@@ -144,5 +156,6 @@ export default {
   replace,
   goTabbar,
   loginTo,
+  updateSelectTabbar,
   extract,
 }

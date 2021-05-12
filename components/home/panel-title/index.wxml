@@ -5,8 +5,8 @@
   <view class="slot">
     <slot name="body" />
   </view>
-  <view class="more" wx:if="{{more}}" style="color: {{moreColor}}">
-    <view>查看更多</view>
-    <view class="more_arrow" style="border-color: {{moreColor}}" />
+  <view class="more" wx:if="{{more}}" style="color: {{moreColor}}" bindtap="onToUrl">
+    <view>{{moreText}}</view>
+    <!-- <view class="more_arrow" style="border-color: {{moreColor}}" /> -->
   </view>
 </view>

@@ -19,6 +19,36 @@
   box-sizing: border-box;
 }
 
+.down_time {
+  padding-bottom: 6rpx;
+}
+
+.time_item {
+  display: inline-block;
+  vertical-align: middle;
+  width: 36rpx;
+  height: 36rpx;
+  color: #ffffff;
+  font-size: 24rpx;
+  letter-spacing: 2rpx;
+  line-height: 36rpx;
+  text-align: center;
+  background-color: #ea3627;
+  border-radius: 6rpx;
+}
+
+.days {
+  width: auto;
+  padding: 0 6rpx;
+  margin-right: 16rpx;
+}
+
+.time_mark {
+  font-weight: 600;
+  color: #d7291d;
+  padding: 0 4rpx;
+}
+
 .good_scroll {
   width: 100%;
   background-color: #fff;
@@ -53,6 +83,9 @@
 }
 
 .sale {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 72rpx;
   font-weight: 700;
   color: #ffffff;
   font-size: 18rpx;
@@ -70,5 +103,5 @@
   font-size: 18rpx;
   text-decoration: line-through;
   line-height: 26rpx;
-  padding-left: 28rpx;
+  padding-left: 12rpx;
 }

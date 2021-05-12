@@ -1,3 +1,5 @@
+import router from '../../../utils/router'
+
 
 Component({
   options: {
@@ -32,7 +34,15 @@ Component({
     more: {
       type: Boolean,
       value: false,
-    }
+    },
+    moreText: {
+      type: String,
+      value: "",
+    },
+    actionUrl: {
+      type: String,
+      value: "",
+    },
   },
 
   data: {
@@ -40,6 +50,15 @@ Component({
   },
 
   methods: {
-
+    onToUrl() {
+      let url = this.data.actionUrl;
+      console.log("跳转链接", url);
+      return ;
+      if(!!url) {
+        router.push({
+          name: url
+        })
+      }
+    }
   }
 })

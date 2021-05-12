@@ -74,11 +74,11 @@ export default {
     overList.forEach(item => {
     console.log("🚀 ~ file: common.js ~ line 76 ~ runOverList ~ item", item)
       if(item.method === "GET") {
-        Reqeust.get({
+        Request.get({
           ...item,
         });
       } else if(item.method === "POST") {
-        Reqeust.post({
+        Request.post({
           ...item,
         });
       }

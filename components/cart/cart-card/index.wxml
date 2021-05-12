@@ -1,0 +1,44 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="cart_card">
+  <view class="select_content head_content">
+    <image class="select_icon" src="{{notSelectIcon}}" />
+    <view class="select_info">
+      <van-image
+        width="40rpx"
+        height="40rpx"
+        custom-class="store_icon"
+        src="{{tools.getImgUrl('miniprogram/cart/666.jpg')}}"
+      />
+      <view class="store_name">约购平台自营</view>
+    </view>
+  </view>
+  <van-swipe-cell right-width="{{ 150 }}">
+    <van-cell-group>
+      <view class="select_content good_content">
+        <image class="select_icon" src="{{selectIcon}}" />
+        <view class="select_info">
+          <van-image 
+            width="180rpx"
+            height="180rpx"
+            custom-class="good_img"
+            src="{{tools.getImgUrl('miniprogram/cart/666.jpg')}}"
+          />
+          <view class="good_info">
+            <view class="good_title text_one_line">吉列（Gillette)   剃须最多一行剃须最多一行剃须最多一行剃须最多一行剃须最多一行</view>
+            <view class="good_desc text_one_line">经典抗衰老 360无缝极光；经典抗衰老 360无缝极光；经典抗衰老 360无缝极光；经典抗衰老 360无缝极光；</view>
+            <view class="price_info">
+              <view class="good_price">¥{{8.88}}</view>
+              <num-control />
+            </view>
+          </view>
+        </view>
+      </view>
+    </van-cell-group>
+    <view slot="right" class="right_content">
+      <view class="right_btn collection"><text>移入\r\n收藏夹</text></view>
+      <view class="right_btn delete">删除</view>
+    </view>
+  </van-swipe-cell>
+
+</view>
