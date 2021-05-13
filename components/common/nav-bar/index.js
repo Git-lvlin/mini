@@ -62,6 +62,11 @@ create.Component(store, {
     pageScroll: {
       type: Number,
       value: 0
+    },
+    // 返回层数
+    delta: {
+      type: Number,
+      value: 1
     }
   },
 
@@ -105,7 +110,8 @@ create.Component(store, {
     },
     // 点击返回按钮
     onClickBack() {
-      router.go();
+      const delta = this.data.delta;
+      router.go(delta);
     },
 
     // 点击返回首页

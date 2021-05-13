@@ -5,25 +5,24 @@
     <image class="hot_icon" src="{{tools.getImgUrl('miniprogram/home/fire.png')}}" />
     <view class="hot_title">
       <panel-title 
-        title="热销好货"
-        desc="每天不重样"
+        title="{{floor.header.title[0].name}}"
+        desc="{{floor.header.subTitle[0].name}}"
         more
+        moreText="{{floor.header.subTitle[0].action}}"
+        actionUrl="{{floor.header.subTitle[0].actionUrl}}"
       />
     </view>
   </view>
   <view class="good_list">
-    <view class="good_item">
+    <view
+      class="good_item"
+      wx:for="{{hotGoodList}}"
+      wx:key="id"
+      data-data="{{item}}"
+      bindtap="onGood"
+    >
       <good-card
-        size="344rpx"
-      />
-    </view>
-    <view class="good_item">
-      <good-card
-        size="344rpx"
-      />
-    </view>
-    <view class="good_item">
-      <good-card
+        data="{{item}}"
         size="344rpx"
       />
     </view>

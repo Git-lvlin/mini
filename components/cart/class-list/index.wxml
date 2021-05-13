@@ -1,21 +1,21 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
-<view class="content">
+<view class="class_content">
   <view class="class_list">
     <scroll-view scroll-x class="class_scroll">
       <view class="class_scroll_list">
         <view 
-          class="class_item {{item.index === classIndex ? 'class_item_act' : ''}}"
-          wx:for="{{classList}}"
-          wx:key="name"
-          data-index="{{item.index}}"
+          class="class_item {{item.id === classId ? 'class_item_act' : ''}}"
+          wx:for="{{category}}"
+          wx:key="id"
+          data-id="{{item.id}}"
           bindtap="onSelectClass"
         >
           <view class="class_img">
-            <van-image width="80rpx" height="80rpx" round src="{{item.icon}}" />
+            <van-image width="80rpx" height="80rpx" round src="{{item.gcIcon}}" />
           </view>
-          <view class="class_name">{{item.name}}</view>
-          <view class="horn_top" wx:if="{{index === classIndex}}" />
+          <view class="class_name text_one_line">{{item.gcName}}</view>
+          <view class="horn_top" wx:if="{{item.id === classId}}" />
         </view>
         <view class="class_item_other" />
       </view>
@@ -38,16 +38,16 @@
       <view class="class_popup_title">全部分类</view>
       <view class="class_popup_list">
         <view
-          class="class_popup_item {{item.index === classIndex ? 'popup_item_act' : ''}}"
-          wx:for="{{classList}}"
-          wx:key="name"
-          data-index="{{item.index}}"
+          class="class_popup_item {{item.id === classId ? 'popup_item_act' : ''}}"
+          wx:for="{{category}}"
+          wx:key="id"
+          data-id="{{item.id}}"
           bindtap="onSelectClass"
         >
           <view class="popup_item_img">
-            <van-image width="80rpx" height="80rpx" round src="{{item.icon}}" />
+            <van-image width="80rpx" height="80rpx" round src="{{item.gcIcon}}" />
           </view>
-          <view class="popup_item_name">{{item.name}}</view>
+          <view class="popup_item_name text_one_line">{{item.gcName}}</view>
         </view>
       </view>
     </view>

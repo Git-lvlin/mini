@@ -41,7 +41,7 @@ page {
 }
 
 .address {
-  height: 84rpx;
+  max-height: 84rpx;
   color: #333333;
   font-size: 28rpx;
   line-height: 42rpx;
@@ -113,4 +113,21 @@ page {
   width: 48rpx;
   height: 48rpx;
   margin-right: 16rpx;
+}
+
+
+.no_data_btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 494rpx;
+  height: 96rpx;
+  font-weight: 500;
+  color: #ffffff;
+  font-size: 32rpx;
+  line-height: 96rpx;
+  margin: 80rpx auto 0;
+  background-color: #e5352f;
+  border-radius: 48rpx;
+  box-shadow: 0rpx 6rpx 12rpx rgba(229, 53, 47, 0.4);
 }

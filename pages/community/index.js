@@ -1,4 +1,5 @@
-// pages/community/main/index.js
+import router from "../../utils/router";
+
 Page({
 
   /**
@@ -26,7 +27,8 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    // 更新tabbar显示
+    router.updateSelectTabbar(this, 1);
   },
 
   /**

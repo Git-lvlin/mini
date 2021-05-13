@@ -13,6 +13,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: 126rpx;
   padding-top: 14rpx;
   margin: 0 6rpx;
 }
@@ -45,7 +46,7 @@
   height: 98rpx; */
   width: 320rpx;
   height: 89rpx;
-  animation: receiveAction 1.4s linear infinite;
+  animation: receiveAction 1.4s ease-out infinite;
 }
 
 @keyframes receiveAction {

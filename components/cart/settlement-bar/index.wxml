@@ -1,17 +1,17 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 <view >
-  <view class="settlement_conetnt" style="z-index: {{!classPopupState ? 999 : 9}}">
+  <view class="settlement_conetnt" style="z-index: {{barIndex}}">
     <view class="cart_icon" bindtap="onOpenCart">
       <van-image width="84rpx" height="84rpx" src="{{tools.getImgUrl('miniprogram/cart/class_cart@2x.png')}}" />
-      <view class="cart_num">2</view>
+      <view class="cart_num" wx:if="{{$.cartListTotal.checkedQuantity}}">{{$.cartListTotal.checkedQuantity}}</view>
     </view>
     <view class="settlement_price">
       <view class="price">
         <view class="unit">￥</view>
-        21.53
-        <view class="market_price">￥25.32</view>
+        {{$.cartListTotal.subtotalPromotion}}
+        <view class="market_price">￥{{$.cartListTotal.subtotal}}</view>
       </view>
-      <view class="delivery">免配送费</view>
+      <view class="delivery">{{$.cartListTotal.freight == 0 ? "免配送费" : "配送费：￥" + $.cartListTotal.freight }}</view>
     </view>
     <view class="settlement_btn" bindtap="onToCreateOrder">去下单</view>
   </view>
@@ -20,29 +20,37 @@
     show="{{ showClassPopup }}"
     position="bottom"
     closeable
-    custom-style="bottom: {{bottomBarHeight}}rpx;min-height: 20%;padding-bottom: 0;"
+    custom-style="bottom: {{bottomBarHeight}}rpx;height: 800rpx;padding-bottom: 0;"
     bind:close="onCloseCart"
   >
     <view class="desc">
-      <view>已减8.88元</view>
+      <view>已减{{tools.floatReduce($.cartListTotal.subtotal, $.cartListTotal.subtotalPromotion)}}元</view>
       <view class="gary">已包含：配送费、商品减免</view>
     </view>
     <view class="goods">
       <view class="goods_head">
-        <image class="select_icon" src="{{icon}}" />
-        <view class="all_text">全选</view>
-        <view class="goods_num">（共计9件商品）</view>
-        <view class="clear">
+        <image class="select_icon" src="{{selectAll ? selectIcon : icon}}" bindtap="onSelectCard" />
+        <view class="all_text" bindtap="onSelectCard">全选</view>
+        <view class="goods_num">（共计{{$.cartListTotal.checkedQuantity}}件商品）</view>
+        <view class="clear" bindtap="onClearCart">
           <image class="clear_icon" src="{{tools.getImgUrl('miniprogram/cart/delete.png')}}" />
           <view>清空</view>
         </view>
       </view>
       <scroll-view scroll-y class="goods_list">
-        <view class="good_item" wx:for="{{[1,1,1,1,1,1,1,1]}}" wx:key="index">
-          <image class="list_icon select_icon" src="{{icon}}" />
+        <view class="good_item" wx:for="{{$.cartList}}" wx:key="id">
+          <image
+            class="list_icon select_icon"
+            src="{{item.isChecked ? selectIcon : icon}}"
+            data-id="{{item.skuId}}"
+            data-checked="{{item.skuId}}"
+            bindtap="onSelectGood"
+          />
           <view class="good_card">
             <join-cart
+              good="{{item}}"
               width="100%"
+              source="cart"
             />
           </view>
         </view>

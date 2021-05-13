@@ -15,53 +15,63 @@
       indicator-dots="{{false}}"
       autoplay="{{true}}"
       interval="{{3000}}"
-      duration="{{800}}"
+      duration="{{600}}"
       bindanimationfinish="handleSwiperChange"
     >
-      <block wx:for="{{imgUrls}}">
+      <block wx:for="{{good.imageList}}" wx:key="index">
         <swiper-item class="banner_item">
           <van-image
             width="750rpx"
             height="750rpx"
             fit="cover"
-            src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/cart/666.jpg"
+            src="{{item}}"
           />
         </swiper-item>
       </block>
     </swiper>
-    <view class="swiper_num">{{swiperCurrent}}/{{imgUrls.length}}</view>
+    <view class="swiper_num">{{swiperCurrent}}/{{!!good.imageList ? good.imageList.length : 1}}</view>
   </view>
 
   <view class="good_head">
     <view class="good_price">
       <view class="price">
-        ￥<text class="max_text">{{tools.getPriceSplit(88.65)}}</text>{{tools.getPriceSplit(88.65, 1)}}
-        <view class="market_price ">￥12.63</view>
+        ￥<text class="max_text">{{tools.getPriceSplit(good.goodsSaleMinPrice)}}</text>{{tools.getPriceSplit(good.goodsSaleMinPrice, 1)}}
+        <view class="market_price ">￥{{good.goodsMarketPrice}}</view>
       </view>
-      <view class="sales">月售188件</view>
+      <!-- <view class="sales">月售188件</view> -->
+      <view class="sales">{{good.goodsSaleNum}}</view>
     </view>
     <view class="good_info">
       <view class="good_title">
-        <view class="text text_one_line">优质番茄 500g*1盒子（最多16字）</view>
-        <view class="text_one_line">优质番茄 500g*1盒子（最多16字）</view>
+        <view class="text text_one_line">{{good.goodsName}}</view>
+        <view class="text_one_line">{{good.goodsDesc}}</view>
       </view>
       <view class="add_cart">
-        <view class="cart_btn" wx:if="{{!stock}}" bindtap="addStock">加入购物车</view>
+       <!-- || quantity && good.isMultiSpec == 1  -->
+        <view class="cart_btn" wx:if="{{!quantity}}" bindtap="addCart">加入购物车</view>
         <view class="num_controller" wx:else>
-          <image class="icon" src="{{tools.getImgUrl('miniprogram/cart/reduce%402x.png')}}" bindtap="reduceStock" />
+          <image
+            class="icon"
+            src="{{tools.getImgUrl('miniprogram/cart/reduce%402x.png')}}"
+            bindtap="reduceCart"
+          />
           <!-- <input
             class="num_input"
             value="{{stock}}"
             wx:if="{{stock}}"
           /> -->
-          <view class="num_input" >{{stock}}</view>
-          <image class="icon" src="{{tools.getImgUrl('miniprogram/cart/add%402x.png')}}" bindtap="addStock" />
+          <view class="num_input" >{{quantity}}</view>
+          <image
+            class="icon"
+            src="{{tools.getImgUrl('miniprogram/cart/add%402x.png')}}"
+            bindtap="addCart"
+          />
         </view>
       </view>
     </view>
   </view>
 
-  <view class="space_20" />
+  <!-- <view class="space_20" />
 
   <view class="info_card">
     <view class="info_title">商品参数</view>
@@ -75,25 +85,29 @@
         <view class="parameter_value">{{item.value}}</view>
       </view>
     </view>
-  </view>
+  </view> -->
   
   <view class="space_20" />
 
   <view class="info_card">
     <view class="info_title">商品详情</view>
     <view class="detail">
-      <van-image width="100%" fit="widthFix" custom-class="detail_image" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/cart/666.jpg" />
-      <van-image width="100%" fit="widthFix" custom-class="detail_image" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/cart/666.jpg" />
-      <van-image width="100%" fit="widthFix" custom-class="detail_image" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/cart/666.jpg" />
-      <van-image width="100%" fit="widthFix" custom-class="detail_image" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/cart/666.jpg" />
-      <van-image width="100%" fit="widthFix" custom-class="detail_image" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/cart/666.jpg" />
-      <van-image width="100%" fit="widthFix" custom-class="detail_image" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/cart/666.jpg" />
+      <van-image
+        width="100%"
+        fit="widthFix"
+        custom-class="detail_image"
+        wx:for="{{detailImg}}"
+        wx:key="index"
+        src="{{item}}"
+      />
     </view>
   </view>
 
   <view style="height: {{$.systemInfo.bottomBarHeight + 104}}rpx" />
 
-  <spec-panel />
+  <spec-panel
+    good="{{good}}"
+  />
 
   <settlement-bar />
 </view>

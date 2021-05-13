@@ -27,6 +27,9 @@ export default {
   bindPhone: {
     path: "/pages/login/bindPhone/index"
   },
+  location: {
+    path: "/pages/location/index"
+  },
 
   
   // 分类列表

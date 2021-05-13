@@ -6,7 +6,8 @@
     "pages/user/index",
     "pages/login/main/index",
     "pages/login/bindPhone/index",
-    "pages/list/index"
+    "pages/list/index",
+    "pages/location/index"
   ],
   "subpackages": [
     {
@@ -105,6 +106,11 @@
   },
   "usingComponents": {
     "van-image": "/miniprogram_npm/@vant/weapp/image/index"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "方便确定您当前位置"
+    }
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"

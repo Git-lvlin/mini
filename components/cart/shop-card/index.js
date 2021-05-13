@@ -9,7 +9,11 @@ Component({
     data: {
       type: Object,
       value: {}
-    }
+    },
+    idx: {
+      type: Number,
+      value: 0
+    },
   },
 
   data: {
@@ -22,40 +26,44 @@ Component({
       currentTarget,
     }){
       let {
-        data
+        data,
+        idx
       } = this.data;
       let index = currentTarget.dataset.index;
-      if(data.goods[index].num < 2) {
+      if(data.goodsInfos[index].skuNum < 2) {
         Toast({
           message:"至少添加一个商品",
           context: this,
         });
         return
       }
-      data.goods[index].num -= 1;
-      this.setData({
-        data,
-      })
+      data.goodsInfos[index].skuNum -= 1;
+      // this.setData({
+      //   data,
+      // })
+      this.triggerEvent("changeNum", { data, idx});
     },
 
     onAddNum({
       currentTarget,
     }){
       let {
-        data
+        data,
+        idx
       } = this.data;
       let index = currentTarget.dataset.index;
-      if(data.goods[index].num >= data.goods[index].stock) {
-        Toast({
-          message:"哎呀，没有库存啦",
-          context: this,
-        });
-        return
-      }
-      data.goods[index].num += 1;
-      this.setData({
-        data,
-      })
+      // if(data.goodsInfos[index].skuNum >= data.goodsInfos[index].stock) {
+      //   Toast({
+      //     message:"哎呀，没有库存啦",
+      //     context: this,
+      //   });
+      //   return
+      // }
+      data.goodsInfos[index].skuNum += 1;
+      // this.setData({
+      //   data,
+      // })
+      this.triggerEvent("changeNum", { data, idx});
     }
   }
 })

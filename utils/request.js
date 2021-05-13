@@ -17,9 +17,17 @@ import router from '../utils/router'
 */
 const Reqeust = (params) => {
   const baseUrl = getBaseApiUrl();
-  const token = wx.getStorageSync("SYS_TOKEN");
+  const token = wx.getStorageSync("ACCESS_TOKEN");
+  const loginOver = wx.getStorageSync("LOGIN_OVER");
+  if(!!loginOver && params.mustLogin) {
+    let overList = wx.getStorageSync("OVER_LIST");
+    overList = !!overList ? overList : [];
+    overList.push(params);
+    wx.setStorageSync("OVER_LIST", overList);
+    return ;
+  }
   const header = {
-    'content-type': !params.contentType ? 'application/json' : params.contentType,
+    'Content-Type': !params.contentType ? 'application/json' : params.contentType,
     v: VERSION,
     t: new Date().getTime(),
     ...params.header
@@ -36,7 +44,7 @@ const Reqeust = (params) => {
   }
   return new Promise((resolve, reject) => {
     wx.request({
-      url: baseUrl + params.url,
+      url: !!params.hasBase ? params.url : baseUrl + params.url,
       method: params.method.toUpperCase() || 'GET',
       data: params.data || {},
       header,
@@ -44,6 +52,7 @@ const Reqeust = (params) => {
       success(res){
         // 判断是否返回数据包
         const data = !!params.dataPackage ? res.data : res.data.data;
+        // console.log(params.url, res.data)
         //数据请求成功判断
         if (res.statusCode === 200 && res.data.code === 0 && res.data.success) {
           resolve(data);
@@ -52,26 +61,26 @@ const Reqeust = (params) => {
           // 返回错误码处理
           if(!params.notErrorMsg) {
             handleErrorCode({
+              params,
               code: res.data.code,
               msg: res.data.msg,
               mustLogin: params.mustLogin,
             });
-          } else {
-            wx.hideLoading();
           }
+          wx.hideLoading();
           reject(res.data);
         }
       },
       fail(error) {
         if(!params.notErrorMsg) {
           handleErrorCode({
-            code: res.data.code,
-            msg: res.data.msg,
+            params,
+            code: 10018,
+            msg: "",
             mustLogin: params.mustLogin,
           });
-        } else {
-          wx.hideLoading();
         }
+        wx.hideLoading();
         reject(error);
       }
     })

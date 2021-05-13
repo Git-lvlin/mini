@@ -1,4 +1,7 @@
-import router from '../../../utils/router'
+import homeApi from '../../../apis/home';
+import router from '../../../utils/router';
+import { mapNum } from '../../../utils/homeFloor';
+
 
 Component({
   options: {
@@ -6,17 +9,65 @@ Component({
   },
 
   properties: {
-
+    floor: {
+      type: Object,
+      value: {},
+      observer(now, old) {
+        const nowStr = JSON.stringify(now);
+        const oldStr = JSON.stringify(old);
+        if(nowStr != oldStr) {
+          this.setGoodList(now.content);
+        }
+      }
+    },
   },
 
   data: {
-
+    goodList: [],
   },
 
   methods: {
-    onToDetail() {
+    // 设置商品列表数据
+    setGoodList(content) {
+      if(content.dataType === 1) {
+        let homeCache = wx.getStorageSync("HOME_CACHE") || {};
+        if(homeCache.goodList && !!homeCache.goodList.length) {
+          this.setData({
+            goodList: homeCache.goodList
+          })
+        }
+        homeApi.getFloorCustom(content.dataUrl).then(res => {
+          let goodList = mapNum(res.goodsInfo)
+          this.setData({
+            goodList
+          });
+          homeCache.goodList = goodList;
+          wx.setStorage({
+            key: "HOME_CACHE",
+            data: homeCache,
+          })
+        });
+      } else {
+        this.setData({
+          goodList: mapNum(content.data)
+        })
+        if(homeCache.goodList) {
+          delete homeCache.goodList;
+          wx.setStorage({
+            key: "HOME_CACHE",
+            data: homeCache,
+          })
+        }
+      }
+    },
+    // 跳转详情
+    onToDetail({
+      currentTarget
+    }) {
+      let data = currentTarget.dataset.data;
       router.push({
         name: 'detail',
+        data
       });
     },
   }

@@ -12,6 +12,7 @@ create.Component(store, {
 
   data: {
     pagePath: "",
+    selectedIndex: 0,
     tabList: [
       {
         index: 0,
@@ -42,21 +43,23 @@ create.Component(store, {
   },
 
   ready() {
+    const tabList = this.data.tabList;
     const pages = getCurrentPages();
-    const pagePath = `/${pages[pages.length - 1].route}`;
+    const currPage = pages[pages.length - 1].route
+    const tabIndex = tabList.findIndex(item => `/${currPage}` === item.pagePath);
+    if(tabIndex < 0) return;
     this.setData({
-      pagePath
-    });
-    console.log(this.data.$);
+      selectedIndex: tabList[tabIndex].index
+    })
   },
 
-  /**
-   * 组件的方法列表
-   */
   methods: {
     onToPath(event) {
       const url = event.currentTarget.dataset.path;
-      if(url === this.data.pagePath) return;
+      const pages = getCurrentPages();
+      const currPage = pages[pages.length - 1].route
+      const index = event.currentTarget.dataset.index;
+      if(url === `/${currPage}`) return;
       wx.switchTab({
         url,
       });

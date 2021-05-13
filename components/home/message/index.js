@@ -1,3 +1,4 @@
+import homeApi from "../../../apis/home";
 
 Component({
   options: {
@@ -5,28 +6,66 @@ Component({
   },
   
   properties: {
-
+    floor: {
+      type: Object,
+      value: {},
+      observer(now, old) {
+        const nowStr = JSON.stringify(now);
+        const oldStr = JSON.stringify(old);
+        if(nowStr != oldStr) {
+          this.setMsgList(now.content);
+        }
+      }
+    },
   },
 
-  /**
-   * 组件的初始数据
-   */
   data: {
-    list: [
-      {
-        text: "11111多亏有了vivo S9手机，超过20字显示内容超过20字显示内容超过20字显示内容"
-      },{
-        text: "22222多亏有了vivo S9手机，超过20字显示内容超过20字显示内容超过20字显示内容"
-      },{
-        text: "33333多亏有了vivo S9手机，超过20字显示内容超过20字显示内容超过20字显示内容"
-      },
-    ]
+    msgList: [],
   },
 
-  /**
-   * 组件的方法列表
-   */
   methods: {
-
+    // 设置商品列表数据
+    setMsgList(content) {
+      let homeCache = wx.getStorageSync("HOME_CACHE") || {};
+      if(content.dataType === 1) {
+        if(homeCache.msgList && !!homeCache.msgList.length) {
+          this.setData({
+            msgList: homeCache.msgList
+          })
+        }
+        homeApi.getFloorCustom(content.dataUrl).then(res => {
+          this.setData({
+            msgList: res
+          });
+          homeCache.msgList = res;
+          wx.setStorage({
+            key: "HOME_CACHE",
+            data: homeCache,
+          })
+        });
+      } else {
+        this.setData({
+          msgList: content.data
+        })
+        if(homeCache.msgList) {
+          delete homeCache.msgList;
+          wx.setStorage({
+            key: "HOME_CACHE",
+            data: homeCache,
+          })
+        }
+      }
+    },
+    // 跳转详情
+    onMsg({
+      currentTarget
+    }) {
+      let data = currentTarget.dataset.data;
+      console.log("msg跳转", data.actionUrl);
+      // router.push({
+      //   name: 'detail',
+      //   data
+      // });
+    },
   }
 })

@@ -1,5 +1,8 @@
 import { apiUrl } from "../constants/index"
-
+import routes from "../constants/routes"
+import commonApi from '../apis/common'
+import router from "../utils/router"
+import util from "./util"
 
 // 获取当前环境接口域名
 export const getBaseApiUrl = () => {
@@ -18,6 +21,7 @@ const showErrorMsg = (msg, icon) => {
 
 // 错误码处理
 export const handleErrorCode = ({
+  params,
   code,
   msg,
   mustLogin = false,
@@ -28,7 +32,16 @@ export const handleErrorCode = ({
       if(mustLogin) {
         showLogin();
       } else {
-        showErrorMsg("您还未登录，请登录");
+        // showErrorMsg("您还未登录，请登录");
+        showModal({
+          content: "您还未登录，请登录",
+          confirmText: "去登录",
+          ok() {
+            router.push({
+              name: "login"
+            })
+          }
+        })
       }
       break;
     case 10011:
@@ -46,7 +59,13 @@ export const handleErrorCode = ({
       break;
     case 10014:
       // accessToken 无效
-      showErrorMsg("刷新token");
+      wx.setStorageSync("LOGIN_OVER", true);
+      commonApi.refreshToken();
+      let overList = wx.getStorageSync("OVER_LIST");
+      overList = !!overList ? overList : [];
+      overList.push(params);
+      wx.setStorageSync("OVER_LIST", overList);
+      // showErrorMsg("刷新token");
       break;
     case 10015:
       // refreshToken 无效
@@ -72,6 +91,51 @@ export const handleErrorCode = ({
       showErrorMsg(!!msg ? msg : "")
   }
 };
+
+// 显示toast 提示
+export const showToast = ({
+  title,
+  icon = "none",
+  ok = () => {},
+}) => {
+  wx.showToast({
+    title,
+    icon,
+    success() {
+      const timer = setTimeout(() => {
+        ok();
+      }, 1500)
+    }
+  })
+}
+
+// 显示Modal提示
+export const showModal = ({
+  title = "",
+  content,
+  cancelColor = "#999",
+  cancelText = "取消",
+  confirmColor = "#D7291D",
+  confirmText = "确定",
+  ok = () => {},
+  cancel = () => {},
+}) => {
+  wx.showModal({
+    title,
+    content,
+    cancelText,
+    cancelColor,
+    confirmText,
+    confirmColor,
+    success(res) {
+      if (res.confirm) {
+        ok();
+      } else if(res.cancel) {
+        cancel();
+      }
+    }
+  })
+}
 
 
 // 获取/更新系统信息
@@ -150,6 +214,34 @@ export const getUserInfo = (profile) => {
   }
 };
 
+/**
+ * 获取本地用户信息
+ * showLogin boolean 是否显示登录提醒
+*/
+export const getStorageUserInfo = showLogin => {
+  const userInfo = wx.getStorageSync("USER_INFO");
+  if(showLogin && !userInfo) {
+    showModal({
+      content: "您还未登录，请登录",
+      confirmText: "去登录",
+      ok() {
+        router.push({
+          name: "login"
+        })
+      }
+    })
+  }
+  return userInfo;
+};
+
+/**
+ * 设置本地用户信息
+ * userInfo object 用户信息
+*/
+export const setStorageUserInfo = userInfo => {
+  wx.setStorageSync("USER_INFO", userInfo);
+};
+
 
 // 防抖
 export const debounce = (func, wait) => {
@@ -204,3 +296,37 @@ export const getQueryString = (name) => {
   if (r != null) return unescape(r[2]);
   return null;
 }
+
+
+// 取url参数
+export const setLoginRouter = (path) => {
+  let url = path;
+  if(!!url) {
+    const pages = getCurrentPages();
+    url = pages[pages.length - 1].route;
+  }
+  for(let key in routes) {
+    if(routes[key].path === url) {
+      wx.setStorageSync("LOGIN_TO_DATA", routes[key]);
+    }
+  }
+}
+
+// 转为浮点数
+export const mapNum = (list = []) => {
+  list.forEach(item => {
+    if(item.marketPrice) {
+      item.marketPrice = util.divide(item.marketPrice, 100);
+    }
+    if(item.salePrice) {
+      item.salePrice = util.divide(item.salePrice, 100);
+    }
+    if(item.freeAmount) {
+      item.freeAmount = util.divide(item.freeAmount, 100);
+    }
+    if(item.usefulAmount) {
+      item.usefulAmount = util.divide(item.usefulAmount, 100);
+    }
+  })
+  return list
+};

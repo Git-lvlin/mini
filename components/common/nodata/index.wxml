@@ -1,5 +1,5 @@
 
-<view class="nodata" style="margin-top: {{top}}rpx">
+<view class="nodata" style="padding-top: {{top}}rpx">
   <view class="list">
     <view
       class="nodata_item"

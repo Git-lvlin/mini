@@ -1,0 +1,11 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="num_control"> 
+  <view class="control_view reduce_view">
+    <image class="control_icon" src="{{tools.getImgUrl('miniprogram/cart/reduce.png')}}" />
+  </view>
+  <input type="number" value="{{num}}" class="num_input" bindinput="handleInput" />
+  <view class="control_view add_view">
+    <image class="control_icon" src="{{tools.getImgUrl('miniprogram/cart/add.png')}}" />
+  </view>
+</view>

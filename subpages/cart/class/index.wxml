@@ -1,4 +1,5 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
+<wxs module="util" src="./index.wxs" />
 
 <view class="container">
   <nav-bar titleIsSearch useCustomBack >
@@ -14,7 +15,10 @@
       <!-- 分类列表 -->
       <view class="class_list">
         <class-list
+          classId="{{selectFristClass}}"
+          category="{{fristCategory}}"
           bind:popupShow="handleClassPopupShow"
+          bind:selectClass="handleSelectFristClass"
         />
       </view>
       <!-- 分类详细 -->
@@ -22,29 +26,45 @@
         <scroll-view scroll-y class="class_detail_scroll" style="height:{{classScrollHeight}}rpx">
           <view class="detail_menu">
             <view
-              class="menu_item {{item.index === classIndex ? 'menu_item_act' : ''}}"
-              wx:for="{{treeData}}"
+              class="menu_item {{item.id === selectSecondClass ? 'menu_item_act' : ''}}"
+              wx:for="{{secondCategory}}"
               wx:key="index"
-              data-index="{{item.index}}"
+              data-id="{{item.id}}"
               bindtap="onSelectClass"
             >
-              <text>{{item.text}}</text>
+              <text>{{item.gcName}}</text>
               <view class="selected" />
             </view>
           </view>
         </scroll-view>
         <scroll-view scroll-y class="content_scroll" style="height:{{classScrollHeight}}rpx">
           <view class="detail_content">
-            <van-image width="550rpx" height="180rpx" custom-class="content_banner" fit="cover" src="" />
+            <van-image
+              width="550rpx"
+              height="180rpx"
+              custom-class="content_banner"
+              fit="cover"
+              src="{{goodsBanner}}"
+              wx:if="{{!!goodsBanner}}"
+            />
             <view class="detail_list">
-              <join-card border wx:for="{{9}}" bind:handleNum="handleNum"/>
+              <join-card
+                good="{{item}}"
+                canJump="{{true}}"
+                quantity="{{util.getQuantity(item, $.cartList)}}"
+                border="{{index != goodsList.length - 1}}"
+                wx:for="{{goodsList}}"
+                wx:key="id"
+              />
             </view>
           </view>
         </scroll-view>
       </view>
       <!-- 结算 -->
       <view class="settlement">
-        <settlement-bar classPopupState="{{classPopupState}}" />
+        <settlement-bar
+          barIndex="{{!classPopupState ? 999 : 9}}"
+        />
       </view>
     </view>
   </view>

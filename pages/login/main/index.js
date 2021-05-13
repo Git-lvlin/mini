@@ -1,9 +1,10 @@
 import create from '../../../utils/create'
 import store from '../../../store/index'
 import router from '../../../utils/router'
-import { getUserInfo, handleErrorCode } from '../../../utils/tools'
+import { getUserInfo, handleErrorCode, setStorageUserInfo } from '../../../utils/tools'
 import { SOURCE_TYPE } from '../../../constants/index'
 import loginApis from '../../../apis/login'
+import commonApis from '../../../apis/common'
 
 create.Page(store, {
   use: [
@@ -95,6 +96,7 @@ create.Page(store, {
           const loginToData = wx.getStorageSync("LOGIN_TO_DATA");
           store.data.userInfo = res.memberInfo;
           store.data.defUserInfo = res.memberInfo;
+          setStorageUserInfo(res.memberInfo);
           wx.setStorageSync("ACCESS_TOKEN", res.acessToken);
           wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
           if(loginToData) {
@@ -105,6 +107,10 @@ create.Page(store, {
               delta: 1,
             });
           }
+          wx.removeStorage({
+            key: 'LOGIN_INFO',
+          });
+          // commonApis.runOverList();
         }).catch(err => {
           if(err.code === 200102) {
             wx.setStorageSync("LOGIN_INFO", err.data);

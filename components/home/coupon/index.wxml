@@ -1,32 +1,30 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
+<wxs module="utils" src="../../../wxs/homeFloor.wxs" />
 
-<view class="coupon">
+<view
+  class="coupon"
+>
+  <!-- style="{{utils.getHeadBackCss(floor.style, tools.getImgUrl('miniprogram/home/coupon_back.png'))}}" -->
   <panel-title
-    title="新人专享188元券包"
-    desc="限时领取"
+    title="{{floor.header.title[0].name}}"
+    desc="{{floor.header.subTitle[0].name}}"
     color="#fff"
+    moreText="{{floor.header.subTitle[0].action}}"
+    actionUrl="{{floor.header.subTtle[0].actionUrl}}"
   />
   <view class="coupon_list">
-    <view class="coupon_item" style="background-image: url('{{coupon}}');">
+    <view
+      class="coupon_item"
+      style="background-image: url('{{item.lqStatus === 1 ? coupon : couponSelect}}');"
+      wx:for="{{couponList}}"
+      wx:key="id"
+      wx:if="{{index < 3}}"
+    >
       <price-mobel
-        money="3"
+        money="{{item.freeAmount}}"
         maxSize="{{48}}"
       />
-      <view class="desc">满18可用</view>
-    </view>
-    <view class="coupon_item" style="background-image: url('{{couponSelect}}');">
-      <price-mobel
-        money="3"
-        maxSize="{{48}}"
-      />
-      <view class="desc">满18可用</view>
-    </view>
-    <view class="coupon_item" style="background-image: url('{{coupon}}');">
-      <price-mobel
-        money="3"
-        maxSize="{{48}}"
-      />
-      <view class="desc">满18可用</view>
+      <view class="desc">满{{item.usefulAmount}}可用</view>
     </view>
   </view>
 

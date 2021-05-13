@@ -75,3 +75,7 @@
   background-color: #EB0000;
   border-radius: 6rpx;
 }
+
+.progress_full {
+  width: 88rpx;
+}

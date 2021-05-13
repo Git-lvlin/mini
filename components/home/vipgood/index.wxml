@@ -1,32 +1,49 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
+<wxs module="utils" src="../../../wxs/homeFloor.wxs" />
 
-<view class="vipgood">
+<view class="vipgood" style="{{utils.getHeadBackCss(floor.style)}}">
   <view class="good_panel">
     <view class="good_head">
-      <view class="title">会员约购专享</view>
+      <view class="title">{{vipGood.userTagList.title || ""}}</view>
       <view
         class="label label_orgin"
         style="background-image: url({{tools.getImgUrl('miniprogram/home/vip_origin.png')}})"
-      >每日特惠</view>
+      >{{vipGood.userTagList.tag || ""}}</view>
     </view>
-    <view class="desc desc_origin">爆款限时特卖</view>
+    <view class="desc desc_origin">{{vipGood.userTagList.subtitle || ""}}</view>
     <view class="good_list">
-      <van-image width="130rpx" height="130rpx" fit="cover" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/Fruits.png" />
-      <van-image width="130rpx" height="130rpx" fit="cover" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/Fruits.png" />
+      <van-image
+        width="130rpx"
+        height="130rpx"
+        fit="cover"
+        wx:for="{{vipGood.userTagList.info}}"
+        wx:key="id"
+        src="{{item.image}}"
+        data-data="{{item}}"
+        bindtap="onGood"
+      />
     </view> 
   </view>
   <view class="good_panel">
     <view class="good_head">
-      <view class="title">会员店约购专享</view>
+      <view class="title">{{vipGood.shopTagList.title || ""}}</view>
       <view
         class="label label_red"
         style="background-image: url({{tools.getImgUrl('miniprogram/home/vip_red.png')}})"
-      >大折扣</view>
+      >{{vipGood.shopTagList.tag || ""}}</view>
     </view>
-    <view class="desc desc_red">全网最低价</view>
+    <view class="desc desc_red">{{vipGood.shopTagList.subtitle || ""}}</view>
     <view class="good_list">
-      <van-image width="130rpx" height="130rpx" fit="cover" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/Fruits.png" />
-      <van-image width="130rpx" height="130rpx" fit="cover" src="https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/Fruits.png" />
+      <van-image
+        width="130rpx"
+        height="130rpx"
+        fit="cover"
+        wx:for="{{vipGood.userTagList.info}}"
+        wx:key="id"
+        src="{{item.image}}"
+        data-data="{{item}}"
+        bindtap="onGood"
+      />
     </view>
   </view>
 </view>

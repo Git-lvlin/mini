@@ -1,74 +1,83 @@
 import create from '../../../utils/create'
 import store from '../../../store/good'
 import routes from '../../../constants/routes'
+import goodApi from '../../../apis/good'
+import { showModal } from '../../../utils/tools'
+import util from '../../../utils/util'
 
 
 create.Page(store, {
+  goodId: 0,
+
   use: [
     "systemInfo",
+    "cartList",
   ],
 
-  /**
-   * 页面的初始数据
-   */
+  computed: {
+    quantity: ({
+      options,
+      store,
+    }) => {
+      const cartList = store.data.cartList;
+      const goodId = options.id;
+      let quantity = 0;
+      cartList.forEach(item => {
+        if(item.spuId === goodId) {
+          quantity = item.quantity
+        }
+      })
+      return quantity
+    }
+  },
+
   data: {
+    good: {},
     stock: 0,
     backTopHeight: 56,
     swiperCurrent: 1,
-    imgUrls: [
-      1,1,1
-    ],
     showSpec: false,
-    parameterList: [
-      {
-        name: "品种",
-        value: "番茄"
-      },{
-        name: "品牌",
-        value: "新奇儿"
-      },{
-        name: "供应商",
-        value: "山东青岛"
-      },{
-        name: "净含量",
-        value: "500g"
-      },{
-        name: "储存条件",
-        value: "500g"
-      },
-    ]
+    detailImg: [],
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
     let { systemInfo } = this.data.$;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
+    this.goodId = options.id
     this.setData({
-      backTopHeight
+      backTopHeight,
     })
+    this.getGoodDetail();
+    this.getDetailImg();
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
   onShareAppMessage: function () {
 
+  },
+
+  // 商品详情图片
+  getDetailImg() {
+    goodApi.getDetailImg({
+      spuId: this.goodId,
+    }).then(res => {
+      this.setData({
+        detailImg: res.images
+      })
+    });
+  },
+
+  // 商品详情
+  getGoodDetail() {
+    goodApi.getGoodDetail({
+      id: this.goodId
+    }).then(res => {
+      let good = res;
+      good.goodsSaleMinPrice = util.divide(good.goodsSaleMinPrice, 100);
+      good.goodsMarketPrice = util.divide(good.goodsMarketPrice, 100);
+      this.setData({
+        good
+      })
+    });
   },
 
   // 返回按钮
@@ -92,22 +101,48 @@ create.Page(store, {
     })
   },
 
-  addStock() {
-    let stock = this.data.stock;
-    stock += 1;
-    this.setData({
-      stock
-    });
-    store.onChangeSpecState(true);
+  // 增加数量
+  addCart() {
+    let {
+      good
+    } = this.data;
+    // if(good.isMultiSpec == 1) {
+    //   store.onChangeSpecState(true);
+    // } else {
+      this.updateCart({
+        skuId: good.defaultSkuId,
+        quantity: 1,
+      })
+    // }
   },
 
-  reduceStock() {
-    let stock = this.data.stock;
-    if(stock === 1) return
-    stock -= 1;
-    this.setData({
-      stock
+  // 减少数量
+  reduceCart() {
+    let {
+      good,
+      quantity,
+    } = this.data;
+    if(quantity === 1) {
+      showModal({
+        content: "您确定要清除该商品？",
+        ok: () => {
+          this.updateCart({
+            skuId: good.defaultSkuId,
+            quantity: -1,
+          })
+        }
+      });
+      return ;
+    }
+    this.updateCart({
+      skuId: good.defaultSkuId,
+      quantity: -1,
     })
   },
+
+  // 更新购物车数量
+  updateCart(data, showMsg = false) {
+    this.store.addCart(data, showMsg)
+  }
 
 })

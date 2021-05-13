@@ -1,23 +1,67 @@
-// components/home/banner/index.js
+import homeApi from "../../../apis/home";
+
 Component({
-  /**
-   * 组件的属性列表
-   */
   properties: {
-
+    floor: {
+      type: Object,
+      value: {},
+      observer(now, old) {
+        const nowStr = JSON.stringify(now);
+        const oldStr = JSON.stringify(old);
+        if(nowStr != oldStr) {
+          this.setBannerList(now.content);
+        }
+      }
+    },
   },
 
-  /**
-   * 组件的初始数据
-   */
   data: {
-
+    bannerList: [],
   },
 
-  /**
-   * 组件的方法列表
-   */
   methods: {
-
+    // 设置商品列表数据
+    setBannerList(content) {
+      let homeCache = wx.getStorageSync("HOME_CACHE") || {};
+      if(content.dataType === 1) {
+        if(homeCache.bannerList && !!homeCache.bannerList.length) {
+          this.setData({
+            bannerList: homeCache.bannerList
+          })
+        }
+        homeApi.getFloorCustom(content.dataUrl).then(res => {
+          this.setData({
+            bannerList: res
+          });
+          homeCache.bannerList = res;
+          wx.setStorage({
+            key: "HOME_CACHE",
+            data: homeCache,
+          })
+        });
+      } else {
+        this.setData({
+          bannerList: content.data
+        })
+        if(homeCache.bannerList) {
+          delete homeCache.bannerList;
+          wx.setStorage({
+            key: "HOME_CACHE",
+            data: homeCache,
+          })
+        }
+      }
+    },
+    // 跳转详情
+    onBanner({
+      currentTarget
+    }) {
+      let data = currentTarget.dataset.data;
+      console.log("banner跳转", data.actionUrl)
+      // router.push({
+      //   name: 'detail',
+      //   data
+      // });
+    },
   }
 })
