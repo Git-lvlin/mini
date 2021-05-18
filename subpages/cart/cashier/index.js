@@ -6,16 +6,16 @@ import dayjs from '../../../miniprogram_npm/dayjs/index'
 import { IMG_CDN, PAY_TYPE_KEY } from '../../../constants/common'
 import commonApi from '../../../apis/common'
 import cartApi from '../../../apis/cart'
-import { showToast } from '../../../utils/tools'
+import { getStorageUserInfo, showToast } from '../../../utils/tools'
 
 const defaultList = [
 
 ]
 
-create.Page(store, {
-  use: [
-    "userInfo"
-  ],
+// create.Page(store, {
+Page({
+
+  id: "",
 
   data: {
     isPay: false,
@@ -35,7 +35,7 @@ create.Page(store, {
     // orderSn: "16204542762334404122"
     // payAmount: 1
     // payDeadline: 1620454876068
-    const userInfo = this.store.data.userInfo;
+    this.id = options.id
     let downTime = options.payDeadline - options.currentTime;
     this.setData({
       payAmount: util.divide(options.payAmount, 100),
@@ -54,15 +54,20 @@ create.Page(store, {
           payList.push(item);
         }
       });
-      this.getPayInfo({
-        id: options.id,
-        payType,
-        openId: userInfo.openId,
-      })
       this.setData({
         payList,
         payType,
       })
+    })
+  },
+
+  onReady() {
+    const userInfo = getStorageUserInfo(true, true);
+    if(!userInfo) return;
+    this.getPayInfo({
+      id: this.id,
+      payType: 3,
+      openId: userInfo.openId,
     })
   },
 

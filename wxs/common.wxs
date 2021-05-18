@@ -56,10 +56,22 @@ var floatReduce = function(arg1, arg2) {
   return ((arg1 * m - arg2 * m) / m).toFixed(n);
 }
 
+// 计算加入购物车数
+var getQuantity = function(good, cartList) {
+  cartList = !!cartList ? cartList : [];
+  var quantity = 0;
+  cartList.forEach(function(item) {
+    if(good.spuId == item.spuId) {
+      quantity = item.quantity
+    }
+  })
+  return quantity
+}
 
 module.exports = {
   floatAdd: floatAdd,
   floatReduce: floatReduce,
   getImgUrl: getImgUrl,
   getPriceSplit: getPriceSplit,
+  getQuantity: getQuantity,
 }

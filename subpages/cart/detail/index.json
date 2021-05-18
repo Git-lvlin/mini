@@ -3,6 +3,7 @@
   "navigationStyle": "custom",
   "usingComponents": {
     "settlement-bar": "/components/cart/settlement-bar/index",
-    "spec-panel": "/components/cart/spec-panel/index"
+    "spec-panel": "/components/cart/spec-panel/index",
+    "price-mobel": "/components/common/price-mobel/index"
   }
 }

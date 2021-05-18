@@ -1,17 +1,16 @@
 import create from '../../../utils/create'
 import store from '../../../store/good'
-import routes from '../../../constants/routes'
 import goodApi from '../../../apis/good'
-import { showModal } from '../../../utils/tools'
+import { showModal, showToast, getStorageUserInfo } from '../../../utils/tools'
 import util from '../../../utils/util'
-
+import router from '../../../utils/router'
 
 create.Page(store, {
-  goodId: 0,
+  goodParams: {},
 
   use: [
     "systemInfo",
-    "cartList",
+    "cartList"
   ],
 
   computed: {
@@ -38,17 +37,35 @@ create.Page(store, {
     swiperCurrent: 1,
     showSpec: false,
     detailImg: [],
+    isIntensiveGood: false,
+    showSettlementBar: false,
+    userInfo: "",
+    userOtherInfo: "",
   },
 
   onLoad: function (options) {
-    let { systemInfo } = this.data.$;
+    let { systemInfo } = this.store.data;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
-    this.goodId = options.id
+    this.goodParams = options;
+    let isIntensiveGood = false;
+    if(options.orderType == 15) isIntensiveGood = true;
+    let showSettlementBar = !isIntensiveGood;
     this.setData({
       backTopHeight,
+      isIntensiveGood,
+      showSettlementBar,
     })
     this.getGoodDetail();
     this.getDetailImg();
+  },
+
+  onShow() {
+    let userInfo = getStorageUserInfo();
+    let userOtherInfo = wx.getStorageSync("USER_OTHER_INFO") || "";
+    this.setData({
+      userInfo,
+      userOtherInfo,
+    })
   },
 
   onShareAppMessage: function () {
@@ -57,8 +74,11 @@ create.Page(store, {
 
   // 商品详情图片
   getDetailImg() {
+    let {
+      id
+    } = this.goodParams;
     goodApi.getDetailImg({
-      spuId: this.goodId,
+      spuId: id,
     }).then(res => {
       this.setData({
         detailImg: res.images
@@ -68,9 +88,24 @@ create.Page(store, {
 
   // 商品详情
   getGoodDetail() {
-    goodApi.getGoodDetail({
-      id: this.goodId
-    }).then(res => {
+    let {
+      activityId,
+      objectId,
+      orderType,
+      id,
+    } = this.goodParams
+    let params = {
+      id, 
+    };
+    if(orderType == 15) {
+      params = {
+        ...params,
+        activityId,
+        objectId,
+        orderType,
+      }
+    }
+    goodApi.getGoodDetail(params).then(res => {
       let good = res;
       good.goodsSaleMinPrice = util.divide(good.goodsSaleMinPrice, 100);
       good.goodsMarketPrice = util.divide(good.goodsMarketPrice, 100);
@@ -82,16 +117,7 @@ create.Page(store, {
 
   // 返回按钮
   onToBack() {
-    const pages = getCurrentPages();
-    if(pages.length > 2) {
-      wx.navigateBack({
-        delta: 1
-      });
-    } else {
-      wx.reLaunch({
-        url: routes.home.path,
-      });
-    }
+    router.go();
   },
 
   // 监听swiper当前轮播图
@@ -143,6 +169,45 @@ create.Page(store, {
   // 更新购物车数量
   updateCart(data, showMsg = false) {
     this.store.addCart(data, showMsg)
-  }
+  },
+
+  // 跳转确认订单
+  onToCreate() {
+    if(!this.data.userOtherInfo) {
+      getStorageUserInfo(true);
+      return;
+    }
+    if(!this.data.userOtherInfo.isShopMaster) {
+      showToast({ title: "很抱歉，你不店主不能下单"})
+      return;
+    }
+    let {
+      activityId,
+      objectId,
+      orderType,
+    } = this.goodParams;
+    let good = this.data.good;
+    let data = {
+      activityId,
+      objectId,
+      orderType,
+      storeAdress: good.storeAdress,
+      storeGoodsInfos: [{
+        storeNo: good.storeNo,
+        goodsInfos: [{
+          spuId: good.id,
+          skuId: good.defaultSkuId,
+          skuNum: 1,
+        }]
+      }]
+    };
+    wx.setStorageSync("CREATE_INTENSIVE", data);
+    router.push({
+      name: "createOrder",
+      data: {
+        orderType,
+      }
+    });
+  },
 
 })

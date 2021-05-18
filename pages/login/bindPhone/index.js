@@ -147,6 +147,7 @@ create.Page(store, {
       store.data.userInfo = data.memberInfo;
       store.data.defUserInfo = data.memberInfo;
       setStorageUserInfo(data.memberInfo);
+      this.getOtherInfo(data.memberInfo);
       if(loginToData) {
         router.loginTo(loginToData);
       } else {
@@ -159,6 +160,19 @@ create.Page(store, {
         key: 'LOGIN_INFO',
       });
     });
+  },
+
+  // 获取用户其他信息
+  getOtherInfo(userInfo) {
+    loginApis.getOtherInfo({
+      id: userInfo.id
+    }).then(res => {
+      store.data.userOtherInfo = res;
+      wx.setStorage({
+        key: 'USER_OTHER_INFO',
+        data: res,
+      });
+    })
   },
 
   // 监听输入验证码

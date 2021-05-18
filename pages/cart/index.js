@@ -2,54 +2,114 @@ import { IMG_CDN } from "../../constants/common"
 import create from "../../utils/create"
 import store from "../../store/good"
 import router from "../../utils/router";
+import goodApi from "../../apis/good";
+import homeApi from "../../apis/home";
  
 create.Page(store, {
   ues: [
     "systemInfo",
     "userInfo",
+    "storeCartList",
+    "cartListTotal",
   ],
+
+  computed: {
+    selectAll() {
+      let type = true;
+      this.storeCartList.forEach(item => {
+        if(!item.isChecked) {
+          type = false;
+        }
+      })
+      return type
+    }
+  },
+
+  pageData: {
+    page: 1,
+    pageSize: 10,
+    totalPage: 1,
+  },
+  loading: false,
 
   data: {
     choose: `${IMG_CDN}miniprogram/common/choose.png`,
     defChoose: `${IMG_CDN}miniprogram/common/def_choose.png`,
     showCouponPopup: false,
     showDeleteGood: false,
-    item: {
-      activityId: 0,
-      id: 6,
-      image: "http://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/goods/rc-upload-1618621745937-25jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png?x-oss-process=image/resize,m_lfit,h_986,w_1004",
-      marketPrice: 388,
-      objectId: 0,
-      orderType: 2,
-      saleNum: 0,
-      salePrice: 0,
-      skuId: 0,
-      spuId: 6,
-      subtitle: "性价比高 | 日期新鲜",
-      tagId: 2,
-      title: "家盟酒堡赤霞珠干红葡萄酒红桶（3年).",
-    }
+    hotGoodList: [],
   },
 
 
   onLoad(options) {
-    console.log("data userInfo", this.data.userInfo);
     console.log("store userInfo", this.store);
   },
 
-  onReady() {
-    // const {
-    //   bottomBarHeight,
-    //   $,
-    // } = this.data;
-    // this.setData({
-    //   bottomBarHeight: bottomBarHeight + $.systemInfo.bottomBarHeight
-    // });
-  },
-
   onShow: function () {
+    const {
+      userInfo,
+    } = this.store.data;
+    if(!!userInfo) {
+      store.updateCart();
+    }
     // 更新tabbar显示
     router.updateSelectTabbar(this, 2);
+    this.getHotGood();
+  },
+
+  // 全选购物车
+  onSelectCartAll() {
+    goodApi.checkedAllCart({
+      isChecked: !this.data.selectAll,
+    }).then(res => {
+      this.store.updateCart();
+    })
+  },
+
+  // 获取热销商品
+  getHotGood() {
+    const {
+      page,
+      pageSize,
+    } = this.pageData;
+    if(this.loading) return;
+    this.loading = true;
+    homeApi.getHotGood({
+      page,
+      pageSize
+    }, {
+      showLoading: false
+    }).then(res => {
+      const list = res.records;
+      let {
+        hotGoodList
+      } = this.data;
+      this.pageData.totalPage = res.totalPage;
+      if(page > 1) {
+        hotGoodList = hotGoodList.concat(list)
+      } else {
+        hotGoodList = list;
+      }
+      this.setData({
+        hotGoodList,
+      }, () => {
+        this.loading = false;
+      });
+    }).catch(err => {
+      this.loading = false;
+    })
+  },
+
+  // 滚动到底部
+  handleScrollBottom() {
+    const {
+      page,
+      totalPage,
+    } = this.pageData;
+    if(page < totalPage) {
+      this.pageData.page = page + 1;
+      this.getHotGood();
+    }
   },
 
   // 打开订单明细窗口
@@ -82,5 +142,12 @@ create.Page(store, {
   // 去逛逛
   onToHome() {
     router.goTabbar();
-  }
+  },
+
+  // 跳转确认订单
+  onToOrder() {
+    router.push({
+      name: "createOrder"
+    })
+  },
 })

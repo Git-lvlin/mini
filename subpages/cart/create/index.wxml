@@ -23,7 +23,7 @@
     </view>
     
     <view class="content">
-      <view class="address" wx:if="{{orderInfo.token}}" bindtap="onToAddress">
+      <view class="address" wx:if="{{orderInfo.token && orderType != 15}}" bindtap="onToAddress">
         <view class="no_address" wx:if="{{!addressInfo.id}}">
           <image class="add_address" src="{{tools.getImgUrl('miniprogram/cart/add_address.png')}}" />
           <view class="no_address_title">添加收货地址</view>
@@ -35,6 +35,18 @@
             <view class="address_detail text_two_line">{{addressInfo.fullAddress}}</view>
           </view>
           <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
+        </view>
+      </view>
+      <view class="store_address" wx:if="{{orderType == 15}}">
+        <view class="store_address_user">
+          <image class="position_icon" src="{{tools.getImgUrl('miniprogram/common/location_black.png')}}" />
+          <view class="store_user_name">{{storeAdress.linkman}}</view>
+          <view class="store_user_phone">{{storeAdress.phone}}</view>
+          <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
+        </view>
+        <view class="store_address_info">
+          <view class="store_name">自提点：<text class="name_gray">{{storeAdress.storeName}}</text></view>
+          <view class="store_address_detail">{{storeAdress.fullAddress}}</view>
         </view>
       </view>
 
@@ -65,12 +77,28 @@
           <view class="cell_name">运费</view>
           <view class="cell_value">￥{{orderInfo.shippingFeeAmount || 0}}</view>
         </view>
-        <view class="cell_item">
+        <view class="cell_item" wx:if="{{orderType != 15}}">
           <view class="cell_name">给商家留言</view>
           <view class="cell_value">
-            <input class="input_msg" placeholder="留言,10个字以内" maxlength="10" placeholder-class="input_placeholder" bindinput="handleMsgInput" />
+            <input
+              class="input_msg"
+              placeholder="留言,10个字以内"
+              maxlength="10"
+              placeholder-class="input_placeholder"
+              bindinput="handleMsgInput"
+            />
           </view>
         </view>
+      </view>
+
+      <view class="store_msg" wx:if="{{orderType == 15}}">
+        备注
+        <input
+          class="store_msg_input"
+          maxlength="10"
+          placeholder="选填,如有特殊需求可以告诉我们"
+          bindinput="handleMsgInput"
+        />
       </view>
     </view>
   </view>

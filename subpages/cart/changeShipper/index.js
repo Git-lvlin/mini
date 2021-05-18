@@ -1,4 +1,4 @@
-// pages/cart/main/index.js
+// subpages/cart/changeShipper/index.js
 Page({
 
   /**

@@ -1,0 +1,7 @@
+
+<view class="info_cell">
+  <view class="cell_item">
+    <view class="cell_name"></view>
+    <view class="cell_value"></view>
+  </view>
+</view>

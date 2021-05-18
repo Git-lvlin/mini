@@ -36,6 +36,10 @@ create.Component(store, {
     canJump: {
       type: Boolean,
       value: false,
+    },
+    control: {
+      type: Boolean,
+      value: true,
     }
   },
 
@@ -92,11 +96,7 @@ create.Component(store, {
       if(!canJump) return; 
       router.push({
         name: "detail",
-        data: {
-          id: good.spuId,
-          skuId: good.skuId,
-          quantity,
-        }
+        data: good
       })
     },
   }

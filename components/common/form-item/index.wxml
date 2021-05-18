@@ -1,0 +1,12 @@
+<view
+  class="cell_item {{roundTop ? 'round_top' : ''}} {{roundBottom ? 'round_bottom' : ''}} {{border ? 'border' : ''}}"
+>
+  <view class="cell_name">{{name}}</view>
+  <view class="cell_value">
+    <input
+      class="cell_input {{textAlign}}"
+      bindinput="handleInput"
+      disabled="{{read}}"
+    />
+  </view>
+</view>

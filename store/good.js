@@ -25,6 +25,16 @@ const addCart = (data, showMsg) => {
   })
 }
 
+// 设置商品数
+const setCartNum = (data) => {
+  goodApi.setCartNum(data, {
+    showLoading: false
+  }).then(res => {
+    store.updateCart();
+  });
+}
+
+// 购物车汇总数据
 const getCartTotal = () => {
   goodApi.getCartTotal({}, {
     showLoading: false,
@@ -37,6 +47,7 @@ const getCartTotal = () => {
   })
 }
 
+// 获取购物车商品列表
 const getCartList = () => {
   goodApi.getCartList({}, {
     showLoading: false,
@@ -46,11 +57,27 @@ const getCartList = () => {
   })
 }
 
+// 按店铺获取商品列表
+const getStoreCartList = () => {
+  goodApi.getStoreCartList({}, {
+    showLoading: false,
+  }).then(res => {
+    let list = res.stores;
+    list.forEach(item => {
+      item.skus = mapNum(item.skus)
+    });
+    store.data.storeCartList = list;
+  })
+}
+
+// 更新购物车数据
 const updateCart = () => {
   store.getCartList();
+  store.getStoreCartList();
   store.getCartTotal();
 }
 
+// 获取用户信息
 const getUserInfo = () => {
   console.log("🚀 ~ file: good.js ~ line 57 ~ getUserInfo ~ main.data", main.data)
   return main.data.userInfo
@@ -60,10 +87,13 @@ const store = {
   data:{
     systemInfo: main.data.systemInfo,
     userInfo: main.data.userInfo,
+    userOtherInfo: main.data.userOtherInfo,
     // 显示选择规格弹窗
     showSpecPopup: false,
     // 购物车列表
     cartList: [],
+    // 按店铺购物车列表
+    storeCartList: [],
     // 购物车汇总数据
     cartListTotal: {
       "quantity": 0,
@@ -77,14 +107,16 @@ const store = {
   },
   onChangeSpecState,
   addCart,
+  setCartNum,
   getCartTotal,
   getCartList,
+  getStoreCartList,
   updateCart,
   getUserInfo,
   //调试开关，打开可以在 console 面板查看到 store 变化的 log
   debug: true,
   //当为 true 时，无脑全部更新，组件或页面不需要声明 use
-  updateAll: true,
+  updateAll: false,
 }
 
 export default store

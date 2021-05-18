@@ -33,7 +33,7 @@
   </view>
 
   <view class="good_head">
-    <view class="good_price">
+    <view class="good_price" wx:if="{{!isIntensiveGood}}">
       <view class="price">
         ￥<text class="max_text">{{tools.getPriceSplit(good.goodsSaleMinPrice)}}</text>{{tools.getPriceSplit(good.goodsSaleMinPrice, 1)}}
         <view class="market_price ">￥{{good.goodsMarketPrice}}</view>
@@ -46,7 +46,8 @@
         <view class="text text_one_line">{{good.goodsName}}</view>
         <view class="text_one_line">{{good.goodsDesc}}</view>
       </view>
-      <view class="add_cart">
+      <view class="store_show_sale" wx:if="{{isIntensiveGood}}">{{good.goodsSaleNum}}</view>
+      <view class="add_cart" wx:if="{{!isIntensiveGood}}">
        <!-- || quantity && good.isMultiSpec == 1  -->
         <view class="cart_btn" wx:if="{{!quantity}}" bindtap="addCart">加入购物车</view>
         <view class="num_controller" wx:else>
@@ -69,6 +70,16 @@
         </view>
       </view>
     </view>
+    <view class="store_price" wx:if="{{isIntensiveGood}}">
+      <view class="store_price_title">集约价：</view>
+      <price-mobel
+        money="{{good.goodsSaleMinPrice}}"
+        marketMoney="{{good.goodsMarketPrice}}"
+        desc="集约价："
+        minSize="{{28}}"
+        maxSize="{{48}}"
+      />
+    </view>
   </view>
 
   <!-- <view class="space_20" />
@@ -86,6 +97,18 @@
       </view>
     </view>
   </view> -->
+
+  <view class="space_20" wx:if="{{isIntensiveGood}}" />
+    
+  <view class="pick_info" wx:if="{{isIntensiveGood}}" >
+    <view class="pick_info_title">提货信息</view>
+    <view class="pick_info_location text_one_line">
+      自提点：
+      <image class="location_icon" src="{{tools.getImgUrl('miniprogram/common/detail_location.png')}}" />
+      <text class="location_text">{{good.storeAdress.storeName}}</text>
+    </view>
+    <view class="pick_info_address text_one_line">{{good.storeAdress.fullAddress}}</view>
+  </view>
   
   <view class="space_20" />
 
@@ -105,9 +128,15 @@
 
   <view style="height: {{$.systemInfo.bottomBarHeight + 104}}rpx" />
 
-  <spec-panel
+  <!-- <spec-panel
     good="{{good}}"
-  />
+  /> -->
 
-  <settlement-bar />
+  <view class="to_buy">
+    <view class="to_buy_btn" bindtap="onToCreate">立即购买</view>
+  </view>
+
+  <view wx:if="{{showSettlementBar}}">
+    <settlement-bar />
+  </view>
 </view>

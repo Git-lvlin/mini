@@ -7,7 +7,8 @@
     "pages/login/main/index",
     "pages/login/bindPhone/index",
     "pages/list/index",
-    "pages/location/index"
+    "pages/location/index",
+    "pages/intensive/index"
   ],
   "subpackages": [
     {
@@ -31,14 +32,14 @@
     {
       "root": "subpages/cart",
       "pages": [
-        "main/index",
         "create/index",
         "detail/index",
         "class/index",
         "address/index",
         "search/index",
         "cashier/index",
-        "editAddress/index"
+        "editAddress/index",
+        "changeShipper/index"
       ]
     },
     {

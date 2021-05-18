@@ -218,8 +218,8 @@ export const getUserInfo = (profile) => {
  * 获取本地用户信息
  * showLogin boolean 是否显示登录提醒
 */
-export const getStorageUserInfo = showLogin => {
-  const userInfo = wx.getStorageSync("USER_INFO");
+export const getStorageUserInfo = (showLogin, goBack) => {
+  const userInfo = wx.getStorageSync("USER_INFO") || "";
   if(showLogin && !userInfo) {
     showModal({
       content: "您还未登录，请登录",
@@ -228,7 +228,10 @@ export const getStorageUserInfo = showLogin => {
         router.push({
           name: "login"
         })
-      }
+      },
+      cancel() {
+        !!goBack && router.go();
+      },
     })
   }
   return userInfo;

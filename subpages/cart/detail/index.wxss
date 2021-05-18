@@ -28,18 +28,19 @@
 
 .swiper_num {
   position: absolute;
-  right: 24rpx;
+  right: 50%;
   bottom: 30rpx;
-  height: 36rpx;
+  height: 40rpx;
   font-size: 24rpx;
   color: #FFFFFF;
-  line-height: 36rpx;
+  line-height: 40rpx;
   text-align: center;
   font-weight: 500;
   letter-spacing: 2rpx;
   padding: 0 16rpx;
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 36rpx;
+  background: linear-gradient(144deg, #ED8065 0%, #D7291D 100%);
+  border-radius: 40rpx;
+  transform: translateX(50%);
 }
 
 
@@ -99,6 +100,13 @@
   margin-bottom: 8rpx;
 }
 
+.store_show_sale {
+  color: #e7755c;
+  font-size: 24rpx;
+  letter-spacing: 2.4rpx;
+  line-height: 34rpx;
+}
+
 .add_cart {
   flex-grow: 0;
   flex-shrink: 0;
@@ -138,6 +146,60 @@
   text-align: center;
   padding: 0;
   margin: 0 8rpx;
+}
+
+.store_price {
+  display: flex;
+  align-items: flex-end;
+  margin-top: 30rpx;
+}
+
+.store_price_title {
+  font-weight: 600;
+  color: #e7532c;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+
+
+.pick_info {
+  padding: 24rpx;
+  background-color: #fff;
+}
+
+.pick_info_title {
+  font-weight: 600;
+  color: #333333;
+  font-size: 32rpx;
+  line-height: 44rpx;
+  margin-bottom: 20rpx;
+}
+
+.pick_info_location {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin-bottom: 16rpx;
+}
+
+.location_icon {
+  width: 28rpx;
+  height: 32rpx;
+  margin-right: 8rpx;
+}
+
+.location_text {
+  font-weight: 400;
+  color: #666;
+}
+
+.pick_info_address {
+  color: #999999;
+  font-size: 28rpx;
+  line-height: 40rpx;
 }
 
 
@@ -184,4 +246,30 @@
 
 .detail_image {
   vertical-align: middle;
+}
+
+
+.to_buy {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 104rpx;
+  background-color: #f7f7f7;
+  border: 1rpx solid #dbdcdb;
+}
+
+.to_buy_btn {
+  width: 686rpx;
+  height: 76rpx;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 28rpx;
+  line-height: 76rpx;
+  text-align: center;
+  background-image: linear-gradient(270deg,#fb5f2a 0%,#e5352f 100%);
+  border-radius: 38rpx;
 }

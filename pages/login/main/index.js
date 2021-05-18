@@ -4,7 +4,6 @@ import router from '../../../utils/router'
 import { getUserInfo, handleErrorCode, setStorageUserInfo } from '../../../utils/tools'
 import { SOURCE_TYPE } from '../../../constants/index'
 import loginApis from '../../../apis/login'
-import commonApis from '../../../apis/common'
 
 create.Page(store, {
   use: [
@@ -84,7 +83,7 @@ create.Page(store, {
 
   // 获取用户openid 登录
   getCodeLogin(userInfo) {
-    console.log(userInfo);
+    const that = this;
     wx.login({
       success: (result)=>{
         loginApis.userLogin({
@@ -99,6 +98,7 @@ create.Page(store, {
           setStorageUserInfo(res.memberInfo);
           wx.setStorageSync("ACCESS_TOKEN", res.acessToken);
           wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
+          this.getOtherInfo(res.memberInfo);
           if(loginToData) {
             router.loginTo(loginToData);
           } else {
@@ -127,6 +127,19 @@ create.Page(store, {
       fail: ()=>{}
     });
     this.setData({ userAuth : true, userInfo: userInfo})
+  },
+
+  // 获取用户其他信息
+  getOtherInfo(userInfo) {
+    loginApis.getOtherInfo({
+      id: userInfo.id
+    }).then(res => {
+      store.data.userOtherInfo = res;
+      wx.setStorage({
+        key: 'USER_OTHER_INFO',
+        data: res,
+      });
+    })
   },
 
   // 勾选条件

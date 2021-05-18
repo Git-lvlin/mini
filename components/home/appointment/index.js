@@ -20,6 +20,10 @@ Component({
         }
       }
     },
+    moreRouter: {
+      type: String,
+      value: ""
+    }
   },
 
   data: {
@@ -36,7 +40,9 @@ Component({
             goodList: homeCache.goodList
           })
         }
-        homeApi.getFloorCustom(content.dataUrl).then(res => {
+        homeApi.getFloorCustom(content.dataUrl, {
+          storeNo: "store_m_1"
+        }).then(res => {
           let goodList = mapNum(res.goodsInfo)
           this.setData({
             goodList

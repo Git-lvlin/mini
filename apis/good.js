@@ -7,6 +7,7 @@ const url = {
   
   addCart: "/cart/auth/cart/addCart",
   cartList: "/cart/auth/cart/list",
+  myCartList: "/cart/auth/myCart/list",
   removeCart: "/cart/auth/cart/removeCart",
   setCartNum: "/cart/auth/cart/setCart",
   checkedCart: "/cart/auth/cart/checkedCart",
@@ -37,6 +38,10 @@ export default {
   // 获取购物车列表
   getCartList(params, option) {
     return Request.post(url.cartList, params, option);
+  },
+  // 按店铺获取购物车列表
+  getStoreCartList(params, option) {
+    return Request.post(url.myCartList, params, option);
   },
   // 添加到购物车
   addCart(params, option) {

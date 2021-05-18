@@ -10,6 +10,10 @@ create.Component(store, {
     show: {
       type: Boolean,
       value: false
+    },
+    total: {
+      type: Object,
+      value: {}
     }
   },
 

@@ -1,5 +1,5 @@
 import router from '../../../utils/router'
-
+import appRouter from '../../../constants/appRouter'
 
 Component({
   options: {
@@ -52,6 +52,17 @@ Component({
   methods: {
     onToUrl() {
       let url = this.data.actionUrl;
+      let jumpKey = "";
+      for(let key in appRouter) {
+        if(url === appRouter[key]) {
+          jumpKey = key;
+        }
+      }
+      if(!!jumpKey) {
+        router.push({
+          name: jumpKey,
+        })
+      }
       console.log("跳转链接", url);
       return ;
       if(!!url) {

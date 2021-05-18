@@ -6,6 +6,7 @@ App({
   onLaunch() {
     store.data.userInfo = getStorageUserInfo();
     store.data.defUserInfo = getStorageUserInfo();
+    store.data.userOtherInfo = wx.getStorageSync("USER_OTHER_INFO");
     setTimeout(() => {
       store.data.motto = "改变了12111111"
       console.log(store.data)

@@ -1,6 +1,6 @@
 
 var getHeadBackCss = function(style, defUrl) {
-  var url = !!defUrl ? defUrl : 'https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/appointment_back.png'
+  var url = !!defUrl ? defUrl : 'https://dev-yeahgo-oss.waiad.com/miniprogram/home/appointment_back.png'
   var headBackCss = "background-image: url(" + url + ")";
   if(!!style && style.backgroundImage) {
     headBackCss = "background-image: url(" + style.backgroundImage + ")";
