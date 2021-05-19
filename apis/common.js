@@ -8,6 +8,24 @@ const url = {
   refreshToken: "/member/open/refreshToken",
 }
 
+const showLogin = (back) => {
+  showModal({
+    content: "您的登录已过期，请登录",
+    confirmText: "去登录",
+    ok() {
+      setLoginRouter();
+      router.push({
+        name: "login"
+      })
+    },
+    cancel() {
+      if(back) {
+        router.go();
+      }
+    }
+  })
+}
+
 
 export default {
   // 获取资源位数据
@@ -43,17 +61,10 @@ export default {
     let postData = {};
     // const userInfo = store.data.userInfo;
     const userInfo = getStorageUserInfo();
+    const refreshToken = wx.getStorageSync("REFRESH_TOKEN");
+    if(!refreshToken) return;
     if(!userInfo) {
-      showModal({
-        content: "您的登录已过期，请登录",
-        confirmText: "去登录",
-        ok() {
-          setLoginRouter();
-          router.push({
-            name: "login"
-          })
-        }
-      })
+      showLogin();
       return ;
     }
     postData = {
@@ -64,6 +75,14 @@ export default {
       wx.setStorageSync("ACCESS_TOKEN", res.acessToken);
       wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
       this.runOverList();
+    }).catch(err => {
+      if(err.code == 405) {
+        wx.removeStorageSync("ACCESS_TOKEN");
+        wx.removeStorageSync("REFRESH_TOKEN");
+        wx.removeStorageSync("USER_INFO");
+        wx.removeStorageSync("USER_OTHER_INFO");
+        showLogin(true);
+      }
     })
   },
 

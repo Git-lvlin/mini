@@ -37,6 +37,16 @@ create.Page(store, {
   onShow: function () {
     this.getDefaultAddress();
     this.getConfirmInfo();
+    if(this.orderType == 15) {
+      let userData = wx.getStorageSync("STORE_SHIPPER_INFO");
+      if(!userData) return;
+      const storeAdress = this.data.storeAdress;
+      storeAdress.linkman = userData.user;
+      storeAdress.phone = userData.phone;
+      this.setData({
+        storeAdress
+      });
+    }
   },
 
   onHide: function () {
@@ -46,7 +56,9 @@ create.Page(store, {
   // 获取默认地址
   getDefaultAddress() {
     const chooseAddress = wx.getStorageSync("CHOOSE_ADDRESS");
-    const addressInfo = this.data.addressInfo;
+    const {
+      addressInfo,
+    } = this.data;
     if(chooseAddress) {
       this.setData({
         addressInfo: chooseAddress
@@ -63,8 +75,32 @@ create.Page(store, {
         this.setData({
           addressInfo: res,
         })
+        this.setStoreAddress(res);
       }
+    }).catch(err => {
+      this.setStoreAddress(err);
     });
+  },
+
+  // 设置提货人
+  setStoreAddress(address) {
+    if(this.orderType == 15) {
+      let data = wx.getStorageSync("CREATE_INTENSIVE");
+      let {
+        storeAdress,
+        ...other
+      } = data;
+      if(!!address.consignee) {
+        storeAdress.linkman = address.consignee;
+        storeAdress.phone = address.phone;
+      } else {
+        storeAdress.linkman = "请输入提货人信息";
+        storeAdress.phone = "";
+      }
+      this.setData({
+        storeAdress
+      })
+    }
   },
 
   getConfirmInfo() {
@@ -78,7 +114,6 @@ create.Page(store, {
        } = data;
        postData = other;
        this.setData({
-        storeAdress,
         storeIntensiveGood: other
        })
     } else {
@@ -120,6 +155,19 @@ create.Page(store, {
       name: "address",
       data: {
         isChoose: true,
+      }
+    })
+  },
+
+  // 跳转修改提货人
+  onToChangeUser() {
+    const {
+      storeAdress
+    } = this.data;
+    router.push({
+      name: "changeShipper",
+      data: {
+        storeNo: storeAdress.storeNo,
       }
     })
   },

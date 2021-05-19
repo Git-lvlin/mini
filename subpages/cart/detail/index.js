@@ -62,6 +62,7 @@ create.Page(store, {
   onShow() {
     let userInfo = getStorageUserInfo();
     let userOtherInfo = wx.getStorageSync("USER_OTHER_INFO") || "";
+    console.log("🚀 ~ onShow ~ userOtherInfo", userOtherInfo)
     this.setData({
       userInfo,
       userOtherInfo,
@@ -173,14 +174,15 @@ create.Page(store, {
 
   // 跳转确认订单
   onToCreate() {
-    if(!this.data.userOtherInfo) {
+    console.log("detail data", this.data);
+    if(!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
     }
-    if(!this.data.userOtherInfo.isShopMaster) {
-      showToast({ title: "很抱歉，你不店主不能下单"})
-      return;
-    }
+    // if(!this.data.userOtherInfo.isShopMaster) {
+    //   showToast({ title: "很抱歉，你不店主不能下单"})
+    //   return;
+    // }
     let {
       activityId,
       objectId,

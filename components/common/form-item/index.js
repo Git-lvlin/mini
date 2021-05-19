@@ -8,7 +8,7 @@ Component({
     },
     label: {
       type: String,
-      value: "name"
+      value: ""
     },
     roundTop: {
       type: Boolean,
@@ -22,6 +22,14 @@ Component({
       type: Boolean,
       value: true,
     },
+    inputType: {
+      type: String,
+      value: "text"
+    },
+    maxLength: {
+      type: String,
+      value: "200"
+    },
     read: {
       type: Boolean,
       value: false,
@@ -30,13 +38,29 @@ Component({
     textAlign: {
       type: String,
       value: "",
-    }
+    },
+    placeholder: {
+      type: String,
+      value: ""
+    },
   },
   data: {
 
   },
 
   methods: {
-
+    handleInput({
+      detail
+    }) {
+      const {
+        label,
+        name,
+      } = this.data;
+      if(!label) showToast({ title: `请确认${name}参数名` });
+      this.triggerEvent("input", {
+        label,
+        value: detail.value
+      })
+    }
   }
 })

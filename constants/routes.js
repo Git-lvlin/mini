@@ -65,6 +65,10 @@ export default {
   cashier: {
     path: "/subpages/cart/cashier/index"
   },
+  // 修改提货人
+  changeShipper: {
+    path: "/subpages/cart/changeShipper/index"
+  },
 
 
   // 用户中心

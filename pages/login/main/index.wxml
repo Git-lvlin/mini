@@ -27,7 +27,7 @@
       wx:if="{{canUseProfile}}"
       bindtap="onLogin"
     >登录+</van-button>
-    <view class="on_login">不登录，先看看</view>
+    <view class="on_login" bindtap="onToHome">不登录，先看看</view>
   </view>
   <view class="other_login" />
   <view class="treaty">
@@ -39,8 +39,8 @@
         icon-size="32rpx"
       >
         登陆/注册即表示您已阅读并同意
-        <text class="red_text" bindtap="onClickTreaty">服务协议</text>和
-        <text class="red_text" bindtap="onClickTreaty">隐私政策</text>
+        <text class="red_text" catchtap="onClickTreaty">服务协议</text>和
+        <text class="red_text" catchtap="onClickTreaty">隐私政策</text>
       </van-radio>
     </van-radio-group>
   </view>

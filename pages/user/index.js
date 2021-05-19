@@ -157,5 +157,15 @@ create.Page(store, {
     router.push({
       name: "list"
     })
+  },
+
+
+
+  onLoginOut() {
+    wx.removeStorageSync("ACCESS_TOKEN");
+    wx.removeStorageSync("REFRESH_TOKEN");
+    wx.removeStorageSync("USER_INFO");
+    wx.removeStorageSync("USER_OTHER_INFO");
+    router.goTabbar();
   }
 })

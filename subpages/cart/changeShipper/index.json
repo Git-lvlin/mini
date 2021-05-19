@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "修改货人信息",
-  "usingComponents": {}
+  "usingComponents": {
+    "form-item": "/components/common/form-item/index"
+  }
 }

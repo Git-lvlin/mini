@@ -1,66 +1,61 @@
-// subpages/cart/changeShipper/index.js
+import router from "../../../utils/router";
+import { showModal, showToast } from "../../../utils/tools";
+
 Page({
+  storeNo: "",
 
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    user: "",
+    phone: "",
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
-
+    this.storeNo = options.storeNo;
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
   onHide: function () {
 
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
   onUnload: function () {
 
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
+  handleInput({
+    detail
+  }) {
+    let data = {};
+    data[detail.label] = detail.value;
+    this.setData(data)
   },
 
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
+  onSave() {
+    const {
+      user,
+      phone,
+    } = this.data;
+    if(!user) {
+      showToast({ title: "请输入提货人" })
+      return;
+    }
+    if(!phone) {
+      showToast({ title: "请输入手机号" })
+      return;
+    }
+    if(phone.length != 11) {
+      showToast({ title: "请输入正确手机号" })
+      return;
+    }
+    showModal({
+      content: "您确定要修改提货人信息？",
+      ok() {
+        wx.setStorageSync("STORE_SHIPPER_INFO", {
+          user,
+          phone,
+        });
+        router.go();
+      },
+    })
   },
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
 })

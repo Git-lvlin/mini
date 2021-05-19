@@ -4,7 +4,11 @@
   <view class="cell_name">{{name}}</view>
   <view class="cell_value">
     <input
+      type="{{inputType}}"
       class="cell_input {{textAlign}}"
+      maxlength="{{maxLength}}"
+      placeholder="{{placeholder}}"
+      placeholder-class="input-placeholder"
       bindinput="handleInput"
       disabled="{{read}}"
     />

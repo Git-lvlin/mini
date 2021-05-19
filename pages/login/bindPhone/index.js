@@ -3,6 +3,7 @@ import store from '../../../store/index'
 import router from '../../../utils/router'
 import { debounce, setStorageUserInfo } from '../../../utils/tools'
 import loginApis from '../../../apis/login'
+import tools from '../utils/login'
 
 create.Page(store, {
   use: [
@@ -141,13 +142,22 @@ create.Page(store, {
       authCode: code,
     }).then(res => {
       const data = res;
-      const loginToData = wx.getStorageSync("LOGIN_TO_DATA");
-      wx.setStorageSync("ACCESS_TOKEN", data.acessToken);
-      wx.setStorageSync("REFRESH_TOKEN", data.refreshToken);
       store.data.userInfo = data.memberInfo;
       store.data.defUserInfo = data.memberInfo;
-      setStorageUserInfo(data.memberInfo);
+      tools.setUserInfo(data);
       this.getOtherInfo(data.memberInfo);
+    });
+  },
+
+  // 获取用户其他信息
+  getOtherInfo(userInfo) {
+    console.log("其他信息", userInfo)
+    loginApis.getOtherInfo({
+      id: userInfo.id
+    }).then(res => {
+      const loginToData = wx.getStorageSync("LOGIN_TO_DATA");
+      store.data.userOtherInfo = res;
+      wx.setStorageSync('USER_OTHER_INFO', res);
       if(loginToData) {
         router.loginTo(loginToData);
       } else {
@@ -156,22 +166,8 @@ create.Page(store, {
           delta: 2,
         });
       }
-      wx.removeStorage({
-        key: 'LOGIN_INFO',
-      });
-    });
-  },
+    }).catch(res => {
 
-  // 获取用户其他信息
-  getOtherInfo(userInfo) {
-    loginApis.getOtherInfo({
-      id: userInfo.id
-    }).then(res => {
-      store.data.userOtherInfo = res;
-      wx.setStorage({
-        key: 'USER_OTHER_INFO',
-        data: res,
-      });
     })
   },
 
