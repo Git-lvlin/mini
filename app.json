@@ -39,7 +39,8 @@
         "search/index",
         "cashier/index",
         "editAddress/index",
-        "changeShipper/index"
+        "changeShipper/index",
+        "teamDetail/index"
       ]
     },
     {

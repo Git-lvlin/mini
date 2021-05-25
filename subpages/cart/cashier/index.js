@@ -2,11 +2,12 @@ import create from '../../../utils/create'
 import store from '../../../store/index'
 import router from '../../../utils/router'
 import util from '../../../utils/util'
+import { getStorageUserInfo, showToast } from '../../../utils/tools'
 import dayjs from '../../../miniprogram_npm/dayjs/index'
 import { IMG_CDN, PAY_TYPE_KEY } from '../../../constants/common'
 import commonApi from '../../../apis/common'
-import cartApi from '../../../apis/cart'
-import { getStorageUserInfo, showToast } from '../../../utils/tools'
+import cartApi from '../../../apis/order'
+import homeApi from '../../../apis/home'
 
 const defaultList = [
 
@@ -16,6 +17,12 @@ const defaultList = [
 Page({
 
   id: "",
+  goodPage: {
+    page: 1,
+    pageSize: 3,
+    totalPage: 1,
+  },
+  loading: false,
 
   data: {
     isPay: false,
@@ -28,6 +35,8 @@ Page({
     downTime: 0,
     timeData: {},
     payData: {},
+    teamPopup: false,
+    hotGood: [],
   },
 
   onLoad: function (options) {
@@ -58,7 +67,10 @@ Page({
         payList,
         payType,
       })
-    })
+    });
+    if(options.orderType == 3 && options.orderType == 4) {
+      this.getHotGood();
+    }
   },
 
   onReady() {
@@ -79,6 +91,47 @@ Page({
         orderCreateTime: dayjs(res.orderCreateTime).format("YYYY-MM-DD HH:mm:ss"),
       })
     });
+  },
+
+  // 获取热销商品
+  getHotGood(nowPage) {
+    let {
+      page,
+      pageSize,
+    } = this.goodPage;
+    if(this.loading) return;
+    page = !!nowPage ? nowPage : page;
+    this.loading = true;
+    homeApi.getHotGood({
+      page,
+      pageSize,
+    }, {
+      showLoading: false,
+    }).then(res => {
+      this.goodPage.totalPage = res.totalPage;
+      this.goodPage.page = page;
+      let hotGood = this.data.hotGood;
+      if(page != 1) {
+        hotGood = hotGood.concat(this.handleListPrice(res.records));
+      } else {
+        hotGood = this.handleListPrice(res.records)
+      }
+      this.setData({
+        hotGood,
+      });
+      this.loading = false;
+    }).catch(err => {
+      this.loading = false;
+    })
+  },
+
+  // 处理金额
+  handleListPrice(list = []) {
+    list.forEach(item => {
+      item.marketPrice = util.divide(item.marketPrice, 100);
+      item.salePrice = util.divide(item.salePrice, 100);
+    })
+    return list;
   },
 
   // 监听倒计时
@@ -136,5 +189,35 @@ Page({
 
   onSuccess() {
     router.goTabbar();
-  }
+  },
+
+  handleCloseTeam() {
+    this.setData({
+      teamPopup: false
+    })
+  },
+
+  handleToDetail({ detail }) {
+    let params = {
+      id: detail.spuId,
+      skuId: detail.skuId,
+      orderType: detail.orderType,
+    }
+    if(!!detail.activityId) params.activityId = detail.activityId;
+    if(!!detail.objectId) params.objectId = detail.objectId;
+    router.replace({
+      name: "detail",
+      data: params,
+    });
+  },
+
+  onReachBottom() {
+    const {
+      page,
+      totalPage
+    } = this.goodPage;
+    if(!this.loading && page < totalPage) {
+      this.getHotGood(page + 1);
+    }
+  },
 })

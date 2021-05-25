@@ -1,0 +1,27 @@
+
+.user_banner {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  min-width: 280rpx;
+  height: 56rpx;
+  padding-left: 4rpx;
+  padding-right: 24rpx;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 28rpx;
+}
+
+.user_avater {
+  width: 44rpx;
+  height: 44rpx;
+  overflow: hidden;
+  margin-right: 8rpx;
+  border: 2rpx solid #fff;
+  border-radius: 50%;
+}
+
+.order_text {
+  color: #ffffff;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}

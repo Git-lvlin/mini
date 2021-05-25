@@ -21,7 +21,7 @@
         {
           "name": "创建订单",
           "pathName": "subpages/cart/create/index",
-          "query": "orderType=15",
+          "query": "orderType=3",
           "scene": null
         },
         {
@@ -64,6 +64,24 @@
           "name": "约购",
           "pathName": "pages/intensive/index",
           "query": "id=2040&skuId=45&quantity=4",
+          "scene": null
+        },
+        {
+          "name": "subpages/cart/detail/index",
+          "pathName": "subpages/cart/detail/index",
+          "query": "orderType=3&activityId=6&id=2069&skuId=84",
+          "scene": null
+        },
+        {
+          "name": "subpages/cart/cashier/index",
+          "pathName": "subpages/cart/cashier/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "subpages/cart/teamDetail/index",
+          "pathName": "subpages/cart/teamDetail/index",
+          "query": "",
           "scene": null
         }
       ]

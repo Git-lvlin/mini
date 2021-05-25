@@ -1,7 +1,7 @@
 import create from '../../../utils/create'
 import store from '../../../store/index'
 import router from '../../../utils/router'
-import cartApi from '../../../apis/cart'
+import cartApi from '../../../apis/order'
 import { getStorageUserInfo, showToast } from '../../../utils/tools'
 import util from '../../../utils/util'
 
@@ -11,8 +11,11 @@ create.Page(store, {
   ],
 
   orderType: 1,
+  // 是否活动商品单独购买
+  isActivityCome: false,
 
   data: {
+    orderType: 1,
     backTopHeight: 120,
     addressInfo: {},
     orderInfo: {},
@@ -21,22 +24,28 @@ create.Page(store, {
     note: "",
     storeAdress: "",
     storeIntensiveGood: "",
+    objectId: "",
+    activityId: "",
   },
 
   onLoad: function (options) {
     let { systemInfo } = this.data.$;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
-    let orderType = options.orderType || 1;
+    let orderType = !options.isActivityCome ? 1 : options.orderType || 1;
     this.orderType = orderType;
+    console.log("🚀 ~ options", options)
+    console.log("🚀 ~ orderType", orderType)
+    this.isActivityCome = !!options.isActivityCome;
     this.setData({
       backTopHeight,
       orderType,
+      objectId: options.objectId ? options.objectId : "",
+      activityId: options.activityId ? options.activityId : "",
     })
   },
   
   onShow: function () {
     this.getDefaultAddress();
-    this.getConfirmInfo();
     if(this.orderType == 15) {
       let userData = wx.getStorageSync("STORE_SHIPPER_INFO");
       if(!userData) return;
@@ -74,6 +83,8 @@ create.Page(store, {
       if(!addressInfo.consignee) {
         this.setData({
           addressInfo: res,
+        }, () => {
+          this.getConfirmInfo();
         })
         this.setStoreAddress(res);
       }
@@ -88,7 +99,6 @@ create.Page(store, {
       let data = wx.getStorageSync("CREATE_INTENSIVE");
       let {
         storeAdress,
-        ...other
       } = data;
       if(!!address.consignee) {
         storeAdress.linkman = address.consignee;
@@ -106,20 +116,49 @@ create.Page(store, {
   getConfirmInfo() {
     let goodList = [];
     let postData = {};
+    let {
+      addressInfo
+    } = this.data;
+    let deliveryInfo = this.mapAddress(addressInfo);
+    postData.deliveryInfo = deliveryInfo;
     if(this.orderType == 15) {
+      // 集约
       let data = wx.getStorageSync("CREATE_INTENSIVE");
       let {
         storeAdress,
         ...other
        } = data;
        postData = other;
+       postData.deliveryInfo = this.mapAddress(storeAdress);
        this.setData({
         storeIntensiveGood: other
        })
+    } else if(this.orderType == 3) {
+      // 单约
+      let data = wx.getStorageSync("CREATE_INTENSIVE");
+       postData = {
+         ...postData,
+         ...data,
+       };
+       this.setData({
+        storeIntensiveGood: data
+       })
+    } else if(this.isActivityCome && this.orderType == 1) {
+      // 活动商品单独购买
+      let data = wx.getStorageSync("CREATE_INTENSIVE");
+      postData = {
+        ...postData,
+        ...data,
+      };
+       this.setData({
+        storeIntensiveGood: data
+       })
     } else {
+      // 
       goodList = wx.getStorageSync("GOOD_LIST");
       postData = {
         orderType: 1,
+        deliveryInfo,
         storeGoodsInfos: goodList
       };
     }
@@ -142,6 +181,23 @@ create.Page(store, {
         orderInfo,
       })
     })
+  },
+
+  // 组装提交的地址数据
+  mapAddress(info) {
+    let data = {
+      consignee: info.consignee,
+      phone: info.phone,
+      address: info.address,
+      provinceId: info.provinceId,
+      provinceName: info.provinceName,
+      cityId: info.cityId,
+      cityName: info.cityName,
+      districtName: info.districtName,
+      fullAddress: info.fullAddress,
+      streetName: info.streetName || "",
+    };
+    return data;
   },
 
   // 返回上一页
@@ -182,6 +238,8 @@ create.Page(store, {
       storeAdress,
       addressInfo,
       note,
+      activityId,
+      objectId,
     } = this.data;
     let storeGoodsInfos = [];
     let storeItem = {};
@@ -201,7 +259,7 @@ create.Page(store, {
       storeGoodsInfos.push(storeItem);
     })
     let postData = {};
-    if(this.orderType != 15) {
+    if(this.orderType == 1) {
       postData = {
         orderType: 1,
         note,
@@ -216,8 +274,6 @@ create.Page(store, {
     } else {
       postData = {
         orderType: storeIntensiveGood.orderType,
-        objectId: storeIntensiveGood.objectId,
-        activityId: storeIntensiveGood.activityId,
         note,
         deliveryInfo: {
           provinceId: storeAdress.provinceId,
@@ -227,6 +283,8 @@ create.Page(store, {
         },
         storeGoodsInfos,
       }
+      if(!!activityId) postData.activityId = activityId
+      if(!!objectId) postData.objectId = objectId
     }
     cartApi.getOrderAmount(postData).then(res => {
       const {
@@ -287,7 +345,13 @@ create.Page(store, {
       addressInfo,
       orderInfo,
       note,
+      storeIntensiveGood,
     } = this.data;
+    const {
+      orderType,
+      objectId,
+      activityId,
+    } = storeIntensiveGood;
     if(!addressInfo.consignee) {
       showToast({ title: "请选择收货地址" });
       return;
@@ -321,6 +385,11 @@ create.Page(store, {
       },
       storeGoodsInfos: [],
     };
+    if(orderType == 3) {
+      postData.orderType = 3;
+      if(!!activityId) postData.activityId = activityId;
+      if(!!objectId) postData.objectId = objectId;
+    }
     orderInfo.storeGoodsInfos.forEach(item => {
       // let storeGood = {"goodsInfos":[{"skuId":1,"skuNum":1,"spuId":2015}],"storeNo":"store_m_1"}
       let storeGood = {
@@ -396,10 +465,16 @@ create.Page(store, {
     }
     cartApi.createOrder(postData).then(res => {
       wx.setStorageSync("order_info", res);
+      res.orderType = this.orderType;
       router.push({
         name: "cashier",
         data: res,
       })
+    }).catch(err => {
+      let time = setTimeout(() => {
+        router.go();
+        clearTimeout(time);
+      }, 1500);
     });
   }
 })

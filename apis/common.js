@@ -8,6 +8,8 @@ const url = {
   refreshToken: "/member/open/refreshToken",
 }
 
+let isShowLoginMobal = false;
+
 const showLogin = (back) => {
   showModal({
     content: "您的登录已过期，请登录",
@@ -63,8 +65,9 @@ export default {
     const userInfo = getStorageUserInfo();
     const refreshToken = wx.getStorageSync("REFRESH_TOKEN");
     if(!refreshToken) return;
-    if(!userInfo) {
+    if(!userInfo && !isShowLoginMobal) {
       showLogin();
+      isShowLoginMobal = true;
       return ;
     }
     postData = {
@@ -75,13 +78,15 @@ export default {
       wx.setStorageSync("ACCESS_TOKEN", res.acessToken);
       wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
       this.runOverList();
+      isShowLoginMobal = false;
     }).catch(err => {
       if(err.code == 405) {
         wx.removeStorageSync("ACCESS_TOKEN");
         wx.removeStorageSync("REFRESH_TOKEN");
         wx.removeStorageSync("USER_INFO");
         wx.removeStorageSync("USER_OTHER_INFO");
-        showLogin(true);
+        !isShowLoginMobal && showLogin(true);
+        isShowLoginMobal = true;
       }
     })
   },

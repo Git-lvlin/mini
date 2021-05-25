@@ -1,0 +1,48 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="container">
+  <view class="team_detail">
+    <view class="flex_middle good_content">
+      <view class="cover">
+        <van-image
+          width="240rpx"
+          height="240rpx"
+          fit="cover"
+          custom-class="cover"
+          src="{{}}"
+        />
+      </view>
+      <view class="good_info">
+        <view class="text_two_line title">客家正规好吃土鸡蛋8枚 无污染 约425g（带盒）客家正规好吃土鸡蛋8枚 无污染 约425g（带盒）</view>
+        <view class="desc">性价比高 丨 日期新鲜</view>
+        <view class="flex_middle">
+          <view class="price_text">团购价</view>
+          <price-mobel
+            money="9.89"
+            marketMoney="1253"
+            minSize="{{20}}"
+            maxSize="{{32}}"
+          />
+        </view>
+      </view>
+    </view>
+    <view class="flex_center">
+      <view class="time_text">仅差<text class="red">1</text>人成团，时间仅剩</view>
+      <count-down
+        time="{{1100000}}"
+        isFull
+      />
+    </view>
+    <view class="user_list">
+      <together-user
+        title="团长"
+      />
+    </view>
+    <view class="btn">立即参团</view>
+  </view>
+
+  <hot-good
+    icon="{{tools.getImgUrl('miniprogram/common/bag.png')}}"
+    title="更多团约"
+  />
+</view>

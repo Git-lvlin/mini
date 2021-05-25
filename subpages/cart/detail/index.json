@@ -4,6 +4,11 @@
   "usingComponents": {
     "settlement-bar": "/components/cart/settlement-bar/index",
     "spec-panel": "/components/cart/spec-panel/index",
-    "price-mobel": "/components/common/price-mobel/index"
+    "price-mobel": "/components/common/price-mobel/index",
+    "user-banner": "/components/good/user-banner/index",
+    "together-item": "/components/good/together-item/index",
+    "team-popup": "/components/good/team-popup/index",
+    "together-popup": "/components/good/together-popup/index",
+    "count-down": "/components/common/count-down/index"
   }
 }

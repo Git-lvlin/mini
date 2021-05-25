@@ -10,6 +10,17 @@ image {
   vertical-align: middle;
 }
 
+.flex_middle {
+  display: flex;
+  align-items: center;
+}
+
+.flex_center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /*单行溢出省略*/
 .text_one_line {
   text-overflow: ellipsis;
@@ -33,4 +44,17 @@ image {
 
 .img_middle{
   vertical-align: middle;
+}
+
+.right_arrow {
+  width: 12rpx;
+  height: 12rpx;
+  border-top: 4rpx solid #FFF;
+  border-right: 4rpx solid #FFF;
+  transform: rotate(45deg);
+}
+
+.safe_bottom {
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
 }

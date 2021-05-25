@@ -1,6 +1,6 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
-<view class="container">
+<view class="safe_bottom container" style="{{isPay ? 'background: #f5f5f5' : ''}}">
   <view class="nav_bar">
     <nav-bar title="收银台" delta="{{isPay ? 2 : 1}}" />
   </view>
@@ -46,7 +46,7 @@
     </view>
   </view>
 
-  <view class="content content_gray" wx:if="{{isPay}}">
+  <view class="content" wx:if="{{isPay}}">
     <view class="def_head_back" />
     
     <view class="success_head" style="background-image: url({{tools.getImgUrl('miniprogram/cart/order/success_back.png')}})">
@@ -75,8 +75,20 @@
       <view class="info_item">支付方式：<text class="info_text">{{'微信支付'}}</text></view>
     </view>
 
-    <view class="bottom_confirm">
+    <hot-good
+      wx:if="{{hotGood.length}}"
+      list="{{hotGood}}"
+      autoJump="{{false}}"
+      bind:click="handleToDetail"
+    />
+
+    <view class="bottom_confirm" wx:if="{{false}}">
       <view class="comfirm_btn" bindtap="onSuccess">完成</view>
     </view>
   </view>
+
+  <team-success
+    show="{{teamPopup}}"
+    bind:close="handleCloseTeam"
+  />
 </view>

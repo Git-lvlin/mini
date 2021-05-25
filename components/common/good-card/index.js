@@ -12,7 +12,7 @@ Component({
     data: {
       type: Object,
       value: {},
-    }
+    },
   },
 
   data: {
@@ -20,6 +20,9 @@ Component({
   },
 
   methods: {
-
+    onToDetail() {
+      let data = this.data.data;
+      this.triggerEvent("click", data);
+    }
   }
 })

@@ -1,0 +1,13 @@
+
+var getLastTime = function(time) {
+  var endTime = 100;
+  time = time.length < 13 ? time * 1000 : time;
+  endTime = getDate().getTime;
+  endTime = time - endTime;
+  if(endTime < 0 || isNaN(endTime)) endTime = 100;
+  return endTime
+}
+
+module.exports = {
+  getLastTime: getLastTime,
+}

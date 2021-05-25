@@ -1,6 +1,6 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
-<view class="good_card" style="width: {{size}}">
+<view class="good_card" style="width: {{size}}" bindtap="onToDetail">
   <van-image
     width="{{size}}"
     height="{{size}}"

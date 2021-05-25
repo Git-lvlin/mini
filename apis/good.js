@@ -18,6 +18,9 @@ const url = {
   detailImg: "/goods/open/detailImages",
   skuList: "/goods/open/skus",
   checkSku: "/goods/open/checkSku",
+  personalDetail: "/activity/open/group/personal/goodsInfo",
+  memberList: "/activity/open/group/personal/memberList",
+  teamDetail: "/activity/open/group/personal/info",
 }
 
 export default {
@@ -33,7 +36,6 @@ export default {
   getRecommends(params, option) {
     return Request.get(url.recommends, params, option);
   },
-
 
   // 获取购物车列表
   getCartList(params, option) {
@@ -85,5 +87,17 @@ export default {
   getCheckSku(params, option) {
     return Request.get(url.checkSku, params, option);
   },
-
+  // 获取单约详情
+  getPersonalDetail(params, option) {
+    return Request.post(url.personalDetail, params, option);
+  },
+  // 获取单约详情
+  getTogetherList(params, option) {
+    return Request.post(url.memberList, params, option);
+  },
+  // 单约团详情
+  getTeamDetail(params, option) {
+    return Request.post(url.teamDetail, params, option);
+  },
+  
 }

@@ -69,6 +69,10 @@ export default {
   changeShipper: {
     path: "/subpages/cart/changeShipper/index"
   },
+  // 参团详情
+  teamDetail: {
+    path: "/subpages/cart/teamDetail/index"
+  },
 
 
   // 用户中心

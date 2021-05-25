@@ -1,5 +1,5 @@
 import router from "../../../utils/router"
-import cartApi from "../../../apis/cart"
+import cartApi from "../../../apis/order"
 import { getPinYin } from '../../../utils/pinyin'
 import format from '../../../utils/format'
 import { showModal, showToast } from '../../../utils/tools'

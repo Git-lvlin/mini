@@ -16,6 +16,15 @@
   height: 56rpx;
 }
 
+/* 购买横幅 */
+.user_banner_list {
+  position: fixed;
+  top: 96rpx;
+  left: 24rpx;
+  z-index: 5;
+}
+
+/* banner */
 .banner {
   width: 750rpx;
   height: 750rpx;
@@ -44,6 +53,7 @@
 }
 
 
+/* 商品标题 */
 .good_head {
   padding: 20rpx 24rpx 28rpx;
 }
@@ -162,6 +172,7 @@
 }
 
 
+/* 提货信息 */
 .pick_info {
   padding: 24rpx;
   background-color: #fff;
@@ -203,6 +214,38 @@
 }
 
 
+/* 拼单 */
+.together_head {
+  display: flex;
+  align-items: center;
+  height: 88rpx;
+  padding: 0 24rpx;
+  border-bottom: 2rpx solid #F3f3f3;
+}
+
+.together_title {
+  flex: 1;
+  color: #000000;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+
+.together_more {
+  display: flex;
+  align-items: center;
+  color: #999999;
+  font-size: 24rpx;
+  line-height: 40rpx;
+}
+
+.right_icon {
+  width: 14rpx;
+  height: 24rpx;
+  margin-left: 12rpx;
+}
+
+
+/* 商品详情 */
 .info_card {
   padding: 24rpx;
   background-color: #fff;
@@ -233,7 +276,7 @@
   height: 64rpx;
   font-size: 28rpx;
   color: #222222;
-  background-color: #F5F6F6 ;
+  background-color: #F5F6F6;
   border-bottom: 2rpx solid #fff;
 }
 
@@ -249,6 +292,7 @@
 }
 
 
+/* 购买集约商品 */
 .to_buy {
   position: fixed;
   left: 0;
@@ -274,4 +318,95 @@
   text-align: center;
   background-image: linear-gradient(270deg,#fb5f2a 0%,#e5352f 100%);
   border-radius: 38rpx;
+}
+
+
+/* 拼团商品 */
+.bar_over_height {
+  height: 80rpx;
+}
+
+.together_bar {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 7;
+  width: 100%;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  background-color: #fff;
+}
+
+.together_recommend {
+  height: 88rpx;
+  padding: 0 24rpx;
+  background-color: #fbf3b8;
+  box-shadow: 0rpx -4rpx 20rpx rgba(0, 0, 0, 0.09);
+}
+
+.user_avatar {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.together_num {
+  color: #000000;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin-left: 4rpx;
+  margin-right: 20rpx;
+}
+
+.together_timer {
+  width: 48rpx;
+  height: 48rpx;
+  color: #ffffff;
+  font-size: 28rpx;
+  line-height: 48rpx;
+  text-align: center;
+  background-color: #d7291d;
+  border-radius: 8rpx;
+}
+
+.timer_util {
+  font-weight: bolder;
+  color: #d7291d;
+  padding: 0 4rpx;
+}
+
+.together_btn {
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+  width: 150rpx;
+  height: 64rpx;
+  color: #fff;
+  font-size: 28rpx;
+  margin-left: auto;
+  background-color: #d7291d;
+  border-radius: 8rpx;
+}
+
+.right_arrow {
+  width: 12rpx;
+  height: 12rpx;
+  border-top: 4rpx solid #FFF;
+  border-right: 4rpx solid #FFF;
+  transform: rotate(45deg);
+}
+
+.order_btn_item {
+  flex-direction: column;
+  width: 50%;
+  height: 100rpx;
+  color: #ffffff;
+  font-size: 32rpx;
+  line-height: 34rpx;
+  background-color: #F5AFAC;
+}
+
+.together_buy_btn {
+  background: linear-gradient(145deg, #ed8065 0%, #d7291d 100%);
 }
