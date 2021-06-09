@@ -119,7 +119,7 @@ page{
 
 .banner_img {
   width: 702rpx;
-  min-height: 130rpx;
+  height: 172rpx;
   margin-left: 24rpx;
   margin-bottom: 32rpx;
 }

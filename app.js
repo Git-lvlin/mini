@@ -6,6 +6,7 @@ App({
   onLaunch() {
     store.data.userInfo = getStorageUserInfo();
     store.data.defUserInfo = getStorageUserInfo();
+    store.data.userOtherInfo = wx.getStorageSync("USER_OTHER_INFO");
     setTimeout(() => {
       store.data.motto = "改变了12111111"
       console.log(store.data)
@@ -14,6 +15,8 @@ App({
     // 获取设置系统信息
     let systemInfo = getSystemInfo();
     store.data.systemInfo = systemInfo;
+    // 设置环境变量 dev test prod
+    wx.setStorageSync('SYS_ENV', 'dev');
 
     // 
     // getResourceDetail({
@@ -27,6 +30,6 @@ App({
   },
 
   globalData: {
-    userInfo: null
-  }
+    userInfo: null,
+  },
 })

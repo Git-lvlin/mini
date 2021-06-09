@@ -148,6 +148,67 @@ page {
   height: 28rpx;
 }
 
+.store_address {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 32rpx 0 32rpx 32rpx;
+  margin-bottom: 24rpx;
+  background-color: #fff;
+  border-radius: 24rpx;
+  box-shadow: 0rpx 8rpx 16rpx rgba(0, 0, 0, 0.01);
+}
+
+.store_address_user {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  padding-right: 32rpx;
+  padding-bottom: 4rpx;
+  margin-bottom: 32rpx;
+  border-bottom: 2rpx solid rgba(0, 0, 0, 0.05);
+}
+
+.position_icon {
+  flex-shrink: 0;
+  flex-grow: 0;
+  width: 20rpx;
+  height: 30rpx;
+  margin-right: 16rpx;
+}
+
+.store_user_name {
+  flex-shrink: 0;
+  flex-grow: 0;
+  margin-right: 16rpx;
+}
+
+.store_user_phone {
+  flex: 1;
+  margin-right: 16rpx;
+}
+
+.store_name {
+  font-weight: 600;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin-bottom: 16rpx;
+}
+
+.name_gray {
+  font-weight: 400;
+  color: #666;
+}
+
+.store_address_detail {
+  color: #999999;
+  font-size: 24rpx;
+  line-height: 34rpx;
+}
+
 
 /* 订单金额 */
 .order_price {
@@ -161,18 +222,20 @@ page {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24rpx;
+}
+
+.cell_item:not(:first-child) {
+  margin-top: 24rpx;
 }
 
 .cell_name {
   color: #333333;
   font-size: 28rpx;
   line-height: 40rpx;
-  font-weight: 600;
 }
 
 .cell_value {
-  font-weight: 500;
+  font-weight: 600;
   color: #333333;
   font-size: 28rpx;
   line-height: 40rpx;
@@ -188,7 +251,7 @@ page {
 }
 
 .coupon_money {
-  font-weight: 500;
+  font-weight: 600;
   color: #333333;
   font-size: 28rpx;
   line-height: 40rpx;
@@ -213,6 +276,24 @@ page {
   color:  #cccccc;
   font-size: 28rpx;
   line-height: 40rpx;
+}
+
+.store_msg {
+  display: flex;
+  align-items: center;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  padding: 32rpx 40rpx;
+  margin-top: 24rpx;
+  background-color: #fff;
+  border-radius: 16rpx;
+}
+
+.store_msg_input {
+  flex: 1;
+  height: 40rpx;
+  margin-left: 24rpx;
 }
 
 

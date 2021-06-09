@@ -7,16 +7,24 @@ const url = {
   
   addCart: "/cart/auth/cart/addCart",
   cartList: "/cart/auth/cart/list",
+  myCartList: "/cart/auth/myCart/list",
   removeCart: "/cart/auth/cart/removeCart",
   setCartNum: "/cart/auth/cart/setCart",
   checkedCart: "/cart/auth/cart/checkedCart",
   checkedAllCart: "/cart/auth/cart/checkedAllCart",
   subtotal: "/cart/auth/cart/subtotal",
 
-  detail: "/goods/open/info",
+  detail: "/goods/option/info",
   detailImg: "/goods/open/detailImages",
   skuList: "/goods/open/skus",
   checkSku: "/goods/open/checkSku",
+  personalDetail: "/activity/option/group/personal/goodsInfo",
+  pushTogether: "/activity/auth/group/createSingle",
+  memberList: "/activity/option/group/personal/memberList",
+  teamDetail: "/activity/option/group/personal/info",
+  posterDetail: "/activity/option/group/poster",
+  togetherUser: "/activity/option/group/personal/memberDynamic",
+  
 }
 
 export default {
@@ -33,10 +41,13 @@ export default {
     return Request.get(url.recommends, params, option);
   },
 
-
   // 获取购物车列表
   getCartList(params, option) {
     return Request.post(url.cartList, params, option);
+  },
+  // 按店铺获取购物车列表
+  getStoreCartList(params, option) {
+    return Request.post(url.myCartList, params, option);
   },
   // 添加到购物车
   addCart(params, option) {
@@ -80,5 +91,29 @@ export default {
   getCheckSku(params, option) {
     return Request.get(url.checkSku, params, option);
   },
-
+  // 获取单约详情
+  getPersonalDetail(params, option) {
+    return Request.post(url.personalDetail, params, option);
+  },
+  // 发起拼团
+  pushTogether(params, option) {
+    return Request.post(url.pushTogether, params, option);
+  },
+  // 获取单约列表
+  getTogetherList(params, option) {
+    return Request.post(url.memberList, params, option);
+  },
+  // 单约团详情
+  getTeamDetail(params, option) {
+    return Request.post(url.teamDetail, params, option);
+  },
+  // 获取拼团海报详情
+  getPosterDetail(params, option) {
+    return Request.post(url.posterDetail, params, option);
+  },
+  // 获取已拼单用户
+  getTogetherUser(params, option) {
+    return Request.post(url.togetherUser, params, option);
+  },
+  
 }

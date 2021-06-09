@@ -1,5 +1,5 @@
 import router from '../../../utils/router'
-import cartApi from '../../../apis/cart'
+import cartApi from '../../../apis/order'
 
 Page({
   isChoose: false,

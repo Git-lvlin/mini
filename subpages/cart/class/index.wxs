@@ -2,7 +2,7 @@
 var getQuantity = function(good, cartList) {
   var quantity = 0;
   cartList.forEach(function(item) {
-    if(good.spuId === item.spuId) {
+    if(good.spuId == item.spuId) {
       quantity = item.quantity
     }
   })

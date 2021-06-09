@@ -1,6 +1,6 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
-<view class="good_card" style="width: {{size}}">
+<view class="good_card" style="width: {{size}}" bindtap="onToDetail">
   <van-image
     width="{{size}}"
     height="{{size}}"
@@ -11,7 +11,10 @@
     <view class="good_title text_one_line">{{data.title}}</view>
     <view class="good_sku text_one_line">{{data.subtitle}}</view>
     <view class="good_price">
-      <price-mobel money="{{data.salePrice}}" marketMoney="{{data.marketPrice}}" />
+      <view class="flex_middle">
+        <text class="price_title">{{priceTitle}}</text>
+        <price-mobel money="{{data.salePrice}}" marketMoney="{{data.marketPrice}}" />
+      </view>
       <view class="cart" wx:if="{{false}}">
         <image class="cart_icon" src="{{tools.getImgUrl('miniprogram/common/good_cart.png')}}" />
         <view class="cart_num">2</view>

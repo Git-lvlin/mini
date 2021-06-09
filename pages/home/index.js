@@ -94,11 +94,17 @@ create.Page(store, {
   onFixation({
     currentTarget
   }) {
-    let url = currentTarget.dataset.url;
-    if(!url) return;
+    // let url = currentTarget.dataset.url;
+    // if(!url) return;
+    // router.push({
+    //   name: url,
+    // })
     router.push({
-      name: url,
-    })
+      name: "webview",
+      data: {
+        url: "http%3A%2F%2Fdev-yeahgo-publicmobile.waiad.icu%2Fmenu"
+      },
+    });
   },
 
   // 跳转选择地址
@@ -112,13 +118,6 @@ create.Page(store, {
   onToSearch() {
     router.push({
       name: 'search',
-    });
-  },
-
-  // 跳转商品详情
-  onToDetail() {
-    router.push({
-      name: 'detail',
     });
   },
 

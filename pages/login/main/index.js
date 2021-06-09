@@ -4,7 +4,7 @@ import router from '../../../utils/router'
 import { getUserInfo, handleErrorCode, setStorageUserInfo } from '../../../utils/tools'
 import { SOURCE_TYPE } from '../../../constants/index'
 import loginApis from '../../../apis/login'
-import commonApis from '../../../apis/common'
+import tools from '../utils/login'
 
 create.Page(store, {
   use: [
@@ -84,7 +84,7 @@ create.Page(store, {
 
   // 获取用户openid 登录
   getCodeLogin(userInfo) {
-    console.log(userInfo);
+    const that = this;
     wx.login({
       success: (result)=>{
         loginApis.userLogin({
@@ -93,23 +93,10 @@ create.Page(store, {
         }, {
           notErrorMsg: true,
         }).then(res => {
-          const loginToData = wx.getStorageSync("LOGIN_TO_DATA");
           store.data.userInfo = res.memberInfo;
           store.data.defUserInfo = res.memberInfo;
-          setStorageUserInfo(res.memberInfo);
-          wx.setStorageSync("ACCESS_TOKEN", res.acessToken);
-          wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
-          if(loginToData) {
-            router.loginTo(loginToData);
-          } else {
-            router.loginTo({
-              type: "back",
-              delta: 1,
-            });
-          }
-          wx.removeStorage({
-            key: 'LOGIN_INFO',
-          });
+          tools.setUserInfo(res);
+          this.getOtherInfo(res.memberInfo);
           // commonApis.runOverList();
         }).catch(err => {
           if(err.code === 200102) {
@@ -127,6 +114,22 @@ create.Page(store, {
       fail: ()=>{}
     });
     this.setData({ userAuth : true, userInfo: userInfo})
+  },
+
+  // 获取用户其他信息
+  getOtherInfo(userInfo) {
+    console.log("其他信息", userInfo)
+    loginApis.getOtherInfo({
+      id: userInfo.id
+    }, {
+      showLoading: false,
+    }).then(res => {
+      store.data.userOtherInfo = res;
+      wx.setStorageSync('USER_OTHER_INFO', res);
+      tools.successJump();
+    }).catch(err => {
+      tools.successJump();
+    });
   },
 
   // 勾选条件
@@ -149,6 +152,11 @@ create.Page(store, {
     this.setData({
       showTreaty: false
     })
-  }
+  },
+
+  // 不登录
+  onToHome() {
+    router.goTabbar();
+  },
 
 })

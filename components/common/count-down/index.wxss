@@ -1,0 +1,18 @@
+
+
+.together_timer {
+  width: 48rpx;
+  height: 48rpx;
+  color: #ffffff;
+  font-size: 28rpx;
+  line-height: 48rpx;
+  text-align: center;
+  background-color: #d7291d;
+  border-radius: 8rpx;
+}
+
+.timer_util {
+  font-weight: bolder;
+  color: #d7291d;
+  padding: 0 4rpx;
+}

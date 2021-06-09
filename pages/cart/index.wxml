@@ -7,30 +7,37 @@
     <view slot="content" class="nav_title">购物车</view>
   </nav-container>
 
-  <scroll-view scroll-y class="content">
+  <scroll-view scroll-y class="content" bindscrolltolower="handleScrollBottom">
     <view class="coupon">
       <view class="coupon_img" style="background-image: url({{tools.getImgUrl('miniprogram/cart/little_coupon_back.png')}})">领券</view>
       <view class="coupon_text">精选好券，抢到赚到</view>
       <image class="coupon_arrow_right" src="{{tools.getImgUrl('miniprogram/common/coupon_arrow_right.png')}}" />
     </view>
 
-    <!-- <cart-card /> -->
+    <block
+      wx:for="{{$.storeCartList}}"
+      wx:key="id"
+    >
+      <cart-card
+        store="{{item}}"
+      />
+    </block>
 
-    <view class="not_list" wx:if="{{false}}">
+    <view class="not_list" wx:if="{{!$.storeCartList.length && !!$.userInfo}}">
       <nodata
         top="{{48}}"
       />
       <view class="to_browse" bindtap="onToHome">去逛逛吧</view>
     </view>
 
-    <view class="not_login">
+    <view class="not_login" wx:if="{{!$.userInfo}}">
       <nodata
         title="去添加点什么吧"
         top="{{48}}"
       />
     </view>
 
-    <view class="hot_sale">
+    <view class="hot_sale" wx:if="{{hotGoodList.length}}">
       <view class="hot_sale_head">
         <view class="hot_head_line left_line" />
         <image class="hot_icon" src="{{tools.getImgUrl('miniprogram/cart/hot.png')}}" />
@@ -38,18 +45,15 @@
         <view class="hot_head_line right_line" />
       </view>
       <view class="hot_list">
-        <good-card
-          data="{{item}}"
-          size="318rpx"
-        />
-        <good-card
-          data="{{item}}"
-          size="318rpx"
-        />
-        <good-card
-          data="{{item}}"
-          size="318rpx"
-        />
+        <block
+          wx:for="{{hotGoodList}}"
+          wx:key="skuId"
+        >
+          <good-card
+            data="{{item}}"
+            size="318rpx"
+          />
+        </block>
       </view>
     </view>
   </scroll-view>
@@ -58,17 +62,21 @@
     <view class="footer footer_content" >
       <view class="settlement">
         <view class="select_all">
-          <image class="choose_icon" src="{{choose}}" />全选
+          <image
+            class="choose_icon"
+            src="{{selectAll ? choose : defChoose}}"
+            bindtap="onSelectCartAll"
+          />全选
         </view>
         <view class="settlement_content">
           <view class="settlement_info">
-            <view class="price">合计：¥931.23</view>
+            <view class="price">合计：¥{{$.cartListTotal.subtotalPromotion}}</view>
             <view
               class="price_desc"
               bindtap="openCouopnDetail"
-            >已优惠244，查看明细<text class="arrow_top {{showCouponPopup ? 'arrow_act' : ''}}" /></view>
+            >已优惠{{tools.floatReduce($.cartListTotal.subtotal, $.cartListTotal.subtotalPromotion)}}，查看明细<text class="arrow_top {{showCouponPopup ? 'arrow_act' : ''}}" /></view>
           </view>
-          <view class="settlement_btn">结算(2)</view>
+          <view class="settlement_btn" bindtap="onToOrder">结算({{$.cartListTotal.checkedQuantity}})</view>
         </view>
       </view>
     </view>
@@ -76,6 +84,7 @@
 
   
   <cart-coupon-detail
+    total="{{$.cartListTotal}}"
     show="{{ showCouponPopup }}"
     bind:close="handleCloseCouponDetail"
   />

@@ -1,11 +1,31 @@
 import Request from '../utils/request'
-import store from '../store/index'
 import { showModal, setLoginRouter, getStorageUserInfo } from '../utils/tools'
 import router from '../utils/router'
+import homeApi from './home'
 
 const url = {
   resource: "/cms/open/json/selByResourceKey",
   refreshToken: "/member/open/refreshToken",
+}
+
+let isShowLoginMobal = false;
+
+const showLogin = (back) => {
+  showModal({
+    content: "您的登录已过期，请登录",
+    confirmText: "去登录",
+    ok() {
+      setLoginRouter();
+      router.push({
+        name: "login"
+      })
+    },
+    cancel() {
+      if(back) {
+        router.go();
+      }
+    }
+  })
 }
 
 
@@ -43,17 +63,11 @@ export default {
     let postData = {};
     // const userInfo = store.data.userInfo;
     const userInfo = getStorageUserInfo();
-    if(!userInfo) {
-      showModal({
-        content: "您的登录已过期，请登录",
-        confirmText: "去登录",
-        ok() {
-          setLoginRouter();
-          router.push({
-            name: "login"
-          })
-        }
-      })
+    const refreshToken = wx.getStorageSync("REFRESH_TOKEN");
+    if(!refreshToken) return;
+    if(!userInfo && !isShowLoginMobal) {
+      showLogin();
+      isShowLoginMobal = true;
       return ;
     }
     postData = {
@@ -64,6 +78,16 @@ export default {
       wx.setStorageSync("ACCESS_TOKEN", res.acessToken);
       wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
       this.runOverList();
+      isShowLoginMobal = false;
+    }).catch(err => {
+      if(err.code == 405 || err.code == 200109) {
+        wx.removeStorageSync("ACCESS_TOKEN");
+        wx.removeStorageSync("REFRESH_TOKEN");
+        wx.removeStorageSync("USER_INFO");
+        wx.removeStorageSync("USER_OTHER_INFO");
+        !isShowLoginMobal && showLogin(true);
+        isShowLoginMobal = true;
+      }
     })
   },
 
@@ -84,5 +108,18 @@ export default {
       }
     });
     wx.setStorageSync("OVER_LIST", []);
+  },
+
+  // 获取商品分享参数
+  getGoodShareInfo(params) {
+    return new Promise(resolve => {
+      homeApi.getShareInfo(params).then(res => {
+        resolve({
+          title: res.title,
+          path: res.shareUrl,
+          imageUrl: res.thumbData
+        })
+      });
+    });
   },
 }

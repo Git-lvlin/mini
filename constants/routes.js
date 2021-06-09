@@ -27,8 +27,21 @@ export default {
   bindPhone: {
     path: "/pages/login/bindPhone/index"
   },
+  // 选择地址
   location: {
     path: "/pages/location/index"
+  },
+  // 集约列表
+  intensive: {
+    path: "/pages/intensive/index"
+  },
+  // 集约列表
+  otherpay: {
+    path: "/pages/otherpay/index"
+  },
+  // 集约列表
+  webview: {
+    path: "/pages/webview/index"
   },
 
   
@@ -59,6 +72,14 @@ export default {
   // 收银台
   cashier: {
     path: "/subpages/cart/cashier/index"
+  },
+  // 修改提货人
+  changeShipper: {
+    path: "/subpages/cart/changeShipper/index"
+  },
+  // 参团详情
+  teamDetail: {
+    path: "/subpages/cart/teamDetail/index"
   },
 
 

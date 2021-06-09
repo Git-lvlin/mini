@@ -75,8 +75,8 @@ const Reqeust = (params) => {
         if(!params.notErrorMsg) {
           handleErrorCode({
             params,
-            code: 10018,
-            msg: "",
+            code: !!error && !!error.data ? error.data.code : 10018,
+            msg: !!error && !!error.data ? error.data.msg : "",
             mustLogin: params.mustLogin,
           });
         }

@@ -1,0 +1,41 @@
+
+.user_content {
+  padding: 36rpx 0;
+}
+
+.user_item {
+  position: relative;
+  width: 112rpx;
+  height: 112rpx;
+  border: 2rpx solid #d7291d;
+  border-radius: 50%;
+}
+
+.user_label {
+  position: absolute;
+  top: -22rpx;
+  left: 50%;
+  z-index: 2;
+  width: 82rpx;
+  height: 40rpx;
+  color: #ffffff;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  text-align: center;
+  background-color: #EB0000;
+  border: 2rpx solid #FFF;
+  border-radius: 40rpx;
+  transform: translateX(-50%);
+}
+
+.user_item:not(:first-child) {
+  z-index: 2;
+  /* transform: translateX(-12rpx); */
+  margin-left: -12rpx;
+}
+
+.user_other {
+  width: 116rpx;
+  height: 116rpx;
+  margin-left: 32rpx;
+}

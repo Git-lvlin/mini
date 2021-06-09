@@ -12,7 +12,11 @@ Component({
     data: {
       type: Object,
       value: {},
-    }
+    },
+    priceTitle: {
+      type: String,
+      value: "",
+    },
   },
 
   data: {
@@ -20,6 +24,9 @@ Component({
   },
 
   methods: {
-
+    onToDetail() {
+      let data = this.data.data;
+      this.triggerEvent("click", data);
+    }
   }
 })

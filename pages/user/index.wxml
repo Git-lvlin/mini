@@ -61,6 +61,10 @@
       </view>
     </view>
 
+    <button type="primary" bindtap="onLoginOut">
+      退出登录
+    </button>
+
     <van-popup show="{{ showPopup }}" closeable round bind:close="onHidePopup">
       <view class="popup_content">请下载APP体验完整功能</view>
     </van-popup>

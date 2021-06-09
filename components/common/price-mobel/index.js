@@ -5,6 +5,10 @@ Component({
       type: String,
       value: ""
     },
+    desc: {
+      type: String,
+      value: ""
+    },
     money: {
       type: Number,
       value: 0

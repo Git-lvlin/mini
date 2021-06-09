@@ -1,0 +1,51 @@
+
+.team_success {
+  width: 654rpx;
+  height: 568rpx;
+  padding: 40rpx 0 24rpx;
+  background-color: #ffffff;
+}
+
+.text {
+  color: #000000;
+  font-size: 36rpx;
+  letter-spacing: 1.5rpx;
+  line-height: 50rpx;
+  text-align: center;
+}
+
+.red {
+  color: #d7291d;
+}
+
+.share {
+  margin-top: 24rpx;
+}
+
+.share_list {
+  padding-top: 8rpx;
+  padding-bottom: 24rpx
+}
+
+.share_item:not(:last-child) {
+  margin-right: 48rpx;
+}
+
+.share_name {
+  color: #999999;
+  font-size: 24rpx;
+  line-height: 34rpx;
+  text-align: center;
+  margin-top: 6rpx;
+}
+
+.share_icon {
+  width: 96rpx;
+  height: 96rpx;
+}
+
+.time_down {
+  color: #666666;
+  font-size: 36rpx;
+  line-height: 50rpx;
+}

@@ -3,6 +3,8 @@
   "usingComponents": {
     "nav-bar": "/components/common/nav-bar/index",
     "price-mobel": "/components/common/price-mobel/index",
-    "van-count-down": "/miniprogram_npm/@vant/weapp/count-down/index"
+    "hot-good": "/components/good/hot-good/index",
+    "van-count-down": "/miniprogram_npm/@vant/weapp/count-down/index",
+    "team-success": "/components/cart/team-success/index"
   }
 }

@@ -19,7 +19,7 @@
     <view class="sale">{{!!good.goodsSaleNum ? good.goodsSaleNum : "" }}</view>
     <view class="price">
       <view class="text"><text class="unit">￥</text>{{good.salePrice}}<view class="market_price">¥{{good.marketPrice}} </view></view>
-      <view class="num_controller" >
+      <view class="num_controller" wx:if="{{control}}">
         <image
           class="icon"
           wx:if="{{!!quantity ? quantity : good.quantity}}"

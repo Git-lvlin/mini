@@ -70,10 +70,7 @@ Component({
       currentTarget
     }) {
       let data = currentTarget.dataset.data;
-      router.push({
-        name: 'detail',
-        data
-      });
+      console.log("跳转链接", data);
     },
   }
 })

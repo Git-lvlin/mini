@@ -103,10 +103,22 @@ Component({
     onGood({
       currentTarget
     }) {
-      let data = currentTarget.dataset.data;
+      let {
+        spuId,
+        skuId,
+        activityId,
+        objectId,
+        orderType,
+      } = currentTarget.dataset.data;
       router.push({
         name: 'detail',
-        data
+        data: {
+          spuId,
+          skuId,
+          activityId,
+          objectId,
+          orderType,
+        }
       });
     },
   }

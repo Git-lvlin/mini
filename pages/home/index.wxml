@@ -29,6 +29,7 @@
   >
     <!-- 约购商品 -->
     <appointment
+      moreRouter="intensive"
       floor="{{item}}"
       wx:if="{{item.floorType === 1}}"
     />

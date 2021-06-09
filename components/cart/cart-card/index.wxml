@@ -2,34 +2,51 @@
 
 <view class="cart_card">
   <view class="select_content head_content">
-    <image class="select_icon" src="{{notSelectIcon}}" />
+    <image
+      class="select_icon"
+      src="{{store.isChecked ? selectIcon : notSelectIcon}}"
+      bindtap="onChooseAll"
+    />
     <view class="select_info">
       <van-image
         width="40rpx"
         height="40rpx"
         custom-class="store_icon"
-        src="{{tools.getImgUrl('miniprogram/cart/666.jpg')}}"
+        src="{{store.storeLogo}}"
       />
-      <view class="store_name">约购平台自营</view>
+      <view class="store_name">{{store.storeName}}</view>
     </view>
   </view>
-  <van-swipe-cell right-width="{{ 150 }}">
+  <van-swipe-cell
+    right-width="{{ 150 }}"
+    wx:for="{{store.skus}}"
+    wx:key="skuId"
+  >
     <van-cell-group>
       <view class="select_content good_content">
-        <image class="select_icon" src="{{selectIcon}}" />
+        <image
+          class="select_icon"
+          src="{{item.isChecked ? selectIcon : notSelectIcon}}"
+          data-id="{{item.skuId}}"
+          bindtap="onChooseGood"
+        />
         <view class="select_info">
           <van-image 
             width="180rpx"
             height="180rpx"
             custom-class="good_img"
-            src="{{tools.getImgUrl('miniprogram/cart/666.jpg')}}"
+            src="{{item.thumbnail}}"
           />
           <view class="good_info">
-            <view class="good_title text_one_line">吉列（Gillette)   剃须最多一行剃须最多一行剃须最多一行剃须最多一行剃须最多一行</view>
-            <view class="good_desc text_one_line">经典抗衰老 360无缝极光；经典抗衰老 360无缝极光；经典抗衰老 360无缝极光；经典抗衰老 360无缝极光；</view>
+            <view class="good_title text_one_line">{{item.skuName}}</view>
+            <view class="good_desc text_one_line">{{item.goodsName}}</view>
             <view class="price_info">
-              <view class="good_price">¥{{8.88}}</view>
-              <num-control />
+              <view class="good_price">¥{{item.salePrice}}</view>
+              <num-control
+                skuId="{{item.skuId}}"
+                num="{{item.quantity}}"
+                bind:change="handleStockChange"
+              />
             </view>
           </view>
         </view>

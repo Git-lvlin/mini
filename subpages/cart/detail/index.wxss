@@ -16,6 +16,7 @@
   height: 56rpx;
 }
 
+/* banner */
 .banner {
   width: 750rpx;
   height: 750rpx;
@@ -28,21 +29,23 @@
 
 .swiper_num {
   position: absolute;
-  right: 24rpx;
+  right: 50%;
   bottom: 30rpx;
-  height: 36rpx;
+  height: 40rpx;
   font-size: 24rpx;
   color: #FFFFFF;
-  line-height: 36rpx;
+  line-height: 40rpx;
   text-align: center;
   font-weight: 500;
   letter-spacing: 2rpx;
   padding: 0 16rpx;
-  background-color: rgba(0, 0, 0, 0.5);
-  border-radius: 36rpx;
+  background: linear-gradient(144deg, #ED8065 0%, #D7291D 100%);
+  border-radius: 40rpx;
+  transform: translateX(50%);
 }
 
 
+/* 商品标题 */
 .good_head {
   padding: 20rpx 24rpx 28rpx;
 }
@@ -99,6 +102,13 @@
   margin-bottom: 8rpx;
 }
 
+.store_show_sale {
+  color: #e7755c;
+  font-size: 24rpx;
+  letter-spacing: 2.4rpx;
+  line-height: 34rpx;
+}
+
 .add_cart {
   flex-grow: 0;
   flex-shrink: 0;
@@ -140,7 +150,101 @@
   margin: 0 8rpx;
 }
 
+.store_price {
+  display: flex;
+  align-items: flex-end;
+  margin-top: 30rpx;
+}
 
+.store_price_title {
+  font-weight: 600;
+  color: #e7532c;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+
+
+/* 提货信息 */
+.pick_info {
+  padding: 24rpx;
+  background-color: #fff;
+}
+
+.pick_info_title {
+  font-weight: 600;
+  color: #333333;
+  font-size: 32rpx;
+  line-height: 44rpx;
+  margin-bottom: 20rpx;
+}
+
+.pick_way {
+  justify-content: space-around;
+}
+
+.pick_way_item {
+  width: 252rpx;
+  height: 80rpx;
+  padding: 0 24rpx;
+  background-color: #f9f9f9;
+  border: 2rpx solid #cccccc;
+  border-radius: 16rpx;
+}
+
+.pick_way_icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 12rpx;
+}
+
+.pick_way_name {
+  color: #333333;
+  font-size: 32rpx;
+  line-height: 44rpx;
+}
+
+.way_item_act {
+  border-color: #e5352f;
+}
+
+.way_item_act .pick_way_name {
+  color: #e5352f;
+}
+
+
+
+/* 拼单 */
+.together_head {
+  display: flex;
+  align-items: center;
+  height: 88rpx;
+  padding: 0 24rpx;
+  border-bottom: 2rpx solid #F3f3f3;
+}
+
+.together_title {
+  flex: 1;
+  color: #000000;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+
+.together_more {
+  display: flex;
+  align-items: center;
+  color: #999999;
+  font-size: 24rpx;
+  line-height: 40rpx;
+}
+
+.right_icon {
+  width: 14rpx;
+  height: 24rpx;
+  margin-left: 12rpx;
+}
+
+
+/* 商品详情 */
 .info_card {
   padding: 24rpx;
   background-color: #fff;
@@ -171,7 +275,7 @@
   height: 64rpx;
   font-size: 28rpx;
   color: #222222;
-  background-color: #F5F6F6 ;
+  background-color: #F5F6F6;
   border-bottom: 2rpx solid #fff;
 }
 
@@ -184,4 +288,124 @@
 
 .detail_image {
   vertical-align: middle;
+}
+
+
+/* 购买集约商品 */
+.to_buy {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 104rpx;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  background-color: #f7f7f7;
+  border: 1rpx solid #dbdcdb;
+}
+
+.to_buy_btn {
+  width: 686rpx;
+  height: 76rpx;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 28rpx;
+  line-height: 76rpx;
+  text-align: center;
+  background-image: linear-gradient(270deg,#fb5f2a 0%,#e5352f 100%);
+  border-radius: 38rpx;
+}
+
+
+/* 拼团商品 */
+.bar_over_height {
+  height: 80rpx;
+}
+
+.together_bar {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 7;
+  width: 100%;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+  background-color: #fff;
+}
+
+.together_recommend {
+  height: 88rpx;
+  padding: 0 24rpx;
+  background-color: #fbf3b8;
+  box-shadow: 0rpx -4rpx 20rpx rgba(0, 0, 0, 0.09);
+}
+
+.user_avatar {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.together_num {
+  color: #000000;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin-left: 4rpx;
+  margin-right: 20rpx;
+}
+
+.together_timer {
+  width: 48rpx;
+  height: 48rpx;
+  color: #ffffff;
+  font-size: 28rpx;
+  line-height: 48rpx;
+  text-align: center;
+  background-color: #d7291d;
+  border-radius: 8rpx;
+}
+
+.timer_util {
+  font-weight: bolder;
+  color: #d7291d;
+  padding: 0 4rpx;
+}
+
+.together_btn {
+  display: flex; 
+  align-items: center;
+  justify-content: center;
+  width: 150rpx;
+  height: 64rpx;
+  color: #fff;
+  font-size: 28rpx;
+  margin-left: auto;
+  background-color: #d7291d;
+  border-radius: 8rpx;
+}
+
+.right_arrow {
+  width: 12rpx;
+  height: 12rpx;
+  border-top: 4rpx solid #FFF;
+  border-right: 4rpx solid #FFF;
+  transform: rotate(45deg);
+}
+
+.order_btn_item {
+  flex-direction: column;
+  width: 50%;
+  height: 100rpx;
+  color: #ffffff;
+  font-size: 32rpx;
+  line-height: 34rpx;
+  background-color: #F5AFAC;
+}
+
+.together_buy_btn {
+  background: linear-gradient(145deg, #ed8065 0%, #d7291d 100%);
 }

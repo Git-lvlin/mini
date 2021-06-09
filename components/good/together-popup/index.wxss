@@ -1,0 +1,39 @@
+
+.together_content {
+  width: 654rpx;
+  height: 532rpx;
+  background-color: #ffffff;
+}
+
+.together_title { 
+  color: #000000;
+  font-size: 40rpx;
+  letter-spacing: 1.67rpx;
+  line-height: 56rpx;
+  text-align: center;
+  padding: 76rpx 0 24rpx;
+}
+
+.info {
+  color: #666666;
+  font-size: 32rpx;
+  letter-spacing: 1.33rpx;
+  line-height: 44rpx;
+  text-align: center;
+}
+
+.red {
+  color: #d7291d;
+}
+
+.btn {
+  width: 558rpx;
+  height: 96rpx;
+  color: #ffffff;
+  font-size: 32rpx;
+  line-height: 96rpx;
+  text-align: center;
+  margin: 0 auto;
+  background-color: #d7291d;
+  border-radius: 96rpx;
+}

@@ -56,10 +56,34 @@ var floatReduce = function(arg1, arg2) {
   return ((arg1 * m - arg2 * m) / m).toFixed(n);
 }
 
+// 计算加入购物车数
+var getQuantity = function(good, cartList) {
+  cartList = !!cartList ? cartList : [];
+  var quantity = 0;
+  cartList.forEach(function(item) {
+    if(good.spuId == item.spuId) {
+      quantity = item.quantity
+    }
+  })
+  return quantity
+}
+
+// 获取当前距离结束时间
+var getLastTime = function(time) {
+  if(!time) return 100;
+  var endTime = 100;
+  time = time.length < 13 ? time * 1000 : time;
+  endTime = getDate().getTime;
+  endTime = time - endTime;
+  if(endTime < 0 || isNaN(endTime)) endTime = 100;
+  return endTime
+}
 
 module.exports = {
   floatAdd: floatAdd,
   floatReduce: floatReduce,
   getImgUrl: getImgUrl,
   getPriceSplit: getPriceSplit,
+  getQuantity: getQuantity,
+  getLastTime: getLastTime,
 }

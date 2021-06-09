@@ -1,13 +1,17 @@
-import { apiUrl } from "../constants/index"
+import { baseApi } from "../constants/index"
 import routes from "../constants/routes"
 import commonApi from '../apis/common'
 import router from "../utils/router"
+import dayjs from '../miniprogram_npm/dayjs/index.js'
+import relativeTime from './dayjsplugin/relativeTime'
 import util from "./util"
+
+dayjs.extend(relativeTime);
 
 // 获取当前环境接口域名
 export const getBaseApiUrl = () => {
-  let url = apiUrl
-  return url;
+  const env = wx.getStorageSync("SYS_ENV") || 'prod';
+  return baseApi[env];
 }
 
 // 提示信息
@@ -218,8 +222,8 @@ export const getUserInfo = (profile) => {
  * 获取本地用户信息
  * showLogin boolean 是否显示登录提醒
 */
-export const getStorageUserInfo = showLogin => {
-  const userInfo = wx.getStorageSync("USER_INFO");
+export const getStorageUserInfo = (showLogin, goBack) => {
+  const userInfo = wx.getStorageSync("USER_INFO") || "";
   if(showLogin && !userInfo) {
     showModal({
       content: "您还未登录，请登录",
@@ -228,7 +232,10 @@ export const getStorageUserInfo = showLogin => {
         router.push({
           name: "login"
         })
-      }
+      },
+      cancel() {
+        !!goBack && router.go();
+      },
     })
   }
   return userInfo;
@@ -297,8 +304,16 @@ export const getQueryString = (name) => {
   return null;
 }
 
+// 对象转 param 字符串
+export const objToParamStr = (paramObj = {}) => {
+  const sdata = [];
+  for (let attr in paramObj) {
+    sdata.push(`${attr}=${paramObj[attr]}`);
+  }
+  return sdata.join('&');
+};
 
-// 取url参数
+// 设置登录后跳转地址
 export const setLoginRouter = (path) => {
   let url = path;
   if(!!url) {
@@ -311,6 +326,43 @@ export const setLoginRouter = (path) => {
     }
   }
 }
+
+
+
+export const getRelativeTime = (time) => {
+  const timeStr = dayjs().from(dayjs(time));
+  let str = '';
+  let num = 1;
+  if(timeStr.indexOf('seconds') > -1) {
+    str = '1秒前';
+  } else if(timeStr.indexOf('a minute') > -1) {
+    str = '1分钟前';
+  } else if(timeStr.indexOf('minutes') > -1) {
+    num = timeStr.match(/\d+/g)[0];
+    str = `${num}分钟前`;
+  } else if(timeStr.indexOf('an hour') > -1) {
+    str = '1小时前';
+  } else if(timeStr.indexOf('hours') > -1) {
+    num = timeStr.match(/\d+/g)[0];
+    str = `${num}小时前`;
+  } else if(timeStr.indexOf('a day') > -1) {
+    str = `1天前`;
+  } else if(timeStr.indexOf('days') > -1) {
+    num = timeStr.match(/\d+/g)[0];
+    str = `${num}天前`;
+  } else if(timeStr.indexOf('a month') > -1) {
+    str = `1月前`;
+  } else if(timeStr.indexOf('months') > -1) {
+    num = timeStr.match(/\d+/g)[0];
+    str = `${num}月前`;
+  } else if(timeStr.indexOf('a year') > -1) {
+    str = `1年前`;
+  } else if(timeStr.indexOf('years') > -1) {
+    num = timeStr.match(/\d+/g)[0];
+    str = `${num}年前`;
+  }
+  return str;
+};
 
 // 转为浮点数
 export const mapNum = (list = []) => {

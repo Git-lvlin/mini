@@ -6,9 +6,13 @@ import { IMG_CDN } from './common'
 export const VERSION = "1.0.0";
 
 // 服务器接口域名
-// export const apiUrl = "http://dev-yeahgo-public-web.waiad.icu/";
+export const baseApi = {
+  dev: "http://dev-yeahgo-gateway.waiad.icu",
+  // dev: "https://api-dev.yeahgo.com",
+  test: "https://api-dev.yeahgo.com",
+  prod: "https://api.yeahgo.com",
+};
 // export const apiUrl = "http://8.135.39.109";
-export const apiUrl = "http://dev-yeahgo-gateway.waiad.icu";
 // 服务器接口域名
 export const HTTP_TIMEOUT = 5000;
 // 接口请求来源

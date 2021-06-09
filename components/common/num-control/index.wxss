@@ -19,6 +19,12 @@
   border-radius: 16rpx 0 0 16rpx;
 }
 
+.gray_view {
+  border-top: 2rpx solid #eee;
+  border-bottom: 2rpx solid #eee;
+  border-left: 2rpx solid #eee;
+}
+
 .add_view {
   border-right: 2rpx solid #999;
   border-radius: 0 16rpx 16rpx 0;
