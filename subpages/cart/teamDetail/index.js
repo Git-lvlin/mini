@@ -1,66 +1,172 @@
-// subpages/cart/teamDetail/index.js
+import commonApi from '../../../apis/common';
+import goodApi from '../../../apis/good';
+import homeApi from '../../../apis/home';
+import router from '../../../utils/router';
+import util from '../../../utils/util';
+import { objToParamStr } from '../../../utils/tools';
+
 Page({
+  goodParam: {},
+  hotGoodPage: {
+    page: 1,
+    pageSize: 10,
+    totalPage: 1,
+  },
+  loading: false,
 
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    good: {},
+    hotGood: [],
+    groupInfo: {},
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-
+  onLoad(options) {
+    this.goodParam = options;
+    this.getPosterDetail();
+    this.getHotGood();
+    const a = objToParamStr(options);
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-
+  onReachBottom() {
+    const {
+      page,
+      totalPage,
+    } = this.hotGoodPage;
+    if(!this.loading && page < totalPage) {
+      this.hotGoodPage.page += 1;
+      this.getHotGood();
+    }
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
+  // 分享
+  onShareAppMessage() {
+    const promise = commonApi.getGoodShareInfo({
+      shareType: 1,
+      contentType: 1,
+      shareObjectNo: this.goodParam.spuId,
+      paramId: 3,
+      shareParams: this.goodParam,
+    });
+    const {
+      groupInfo,
+    } = this.data;
+    const param = objToParamStr(this.goodParam);
+    const path = `/subpages/cart/teamDetail/index?${param}`;
+    return {
+      title: groupInfo.curGoods.goodsName,
+      imageUrl: groupInfo.curGoods.imageUrlList[0],
+      path,
+      promise,
+    }
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-
+  // 获取单约详情
+  getPosterDetail() {
+    const {
+      objectId,
+      groupId,
+      spuId,
+      skuId,
+    } = this.goodParam;
+    goodApi.getPosterDetail({
+      activityType: 3,
+      groupId,
+      objectId,
+    }).then(res => {
+      console.log("getPosterDetail ~ res", res)
+      const good = res.curGoods;
+      const groupInfo = res;
+      good.salePrice = util.divide(good.salePrice, 100);
+      good.marketPrice = util.divide(good.marketPrice, 100);
+      good.activityPrice = util.divide(good.activityPrice, 100);
+      groupInfo.distancetime *= 1000;
+      this.setData({
+        good,
+        groupInfo,
+      });
+    });
   },
 
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-
+  // 获取热销商品
+  getHotGood() {
+    if(this.loading) return;
+    const {
+      page,
+      pageSize,
+    } = this.hotGoodPage;
+    let {
+      hotGood,
+    } = this.data;
+    this.loading = true;
+    homeApi.getHotGood({
+      page,
+      pageSize,
+    }).then(res => {
+      this.hotGoodPage.totalPage = res.totalPage;
+      const list = res.records;
+      if(page > 1) {
+        hotGood = hotGood.concat(list);
+      } else {
+        hotGood = list;
+      }
+      this.setData({
+        hotGood,
+      });
+      this.loading = false;
+    });
   },
 
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
+  // 跳转下单
+  onToCreate(gId) {
+    const {
+      groupInfo,
+    } = this.data;
+    const {
+      activityId,
+      spuId,
+      skuId,
+      groupId,
+      curGoods,
+    } = groupInfo;
+    let data = {
+      orderType: 3,
+      storeGoodsInfos: [{
+        storeNo: curGoods.storeNo,
+        goodsInfos: [{
+          spuId,
+          skuId,
+          skuNum: 1,
+        }]
+      }]
+    };
+    if(!!activityId && activityId != undefined) data.activityId = activityId;
+    data.objectId = !!gId ? gId : groupId;
+    data.groupId = !!gId ? gId : groupId;
+    wx.setStorageSync("CREATE_INTENSIVE", data);
+    router.push({
+      name: "createOrder",
+      data: {
+        orderType: 3,
+        activityId,
+        objectId: !!gId ? gId : groupId,
+      }
+    });
   },
 
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-
+  // 发起拼单
+  onPushTogether() {
+    const {
+      activityId,
+      spuId,
+      skuId,
+    } = this.goodParams;
+    goodApi.pushTogether({
+      activityId,
+      spuId,
+      skuId,
+    }).then(res => {
+      this.onToCreate(res.groupId);
+    });
   },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-
-  }
+  
 })

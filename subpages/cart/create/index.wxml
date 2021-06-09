@@ -23,7 +23,11 @@
     </view>
     
     <view class="content">
-      <view class="address" wx:if="{{orderInfo.token && orderType != 15}}" bindtap="onToAddress">
+      <view
+        class="address"
+        wx:if="{{(orderInfo.token && orderType != 15) || (orderType == 15 && selectAddressType.type == 3)}}"
+        bindtap="onToAddress"
+      >
         <view class="no_address" wx:if="{{!addressInfo.id}}">
           <image class="add_address" src="{{tools.getImgUrl('miniprogram/cart/add_address.png')}}" />
           <view class="no_address_title">添加收货地址</view>
@@ -37,7 +41,7 @@
           <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
         </view>
       </view>
-      <view class="store_address" wx:if="{{orderType == 15}}">
+      <view class="store_address" wx:if="{{orderType == 15 && selectAddressType.type == 2}}">
         <view class="store_address_user" bindtap="onToChangeUser">
           <image class="position_icon" src="{{tools.getImgUrl('miniprogram/common/location_black.png')}}" />
           <view class="store_user_name">{{storeAdress.linkman}}</view>

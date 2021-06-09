@@ -35,6 +35,14 @@ export default {
   intensive: {
     path: "/pages/intensive/index"
   },
+  // 集约列表
+  otherpay: {
+    path: "/pages/otherpay/index"
+  },
+  // 集约列表
+  webview: {
+    path: "/pages/webview/index"
+  },
 
   
   // 分类列表

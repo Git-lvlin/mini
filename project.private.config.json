@@ -69,7 +69,7 @@
         {
           "name": "subpages/cart/detail/index",
           "pathName": "subpages/cart/detail/index",
-          "query": "orderType=3&activityId=6&id=2069&skuId=84",
+          "query": "orderType=3&activityId=6&spuId=2069&skuId=84",
           "scene": null
         },
         {
@@ -81,7 +81,19 @@
         {
           "name": "subpages/cart/teamDetail/index",
           "pathName": "subpages/cart/teamDetail/index",
+          "query": "orderType=3&spuId=2069&objectId=2&groupId=23772&skuId=84",
+          "scene": null
+        },
+        {
+          "name": "pages/otherpay/index",
+          "pathName": "pages/otherpay/index",
           "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/webview/index",
+          "pathName": "pages/webview/index",
+          "query": "url=http%3A%2F%2Fwww.baidu.com",
           "scene": null
         }
       ]

@@ -5,6 +5,8 @@ const url = {
   bannerList: "/cms/open/banner/list",
   intensiveGood: "/activity/open/wholesaleGoodsList",
   hotGood: "/activity/open/tagGoodsList",
+
+  shareInfo: "/share/option/shareParam/queryShareContent",
 }
 
 export default {
@@ -36,6 +38,14 @@ export default {
       ...options,
     }
     return Request.get(url, params, option)
-  }
+  },
 
+  // 获取分享参数
+  getShareInfo(params, options) {
+    let option = {
+      showLoading: false,
+      ...options,
+    }
+    return Request.post(url.shareInfo, params, option);
+  },
 }

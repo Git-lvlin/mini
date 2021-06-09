@@ -1,7 +1,7 @@
 import Request from '../utils/request'
-import store from '../store/index'
 import { showModal, setLoginRouter, getStorageUserInfo } from '../utils/tools'
 import router from '../utils/router'
+import homeApi from './home'
 
 const url = {
   resource: "/cms/open/json/selByResourceKey",
@@ -80,7 +80,7 @@ export default {
       this.runOverList();
       isShowLoginMobal = false;
     }).catch(err => {
-      if(err.code == 405) {
+      if(err.code == 405 || err.code == 200109) {
         wx.removeStorageSync("ACCESS_TOKEN");
         wx.removeStorageSync("REFRESH_TOKEN");
         wx.removeStorageSync("USER_INFO");
@@ -108,5 +108,18 @@ export default {
       }
     });
     wx.setStorageSync("OVER_LIST", []);
+  },
+
+  // 获取商品分享参数
+  getGoodShareInfo(params) {
+    return new Promise(resolve => {
+      homeApi.getShareInfo(params).then(res => {
+        resolve({
+          title: res.title,
+          path: res.shareUrl,
+          imageUrl: res.thumbData
+        })
+      });
+    });
   },
 }

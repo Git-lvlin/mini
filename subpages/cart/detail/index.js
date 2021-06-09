@@ -1,6 +1,7 @@
 import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
+import { IMG_CDN } from '../../../constants/common'
 import { showModal, showToast, getStorageUserInfo } from '../../../utils/tools'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
@@ -19,7 +20,7 @@ create.Page(store, {
       store,
     }) => {
       const cartList = store.data.cartList;
-      const goodId = options.id;
+      const goodId = options.spuId;
       let quantity = 0;
       cartList.forEach(item => {
         if(item.spuId === goodId) {
@@ -45,14 +46,18 @@ create.Page(store, {
     isActivityGood: 0,
     personalList: [],
     togetherList: [],
+    togetherUser: [],
     teamDetail: {},
+    wayIcon: `${IMG_CDN}miniprogram/common/def_choose.png`,
+    wayIconSelect: `${IMG_CDN}miniprogram/common/choose.png`,
   },
 
   onLoad: function (options) {
     let { systemInfo } = this.store.data;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
+    // if (!options.spuId && !!options.id) options.spuId = options.id;
     this.goodParams = options;
-    let isActivityGood = 0;
+    let isActivityGood = 1;
     if(!!options.orderType) isActivityGood = options.orderType;
     this.setData({
       backTopHeight,
@@ -61,7 +66,9 @@ create.Page(store, {
     this.getGoodDetail();
     this.getDetailImg();
     if(options.orderType == 3) {
-      this.getTogetherList();
+      // this.getTogetherList();
+      // 拼成用户列表
+      this.getTogetherUser();
     }
   },
 
@@ -82,11 +89,11 @@ create.Page(store, {
   getDetailImg() {
     let {
       orderType,
-      id
+      spuId
     } = this.goodParams;
     if(orderType == 3) return; 
     goodApi.getDetailImg({
-      spuId: id,
+      spuId,
     }).then(res => {
       this.setData({
         detailImg: res.images
@@ -101,10 +108,10 @@ create.Page(store, {
       objectId,
       orderType,
       skuId,
-      id,
+      spuId,
     } = this.goodParams
     let params = {
-      id, 
+      id: spuId, 
     };
     if(!!orderType) {
       params = {
@@ -115,18 +122,21 @@ create.Page(store, {
       if(activityId) params.activityId = activityId;
     }
     if(orderType == 3) {
-      params.spuId = id;
+      params.spuId = spuId;
       params.skuId = skuId;
       goodApi.getPersonalDetail(params).then(res => {
-        let good = res.curGoods;
-        let personalList = res.personalList.records;
-        let detailImg = good.images;
+        const good = res.curGoods;
+        const personalList = res.personalList.records;
+        const detailImg = good.images;
         good.activityPrice = util.divide(good.activityPrice, 100);
         good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
         good.goodsMarketPrice = util.divide(good.marketPrice, 100);
         // good.goodsSaleNum = good.saleNum;
         good.goodsSaleNum = `月售${good.activitySaleNum}件`;
         good.imageList = good.imageUrlList;
+        personalList.forEach(item => {
+          item.distancetime = item.distancetime * 1000;
+        })
         this.setData({
           personalList,
           good,
@@ -136,13 +146,39 @@ create.Page(store, {
     } else {
       goodApi.getGoodDetail(params).then(res => {
         let good = res;
+        let selectAddressType = "";
         good.goodsSaleMinPrice = util.divide(good.goodsSaleMinPrice, 100);
         good.goodsMarketPrice = util.divide(good.goodsMarketPrice, 100);
+        if(good.sendTypeList) {
+          selectAddressType = good.sendTypeList.find(item => item.status == 1);
+        }
         this.setData({
-          good
+          good,
+          selectAddressType,
         })
       });
     }
+  },
+
+  // 集约切换配送方式
+  onChangePickType({
+    currentTarget
+  }) {
+    const current = currentTarget.dataset.data;
+    const {
+      good,
+    } = this.data;
+    good.sendTypeList.forEach(item => {
+      if(item.type === current.type) {
+        item.status = 1;
+      } else {
+        item.status = 0;
+      }
+    });
+    this.setData({
+      good,
+      selectAddressType: current, 
+    });
   },
 
   // 获取拼单列表
@@ -152,15 +188,31 @@ create.Page(store, {
       objectId,
       orderType,
       skuId,
-      id,
+      spuId,
     } = this.goodParams
     goodApi.getTogetherList({
       activityId,
-      spuId: id,
+      spuId,
       skuId,
     }).then(res => {
       this.setData({
         togetherList: res.records
+      })
+    });
+  },
+
+  // 拼成用户列表
+  getTogetherUser() {
+    let {
+      skuId,
+      spuId,
+    } = this.goodParams
+    goodApi.getTogetherUser({
+      spuId,
+      skuId,
+    }).then(res => {
+      this.setData({
+        togetherUser: res.records
       })
     });
   },
@@ -170,9 +222,10 @@ create.Page(store, {
     goodApi.getTeamDetail({
       groupId: data.groupId
     }).then(res => {
-      console.log(res)
+      const teamDetail = res;
+      teamDetail.distancetime = teamDetail.distancetime * 1000;
       this.setData({
-        teamDetail: res
+        teamDetail,
       })
     });
   },
@@ -243,35 +296,52 @@ create.Page(store, {
       activityId,
       objectId,
       orderType,
-      id,
+      spuId,
       skuId,
     } = this.goodParams;
+    const {
+      selectAddressType,
+      good,
+    } = this.data;
+    const {
+      detail,
+      currentTarget,
+    } = event;
     // if(!this.data.userOtherInfo.isShopMaster && orderType == 15) {
     //   showToast({ title: "很抱歉，你不店主不能下单"})
     //   return;
     // }
-    let good = this.data.good;
     let isActivityCome = false;
     let data = {
       orderType,
       storeGoodsInfos: [{
         storeNo: good.storeNo,
         goodsInfos: [{
-          spuId: id ? id : good.id,
+          spuId: spuId ? spuId : good.id,
           skuId: skuId ? skuId : good.defaultSkuId,
           skuNum: 1,
+          goodsFromType: good.goodsFromType,
         }]
       }]
     };
-    if(event.currentTarget.dataset.type === "alone") {
+    // 点击单独购买
+    if(currentTarget && currentTarget.dataset.type === "alone") {
       data.orderType = 1;
       orderType = 1;
       isActivityCome = true;
     } else {
+      // 活动购买
       if(!!activityId && activityId != undefined) data.activityId = activityId;
       if(!!objectId && objectId != undefined) data.objectId = objectId;
       if(!!good.objectId) data.objectId = good.objectId;
-      if(orderType == 15) dat.storeAdress = good.storeAdress;
+      if(orderType == 3) {
+        data.objectId = detail.groupId;
+        objectId = detail.groupId;
+      }
+      if(orderType == 15) {
+        data.storeAdress = good.storeAdress;
+        data.selectAddressType = selectAddressType;
+      }
     }
     wx.setStorageSync("CREATE_INTENSIVE", data);
     router.push({
@@ -324,6 +394,26 @@ create.Page(store, {
       showTeamPopup: false,
       showTogetherPopup: true
     })
+  },
+
+  // 发起拼单
+  onPushTogether() {
+    const {
+      activityId,
+      spuId,
+      skuId,
+    } = this.goodParams;
+    goodApi.pushTogether({
+      activityId,
+      spuId,
+      skuId,
+    }).then(res => {
+      this.onToCreate({
+        detail: {
+          groupId: res.groupId,
+        },
+      });
+    });
   },
 
   // 关闭拼单用户弹窗

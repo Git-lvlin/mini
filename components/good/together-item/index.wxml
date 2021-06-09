@@ -15,7 +15,7 @@
     </view>
     <view class="last_time">
       剩余
-      <count-down time="{{ tools.getLastTime(data.endTime) }}" />
+      <count-down time="{{ data.distancetime }}" />
     </view>
   </view> 
   <view class="btn" bindtap="onToTogether">去拼单<view class="right_arrow"/></view>

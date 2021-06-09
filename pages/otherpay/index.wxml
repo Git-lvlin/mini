@@ -1,0 +1,3 @@
+<!--pages/otherpay/index.wxml-->
+<text>pages/otherpay/index.wxml</text>
+<button open-type="launchApp" app-parameter="wechat" binderror="launchAppError">打开APP</button>

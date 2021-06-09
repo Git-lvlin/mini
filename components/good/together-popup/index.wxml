@@ -11,7 +11,7 @@
     <view class="flex_center info">
       仅差<text class="red">{{data.distanceNum}}</text>人拼成，
       <count-down
-        time="{{ tools.getLastTime(data.endTime) }}"
+        time="{{ data.distancetime }}"
         fontSize="{{32}}"
         color="#666666"
       />

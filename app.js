@@ -15,6 +15,8 @@ App({
     // 获取设置系统信息
     let systemInfo = getSystemInfo();
     store.data.systemInfo = systemInfo;
+    // 设置环境变量 dev test prod
+    wx.setStorageSync('SYS_ENV', 'dev');
 
     // 
     // getResourceDetail({
@@ -28,6 +30,6 @@ App({
   },
 
   globalData: {
-    userInfo: null
-  }
+    userInfo: null,
+  },
 })

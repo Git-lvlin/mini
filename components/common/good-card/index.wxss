@@ -40,6 +40,12 @@
   justify-content: space-between;
 }
 
+.price_title {
+  color: #e7532c;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+
 .cart {
   position: relative;
 }

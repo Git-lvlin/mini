@@ -199,7 +199,7 @@ Page({
 
   handleToDetail({ detail }) {
     let params = {
-      id: detail.spuId,
+      spuId: detail.spuId,
       skuId: detail.skuId,
       orderType: detail.orderType,
     }

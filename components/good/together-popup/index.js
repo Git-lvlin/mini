@@ -24,7 +24,12 @@ Component({
       this.triggerEvent("close", false);
     },
     onToOrder() {
-      this.triggerEvent("jump", false);
+      const {
+        groupId,
+      } = this.data.data;
+      this.triggerEvent("jump", {
+        groupId
+      });
     },
   }
 })

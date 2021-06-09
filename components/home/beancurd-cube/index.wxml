@@ -4,7 +4,7 @@
 <view class="beancurd" >
   <view
     class="beancurd_content"
-    style="{{utils.getHeadBackCss(floor.style, tools.getImgUrl('miniprogram/home/appointment_back.png'))}}"
+    style="{{utils.getHeadBackCss(floor.style)}}"
   >
     <scroll-view
       scroll-x

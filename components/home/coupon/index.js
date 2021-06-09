@@ -33,7 +33,7 @@ Component({
           })
         }
         homeApi.getFloorCustom(content.dataUrl).then(res => {
-          let list = mapNum(res.couponInfo)
+          let list = mapNum(res.couponInfo.records)
           this.setData({
             couponList: list
           })

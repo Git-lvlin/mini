@@ -30,12 +30,12 @@ Component({
         idx
       } = this.data;
       let index = currentTarget.dataset.index;
-      if(data.goodsInfos[index].skuNum < 2) {
+      if(data.goodsInfos[index].skuNum <= data.goodsInfos[index].buyMinNum) {
         Toast({
-          message:"至少添加一个商品",
+          message: `至少添加 ${data.goodsInfos[index].buyMinNum} 个商品`,
           context: this,
         });
-        return
+        return ;
       }
       data.goodsInfos[index].skuNum -= 1;
       // this.setData({
@@ -52,13 +52,13 @@ Component({
         idx
       } = this.data;
       let index = currentTarget.dataset.index;
-      // if(data.goodsInfos[index].skuNum >= data.goodsInfos[index].stock) {
-      //   Toast({
-      //     message:"哎呀，没有库存啦",
-      //     context: this,
-      //   });
-      //   return
-      // }
+      if(data.goodsInfos[index].skuNum >= data.goodsInfos[index].buyMaxNum) {
+        Toast({
+          message:"哎呀，库存不够啦",
+          context: this,
+        });
+        return ;
+      }
       data.goodsInfos[index].skuNum += 1;
       // this.setData({
       //   data,

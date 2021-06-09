@@ -94,10 +94,17 @@ create.Component(store, {
         canJump,
       } = this.data;
       if(!canJump) return; 
+      const {
+        spuId,
+        skuId,
+      } = good;
       router.push({
         name: "detail",
-        data: good
-      })
+        data: {
+          spuId,
+          skuId,
+        },
+      });
     },
   }
 })

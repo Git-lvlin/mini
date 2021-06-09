@@ -60,6 +60,19 @@ page {
   margin-right: 12rpx;
 }
 
+.text_center {
+  text-align: center;
+}
+
+.time_end {
+  width: 600rpx;
+  color: #666666;
+  font-size: 32rpx;
+  line-height: 44rpx;
+  text-align: center;
+  margin: 0 auto;
+}
+
 .red {
   color: #e7532c;
 }

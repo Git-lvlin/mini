@@ -16,14 +16,6 @@
   height: 56rpx;
 }
 
-/* 购买横幅 */
-.user_banner_list {
-  position: fixed;
-  top: 96rpx;
-  left: 24rpx;
-  z-index: 5;
-}
-
 /* banner */
 .banner {
   width: 750rpx;
@@ -186,32 +178,39 @@
   margin-bottom: 20rpx;
 }
 
-.pick_info_location {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
+.pick_way {
+  justify-content: space-around;
+}
+
+.pick_way_item {
+  width: 252rpx;
+  height: 80rpx;
+  padding: 0 24rpx;
+  background-color: #f9f9f9;
+  border: 2rpx solid #cccccc;
+  border-radius: 16rpx;
+}
+
+.pick_way_icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 12rpx;
+}
+
+.pick_way_name {
   color: #333333;
-  font-size: 28rpx;
-  line-height: 40rpx;
-  margin-bottom: 16rpx;
+  font-size: 32rpx;
+  line-height: 44rpx;
 }
 
-.location_icon {
-  width: 28rpx;
-  height: 32rpx;
-  margin-right: 8rpx;
+.way_item_act {
+  border-color: #e5352f;
 }
 
-.location_text {
-  font-weight: 400;
-  color: #666;
+.way_item_act .pick_way_name {
+  color: #e5352f;
 }
 
-.pick_info_address {
-  color: #999999;
-  font-size: 28rpx;
-  line-height: 40rpx;
-}
 
 
 /* 拼单 */

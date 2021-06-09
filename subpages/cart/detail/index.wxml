@@ -8,9 +8,7 @@
       src="{{tools.getImgUrl('miniprogram/cart/good_back.png')}}"
       bindtap="onToBack"
     />
-    <view class="user_banner_list" style="top: {{backTopHeight + 96}}rpx">
-      <user-banner />
-    </view>
+    <user-together-banner list="{{togetherUser}}" top="{{backTopHeight + 96}}" />
     <swiper
       class="banner"
       indicator-dots="{{true}}"
@@ -109,16 +107,23 @@
   
   <!-- 提货地址 -->
   <view class="pick_info" wx:if="{{isActivityGood == 15}}" >
-    <view class="pick_info_title">提货信息</view>
-    <view class="pick_info_location text_one_line">
-      自提点：
-      <image class="location_icon" src="{{tools.getImgUrl('miniprogram/common/detail_location.png')}}" />
-      <text class="location_text">{{good.storeAdress.storeName}}</text>
+    <view class="pick_info_title">选择配送方式：</view>
+    <view class="flex_middle pick_way">
+      <view
+        class="flex_middle pick_way_item {{!item.status ? '' : 'way_item_act'}}"
+        wx:for="{{good.sendTypeList}}"
+        wx:key="id"
+        wx:if="{{item.type == 2 || item.type == 3}}"
+        data-data="{{item}}"
+        bindtap="onChangePickType"
+      >
+        <image class="pick_way_icon" src="{{!item.status ? wayIcon : wayIconSelect}}" />
+        <view class="pick_way_name">{{item.name}}</view>
+      </view>
     </view>
-    <view class="pick_info_address text_one_line">{{good.storeAdress.fullAddress}}</view>
   </view>
   
-
+  <!-- 拼单列表 -->
   <block wx:if="{{isActivityGood == 3 || isActivityGood == 4}}">
     <view class="space_20" />
     <view class="buy_together" wx:if="{{personalList.length}}">
@@ -172,7 +177,7 @@
     <settlement-bar />
   </view>
 
-  <!-- 拼团商品提交 -->
+  <!-- 拼团商品 底部bar -->
   <view class="bar_over_height" />
   <view class="together_bar" wx:if="{{personalList.length}}">
     <view class="flex_middle together_recommend" >
@@ -186,7 +191,7 @@
       </view>
       <view class="together_num">还差{{personalList[0].distanceNum}}人拼成</view>
       <count-down
-        time="{{ tools.getLastTime(personalList[0].endTime) }}"
+        time="{{ personalList[0].distancetime }}"
         isFull
       />
       <view
@@ -207,7 +212,7 @@
       <view
         class="flex_center order_btn_item together_buy_btn"
         data-data="{{personalList[0]}}"
-        bindtap="onOpenTogether"
+        bindtap="onPushTogether"
       >
         <view class="mar_price">￥{{good.activityPrice}}</view>
         <view class="mar_price" >发起拼单</view>
@@ -217,7 +222,7 @@
 
   <!-- 可拼团列表 -->
   <team-popup
-    list="{{togetherList}}"
+    list="{{personalList}}"
     show="{{showTeamPopup}}"
     bind:close="handleCloseTeamPopup"
     bind:toBuy="onOpenTogether"

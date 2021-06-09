@@ -13,6 +13,10 @@ Component({
       type: Object,
       value: {},
     },
+    priceTitle: {
+      type: String,
+      value: "",
+    },
   },
 
   data: {

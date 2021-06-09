@@ -70,7 +70,22 @@ Component({
     onToDetail({
       currentTarget
     }) {
-      let data = currentTarget.dataset.data;
+      let {
+        activityId,
+        objectId,
+        orderType,
+        skuId,
+        spuId,
+        wsId,
+      } = currentTarget.dataset.data;
+      const data = {
+        activityId,
+        objectId,
+        orderType,
+        skuId,
+        spuId,
+        wsId,
+      };
       router.push({
         name: 'detail',
         data

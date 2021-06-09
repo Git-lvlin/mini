@@ -20,6 +20,10 @@ Component({
       type: Boolean,
       value: true,
     },
+    priceTitle: {
+      type: String,
+      value: "",
+    },
   },
 
   data: {
@@ -31,7 +35,7 @@ Component({
         autoJump,
       } = this.data;
       let params = {
-        id: detail.spuId,
+        spuId: detail.spuId,
         skuId: detail.skuId,
         orderType: detail.orderType,
       }

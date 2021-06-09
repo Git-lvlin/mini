@@ -14,13 +14,17 @@ const url = {
   checkedAllCart: "/cart/auth/cart/checkedAllCart",
   subtotal: "/cart/auth/cart/subtotal",
 
-  detail: "/goods/open/info",
+  detail: "/goods/option/info",
   detailImg: "/goods/open/detailImages",
   skuList: "/goods/open/skus",
   checkSku: "/goods/open/checkSku",
-  personalDetail: "/activity/open/group/personal/goodsInfo",
-  memberList: "/activity/open/group/personal/memberList",
-  teamDetail: "/activity/open/group/personal/info",
+  personalDetail: "/activity/option/group/personal/goodsInfo",
+  pushTogether: "/activity/auth/group/createSingle",
+  memberList: "/activity/option/group/personal/memberList",
+  teamDetail: "/activity/option/group/personal/info",
+  posterDetail: "/activity/option/group/poster",
+  togetherUser: "/activity/option/group/personal/memberDynamic",
+  
 }
 
 export default {
@@ -91,13 +95,25 @@ export default {
   getPersonalDetail(params, option) {
     return Request.post(url.personalDetail, params, option);
   },
-  // 获取单约详情
+  // 发起拼团
+  pushTogether(params, option) {
+    return Request.post(url.pushTogether, params, option);
+  },
+  // 获取单约列表
   getTogetherList(params, option) {
     return Request.post(url.memberList, params, option);
   },
   // 单约团详情
   getTeamDetail(params, option) {
     return Request.post(url.teamDetail, params, option);
+  },
+  // 获取拼团海报详情
+  getPosterDetail(params, option) {
+    return Request.post(url.posterDetail, params, option);
+  },
+  // 获取已拼单用户
+  getTogetherUser(params, option) {
+    return Request.post(url.togetherUser, params, option);
   },
   
 }

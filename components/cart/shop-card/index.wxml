@@ -23,7 +23,7 @@
               <image
                 mode="widthFix"
                 class="num_icon"
-                wx:if="{{item.skuNum > 1}}"
+                wx:if="{{item.skuNum > item.buyMinNum}}"
                 src="{{tools.getImgUrl('miniprogram/cart/reduce.png')}}"
               />
               <image mode="widthFix" class="num_icon" wx:else src="{{tools.getImgUrl('miniprogram/cart/reduce_gray.png')}}" />

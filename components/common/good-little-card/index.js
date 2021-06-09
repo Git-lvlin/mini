@@ -15,11 +15,25 @@ Component({
   methods: {
     // 跳转详情
     onToDetail() {
-      let data = this.data.good;
-      if(!data.id) return;
+      let {
+        activityId,
+        objectId,
+        orderType,
+        skuId,
+        spuId,
+        wsId,
+      } = this.data.good;
+      if(!spuId) return;
       router.push({
         name: 'detail',
-        data
+        data: {
+          activityId,
+          objectId,
+          orderType,
+          skuId,
+          spuId,
+          wsId,
+        }
       });
     },
   }

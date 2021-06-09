@@ -1,6 +1,22 @@
 
+.banner {
+  position: absolute;
+  top: 100rpx;
+  z-index: 5;
+}
+
+.banner,
+.banner_item {
+  width: 100%;
+  height: 56rpx;
+}
+
+.banner_item {
+  padding-left: 24rpx;
+}
+
 .user_banner {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   flex-wrap: nowrap;
   min-width: 280rpx;

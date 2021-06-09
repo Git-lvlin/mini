@@ -9,40 +9,48 @@
           height="240rpx"
           fit="cover"
           custom-class="cover"
-          src="{{}}"
+          src="{{good.imageUrlList[0]}}"
         />
       </view>
       <view class="good_info">
-        <view class="text_two_line title">客家正规好吃土鸡蛋8枚 无污染 约425g（带盒）客家正规好吃土鸡蛋8枚 无污染 约425g（带盒）</view>
-        <view class="desc">性价比高 丨 日期新鲜</view>
+        <view class="text_two_line title">{{good.goodsName}}</view>
+        <view class="desc">{{good.goodsDesc}}</view>
         <view class="flex_middle">
-          <view class="price_text">团购价</view>
+          <view class="price_text">单约价</view>
           <price-mobel
-            money="9.89"
-            marketMoney="1253"
-            minSize="{{20}}"
+            money="{{good.activityPrice}}"
+            marketMoney="{{good.marketPrice}}"
+            minSize="{{22}}"
             maxSize="{{32}}"
           />
         </view>
       </view>
     </view>
-    <view class="flex_center">
-      <view class="time_text">仅差<text class="red">1</text>人成团，时间仅剩</view>
+    <view class="flex_center" wx:if="{{groupInfo.groupState == 2}}">
+      <view class="time_text">仅差<text class="red">{{groupInfo.distanceNum}}</text>人成团，时间仅剩</view>
       <count-down
-        time="{{1100000}}"
+        time="{{groupInfo.distancetime}}"
         isFull
       />
     </view>
-    <view class="user_list">
+    <view class="time_text text_center" wx:if="{{groupInfo.groupState == 1}}">该单约已成功，您可重新发起！</view>
+    <view class="time_end" wx:if="{{groupInfo.groupState == 3}}">该单约未能按时凑齐人数，或已过单约有效期，单约失败。您可以发起单约或者查看更多单约商品。</view>
+    <view class="user_list" wx:if="{{groupInfo.groupState != 0}}">
       <together-user
         title="团长"
+        list="{{groupInfo.joinMemberArr}}"
+        distanceNum="{{groupInfo.distanceNum}}"
       />
     </view>
-    <view class="btn">立即参团</view>
+    <view class="btn" wx:if="{{groupInfo.groupState == 2}}" bindtap="onToCreate">立即参团</view>
+    <view class="btn" wx:if="{{groupInfo.groupState == 1}}" bindtap="onPushTogether">我也要单约</view>
+    <view class="btn" wx:if="{{groupInfo.groupState == 3}}" bindtap="onPushTogether">发起单约</view>
   </view>
 
   <hot-good
     icon="{{tools.getImgUrl('miniprogram/common/bag.png')}}"
-    title="更多团约"
+    title="更多单约"
+    priceTitle="单约价"
+    list="{{hotGood}}"
   />
 </view>

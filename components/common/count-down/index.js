@@ -8,11 +8,6 @@ Component({
     time: {
       type: Number,
       value: 100,
-      observer(n, o) {
-      console.log("🚀 ~ file: index.js ~ line 12 ~ observer ~ o", o)
-      console.log("🚀 ~ file: index.js ~ line 12 ~ observer ~ n", n)
-        
-      }
     },
     isFull: {
       type: Boolean,
