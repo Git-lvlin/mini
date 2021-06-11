@@ -28,16 +28,22 @@
     wx:key="floorId"
   >
     <!-- 约购商品 -->
-    <appointment
+    <!-- <appointment
       moreRouter="intensive"
       floor="{{item}}"
       wx:if="{{item.floorType === 1}}"
-    />
+    /> -->
 
     <!-- 优惠券 -->
-    <coupon
+    <!-- <coupon
       floor="{{item}}"
       wx:if="{{item.floorType === 2}}"
+    /> -->
+
+    <!-- 比价模块 -->
+    <priceRatio
+      floor="{{item}}"
+      wx:if="{{item.floorType === 9}}"
     />
 
     <!-- 豆腐块 -->

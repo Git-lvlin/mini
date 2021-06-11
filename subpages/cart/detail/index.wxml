@@ -103,6 +103,10 @@
     </view>
   </view> -->
 
+  <view class="space_20" wx:if="{{ratioData.AveragePrice != undefined}}" />
+
+  <price-ratio-bar price="{{ratioData.AveragePrice}}" wx:if="{{ratioData.AveragePrice != undefined}}" />
+
   <view class="space_20" wx:if="{{isActivityGood == 15}}" />
   
   <!-- 提货地址 -->

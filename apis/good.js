@@ -25,6 +25,7 @@ const url = {
   posterDetail: "/activity/option/group/poster",
   togetherUser: "/activity/option/group/personal/memberDynamic",
   
+  detailRatio: "/contestprice/auth/contestprice/GetSimpleGoodsInfo",
 }
 
 export default {
@@ -114,6 +115,11 @@ export default {
   // 获取已拼单用户
   getTogetherUser(params, option) {
     return Request.post(url.togetherUser, params, option);
+  },
+
+  // 获取详情比价信息
+  getDetailRatio(params, option) {
+    return Request.get(url.detailRatio, params, option);
   },
   
 }

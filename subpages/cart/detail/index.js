@@ -70,6 +70,7 @@ create.Page(store, {
       // 拼成用户列表
       this.getTogetherUser();
     }
+    this.getDetailRatio();
   },
 
   onShow() {
@@ -284,6 +285,25 @@ create.Page(store, {
   // 更新购物车数量
   updateCart(data, showMsg = false) {
     this.store.addCart(data, showMsg)
+  },
+
+  // 获取比价信息
+  getDetailRatio() {
+    const {
+      spuId,
+      skuId
+    } = this.goodParams;
+    goodApi.getDetailRatio({
+      goodsId: spuId,
+      skuId,
+    }).then(res => {
+      const ratioData = res;
+      ratioData.AveragePrice = uitl.divide(ratioData.AveragePrice, 100);
+      ratioData.goodsPrice = uitl.divide(ratioData.goodsPrice, 100);
+      this.setData({
+        ratioData: res
+      })
+    });
   },
 
   // 跳转确认订单

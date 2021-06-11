@@ -10,6 +10,7 @@
     "message": "/components/home/message/index",
     "seckill": "/components/home/seckill/index",
     "vipgood": "/components/home/vipgood/index",
+    "priceRatio": "/components/home/price-ratio/index",
     "hotgoods": "/components/home/hotgoods/index"
   }
 }

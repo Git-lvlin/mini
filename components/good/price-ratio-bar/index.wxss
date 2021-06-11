@@ -1,0 +1,39 @@
+
+.price_ratio {
+  justify-content: space-between;
+  height: 120rpx;
+  padding: 0 24rpx;
+}
+
+.price_title {
+  width: 128rpx;
+  height: 48rpx;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 24rpx;
+  line-height: 48rpx;
+  text-align: center;
+  margin-right: 16rpx;
+  background-color: #e5352f;
+  border-radius: 8rpx;
+}
+
+.price_text {
+  font-weight: 600;
+  color: #e5352f;
+  font-size: 36rpx;
+  line-height: 50rpx;
+}
+
+.line_icon {
+  width: 28rpx;
+  height: 28rpx;
+  margin-right: 8rpx;
+}
+
+.right_text {
+  color: #999999;
+  font-size: 26rpx;
+  line-height: 36rpx;
+  margin-right: 8rpx;
+}
