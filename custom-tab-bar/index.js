@@ -21,12 +21,12 @@ create.Component(store, {
         iconPath: "http://dev-yeahgo-oss.waiad.icu/common/barIcon/home@3x.png",
         selectedIconPath: "http://dev-yeahgo-oss.waiad.icu/common/barIcon/actHome@3x.png"
       },{
-        index: 1,
-        pagePath: "/pages/community/index",
-        name: "社区",
-        iconPath: "http://dev-yeahgo-oss.waiad.icu/common/barIcon/community@3x.png",
-        selectedIconPath: "http://dev-yeahgo-oss.waiad.icu/common/barIcon/actCommunity@3x.png"
-      },{
+      //   index: 1,
+      //   pagePath: "/pages/community/index",
+      //   name: "社区",
+      //   iconPath: "http://dev-yeahgo-oss.waiad.icu/common/barIcon/community@3x.png",
+      //   selectedIconPath: "http://dev-yeahgo-oss.waiad.icu/common/barIcon/actCommunity@3x.png"
+      // },{
         index: 2,
         pagePath: "/pages/cart/index",
         name: "购物车",
@@ -41,6 +41,14 @@ create.Component(store, {
       }
     ]
   },
+
+  
+  // {
+  //   "pagePath": "pages/community/index",
+  //   "text": "社区",
+  //   "iconPath": "/images/tabbar/community@3x.png",
+  //   "selectedIconPath": "/images/tabbar/actCommunity@3x.png"
+  // },
 
   ready() {
     const tabList = this.data.tabList;

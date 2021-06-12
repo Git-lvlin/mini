@@ -26,6 +26,12 @@ const url = {
   togetherUser: "/activity/option/group/personal/memberDynamic",
   
   detailRatio: "/contestprice/auth/contestprice/GetSimpleGoodsInfo",
+
+  searchHistory: "/search/auth/UserSearchHistory/getUserKeyword",
+  clearSearchHistory: "/search/auth/userSearchHistory/clearUserKeyword",
+  hotSearch: "/search/auth/HotKeyword/index",
+  searchList: "/search/option/opensearch/index",
+  associationList: "/search/option/opensearch/getSuggest",
 }
 
 export default {
@@ -120,6 +126,27 @@ export default {
   // 获取详情比价信息
   getDetailRatio(params, option) {
     return Request.get(url.detailRatio, params, option);
+  },
+
+  // 获取搜索历史
+  getSearchHistory(params, option) {
+    return Request.post(url.searchHistory, params, option);
+  },
+  // 清空搜索历史
+  clearSearchHistory(params, option) {
+    return Request.post(url.clearSearchHistory, params, option);
+  },
+  // 热门搜索
+  getHotSearch(params, option) {
+    return Request.post(url.hotSearch, params, option);
+  },
+  // 搜索商品列表
+  getSearchList(params, option) {
+    return Request.post(url.searchList, params, option);
+  },
+  // 搜索联想
+  getAssociationList(params, option) {
+    return Request.post(url.associationList, params, option);
   },
   
 }

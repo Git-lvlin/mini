@@ -89,12 +89,6 @@
         "selectedIconPath": "/images/tabbar/actHome@3x.png"
       },
       {
-        "pagePath": "pages/community/index",
-        "text": "社区",
-        "iconPath": "/images/tabbar/community@3x.png",
-        "selectedIconPath": "/images/tabbar/actCommunity@3x.png"
-      },
-      {
         "pagePath": "pages/cart/index",
         "text": "购物车",
         "iconPath": "/images/tabbar/cart@3x.png",

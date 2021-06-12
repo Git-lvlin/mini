@@ -1,6 +1,12 @@
-import { getBaseApiUrl, handleErrorCode } from './tools'
+import { getBaseApiUrl, handleErrorCode, showModal, setLoginRouter } from './tools'
 import { HTTP_TIMEOUT, VERSION } from '../constants/index'
+import commonApi from '../apis/common';
 import router from '../utils/router'
+
+let isRefreshing = false;
+let requestHistory = [];
+const ACCESS_TOKEN_INVALID = 10014;
+const REFRESH_TOKEN_INVALID = 10015;
 
 /**
  * 请求接口
@@ -18,14 +24,14 @@ import router from '../utils/router'
 const Reqeust = (params) => {
   const baseUrl = getBaseApiUrl();
   const token = wx.getStorageSync("ACCESS_TOKEN");
-  const loginOver = wx.getStorageSync("LOGIN_OVER");
-  if(!!loginOver && params.mustLogin) {
-    let overList = wx.getStorageSync("OVER_LIST");
-    overList = !!overList ? overList : [];
-    overList.push(params);
-    wx.setStorageSync("OVER_LIST", overList);
-    return ;
-  }
+  // const loginOver = wx.getStorageSync("LOGIN_OVER");
+  // if(!!loginOver && params.mustLogin) {
+  //   let overList = wx.getStorageSync("OVER_LIST");
+  //   overList = !!overList ? overList : [];
+  //   overList.push(params);
+  //   wx.setStorageSync("OVER_LIST", overList);
+  //   return ;
+  // }
   const header = {
     'Content-Type': !params.contentType ? 'application/json' : params.contentType,
     v: VERSION,
@@ -49,7 +55,7 @@ const Reqeust = (params) => {
       data: params.data || {},
       header,
       timeout: HTTP_TIMEOUT,
-      success(res){
+      success: async function(res) {
         // 判断是否返回数据包
         const data = !!params.dataPackage ? res.data : res.data.data;
         // console.log(params.url, res.data)
@@ -58,6 +64,38 @@ const Reqeust = (params) => {
           resolve(data);
           wx.hideLoading();
         }else {
+          if (res.data.code == REFRESH_TOKEN_INVALID) {
+            // refreshToken过期退出登录
+            showModal({
+              content: "您的登录已过期，请登录",
+              confirmText: "去登录",
+              ok() {
+                setLoginRouter();
+                router.push({
+                  name: "login"
+                })
+              }
+            })
+            return null;
+          }
+          // token 过期刷新token
+          if(res.data.code === ACCESS_TOKEN_INVALID) {
+            let config = params;
+            if (!isRefreshing) {
+              isRefreshing = true
+              await commonApi.refreshToken();
+              //恢复历史请求
+              requestHistory.forEach(cb => cb());
+              requestHistory = [];
+              return Reqeust(config);
+            } else {
+              return new Promise((resolve) => {
+                requestHistory.push(() => {
+                  resolve(Reqeust(config))
+                })
+              })
+            }
+          }
           // 返回错误码处理
           if(!params.notErrorMsg) {
             handleErrorCode({

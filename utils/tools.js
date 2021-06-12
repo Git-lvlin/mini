@@ -73,7 +73,7 @@ export const handleErrorCode = ({
       break;
     case 10015:
       // refreshToken 无效
-      showErrorMsg("刷新token");
+      showErrorMsg("登录过期，请重新登录");
       break;
     case 10016:
       // 请求地址不存在
@@ -268,7 +268,6 @@ export const debounce = (func, wait) => {
     }, wait);
   }
 }
-
 
 // 节流
 export const throttle = (func, wait) => {

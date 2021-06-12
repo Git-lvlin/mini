@@ -1,45 +1,98 @@
-// pages/otherpay/index.js
+import cartApi from '../../apis/order'
+import { getStorageUserInfo, showToast } from '../../utils/tools'
+
 Page({
+  params: {},
 
-  /**
-   * 页面的初始数据
-   */
   data: {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    var obj = wx.getLaunchOptionsSync()
-    //部分版本在无referrerInfo的时候会返回 undefined,可以做一下判断
-    if (options.referrerInfo && options.referrerInfo.appId) {
-      console.log('启动小程序的路径:', obj.path)
-      console.log('启动小程序的场景值:', obj.scene)
-      console.log('启动小程序的 query 参数:', obj.query)
-      console.log('来源信息:', obj.shareTicket)
-      console.log('来源信息参数appId:', obj.referrerInfo.appId)
-      console.log('来源信息传过来的数据:', obj.referrerInfo.extraData)
+    payData: "",
+    payInfo: {
+      type: "payBack",
+      state: 0,
     }
-    //不做判断
-    console.log('——启动小程序的obj:', obj)
-    console.log('——启动小程序的路径:', obj.path)
+  },
+
+  onLoad(options) {
+    this.params = options;
+    var obj = wx.getLaunchOptionsSync()
     console.log('——启动小程序的场景值:', obj.scene)
-    console.log('——启动小程序的 query 参数:', obj.query)
-    console.log('——来源信息:', obj.shareTicket)
-    console.log('——来源信息参数appId:', obj.referrerInfo.appId)
-    console.log('——来源信息传过来的数据:', obj.referrerInfo.extraData)
   },
 
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
+  onShow() {
+    wx.showLoading();
+    this.getPayInfo(this.params);
   },
+
   launchAppError (e) {
     console.log(e.detail)
-  }
+  },
+
+  // 获取支付信息
+  getPayInfo(data) {
+    // id=1403266210801328130
+    const userInfo = getStorageUserInfo(true);
+    console.log("🚀 ~ file: index.js ~ line 54 ~ getPayInfo ~ userInfo", userInfo)
+    if(!userInfo) return;
+    cartApi.getPayInfo({
+      // id: data.id || "1403266210801328130",
+      id: data.id,
+      payType: 7,
+      openId: userInfo.openId,
+    }, {
+      showLoading: false
+    }).then(res => {
+      console.log("🚀 ~ file: index.js ~ line 61 ~ getPayInfo ~ res", res)
+      this.setData({
+        payData: res,
+      }, () => {
+        wx.headLoading();
+        this.openPay();
+      })
+    }).catch(err => {
+      const {
+        payInfo,
+      } = this.data;
+      payInfo.state = 3;
+      this.setData({
+        payInfo
+      })
+    });
+  },
+
+  openPay() {
+    const {
+      payData,
+      payInfo,
+    } = this.data;
+    if(!!payData) {
+      showToast({ title: "没有获取到支付信息" });
+      return;
+    }
+    const payObj = JSON.parse(payData.prepayData);
+    const that = this;
+    wx.requestPayment({
+      timeStamp: payObj.timeStamp,
+      nonceStr: payObj.nonceStr,
+      package: payObj.packageKey,
+      // package: `prepay_id=${payObj.prepayId}`,
+      signType: 'RSA',
+      paySign: payObj.paySign,
+      success (res) {
+        payInfo.state = 1;
+        that.setData({
+          isPay: true,
+          payInfo
+        })
+      },
+      fail (res) {
+        payInfo.state = 2;
+        that.setData({
+          isPay: true,
+          payInfo
+        })
+        showToast({ title: "支付失败"});
+        router.goTabbar("user");
+      }
+    })
+  },
 })

@@ -1,1 +1,9 @@
-/* pages/otherpay/index.wxss */
+
+.back_btn {
+  position: fixed;
+  bottom: 20%;
+  left: 50%;
+  color: #fff;
+  background-color: #d7291d;
+  transform: translateX(-50%);
+}
