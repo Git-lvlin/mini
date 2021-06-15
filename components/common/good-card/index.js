@@ -1,3 +1,4 @@
+import router from "../../../utils/router";
 
 Component({
   options: {
@@ -17,6 +18,10 @@ Component({
       type: String,
       value: "",
     },
+    jump: {
+      type: Boolean,
+      value: false,
+    }
   },
 
   data: {
@@ -25,8 +30,22 @@ Component({
 
   methods: {
     onToDetail() {
-      let data = this.data.data;
-      this.triggerEvent("click", data);
+      let {
+        data,
+        jump,
+      } = this.data;
+      if(jump) {
+        let params = {
+          spuId: data.spuId,
+          skuId: data.skuId,
+        };
+        if(!!data.activityId) params.activityId = data.activityId;
+        if(!!data.orderType) params.activityId = data.orderType;
+        if(!!data.objectId) params.objectId = data.objectId;
+        console.log(params);
+      } else {
+        this.triggerEvent("click", data);
+      }
     }
   }
 })

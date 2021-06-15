@@ -56,6 +56,7 @@ const Reqeust = (params) => {
       header,
       timeout: HTTP_TIMEOUT,
       success: async function(res) {
+        wx.hideLoading();
         // 判断是否返回数据包
         const data = !!params.dataPackage ? res.data : res.data.data;
         // console.log(params.url, res.data)
@@ -105,7 +106,6 @@ const Reqeust = (params) => {
               mustLogin: params.mustLogin,
             });
           }
-          wx.hideLoading();
           reject(res.data);
         }
       },

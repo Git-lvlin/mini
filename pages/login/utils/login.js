@@ -5,7 +5,7 @@ export default {
   // 设置登录信息
   setUserInfo(data) {
     setStorageUserInfo(data.memberInfo);
-    wx.setStorageSync("ACCESS_TOKEN", data.acessToken);
+    wx.setStorageSync("ACCESS_TOKEN", data.accessToken);
     wx.setStorageSync("REFRESH_TOKEN", data.refreshToken);
     wx.setStorageSync("LOGIN_OVER", false);
     wx.removeStorage({

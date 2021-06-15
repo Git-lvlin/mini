@@ -251,32 +251,32 @@ export const setStorageUserInfo = userInfo => {
 
 
 // 防抖
+let debounceTimeId = null;
 export const debounce = (func, wait) => {
   if (typeof func !== 'function') {
     throw new TypeError('need a function');
   }
   wait = +wait || 0;
-  let timeId = null;
   return function () {
     const self = this;
     const args = arguments;
-    if (timeId) {
-      clearTimeout(timeId);
+    if (debounceTimeId) {
+      clearTimeout(debounceTimeId);
     }
-    timeId = setTimeout(() => {
-      func.apply(self, args);
+    debounceTimeId = setTimeout(() => {
+      func.apply(self, args);      
     }, wait);
   }
 }
 
 // 节流
+let throttleTimeId = null;
 export const throttle = (func, wait) => {
   if (typeof func !== 'function') {
     throw new TypeError('need a function');
   }
   wait = +wait || 0;
   let valid = true
-  let timeId = null;
   return function() {
     const self = this;
     const args = arguments;
@@ -286,10 +286,10 @@ export const throttle = (func, wait) => {
     }
     // 工作时间，执行函数并且在间隔期内把状态位设为无效
     valid = false
-    timeId = setTimeout(() => {
+    throttleTimeId = setTimeout(() => {
       func.apply(self, args);
       valid = true;
-      clearTimeout(timeId);
+      clearTimeout(throttleTimeId);
     }, wait)
   }
 }
