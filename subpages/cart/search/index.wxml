@@ -1,8 +1,8 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
 <view class="container">
-  <view class="search_content">
-    <view class="search_height" />
+  <view class="flex_fix search_content">
+    <view style="height: {{!!goodList.length && !!searchText ? 168 : 96}}rpx" />
     <view class="flex_middle search_wrap">
       <view class="flex_middle search_box">
         <!-- <view class="flex_fix flex_middle good_type">
@@ -27,6 +27,9 @@
       </view>
       <view class="flex_fix search_btn" bindtap="onSearch">搜索</view>
     </view>
+    <view class="screen_box" wx:if="{{goodList.length && searchText}}" >
+      <screen-bar bind:click="onScreenItem" />
+    </view>
     <view class="search_association" wx:if="{{showAssociation}}">
       <view
         class="association_item"
@@ -45,10 +48,10 @@
       </view>
     </view>
   </view>
-  <view class="search_history" wx:if="{{!goodList.length && !searchText}}" >
+  <view class="flex_fix search_history" wx:if="{{!goodList.length && !searchText}}" >
     <view class="history_clear" wx:if="{{historySearch.length}}">
       <view class="title">历史记录</view>
-      <view class="clear" bindtap="clearSearchHistory">
+      <view class="clear" bindtap="onOpenDeleteHistory">
         <image class="clear_icon" src="{{tools.getImgUrl('miniprogram/common/delete@2x.png')}}" />
         清空
       </view>
@@ -79,7 +82,12 @@
     </view>
   </view>
 
-  <view class="good_content" wx:if="{{goodList.length}}">
+  <scroll-view
+    scroll-y
+    class="good_content"
+    wx:if="{{goodList.length}}"
+    bindscrolltolower="handleListBottom"
+  >
     <view class="good_list">
       <good-card
         jump="{{true}}"
@@ -88,7 +96,14 @@
         data="{{item}}"
       />
     </view>
-  </view>
+  </scroll-view>
 
   <notdata wx:if="{{!!searchText && !goodList.length}}" />
+
+  <show-mobal
+    show="{{ showDeleteSearch }}"
+    content="您确定要删除商品吗？"
+    bind:ok="clearSearchHistory"
+    bind:close="handleCloseDeleteSearch"
+  />
 </view>

@@ -6,6 +6,7 @@ import homeApi from './home'
 const url = {
   resource: "/cms/open/json/selByResourceKey",
   refreshToken: "/member/open/refreshToken",
+  inviteCode: "/public/option/invationcode/check/internaltest/app",
 }
 
 let isShowLoginMobal = false;
@@ -121,5 +122,10 @@ export default {
         })
       });
     });
+  },
+
+  // 检查是否填写邀请码
+  getInviteCode(params, option) {
+    return Request.post(url.inviteCode, params, option);
   },
 }

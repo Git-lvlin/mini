@@ -102,6 +102,9 @@
     />
   </view>
 
+  <!-- 活动弹窗 -->
+  <advert-popup advert="{{activityAdvert}}" />
+
   <!-- 底部占位 -->
   <view class="bar_height" />
 </view>

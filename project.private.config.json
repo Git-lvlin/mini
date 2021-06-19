@@ -21,7 +21,7 @@
         {
           "name": "创建订单",
           "pathName": "subpages/cart/create/index",
-          "query": "orderType=3",
+          "query": "orderType=1",
           "scene": null
         },
         {
@@ -61,12 +61,6 @@
           "scene": null
         },
         {
-          "name": "约购",
-          "pathName": "pages/intensive/index",
-          "query": "id=2040&skuId=45&quantity=4",
-          "scene": null
-        },
-        {
           "name": "subpages/cart/detail/index",
           "pathName": "subpages/cart/detail/index",
           "query": "orderType=3&activityId=6&spuId=2069&skuId=84",
@@ -85,15 +79,15 @@
           "scene": null
         },
         {
-          "name": "pages/otherpay/index",
-          "pathName": "pages/otherpay/index",
-          "query": "",
-          "scene": null
-        },
-        {
           "name": "pages/webview/index",
           "pathName": "pages/webview/index",
           "query": "url=http%3A%2F%2Fwww.baidu.com",
+          "scene": null
+        },
+        {
+          "name": "购物车",
+          "pathName": "pages/cart/index",
+          "query": "",
           "scene": null
         }
       ]

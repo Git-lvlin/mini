@@ -11,7 +11,10 @@ create.Component(store, {
   properties: {
     store: {
       type: Object,
-      value: {}
+      value: {},
+      observer(o, n) {
+        console.log(o)
+      }
     }
   },
 
@@ -48,18 +51,21 @@ create.Component(store, {
     },
     // 商品数变化
     handleStockChange({ detail }) {
+      const {
+        good,
+      } = detail;
+      let data = {
+        spuId: good.spuId,
+        skuId: good.skuId,
+        quantity: detail.num,
+        orderType: good.orderType,
+      };
+      if(good.activityId) data.activityId = good.activityId;
+      if(good.objectId) data.objectId = good.objectId;
       if(detail.type === "add") {
-        const good = {
-          skuId: detail.skuId,
-          quantity: detail.num,
-        }
-        this.store.addCart(good);
+        this.store.addCart(data);
       }
       if(detail.type === "set") {
-        const good = {
-          skuId: detail.skuId,
-          quantity: detail.num,
-        }
         this.store.setCartNum(good);
       }
     }

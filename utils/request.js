@@ -39,6 +39,7 @@ const Reqeust = (params) => {
     ...params.header
   }
   if(token) header.token = token;
+  header.p = "miniprogram";
   const opions = {
     showLoading: true,
     ...params

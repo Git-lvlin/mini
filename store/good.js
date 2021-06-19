@@ -11,10 +11,7 @@ const onChangeSpecState = (state) => {
 
 // 加入购物车
 const addCart = (data, showMsg) => {
-  goodApi.addCart({
-    quantity: data.quantity,
-    skuId: data.skuId
-  }, {
+  goodApi.addCart(data, {
     showLoading: false
   }).then(res => {
     if(showMsg) showToast({ title: "添加成功" });
@@ -79,7 +76,6 @@ const updateCart = () => {
 
 // 获取用户信息
 const getUserInfo = () => {
-  console.log("🚀 ~ file: good.js ~ line 57 ~ getUserInfo ~ main.data", main.data)
   return main.data.userInfo
 }
  

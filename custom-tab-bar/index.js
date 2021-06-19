@@ -1,5 +1,6 @@
 import create from '../utils/create'
 import store from '../store/index'
+import { IMG_CDN } from '../constants/common';
 
 create.Component(store, {
   use: [
@@ -18,26 +19,26 @@ create.Component(store, {
         index: 0,
         pagePath: "/pages/home/index",
         name: "首页",
-        iconPath: "http://dev-yeahgo-oss.waiad.icu/common/barIcon/home@3x.png",
-        selectedIconPath: "http://dev-yeahgo-oss.waiad.icu/common/barIcon/actHome@3x.png"
+        iconPath: `${IMG_CDN}common/barIcon/home@3x.png`,
+        selectedIconPath: `${IMG_CDN}common/barIcon/actHome@3x.png`
       },{
       //   index: 1,
       //   pagePath: "/pages/community/index",
       //   name: "社区",
-      //   iconPath: "http://dev-yeahgo-oss.waiad.icu/common/barIcon/community@3x.png",
-      //   selectedIconPath: "http://dev-yeahgo-oss.waiad.icu/common/barIcon/actCommunity@3x.png"
+      //   iconPath: `${IMG_CDN}common/barIcon/community@3x.png`,
+      //   selectedIconPath: `${IMG_CDN}common/barIcon/actCommunity@3x.png`
       // },{
         index: 2,
         pagePath: "/pages/cart/index",
         name: "购物车",
-        iconPath: "http://dev-yeahgo-oss.waiad.icu/common/barIcon/cart@3x.png",
-        selectedIconPath: "http://dev-yeahgo-oss.waiad.icu/common/barIcon/actCart@3x.png"
+        iconPath: `${IMG_CDN}common/barIcon/cart@3x.png`,
+        selectedIconPath: `${IMG_CDN}common/barIcon/actCart@3x.png`
       },{
         index: 3,
         pagePath: "/pages/user/index",
         name: "我的",
-        iconPath: "http://dev-yeahgo-oss.waiad.icu/common/barIcon/me@3x.png",
-        selectedIconPath: "http://dev-yeahgo-oss.waiad.icu/common/barIcon/actMe@3x.png"
+        iconPath: `${IMG_CDN}common/barIcon/me@3x.png`,
+        selectedIconPath: `${IMG_CDN}common/barIcon/actMe@3x.png`
       }
     ]
   },

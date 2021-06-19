@@ -251,10 +251,14 @@ create.Page(store, {
     // if(good.isMultiSpec == 1) {
     //   store.onChangeSpecState(true);
     // } else {
-      this.updateCart({
+      let data = {
         skuId: good.defaultSkuId,
         quantity: 1,
-      })
+        orderType: good.orderType,
+      }
+      if(good.activityId) data.activityId = good.activityId;
+      if(good.objectId) data.objectId = good.objectId;
+      this.updateCart(data);
     // }
   },
 
@@ -298,8 +302,8 @@ create.Page(store, {
       skuId,
     }).then(res => {
       const ratioData = res;
-      ratioData.AveragePrice = uitl.divide(ratioData.AveragePrice, 100);
-      ratioData.goodsPrice = uitl.divide(ratioData.goodsPrice, 100);
+      ratioData.AveragePrice = util.divide(ratioData.AveragePrice, 100);
+      ratioData.goodsPrice = util.divide(ratioData.goodsPrice, 100);
       this.setData({
         ratioData: res
       })

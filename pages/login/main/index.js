@@ -4,6 +4,7 @@ import router from '../../../utils/router'
 import { getUserInfo, handleErrorCode, setStorageUserInfo } from '../../../utils/tools'
 import { SOURCE_TYPE } from '../../../constants/index'
 import loginApis from '../../../apis/login'
+import userApis from '../../../apis/user'
 import tools from '../utils/login'
 
 create.Page(store, {
@@ -93,16 +94,21 @@ create.Page(store, {
         }, {
           notErrorMsg: true,
         }).then(res => {
-          store.data.userInfo = res.memberInfo;
-          store.data.defUserInfo = res.memberInfo;
+          const memberInfo = res.memberInfo;
+          // store.data.userInfo = memberInfo;
+          // store.data.defUserInfo = memberInfo;
+          wx.setStorageSync("OPENID", memberInfo.openId);
           tools.setUserInfo(res);
-          this.getOtherInfo(res.memberInfo);
+          this.getUserInfo(res.memberInfo);
           // commonApis.runOverList();
         }).catch(err => {
           if(err.code === 200102) {
             wx.setStorageSync("LOGIN_INFO", err.data);
             store.data.userInfo = userInfo;
             store.data.defUserInfo = userInfo;
+            if(err.data.memberInfo) {
+              wx.setStorageSync("OPENID", err.data.memberInfo.openId);
+            }
             router.push({
               name: "bindPhone"
             });
@@ -117,15 +123,16 @@ create.Page(store, {
   },
 
   // 获取用户其他信息
-  getOtherInfo(userInfo) {
+  getUserInfo(userInfo) {
     console.log("其他信息", userInfo)
-    loginApis.getOtherInfo({
+    userApis.getUserInfo({
       id: userInfo.id
     }, {
       showLoading: false,
     }).then(res => {
-      store.data.userOtherInfo = res;
-      wx.setStorageSync('USER_OTHER_INFO', res);
+      store.data.userInfo = res;
+      store.data.defUserInfo = res;
+      wx.setStorageSync('USER_INFO', res);
       tools.successJump();
     }).catch(err => {
       tools.successJump();

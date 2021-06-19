@@ -6,8 +6,9 @@ Page({
   searchPage: {
     page: 1,
     size: 10,
-    totalpage: 1,
+    totalPage: 1,
   },
+  loading: false,
 
   data: {
     searchText: "",
@@ -16,6 +17,7 @@ Page({
     historySearch: [],
     keyList: [],
     goodList: [],
+    showDeleteSearch: false,
   },
 
   onShow() {
@@ -48,8 +50,23 @@ Page({
       showLoading: false
     }).then(res => {
       this.setData({
+        showDeleteSearch: false,
         historySearch: [],
       });
+    });
+  },
+
+  // 确认清楚历史
+  onOpenDeleteHistory() {
+    this.setData({
+      showDeleteSearch: true,
+    });
+  },
+
+  // 关闭搜索弹窗
+  handleCloseDeleteSearch() {
+    this.setData({
+      showDeleteSearch: false,
     });
   },
 
@@ -62,41 +79,6 @@ Page({
         hotSearch: res
       })
     });
-  },
-
-  // 点击搜索
-  onSearch() {
-    let {
-      searchText,
-      goodList,
-    } = this.data;
-    const {
-      page,
-      size,
-    } = this.searchPage;
-    const userInfo = getStorageUserInfo();
-    goodApi.getSearchList({
-      page,
-      size,
-      keyword: searchText,
-      requestMemberId: userInfo.id,
-    }).then(res => {
-      this.searchPage.totalpage = res.totalpage;
-      const list = res.records;
-      list.forEach(item => {
-        item.image = item.goodsImageUrl;
-        item.title = item.goodsName;
-        item.subtitle = item.goodsDesc;
-        item.spuId = item.id;
-        item.salePrice = util.divide(item.goodsSaleMinPrice, 100);
-      });
-      if(page > 1) {
-        list = goodList.concat(list);
-      }
-      this.setData({
-        goodList: list,
-      })
-    })
   },
 
   // input输入
@@ -226,5 +208,67 @@ Page({
     }, () => {
       this.onSearch();
     })
+  },
+
+  // 点击搜索
+  onSearch(sort) {
+    if(this.loading) return;
+    this.loading = true;
+    let {
+      searchText,
+      goodList,
+    } = this.data;
+    const {
+      page,
+      size,
+    } = this.searchPage;
+    const userInfo = getStorageUserInfo();
+    goodApi.getSearchList({
+      page,
+      size,
+      sort,
+      keyword: searchText,
+      requestMemberId: userInfo.id,
+    }).then(res => {
+      this.loading = false;
+      this.searchPage.totalPage = res.totalpage;
+      let list = res.records;
+      list.forEach(item => {
+        item.image = item.goodsImageUrl;
+        item.title = item.goodsName;
+        item.subtitle = item.goodsDesc;
+        item.spuId = item.id;
+        item.salePrice = util.divide(item.goodsSaleMinPrice, 100);
+      });
+      if(page > 1) {
+        list = goodList.concat(list);
+        // list = list.concat(list);
+      }
+      this.setData({
+        goodList: list,
+      })
+    }).catch(() => {
+      this.loading = false;
+    })
+  },
+
+  // 点击筛选
+  onScreenItem({
+    detail
+  }) {
+    this.searchPage.page = 1;
+    this.onSearch(detail.sort);
+  },
+
+  // 监听滚动到底部
+  handleListBottom() {
+    const {
+      page,
+      totalPage,
+    } = this.searchPage;
+    if(!this.loading && page < totalPage) {
+      this.searchPage.page += 1;
+      this.onSearch();
+    }
   },
 })

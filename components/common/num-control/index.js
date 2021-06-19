@@ -8,9 +8,9 @@ Component({
       type: Number,
       value: 0,
     },
-    skuId: {
-      type: String,
-      value: ""
+    good: {
+      type: Object,
+      value: {}
     }
   },
 
@@ -22,9 +22,9 @@ Component({
     addNum() {
       let {
         num,
-        skuId,
+        good,
       } = this.data;
-      this.triggerEvent("change", { type:"add", skuId, num: 1})
+      this.triggerEvent("change", { type:"add", good, num: 1})
       // const good = {
       //   skuId,
       //   quantity: 1,
@@ -35,10 +35,10 @@ Component({
     reduceNum() {
       let {
         num,
-        skuId,
+        good,
       } = this.data;
       if(num < 2) return;
-      this.triggerEvent("change", { type:"add", skuId, num: -1})
+      this.triggerEvent("change", { type:"add", good, num: -1})
     },
 
     handleInput({
@@ -46,12 +46,12 @@ Component({
     }) {
       let {
         num,
-        skuId,
+        good,
       } = this.data;
       let nowValue = Number(detail.value) || num;
       // if(nowValue === num || nowValue < 1) return;
       // nowValue = nowValue - num;
-      this.triggerEvent("change", { type: "set", skuId, num: nowValue})
+      this.triggerEvent("change", { type: "set", good, num: nowValue})
     },
   }
 })

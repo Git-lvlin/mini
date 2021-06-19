@@ -8,7 +8,7 @@ page{
   top: 0;
   left: 0;
   width: 100%;
-  height: 412rpx;
+  height: 460rpx;
   overflow: hidden;
 }
 
@@ -17,7 +17,7 @@ page{
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 500rpx;
+  height: 600rpx;
 }
 
 .content {
@@ -25,10 +25,11 @@ page{
   z-index: 2;
 }
 
+/* 会员信息 */
 .user_head {
   display: flex;
   align-items: center;
-  padding: 16rpx 24rpx 48rpx;
+  padding: 16rpx 24rpx 32rpx;
 }
 
 .user_avatar {
@@ -44,18 +45,21 @@ page{
 }
 
 .user_level {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  width: 158rpx;
+  /* width: 58rpx; */
+  min-width: 30rpx;
   height: 42rpx;
+  padding-left: 6rpx;
+  padding-right: 16rpx;
   background-color: rgba(51, 51, 51, 0.6);
   border-radius: 42rpx;
 }
 
 .level_icon {
   width: 32rpx;
-  height: 32rpx;
+  height: 34rpx;
+  margin-right: 8rpx;
 }
 
 .level_name {
@@ -64,7 +68,33 @@ page{
   line-height: 32rpx;
 }
 
+/* 会员数据 */
+.user_data {
+  margin-bottom: 32rpx;
+}
 
+.user_data_item {
+  width: 230rpx;
+  text-align: center;
+  color: #fff;
+  font-size: 24rpx;
+  line-height: 34rpx;
+}
+
+.data_item_value {
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 36rpx;
+  line-height: 46rpx;
+}
+
+.data_item_line {
+  width: 2rpx;
+  height: 54rpx;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 订单信息 */
 .order {
   width: 702rpx;
   height: 270rpx;
@@ -116,7 +146,7 @@ page{
   line-height: 34rpx;
 }
 
-
+/* 广告位 */
 .banner_img {
   width: 702rpx;
   height: 172rpx;
@@ -124,7 +154,7 @@ page{
   margin-bottom: 32rpx;
 }
 
-
+/* 其他设置 */
 .other_setting {
   width: 670rpx;
   padding-left: 32rpx;
@@ -163,31 +193,11 @@ page{
   height: 28rpx;
 }
 
-
+/* 弹窗 */
 .popup_content {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 500rpx;
   height: 300rpx;
-}
-
-
-
-
-/* pages/login/login.wxss */
-.panel_title{
-  font-weight: bold;
-}
-
-.cell_group_title{
-  font-weight: normal;
-}
-
-.cell_back{
-  /* background-color: gray !important; */
-}
-
-.avatar_image{
-  vertical-align: middle;
 }

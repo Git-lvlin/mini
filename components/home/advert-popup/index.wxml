@@ -1,0 +1,13 @@
+
+<van-popup
+  show="{{ !!advert.img && show }}"
+  z-index="999"
+  custom-style="background: transparent;"
+  bind:close="onClose"
+>
+  <view class="advert_content">
+    <image class="advert_close" src="{{advert.closeImg}}" bindtap="onClose" />
+    <image class="advert_img" src="{{advert.img}}" />
+    <image class="advert_btn" src="{{advert.btnImg}}" />
+  </view>
+</van-popup>

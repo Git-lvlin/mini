@@ -23,6 +23,7 @@ Page({
     totalPage: 1,
   },
   loading: false,
+  payType: 7,
 
   data: {
     isPay: false,
@@ -46,46 +47,59 @@ Page({
     // payDeadline: 1620454876068
     this.id = options.id
     let downTime = options.payDeadline - options.currentTime;
+    const sysEnv = wx.getStorageSync("SYS_ENV") || "pro";
     this.setData({
       payAmount: util.divide(options.payAmount, 100),
       downTime,
+      sysEnv,
+      orderType: options.orderType,
     })
     // 获取支付类型
     commonApi.getResourceDetail({
       resourceKey: PAY_TYPE_KEY,
+    }, {
+      showLoading: false,
     }).then(res => {
       let list = res.data.records;
-      let payType = 3;
       let payList = [];
-      list.forEach(item => {
-        if(item.payType === 2) {
-          item.default = 1;
-          payList.push(item);
+      list.forEach((item, index) => {
+        if(item.payType === 2 || item.payType === 7 || item.payType === 0) {
+          // item.default = index === 0 ? 1 : 0;
+          if(item.state === 1) {
+            payList.push(item);
+          }
+          if(item.default === 1) {
+            this.payType = item.payType;
+          }
         }
       });
       this.setData({
         payList,
-        payType,
       })
+      if(this.payType !== 0) {
+        this.getPayInfo();
+      }
     });
     if(options.orderType == 3 && options.orderType == 4) {
       this.getHotGood();
     }
   },
 
-  onReady() {
+  // 获取支付信息
+  getPayInfo(isNotPayment) {
     const userInfo = getStorageUserInfo(true, true);
     if(!userInfo) return;
-    this.getPayInfo({
+    const openId = wx.getStorageSync("OPENID");
+    cartApi.getPayInfo({
       id: this.id,
-      payType: 3,
-      openId: userInfo.openId,
-    })
-  },
-
-  // 获取支付信息
-  getPayInfo(data) {
-    cartApi.getPayInfo(data).then(res => {
+      payType: this.payType,
+      openId,
+    }).then(res => {
+      if(isNotPayment) {
+        this.setData({
+          isPay: true,
+        });
+      }
       this.setData({
         payData: res,
         orderCreateTime: dayjs(res.orderCreateTime).format("YYYY-MM-DD HH:mm:ss"),
@@ -150,10 +164,14 @@ Page({
     payList.forEach((item, idx) => {
       if(index === idx) {
         item.default = 1;
+        this.payType = item.payType;
       } else {
         item.default = 0;
       }
     });
+    if(this.payType !== 0) {
+      this.getPayInfo();
+    }
     this.setData({
       payList,
     })
@@ -161,9 +179,15 @@ Page({
 
   // 点击确定支付
   onPay() {
+    const that = this;
+    if(this.payType === 0) {
+      const userInfo = getStorageUserInfo(true, true);
+      if(!userInfo) return;
+      this.getPayInfo(true)
+      return ;
+    }
     const payData = this.data.payData;
     const payObj = JSON.parse(payData.prepayData);
-    const that = this;
     wx.requestPayment({
       timeStamp: payObj.timeStamp,
       nonceStr: payObj.nonceStr,

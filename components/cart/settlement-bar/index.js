@@ -122,7 +122,10 @@ create.Component(store, {
       store.data.orderGoodList = goodList;
       wx.setStorageSync("GOOD_LIST", goodList);
       router.push({
-        name: "createOrder"
+        name: "createOrder",
+        data: {
+          orderType: 1,
+        },
       })
     },
     // 提交订单商品数据

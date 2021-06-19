@@ -1,12 +1,19 @@
 import store from './store/index'
 import { getSystemInfo, getStorageUserInfo } from './utils/tools'
-import { getResourceDetail } from './apis/common'
+import commonApi from './apis/common'
+import md5 from './utils/md5'
+import router from './utils/router'
+
+// 环境变量 dev uat fat pro
+// ***【 图片CDN域名要改 2 处 】***
+const SYS_ENV = 'dev';
 
 App({
   onLaunch() {
-    store.data.userInfo = getStorageUserInfo();
-    store.data.defUserInfo = getStorageUserInfo();
-    store.data.userOtherInfo = wx.getStorageSync("USER_OTHER_INFO");
+    const userInfo = getStorageUserInfo();
+    store.data.userInfo = userInfo;
+    store.data.defUserInfo = userInfo;
+    // store.data.userOtherInfo = wx.getStorageSync("USER_OTHER_INFO");
     setTimeout(() => {
       store.data.motto = "改变了12111111"
       console.log(store.data)
@@ -16,10 +23,13 @@ App({
     let systemInfo = getSystemInfo();
     store.data.systemInfo = systemInfo;
     // 设置环境变量 dev test prod
-    wx.setStorageSync('SYS_ENV', 'dev');
+    wx.setStorageSync('SYS_ENV', SYS_ENV);
+
+    // 生成设备码校验是否填写邀请码
+    this.getInputCode();
 
     // 
-    // getResourceDetail({
+    // commonApi.getResourceDetail({
     //   resourceKey: "TABBAR",
     //   timeVersion: new Date().getTime()
     // }).then(res => {
@@ -31,5 +41,41 @@ App({
 
   globalData: {
     userInfo: null,
+  },
+
+  // 生成设备码校验是否填写邀请码
+  getInputCode() {
+    if(SYS_ENV === "dev") return;
+    const device_code = wx.getStorageSync("DEVICE_CODE");
+    if(device_code) return;
+    wx.getSystemInfo({
+      success (res) {
+        const {
+          system,
+          version,
+          model,
+        } = res;
+        const nonceStr = Math.random().toString(32).slice(-10);
+        const tempTime = new Date().getTime();
+        const code = md5(`${system}${version}${model}${nonceStr}${tempTime}`);
+        commonApi.getInviteCode({}, {
+          showLoading: false,
+          header: {
+            d: code,
+          }
+        }).then(res => {
+          if(!res.invite) {
+            wx.setStorage({
+              key: 'DEVICE_CODE',
+              data: code,
+            });
+            router.replace({
+              name: "invitation",
+              frist: true,
+            })
+          }
+        });
+      }
+    })
   },
 })

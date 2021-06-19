@@ -82,7 +82,7 @@
       bind:click="handleToDetail"
     />
 
-    <view class="bottom_confirm" wx:if="{{false}}">
+    <view class="bottom_confirm" wx:if="{{isPay && (orderType != 3 && orderType != 4)}}">
       <view class="comfirm_btn" bindtap="onSuccess">完成</view>
     </view>
   </view>

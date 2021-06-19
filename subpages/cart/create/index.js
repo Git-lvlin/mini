@@ -141,8 +141,8 @@ create.Page(store, {
         selectAddressType,
         storeActivityGood: other,
       });
-    } else if(this.orderType == 3 || this.isActivityCome && this.orderType == 1) {
-      // 单约 || 单独购买
+    } else if(this.orderType == 3 || this.isActivityCome && this.orderType == 1 || this.orderType == 11) {
+      // 单约 || 单独购买 || 1688
       let data = wx.getStorageSync("CREATE_INTENSIVE");
       postData = {
         ...postData,
@@ -401,7 +401,7 @@ create.Page(store, {
       deliveryInfo: this.mapAddress(addressInfo),
       storeGoodsInfos: [],
     };
-    if(orderType == 3 || orderType == 4) {
+    if(orderType == 3 || orderType == 4 || orderType == 11) {
       if(!!activityId) postData.activityId = activityId;
       if(!!objectId) postData.objectId = objectId;
     }
@@ -477,6 +477,7 @@ create.Page(store, {
     } else {
       postData = this.getStoreGood();
     }
+    if(!postData) return;
     cartApi.createOrder(postData).then(res => {
       wx.setStorageSync("order_info", res);
       res.orderType = this.orderType;

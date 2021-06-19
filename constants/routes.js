@@ -39,11 +39,15 @@ export default {
   otherpay: {
     path: "/pages/otherpay/index"
   },
-  // 集约列表
+  // webview
   webview: {
     path: "/pages/webview/index"
   },
-
+  // 欢迎页邀请码
+  invitation: {
+    path: "/pages/invitation/index"
+  },
+  
   
   // 分类列表
   classList: {

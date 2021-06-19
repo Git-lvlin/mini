@@ -1,2 +1,11 @@
-<!--subpages/user/setting/index.wxml-->
-<text>subpages/user/setting/index.wxml</text>
+
+<view class="box">
+  <cell-item title="版本号" value="{{version}}" border="{{ false }}"/>
+</view>
+<view class="box">
+  <cell-item title="服务协议" jump />
+  <cell-item title="隐私政策" jump border="{{ false }}" />
+</view>
+<view class="box">
+  <view class="login_out" bindtap="onLoginOut">退出登录</view>
+</view>

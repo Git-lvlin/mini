@@ -121,12 +121,14 @@ export const showModal = ({
   cancelText = "取消",
   confirmColor = "#D7291D",
   confirmText = "确定",
+  showCancel = true,
   ok = () => {},
   cancel = () => {},
 }) => {
   wx.showModal({
     title,
     content,
+    showCancel,
     cancelText,
     cancelColor,
     confirmText,

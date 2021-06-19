@@ -10,7 +10,8 @@
     "pages/location/index",
     "pages/intensive/index",
     "pages/otherpay/index",
-    "pages/webview/index"
+    "pages/webview/index",
+    "pages/invitation/index"
   ],
   "subpackages": [
     {

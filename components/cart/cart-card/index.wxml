@@ -43,7 +43,7 @@
             <view class="price_info">
               <view class="good_price">¥{{item.salePrice}}</view>
               <num-control
-                skuId="{{item.skuId}}"
+                good="{{item}}"
                 num="{{item.quantity}}"
                 bind:change="handleStockChange"
               />

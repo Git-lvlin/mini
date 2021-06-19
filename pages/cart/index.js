@@ -4,11 +4,11 @@ import store from "../../store/good"
 import router from "../../utils/router";
 import goodApi from "../../apis/good";
 import homeApi from "../../apis/home";
+import { getStorageUserInfo } from "../../utils/tools";
  
 create.Page(store, {
-  ues: [
+  use: [
     "systemInfo",
-    "userInfo",
     "storeCartList",
     "cartListTotal",
   ],
@@ -20,9 +20,9 @@ create.Page(store, {
         if(!item.isChecked) {
           type = false;
         }
-      })
-      return type
-    }
+      });
+      return type;
+    },
   },
 
   pageData: {
@@ -38,6 +38,8 @@ create.Page(store, {
     showCouponPopup: false,
     showDeleteGood: false,
     hotGoodList: [],
+    userInfo: "",
+    list: [1, 2, 3],
   },
 
 
@@ -45,12 +47,13 @@ create.Page(store, {
     console.log("store userInfo", this.store);
   },
 
-  onShow: function () {
-    const {
-      userInfo,
-    } = this.store.data;
+  onShow() {
+    const userInfo = getStorageUserInfo();
     if(!!userInfo) {
-      store.updateCart();
+      this.store.updateCart();
+      this.setData({
+        userInfo,
+      })
     }
     // 更新tabbar显示
     router.updateSelectTabbar(this, 2);
@@ -59,6 +62,7 @@ create.Page(store, {
 
   // 全选购物车
   onSelectCartAll() {
+    if(!this.store.data.storeCartList.length) return;
     goodApi.checkedAllCart({
       isChecked: !this.data.selectAll,
     }).then(res => {
@@ -141,7 +145,8 @@ create.Page(store, {
 
   // 去逛逛
   onToHome() {
-    router.goTabbar();
+    console.log("🚀 ~ this.store.data.storeCartList", this.store.data.storeCartList)
+    // router.goTabbar();
   },
 
   // 跳转确认订单

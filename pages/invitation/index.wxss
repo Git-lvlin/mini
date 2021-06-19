@@ -1,0 +1,120 @@
+page {
+  background-color: #FF5D5B;
+}
+
+.invitation_container {
+  width: 100vw;
+  height: 100vh;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+}
+
+.invite_text {
+  display: block;
+  width: 240rpx;
+  height: 80rpx;
+  margin: 16rpx auto 32rpx;
+}
+
+.title_desc {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 28rpx;
+  letter-spacing: 4rpx;
+  line-height: 40rpx;
+  text-align: center;
+  margin-bottom: 32rpx;
+}
+
+.invite_content {
+  width: 686rpx;
+  height: 600rpx;
+  padding: 52rpx 80rpx 0;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background-size: 100% 100%;
+}
+
+.title_content {
+  margin-bottom: 48rpx;
+}
+
+.title_spot {
+  width: 114rpx;
+  height: 18rpx;
+  vertical-align: middle;
+}
+
+.title {
+  font-weight: 600;
+  color: #3e3939;
+  font-size: 40rpx;
+  letter-spacing: 4.44rpx;
+  line-height: 56rpx;
+  margin: 0 8rpx 0 16rpx;
+}
+
+.input_code {
+  width: 526rpx;
+  height: 144rpx;
+  font-weight: 600;
+  color: #e5352f;
+  font-size: 56rpx;
+  letter-spacing: 2rpx;
+  line-height: 144rpx;
+  text-align: center;
+  margin-bottom: 48rpx;
+  background-color: #f5f5f5;
+  border-radius: 16rpx;
+}
+
+.input-placeholder {
+  font-weight: 400;
+  color: #cccccc;
+}
+
+.submit_btn {
+  height: 80rpx;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 28rpx;
+  line-height: 80rpx;
+  text-align: center;
+  margin-bottom: 80rpx;
+  background-color: #e5352f;
+  border-radius: 44rpx;
+}
+
+.submit_desc {
+  font-weight: 600;
+  color: #3e3939;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  text-align: center;
+}
+
+.invite_tips {
+  width: 686rpx;
+  height: 450rpx;
+  padding: 66rpx 80rpx 0;
+  margin: 0 auto;
+  box-sizing: border-box;
+  background-size: 100% 100%;
+}
+
+.tips_title {
+  font-weight: 600;
+  color: #3e3939;
+  font-size: 32rpx;
+  line-height: 44rpx;
+  margin-bottom: 22rpx;
+}
+
+.tips_item {
+  color: #666666;
+  font-size: 26rpx;
+  line-height: 36rpx;
+}
+
+.tips_item:not(:last-child) {
+  margin-bottom: 16rpx;
+}
