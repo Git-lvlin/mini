@@ -2,7 +2,7 @@ import create from '../../utils/create'
 import store from '../../store/index'
 import router from '../../utils/router'
 import homeApi from '../../apis/home'
-import dayjs from '../../miniprogram_npm/dayjs/index'
+import commonApi from '../../apis/common'
 import { IMG_CDN } from '../../constants/common'
 import { showModal } from '../../utils/tools'
 
@@ -32,7 +32,7 @@ create.Page(store, {
   onLoad(options) {
     console.log("home", this.store.data);
     // 系统弹窗
-    // this.getAdvert(3);
+    this.getSystemPopup();
     // 活动弹窗
     this.getAdvert(2);
   },
@@ -81,6 +81,26 @@ create.Page(store, {
     })
   },
 
+  // 获取系统弹窗
+  getSystemPopup() {
+    const sysEnv = wx.getStorageSync("SYS_ENV");
+    if(sysEnv == "dev") return;
+    commonApi.getResourceDetail({
+      resourceKey: "SYSTEMPOP",
+    }, {
+      showLoading: false,
+    }).then(res => {
+      const data = res.data;
+      if(data.state === 1) {
+        showModal({
+          title: data.title,
+          content: data.content,
+          showCancel: false,
+        });
+      }
+    });
+  },
+
   // 获取广告图
   getAdvert(type = 2) {
     homeApi.getAdvert({
@@ -90,24 +110,15 @@ create.Page(store, {
     }).then(res => {
       if(!res.length) return;
       const data = {};
-      let systemPopup = "";
       res.forEach(item => {
         // 活动广告
         if(type === 2) {
           data.activityAdvert = item;
-        } else if(type === 3) {
-          systemPopup = item;
         }
       });
       if(!!data.activityAdvert) {
         this.setData(data);
       }
-      // showModal({
-      //   title: '112312312',
-      //   content: '123123123123',
-      // });
-      // if(!!systemPopup) {
-      // }
     });
   },
 

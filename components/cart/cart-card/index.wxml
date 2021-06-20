@@ -7,7 +7,7 @@
       src="{{store.isChecked ? selectIcon : notSelectIcon}}"
       bindtap="onChooseAll"
     />
-    <view class="select_info">
+    <view class="select_info" bindtap="onToShop">
       <van-image
         width="40rpx"
         height="40rpx"

@@ -43,7 +43,8 @@
         "cashier/index",
         "editAddress/index",
         "changeShipper/index",
-        "teamDetail/index"
+        "teamDetail/index",
+        "store/index"
       ]
     },
     {
@@ -63,10 +64,19 @@
         "subpages/community"
       ]
     },
+    "pages/cart/index": {
+      "network": "all",
+      "packages": [
+        "subpages/cart",
+        "subpages/user",
+        "subpages/community"
+      ]
+    },
     "pages/user/index": {
       "network": "all",
       "packages": [
         "subpages/user",
+        "subpages/cart",
         "dokit"
       ]
     }

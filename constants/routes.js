@@ -85,6 +85,10 @@ export default {
   teamDetail: {
     path: "/subpages/cart/teamDetail/index"
   },
+  // 参团详情
+  store: {
+    path: "/subpages/cart/store/index"
+  },
 
 
   // 用户中心

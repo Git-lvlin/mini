@@ -57,14 +57,44 @@ export const otherSetting = [
  * 用户等级
 */
 export const USER_LEVEL = {
-  1: "普通会员",
-  2: "铜卡",
-  3: "银卡",
-  4: "金卡",
-  5: "合金卡",
-  6: "白金卡",
-  7: "钻石卡",
-  8: "黑钻卡",
-  9: "终身会员卡",
-  10: "汇通卡",
+  1: {
+    name: "普通会员",
+    icon: `${IMG_CDN}miniprogram/user/levelIcon/user_label_1.png`
+  },
+  2: {
+    name: "铜卡会员",
+    icon: `${IMG_CDN}miniprogram/user/levelIcon/user_label_2.png`
+  },
+  3: {
+    name: "银卡会员",
+    icon: `${IMG_CDN}miniprogram/user/levelIcon/user_label_3.png`
+  },
+  4: {
+    name: "金卡会员",
+    icon: `${IMG_CDN}miniprogram/user/levelIcon/user_label_4.png`
+  },
+  5: {
+    name: "合金卡会员",
+    icon: `${IMG_CDN}miniprogram/user/levelIcon/user_label_5.png`
+  },
+  6: {
+    name: "白金卡会员",
+    icon: `${IMG_CDN}miniprogram/user/levelIcon/user_label_6.png`
+  },
+  7: {
+    name: "钻石卡会员",
+    icon: `${IMG_CDN}miniprogram/user/levelIcon/user_label_7.png`
+  },
+  8: {
+    name: "黑钻卡会员",
+    icon: `${IMG_CDN}miniprogram/user/levelIcon/user_label_8.png`
+  },
+  9: {
+    name: "终身卡会员",
+    icon: `${IMG_CDN}miniprogram/user/levelIcon/user_label_9.png`
+  },
+  10: {
+    name: "汇通卡会员",
+    icon: `${IMG_CDN}miniprogram/user/levelIcon/user_label_10.png`
+  },
 }

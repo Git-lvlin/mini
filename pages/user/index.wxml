@@ -20,7 +20,7 @@
       <view class="user_info" wx:else >
         <view class="head_text">{{userInfo.nickName}}</view>
         <view class="user_level" >
-          <image class="level_icon" src="{{tools.getImgUrl('miniprogram/user/user_label.png')}}" />
+          <image class="level_icon" src="{{userInfo.levelIcon}}" />
           <view class="level_name">{{userInfo.levelText || "普通会员"}}</view>
         </view>
       </view>

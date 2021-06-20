@@ -84,6 +84,7 @@ create.Component(store, {
         skuId: good.skuId,
         quantity: num,
         orderType: good.orderType,
+        goodsFromType: good.goodsFromType,
       };
       if(good.activityId) data.activityId = good.activityId;
       if(good.activityId) data.objectId = good.objectId;

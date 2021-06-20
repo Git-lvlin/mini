@@ -2,6 +2,7 @@ import create from "../../../utils/create";
 import store from "../../../store/good";
 import { IMG_CDN } from "../../../constants/common";
 import goodApi from "../../../apis/good";
+import router from "../../../utils/router";
 
 create.Component(store, {
   options: {
@@ -12,9 +13,6 @@ create.Component(store, {
     store: {
       type: Object,
       value: {},
-      observer(o, n) {
-        console.log(o)
-      }
     }
   },
 
@@ -59,6 +57,7 @@ create.Component(store, {
         skuId: good.skuId,
         quantity: detail.num,
         orderType: good.orderType,
+        goodsFromType: good.goodsFromType,
       };
       if(good.activityId) data.activityId = good.activityId;
       if(good.objectId) data.objectId = good.objectId;
@@ -66,8 +65,20 @@ create.Component(store, {
         this.store.addCart(data);
       }
       if(detail.type === "set") {
-        this.store.setCartNum(good);
+        this.store.setCartNum(data);
       }
-    }
+    },
+    // 点击跳转店铺
+    onToShop() {
+      const {
+        store,
+      } = this.data;
+      router.push({
+        name: "store",
+        data: {
+          storeNo: store.storeNo,
+        },
+      })
+    },
   }
 })

@@ -30,13 +30,9 @@ Page({
         markersData = data.markers;
         console.log("🚀 ~ file: index.js ~ line 31 ~ markersData", markersData)
         that.setData({
-          markers: markersData
-        });
-        that.setData({
-          latitude: markersData[0].latitude
-        });
-        that.setData({
-          longitude: markersData[0].longitude
+          markers: markersData,
+          latitude: markersData[0].latitude,
+          longitude: markersData[0].longitude,
         });
         that.showMarkerInfo(markersData,0);
       },

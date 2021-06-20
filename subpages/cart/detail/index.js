@@ -255,6 +255,7 @@ create.Page(store, {
         skuId: good.defaultSkuId,
         quantity: 1,
         orderType: good.orderType,
+        goodsFromType: good.goodsFromType,
       }
       if(good.activityId) data.activityId = good.activityId;
       if(good.objectId) data.objectId = good.objectId;
@@ -327,6 +328,7 @@ create.Page(store, {
       selectAddressType,
       good,
     } = this.data;
+      console.log("🚀 ~ file: index.js ~ line 330 ~ onToCreate ~ good", good)
     const {
       detail,
       currentTarget,
@@ -343,6 +345,9 @@ create.Page(store, {
         goodsInfos: [{
           spuId: spuId ? spuId : good.id,
           skuId: skuId ? skuId : good.defaultSkuId,
+          activityId: good.activityId,
+          objectId: good.objectId,
+          orderType: good.orderType,
           skuNum: 1,
           goodsFromType: good.goodsFromType,
         }]
@@ -368,15 +373,15 @@ create.Page(store, {
       }
     }
     wx.setStorageSync("CREATE_INTENSIVE", data);
-    router.push({
-      name: "createOrder",
-      data: {
-        orderType,
-        isActivityCome,
-        activityId: !!activityId ? activityId : "",
-        objectId: !!objectId ? objectId : "",
-      }
-    });
+    // router.push({
+    //   name: "createOrder",
+    //   data: {
+    //     orderType,
+    //     isActivityCome,
+    //     activityId: !!activityId ? activityId : "",
+    //     objectId: !!objectId ? objectId : "",
+    //   }
+    // });
   },
 
   // 监听拼团剩余时间

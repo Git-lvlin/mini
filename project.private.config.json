@@ -63,13 +63,7 @@
         {
           "name": "subpages/cart/detail/index",
           "pathName": "subpages/cart/detail/index",
-          "query": "orderType=3&activityId=6&spuId=2069&skuId=84",
-          "scene": null
-        },
-        {
-          "name": "subpages/cart/cashier/index",
-          "pathName": "subpages/cart/cashier/index",
-          "query": "",
+          "query": "spuId=2153&skuId=774&activityId=0&objectId=0&orderType=2",
           "scene": null
         },
         {

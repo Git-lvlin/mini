@@ -4,7 +4,7 @@ import store from "../../store/good"
 import router from "../../utils/router";
 import goodApi from "../../apis/good";
 import homeApi from "../../apis/home";
-import { getStorageUserInfo } from "../../utils/tools";
+import { getStorageUserInfo, showToast } from "../../utils/tools";
  
 create.Page(store, {
   use: [
@@ -39,7 +39,6 @@ create.Page(store, {
     showDeleteGood: false,
     hotGoodList: [],
     userInfo: "",
-    list: [1, 2, 3],
   },
 
 
@@ -132,7 +131,6 @@ create.Page(store, {
 
   // 监听删除商品
   handleDeleteGood() {
-    console.log("删除商品")
     this.handleCloseDeleteGood();
   },
 
@@ -145,14 +143,49 @@ create.Page(store, {
 
   // 去逛逛
   onToHome() {
-    console.log("🚀 ~ this.store.data.storeCartList", this.store.data.storeCartList)
-    // router.goTabbar();
+    router.goTabbar();
   },
 
   // 跳转确认订单
   onToOrder() {
+    const {
+      storeCartList,
+    } = this.store.data;
+    const goodList = [];
+    let store = {};
+    let isSelect = false;
+    storeCartList.forEach(item => {
+      store = {
+        storeNo: item.storeNo,
+        goodsInfos: [],
+      };
+      item.skus.forEach(child => {
+        if(child.isChecked) isSelect = true;
+        store.goodsInfos.push({
+          spuId: child.spuId,
+          skuId: child.skuId,
+          skuNum: child.quantity,
+          // goodsFromType: "",
+          orderType: child.orderType,
+          objectId: child.objectId,
+          activityId: child.activityId,
+        })
+      });
+      goodList.push(store);
+    });
+    if(!isSelect) {
+      showToast({ title: "请选择下单商品" });
+      return;
+    }
+    wx.setStorageSync("GOOD_LIST", goodList);
+    const good = storeCartList[0].skus[0];
     router.push({
-      name: "createOrder"
+      name: "createOrder",
+      data: {
+        orderType: good.orderType,
+        objectId: good.objectId,
+        activityId: good.activityId,
+      },
     })
   },
 })

@@ -76,7 +76,8 @@ create.Page(store, {
     }, {
       showLoading: false,
     }).then(res => {
-      res.levelText = USER_LEVEL[res.memberLevel];
+      res.levelText = USER_LEVEL[res.memberLevel].name;
+      res.levelIcon = USER_LEVEL[res.memberLevel].icon;
       setStorageUserInfo(res);
       this.setData({
         userInfo: res,
