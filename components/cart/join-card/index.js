@@ -78,9 +78,17 @@ create.Component(store, {
     },
     handleChangeNum(num, showMsg) {
       let good = this.data.good;
-      good.quantity = num;
       // this.triggerEvent("handleNum", good);
-      this.store.addCart(good, showMsg);
+      let data = {
+        spuId: good.spuId,
+        skuId: good.skuId,
+        quantity: num,
+        orderType: good.orderType,
+        goodsFromType: good.goodsFromType,
+      };
+      if(good.activityId) data.activityId = good.activityId;
+      if(good.activityId) data.objectId = good.objectId;
+      this.store.addCart(data, showMsg);
     },
 
     handleInputNum(event) {

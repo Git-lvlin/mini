@@ -1,0 +1,59 @@
+
+.take_spot {
+  width: 100%;
+  padding: 20rpx;
+  margin-bottom: 24rpx;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: #f9f9f9;
+  border: 2rpx solid #cccccc;
+  border-radius: 16rpx;
+}
+
+.take_spot_act {
+  background-color: #fff5f5;
+  border-color: #e5352f;
+}
+
+.store_info {
+  width: 410rpx;
+  margin-left: 24rpx;
+}
+
+.store_title {
+  font-weight: 600;
+  color: #333333;
+  font-size: 32rpx;
+  line-height: 44rpx;
+  margin-bottom: 28rpx;
+}
+
+.title_text {
+  max-width: 420rpx;
+}
+
+.recommend_label {
+  width: 80rpx;
+  height: 32rpx;
+  margin-left: 16rpx;
+}
+
+.store_location {
+  color: #666666;
+  font-size: 28rpx;
+  line-height: 32rpx;
+}
+
+.distance {
+  font-weight: 600;
+  color: #d7291d;
+  font-size: 28rpx;
+  line-height: 32rpx;
+  padding-right: 16rpx;
+}
+
+.select_icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-left: 48rpx;
+}

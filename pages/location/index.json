@@ -1,4 +1,7 @@
 {
-  "navigationBarTitleText": "所在地区",
-  "usingComponents": {}
+  "navigationBarTitleText": "选择自提点",
+  "usingComponents": {
+    "address-popup": "/components/common/address-popup/index",
+    "take-spot": "/components/other/take_spot/index"
+  }
 }

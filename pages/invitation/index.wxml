@@ -1,0 +1,37 @@
+<wxs module="tools" src="../../wxs/common.wxs" />
+
+<view class="invitation_container" style="background-image: url({{invitationBack}})">
+  <view style="height: {{$.systemInfo.navTotalHeight}}rpx" />
+  <image class="invite_text" src="{{tools.getImgUrl('miniprogram/invitation/invite_text.png')}}" />
+  <view class="title_desc">尊敬的VIP客户，欢迎体验约购APP</view>
+  <view
+    class="invite_content"
+    style="background-image: url({{tools.getImgUrl('miniprogram/invitation/up.png')}})"
+  >
+    <view class="flex_center title_content">
+      <image class="title_spot" src="{{tools.getImgUrl('miniprogram/invitation/spot_left.png')}}" />
+      <view class="title">输入邀请码</view>
+      <image class="title_spot" src="{{tools.getImgUrl('miniprogram/invitation/spot_right.png')}}" />
+    </view>
+    <input
+      type="number"
+      class="input_code"
+      placeholder="输入邀请码"
+      placeholder-class="input-placeholder"
+      bindinput="handleInput"
+    />
+    <view class="submit_btn" bindtap="onSubmitCode">提交</view>
+    <view class="submit_desc">首次体验约购APP，享受更多优惠福利</view>
+  </view>
+  <view
+    class="invite_tips"
+    style="background-image: url({{tools.getImgUrl('miniprogram/invitation/down.png')}})"
+  >
+    <view class="tips_title">温馨提示</view>
+    <view
+      class="tips_item"
+      wx:for="{{tipsList}}"
+      wx:key="index"
+    >{{item}}</view>
+  </view>
+</view>

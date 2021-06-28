@@ -3,6 +3,7 @@ import store from '../../../store/index'
 import router from '../../../utils/router'
 import { debounce, setStorageUserInfo } from '../../../utils/tools'
 import loginApis from '../../../apis/login'
+import userApis from '../../../apis/user'
 import tools from '../utils/login'
 
 create.Page(store, {
@@ -102,7 +103,7 @@ create.Page(store, {
       phoneNumber,
       code,
     } = this.data;
-    let userInfo = this.data.$.userInfo;
+    let userInfo = this.store.data.userInfo;
     let loginInfo = wx.getStorageSync("LOGIN_INFO");
     if(!phoneNumber) {
       wx.showToast({
@@ -145,27 +146,18 @@ create.Page(store, {
       store.data.userInfo = data.memberInfo;
       store.data.defUserInfo = data.memberInfo;
       tools.setUserInfo(data);
-      this.getOtherInfo(data.memberInfo);
+      this.getUserInfo(data.memberInfo);
     });
   },
 
   // 获取用户其他信息
-  getOtherInfo(userInfo) {
-    console.log("其他信息", userInfo)
-    loginApis.getOtherInfo({
+  getUserInfo(userInfo) {
+    userApis.getUserInfo({
       id: userInfo.id
     }).then(res => {
-      const loginToData = wx.getStorageSync("LOGIN_TO_DATA");
       store.data.userOtherInfo = res;
-      wx.setStorageSync('USER_OTHER_INFO', res);
-      if(loginToData) {
-        router.loginTo(loginToData);
-      } else {
-        router.loginTo({
-          type: "back",
-          delta: 2,
-        });
-      }
+      wx.setStorageSync('USER_INFO', res);
+      tools.successJump(2);
     }).catch(res => {
 
     })

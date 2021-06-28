@@ -2,6 +2,7 @@ import create from "../../../utils/create";
 import store from "../../../store/good";
 import { IMG_CDN } from "../../../constants/common";
 import goodApi from "../../../apis/good";
+import router from "../../../utils/router";
 
 create.Component(store, {
   options: {
@@ -11,7 +12,7 @@ create.Component(store, {
   properties: {
     store: {
       type: Object,
-      value: {}
+      value: {},
     }
   },
 
@@ -48,20 +49,39 @@ create.Component(store, {
     },
     // 商品数变化
     handleStockChange({ detail }) {
+      const {
+        good,
+      } = detail;
+      let data = {
+        spuId: good.spuId,
+        skuId: good.skuId,
+        quantity: detail.num,
+        orderType: good.orderType,
+        goodsFromType: good.goodsFromType,
+      };
+      if(good.activityId) data.activityId = good.activityId;
+      if(good.objectId) data.objectId = good.objectId;
       if(detail.type === "add") {
-        const good = {
-          skuId: detail.skuId,
-          quantity: detail.num,
-        }
-        this.store.addCart(good);
+        this.store.addCart(data);
       }
       if(detail.type === "set") {
-        const good = {
-          skuId: detail.skuId,
-          quantity: detail.num,
-        }
-        this.store.setCartNum(good);
+        this.store.setCartNum(data);
       }
-    }
+    },
+    // 点击跳转店铺
+    onToShop() {
+      const {
+        store,
+      } = this.data;
+      let id = store.storeNo.slice(8, store.storeNo.length);
+      id = +id;
+      if(id < 123580) return;
+      router.push({
+        name: "store",
+        data: {
+          storeNo: store.storeNo,
+        },
+      })
+    },
   }
 })

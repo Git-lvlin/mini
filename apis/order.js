@@ -13,8 +13,11 @@ const url = {
   createOrder: "/order/auth/createOrder",
   orderAmount: "/order/auth/orderAmount",
   payInfo: "/order/auth/prepayOrder",
+  rechargePay: "/financial/auth/pursePayment/pay",
+  intensivePay: "/store/auth/wholesale/payOrder",
   orderDetail: "/order/auth/order/orderDetail",
   orderAmount: "/order/auth/orderAmount",
+  orderToken: "/order/auth/orderToken",
   
 }
 
@@ -69,5 +72,17 @@ export default {
   getPayInfo(params, option) {
     return Request.post(url.payInfo, params, option);
   },
-  
+  // 约卡充值
+  getRechargePay(params, option) {
+    return Request.post(url.rechargePay, params, option);
+  },
+  // 集约支付信息
+  getIntensivePay(params, option) {
+    return Request.post(url.intensivePay, params, option);
+  },
+  // 刷新订单token
+  getOrderToken(params, option) {
+    return Request.post(url.orderToken, params, option);
+  },
+
 }

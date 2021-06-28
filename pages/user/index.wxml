@@ -2,7 +2,7 @@
 
 <view class="container">
   <view class="nav_back" style="padding-top: {{$.systemInfo.statusHeight}}rpx">
-    <image mode="widthFix" class="nav_back_img" src="{{tools.getImgUrl('miniprogram/user/user_back.png')}}" />
+    <image class="nav_back_img" src="{{tools.getImgUrl('miniprogram/user/user_back.png?v=20210617')}}" />
   </view>
   <view class="content">
     <view class="nav_height" style="height: {{$.systemInfo.statusHeight + $.systemInfo.navBarHeight}}rpx" />
@@ -14,16 +14,29 @@
         fit="cover"
         round
         custom-class="user_avatar"
-        src="{{tools.getImgUrl('miniprogram/user/user_back.png')}}"
+        src="{{userInfo ? userInfo.icon : tools.getImgUrl('miniprogram/common/default_avatar.png') }}"
       />
-      <view class="head_text" wx:if="{{!$.userInfo.nickName}}" bindtap="onToLogin">登录/注册</view>
+      <view class="head_text" wx:if="{{!userInfo}}" bindtap="onToLogin">登录/注册</view>
       <view class="user_info" wx:else >
-        <view class="head_text">momo</view>
-        <view class="user_level">
-          <image class="level_icon" src="" />
-          <view class="level_name">普通会员</view>
+        <view class="head_text">{{userInfo.nickName}}</view>
+        <view class="user_level" >
+          <image class="level_icon" src="{{userInfo.levelIcon}}" />
+          <view class="level_name">{{userInfo.levelText || "普通会员"}}</view>
         </view>
       </view>
+    </view>
+
+    <view class="flex_center user_data">
+      <block
+        wx:for="{{userData}}"
+        wx:key="index"
+      >
+        <view class="user_data_item">
+          <view class="data_item_value">{{item.value}}</view>
+          <view>{{item.text}}</view>
+        </view>
+        <view class="flex_fix data_item_line" wx:if="{{index != userData.length - 1}}" />
+      </block>
     </view>
 
     <view class="order">
@@ -44,7 +57,7 @@
       </view>
     </view>
 
-    <image mode="widthFix" class="banner_img" src="{{banner}}" />
+    <image mode="widthFix" class="banner_img" wx:if="{{banner}}" src="{{banner}}" />
 
     <view class="other_setting">
       <view
@@ -61,35 +74,9 @@
       </view>
     </view>
 
-    <button type="primary" bindtap="onLoginOut">
-      退出登录
-    </button>
-
     <van-popup show="{{ showPopup }}" closeable round bind:close="onHidePopup">
       <view class="popup_content">请下载APP体验完整功能</view>
     </van-popup>
-
-    <!-- <van-button wx:else open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </van-button> -->
-    <!-- <van-button wx:if="{{canUseUserProfile}}" bindtap="onGetUserProfile"> 授权登录 --- </van-button>
-    <van-button wx:if="{{!canUseUserProfile}}" open-type="getUserInfo" bind:getuserinfo="handleGetUernfo">授权登录</van-button>
-    <van-panel 
-      title="用户信息"
-      custom-class="panel_title"
-      wx:else="{{!userAuth}}"
-    >
-      <van-cell-group title="用户信息" custom-class="cell_group_title">
-        <van-cell 
-          title="昵称" 
-          value="{{$.userInfo.nickName}}" 
-          bind:click="onClickHead"
-        />
-        <van-cell title="头像" center custom-class="cell_back">
-          <van-image fit="cover" custom-class="avatar_image" round width="60" height="60" src="{{$.userInfo.avatarUrl}}" data-src="{{$.userInfo.avatarUrl}}" bind:click="onClickImg" />
-        </van-cell>
-        <van-cell title="地区" value="{{$.userInfo.country + $.userInfo.province + $.userInfo.city}}" border="{{ false }}" />
-        <van-cell title="全局变量" value="{{motto}}" bind:click="onClickOther"/>
-      </van-cell-group>
-    </van-panel> -->
   </view>
 </view>
 

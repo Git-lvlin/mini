@@ -10,7 +10,9 @@
     "pages/location/index",
     "pages/intensive/index",
     "pages/otherpay/index",
-    "pages/webview/index"
+    "pages/webview/index",
+    "pages/invitation/index",
+    "pages/locationSearch/index"
   ],
   "subpackages": [
     {
@@ -42,7 +44,8 @@
         "cashier/index",
         "editAddress/index",
         "changeShipper/index",
-        "teamDetail/index"
+        "teamDetail/index",
+        "store/index"
       ]
     },
     {
@@ -62,10 +65,19 @@
         "subpages/community"
       ]
     },
+    "pages/cart/index": {
+      "network": "all",
+      "packages": [
+        "subpages/cart",
+        "subpages/user",
+        "subpages/community"
+      ]
+    },
     "pages/user/index": {
       "network": "all",
       "packages": [
         "subpages/user",
+        "subpages/cart",
         "dokit"
       ]
     }
@@ -87,12 +99,6 @@
         "text": "首页",
         "iconPath": "/images/tabbar/home@3x.png",
         "selectedIconPath": "/images/tabbar/actHome@3x.png"
-      },
-      {
-        "pagePath": "pages/community/index",
-        "text": "社区",
-        "iconPath": "/images/tabbar/community@3x.png",
-        "selectedIconPath": "/images/tabbar/actCommunity@3x.png"
       },
       {
         "pagePath": "pages/cart/index",

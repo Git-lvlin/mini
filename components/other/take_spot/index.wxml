@@ -1,0 +1,22 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="flex_middle take_spot">
+  <view class="flex_fix store_avatar">
+    <van-image
+      width="136rpx"
+      height="136rpx"
+      radius="16rpx"
+    />
+  </view>
+  <view class="store_info">
+    <view class="flex_middle store_title">
+      <view class="title_text text_one_line">创业二路SPRO店创业二路SPRO店创业二路SPRO店创业二路SPRO店</view>
+      <image class="flex_fix recommend_label" src="{{tools.getImgUrl('miniprogram/location/hand_recommend.png')}}" />
+    </view>
+    <view class="store_location text_two_line">
+      <text class="distance">距离800m</text>
+      广东省深圳市宝安区新安街道23区88号铺
+    </view>
+  </view>
+  <image class="flex_fix select_icon" src="{{defSelect}}" />
+</view>

@@ -8,7 +8,6 @@
   padding-bottom: 26rpx;
   padding-right: 24rpx;
   padding-left: 24rpx;
-  margin-bottom: 14rpx;
   border-bottom: 2rpx solid rgba(0, 0, 0, 0.05);
 }
 
@@ -28,6 +27,12 @@
 
 .price .text {
   font-size: 48rpx;
+}
+
+.spec_box {
+  height: 500rpx;
+  overflow-y: auto;
+  padding-top: 16rpx;
 }
 
 .spec_body {

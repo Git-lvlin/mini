@@ -14,23 +14,20 @@
       <image class="coupon_arrow_right" src="{{tools.getImgUrl('miniprogram/common/coupon_arrow_right.png')}}" />
     </view>
 
-    <block
+    <cart-card
       wx:for="{{$.storeCartList}}"
       wx:key="id"
-    >
-      <cart-card
-        store="{{item}}"
-      />
-    </block>
-
-    <view class="not_list" wx:if="{{!$.storeCartList.length && !!$.userInfo}}">
+      store="{{item}}"
+    />
+{{reas}}
+    <view class="not_list" wx:if="{{!$.storeCartList.length && !!userInfo}}">
       <nodata
         top="{{48}}"
       />
       <view class="to_browse" bindtap="onToHome">去逛逛吧</view>
     </view>
 
-    <view class="not_login" wx:if="{{!$.userInfo}}">
+    <view class="not_login" wx:if="{{!userInfo}}">
       <nodata
         title="去添加点什么吧"
         top="{{48}}"

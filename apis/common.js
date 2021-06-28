@@ -6,6 +6,7 @@ import homeApi from './home'
 const url = {
   resource: "/cms/open/json/selByResourceKey",
   refreshToken: "/member/open/refreshToken",
+  inviteCode: "/public/option/invationcode/check/internaltest/app",
 }
 
 let isShowLoginMobal = false;
@@ -74,13 +75,13 @@ export default {
       refreshToken: wx.getStorageSync("REFRESH_TOKEN"),
       id: userInfo.id,
     }
-    Request.post(url.refreshToken, postData).then(res => {
-      wx.setStorageSync("ACCESS_TOKEN", res.acessToken);
+    return Request.post(url.refreshToken, postData).then(res => {
+      wx.setStorageSync("ACCESS_TOKEN", res.accessToken);
       wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
-      this.runOverList();
       isShowLoginMobal = false;
+      return res;
     }).catch(err => {
-      if(err.code == 405 || err.code == 200109) {
+      if(err.code == 405 || err.code == 200109 || err.code == 10018) {
         wx.removeStorageSync("ACCESS_TOKEN");
         wx.removeStorageSync("REFRESH_TOKEN");
         wx.removeStorageSync("USER_INFO");
@@ -121,5 +122,10 @@ export default {
         })
       });
     });
+  },
+
+  // 检查是否填写邀请码
+  getInviteCode(params, option) {
+    return Request.post(url.inviteCode, params, option);
   },
 }

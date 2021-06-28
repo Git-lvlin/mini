@@ -5,6 +5,7 @@
     "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
     "van-index-bar": "/miniprogram_npm/@vant/weapp/index-bar/index",
     "van-index-anchor": "/miniprogram_npm/@vant/weapp/index-anchor/index",
-    "van-cell": "/miniprogram_npm/@vant/weapp/cell/index"
+    "van-cell": "/miniprogram_npm/@vant/weapp/cell/index",
+    "address-popup": "/components/common/address-popup/index"
   }
 }

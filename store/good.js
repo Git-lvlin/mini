@@ -6,15 +6,12 @@ import util from "../utils/util"
 
 // 设置规格弹窗状态
 const onChangeSpecState = (state) => {
-  this.data.showSpecPopup = state;
+  store.data.showSpecPopup = state;
 }
 
 // 加入购物车
 const addCart = (data, showMsg) => {
-  goodApi.addCart({
-    quantity: data.quantity,
-    skuId: data.skuId
-  }, {
+  goodApi.addCart(data, {
     showLoading: false
   }).then(res => {
     if(showMsg) showToast({ title: "添加成功" });
@@ -72,14 +69,13 @@ const getStoreCartList = () => {
 
 // 更新购物车数据
 const updateCart = () => {
-  store.getCartList();
-  store.getStoreCartList();
-  store.getCartTotal();
+  getCartList();
+  getStoreCartList();
+  getCartTotal();
 }
 
 // 获取用户信息
 const getUserInfo = () => {
-  console.log("🚀 ~ file: good.js ~ line 57 ~ getUserInfo ~ main.data", main.data)
   return main.data.userInfo
 }
  

@@ -21,6 +21,11 @@ image {
   justify-content: center;
 }
 
+.flex_fix {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
 /*单行溢出省略*/
 .text_one_line {
   text-overflow: ellipsis;
@@ -51,6 +56,14 @@ image {
   height: 12rpx;
   border-top: 4rpx solid #FFF;
   border-right: 4rpx solid #FFF;
+  transform: rotate(45deg);
+}
+
+.right_arrow_gray {
+  width: 12rpx;
+  height: 12rpx;
+  border-top: 4rpx solid #ccc;
+  border-right: 4rpx solid #ccc;
   transform: rotate(45deg);
 }
 

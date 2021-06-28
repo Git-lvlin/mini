@@ -40,6 +40,12 @@
       wx:if="{{item.floorType === 2}}"
     />
 
+    <!-- 比价模块 -->
+    <priceRatio
+      floor="{{item}}"
+      wx:if="{{item.floorType === 9}}"
+    />
+
     <!-- 豆腐块 -->
     <beancurd-cube
       floor="{{item}}"
@@ -95,6 +101,9 @@
       bindtap="onFixation"
     />
   </view>
+
+  <!-- 活动弹窗 -->
+  <advert-popup advert="{{activityAdvert}}" />
 
   <!-- 底部占位 -->
   <view class="bar_height" />

@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "店铺首页",
+  "usingComponents": {
+    "screen-bar": "/components/common/screen-bar/index",
+    "good-card": "/components/common/good-card/index",
+    "nodata": "/components/common/nodata/index"
+  }
+}

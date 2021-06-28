@@ -2,7 +2,7 @@ import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
 import { IMG_CDN } from '../../../constants/common'
-import { showModal, showToast, getStorageUserInfo } from '../../../utils/tools'
+import { showModal, getStorageUserInfo } from '../../../utils/tools'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
 
@@ -32,6 +32,7 @@ create.Page(store, {
   },
 
   data: {
+    skuId: "",
     good: {},
     stock: 0,
     backTopHeight: 56,
@@ -50,9 +51,11 @@ create.Page(store, {
     teamDetail: {},
     wayIcon: `${IMG_CDN}miniprogram/common/def_choose.png`,
     wayIconSelect: `${IMG_CDN}miniprogram/common/choose.png`,
+    // buy 立即购买  add 添加到购物车
+    specType: "buy",
   },
 
-  onLoad: function (options) {
+  onLoad(options) {
     let { systemInfo } = this.store.data;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
     // if (!options.spuId && !!options.id) options.spuId = options.id;
@@ -62,6 +65,7 @@ create.Page(store, {
     this.setData({
       backTopHeight,
       isActivityGood,
+      skuId: options.skuId,
     })
     this.getGoodDetail();
     this.getDetailImg();
@@ -70,6 +74,7 @@ create.Page(store, {
       // 拼成用户列表
       this.getTogetherUser();
     }
+    this.getDetailRatio();
   },
 
   onShow() {
@@ -247,14 +252,23 @@ create.Page(store, {
     let {
       good
     } = this.data;
-    // if(good.isMultiSpec == 1) {
-    //   store.onChangeSpecState(true);
-    // } else {
-      this.updateCart({
+    if(good.isMultiSpec == 1) {
+      this.setData({
+        specType: "add",
+      });
+      // 打开选择规格弹窗
+      store.onChangeSpecState(true);
+    } else {
+      let data = {
         skuId: good.defaultSkuId,
         quantity: 1,
-      })
-    // }
+        orderType: good.orderType,
+        goodsFromType: good.goodsFromType,
+      }
+      if(good.activityId) data.activityId = good.activityId;
+      if(good.objectId) data.objectId = good.objectId;
+      this.updateCart(data);
+    }
   },
 
   // 减少数量
@@ -281,9 +295,56 @@ create.Page(store, {
     })
   },
 
+  // 多规格更新购物车数量
+  specUpdateCart({
+    detail,
+  }) {
+    this.updateCart(detail, true);
+  },
+
   // 更新购物车数量
   updateCart(data, showMsg = false) {
     this.store.addCart(data, showMsg)
+  },
+
+  // 获取比价信息
+  getDetailRatio() {
+    const {
+      spuId,
+      skuId
+    } = this.goodParams;
+    goodApi.getDetailRatio({
+      goodsId: spuId,
+      skuId,
+    }).then(res => {
+      const ratioData = res;
+      ratioData.AveragePrice = util.divide(ratioData.AveragePrice, 100);
+      ratioData.goodsPrice = util.divide(ratioData.goodsPrice, 100);
+      this.setData({
+        ratioData: res
+      })
+    });
+  },
+
+  // 点击立即购买
+  onBuy(event) {
+    if(!this.data.userInfo) {
+      getStorageUserInfo(true);
+      return;
+    }
+    const {
+      good,
+      skuId,
+    } = this.data;
+    if(good.isMultiSpec) {
+      this.setData({
+        specType: "buy",
+      });
+      // 打开选择规格弹窗
+      store.onChangeSpecState(true);
+    } else {
+      this.onToCreate(event)
+    }
   },
 
   // 跳转确认订单
@@ -299,6 +360,7 @@ create.Page(store, {
       spuId,
       skuId,
     } = this.goodParams;
+    let skuNum = 1;
     const {
       selectAddressType,
       good,
@@ -311,6 +373,11 @@ create.Page(store, {
     //   showToast({ title: "很抱歉，你不店主不能下单"})
     //   return;
     // }
+    // 选择规格回来下单
+    if(good.isMultiSpec) {
+      skuId = detail.skuId;
+      skuNum = detail.skuNum;
+    }
     let isActivityCome = false;
     let data = {
       orderType,
@@ -319,7 +386,10 @@ create.Page(store, {
         goodsInfos: [{
           spuId: spuId ? spuId : good.id,
           skuId: skuId ? skuId : good.defaultSkuId,
-          skuNum: 1,
+          activityId: good.activityId,
+          objectId: good.objectId,
+          orderType: good.orderType,
+          skuNum,
           goodsFromType: good.goodsFromType,
         }]
       }]
@@ -343,6 +413,8 @@ create.Page(store, {
         data.selectAddressType = selectAddressType;
       }
     }
+    console.log("data", data);
+    console.log("event", event);
     wx.setStorageSync("CREATE_INTENSIVE", data);
     router.push({
       name: "createOrder",

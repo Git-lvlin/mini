@@ -1,3 +1,13 @@
-<!--pages/otherpay/index.wxml-->
-<text>pages/otherpay/index.wxml</text>
-<button open-type="launchApp" app-parameter="wechat" binderror="launchAppError">打开APP</button>
+
+<view class="bay_text" wx:if="{{payInfo.state === 1}}">支付成功</view>
+<view class="bay_text" wx:if="{{payInfo.state === 2}}">支付失败</view>
+<view class="bay_text" wx:if="{{payInfo.state === 3}}">支付出错啦！</view>
+
+<button
+  class="back_btn"
+  open-type="launchApp"
+  app-parameter="payBack"
+  wx:if="{{payInfo.state != 0}}"
+  binderror="launchAppError"
+>返回约购商城</button>
+<!-- <button bindtap="openPay">点击支付</button> -->

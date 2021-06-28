@@ -63,17 +63,17 @@ export const handleErrorCode = ({
       break;
     case 10014:
       // accessToken 无效
-      wx.setStorageSync("LOGIN_OVER", true);
-      commonApi.refreshToken();
-      let overList = wx.getStorageSync("OVER_LIST");
-      overList = !!overList ? overList : [];
-      overList.push(params);
-      wx.setStorageSync("OVER_LIST", overList);
+      // wx.setStorageSync("LOGIN_OVER", true);
+      // commonApi.refreshToken();
+      // let overList = wx.getStorageSync("OVER_LIST");
+      // overList = !!overList ? overList : [];
+      // overList.push(params);
+      // wx.setStorageSync("OVER_LIST", overList);
       // showErrorMsg("刷新token");
       break;
     case 10015:
       // refreshToken 无效
-      showErrorMsg("刷新token");
+      // showErrorMsg("登录过期，请重新登录");
       break;
     case 10016:
       // 请求地址不存在
@@ -121,12 +121,14 @@ export const showModal = ({
   cancelText = "取消",
   confirmColor = "#D7291D",
   confirmText = "确定",
+  showCancel = true,
   ok = () => {},
   cancel = () => {},
 }) => {
   wx.showModal({
     title,
     content,
+    showCancel,
     cancelText,
     cancelColor,
     confirmText,
@@ -241,6 +243,20 @@ export const getStorageUserInfo = (showLogin, goBack) => {
   return userInfo;
 };
 
+// 退出登录
+export const clearLoginInfo = (jump) => {
+  store.data.hasUserInfo = false;
+  store.data.userInfo = "";
+  store.data.userOtherInfo = "";
+  store.data.defUserInfo = "";
+  wx.removeStorageSync("ACCESS_TOKEN");
+  wx.removeStorageSync("REFRESH_TOKEN");
+  wx.removeStorageSync("USER_INFO");
+  wx.removeStorageSync("USER_OTHER_INFO");
+  wx.removeStorageSync("OPENID");
+  jump && router.goTabbar();
+}
+
 /**
  * 设置本地用户信息
  * userInfo object 用户信息
@@ -251,33 +267,32 @@ export const setStorageUserInfo = userInfo => {
 
 
 // 防抖
+let debounceTimeId = null;
 export const debounce = (func, wait) => {
   if (typeof func !== 'function') {
     throw new TypeError('need a function');
   }
   wait = +wait || 0;
-  let timeId = null;
   return function () {
     const self = this;
     const args = arguments;
-    if (timeId) {
-      clearTimeout(timeId);
+    if (debounceTimeId) {
+      clearTimeout(debounceTimeId);
     }
-    timeId = setTimeout(() => {
-      func.apply(self, args);
+    debounceTimeId = setTimeout(() => {
+      func.apply(self, args);      
     }, wait);
   }
 }
 
-
 // 节流
+let throttleTimeId = null;
 export const throttle = (func, wait) => {
   if (typeof func !== 'function') {
     throw new TypeError('need a function');
   }
   wait = +wait || 0;
   let valid = true
-  let timeId = null;
   return function() {
     const self = this;
     const args = arguments;
@@ -287,10 +302,10 @@ export const throttle = (func, wait) => {
     }
     // 工作时间，执行函数并且在间隔期内把状态位设为无效
     valid = false
-    timeId = setTimeout(() => {
+    throttleTimeId = setTimeout(() => {
       func.apply(self, args);
       valid = true;
-      clearTimeout(timeId);
+      clearTimeout(throttleTimeId);
     }, wait)
   }
 }

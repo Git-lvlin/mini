@@ -17,7 +17,7 @@ const url = {
   detail: "/goods/option/info",
   detailImg: "/goods/open/detailImages",
   skuList: "/goods/open/skus",
-  checkSku: "/goods/open/checkSku",
+  checkSku: "/goods/option/goodsSpecList",
   personalDetail: "/activity/option/group/personal/goodsInfo",
   pushTogether: "/activity/auth/group/createSingle",
   memberList: "/activity/option/group/personal/memberList",
@@ -25,6 +25,16 @@ const url = {
   posterDetail: "/activity/option/group/poster",
   togetherUser: "/activity/option/group/personal/memberDynamic",
   
+  detailRatio: "/contestprice/auth/contestprice/GetSimpleGoodsInfo",
+
+  searchHistory: "/search/auth/UserSearchHistory/getUserKeyword",
+  clearSearchHistory: "/search/auth/userSearchHistory/clearUserKeyword",
+  hotSearch: "/search/auth/HotKeyword/index",
+  searchList: "/search/option/opensearch/index",
+  associationList: "/search/option/opensearch/getSuggest",
+
+  storeDetail: "/store/option/storeShop/show",
+  storeGood: "/store/option/storeShop/salePage",
 }
 
 export default {
@@ -115,5 +125,39 @@ export default {
   getTogetherUser(params, option) {
     return Request.post(url.togetherUser, params, option);
   },
-  
+
+  // 获取详情比价信息
+  getDetailRatio(params, option) {
+    return Request.get(url.detailRatio, params, option);
+  },
+
+  // 获取搜索历史
+  getSearchHistory(params, option) {
+    return Request.post(url.searchHistory, params, option);
+  },
+  // 清空搜索历史
+  clearSearchHistory(params, option) {
+    return Request.post(url.clearSearchHistory, params, option);
+  },
+  // 热门搜索
+  getHotSearch(params, option) {
+    return Request.post(url.hotSearch, params, option);
+  },
+  // 搜索商品列表
+  getSearchList(params, option) {
+    return Request.post(url.searchList, params, option);
+  },
+  // 搜索联想
+  getAssociationList(params, option) {
+    return Request.post(url.associationList, params, option);
+  },
+
+  // 获取店铺详情
+  getStoreDetail(params, option) {
+    return Request.get(url.storeDetail, params, option);
+  },
+  // 获取店铺商品
+  getStoreGood(params, option) {
+    return Request.get(url.storeGood, params, option);
+  },
 }

@@ -1,17 +1,13 @@
 import create from '../../utils/create'
 import store from '../../store/index'
 import router from '../../utils/router'
-import { orderList, otherSetting } from '../../constants/user'
-import commonApi from '../../apis/common'
+import { orderList, otherSetting, USER_LEVEL } from '../../constants/user'
+import userApi from '../../apis/user'
+import { getStorageUserInfo, setStorageUserInfo } from '../../utils/tools'
 
 create.Page(store, {
-
-  /**
-   * 页面的初始数据
-   */
   use: [
     'systemInfo',
-    'userInfo',
     'motto'
   ],
 
@@ -22,19 +18,31 @@ create.Page(store, {
     canUseUserProfile: true,
     banner: "",
     showPopup: false,
+    userData: [
+      {
+        text: "约卡（元）",
+        value: 0,
+      },
+      {
+        text: "优惠券",
+        value: 0,
+      },
+      {
+        text: "积分",
+        value: 0,
+      },
+    ],
+    userInfo: "",
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad: function (options) {
-    commonApi.getResourceDetail({
-      resourceKey: "USERBANNER"
-    }).then(res => {
-      this.setData({
-        banner: res.data.banner
-      })
-    })
+    // commonApi.getResourceDetail({
+    //   resourceKey: "USERBANNER"
+    // }).then(res => {
+    //   this.setData({
+    //     banner: res.data.banner
+    //   })
+    // })
 
     // this.getUserSetting();
     // if (wx.getUserProfile) {
@@ -44,16 +52,83 @@ create.Page(store, {
   },
 
   onShow() {
+    // const {
+    //   userData,
+    // } = this.data;
     // 更新tabbar显示
     router.updateSelectTabbar(this, 3);
+    const userInfo = getStorageUserInfo() || "";
+    if(userInfo) {
+      // userData[2].value = userInfo.integralValue || 0;
+      this.updateUserInfo(userInfo);
+      this.getUserData(userInfo);
+      this.getOrderCount();
+    }
+    this.setData({
+      userInfo,
+    });
   },
 
+  // 获取用户信息
+  updateUserInfo(userInfo) {
+    userApi.getUserInfo({
+      id: userInfo.id,
+    }, {
+      showLoading: false,
+    }).then(res => {
+      res.levelText = USER_LEVEL[res.memberLevel].name;
+      res.levelIcon = USER_LEVEL[res.memberLevel].icon;
+      setStorageUserInfo(res);
+      this.setData({
+        userInfo: res,
+      })
+    })
+  },
+
+  // 获取用户数据
+  getUserData(userInfo) {
+    const {
+      userData,
+    } = this.data;
+    userApi.getUserData({
+      id: userInfo.id,
+    }).then(res => {
+      userData[0].value = res.balance || 0;
+      userData[1].value = res.couponNum || 0;
+      userData[2].value = res.integralValue || 0;
+      this.setData({
+        userData,
+      })
+    });
+  },
+
+  // 获取订单数据
+  getOrderCount() {
+    const {
+      orderTypeList
+    } = this.data;
+    userApi.getOrderCount({}, {
+      showLoading: false,
+    }).then(res => {
+      orderTypeList[0].subNum = res.paid;
+      orderTypeList[1].subNum = res.share;
+      orderTypeList[2].subNum = res.deliver;
+      orderTypeList[3].subNum = res.receive;
+      orderTypeList[4].subNum = res.afterSales;
+      this.setData({
+        orderTypeList,
+      })
+    })
+  },
+
+  // 跳转登录
   onToLogin() {
     router.push({
       name: "login"
     })
   },
 
+  // 点击其他功能模块
   onToOtherSet({
     currentTarget
   }) {
@@ -81,69 +156,6 @@ create.Page(store, {
       showPopup: false,
     })
   },
-  
-  // 进入页面获取用户授权情况
-  getUserSetting () {
-    var that = this;
-    //查看是否授权
-    wx.getSetting({
-      success: function(res) {
-      console.log("🚀 ~ file: index.js ~ line 36 ~ getUserSetting ~ res", res)
-        if (res.authSetting['scope.userInfo']) {
-          console.log("用户授权了");
-          // wx.getUserInfo({
-          //   lang: "zh_CN",
-          //   success (res) {
-          //     that.getCodeLogin(res.userInfo);
-          //   }
-          // })
-        } else {
-          //用户没有授权
-          console.log("用户没有授权");
-          that.setData({ userAuth : false})
-        }
-      }
-    });
-  },
-
-  // 点击授权
-  handleGetUerInfo(res) {
-    console.log(res)
-    // rawData
-    if(!!res.detail.userInfo){ // 返回用户信息
-      this.getCodeLogin(res.detail.userInfo);
-    } else { // 没有返回用户信息
-      console.log("用户按了拒绝按钮")
-    }
-  },
-
-  onGetUserProfile() {
-    // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-    wx.getUserProfile({
-      desc: '用于完善会员资料',
-      success: (res) => {
-        this.getCodeLogin(res.userInfo);
-        // this.setData({
-        //   userInfo: res.userInfo,
-        //   hasUserInfo: true
-        // })
-      }
-    })
-  },
-
-  // 获取用户openid 登录
-  getCodeLogin (userInfo) {
-    console.log(userInfo);
-    this.setData({ userAuth : true, userInfo: userInfo})
-  },
-
-  // 点击图片
-  onClickImg(event) {
-    console.log(event);
-    wx.previewImage({
-      urls: [event.target.dataset.src] // 需要预览的图片http链接列表
-    })
-  },
 
   // 点击头部
   onClickHead() {
@@ -151,21 +163,4 @@ create.Page(store, {
       url: '/dokit/index/index',
     })
   },
-
-  // 点击全局
-  onClickOther() {
-    router.push({
-      name: "list"
-    })
-  },
-
-
-
-  onLoginOut() {
-    wx.removeStorageSync("ACCESS_TOKEN");
-    wx.removeStorageSync("REFRESH_TOKEN");
-    wx.removeStorageSync("USER_INFO");
-    wx.removeStorageSync("USER_OTHER_INFO");
-    router.goTabbar();
-  }
 })

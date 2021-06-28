@@ -6,8 +6,6 @@ const url = {
   checkBind: "/member/open/checkNumPhoneBlind",
   bindPhone: "/member/open/wxBlind",
   getPhone: "/member/open/memberInfo/minProgramDecrypt",
-  otherInfo: "/member/auth/memberInfo/getUserCenter",
-  
 }
 
 export default {
@@ -34,11 +32,6 @@ export default {
   // 解密手机号
   getPhoneNumber(params, option) {
     return Request.post(url.getPhone, params, option);
-  },
-
-  // 用户扩展信息
-  getOtherInfo(params, option) {
-    return Request.post(url.otherInfo, params, option);
   },
 
 }

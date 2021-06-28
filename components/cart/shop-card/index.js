@@ -1,4 +1,4 @@
-import Toast from '../../../miniprogram_npm/@vant/weapp/toast/toast';
+import { showToast } from '../../../utils/tools';
 
 Component({
   options: {
@@ -30,7 +30,9 @@ Component({
         idx
       } = this.data;
       let index = currentTarget.dataset.index;
-      if(data.goodsInfos[index].skuNum <= data.goodsInfos[index].buyMinNum) {
+      let buyMinNum = data.goodsInfos[index].buyMinNum;
+      buyMinNum = buyMinNum < 1 ? 1 : buyMinNum;
+      if(data.goodsInfos[index].skuNum <= buyMinNum) {
         Toast({
           message: `至少添加 ${data.goodsInfos[index].buyMinNum} 个商品`,
           context: this,
@@ -53,11 +55,9 @@ Component({
       } = this.data;
       let index = currentTarget.dataset.index;
       if(data.goodsInfos[index].skuNum >= data.goodsInfos[index].buyMaxNum) {
-        Toast({
-          message:"哎呀，库存不够啦",
-          context: this,
+        showToast( {
+          title: "哎呀，库存不够啦",
         });
-        return ;
       }
       data.goodsInfos[index].skuNum += 1;
       // this.setData({

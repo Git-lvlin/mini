@@ -7,6 +7,8 @@ const url = {
   hotGood: "/activity/open/tagGoodsList",
 
   shareInfo: "/share/option/shareParam/queryShareContent",
+
+  advert: "/public/open/adimgs",
 }
 
 export default {
@@ -47,5 +49,10 @@ export default {
       ...options,
     }
     return Request.post(url.shareInfo, params, option);
+  },
+
+  // 获取首页广告
+  getAdvert(params, option) {
+    return Request.post(url.advert, params, option);
   },
 }

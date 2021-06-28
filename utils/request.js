@@ -1,6 +1,12 @@
-import { getBaseApiUrl, handleErrorCode } from './tools'
+import { getBaseApiUrl, handleErrorCode, showModal, setLoginRouter } from './tools'
 import { HTTP_TIMEOUT, VERSION } from '../constants/index'
+import commonApi from '../apis/common';
 import router from '../utils/router'
+
+let isRefreshing = false;
+let requestHistory = [];
+const ACCESS_TOKEN_INVALID = 10014;
+const REFRESH_TOKEN_INVALID = 10015;
 
 /**
  * 请求接口
@@ -18,14 +24,6 @@ import router from '../utils/router'
 const Reqeust = (params) => {
   const baseUrl = getBaseApiUrl();
   const token = wx.getStorageSync("ACCESS_TOKEN");
-  const loginOver = wx.getStorageSync("LOGIN_OVER");
-  if(!!loginOver && params.mustLogin) {
-    let overList = wx.getStorageSync("OVER_LIST");
-    overList = !!overList ? overList : [];
-    overList.push(params);
-    wx.setStorageSync("OVER_LIST", overList);
-    return ;
-  }
   const header = {
     'Content-Type': !params.contentType ? 'application/json' : params.contentType,
     v: VERSION,
@@ -33,6 +31,7 @@ const Reqeust = (params) => {
     ...params.header
   }
   if(token) header.token = token;
+  header.p = "miniprogram";
   const opions = {
     showLoading: true,
     ...params
@@ -49,17 +48,52 @@ const Reqeust = (params) => {
       data: params.data || {},
       header,
       timeout: HTTP_TIMEOUT,
-      success(res){
+      success: async function(res) {
+        wx.hideLoading();
         // 判断是否返回数据包
         const data = !!params.dataPackage ? res.data : res.data.data;
         // console.log(params.url, res.data)
         //数据请求成功判断
         if (res.statusCode === 200 && res.data.code === 0 && res.data.success) {
-          resolve(data);
+          // resolve(data);
+          resolve(data)
           wx.hideLoading();
-        }else {
+        } else {
+          if (res.data.code == REFRESH_TOKEN_INVALID) {
+            // refreshToken过期退出登录
+            showModal({
+              content: "您的登录已过期，请登录",
+              confirmText: "去登录",
+              ok() {
+                setLoginRouter();
+                router.push({
+                  name: "login"
+                })
+              }
+            })
+            reject(res.data);
+            return null;
+          }
+          // token 过期刷新token
+          if(res.data.code === ACCESS_TOKEN_INVALID) {
+            let config = params;
+            if (!isRefreshing) {
+              isRefreshing = true;
+              // requestHistory.push({resolve, config});
+              await commonApi.refreshToken();
+              //恢复历史请求
+              resolve(Reqeust(config));
+              requestHistory.forEach(item => {
+                item.resolve(Reqeust(item.config));
+              });
+              requestHistory = [];
+              isRefreshing = false;
+            } else {
+              requestHistory.push({resolve, config});
+            }
+          }
           // 返回错误码处理
-          if(!params.notErrorMsg) {
+          if(!params.notErrorMsg && !this.refreshToken) {
             handleErrorCode({
               params,
               code: res.data.code,
@@ -67,11 +101,13 @@ const Reqeust = (params) => {
               mustLogin: params.mustLogin,
             });
           }
-          wx.hideLoading();
-          reject(res.data);
+          if(params.errorData) {
+            reject(res.data);
+          }
         }
       },
       fail(error) {
+        console.log(33333)
         if(!params.notErrorMsg) {
           handleErrorCode({
             params,

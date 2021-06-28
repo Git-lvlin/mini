@@ -2,7 +2,9 @@ import create from '../../utils/create'
 import store from '../../store/index'
 import router from '../../utils/router'
 import homeApi from '../../apis/home'
-import dayjs from '../../miniprogram_npm/dayjs/index'
+import commonApi from '../../apis/common'
+import { IMG_CDN } from '../../constants/common'
+import { showModal } from '../../utils/tools'
 
 create.Page(store, {
   touchTimer: null,
@@ -23,11 +25,16 @@ create.Page(store, {
     scrolling: false,
     scrollBottom: false,
     floor: {},
-    headBackCss: `background-image: url("https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/nav_back.png")`, 
+    headBackCss: `background-image: url("${IMG_CDN}miniprogram/home/nav_back.png")`, 
+    activityAdvert: {},
   },
 
   onLoad(options) {
-    console.log("home", this.store.data)
+    console.log("home", this.store.data);
+    // 系统弹窗
+    this.getSystemPopup();
+    // 活动弹窗
+    this.getAdvert(2);
   },
 
   onReady() {
@@ -47,16 +54,12 @@ create.Page(store, {
     router.updateSelectTabbar(this, 0);
   },
 
-  onShareAppMessage() {
-
-  },
-
   // 获取首页楼层列表
   getFloorList() {
     let floor = wx.getStorageSync("HOME_FLOOR");
     let headBackCss = "";
     if(!!floor) {
-      headBackCss = this.setHeadBack(floor.headData.style);
+      headBackCss = this.setHeadBack(floor.headData && floor.headData.style || "");
       this.setData({
         floor: floor,
         headBackCss,
@@ -69,7 +72,7 @@ create.Page(store, {
       showLoading: this.isFristLoad,
     }).then(res => {
       this.isFristLoad = true;
-      headBackCss = this.setHeadBack(res.headData.style);
+      headBackCss = this.setHeadBack(res.headData && res.headData.style || "");
       this.setData({
         floor: res,
         headBackCss,
@@ -78,10 +81,51 @@ create.Page(store, {
     })
   },
 
+  // 获取系统弹窗
+  getSystemPopup() {
+    const sysEnv = wx.getStorageSync("SYS_ENV");
+    if(sysEnv == "dev") return;
+    commonApi.getResourceDetail({
+      resourceKey: "SYSTEMPOP",
+    }, {
+      showLoading: false,
+    }).then(res => {
+      const data = res.data;
+      if(data.state === 1) {
+        showModal({
+          title: data.title,
+          content: data.content,
+          showCancel: false,
+        });
+      }
+    });
+  },
+
+  // 获取广告图
+  getAdvert(type = 2) {
+    homeApi.getAdvert({
+      type
+    }, {
+      showLoading: false,
+    }).then(res => {
+      if(!res.length) return;
+      const data = {};
+      res.forEach(item => {
+        // 活动广告
+        if(type === 2) {
+          data.activityAdvert = item;
+        }
+      });
+      if(!!data.activityAdvert) {
+        this.setData(data);
+      }
+    });
+  },
+
   // 设置首页头部背景
   setHeadBack(style) {
     // let headBackCss = `background-color: #FC3B18`;
-    let headBackCss = `background-image: url("https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/nav_back.png")`;
+    let headBackCss = `background-image: url("${IMG_CDN}miniprogram/home/nav_back.png")`;
     // if(style.backgroundImage) {
     //   headBackCss = `background-image: url(${style.backgroundImage})`
     // } else if(style.backgroundColor) {

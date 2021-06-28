@@ -1,0 +1,36 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="store_container">
+  <view class="flex_middle store_head">
+    <van-image
+      width="104rpx"
+      height="104rpx"
+      radius="16rpx"
+      custom-class="flex_fix"
+      src="{{storeDetail.storeLogo}}"
+    />
+    <view class="store_box">
+      <view class="store_name text_one_line">{{storeDetail.storeName}}</view>
+      <view class="store_good">商品 {{storeDetail.saleGoodsTotal}}</view>
+    </view>
+    <view class="flex_center contact">
+      <image class="envelope_icon" src="{{tools.getImgUrl('miniprogram/user/contact_icon.png')}}" />
+      联系商家
+    </view>
+  </view>
+
+  <view class="store_good_content" wx:if="{{goodList.length}}">
+    <view class="store_good_head">
+      <view class="good_class">全部商品</view>
+      <screen-bar bind:click="onScreenItem" />
+    </view>
+    <view class="flex_middle store_good_list">
+      <good-card
+        wx:for="{{goodList}}"
+        wx:key="index"
+        data="{{item}}"
+      />
+    </view>
+  </view>
+  <nodata wx:if="{{!goodList.length}}"/>
+</view>
