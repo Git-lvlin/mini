@@ -257,35 +257,6 @@
   margin-bottom: 20rpx;
 }
 
-.parameter_list {
-  display: flex;
-  align-items: center;
-  border-radius: 8rpx;
-  overflow: hidden;
-}
-
-.parameter_item {
-  flex: 1;
-  line-height: 64rpx;
-  text-align: center;
-  border-right: 2rpx solid #fff;
-}
-
-.parameter_name {
-  height: 64rpx;
-  font-size: 28rpx;
-  color: #222222;
-  background-color: #F5F6F6;
-  border-bottom: 2rpx solid #fff;
-}
-
-.parameter_value {
-  height: 64rpx;
-  font-size: 24rpx;
-  color: #666;
-  background-color: #FAFAFB;
-}
-
 .detail_image {
   vertical-align: middle;
 }

@@ -21,6 +21,11 @@ image {
   justify-content: center;
 }
 
+.flex_fix {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
 /*单行溢出省略*/
 .text_one_line {
   text-overflow: ellipsis;

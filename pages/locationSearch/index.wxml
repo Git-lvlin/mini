@@ -1,0 +1,22 @@
+<wxs module="tools" src="../../wxs/common.wxs" />
+
+<view class="container">
+  <view class="flex_middle search_content">
+    <view class="flex_fix flex_middle address_info">
+      <view class="city">深圳</view>
+      <image class="icon" src="{{tools.getImgUrl('miniprogram/common/down_spot.png')}}" />
+    </view>
+    <view class="flex_middle search_info" >
+      <image class="search_icon" src="{{tools.getImgUrl('miniprogram/common/search%402x.png')}}" />
+      <input class="search_input" />
+      <image class="clear_icon" src="{{tools.getImgUrl('miniprogram/common/clear_input.png')}}" />
+    </view>
+  </view>
+
+  <view class="list">
+    <view class="address_item">
+      <view class="company_name text_one_line">asdfasd </view>
+      <view class="company_address text_one_line"> asdfasdfasdf</view>
+    </view>
+  </view>
+</view>

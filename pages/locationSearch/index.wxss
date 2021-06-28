@@ -1,0 +1,49 @@
+
+.search_content {
+  padding: 20rpx 32rpx;
+}
+
+.address_info {
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin-right: 16rpx;
+} 
+
+.icon {
+  width: 32rpx;
+  height: 16rpx;
+  margin-left: 8rpx;
+}
+
+.search_info {
+  flex: 1;
+  height: 64rpx;
+  padding: 0 16rpx;
+  background-color: #f5f5f5;
+  border-radius: 32rpx;
+}
+
+.search_input {
+  flex: 1;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin: 0 8rpx;
+}
+
+.clear_icon,
+.search_icon {
+  width: 40rpx;
+  height: 40rpx;
+} 
+
+
+.address_item {
+  position: relative ;
+  padding: 20rpx 64rpx 20rpx 32rpx;
+}
+
+.address_item:not(:last-child) {
+  border: 2rpx solid #f5f5f5;
+}

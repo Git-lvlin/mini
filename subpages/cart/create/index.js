@@ -5,6 +5,23 @@ import cartApi from '../../../apis/order'
 import { getStorageUserInfo, showToast } from '../../../utils/tools'
 import util from '../../../utils/util'
 
+const refreshOrderToken = {
+  20802: "库存不足！",
+  20809: "优惠券不可用",
+}
+
+const backDetail = {
+  20800: "系统异常，请联系管理员",
+  20801: "请勿重复提交！",
+  20803: "订单金额错误！",
+  20804: "订单不存在！",
+  20805: "获取预付Id异常！",
+  20806: "禁止非本人操作！",
+  20807: "更新订单状态失败！",
+  20808: "重复处理错误",
+  20811: "当前状态不可做此操作",
+};
+
 create.Page(store, {
   use: [
     "systemInfo"
@@ -28,6 +45,7 @@ create.Page(store, {
     objectId: "",
     activityId: "",
     selectAddressType: "",
+    orderToken: "",
   },
 
   onLoad(options) {
@@ -40,7 +58,6 @@ create.Page(store, {
       teamGoods.storeGoodsInfos =JSON.parse(options.storeGoodsInfos);
     }
     this.orderType = orderType;
-    console.log("确认订单 ~ options", options)
     // 活动页面 - 单独购买
     this.isActivityCome = !!options.isActivityCome;
     this.setData({
@@ -49,7 +66,8 @@ create.Page(store, {
       objectId: options.objectId ? options.objectId : "",
       activityId: options.activityId ? options.activityId : "",
       teamGoods,
-    })
+    });
+    this.getOrderToken();
   },
   
   onShow() {
@@ -202,8 +220,21 @@ create.Page(store, {
     })
   },
 
+  // 获取订单token
+  getOrderToken() {
+    cartApi.getOrderToken({}, {
+      showLoading: false,
+    }).then(res => {
+      console.log(res)
+      this.setData({
+        orderToken: res,
+      })
+    });
+  },
+
   // 组装提交的地址数据
   mapAddress(info) {
+    if(!info.phone) return undefined;
     let data = {
       consignee: info.consignee || info.linkman,
       phone: info.phone,
@@ -373,6 +404,7 @@ create.Page(store, {
       orderInfo,
       note,
       storeActivityGood,
+      orderToken,
     } = this.data;
     const {
       orderType,
@@ -393,9 +425,10 @@ create.Page(store, {
       activityId: "",
       objectId: "",
       sourceId: "miniprogram",
-      token: orderInfo.token,
+      token: orderToken,
       totalAmount: util.multiply(orderInfo.totalAmount, 100),
       payAmount: util.multiply(orderInfo.payAmount, 100),
+      deliveryMode: 1,
       note: note,
       shippingFeeAmount: orderInfo.shippingFeeAmount || 0,
       deliveryInfo: this.mapAddress(addressInfo),
@@ -456,9 +489,10 @@ create.Page(store, {
       activityId,
       objectId,
       sourceId: "miniprogram",
-      token: orderInfo.token,
+      token: orderToken,
       totalAmount: util.multiply(orderInfo.totalAmount, 100),
       payAmount: util.multiply(orderInfo.payAmount, 100),
+      deliveryMode: selectAddressType.type,
       note,
       shippingFeeAmount: orderInfo.shippingFeeAmount || 0,
       deliveryInfo: this.mapAddress(storeAdress),
@@ -486,10 +520,14 @@ create.Page(store, {
         data: res,
       })
     }).catch(err => {
-      let time = setTimeout(() => {
-        router.go();
-        clearTimeout(time);
-      }, 1500);
+      if(refreshOrderToken[err.code]) {
+        this.getOrderToken();
+      } else {
+        let timer = setTimeout(() => {
+          router.go();
+          clearTimeout(timer);
+        }, 1500);
+      }
     });
   }
 })

@@ -7,13 +7,11 @@ export const VERSION = "1.0.0";
 
 // 服务器接口域名S
 export const baseApi = {
-  // dev: "http://dev-yeahgo-gateway.waiad.icu",
   dev: "https://api-dev.yeahgo.com",
-  uat: "https://api-uat.yeahgo.com/",
-  fat: "https://api-fat.yeahgo.com/",
+  uat: "https://api-uat.yeahgo.com",
+  fat: "https://api-fat.yeahgo.com",
   pro: "https://api.yeahgo.com",
 };
-// export const apiUrl = "http://8.135.39.109";
 // 服务器接口域名
 export const HTTP_TIMEOUT = 5000;
 // 接口请求来源

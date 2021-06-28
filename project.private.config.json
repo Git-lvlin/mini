@@ -63,7 +63,7 @@
         {
           "name": "subpages/cart/detail/index",
           "pathName": "subpages/cart/detail/index",
-          "query": "spuId=2153&skuId=774&activityId=0&objectId=0&orderType=2",
+          "query": "spuId=2263&skuId=1828&activityId=0&objectId=store_a_123931&orderType=11",
           "scene": null
         },
         {
@@ -81,6 +81,18 @@
         {
           "name": "购物车",
           "pathName": "pages/cart/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/otherpay/index",
+          "pathName": "pages/otherpay/index",
+          "query": "id=4632278027512842181&payType=7&scene=3&storeNo=store_m_123616&type=1",
+          "scene": null
+        },
+        {
+          "name": "pages/locationSearch/index",
+          "pathName": "pages/locationSearch/index",
           "query": "",
           "scene": null
         }

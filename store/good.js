@@ -6,7 +6,7 @@ import util from "../utils/util"
 
 // 设置规格弹窗状态
 const onChangeSpecState = (state) => {
-  this.data.showSpecPopup = state;
+  store.data.showSpecPopup = state;
 }
 
 // 加入购物车
@@ -69,9 +69,9 @@ const getStoreCartList = () => {
 
 // 更新购物车数据
 const updateCart = () => {
-  store.getCartList();
-  store.getStoreCartList();
-  store.getCartTotal();
+  getCartList();
+  getStoreCartList();
+  getCartTotal();
 }
 
 // 获取用户信息

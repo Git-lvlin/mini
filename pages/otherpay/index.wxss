@@ -1,4 +1,12 @@
 
+.bay_text {
+  font-size: 48rpx;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+  padding-top: 96rpx;
+}
+
 .back_btn {
   position: fixed;
   bottom: 20%;

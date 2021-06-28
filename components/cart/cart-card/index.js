@@ -73,6 +73,9 @@ create.Component(store, {
       const {
         store,
       } = this.data;
+      let id = store.storeNo.slice(8, store.storeNo.length);
+      id = +id;
+      if(id < 123580) return;
       router.push({
         name: "store",
         data: {

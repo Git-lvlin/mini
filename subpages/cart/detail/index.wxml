@@ -35,7 +35,7 @@
 
   <!-- 商品标题模块 -->
   <view class="good_head">
-    <view class="good_price" wx:if="{{isActivityGood == 1 || isActivityGood == 2}}">
+    <view class="good_price" wx:if="{{isActivityGood == 1 || isActivityGood == 2 || isActivityGood == 11}}">
       <view class="price">
         ￥<text class="max_text">{{tools.getPriceSplit(good.goodsSaleMinPrice)}}</text>{{tools.getPriceSplit(good.goodsSaleMinPrice, 1)}}
         <view class="market_price ">￥{{good.goodsMarketPrice}}</view>
@@ -81,22 +81,6 @@
       />
     </view>
   </view>
-
-  <!-- <view class="space_20" />
-
-  <view class="info_card">
-    <view class="info_title">商品参数</view>
-    <view class="parameter_list">
-      <view
-        class="parameter_item"
-        wx:for="{{parameterList}}"
-        wx:key="name"
-      >
-        <view class="parameter_name">{{item.name}}</view>
-        <view class="parameter_value">{{item.value}}</view>
-      </view>
-    </view>
-  </view> -->
 
   <view class="space_20" wx:if="{{ratioData.AveragePrice != undefined}}" />
 
@@ -162,13 +146,17 @@
   <view style="height: {{$.systemInfo.bottomBarHeight + 104}}rpx" />
 
   <!-- 选择规格 -->
-  <!-- <spec-panel
+  <spec-panel
     good="{{good}}"
-  /> -->
+    skuId="{{skuId}}"
+    specType="{{specType}}"
+    bind:specBuy="onToCreate"
+    bind:specAdd="specUpdateCart"
+  />
 
   <!-- 集约商品 || 1688商品 -->
   <view class="to_buy" wx:if="{{isActivityGood == 15 || isActivityGood == 11}}">
-    <view class="to_buy_btn" bindtap="onToCreate">立即购买</view>
+    <view class="to_buy_btn" bindtap="onBuy">立即购买</view>
   </view>
 
   <!-- 普通商品结算 -->
@@ -203,7 +191,7 @@
       <view
         class="flex_center order_btn_item"
         data-type="alone"
-        bindtap="onToCreate"
+        bindtap="onBuy"
       >
         <view class="mar_price">￥{{good.goodsSaleMinPrice}}</view>
         <view class="mar_price">单独购买</view>
@@ -232,6 +220,6 @@
     data="{{teamDetail}}"
     show="{{showTogetherPopup}}"
     bind:close="handleCloseTogetherPopup"
-    bind:jump="onToCreate"
+    bind:jump="onBuy"
   />
 </view>

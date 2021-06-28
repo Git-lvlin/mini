@@ -17,7 +17,7 @@ const url = {
   detail: "/goods/option/info",
   detailImg: "/goods/open/detailImages",
   skuList: "/goods/open/skus",
-  checkSku: "/goods/open/checkSku",
+  checkSku: "/goods/option/goodsSpecList",
   personalDetail: "/activity/option/group/personal/goodsInfo",
   pushTogether: "/activity/auth/group/createSingle",
   memberList: "/activity/option/group/personal/memberList",
@@ -32,6 +32,9 @@ const url = {
   hotSearch: "/search/auth/HotKeyword/index",
   searchList: "/search/option/opensearch/index",
   associationList: "/search/option/opensearch/getSuggest",
+
+  storeDetail: "/store/option/storeShop/show",
+  storeGood: "/store/option/storeShop/salePage",
 }
 
 export default {
@@ -148,5 +151,13 @@ export default {
   getAssociationList(params, option) {
     return Request.post(url.associationList, params, option);
   },
-  
+
+  // 获取店铺详情
+  getStoreDetail(params, option) {
+    return Request.get(url.storeDetail, params, option);
+  },
+  // 获取店铺商品
+  getStoreGood(params, option) {
+    return Request.get(url.storeGood, params, option);
+  },
 }

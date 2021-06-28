@@ -63,17 +63,17 @@ export const handleErrorCode = ({
       break;
     case 10014:
       // accessToken 无效
-      wx.setStorageSync("LOGIN_OVER", true);
-      commonApi.refreshToken();
-      let overList = wx.getStorageSync("OVER_LIST");
-      overList = !!overList ? overList : [];
-      overList.push(params);
-      wx.setStorageSync("OVER_LIST", overList);
+      // wx.setStorageSync("LOGIN_OVER", true);
+      // commonApi.refreshToken();
+      // let overList = wx.getStorageSync("OVER_LIST");
+      // overList = !!overList ? overList : [];
+      // overList.push(params);
+      // wx.setStorageSync("OVER_LIST", overList);
       // showErrorMsg("刷新token");
       break;
     case 10015:
       // refreshToken 无效
-      showErrorMsg("登录过期，请重新登录");
+      // showErrorMsg("登录过期，请重新登录");
       break;
     case 10016:
       // 请求地址不存在
@@ -242,6 +242,20 @@ export const getStorageUserInfo = (showLogin, goBack) => {
   }
   return userInfo;
 };
+
+// 退出登录
+export const clearLoginInfo = (jump) => {
+  store.data.hasUserInfo = false;
+  store.data.userInfo = "";
+  store.data.userOtherInfo = "";
+  store.data.defUserInfo = "";
+  wx.removeStorageSync("ACCESS_TOKEN");
+  wx.removeStorageSync("REFRESH_TOKEN");
+  wx.removeStorageSync("USER_INFO");
+  wx.removeStorageSync("USER_OTHER_INFO");
+  wx.removeStorageSync("OPENID");
+  jump && router.goTabbar();
+}
 
 /**
  * 设置本地用户信息

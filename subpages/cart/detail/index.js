@@ -2,7 +2,7 @@ import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
 import { IMG_CDN } from '../../../constants/common'
-import { showModal, showToast, getStorageUserInfo } from '../../../utils/tools'
+import { showModal, getStorageUserInfo } from '../../../utils/tools'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
 
@@ -32,6 +32,7 @@ create.Page(store, {
   },
 
   data: {
+    skuId: "",
     good: {},
     stock: 0,
     backTopHeight: 56,
@@ -50,9 +51,11 @@ create.Page(store, {
     teamDetail: {},
     wayIcon: `${IMG_CDN}miniprogram/common/def_choose.png`,
     wayIconSelect: `${IMG_CDN}miniprogram/common/choose.png`,
+    // buy 立即购买  add 添加到购物车
+    specType: "buy",
   },
 
-  onLoad: function (options) {
+  onLoad(options) {
     let { systemInfo } = this.store.data;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
     // if (!options.spuId && !!options.id) options.spuId = options.id;
@@ -62,6 +65,7 @@ create.Page(store, {
     this.setData({
       backTopHeight,
       isActivityGood,
+      skuId: options.skuId,
     })
     this.getGoodDetail();
     this.getDetailImg();
@@ -248,9 +252,13 @@ create.Page(store, {
     let {
       good
     } = this.data;
-    // if(good.isMultiSpec == 1) {
-    //   store.onChangeSpecState(true);
-    // } else {
+    if(good.isMultiSpec == 1) {
+      this.setData({
+        specType: "add",
+      });
+      // 打开选择规格弹窗
+      store.onChangeSpecState(true);
+    } else {
       let data = {
         skuId: good.defaultSkuId,
         quantity: 1,
@@ -260,7 +268,7 @@ create.Page(store, {
       if(good.activityId) data.activityId = good.activityId;
       if(good.objectId) data.objectId = good.objectId;
       this.updateCart(data);
-    // }
+    }
   },
 
   // 减少数量
@@ -287,6 +295,13 @@ create.Page(store, {
     })
   },
 
+  // 多规格更新购物车数量
+  specUpdateCart({
+    detail,
+  }) {
+    this.updateCart(detail, true);
+  },
+
   // 更新购物车数量
   updateCart(data, showMsg = false) {
     this.store.addCart(data, showMsg)
@@ -311,6 +326,27 @@ create.Page(store, {
     });
   },
 
+  // 点击立即购买
+  onBuy(event) {
+    if(!this.data.userInfo) {
+      getStorageUserInfo(true);
+      return;
+    }
+    const {
+      good,
+      skuId,
+    } = this.data;
+    if(good.isMultiSpec) {
+      this.setData({
+        specType: "buy",
+      });
+      // 打开选择规格弹窗
+      store.onChangeSpecState(true);
+    } else {
+      this.onToCreate(event)
+    }
+  },
+
   // 跳转确认订单
   onToCreate(event) {
     if(!this.data.userInfo) {
@@ -324,11 +360,11 @@ create.Page(store, {
       spuId,
       skuId,
     } = this.goodParams;
+    let skuNum = 1;
     const {
       selectAddressType,
       good,
     } = this.data;
-      console.log("🚀 ~ file: index.js ~ line 330 ~ onToCreate ~ good", good)
     const {
       detail,
       currentTarget,
@@ -337,6 +373,11 @@ create.Page(store, {
     //   showToast({ title: "很抱歉，你不店主不能下单"})
     //   return;
     // }
+    // 选择规格回来下单
+    if(good.isMultiSpec) {
+      skuId = detail.skuId;
+      skuNum = detail.skuNum;
+    }
     let isActivityCome = false;
     let data = {
       orderType,
@@ -348,7 +389,7 @@ create.Page(store, {
           activityId: good.activityId,
           objectId: good.objectId,
           orderType: good.orderType,
-          skuNum: 1,
+          skuNum,
           goodsFromType: good.goodsFromType,
         }]
       }]
@@ -372,16 +413,18 @@ create.Page(store, {
         data.selectAddressType = selectAddressType;
       }
     }
+    console.log("data", data);
+    console.log("event", event);
     wx.setStorageSync("CREATE_INTENSIVE", data);
-    // router.push({
-    //   name: "createOrder",
-    //   data: {
-    //     orderType,
-    //     isActivityCome,
-    //     activityId: !!activityId ? activityId : "",
-    //     objectId: !!objectId ? objectId : "",
-    //   }
-    // });
+    router.push({
+      name: "createOrder",
+      data: {
+        orderType,
+        isActivityCome,
+        activityId: !!activityId ? activityId : "",
+        objectId: !!objectId ? objectId : "",
+      }
+    });
   },
 
   // 监听拼团剩余时间

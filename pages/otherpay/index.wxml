@@ -1,4 +1,8 @@
 
+<view class="bay_text" wx:if="{{payInfo.state === 1}}">支付成功</view>
+<view class="bay_text" wx:if="{{payInfo.state === 2}}">支付失败</view>
+<view class="bay_text" wx:if="{{payInfo.state === 3}}">支付出错啦！</view>
+
 <button
   class="back_btn"
   open-type="launchApp"

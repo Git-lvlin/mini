@@ -23,6 +23,7 @@ create.Page(store, {
     wx.removeStorageSync("REFRESH_TOKEN");
     wx.removeStorageSync("USER_INFO");
     wx.removeStorageSync("USER_OTHER_INFO");
+    wx.removeStorageSync("OPENID");
     router.goTabbar();
   }
 })

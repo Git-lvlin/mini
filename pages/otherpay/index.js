@@ -1,8 +1,10 @@
 import cartApi from '../../apis/order'
-import { getStorageUserInfo, showToast } from '../../utils/tools'
+import router from '../../utils/router';
+import { getStorageUserInfo, showModal, showToast } from '../../utils/tools'
 
 Page({
   params: {},
+  showPay: false,
 
   data: {
     payData: "",
@@ -12,41 +14,71 @@ Page({
     }
   },
 
+  // options.scene 自定义支付场景  1 商品下单支付  2 约卡充值支付
   onLoad(options) {
+    console.log("🚀 ~ file: index.js ~ line 19 ~ onLoad ~ options", options)
     this.params = options;
     var obj = wx.getLaunchOptionsSync()
     console.log('——启动小程序的场景值:', obj.scene)
   },
 
   onShow() {
+    if(this.showPay) return;
+    const openId = this.isLogin();
+    if(!openId) return;
     wx.showLoading();
-    this.getPayInfo(this.params);
+    this.params.openId = openId;
+    console.log("🚀 ~ file: index.js ~ line 31 ~ onShow ~ this.params", this.params)
+    if(this.params.scene == 1) {
+      // 获取商品下单支付信息
+      this.getPayInfo(this.params);
+    } else if(this.params.scene == 2) {
+      // 获取约卡充值支付信息
+      this.getRechargePay(this.params);
+    } else if(this.params.scene == 3) {
+      // 获取约卡充值支付信息
+      this.getIntensivePay(this.params);
+    }
   },
 
   launchAppError (e) {
     console.log(e.detail)
   },
 
-  // 获取支付信息
+  // 判断用户是否登录
+  isLogin() {
+    const openId = wx.getStorageSync("OPENID") || "";
+    if(!openId) {
+      showModal({
+        content: "您还未登录，请登录！",
+        confirmText: "去登录",
+        ok() {
+          // setLoginRouter();
+          router.push({
+            name: "login"
+          })
+        },
+      })
+    }
+    return openId;
+  },
+
+  // 获取商品支付信息
   getPayInfo(data) {
     // id=1403266210801328130
-    const userInfo = getStorageUserInfo(true);
-    console.log("🚀 ~ file: index.js ~ line 54 ~ getPayInfo ~ userInfo", userInfo)
-    if(!userInfo) return;
     cartApi.getPayInfo({
       // id: data.id || "1403266210801328130",
       id: data.id,
       payType: 7,
-      openId: userInfo.openId,
+      openId: data.openId,
     }, {
       showLoading: false
     }).then(res => {
-      console.log("🚀 ~ file: index.js ~ line 61 ~ getPayInfo ~ res", res)
       this.setData({
         payData: res,
       }, () => {
-        wx.headLoading();
         this.openPay();
+        wx.hideLoading();
       })
     }).catch(err => {
       const {
@@ -59,15 +91,74 @@ Page({
     });
   },
 
+  // 获取约卡支付信息
+  getRechargePay(data) {
+    cartApi.getRechargePay({
+      paymentNo: data.id,
+      payType: 7,
+      openId: data.openId,
+    }).then(res => {
+      console.log("获取约卡 res", res)
+      res.prepayData = res.paymentParam;
+      this.setData({
+        payData: res,
+      }, () => {
+        this.openPay();
+        wx.hideLoading();
+      })
+    }).catch(err => {
+      const {
+        payInfo,
+      } = this.data;
+      payInfo.state = 3;
+      this.setData({
+        payInfo
+      })
+    });
+  },
+
+  // 获取集约支付信息
+  getIntensivePay(data) {
+    console.log("🚀 ~ file: index.js ~ line 122 ~ getIntensivePay ~ data", data)
+    cartApi.getIntensivePay({
+      orderId: data.id,
+      storeNo: data.storeNo,
+      type: data.type,
+      payType: 7,
+      openId: data.openId,
+    }, {
+      notErrorMsg: true,
+    }).then(res => {
+      console.log("获取集约 res", res)
+      this.setData({
+        payData: res,
+      }, () => {
+        this.openPay();
+        // wx.hideLoading();
+      })
+    }).catch(err => {
+      console.log("🚀 ~ file: index.js ~ line 137 ~ getIntensivePay ~ err", err)
+      const {
+        payInfo,
+      } = this.data;
+      payInfo.state = 3;
+      this.setData({
+        payInfo
+      })
+    });
+  },
+
+  // 拉起微信支付
   openPay() {
     const {
       payData,
       payInfo,
     } = this.data;
-    if(!!payData) {
+    if(!payData) {
       showToast({ title: "没有获取到支付信息" });
       return;
     }
+    this.showPay = true;
     const payObj = JSON.parse(payData.prepayData);
     const that = this;
     wx.requestPayment({
