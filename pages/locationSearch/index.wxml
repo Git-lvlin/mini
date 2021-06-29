@@ -15,8 +15,13 @@
 
   <view class="list">
     <view class="address_item">
-      <view class="company_name text_one_line">asdfasd </view>
-      <view class="company_address text_one_line"> asdfasdfasdf</view>
+      <view class="company_name text_one_line">asdfasdas</view>
+      <view class="company_address text_one_line">1234231</view>
+      <image
+        class="select_icon"
+        src="{{tools.getImgUrl('miniprogram/common/choose.png')}}"
+        wx:if="{{ false }}"
+      />
     </view>
   </view>
 </view>

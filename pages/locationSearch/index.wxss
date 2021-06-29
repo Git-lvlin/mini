@@ -47,3 +47,25 @@
 .address_item:not(:last-child) {
   border: 2rpx solid #f5f5f5;
 }
+
+.company_name {
+  font-weight: 500;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin-bottom: 4rpx;
+}
+
+.company_address {
+  color: #999999;
+  font-size: 20rpx;
+  line-height: 28rpx;
+}
+
+.select_icon {
+  position: absolute;
+  top: 38rpx;
+  right: 32rpx;
+  width: 40rpx;
+  height: 40rpx; 
+}

@@ -3,6 +3,7 @@ import { IMG_CDN } from '../../constants/common';
 import create from '../../utils/create';
 import store from '../../store/index';
 import { throttle } from '../../utils/tools';
+import goodApi from '../../apis/good';
 
 let markersData = [];
 
@@ -10,6 +11,9 @@ create.Page(store, {
   use: [
     "systemInfo",
   ],
+
+  // 当前位置经纬度
+  location: {},
 
   // 值单位 px
   touchMove: {
@@ -27,8 +31,35 @@ create.Page(store, {
     barState: false,
   },
 
-  onLoad() {
+  onShow() {
     this.getPoiAround();
+    if(this.location.latitude) {
+
+    } else {
+      wx.getLocation({
+        type: 'wgs84',
+        altitude: false,
+        success: (result)=>{
+          let data = {
+            latitude: result.latitude,
+            longitude: result.longitude,
+          }
+          this.location = data;
+          this.getNearbyStore(data);
+        },
+      });
+    }
+  },
+
+  // 附近店铺
+  getNearbyStore(data) {
+    goodApi.getNearbyStore({
+      radius: 50,
+      unit: 'km',
+      ...data,
+    }).then(res => {
+      console.log("res", res);
+    })
   },
 
   // 获取附近的点

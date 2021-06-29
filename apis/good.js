@@ -35,6 +35,8 @@ const url = {
 
   storeDetail: "/store/option/storeShop/show",
   storeGood: "/store/option/storeShop/salePage",
+
+  nearbyStore: "/store/option/memberShop/nearby",
 }
 
 export default {
@@ -160,4 +162,9 @@ export default {
   getStoreGood(params, option) {
     return Request.get(url.storeGood, params, option);
   },
+  // 获取一定范围内的店铺数
+  getNearbyStore(params, option) {
+    return Request.get(url.nearbyStore, params, option);
+  },
+
 }
