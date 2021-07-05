@@ -6,7 +6,10 @@ Component({
   },
 
   properties: {
-
+    data: {
+      type: Object,
+      value: {},
+    }
   },
 
   data: {
@@ -15,6 +18,11 @@ Component({
   },
 
   methods: {
-
+    onClick() {
+      const {
+        data,
+      } = this.data;
+      this.triggerEvent("click", data);
+    },
   }
 })

@@ -25,7 +25,7 @@
     <view class="content">
       <view
         class="address"
-        wx:if="{{(orderInfo.token && orderType != 15) || (orderType == 15 && selectAddressType.type == 3)}}"
+        wx:if="{{(orderToken && orderType != 15) || (orderType == 15 && selectAddressType.type == 3)}}"
         bindtap="onToAddress"
       >
         <view class="no_address" wx:if="{{!addressInfo.id}}">
@@ -66,7 +66,7 @@
         />
       </view>
 
-      <view class="order_price" wx:if="{{orderInfo.token}}">
+      <view class="order_price" wx:if="{{orderToken}}">
         <view class="cell_item">
           <view class="cell_name">商品金额</view>
           <view class="cell_value">￥{{orderInfo.totalAmount}}</view>

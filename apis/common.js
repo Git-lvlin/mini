@@ -10,6 +10,7 @@ const url = {
 }
 
 let isShowLoginMobal = false;
+let refreshingToken = false;
 
 const showLogin = (back) => {
   showModal({
@@ -59,8 +60,10 @@ export default {
     })
   },
 
-  // 刷新token 
+  // 刷新token
   refreshToken() {
+    if(refreshingToken) return;
+    refreshingToken = true;
     let postData = {};
     // const userInfo = store.data.userInfo;
     const userInfo = getStorageUserInfo();
@@ -79,6 +82,7 @@ export default {
       wx.setStorageSync("ACCESS_TOKEN", res.accessToken);
       wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
       isShowLoginMobal = false;
+      refreshingToken = false;
       return res;
     }).catch(err => {
       if(err.code == 405 || err.code == 200109 || err.code == 10018) {
@@ -89,6 +93,7 @@ export default {
         !isShowLoginMobal && showLogin(true);
         isShowLoginMobal = true;
       }
+      refreshingToken = false;
     })
   },
 

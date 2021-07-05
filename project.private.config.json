@@ -87,13 +87,13 @@
         {
           "name": "pages/otherpay/index",
           "pathName": "pages/otherpay/index",
-          "query": "id=4632278027512842181&payType=7&scene=3&storeNo=store_m_123616&type=1",
+          "query": "id=1410138285051949057&payType=7&scene=1",
           "scene": null
         },
         {
           "name": "pages/locationSearch/index",
           "pathName": "pages/locationSearch/index",
-          "query": "",
+          "query": "latitude=22.542145&longitude=114.061675",
           "scene": null
         }
       ]

@@ -7,6 +7,8 @@ import router from './utils/router'
 // 环境变量 dev uat fat pro
 // ***【 图片CDN域名要改 2 处 】***
 const SYS_ENV = 'dev';
+// 是否显示选择环境按钮
+const CHANGE_ENV = true;
 
 App({
   onLaunch() {
@@ -41,6 +43,7 @@ App({
 
   globalData: {
     userInfo: null,
+    changeEnv: CHANGE_ENV,
   },
 
   // 生成设备码校验是否填写邀请码

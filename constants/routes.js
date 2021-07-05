@@ -47,6 +47,15 @@ export default {
   invitation: {
     path: "/pages/invitation/index"
   },
+  // 选择自提点
+  location: {
+    path: "/pages/location/index"
+  },
+  // 搜索经纬度
+  locationSearch: {
+    path: "/pages/locationSearch/index"
+  },
+  
   
   
   // 分类列表

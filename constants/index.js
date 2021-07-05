@@ -25,3 +25,6 @@ export const NODATA_LIST = [
     title: "暂无数据"
   }
 ];
+
+// 高德地图key
+export const MAP_KEY = "2755064499f1d1ff7f7bc61154a112b2";

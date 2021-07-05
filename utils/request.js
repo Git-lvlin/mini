@@ -101,7 +101,7 @@ const Reqeust = (params) => {
               mustLogin: params.mustLogin,
             });
           }
-          if(params.errorData) {
+          if(res.data.code !== ACCESS_TOKEN_INVALID) {
             reject(res.data);
           }
         }

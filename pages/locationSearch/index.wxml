@@ -1,27 +1,50 @@
 <wxs module="tools" src="../../wxs/common.wxs" />
 
 <view class="container">
-  <view class="flex_middle search_content">
-    <view class="flex_fix flex_middle address_info">
-      <view class="city">深圳</view>
+  <view class="flex_fix flex_middle search_content">
+    <view class="flex_fix flex_middle address_info" bindtap="onOpenCity">
+      <view class="city">{{cityData.city}}</view>
       <image class="icon" src="{{tools.getImgUrl('miniprogram/common/down_spot.png')}}" />
     </view>
     <view class="flex_middle search_info" >
       <image class="search_icon" src="{{tools.getImgUrl('miniprogram/common/search%402x.png')}}" />
-      <input class="search_input" />
+      <input
+        class="search_input"
+        bindinput="handleInput"
+      />
       <image class="clear_icon" src="{{tools.getImgUrl('miniprogram/common/clear_input.png')}}" />
     </view>
   </view>
 
   <view class="list">
-    <view class="address_item">
-      <view class="company_name text_one_line">asdfasdas</view>
-      <view class="company_address text_one_line">1234231</view>
+    <view
+      class="address_item"
+      wx:for="{{markers}}"
+      wx:key="id"
+    >
+      <view class="company_name text_one_line">
+        <text
+          class="{{child.type === 2 ? 'text_red' : ''}}"
+          wx:for="{{item.nameArr}}"
+          wx:key="index"
+          wx:for-item="child"
+        >{{child.text}}</text>
+      </view>
+      <view class="company_address text_one_line">{{item.address}}</view>
       <image
         class="select_icon"
-        src="{{tools.getImgUrl('miniprogram/common/choose.png')}}"
-        wx:if="{{ false }}"
+        src="{{tools.getImgUrl('miniprogram/common/def_choose.png')}}"
       />
     </view>
   </view>
+
+  <!-- <view class="flex_fix confirm_box" style="padding-bottom: {{$.systemInfo.bottomBarHeight}}rpx">
+    <view class="confirm_btn">确认</view>
+  </view> -->
+
+  <address-popup
+    show="{{ showPopup }}"
+    showArea="{{false}}"
+    bind:close="onCloseAddress"
+  />
 </view>

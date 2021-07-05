@@ -1,11 +1,16 @@
-import amapFile from '../../libs/amap-wx';
 import { IMG_CDN } from '../../constants/common';
 import create from '../../utils/create';
 import store from '../../store/index';
 import { throttle } from '../../utils/tools';
 import goodApi from '../../apis/good';
+import router from '../../utils/router';
 
 let markersData = [];
+const defLocation = {
+  longitude: 116.39731407,
+  latitude: 39.90874867,
+};
+const deflocationIcon = `${IMG_CDN}miniprogram/location/def_location.png?V=465656`;
 
 create.Page(store, {
   use: [
@@ -23,29 +28,36 @@ create.Page(store, {
 
   data: {
     markers: [],
-    latitude: '',
-    longitude: '',
+    latitude: defLocation.latitude,
+    longitude: defLocation.longitude,
     textData: {},
     showPopup: false,
     spotBottom: 0,
     barState: false,
+    currentSpot: {},
   },
 
   onShow() {
-    this.getPoiAround();
+    const that = this;
+    // this.getPoiAround();
     if(this.location.latitude) {
-
+      that.getNearbyStore(this.location);
     } else {
       wx.getLocation({
-        type: 'wgs84',
+        type: 'gps84',
         altitude: false,
-        success: (result)=>{
+        success(result) {
           let data = {
             latitude: result.latitude,
             longitude: result.longitude,
           }
-          this.location = data;
-          this.getNearbyStore(data);
+          that.location = data;
+          that.setData(data);
+          that.getNearbyStore(data);
+        },
+        fail() {
+          // that.location = defLocation;
+          // that.getNearbyStore(defLocation);
         },
       });
     }
@@ -54,87 +66,103 @@ create.Page(store, {
   // 附近店铺
   getNearbyStore(data) {
     goodApi.getNearbyStore({
-      radius: 50,
-      unit: 'km',
+      radius: 50000,
+      unit: 'm',
       ...data,
     }).then(res => {
-      console.log("res", res);
-    })
-  },
-
-  // 获取附近的点
-  getPoiAround() {
-    let that = this;
-    let myAmapFun = new amapFile.AMapWX({
-      key: '2755064499f1d1ff7f7bc61154a112b2'
-    });
-    myAmapFun.getPoiAround({
-      iconPathSelected: `${IMG_CDN}miniprogram/location/def_location.png?V=465656`,
-      iconPath: `${IMG_CDN}miniprogram/location/def_location.png?V=465656`,
-      success(data) {
-        markersData = data.markers;
-        console.log("line 31 ~ markersData", markersData)
-        that.setData({
-          markers: markersData,
-          latitude: markersData[0].latitude,
-          longitude: markersData[0].longitude,
+      let list = [];
+      let fullAddress = "";
+      if(res.length > 0) {
+        res.forEach((item, index) => {
+          // 遍历地址
+          fullAddress = "";
+          for(let str in item.areaInfo) {
+            fullAddress += item.areaInfo[str];
+          }
+          fullAddress += item.address;
+          item.fullAddress = fullAddress;
+          // 计算距离
+          item.distance = +item.distance;
+          if(item.distance > 1000) {
+            item.distanceText = `${(item.distance / 1000).toFixed(1)}KM`;
+          } else {
+            item.distanceText = `${item.distance.toFixed(0)}M`;
+          }
+          list.push({
+            ...item,
+            width: 23,
+            height: 32,
+            id: 10 + index,
+            selected: false,
+            iconPath: deflocationIcon,
+          })
+        })
+        // list[0] = {
+        //   ...list[0],
+        //   iconPath: list[0].storeLogo,
+        //   width: 28,
+        //   height: 28,
+        //   selected: true,
+        // }
+        this.setData({
+          markers: list,
+          latitude: list[0].latitude,
+          longitude: list[0].longitude,
         });
-        that.showMarkerInfo(markersData,0);
-      },
-      fail(info) {
-        wx.showModal({title:info.errMsg})
       }
     })
-    // myAmapFun.getRegeo({
-      // success(data){
-      // console.log("🚀 ~ file: index.js ~ line 49 ~ data", data)
-        // markersData = data.markers;
-        // that.setData({
-        //   markers: markersData,
-        //   latitude: markersData[0].latitude,
-        //   longitude: markersData[0].longitude,
-        // });
-        // that.showMarkerInfo(markersData,0);
-      // },
-    // })
-  },
-  
-  // 点击搜索结果
-  makertap(e) {
-    let id = e.markerId;
-    let that = this;
-    that.showMarkerInfo(markersData,id);
-    that.changeMarkerColor(markersData,id);
   },
 
-  // 设置搜索结果信息
-  showMarkerInfo(data,i) {
-    let that = this;
-    that.setData({
-      textData: {
-        name: data[i].name,
-        desc: data[i].address
+  // 点击搜索框
+  onSearchInput() {
+    router.push({
+      name: 'locationSearch',
+      data: this.location
+    })
+  },
+
+  // 点击自提点
+  makertap(e) {
+    this.setMarket(e.markerId);
+  },
+
+  // 点击列表自提点
+  onTakeSpot({
+    detail
+  }) {
+    console.log("onTakeSpot ~ detail", detail)
+    if(!detail.isCurrent) {
+      this.setMarket(detail.id);
+    }
+  },
+
+  // 设置market
+  setMarket(id) {
+    const {
+      markers
+    } = this.data;
+    const idx = id - 10;
+    markers.forEach((item, index) => {
+      if(idx === index) {
+        item.iconPath = item.storeLogo;
+        item.width = 28;
+        item.height = 28;
+        item.selected = true;
+      } else {
+        item.iconPath = deflocationIcon;
+        item.width = 23;
+        item.height = 32;
+        item.selected = false;
       }
     });
-  },
-
-  // 设置选中图标
-  changeMarkerColor(data,i) {
-    let that = this;
-    let markers = [];
-    for(let j = 0; j < data.length; j++){
-      if(j==i){
-        //如：..­/..­/img/marker_checked.png
-        // data[j].iconPath = "选中 marker 图标的相对路径";
-      }else{
-        //如：..­/..­/img/marker.png
-        // data[j].iconPath = "未选中 marker 图标的相对路径";
-      }
-      markers.push(data[j]);
-    }
-    that.setData({
+    this.setData({
       markers: markers
     });
+  },
+  
+  // 确认自提点
+  onConfirm() {
+
   },
 
   // 点击列表bar
@@ -201,19 +229,6 @@ create.Page(store, {
     }
     this.setData({
       spotBottom
-    })
-  },
-
-  // 关闭地址弹窗
-  onCloseAddress({
-    detail
-  }) {
-    const {
-      selectAddress,
-    } = detail;
-    console.log("🚀 ~ file: index.js ~ line 95 ~ detail", detail)
-    this.setData({
-      showPopup: false,
     })
   },
 

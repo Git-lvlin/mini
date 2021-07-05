@@ -56,6 +56,10 @@ create.Page(store, {
     //   userData,
     // } = this.data;
     // 更新tabbar显示
+    const {
+      orderTypeList,
+      userData,
+    } = this.data;
     router.updateSelectTabbar(this, 3);
     const userInfo = getStorageUserInfo() || "";
     if(userInfo) {
@@ -63,9 +67,14 @@ create.Page(store, {
       this.updateUserInfo(userInfo);
       this.getUserData(userInfo);
       this.getOrderCount();
+    } else {
+      userData.forEach(item => item.value = 0);
+      orderTypeList.forEach(item => item.subNum = 0);
     }
     this.setData({
       userInfo,
+      orderTypeList,
+      userData,
     });
   },
 

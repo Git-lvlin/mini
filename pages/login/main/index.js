@@ -7,6 +7,30 @@ import loginApis from '../../../apis/login'
 import userApis from '../../../apis/user'
 import tools from '../utils/login'
 
+const envList = [
+  {
+    name: "开发",
+    env: "dev",
+    value: 1,
+  },
+  {
+    name: "测试",
+    env: "uat",
+    value: 2,
+  },
+  {
+    name: "预发布",
+    env: "fat",
+    value: 3,
+  },
+  {
+    name: "生产",
+    env: "pro",
+    value: 4,
+  },
+];
+
+const app = getApp();
 create.Page(store, {
   use: [
     'motto'
@@ -15,10 +39,19 @@ create.Page(store, {
   data: {
     showTreaty: false,
     canUseProfile: false,
-    radio: ''
+    radio: '',
+    envList,
+    changeEnv: app.globalData.changeEnv,
+    currentEnv: ''
   },
 
   onLoad(options) {
+    const sysEnv = wx.getStorageSync("SYS_ENV");
+    if(sysEnv && app.globalData.changeEnv) {
+      this.setData({
+        currentEnv: sysEnv,
+      })
+    }
     if (wx.getUserProfile) {
       this.setData({
         canUseProfile: true
@@ -137,6 +170,12 @@ create.Page(store, {
     }).catch(err => {
       tools.successJump();
     });
+  },
+
+  // 切换环境
+  handleChangeEnv({ detail }) {
+    console.log(detail.value);
+    wx.setStorageSync("SYS_ENV", detail.value);
   },
 
   // 勾选条件

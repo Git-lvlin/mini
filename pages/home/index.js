@@ -4,7 +4,8 @@ import router from '../../utils/router'
 import homeApi from '../../apis/home'
 import commonApi from '../../apis/common'
 import { IMG_CDN } from '../../constants/common'
-import { showModal } from '../../utils/tools'
+import { showModal, showToast } from '../../utils/tools'
+import { checkSetting } from '../../utils/wxSetting';
 
 create.Page(store, {
   touchTimer: null,
@@ -27,6 +28,7 @@ create.Page(store, {
     floor: {},
     headBackCss: `background-image: url("${IMG_CDN}miniprogram/home/nav_back.png")`, 
     activityAdvert: {},
+    locationAuth: false,
   },
 
   onLoad(options) {
@@ -46,6 +48,7 @@ create.Page(store, {
         })
       }
     }).exec();
+    this.getLocationAuth(this);
   },
 
   onShow() {
@@ -150,12 +153,52 @@ create.Page(store, {
       },
     });
   },
+  
+  // 获取为止权限
+  getLocationAuth: async (that) => {
+    const locationAuth = await checkSetting('userLocation', true);
+    that.setData({
+      locationAuth,
+    });
+  },
 
   // 跳转选择地址
   onToLocation() {
-    router.push({
-      name: 'location',
-    });
+    const {
+      locationAuth,
+    } = this.data;
+    if(!locationAuth) {
+      showModal({
+        content: "需要您授权地理位置才可使用",
+        ok(){
+          wx.openSetting({
+            success(result) {
+              if(result.errMsg === "openSetting:ok") {
+                const {
+                  authSetting,
+                } = result;
+                let state = authSetting['scope.userLocation'];
+                if(state) {
+                  router.push({
+                    name: 'location',
+                  });
+                } else {
+                  showToast('您没有授权成功呢！');
+                }
+              }
+            },
+            fail(err) {
+              showToast('您没有授权成功呢！');
+            },
+          });
+        }
+      })
+      
+    } else {
+      router.push({
+        name: 'location',
+      });
+    }
   },
 
   // 跳转搜索
