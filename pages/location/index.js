@@ -1,7 +1,7 @@
 import { IMG_CDN } from '../../constants/common';
 import create from '../../utils/create';
 import store from '../../store/index';
-import { throttle } from '../../utils/tools';
+import { showToast, throttle } from '../../utils/tools';
 import goodApi from '../../apis/good';
 import router from '../../utils/router';
 
@@ -40,6 +40,31 @@ create.Page(store, {
   onShow() {
     const that = this;
     // this.getPoiAround();
+    const takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
+    const searchSpot = wx.getStorageSync("SEARCH_SPOT");
+    let spotData = "";
+    if(takeSpot && !searchSpot) {
+      spotData = takeSpot;
+    }
+    if(searchSpot) {
+      spotData = searchSpot;
+    }
+    if(spotData) {
+      that.setData({
+        currentSpot: takeSpot,
+        latitude: spotData.latitude,
+        longitude: spotData.longitude,
+      }, () => {
+        that.getNearbyStore({
+          latitude: spotData.latitude,
+          longitude: spotData.longitude,
+        });
+      });
+      wx.removeStorage({
+        key: 'SEARCH_SPOT',
+      });
+      return;
+    }
     if(this.location.latitude) {
       that.getNearbyStore(this.location);
     } else {
@@ -65,6 +90,9 @@ create.Page(store, {
 
   // 附近店铺
   getNearbyStore(data) {
+    const {
+      currentSpot,
+    } = this.data;
     goodApi.getNearbyStore({
       radius: 50000,
       unit: 'm',
@@ -72,10 +100,13 @@ create.Page(store, {
     }).then(res => {
       let list = [];
       let fullAddress = "";
+      let selected = false;
+      console.log("🚀 ~ file: index.js ~ line 121 ~ res.forEach ~ currentSpot", currentSpot)
       if(res.length > 0) {
         res.forEach((item, index) => {
           // 遍历地址
           fullAddress = "";
+          selected = false;
           for(let str in item.areaInfo) {
             fullAddress += item.areaInfo[str];
           }
@@ -88,12 +119,15 @@ create.Page(store, {
           } else {
             item.distanceText = `${item.distance.toFixed(0)}M`;
           }
+          if(currentSpot.storeNo == item.storeNo) {
+            selected = true;
+          }
           list.push({
             ...item,
             width: 23,
             height: 32,
             id: 10 + index,
-            selected: false,
+            selected,
             iconPath: deflocationIcon,
           })
         })
@@ -121,29 +155,20 @@ create.Page(store, {
     })
   },
 
-  // 点击自提点
+  // 点击地图自提点
   makertap(e) {
     this.setMarket(e.markerId);
   },
 
-  // 点击列表自提点
-  onTakeSpot({
-    detail
-  }) {
-    console.log("onTakeSpot ~ detail", detail)
-    if(!detail.isCurrent) {
-      this.setMarket(detail.id);
-    }
-  },
-
-  // 设置market
-  setMarket(id) {
+  // 点击当前自提点
+  onCurrentSpot() {
     const {
-      markers
+      markers,
+      currentSpot,
     } = this.data;
-    const idx = id - 10;
-    markers.forEach((item, index) => {
-      if(idx === index) {
+    currentSpot.selected = true;
+    markers.forEach(item => {
+      if(item.storeNo == currentSpot.storeNo) {
         item.iconPath = item.storeLogo;
         item.width = 28;
         item.height = 28;
@@ -156,13 +181,73 @@ create.Page(store, {
       }
     });
     this.setData({
-      markers: markers
+      currentSpot,
+      markers,
+    });
+  },
+
+  // 点击列表自提点
+  onTakeSpot({
+    detail
+  }) {
+    if(!detail.isCurrent) {
+      this.setMarket(detail.id);
+    }
+  },
+
+  // 设置market
+  setMarket(id) {
+    const {
+      markers,
+      currentSpot,
+    } = this.data;
+    const idx = id - 10;
+    markers.forEach((item, index) => {
+      if(idx === index) {
+        item.iconPath = item.storeLogo;
+        item.width = 28;
+        item.height = 28;
+        item.selected = true;
+        if(item.storeNo != currentSpot.storeNo) {
+          currentSpot.selected = false;
+        } else {
+          currentSpot.selected = true;
+        }
+      } else {
+        item.iconPath = deflocationIcon;
+        item.width = 23;
+        item.height = 32;
+        item.selected = false;
+      }
+    });
+    this.setData({
+      currentSpot,
+      markers,
     });
   },
   
   // 确认自提点
   onConfirm() {
-
+    const {
+      markers,
+      currentSpot,
+    } = this.data;
+    let marketSelect = {};
+    if (currentSpot.selected) {
+      marketSelect = currentSpot;
+    } else {
+      markers.forEach(item => {
+        if(item.selected) {
+          marketSelect = item;
+        }
+      });
+    }
+    if(!marketSelect.storeNo) {
+      showToast({ title: "请选择自提点" });
+      return;
+    }
+    wx.setStorageSync("TAKE_SPOT", marketSelect);
+    router.go();
   },
 
   // 点击列表bar

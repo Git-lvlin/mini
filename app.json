@@ -52,7 +52,8 @@
       "root": "subpages/user",
       "pages": [
         "main/index",
-        "setting/index"
+        "setting/index",
+        "information/index"
       ]
     }
   ],

@@ -38,11 +38,11 @@
         <view class="bar_line" />
       </view>
       <view class="store_spot_list">
-        <view class="current_spot" wx:if="{{currentSpot.id}}">
+        <view class="current_spot" wx:if="{{currentSpot.storeNo}}">
           <view class="current_spot_text">当前自提点</view>
           <take-spot
             data="{{currentSpot}}"
-            bind:click="onTakeSpot"
+            bind:click="onCurrentSpot"
           />
         </view>
         <view class="other_spot">

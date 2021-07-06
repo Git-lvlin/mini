@@ -101,7 +101,7 @@ export default {
   },
   // 选择sku
   getCheckSku(params, option) {
-    return Request.get(url.checkSku, params, option);
+    return Request.post(url.checkSku, params, option);
   },
   // 获取单约详情
   getPersonalDetail(params, option) {

@@ -3,6 +3,7 @@ import amapFile from '../../libs/amap-wx';
 import { debounce, showToast } from '../../utils/tools'
 import create from '../../utils/create'
 import store from '../../store/index'
+import router from '../../utils/router';
 
 const myAmapFun = new amapFile.AMapWX({
   key: MAP_KEY,
@@ -22,7 +23,6 @@ create.Page(store, {
   onLoad(options) {
     this.location = options;
     this.getRegeo();
-    // this.getPoiAround("店)");
   },
   
   // 监听输入
@@ -35,10 +35,10 @@ create.Page(store, {
     } = this.data;
     debounce(() => {
       this.getPoiAround(`${cityData.province}${cityData.city}${inputText}`);
-    }, 500)();
-    // this.setData({
-    //   inputText,
-    // })
+    }, 300)();
+    this.setData({
+      inputText,
+    })
   },
 
   // 根据经纬度获取地址信息
@@ -55,7 +55,6 @@ create.Page(store, {
           const {
             addressComponent,
           } = data[0].regeocodeData;
-          console.log("addressComponent", addressComponent)
           that.setData({
             cityData: addressComponent,
           });
@@ -74,7 +73,6 @@ create.Page(store, {
         markers.forEach(item => {
           item.nameArr = that.getTextKey(item.name, querykeywords);
         });
-        console.log("🚀 ~ file: index.js ~ line 39 ~ success ~ markers", markers)
         that.setData({
           markers,
         });
@@ -86,10 +84,13 @@ create.Page(store, {
   },
 
   // 获取高亮文字
-  getTextKey(str, key) {
+  getTextKey(str) {
+    const {
+      inputText,
+    } = this.data;
     const arr = [];
-    if(str.indexOf(key) > -1) {
-      const textArr = str.split(key);
+    if(str.indexOf(inputText) > -1) {
+      const textArr = str.split(inputText);
       const len = textArr.length - 1;
       textArr.forEach((item, index) => {
         if(!!item) {
@@ -101,7 +102,7 @@ create.Page(store, {
         }
         if(index == 0 && !item || index != len) {
           arr.push({
-            text: key,
+            text: inputText,
             type: 2,
           })
         }
@@ -112,7 +113,6 @@ create.Page(store, {
         type: 1,
       })
     }
-    console.log(arr)
     return arr;
   },
 
@@ -140,5 +140,16 @@ create.Page(store, {
       cityData,
       showPopup: false,
     })
+  },
+
+  // 选择自提点
+  onSelectSpot({
+    currentTarget,
+  }) {
+    const {
+      data,
+    } = currentTarget.dataset;
+    wx.setStorageSync("SEARCH_SPOT", data);
+    router.go();
   },
 })

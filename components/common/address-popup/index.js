@@ -227,6 +227,7 @@ Component({
       } else if(selectAddress.isAct === "city") {
         // 提供镇区选择
         if(showArea) {
+          // 展示城区
           selectAddress.isAct = "area"
           selectAddress["area"] = {};
           this.setData({
@@ -234,6 +235,8 @@ Component({
           });
           this.getArea(data.id, false);
         } else {
+          // 不展示城区
+          selectAddress.isAct = "province"
           this.onCloseAddress({
             selectAddress,
             areaData,

@@ -54,8 +54,12 @@
       >{{good.goodsSaleNum}}</view>
       <view class="add_cart" wx:if="{{isActivityGood == 1 || isActivityGood == 2}}">
        <!-- || quantity && good.isMultiSpec == 1  -->
-        <view class="cart_btn" bindtap="addCart">加入购物车</view>
-        <!-- <view class="num_controller" wx:else>  wx:if="{{!quantity}}"
+        <view
+          class="cart_btn"
+          wx:if="{{!quantity || quantity && good.isMultiSpec == 1}}"
+          bindtap="addCart"
+        >加入购物车</view>
+        <view class="num_controller" wx:if="{{quantity && good.isMultiSpec == 0}}">
           <image
             class="icon"
             src="{{tools.getImgUrl('miniprogram/cart/reduce%402x.png')}}"
@@ -67,7 +71,7 @@
             src="{{tools.getImgUrl('miniprogram/cart/add%402x.png')}}"
             bindtap="addCart"
           />
-        </view> -->
+        </view>
       </view>
     </view>
     <view class="store_price" wx:if="{{isActivityGood == 15 || isActivityGood == 3 || isActivityGood == 4}}">

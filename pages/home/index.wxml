@@ -10,7 +10,7 @@
     <view class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx;{{headBackCss}}">
       <view class="nav_location">
         <image class="location_icon" src="{{tools.getImgUrl('miniprogram/home/location.png')}}" />
-        <view class="address text_one_line" bindtap="onToLocation">中粮商务公园店中粮商务公园店</view>
+        <view class="address text_one_line" bindtap="onToLocation">{{takeSpot.storeName || '选择自提点' }}</view>
         <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/back_white%402x.png')}}" />
       </view>
       <view class="search_content">

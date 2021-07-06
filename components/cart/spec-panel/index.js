@@ -115,10 +115,12 @@ create.Component(store, {
         checkSpec
       } = this.data;
       checkSpec[pidx] = good.specValueId;
-      let data = {};
-      checkSpec.forEach((item, index) => {
-        data[`checkSpec[${index}]`] = item;
-      });
+      let data = {
+        checkSpec,
+      };
+      // checkSpec.forEach((item, index) => {
+      //   data[`checkSpec[${index}]`] = item;
+      // });
       this.setData({
         checkSpec,
       })

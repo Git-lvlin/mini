@@ -51,19 +51,13 @@
         {
           "name": "商详",
           "pathName": "subpages/cart/detail/index",
-          "query": "image=http://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/goods/rc-upload-1620980448040-292%402x.png&orderId=4617617774317928000&spuId=2070&skuId=85&skuName=单位2&goodsName=四川春见粑粑丑柑 丑柑180g&salePrice=10&marketPrice=14&title=四川春见粑粑丑柑 丑柑180g单位2&objectId=4617617774317928662&id=2070&orderType=15&activityId=0&wsId=0&url=https://www.yeahgo.com/shopping/detail",
+          "query": "spuId=2365&skuId=3018&activityId=0&objectId=&orderType=2",
           "scene": null
         },
         {
           "name": "选择地理位置",
           "pathName": "pages/location/index",
           "query": "name=bak",
-          "scene": null
-        },
-        {
-          "name": "subpages/cart/detail/index",
-          "pathName": "subpages/cart/detail/index",
-          "query": "spuId=2263&skuId=1828&activityId=0&objectId=store_a_123931&orderType=11",
           "scene": null
         },
         {

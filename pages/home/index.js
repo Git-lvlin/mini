@@ -29,6 +29,7 @@ create.Page(store, {
     headBackCss: `background-image: url("${IMG_CDN}miniprogram/home/nav_back.png")`, 
     activityAdvert: {},
     locationAuth: false,
+    takeSpot: {},
   },
 
   onLoad(options) {
@@ -52,6 +53,12 @@ create.Page(store, {
   },
 
   onShow() {
+    const takeSpot = wx.getStorageSync("TAKE_SPOT");
+    if(takeSpot) {
+      this.setData({
+        takeSpot,
+      });
+    }
     this.getFloorList();
     // 更新tabbar显示
     router.updateSelectTabbar(this, 0);

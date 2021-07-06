@@ -250,8 +250,10 @@ create.Page(store, {
   // 增加数量
   addCart() {
     let {
-      good
+      good,
+      quantity,
     } = this.data;
+    console.log("🚀 ~ file: index.js ~ line 255 ~ addCart ~ good", good);
     if(good.isMultiSpec == 1) {
       this.setData({
         specType: "add",

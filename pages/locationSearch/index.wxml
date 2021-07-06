@@ -12,7 +12,11 @@
         class="search_input"
         bindinput="handleInput"
       />
-      <image class="clear_icon" src="{{tools.getImgUrl('miniprogram/common/clear_input.png')}}" />
+      <image
+        class="clear_icon"
+        wx:if="{{!!inputText}}"
+        src="{{tools.getImgUrl('miniprogram/common/clear_input.png')}}"
+      />
     </view>
   </view>
 
@@ -21,6 +25,8 @@
       class="address_item"
       wx:for="{{markers}}"
       wx:key="id"
+      data-data="{{item}}"
+      bindtap="onSelectSpot"
     >
       <view class="company_name text_one_line">
         <text
