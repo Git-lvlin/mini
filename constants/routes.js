@@ -101,8 +101,21 @@ export default {
 
 
   // 用户中心
+  // 设置
   setting: {
     path: "/subpages/user/setting/index"
+  },
+  // 用户中心
+  information: {
+    path: "/subpages/user/information/index"
+  },
+  // 修改用户信息
+  changeInfo: {
+    path: "/subpages/user/changeInfo/index"
+  },
+  // 更改绑定手机号
+  changePhone: {
+    path: "/subpages/user/changePhone/index"
   },
 
   list: {

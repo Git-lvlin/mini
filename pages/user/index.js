@@ -3,7 +3,7 @@ import store from '../../store/index'
 import router from '../../utils/router'
 import { orderList, otherSetting, USER_LEVEL } from '../../constants/user'
 import userApi from '../../apis/user'
-import { getStorageUserInfo, setStorageUserInfo } from '../../utils/tools'
+import { getStorageUserInfo, setStorageUserInfo, showToast } from '../../utils/tools'
 
 create.Page(store, {
   use: [
@@ -135,6 +135,15 @@ create.Page(store, {
     router.push({
       name: "login"
     })
+  },
+
+  // 点击跳转个人信息
+  onToInfo() {
+    const userInfo = getStorageUserInfo();
+    if(!userInfo) return;
+    router.push({
+      name: "information",
+    });
   },
 
   // 点击其他功能模块

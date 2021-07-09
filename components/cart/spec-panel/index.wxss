@@ -127,3 +127,8 @@
   background-image: linear-gradient(144deg, #ED8065 0%, #D7291D 100%);
   border-radius: 36px;
 }
+
+.def_btn {
+  color: #333;
+  background: #f0f0f0;
+}

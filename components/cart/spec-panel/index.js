@@ -23,19 +23,29 @@ create.Component(store, {
       let quantity = 0;
       const {
         specType,
+        good,
       } = data;
       if(specType === "add") {
         const cartList = store.data.cartList;
-        console.log("🚀  ~ cartList", cartList)
-        // const goodId = options.spuId;
+        // console.log("🚀  ~ cartList", cartList)
+        // const currentCart = [];
         // cartList.forEach(item => {
-        //   if(item.spuId === goodId) {
-        //     quantity = item.quantity
+        //   if(item.spuId == good.id) {
+        //     currentCart.push({
+        //       skuId: item.skuId,
+        //       quantity: item.quantity,
+        //       stockNum: item.stockNum,
+        //       buyMinNum: item.buyMinNum,
+        //       buyMaxNum: item.buyMaxNum,
+        //     })
         //   }
-        // })
+        // });
+        // scope.setData({
+        //   currentCart,
+        // });
       }
       return quantity
-    }
+    },
   },
   
   properties: {
@@ -65,6 +75,8 @@ create.Component(store, {
     stock: 1,
     skuList: [],
     checkSpec: [],
+    curSku: {},
+    // currentCart: [],
   },
 
   methods: {
@@ -84,6 +96,7 @@ create.Component(store, {
       goodApi.getCheckSku(postData).then(res => {
         const curSku = res.curSku;
         curSku.salePrice = util.divide(curSku.salePrice, 100);
+        curSku.stockOver = curSku.stockNum <= 0 ? true : false;
         if(fristLoad) {
           res.specList.forEach((item, index) => {
             item.specValue.forEach(child => {
@@ -98,6 +111,7 @@ create.Component(store, {
           skuData: res,
           skuList: res.specList,
           curSku,
+          stock: curSku.buyMinNum,
           checkSpec,
         })
       })
@@ -136,14 +150,14 @@ create.Component(store, {
 
     onReduceNum() {
       const {
-        good,
+        curSku,
         stock,
         quantity,
         specType
       } = this.data;
       let {
         buyMinNum,
-      } = good;
+      } = curSku;
       buyMinNum = buyMinNum < 1 ? 1 : buyMinNum;
       let totalNum = specType === "buy" ? stock : stock + quantity;
       if(totalNum > buyMinNum) {
@@ -157,14 +171,18 @@ create.Component(store, {
 
     onAddNum() {
       const {
-        good,
+        curSku,
         stock,
         quantity,
         specType,
       } = this.data;
       const {
         buyMaxNum,
-      } = good;
+      } = curSku;
+      if(stock >= buyMaxNum) {
+        showToast({ title: "没有足够库存啦" });
+        return ;
+      }
       let totalNum = specType === "buy" ? stock : stock + quantity;
       if(totalNum < buyMaxNum) {
         this.setData({

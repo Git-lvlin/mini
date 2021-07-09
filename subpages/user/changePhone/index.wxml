@@ -1,0 +1,27 @@
+
+<view class="info_cell">
+  <form-item
+    name="新手机号"
+    inputType="number"
+    label="phone"
+    maxLength="11"
+    roundTop
+    placeholder="请输入新手机号码"
+    bind:input="handleInput"
+  />
+  <form-item
+    name="验证码"
+    inputType="number"
+    label="code"
+    roundBottom
+    slotRight
+    placeholder="请输入验证码"
+    bind:input="handleInput"
+  >
+    <view class="code_btn {{openTimeType ? 'code_btn_active' : ''}}" catchtap="onCode">
+      {{openTimeType ? '重新获取' + countTime + 's': '获取验证码'}}
+    </view>
+  </form-item>
+
+  <view class="save_btn" bindtap="onSave">保存</view>
+</view>

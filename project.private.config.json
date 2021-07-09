@@ -51,7 +51,7 @@
         {
           "name": "商详",
           "pathName": "subpages/cart/detail/index",
-          "query": "spuId=2365&skuId=3018&activityId=0&objectId=&orderType=2",
+          "query": "spuId=2373&skuId=3054&activityId=0&objectId=&orderType=2",
           "scene": null
         },
         {
@@ -82,12 +82,6 @@
           "name": "pages/otherpay/index",
           "pathName": "pages/otherpay/index",
           "query": "id=1410138285051949057&payType=7&scene=1",
-          "scene": null
-        },
-        {
-          "name": "pages/locationSearch/index",
-          "pathName": "pages/locationSearch/index",
-          "query": "latitude=22.542145&longitude=114.061675",
           "scene": null
         }
       ]

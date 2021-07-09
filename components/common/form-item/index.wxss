@@ -34,7 +34,7 @@
 }
 
 .cell_input {
-  width: 100%;
+  flex: 1;
   height: 40rpx;
   color: #333;
   font-size: 28rpx;

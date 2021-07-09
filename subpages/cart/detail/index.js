@@ -2,7 +2,7 @@ import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
 import { IMG_CDN } from '../../../constants/common'
-import { showModal, getStorageUserInfo } from '../../../utils/tools'
+import { showModal, getStorageUserInfo, showToast } from '../../../utils/tools'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
 
@@ -251,9 +251,8 @@ create.Page(store, {
   addCart() {
     let {
       good,
-      quantity,
+      quantity = 0,
     } = this.data;
-    console.log("🚀 ~ file: index.js ~ line 255 ~ addCart ~ good", good);
     if(good.isMultiSpec == 1) {
       this.setData({
         specType: "add",
@@ -261,9 +260,17 @@ create.Page(store, {
       // 打开选择规格弹窗
       store.onChangeSpecState(true);
     } else {
+      if(quantity >= good.defaultSkuBuyMinNum) {
+        showToast({ title: `最多购买${good.defaultSkuBuyMaxNum}件`});
+        return;
+      }
+      if(quantity < good.defaultSkuBuyMinNum) {
+        quantity = good.defaultSkuBuyMinNum;
+        showToast({ title: `至少购买${quantity}件`});
+      }
       let data = {
         skuId: good.defaultSkuId,
-        quantity: 1,
+        quantity,
         orderType: good.orderType,
         goodsFromType: good.goodsFromType,
       }
@@ -277,15 +284,17 @@ create.Page(store, {
   reduceCart() {
     let {
       good,
-      quantity,
+      quantity = 0,
     } = this.data;
-    if(quantity === 1) {
+    const minBuy = good.defaultSkuBuyMinNum > 1 ? good.defaultSkuBuyMinNum : 1;
+    if(quantity == minBuy) {
+      quantity = -good.defaultSkuBuyMinNum;
       showModal({
         content: "您确定要清除该商品？",
         ok: () => {
           this.updateCart({
             skuId: good.defaultSkuId,
-            quantity: -1,
+            quantity,
           })
         }
       });
@@ -306,7 +315,7 @@ create.Page(store, {
 
   // 更新购物车数量
   updateCart(data, showMsg = false) {
-    this.store.addCart(data, showMsg)
+    this.store.addCart(data, showMsg);
   },
 
   // 获取比价信息

@@ -7,7 +7,7 @@
   <view class="content">
     <view class="nav_height" style="height: {{$.systemInfo.statusHeight + $.systemInfo.navBarHeight}}rpx" />
 
-    <view class="user_head">
+    <view class="user_head" bindtap="onToInfo">
       <van-image
         width="120rpx"
         height="120rpx"
@@ -16,7 +16,7 @@
         custom-class="user_avatar"
         src="{{userInfo ? userInfo.icon : tools.getImgUrl('miniprogram/common/default_avatar.png') }}"
       />
-      <view class="head_text" wx:if="{{!userInfo}}" bindtap="onToLogin">登录/注册</view>
+      <view class="head_text" wx:if="{{!userInfo}}" catchtap="onToLogin">登录/注册</view>
       <view class="user_info" wx:else >
         <view class="head_text">{{userInfo.nickName}}</view>
         <view class="user_level" >
@@ -24,6 +24,7 @@
           <view class="level_name">{{userInfo.levelText || "普通会员"}}</view>
         </view>
       </view>
+      <view class="flex_fix right_arrow user_head_right" />
     </view>
 
     <view class="flex_center user_data">

@@ -1,5 +1,8 @@
 
 Component({
+  options: {
+    addGlobalClass: true,
+  },
 
   properties: {
     name: {
@@ -43,6 +46,10 @@ Component({
       type: String,
       value: ""
     },
+    slotRight: {
+      type: Boolean,
+      value: false
+    }
   },
   data: {
 

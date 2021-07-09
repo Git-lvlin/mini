@@ -7,6 +7,7 @@ const url = {
   resource: "/cms/open/json/selByResourceKey",
   refreshToken: "/member/open/refreshToken",
   inviteCode: "/public/option/invationcode/check/internaltest/app",
+  ossConfig: "/public/open/uploadConfig/findByBizCode",
 }
 
 let isShowLoginMobal = false;
@@ -132,5 +133,10 @@ export default {
   // 检查是否填写邀请码
   getInviteCode(params, option) {
     return Request.post(url.inviteCode, params, option);
+  },
+
+  // 获取oss上传配置
+  getOssConfig(params, option) {
+    return Request.get(url.ossConfig, params, option);
   },
 }

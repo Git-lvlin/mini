@@ -5,7 +5,7 @@ import md5 from './utils/md5'
 import router from './utils/router'
 
 // 环境变量 dev uat fat pro
-// ***【 图片CDN域名要改 2 处 】***
+// ***【 环境如有变动 common.wxs 需更换域名 】***
 const SYS_ENV = 'dev';
 // 是否显示选择环境按钮
 const CHANGE_ENV = true;

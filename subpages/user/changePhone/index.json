@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "更改手机号码",
+  "usingComponents": {
+    "form-item": "/components/common/form-item/index"
+  }
+}

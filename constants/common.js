@@ -1,10 +1,18 @@
 // 定义常用常量
 
-// oss cdn 域名        ***【重要！重要！重要！ common.wxs 也要改】***
-export const IMG_CDN = "https://dev-yeahgo-oss.yeahgo.com/"
-// export const IMG_CDN = "https://uat-yeahgo-oss.yeahgo.com/"
-// export const IMG_CDN = "https://fat-yeahgo-oss.yeahgo.com/"
-// export const IMG_CDN = "https://pro-yeahgo-oss.yeahgo.com/"
+const ENV = wx.getStorageSync("SYS_ENV");
+
+// oss 上传域名
+// ***【 如有变动 common.wxs 需更换域名 】***
+export const ossHost = {
+  dev: "https://dev-yeahgo-oss.yeahgo.com/",
+  uat: "https://uat-yeahgo-oss.yeahgo.com/",
+  fat: "https://fat-yeahgo-oss.yeahgo.com/",
+  pro: "https://pro-yeahgo-oss.yeahgo.com/",
+};
+
+// 图片cdn
+export const IMG_CDN = ossHost[ENV];
 
 
 // 字符类型资源位id

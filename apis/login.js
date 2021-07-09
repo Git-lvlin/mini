@@ -5,6 +5,7 @@ const url = {
   code: "/member/open/getAuthCode",
   checkBind: "/member/open/checkNumPhoneBlind",
   bindPhone: "/member/open/wxBlind",
+  changeBindPhone: "/member/auth/wxBlindAuth",
   getPhone: "/member/open/memberInfo/minProgramDecrypt",
 }
 
@@ -15,7 +16,7 @@ export default {
   },
 
   // 检查手机是否已被绑定
-    checkBindPhone(params, option) {
+  checkBindPhone(params, option) {
     return Request.post(url.checkBind, params, option);
   },
 
@@ -29,7 +30,12 @@ export default {
     return Request.post(url.bindPhone, params, option);
   },
 
-  // 解密手机号
+  // 解绑或更换绑定手机号
+  changeBindPhone(params, option) {
+    return Request.post(url.bindPhone, params, option);
+  },
+
+  // 解密微信获取的手机号
   getPhoneNumber(params, option) {
     return Request.post(url.getPhone, params, option);
   },

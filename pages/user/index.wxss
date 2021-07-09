@@ -44,6 +44,10 @@ page{
   line-height: 66rpx;
 }
 
+.user_info {
+  flex: 1;
+}
+
 .user_level {
   display: inline-flex;
   align-items: center;
@@ -66,6 +70,12 @@ page{
   color: #ffffff;
   font-size: 24rpx;
   line-height: 32rpx;
+}
+
+.user_head_right {
+  width: 18rpx;
+  height: 18rpx;
+  margin-right: 8rpx;
 }
 
 /* 会员数据 */
