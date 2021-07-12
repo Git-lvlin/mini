@@ -111,9 +111,9 @@
   </view>
   
   <!-- 拼单列表 -->
-  <block wx:if="{{isActivityGood == 3 || isActivityGood == 4}}">
+  <block wx:if="{{(isActivityGood == 3 || isActivityGood == 4) && !!personalList.length}}">
     <view class="space_20" />
-    <view class="buy_together" wx:if="{{personalList.length}}">
+    <view class="buy_together">
       <view class="together_head">
         <view class="together_title">{{personalList.length}}人正在拼单，立即参与</view>
         <view class="together_more" bindtap="onOpenTeam">查看全部<image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" /></view>
@@ -170,8 +170,8 @@
 
   <!-- 拼团商品 底部bar -->
   <view class="bar_over_height" />
-  <view class="together_bar" wx:if="{{personalList.length}}">
-    <view class="flex_middle together_recommend" >
+  <view class="together_bar" wx:if="{{isActivityGood == 3}}">
+    <view class="flex_middle together_recommend" wx:if="{{personalList.length}}" >
       <view class="user_avatar">
         <van-image
           width="48rpx"

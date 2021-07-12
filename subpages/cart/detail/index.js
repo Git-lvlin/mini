@@ -1,8 +1,9 @@
 import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
+import commonApi from '../../../apis/common'
 import { IMG_CDN } from '../../../constants/common'
-import { showModal, getStorageUserInfo, showToast } from '../../../utils/tools'
+import { showModal, getStorageUserInfo, showToast, objToParamStr } from '../../../utils/tools'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
 
@@ -58,8 +59,8 @@ create.Page(store, {
   onLoad(options) {
     let { systemInfo } = this.store.data;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
-    // if (!options.spuId && !!options.id) options.spuId = options.id;
     this.goodParams = options;
+    console.log("🚀 ~ file: index.js ~ line 63 ~ onLoad ~ this.goodParams", this.goodParams)
     let isActivityGood = 1;
     if(!!options.orderType) isActivityGood = options.orderType;
     this.setData({
@@ -74,20 +75,54 @@ create.Page(store, {
       // 拼成用户列表
       this.getTogetherUser();
     }
-    this.getDetailRatio();
   },
 
   onShow() {
     let userInfo = getStorageUserInfo();
-    let userOtherInfo = wx.getStorageSync("USER_OTHER_INFO") || "";
+    // let userOtherInfo = wx.getStorageSync("USER_OTHER_INFO") || "";
+    if(!!userInfo) {
+      this.getDetailRatio();
+    }
     this.setData({
       userInfo,
-      userOtherInfo,
+      // userOtherInfo,
     })
   },
 
-  onShareAppMessage: function () {
-
+  // 转发
+  onShareAppMessage() {
+    const {
+      good,
+    } = this.data;
+    const {
+      orderType,
+      spuId,
+    } = this.goodParams;
+    let promise = null;
+    const pathParam = objToParamStr(this.goodParams);
+    const shareInfo = {
+      title: good.goodsName,
+      path: "/subpages/cart/detail/index",
+      imageUrl: good.imageList[0],
+    }
+    const userInfo = getStorageUserInfo();
+    if(userInfo) {
+      let params = {
+        shareType: 1,
+        contentType: 1,
+        shareObjectNo: spuId,
+        paramId: 1,
+        shareParams: this.goodParams,
+      };
+      if(orderType == 3 || orderType == 4) {
+        params.paramId = 3;
+        shareInfo.path = "/subpages/cart/teamDetail/index";
+      }
+      promise = commonApi.getShareInfo(params);
+      shareInfo.promise = promise;
+    }
+    shareInfo.path = `${shareInfo.path}${pathParam}`;
+    return shareInfo;
   },
 
   // 商品详情图片
@@ -131,7 +166,7 @@ create.Page(store, {
       params.skuId = skuId;
       goodApi.getPersonalDetail(params).then(res => {
         const good = res.curGoods;
-        const personalList = res.personalList.records;
+        const personalList = res.personalList;
         const detailImg = good.images;
         good.activityPrice = util.divide(good.activityPrice, 100);
         good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
@@ -399,7 +434,7 @@ create.Page(store, {
           skuId: skuId ? skuId : good.defaultSkuId,
           activityId: good.activityId,
           objectId: good.objectId,
-          orderType: good.orderType,
+          orderType,
           skuNum,
           goodsFromType: good.goodsFromType,
         }]
@@ -427,15 +462,15 @@ create.Page(store, {
     console.log("data", data);
     console.log("event", event);
     wx.setStorageSync("CREATE_INTENSIVE", data);
-    router.push({
-      name: "createOrder",
-      data: {
-        orderType,
-        isActivityCome,
-        activityId: !!activityId ? activityId : "",
-        objectId: !!objectId ? objectId : "",
-      }
-    });
+    // router.push({
+    //   name: "createOrder",
+    //   data: {
+    //     orderType,
+    //     isActivityCome,
+    //     activityId: !!activityId ? activityId : "",
+    //     objectId: !!objectId ? objectId : "",
+    //   }
+    // });
   },
 
   // 监听拼团剩余时间

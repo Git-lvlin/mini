@@ -1,6 +1,7 @@
 import homeApi from '../../../apis/home';
 import router from '../../../utils/router';
 import { mapNum } from '../../../utils/homeFloor';
+import { showToast } from '../../../utils/tools';
 
 
 Component({
@@ -78,6 +79,10 @@ Component({
         spuId,
         wsId,
       } = currentTarget.dataset.data;
+      if(orderType == 5) {
+        showToast({ title: "您还不是店主，暂时不能下单!" });
+        return;
+      }
       const data = {
         activityId,
         objectId,

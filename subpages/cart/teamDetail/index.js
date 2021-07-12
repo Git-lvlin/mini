@@ -40,24 +40,32 @@ Page({
 
   // 分享
   onShareAppMessage() {
-    const promise = commonApi.getGoodShareInfo({
-      shareType: 1,
-      contentType: 1,
-      shareObjectNo: this.goodParam.spuId,
-      paramId: 3,
-      shareParams: this.goodParam,
-    });
     const {
-      groupInfo,
+      good,
     } = this.data;
-    const param = objToParamStr(this.goodParam);
-    const path = `/subpages/cart/teamDetail/index?${param}`;
-    return {
-      title: groupInfo.curGoods.goodsName,
-      imageUrl: groupInfo.curGoods.imageUrlList[0],
-      path,
-      promise,
+    const {
+      spuId,
+    } = this.goodParams;
+    let promise = null;
+    const pathParam = objToParamStr(this.goodParams);
+    const shareInfo = {
+      title: good.goodsName,
+      path: `/subpages/cart/teamDetail/index?${pathParam}`,
+      imageUrl: good.imageList[0],
     }
+    const userInfo = getStorageUserInfo();
+    if(userInfo) {
+      let params = {
+        shareType: 1,
+        contentType: 1,
+        shareObjectNo: spuId,
+        paramId: 3,
+        shareParams: this.goodParams,
+      };
+      promise = commonApi.getShareInfo(params);
+      shareInfo.promise = promise;
+    }
+    return shareInfo;
   },
 
   // 获取单约详情
@@ -122,25 +130,32 @@ Page({
       groupInfo,
     } = this.data;
     const {
-      activityId,
       spuId,
       skuId,
       groupId,
       curGoods,
     } = groupInfo;
+    const {
+      activityId,
+      orderType,
+    } = this.goodParam;
+    const objectId = !!gId ? gId : groupId;
     let data = {
-      orderType: 3,
+      orderType,
       storeGoodsInfos: [{
         storeNo: curGoods.storeNo,
         goodsInfos: [{
           spuId,
           skuId,
           skuNum: 1,
+          orderType,
+          activityId,
+          objectId,
         }]
       }]
     };
     if(!!activityId && activityId != undefined) data.activityId = activityId;
-    data.objectId = !!gId ? gId : groupId;
+    data.objectId = objectId;
     data.groupId = !!gId ? gId : groupId;
     wx.setStorageSync("CREATE_INTENSIVE", data);
     router.push({

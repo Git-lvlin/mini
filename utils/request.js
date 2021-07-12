@@ -118,7 +118,10 @@ const Reqeust = (params) => {
         }
         wx.hideLoading();
         reject(error);
-      }
+      },
+      complete(res) {
+        // console.log("request ~ ", params.url, res.data);
+      },
     })
   })
 }

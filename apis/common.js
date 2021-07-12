@@ -118,7 +118,7 @@ export default {
   },
 
   // 获取商品分享参数
-  getGoodShareInfo(params) {
+  getShareInfo(params) {
     return new Promise(resolve => {
       homeApi.getShareInfo(params).then(res => {
         resolve({
