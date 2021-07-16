@@ -41,11 +41,6 @@ component_1.VantComponent({
       type: String,
       observer: 'updateChildren',
     },
-    reverse: {
-      type: Boolean,
-      value: false,
-      observer: 'updateChildren',
-    },
   },
   methods: {
     updateChildren: function () {

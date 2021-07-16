@@ -1,6 +1,7 @@
 import Request from '../utils/request'
 import { showModal, setLoginRouter, getStorageUserInfo } from '../utils/tools'
 import router from '../utils/router'
+import store from '../store/index'
 import homeApi from './home'
 
 const url = {
@@ -8,9 +9,10 @@ const url = {
   refreshToken: "/member/open/refreshToken",
   inviteCode: "/public/option/invationcode/check/internaltest/app",
   ossConfig: "/public/open/uploadConfig/findByBizCode",
+  shareParam: "/share/option/shareParam/getScene",
 }
 
-let isShowLoginMobal = false;
+let isShowLoginMobal = store.data.showLoginMobel;
 let refreshingToken = false;
 
 const showLogin = (back) => {
@@ -72,7 +74,7 @@ export default {
     if(!refreshToken) return;
     if(!userInfo && !isShowLoginMobal) {
       showLogin();
-      isShowLoginMobal = true;
+      store.data.showLoginMobel = true;
       return ;
     }
     postData = {
@@ -82,19 +84,22 @@ export default {
     return Request.post(url.refreshToken, postData).then(res => {
       wx.setStorageSync("ACCESS_TOKEN", res.accessToken);
       wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
-      isShowLoginMobal = false;
+      store.data.showLoginMobel = false;
       refreshingToken = false;
       return res;
     }).catch(err => {
-      if(err.code == 405 || err.code == 200109 || err.code == 10018) {
+      // if(err.code == 405 || err.code == 200109 || err.code == 10018 || err.code == 200104) {
         wx.removeStorageSync("ACCESS_TOKEN");
         wx.removeStorageSync("REFRESH_TOKEN");
         wx.removeStorageSync("USER_INFO");
         wx.removeStorageSync("USER_OTHER_INFO");
-        !isShowLoginMobal && showLogin(true);
-        isShowLoginMobal = true;
-      }
+        if(!isShowLoginMobal) {
+          showLogin(true);
+          store.data.showLoginMobel = true;
+        }
+      // }
       refreshingToken = false;
+      return err;
     })
   },
 
@@ -138,5 +143,10 @@ export default {
   // 获取oss上传配置
   getOssConfig(params, option) {
     return Request.get(url.ossConfig, params, option);
+  },
+
+  // 解析分享参数
+  getShareParam(params, option) {
+    return Request.post(url.shareParam, params, option);
   },
 }

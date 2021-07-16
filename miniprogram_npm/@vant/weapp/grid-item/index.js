@@ -10,10 +10,6 @@ component_1.VantComponent({
   props: {
     icon: String,
     iconColor: String,
-    iconPrefix: {
-      type: String,
-      value: 'van-icon',
-    },
     dot: Boolean,
     info: null,
     badge: null,
@@ -41,7 +37,6 @@ component_1.VantComponent({
         clickable = data.clickable,
         center = data.center,
         direction = data.direction,
-        reverse = data.reverse,
         iconSize = data.iconSize;
       this.setData({
         center: center,
@@ -50,7 +45,6 @@ component_1.VantComponent({
         gutter: gutter,
         clickable: clickable,
         direction: direction,
-        reverse: reverse,
         iconSize: iconSize,
         index: children.indexOf(this),
         columnNum: columnNum,

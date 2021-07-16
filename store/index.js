@@ -10,12 +10,12 @@ const setDefUserInfo = (userInfo) => {
 const store = {
   data: {
     systemInfo: null,
-    motto: 'Hello World',
     userInfo: '',
     defUserInfo: '',
     userOtherInfo: '',
     hasUserInfo: false,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    showLoginMobel: false,
     logs: []
   },
   setUserInfo,

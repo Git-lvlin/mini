@@ -7,8 +7,7 @@ import { getStorageUserInfo, setStorageUserInfo, showToast } from '../../utils/t
 
 create.Page(store, {
   use: [
-    'systemInfo',
-    'motto'
+    'systemInfo'
   ],
 
   data: {

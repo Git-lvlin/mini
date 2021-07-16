@@ -32,7 +32,10 @@ component_1.VantComponent({
         }
       },
     },
-    barHeight: null,
+    barHeight: {
+      type: null,
+      value: 2,
+    },
   },
   created: function () {
     this.updateValue(this.data.value);

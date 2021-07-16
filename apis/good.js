@@ -26,6 +26,7 @@ const url = {
   togetherUser: "/activity/option/group/personal/memberDynamic",
   
   detailRatio: "/contestprice/auth/contestprice/GetSimpleGoodsInfo",
+  priceDetail: "/contestprice/open/contestprice/GetContestDetail",
 
   searchHistory: "/search/auth/UserSearchHistory/getUserKeyword",
   clearSearchHistory: "/search/auth/userSearchHistory/clearUserKeyword",
@@ -131,6 +132,10 @@ export default {
   // 获取详情比价信息
   getDetailRatio(params, option) {
     return Request.get(url.detailRatio, params, option);
+  },
+  // 获取详情比价信息
+  getPriceDetail(params, option) {
+    return Request.get(url.priceDetail, params, option);
   },
 
   // 获取搜索历史

@@ -17,10 +17,6 @@ component_1.VantComponent({
       type: Boolean,
       observer: 'updateChildren',
     },
-    direction: {
-      type: String,
-      value: 'vertical',
-    },
   },
   methods: {
     updateChildren: function () {
@@ -32,12 +28,10 @@ component_1.VantComponent({
     updateChild: function (child) {
       var _a = this.data,
         value = _a.value,
-        disabled = _a.disabled,
-        direction = _a.direction;
+        disabled = _a.disabled;
       child.setData({
         value: value.indexOf(child.data.name) !== -1,
         parentDisabled: disabled,
-        direction: direction,
       });
     },
   },

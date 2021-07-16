@@ -295,13 +295,15 @@ create.Page(store, {
       // 打开选择规格弹窗
       store.onChangeSpecState(true);
     } else {
-      if(quantity >= good.defaultSkuBuyMinNum) {
+      if(quantity >= good.defaultSkuBuyMaxNum) {
         showToast({ title: `最多购买${good.defaultSkuBuyMaxNum}件`});
         return;
       }
       if(quantity < good.defaultSkuBuyMinNum) {
         quantity = good.defaultSkuBuyMinNum;
-        showToast({ title: `至少购买${quantity}件`});
+        // showToast({ title: `至少购买${quantity}件`});
+      } else {
+        quantity = 1
       }
       let data = {
         skuId: good.defaultSkuId,
@@ -462,15 +464,15 @@ create.Page(store, {
     console.log("data", data);
     console.log("event", event);
     wx.setStorageSync("CREATE_INTENSIVE", data);
-    // router.push({
-    //   name: "createOrder",
-    //   data: {
-    //     orderType,
-    //     isActivityCome,
-    //     activityId: !!activityId ? activityId : "",
-    //     objectId: !!objectId ? objectId : "",
-    //   }
-    // });
+    router.push({
+      name: "createOrder",
+      data: {
+        orderType,
+        isActivityCome,
+        activityId: !!activityId ? activityId : "",
+        objectId: !!objectId ? objectId : "",
+      }
+    });
   },
 
   // 监听拼团剩余时间

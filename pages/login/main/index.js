@@ -1,10 +1,11 @@
 import create from '../../../utils/create'
 import store from '../../../store/index'
 import router from '../../../utils/router'
-import { getUserInfo, handleErrorCode, setStorageUserInfo } from '../../../utils/tools'
+import { getUserInfo, handleErrorCode, strToParamObj } from '../../../utils/tools'
 import { SOURCE_TYPE } from '../../../constants/index'
 import loginApis from '../../../apis/login'
 import userApis from '../../../apis/user'
+import commonApis from '../../../apis/common'
 import tools from '../utils/login'
 
 const envList = [
@@ -30,12 +31,24 @@ const envList = [
   },
 ];
 
+// 进入小程序场景值
+const codeScene = {
+  // 扫描二维码
+  1011: true,
+  // 长按图片识别二维码
+  1012: true,
+  // 扫描手机相册中选取的二维码
+  1013: true,
+  // 扫描小程序码
+  1047: true,
+  // 长按图片识别小程序码
+  1048: true,
+  // 扫描手机相册中选取的小程序码
+  1049: true,
+}
+
 const app = getApp();
 create.Page(store, {
-  use: [
-    'motto'
-  ],
-
   data: {
     showTreaty: false,
     canUseProfile: false,
@@ -47,7 +60,11 @@ create.Page(store, {
 
   onLoad(options) {
     const sysEnv = wx.getStorageSync("SYS_ENV");
-    if(sysEnv && app.globalData.changeEnv) {
+    const {
+      changeEnv,
+      appScene,
+    } = app.globalData;
+    if(sysEnv && changeEnv) {
       this.setData({
         currentEnv: sysEnv,
       })
@@ -58,6 +75,15 @@ create.Page(store, {
       })
     } else {
       this.getUserSetting();
+    }
+    // 获取进入小程序场景值
+    if(codeScene[appScene]) {
+      // options.scene = "cf2a02ac71ca987860af70c2171d1512";
+      if(!options.scene) {
+        console.log("未获取到解析参数", options);
+      } else {
+        this.getShareParam(options);
+      }
     }
     
     router.loginTo();
@@ -88,6 +114,19 @@ create.Page(store, {
       }
     }
     this.getCodeLogin(userInfo);
+  },
+
+  // 获取分享配置
+  getShareParam(data) {
+    commonApis.getShareParam({
+      scene: data.scene,
+    }).then(res => {
+      console.log(res)
+      const param = strToParamObj(res);
+      if(!!param.inviteCode) {
+        wx.setStorageSync("INVITE_INFO", param);
+      }
+    })
   },
   
   // 进入页面获取用户授权情况 - 旧api登录

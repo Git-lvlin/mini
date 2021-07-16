@@ -183,6 +183,7 @@ create.Page(store, {
       goodList = wx.getStorageSync("GOOD_LIST");
       postData = {
         orderType: 1,
+        objectId: 0,
         deliveryInfo,
         storeGoodsInfos: goodList
       };
@@ -446,6 +447,9 @@ create.Page(store, {
       };
       item.goodsInfos.forEach(child => {
         storeGood.goodsInfos.push({
+          objectId: child.objectId,
+          activityId: child.activityId,
+          orderType: child.orderType,
           spuId: child.spuId,
           skuId: child.skuId,
           skuNum: child.skuNum,

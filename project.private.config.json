@@ -83,6 +83,18 @@
           "pathName": "pages/otherpay/index",
           "query": "id=1410138285051949057&payType=7&scene=1",
           "scene": null
+        },
+        {
+          "name": "比价详情",
+          "pathName": "subpages/cart/priceDetail/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/test/index",
+          "pathName": "pages/test/index",
+          "query": "",
+          "scene": null
         }
       ]
     }

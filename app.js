@@ -12,12 +12,12 @@ const CHANGE_ENV = true;
 
 App({
   onLaunch() {
+    // this.globalData.appScene = scene;
     const userInfo = getStorageUserInfo();
     store.data.userInfo = userInfo;
     store.data.defUserInfo = userInfo;
     // store.data.userOtherInfo = wx.getStorageSync("USER_OTHER_INFO");
     setTimeout(() => {
-      store.data.motto = "改变了12111111"
       console.log(store.data)
     }, 2000)
     
@@ -41,7 +41,15 @@ App({
     // }) ;
   },
 
+  onShow(options) {
+    const {
+      scene,
+    } = options;
+    this.globalData.appScene = scene;
+  },
+
   globalData: {
+    appScene: 1001,
     userInfo: null,
     changeEnv: CHANGE_ENV,
   },

@@ -1,6 +1,7 @@
-import { getBaseApiUrl, handleErrorCode, showModal, setLoginRouter } from './tools'
+import { getBaseApiUrl, handleErrorCode, showModal, setLoginRouter, clearLoginInfo } from './tools'
 import { HTTP_TIMEOUT, VERSION } from '../constants/index'
-import commonApi from '../apis/common';
+import commonApi from '../apis/common'
+import store from '../store/index'
 import router from '../utils/router'
 
 let isRefreshing = false;
@@ -24,6 +25,7 @@ const REFRESH_TOKEN_INVALID = 10015;
 const Reqeust = (params) => {
   const baseUrl = getBaseApiUrl();
   const token = wx.getStorageSync("ACCESS_TOKEN");
+  const showLoginMobel = store.data.showLoginMobel;
   const header = {
     'Content-Type': !params.contentType ? 'application/json' : params.contentType,
     v: VERSION,
@@ -49,7 +51,7 @@ const Reqeust = (params) => {
       header,
       timeout: HTTP_TIMEOUT,
       success: async function(res) {
-        wx.hideLoading();
+        opions.showLoading && wx.hideLoading();
         // 判断是否返回数据包
         const data = !!params.dataPackage ? res.data : res.data.data;
         // console.log(params.url, res.data)
@@ -57,21 +59,28 @@ const Reqeust = (params) => {
         if (res.statusCode === 200 && res.data.code === 0 && res.data.success) {
           // resolve(data);
           resolve(data)
-          wx.hideLoading();
+          opions.showLoading && wx.hideLoading();
         } else {
           if (res.data.code == REFRESH_TOKEN_INVALID) {
             // refreshToken过期退出登录
-            showModal({
-              content: "您的登录已过期，请登录",
-              confirmText: "去登录",
-              ok() {
-                setLoginRouter();
-                router.push({
-                  name: "login"
-                })
-              }
-            })
+            if(!showLoginMobel) {
+              showModal({
+                content: "您的登录已过期，请登录",
+                confirmText: "去登录",
+                ok() {
+                  store.data.showLoginMobel = false;
+                  setLoginRouter();
+                  router.push({
+                    name: "login"
+                  })
+                },
+                cancel() {
+                  store.data.showLoginMobel = false;
+                }
+              })
+            }
             reject(res.data);
+            clearLoginInfo();
             return null;
           }
           // token 过期刷新token
@@ -107,7 +116,6 @@ const Reqeust = (params) => {
         }
       },
       fail(error) {
-        console.log(33333)
         if(!params.notErrorMsg) {
           handleErrorCode({
             params,
@@ -116,7 +124,7 @@ const Reqeust = (params) => {
             mustLogin: params.mustLogin,
           });
         }
-        wx.hideLoading();
+        opions.showLoading && wx.hideLoading();
         reject(error);
       },
       complete(res) {

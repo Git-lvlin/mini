@@ -7,10 +7,6 @@ import userApis from '../../../apis/user'
 import tools from '../utils/login'
 
 create.Page(store, {
-  use: [
-    'motto'
-  ],
-
   data: {
     phoneNumber: "",
     code: "",
@@ -104,7 +100,6 @@ create.Page(store, {
       code,
     } = this.data;
     let userInfo = this.store.data.userInfo;
-    let loginInfo = wx.getStorageSync("LOGIN_INFO");
     if(!phoneNumber) {
       wx.showToast({
         title: "请获取/输入手机号码",
@@ -133,18 +128,27 @@ create.Page(store, {
       })
       return
     }
-    loginApis.bindPhone({
+    let loginInfo = wx.getStorageSync("LOGIN_INFO");
+    let inviteInfo = wx.getStorageSync("INVITE_INFO");
+    const data = {
       phoneNumber,
       sourceType: 4,
       wxUId: loginInfo.wxUId,
       icon: userInfo.avatarUrl,
       nickName: userInfo.nickName,
       gender: userInfo.gender,
-      authCode: code,
-    }).then(res => {
+      authCode: code
+    };
+    if(inviteInfo && inviteInfo.inviteCode) {
+      data.inviteCode = inviteInfo.inviteCode;
+    }
+    loginApis.bindPhone(data).then(res => {
       const data = res;
       store.data.userInfo = data.memberInfo;
       store.data.defUserInfo = data.memberInfo;
+      wx.removeStorage({
+        key: 'INVITE_INFO',
+      });
       tools.setUserInfo(data);
       this.getUserInfo(data.memberInfo);
     });

@@ -12,7 +12,8 @@
     "pages/otherpay/index",
     "pages/webview/index",
     "pages/invitation/index",
-    "pages/locationSearch/index"
+    "pages/locationSearch/index",
+    "pages/test/index"
   ],
   "subpackages": [
     {
@@ -45,7 +46,8 @@
         "editAddress/index",
         "changeShipper/index",
         "teamDetail/index",
-        "store/index"
+        "store/index",
+        "priceDetail/index"
       ]
     },
     {
