@@ -5,13 +5,14 @@ let lineChart = null;
 
 Page({
   linechartsComponnet: null,
+	id: "",
 
   data: {
 		activeNames: ['1'],
   },
 
   onLoad(options) {
-  	console.log("🚀 ~ file: index.js ~ line 14 ~ onLoad ~ options", options)
+		this.id = options.id;
 		this.lineLoad();
   },
 
@@ -21,7 +22,7 @@ Page({
 
 	// 获取比价详情
 	getPriceDetail() {
-
+		// if() {}
 	},
 
 	lineLoad() {
