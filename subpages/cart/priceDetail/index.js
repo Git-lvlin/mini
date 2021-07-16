@@ -1,31 +1,85 @@
 import goodApi from '../../../apis/good';
+import util from '../../../utils/util';
 import wxCharts from '../../../utils/wxcharts';
 
 let lineChart = null;
 
 Page({
-  linechartsComponnet: null,
 	id: "",
+	goodPage: {
+		size: 10,
+		page: 1,
+		hasNext: true,
+		next: 1,
+	},
 
   data: {
-		activeNames: ['1'],
+		activeNames: [],
+		goodInfo: {},
+		showOtherPrice: false,
+		inputPrice: "",
   },
 
   onLoad(options) {
 		this.id = options.id;
-		this.lineLoad();
-  },
-
-  onShareAppMessage() {
-
+		this.getPriceDetail();
+		this.getPriceGoodList();
   },
 
 	// 获取比价详情
 	getPriceDetail() {
-		// if() {}
+		if(!this.id) return;
+		goodApi.getPriceDetail({
+			id: this.id,
+		}).then(res => {
+			const goodInfo = res;
+			const lineData = {
+				categories: [],
+				data: [],
+			};
+			goodInfo.averagePrice = util.divide(goodInfo.averagePrice, 100);
+			goodInfo.goodsMarketPrice = util.divide(goodInfo.goodsMarketPrice, 100);
+			goodInfo.goodsPrice = util.divide(goodInfo.goodsPrice, 100);
+			goodInfo.jdPrice = util.divide(goodInfo.jdPrice, 100);
+			goodInfo.maxPrice = util.divide(goodInfo.maxPrice, 100);
+			goodInfo.minPrice = util.divide(goodInfo.minPrice, 100);
+			goodInfo.pddPrice = util.divide(goodInfo.pddPrice, 100);
+			goodInfo.tbPrice = util.divide(goodInfo.tbPrice, 100);
+			goodInfo.tmallPrice = util.divide(goodInfo.tmallPrice, 100);
+			goodInfo.chartData.length && goodInfo.chartData.forEach(item => {
+				lineData.categories.push(item.date);
+				lineData.data.push(util.divide(item.price, 100));
+			});
+			goodInfo.platformPrice.length && goodInfo.platformPrice.forEach(item => {
+				item.price = util.divide(item.price, 100);
+			});
+			this.setData({
+				goodInfo
+			})
+			this.lineLoad(lineData);
+		});
 	},
 
-	lineLoad() {
+	// 商品列表
+	getPriceGoodList() {
+		const{
+			size,
+			page,
+		} = this.goodPage;
+		goodApi.getPriceGoodList({
+			size,
+			page,
+		}).then(res => {
+			this.goodPage.hasNext = res.hasNext;
+			this.goodPage.next = res.next;
+			this.setData({
+				goodList: res.records || [],
+			});
+		});
+	},
+
+	// 加载图表
+	lineLoad(lineData) {
 		let windowWidth = 375;
 		try {
 			const res = wx.getSystemInfoSync();
@@ -33,42 +87,40 @@ Page({
 		} catch (e) {
 			console.error('getSystemInfoSync failed!');
 		}
-		const simulationData = this.createSimulationData();
 		lineChart = new wxCharts({
 			canvasId: 'lineCanvas',
 			type: 'line',
-			categories: simulationData.categories,
+			categories: lineData.categories,
 			animation: true,
 			background: '#ffffff',
 			series: [{
-				name: '成交量1',
-				data: simulationData.data,
-				format: function (val, name) {
-					return val.toFixed(2) + '万';
+				name: '价格',
+				color: "#e5352f",
+				data: lineData.data,
+				format (val, name) {
+					return val.toFixed(2) + '元';
 				}
 			}],
 			xAxis: {
-				disableGrid: true
+				disableGrid: true,
 			},
 			yAxis: {
-				// title: '成交金额 (万元)',
+				// gridColor: "#e5352f",
+				disableGrid: false,
 				format: function (val) {
 					return val.toFixed(2);
 				},
 				min: 0
 			},
-			width: 375,
+			width: windowWidth,
 			height: 175,
 			dataLabel: false,
 			dataPointShape: true,
-			extra: {
-				// lineStyle: 'curve'
-				lineStyle: 'liner'
-			}
 		});
 	},
 
-  touchHandler: function (e) {
+	// 点击图表展示数据
+  touchHandler(e) {
     console.log(lineChart.getCurrentDataIndex(e));
     lineChart.showToolTip(e, {
         // background: '#7cb5ec',
@@ -76,27 +128,16 @@ Page({
             return category + ' ' + item.name + ':' + item.data 
         }
     });
-  },    
-  createSimulationData: function () {
-      var categories = [];
-      var data = [];
-      for (var i = 0; i < 10; i++) {
-          categories.push('2016-' + (i + 1));
-          data.push(Math.random()*(20-10)+10);
-      }
-      // data[4] = null;
-      return {
-          categories: categories,
-          data: data
-      }
   },
-  updateData: function () {
+
+	// 工薪图表数据
+  updateData () {
       var simulationData = this.createSimulationData();
       var series = [{
-          name: '成交量1',
+          name: '价格',
           data: simulationData.data,
-          format: function (val, name) {
-              return val.toFixed(2) + '万';
+          format(val, name) {
+              return val.toFixed(2) + '元';
           }
       }];
       lineChart.updateData({
@@ -105,9 +146,30 @@ Page({
       });
   },
 
-  onChange(event) {
-    this.setData({
-      activeNames: event.detail,
-    });
-  },
+	// 点击展示其他价格
+	onClickOther() {
+		this.setData({
+			showOtherPrice: !this.data.showOtherPrice,
+		});
+	},
+
+	// 监听价格输入
+	handleInput({
+		detail
+	}) {
+		this.setData({
+			inputPrice: detail.value,
+		});
+	},
+
+	onReachBottom() {
+		const{
+			next,
+			hasNext
+		} = this.goodPage;
+		if(hasNext) {
+			this.goodPage.page = next;
+			this.getPriceGoodList();
+		}
+	},
 })

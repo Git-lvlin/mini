@@ -161,6 +161,10 @@ page {
   background-color: #fff;
 }
 
+.other_price_bottom {
+  padding-bottom: 48rpx;
+}
+
 .other_price_btn {
   width: 500rpx;
   height: 80rpx;
@@ -178,6 +182,11 @@ page {
   width: 20rpx;
   height: 16rpx;
   margin-left: 8rpx;
+  transition: transform 0.3s ease-in-out;
+}
+
+.btn_icon_act {
+  transform: rotate(180deg);
 }
 
 .other_price_item {

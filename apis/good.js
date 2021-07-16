@@ -27,6 +27,7 @@ const url = {
   
   detailRatio: "/contestprice/auth/contestprice/GetSimpleGoodsInfo",
   priceDetail: "/contestprice/open/contestprice/GetContestDetail",
+  priceGoodList: "/contestprice/open/contestprice/GetHotGoodsList",
 
   searchHistory: "/search/auth/UserSearchHistory/getUserKeyword",
   clearSearchHistory: "/search/auth/userSearchHistory/clearUserKeyword",
@@ -136,6 +137,10 @@ export default {
   // 获取详情比价信息
   getPriceDetail(params, option) {
     return Request.get(url.priceDetail, params, option);
+  },
+  // 获取详情比价信息
+  getPriceGoodList(params, option) {
+    return Request.get(url.priceGoodList, params, option);
   },
 
   // 获取搜索历史

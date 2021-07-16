@@ -87,7 +87,7 @@
         {
           "name": "比价详情",
           "pathName": "subpages/cart/priceDetail/index",
-          "query": "",
+          "query": "id=60",
           "scene": null
         },
         {
