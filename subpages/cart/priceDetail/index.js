@@ -1,4 +1,5 @@
 import goodApi from '../../../apis/good';
+import router from '../../../utils/router';
 import util from '../../../utils/util';
 import wxCharts from '../../../utils/wxcharts';
 
@@ -18,6 +19,7 @@ Page({
 		goodInfo: {},
 		showOtherPrice: false,
 		inputPrice: "",
+		goodList: [],
   },
 
   onLoad(options) {
@@ -66,12 +68,21 @@ Page({
 			size,
 			page,
 		} = this.goodPage;
+		let {
+			goodList,
+		} = this.data;
 		goodApi.getPriceGoodList({
 			size,
 			page,
 		}).then(res => {
 			this.goodPage.hasNext = res.hasNext;
 			this.goodPage.next = res.next;
+			let list = res.records || [];
+			if(page === 1) {
+				goodList = list
+			} else {
+				goodList = goodList.concat(list);
+			}
 			this.setData({
 				goodList: res.records || [],
 			});
@@ -172,4 +183,24 @@ Page({
 			this.getPriceGoodList();
 		}
 	},
+
+	// 点击跳转商品详情
+	onToDetail({
+		currentTarget,
+	}) {
+		const {
+			good,
+		} = currentTarget.dataset;
+		const data = {
+			spuId: good.spuId,
+			skuId: good.skuId || good.goodsSkuId,
+			activityId: good.activityId || 0,
+			objectId: good.objectId || 0,
+			orderType: good.orderType,
+		};
+		router.replace({
+			name: "detail",
+			data,
+		})
+	}
 })

@@ -26,7 +26,7 @@
           money="{{goodInfo.goodsPrice}}"
           defaultColor="#e5352f"
         />
-        <view class="buy_btn">去购买</view>
+        <view class="buy_btn" data-good="{{goodInfo}}" bindtap="onToDetail">去购买</view>
       </view>
     </view>
   </view>
@@ -110,29 +110,32 @@
         class="flex_middle low_price_item"
         wx:for="{{goodList}}"
         wx:key="index"
+        data-good="{{item}}"
+        bindtap="onToDetail"
       >
         <view class="img_box">
           <van-image
             width="200rpx"
             height="200rpx"
             custom-class="img_middle"
+            src="{{item.image}}"
           />
-          <view class="reduction_proportion">降价50%</view>
+          <view class="reduction_proportion">降价{{item.goodsContestRate}}%</view>
         </view>
         <view class="good_info">
-          <view class="good_title text_one_line">宁夏菠萝蜜500g装时令鲜水果宁夏菠萝蜜500g装时令鲜水果</view>
+          <view class="good_title text_one_line">{{item.title}}</view>
           <view class="flex_middle info_label ranking_label">
             <image class="flex_fix label_icon" src="{{tools.getImgUrl('miniprogram/home/price/ranking.png')}}" />
-            <view class="label_text">方便速食类销量排名第1</view>
+            <view class="label_text">{{item.gcName}}类销量排名第{{item.gcRang}}</view>
           </view>
           <view class="flex_middle info_label sale_label">
             <image class="flex_fix label_icon" src="{{tools.getImgUrl('miniprogram/home/price/sale_icon.png')}}" />
-            <view class="label_text">销量1万+</view>
+            <view class="label_text">销量{{item.saleNum}}</view>
           </view>
-          <view class="price_num">共有4个商场比价</view>
+          <view class="price_num">共有{{item.contestPlatformNum}}个商场比价</view>
           <price-mobel
-            money="8.89"
-            marketMoney="19.89"
+            money="{{item.salePrice}}"
+            marketMoney="{{item.marketPrice}}"
           />
         </view>
       </view>

@@ -270,6 +270,19 @@ create.Page(store, {
     });
   },
 
+  // 点击跳转比价详情
+  onToPriceDetail({
+    detail
+  }) {
+    console.log(detail)
+    router.replace({
+      name: "priceDetail",
+      data: {
+        id: detail.contestGoodsId,
+      }
+    })
+  },
+
   // 返回按钮
   onToBack() {
     router.go();

@@ -88,7 +88,11 @@
 
   <view class="space_20" wx:if="{{ratioData.AveragePrice != undefined}}" />
 
-  <price-ratio-bar price="{{ratioData.AveragePrice}}" wx:if="{{ratioData.AveragePrice != undefined}}" />
+  <price-ratio-bar
+    data="{{ratioData}}"
+    wx:if="{{ratioData.AveragePrice != undefined}}"
+    bind:click="onToPriceDetail"
+  />
 
   <view class="space_20" wx:if="{{isActivityGood == 15}}" />
   
