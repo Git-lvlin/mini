@@ -32,22 +32,22 @@
         wx:for="{{userData}}"
         wx:key="index"
       >
-        <view class="user_data_item">
+        <view class="user_data_item" wx:if="{{index != 0}}">
           <view class="data_item_value">{{item.value}}</view>
           <view>{{item.text}}</view>
         </view>
-        <view class="flex_fix data_item_line" wx:if="{{index != userData.length - 1}}" />
+        <view class="flex_fix data_item_line" wx:if="{{index != 0 && index != userData.length - 1}}" />
       </block>
     </view>
 
     <view class="order">
+        <!-- value="查看全部"
+        is-link
+        bind:click="showPopup" -->
       <van-cell 
         title="我的订单"
-        value="查看全部"
-        is-link
         border="{{false}}"
         title-style="font-weight:600;color:#333333;font-size: 28rpx;"
-        bind:click="showPopup"
       />
       <view class="order_list">
         <view class="order_item" wx:for="{{orderTypeList}}" wx:key="name" bindtap="showPopup">

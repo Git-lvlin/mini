@@ -2,7 +2,7 @@ import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
 import util from '../../../utils/util';
-import { showToast } from '../../../utils/tools';
+import { debounce, showToast } from '../../../utils/tools';
 
 create.Component(store, {
   use: [
@@ -51,11 +51,13 @@ create.Component(store, {
       type: Object,
       value: {},
       observer(now, old) {
-        if(now.id !== old.id && now.isMultiSpec == 1) {
+        if(now.isMultiSpec == 1) {
           const skuId = this.data.skuId;
-          this.getCheckSku({
-            skuId,
-          });
+          debounce(() => {
+            this.getCheckSku({
+              skuId,
+            });
+          }, 1000)();
         }
       }
     },

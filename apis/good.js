@@ -31,9 +31,9 @@ const url = {
 
   searchHistory: "/search/auth/UserSearchHistory/getUserKeyword",
   clearSearchHistory: "/search/auth/userSearchHistory/clearUserKeyword",
-  hotSearch: "/search/auth/HotKeyword/index",
+  hotSearch: "/search/open/HotKeyword/index",
   searchList: "/search/option/opensearch/index",
-  associationList: "/search/option/opensearch/getSuggest",
+  associationList: "/search/open/opensearch/getSuggest",
 
   storeDetail: "/store/option/storeShop/show",
   storeGood: "/store/option/storeShop/salePage",

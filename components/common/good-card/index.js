@@ -39,10 +39,14 @@ Component({
           spuId: data.spuId,
           skuId: data.skuId,
         };
-        if(!!data.activityId) params.activityId = data.activityId;
-        if(!!data.orderType) params.activityId = data.orderType;
-        if(!!data.objectId) params.objectId = data.objectId;
+        params.activityId = data.activityId || 0;
+        params.objectId = data.objectId || 0;
+        if(!!data.orderType) params.orderType = data.orderType;
         console.log(params);
+        router.push({
+          name: "detail",
+          data: params
+        })
       } else {
         this.triggerEvent("click", data);
       }

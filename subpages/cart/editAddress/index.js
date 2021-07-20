@@ -61,7 +61,6 @@ Page({
         postData,
         isEdit
       });
-      console.log("🚀 ~ file: index.js ~ line 61 ~ editData", editData)
     }
   },
 

@@ -9,18 +9,18 @@ Page({
     listLoad: false,
   },
 
-  onLoad: function (options) {
+  onLoad(options) {
     if(options.isChoose) {
       this.isChoose = true;
     }
   },
 
-  onShow: function () {
+  onShow() {
     this.getAddressList();
   },
 
   
-  onHide: function () {
+  onHide() {
 
   },
 

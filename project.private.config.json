@@ -101,6 +101,12 @@
           "pathName": "subpages/cart/address/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "subpages/cart/editAddress/index",
+          "pathName": "subpages/cart/editAddress/index",
+          "query": "data={\"address\":\"是的发送到发\",\"cityId\":\"2\",\"cityName\":\"北京市\",\"consignee\":\"木木\",\"districtId\":\"14\",\"districtName\":\"大兴区\",\"fullAddress\":\"北京市北京市大兴区是的发送到发\",\"id\":\"1409760393264574466\",\"isDefault\":false,\"latitude\":\"\",\"longitude\":\"\",\"memberId\":\"1409757599577092098\",\"phone\":\"18924245450\",\"placeName\":\"\",\"provinceId\":\"1\",\"provinceName\":\"北京市\",\"roomNo\":\"\"}",
+          "scene": null
         }
       ]
     }

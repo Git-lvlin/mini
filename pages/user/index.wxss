@@ -84,7 +84,7 @@ page{
 }
 
 .user_data_item {
-  width: 230rpx;
+  width: 320rpx;
   text-align: center;
   color: #fff;
   font-size: 24rpx;

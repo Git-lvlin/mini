@@ -96,12 +96,12 @@ create.Page(store, {
     goodApi.getNearbyStore({
       radius: 50000,
       unit: 'm',
+      limit: 200,
       ...data,
     }).then(res => {
       let list = [];
       let fullAddress = "";
       let selected = false;
-      console.log("🚀 ~ file: index.js ~ line 121 ~ res.forEach ~ currentSpot", currentSpot)
       if(res.length > 0) {
         res.forEach((item, index) => {
           // 遍历地址

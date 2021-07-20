@@ -167,7 +167,7 @@ create.Page(store, {
       goodApi.getPersonalDetail(params).then(res => {
         const good = res.curGoods;
         const personalList = res.personalList;
-        const detailImg = good.images;
+        const detailImg = good && good.images || [];
         good.activityPrice = util.divide(good.activityPrice, 100);
         good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
         good.goodsMarketPrice = util.divide(good.marketPrice, 100);

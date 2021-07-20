@@ -223,13 +223,16 @@ Page({
       size,
     } = this.searchPage;
     const userInfo = getStorageUserInfo();
-    goodApi.getSearchList({
+    const param = {
       page,
       size,
-      sort,
       keyword: searchText,
       requestMemberId: userInfo.id,
-    }).then(res => {
+    }
+    if(typeof sort === "string") {
+      param.sort = sort;
+    }
+    goodApi.getSearchList(param).then(res => {
       this.loading = false;
       this.searchPage.totalPage = res.totalpage;
       let list = res.records;
@@ -237,7 +240,6 @@ Page({
         item.image = item.goodsImageUrl;
         item.title = item.goodsName;
         item.subtitle = item.goodsDesc;
-        item.spuId = item.id;
         item.salePrice = util.divide(item.goodsSaleMinPrice, 100);
       });
       if(page > 1) {
