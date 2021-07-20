@@ -144,6 +144,8 @@ create.Page(store, {
     }
     loginApis.bindPhone(data).then(res => {
       const data = res;
+      wx.setStorageSync("ACCESS_TOKEN", data.accessToken);
+      wx.setStorageSync("REFRESH_TOKEN", data.refreshToken);
       store.data.userInfo = data.memberInfo;
       store.data.defUserInfo = data.memberInfo;
       wx.removeStorage({
@@ -158,12 +160,14 @@ create.Page(store, {
   getUserInfo(userInfo) {
     userApis.getUserInfo({
       id: userInfo.id
+    }, {
+      showLoading: false,
     }).then(res => {
       store.data.userOtherInfo = res;
       wx.setStorageSync('USER_INFO', res);
       tools.successJump(2);
-    }).catch(res => {
-
+    }).catch(err => {
+      console.log("getUserInfo - err", err)
     })
   },
 

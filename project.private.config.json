@@ -39,7 +39,7 @@
         {
           "name": "登录",
           "pathName": "pages/login/main/index",
-          "query": "name=bak",
+          "query": "",
           "scene": null
         },
         {
@@ -51,7 +51,7 @@
         {
           "name": "商详",
           "pathName": "subpages/cart/detail/index",
-          "query": "activityId=72&objectId=84&orderType=3&skuId=14838&spuId=2543&wsId=0",
+          "query": "activityId=0&objectId=&orderType=2&skuId=3293&spuId=2449&wsId=0",
           "scene": null
         },
         {
@@ -93,6 +93,12 @@
         {
           "name": "pages/test/index",
           "pathName": "pages/test/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "subpages/cart/address/index",
+          "pathName": "subpages/cart/address/index",
           "query": "",
           "scene": null
         }

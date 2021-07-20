@@ -6,7 +6,7 @@ import router from './utils/router'
 
 // 环境变量 dev uat fat pro
 // ***【 环境如有变动 common.wxs 需更换域名 】***
-const SYS_ENV = 'dev';
+const SYS_ENV = 'uat';
 // 是否显示选择环境按钮
 const CHANGE_ENV = true;
 

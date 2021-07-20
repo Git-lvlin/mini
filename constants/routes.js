@@ -27,10 +27,6 @@ export default {
   bindPhone: {
     path: "/pages/login/bindPhone/index"
   },
-  // 选择地址
-  location: {
-    path: "/pages/location/index"
-  },
   // 集约列表
   intensive: {
     path: "/pages/intensive/index"
@@ -94,7 +90,7 @@ export default {
   teamDetail: {
     path: "/subpages/cart/teamDetail/index"
   },
-  // 参团详情
+  // 会员店
   store: {
     path: "/subpages/cart/store/index"
   },

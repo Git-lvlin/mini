@@ -4,8 +4,6 @@ import goodApi from '../../../apis/good'
 import util from '../../../utils/util';
 import { showToast } from '../../../utils/tools';
 
-let fristLoad = true;
-
 create.Component(store, {
   use: [
     "systemInfo",
@@ -81,7 +79,7 @@ create.Component(store, {
 
   methods: {
     // 获取sku列表
-    getCheckSku(data) {
+    getCheckSku(data, fristLoad = true) {
       const {
         good,
         checkSpec,
@@ -106,7 +104,6 @@ create.Component(store, {
             });
           });
         }
-        fristLoad = false;
         this.setData({
           skuData: res,
           skuList: res.specList,
@@ -138,7 +135,7 @@ create.Component(store, {
       this.setData({
         checkSpec,
       })
-      this.getCheckSku(data);
+      this.getCheckSku(data, false);
     },
 
     onClose() {

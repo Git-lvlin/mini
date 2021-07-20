@@ -9,15 +9,19 @@ Component({
     addGlobalClass: true,
   },
 
+  takeSpot: {},
+
   properties: {
     floor: {
       type: Object,
       value: {},
       observer(now, old) {
-        const nowStr = JSON.stringify(now);
-        const oldStr = JSON.stringify(old);
-        if(nowStr != oldStr) {
-          this.setGoodList(now.content);
+        let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
+        const nowTakeSpot = JSON.stringify(takeSpot);
+        const oldTakeSpot = JSON.stringify(this.takeSpot);
+        if(now.content && now.content.dataType && nowTakeSpot != oldTakeSpot) {
+          takeSpot = takeSpot && takeSpot.storeNo ? takeSpot : {};
+          this.setGoodList(now.content, takeSpot);
         }
       }
     },
@@ -31,9 +35,15 @@ Component({
     goodList: [],
   },
 
+  pageLifetimes: {
+    // show() {
+      // 页面被展示
+    // },
+  },
+
   methods: {
     // 设置商品列表数据
-    setGoodList(content) {
+    setGoodList(content, spot) {
       if(content.dataType === 1) {
         let homeCache = wx.getStorageSync("HOME_CACHE") || {};
         if(homeCache.goodList && !!homeCache.goodList.length) {
@@ -42,7 +52,7 @@ Component({
           })
         }
         homeApi.getFloorCustom(content.dataUrl, {
-          storeNo: "store_m_1"
+          storeNo: spot.storeNo || ""
         }).then(res => {
           let goodList = mapNum(res.goodsInfo)
           this.setData({

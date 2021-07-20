@@ -3,7 +3,7 @@
   <view class="settlement_conetnt" style="z-index: {{barIndex}}">
     <view class="cart_icon" bindtap="onOpenCart">
       <van-image width="84rpx" height="84rpx" src="{{tools.getImgUrl('miniprogram/cart/class_cart@2x.png')}}" />
-      <view class="cart_num" wx:if="{{$.cartList.length}}">{{$.cartList.length}}</view>
+      <view class="cart_num" wx:if="{{$.cartListTotal.checkedQuantity}}">{{$.cartListTotal.checkedQuantity}}</view>
     </view>
     <view class="settlement_price">
       <view class="price">

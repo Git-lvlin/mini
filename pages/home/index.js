@@ -26,7 +26,7 @@ create.Page(store, {
     scrolling: false,
     scrollBottom: false,
     floor: {},
-    headBackCss: `background-image: url("${IMG_CDN}miniprogram/home/nav_back.png")`, 
+    headBackCss: `background-image: url(${IMG_CDN}miniprogram/home/nav_back.png)`, 
     activityAdvert: {},
     locationAuth: false,
     takeSpot: {},
@@ -38,6 +38,9 @@ create.Page(store, {
     this.getSystemPopup();
     // 活动弹窗
     this.getAdvert(2);
+    let url = "https://www.kdocs.cn/p/115688640900r";
+    let route = url.match(/(http|https):\/\/([^/]+)(\S*)/);
+    console.log("route", route);
   },
 
   onReady() {
@@ -148,17 +151,19 @@ create.Page(store, {
   onFixation({
     currentTarget
   }) {
-    // let url = currentTarget.dataset.url;
-    // if(!url) return;
+    let url = currentTarget.dataset.url;
+    console.log("🚀 ~ file: index.js ~ line 155 ~ url", url)
+    if(!url) return;
+    router.getUrlRoute(url);
     // router.push({
     //   name: url,
     // })
-    router.push({
-      name: "webview",
-      data: {
-        url: "http%3A%2F%2Fdev-yeahgo-publicmobile.waiad.icu%2Fmenu"
-      },
-    });
+    // router.push({
+    //   name: "webview",
+    //   data: {
+    //     url: "http%3A%2F%2Fdev-yeahgo-publicmobile.waiad.icu%2Fmenu"
+    //   },
+    // });
   },
   
   // 获取为止权限

@@ -289,8 +289,6 @@ create.Page(store, {
       storeAdress,
       addressInfo,
       note,
-      activityId,
-      objectId,
       selectAddressType,
     } = this.data;
     let storeGoodsInfos = [];
@@ -306,6 +304,9 @@ create.Page(store, {
           spuId: child.spuId,
           skuId: child.skuId,
           skuNum: child.skuNum,
+          activityId: child.activityId,
+          orderType: child.orderType,
+          objectId: child.objectId,
         })
       });
       storeGoodsInfos.push(storeItem);
@@ -313,7 +314,6 @@ create.Page(store, {
     let postData = {};
     if (this.orderType == 15 && selectAddressType.type == 2) {
       postData = {
-        orderType: storeActivityGood.orderType,
         note,
         deliveryInfo: {
           provinceId: storeAdress.provinceId,
@@ -325,7 +325,6 @@ create.Page(store, {
       }
     } else {
       postData = {
-        orderType: this.orderType,
         note,
         storeGoodsInfos,
       }
@@ -338,8 +337,6 @@ create.Page(store, {
         }
       }
     }
-    if(!!activityId) postData.activityId = activityId;
-    if(!!objectId) postData.objectId = objectId;
     this.updateOrderAmount(postData);
   },
 

@@ -1,4 +1,6 @@
+import routeMap from "../constants/routeMap";
 import routes from "../constants/routes"
+import { getStorageUserInfo, objToParamStr, strToParamObj } from "./tools";
  
 const paramToStr = (data) => {
   let str = "";
@@ -147,6 +149,80 @@ const updateSelectTabbar = (that, index) => {
     })
   }
 }
+
+// 解析字符串url路由
+const getUrlRoute = (url, opt) => {
+  const option = {
+    isJump: true,
+    needLogin: false,
+    ...opt,
+  }
+  let userInfo = {};
+  let token = "";
+  if(option.needLogin) {
+    userInfo = getStorageUserInfo(true);
+    if(!userInfo) {
+      return null;
+    }
+    token = wx.getStorageSync("ACCESS_TOKEN");
+  }
+  if(!url) {
+    return null;
+  }
+  const routeStr = url.match(/(http|https):\/\/([^/]+)(\S*)/)[3];
+  const routeArr = routeStr.split("?");
+  const data = {
+    routeStr,
+    route: routeArr[0],
+    params: {},
+  };
+  if(!!routeArr[1]) {
+    data.paramStr = routeArr[1];
+    data.params = strToParamObj(data.paramStr);
+  }
+  if(data.route.indexOf("/web/") > -1) {
+    // 自主开发WEB页面
+    data.routeType = "web";
+    let connector = url.indexOf("?") > -1 ? "&" : "?"
+    if(option.needLogin) {
+      url = `${url}${connector}memberId=${userInfo.id}&token=${token}`;
+    }
+    if(option.data) {
+      url = `${url}${option.needLogin ? "&" : connector}${objToParamStr(option.data)}`;
+    }
+    data.params.url = encodeURIComponent(url);
+    if(option.isJump) {
+      push({
+        name: "webview",
+        data: data.params,
+      })
+    }
+  } else if(routeMap[data.route]) {
+    // 小程序页面
+    data.routeType = "route";
+    data.route = routeMap[data.route];
+    if(option.isJump) {
+      push({
+        name: data.route,
+        data: data.params,
+      })
+    }
+  } else {
+    // 无法识别的页面
+    if(option.isJump) {
+      data.params = {
+        ...data.params,
+        url: encodeURIComponent(url),
+      }
+      push({
+        name: "webview",
+        data: data.params || {},
+    })
+    }
+  }
+  console.log("getUrlRoute ~ data", data);
+  return data;
+}
  
 const extract = options => JSON.parse(decodeURIComponent(options.encodedData));
 
@@ -157,5 +233,6 @@ export default {
   goTabbar,
   loginTo,
   updateSelectTabbar,
+  getUrlRoute,
   extract,
 }

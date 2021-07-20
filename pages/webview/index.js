@@ -4,19 +4,20 @@ Page({
   optionsInfo: {},
 
   data: {
-    link: "https://publicmobile-uat.yeahgo.com/web/user-appointment",
-    // link: "http://baidu.com",
+    // link: "https://publicmobile-uat.yeahgo.com/web/user-appointment",
+    link: "https://baidu.com",
   },
 
   onLoad(options) {
-    // if(!options.url) {
-    //   router.go();
-    //   return;
-    // }
-    // const link = decodeURIComponent(options.url);
-    // this.setData({
-    //   link,
-    // });
+    if(!options.url) {
+      router.go();
+      return;
+    }
+    const link = decodeURIComponent(options.url);
+    console.log("webview ~ link", link)
+    this.setData({
+      link,
+    });
     this.optionsInfo = options;
   },
 

@@ -38,13 +38,14 @@ Page({
     isEdit: false,
   },
 
-  onLoad: function (options) {
+  onLoad(options) {
     // let editData = wx.getStorageSync("EDIT_ADDRESS");
     let editData = options.data;
     if(!!editData) {
       editData = JSON.parse(editData);
       let {
-        postData
+        postData,
+        selectAddress,
       } = this.data;
       const isEdit = true;
       postData = {
@@ -53,11 +54,14 @@ Page({
         address: editData.address,
         isDefault: editData.isDefault
       }
+      selectAddress.areaStr = `${editData.provinceName} ${editData.cityName} ${editData.districtName}`
       this.setData({
+        selectAddress,
         editData,
         postData,
         isEdit
       });
+      console.log("🚀 ~ file: index.js ~ line 61 ~ editData", editData)
     }
   },
 

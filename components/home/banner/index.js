@@ -1,4 +1,5 @@
 import homeApi from "../../../apis/home";
+import router from "../../../utils/router";
 
 Component({
   properties: {
@@ -58,10 +59,7 @@ Component({
     }) {
       let data = currentTarget.dataset.data;
       console.log("banner跳转", data.actionUrl)
-      // router.push({
-      //   name: 'detail',
-      //   data
-      // });
+      router.getUrlRoute(data.actionUrl);
     },
   }
 })

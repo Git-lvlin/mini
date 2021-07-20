@@ -12,7 +12,7 @@ export const ossHost = {
 };
 
 // 图片cdn
-export const IMG_CDN = ossHost[ENV];
+export const IMG_CDN = ossHost[ENV] || ossHost['pro'];
 
 
 // 字符类型资源位id

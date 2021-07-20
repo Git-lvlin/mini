@@ -85,6 +85,12 @@ create.Page(store, {
         this.getShareParam(options);
       }
     }
+    console.log("options", options)
+    if(options.inviteCode) {
+      wx.setStorageSync("INVITE_INFO", {
+        inviteCode: options.inviteCode,
+      });
+    }
     
     router.loginTo();
   },

@@ -31,7 +31,7 @@ create.Page(store, {
   },
 
   onLoad: function (options) {
-    store.updateCart();
+    // store.updateCart();
     this.getBannerList();
     if(!store.data.userOtherInfo.isShopMaster) {
       this.getIntensiveList();

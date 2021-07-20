@@ -3,7 +3,7 @@
 import { IMG_CDN } from './common'
 
 // 小程序版本号
-export const VERSION = "1.0.0";
+export const VERSION = "1.0.1";
 
 // 服务器接口域名S
 export const baseApi = {

@@ -9,7 +9,6 @@
   width: 100%;
   padding: 12rpx 24rpx 24rpx;
   box-sizing: border-box;
-  background-image: url('https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/appointment_back.png');
   background-size: 100% 100%;
 }
 

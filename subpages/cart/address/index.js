@@ -57,9 +57,11 @@ Page({
       provinceName: data.provinceName,
       cityName: data.cityName,
       districtName: data.districtName,
-      isDefault: true,
+      isDefault: !data.isDefault,
     }
-    cartApi.updateAddress(postData).then(res => {
+    cartApi.updateAddress(postData, {
+      showLoading: false
+    }).then(res => {
       this.getAddressList();
     })
   },

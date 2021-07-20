@@ -4,7 +4,7 @@ import { IMG_CDN } from "../../../constants/common";
 import { USER_LEVEL } from "../../../constants/user";
 import router from "../../../utils/router";
 import { getStorageUserInfo, setStorageUserInfo, showModal, showToast } from "../../../utils/tools";
-import { getCofigData } from "../../../utils/uploadAliyun";
+import { getCofigData, getOssImgWH } from "../../../utils/uploadAliyun";
 
 Page({
   fileConfig: {
@@ -55,6 +55,8 @@ Page({
   getOssConfig() {
     commonApi.getOssConfig({
       bizCode: "yeahgo-user"
+    }, {
+      showLoading: false,
     }).then(res => {
       console.log(res)
       this.fileConfig.ossConfig = res;
@@ -85,15 +87,16 @@ Page({
       formData,
       success(res) {
         if (res.statusCode == "200") {
-          const avatarUrl = IMG_CDN + path;
+          const avatarUrl = getOssImgWH(IMG_CDN + path, 200, 200);
+          console.log("🚀 ~ file: index.js ~ line 89 ~ success ~ avatarUrl", avatarUrl)
           that.updateUserAvatar(avatarUrl);
-          console.log("阿里云OSS上传图片成功" + IMG_CDN + path );
+          console.log("阿里云OSS上传图片成功" + avatarUrl );
         } else {
           showToast({ title: "上传出错啦，请重试" });
         }
       },
       fail(err) {
-      console.log("uploadImg ~ err", err)
+        console.log("uploadImg ~ err", err)
         wx.showToast({
           title: "上传失败",
           icon: 'none',

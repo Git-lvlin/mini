@@ -47,10 +47,10 @@
         is-link
         border="{{false}}"
         title-style="font-weight:600;color:#333333;font-size: 28rpx;"
-        bind:click="onClickHead"
+        bind:click="showPopup"
       />
       <view class="order_list">
-        <view class="order_item" wx:for="{{orderTypeList}}" wx:key="name">
+        <view class="order_item" wx:for="{{orderTypeList}}" wx:key="name" bindtap="showPopup">
           <view class="sub_num" wx:if="{{item.subNum > 0}}">{{item.subNum}}</view>
           <image class="item_img" src="{{item.icon}}" />
           <view class="item_name">{{item.name}}</view>
@@ -76,7 +76,7 @@
     </view>
 
     <van-popup show="{{ showPopup }}" closeable round bind:close="onHidePopup">
-      <view class="popup_content">请下载APP体验完整功能</view>
+      <view class="popup_content">请下载约购APP体验完整功能</view>
     </van-popup>
   </view>
 </view>

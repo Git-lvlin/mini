@@ -301,6 +301,10 @@ create.Page(store, {
       good,
       quantity = 0,
     } = this.data;
+    if(good.goodsState != 1 || good.goodsVerifyState != 1) {
+      showToast({ title: "商品已下架" });
+      return;
+    }
     if(good.isMultiSpec == 1) {
       this.setData({
         specType: "add",
@@ -397,6 +401,10 @@ create.Page(store, {
       good,
       skuId,
     } = this.data;
+    if(good.goodsState != 1 || good.goodsVerifyState != 1) {
+      showToast({ title: "商品已下架" });
+      return;
+    }
     if(good.isMultiSpec) {
       this.setData({
         specType: "buy",
@@ -426,6 +434,10 @@ create.Page(store, {
       selectAddressType,
       good,
     } = this.data;
+    if(good.goodsState != 1 || good.goodsVerifyState != 1) {
+      showToast({ title: "商品已下架" });
+      return;
+    }
     const {
       detail,
       currentTarget,

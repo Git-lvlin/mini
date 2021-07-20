@@ -5,6 +5,7 @@
     class="price_header"
     mode="widthFix"
     src="{{tools.getImgUrl('/miniprogram/home/price_ratio_header.gif')}}"
+    bindtap="onToList"
   />
   <view
     class="flex_middle good_list"

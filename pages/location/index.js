@@ -49,7 +49,7 @@ create.Page(store, {
     if(searchSpot) {
       spotData = searchSpot;
     }
-    if(spotData) {
+    if(spotData && spotData.latitude) {
       that.setData({
         currentSpot: takeSpot,
         latitude: spotData.latitude,
@@ -80,9 +80,9 @@ create.Page(store, {
           that.setData(data);
           that.getNearbyStore(data);
         },
-        fail() {
-          // that.location = defLocation;
-          // that.getNearbyStore(defLocation);
+        fail(err) {
+          that.location = defLocation;
+          that.getNearbyStore(defLocation);
         },
       });
     }

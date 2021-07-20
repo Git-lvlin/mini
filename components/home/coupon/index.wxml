@@ -3,8 +3,8 @@
 
 <view
   class="coupon"
+  style="{{utils.getHeadBackCss(floor.style, tools.getImgUrl('miniprogram/home/coupon_back.png'))}}"
 >
-  <!-- style="{{utils.getHeadBackCss(floor.style, tools.getImgUrl('miniprogram/home/coupon_back.png'))}}" -->
   <panel-title
     title="{{floor.header.title[0].name}}"
     desc="{{floor.header.subTitle[0].name}}"
@@ -29,6 +29,10 @@
   </view>
 
   <view class="receive">
-    <image class="receive_btn" src="{{tools.getImgUrl('miniprogram/home/receive_coupon.png')}}" />
+    <image
+      class="receive_btn"
+      src="{{tools.getImgUrl('miniprogram/home/receive_coupon.png')}}"
+      bindtap="onClickReceive"
+    />
   </view>
 </view>

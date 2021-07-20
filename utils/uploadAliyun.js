@@ -28,3 +28,7 @@ export const getCofigData = (config) => {
   }
   return formData
 }
+
+export const getOssImgWH = (url, width, height) => {
+  return `${url}?x-oss-process=image/resize,m_fill,h_${height},w_${width},limit_0/auto-orient,0`;
+}

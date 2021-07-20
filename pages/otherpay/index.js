@@ -187,7 +187,7 @@ Page({
           payInfo
         })
         showToast({ title: "支付失败"});
-        router.goTabbar("user");
+        // router.goTabbar("user");
       }
     })
   },
