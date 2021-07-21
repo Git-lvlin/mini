@@ -19,9 +19,9 @@ Component({
       type: Boolean,
       value: false,
       observer(newVal, oldVal) {
-        if(newVal !== oldVal && newVal) {
-          this.getProvince();
-        }
+        // if(newVal !== oldVal && newVal) {
+        //   this.getProvince();
+        // }
       },
     },
     editData: {
@@ -37,6 +37,8 @@ Component({
       value: false,
     },
   },
+
+  editFristLoad: false,
 
   data: {
     letterList: defaultIndex,
@@ -55,7 +57,9 @@ Component({
     },
   },
 
-  
+  ready() {
+    this.getProvince();
+  },
 
   methods: {
     // 获取省份
@@ -68,6 +72,7 @@ Component({
         } = this.data;
         let selectData = {};
         if(isEdit) {
+          this.editFristLoad = true;
           selectData = {
             id: editData.provinceId,
             type: "province",
@@ -113,14 +118,18 @@ Component({
           areaData.area = areaList;
         }
         this.setData({
+          areaData,
           areaList,
-          areaData
-        })
+        });
       });
     },
 
     // 格式化区域数据
     mapAddreass(list = [], selectData = {}) {
+      const {
+        isEdit,
+        areaData,
+      } = this.data;
       let letterList = [];
       let selectAddress = this.data.selectAddress;
       let areaList = JSON.stringify(defaultAreaList);
@@ -147,6 +156,12 @@ Component({
                 selectAddress.areaStr = `${selectAddress.province.name} ${selectAddress.city.name} ${selectAddress.area.name}`
                 selectAddress.isAct = "area";
                 this.editFristLoad = false;
+                if(isEdit) {
+                  this.triggerEvent("setAddress", {
+                    selectAddress,
+                    areaData
+                  })
+                }
               }
             }
             letterList.forEach(item => {
@@ -254,6 +269,7 @@ Component({
     },
     // 关闭弹窗
     onCloseAddress(data) {
+      data = data.selectAddress ? data : {};
       this.triggerEvent("close", data);
     }
   }

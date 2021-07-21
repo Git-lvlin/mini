@@ -96,6 +96,17 @@ Page({
     })
   },
 
+  // 保存编辑地址区域
+  handleEditAddress({
+    detail
+  }) {
+    const {
+      selectAddress,
+      areaData,
+    } = detail;
+    this.setData(detail);
+  },
+
   // 关闭省市区弹窗
   onCloseAddress({
     detail
@@ -104,17 +115,18 @@ Page({
       selectAddress,
       areaData,
     } = detail;
-    if(!selectAddress && !selectAddress.area.name) {
-      selectAddress.province = {};
-      selectAddress.city = {};
-    } else {
+    const data = {
+      showPopup: false
+    };
+    if(!!selectAddress && !selectAddress.area.name) {
+    //   selectAddress.province = {};
+    //   selectAddress.city = {};
+    // } else {
       selectAddress.areaStr = `${selectAddress.province.name} ${selectAddress.city.name} ${selectAddress.area.name}`
+      data.selectAddress = selectAddress;
+      data.areaData = areaData;
     }
-    this.setData({
-      selectAddress,
-      areaData,
-      showPopup: false,
-    })
+    this.setData(data);
   },
 
   // 保存地址

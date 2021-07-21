@@ -81,5 +81,6 @@
     editData="{{ editData }}"
     isEdit="{{ isEdit }}"
     bind:close="onCloseAddress"
+    bind:setAddress="handleEditAddress"
   />
 </view>

@@ -19,7 +19,6 @@
       wx:key="id"
       store="{{item}}"
     />
-{{reas}}
     <view class="not_list" wx:if="{{!$.storeCartList.length && !!userInfo}}">
       <nodata
         top="{{48}}"

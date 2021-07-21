@@ -20,7 +20,7 @@ Component({
     },
     jump: {
       type: Boolean,
-      value: false,
+      value: true,
     }
   },
 

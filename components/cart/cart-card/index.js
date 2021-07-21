@@ -13,6 +13,10 @@ create.Component(store, {
     store: {
       type: Object,
       value: {},
+    },
+    jump: {
+      type: Boolean,
+      value: true
     }
   },
 
@@ -75,13 +79,32 @@ create.Component(store, {
       } = this.data;
       let id = store.storeNo.slice(8, store.storeNo.length);
       id = +id;
+      console.log("ShopId ~ id", id)
       if(id < 123580) return;
+      // router.push({
+      //   name: "store",
+      //   data: {
+      //     storeNo: store.storeNo,
+      //   },
+      // })
+    },
+    // 跳转商详
+    onToDetail({
+      currentTarget,
+    }) {
+      const {
+        good,
+      } = currentTarget.dataset;
       router.push({
-        name: "store",
+        name: "detail",
         data: {
-          storeNo: store.storeNo,
+          activityId: good.activityId,
+          objectId: good.objectId,
+          orderType: good.orderType,
+          skuId: good.skuId,
+          spuId: good.spuId,
         },
       })
-    },
+    }
   }
 })

@@ -193,7 +193,7 @@ Page({
       nonceStr: payObj.nonceStr,
       package: payObj.packageKey,
       // package: `prepay_id=${payObj.prepayId}`,
-      signType: 'MD5',
+      signType: payObj.signType,
       paySign: payObj.paySign,
       success (res) {
         that.setData({

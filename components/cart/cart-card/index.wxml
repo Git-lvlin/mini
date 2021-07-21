@@ -30,7 +30,7 @@
           data-id="{{item.skuId}}"
           bindtap="onChooseGood"
         />
-        <view class="select_info">
+        <view class="select_info" data-good="{{item}}" bindtap="onToDetail">
           <van-image 
             width="180rpx"
             height="180rpx"

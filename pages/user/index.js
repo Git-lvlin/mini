@@ -101,6 +101,10 @@ create.Page(store, {
     userApi.getUserData({
       id: userInfo.id,
     }).then(res => {
+      let integralValue = res.integralValue;
+      if(!integralValue || integralValue == "null" || integralValue == "undefined") {
+        integralValue = 0;
+      }
       userData[0].value = res.balance || 0;
       userData[1].value = res.couponNum || 0;
       userData[2].value = res.integralValue || 0;
