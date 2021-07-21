@@ -130,6 +130,7 @@ create.Page(store, {
     }
     let loginInfo = wx.getStorageSync("LOGIN_INFO");
     let inviteInfo = wx.getStorageSync("INVITE_INFO");
+    const isInvite = inviteInfo && inviteInfo.inviteCode ? true : false;
     const data = {
       phoneNumber,
       sourceType: 4,
@@ -139,7 +140,7 @@ create.Page(store, {
       gender: userInfo.gender,
       authCode: code
     };
-    if(inviteInfo && inviteInfo.inviteCode) {
+    if(isInvite) {
       data.inviteCode = inviteInfo.inviteCode;
     }
     loginApis.bindPhone(data).then(res => {
@@ -148,16 +149,18 @@ create.Page(store, {
       wx.setStorageSync("REFRESH_TOKEN", data.refreshToken);
       store.data.userInfo = data.memberInfo;
       store.data.defUserInfo = data.memberInfo;
-      wx.removeStorage({
-        key: 'INVITE_INFO',
-      });
       tools.setUserInfo(data);
-      this.getUserInfo(data.memberInfo);
+      this.getUserInfo(data.memberInfo, isInvite);
+      if(isInvite) {
+        wx.removeStorage({
+          key: 'INVITE_INFO',
+        });
+      }
     });
   },
 
   // 获取用户其他信息
-  getUserInfo(userInfo) {
+  getUserInfo(userInfo, backHome) {
     userApis.getUserInfo({
       id: userInfo.id
     }, {
@@ -165,7 +168,11 @@ create.Page(store, {
     }).then(res => {
       store.data.userOtherInfo = res;
       wx.setStorageSync('USER_INFO', res);
-      tools.successJump(2);
+      if(backHome) {
+        router.goTabbar();
+      } else {
+        tools.successJump(2);
+      }
     }).catch(err => {
       console.log("getUserInfo - err", err)
     })

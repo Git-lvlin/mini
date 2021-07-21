@@ -12,7 +12,8 @@ create.Page(store, {
 
   use: [
     "systemInfo",
-    "cartList"
+    "cartList",
+    "cartListTotal",
   ],
 
   computed: {
@@ -79,13 +80,14 @@ create.Page(store, {
 
   onShow() {
     let userInfo = getStorageUserInfo();
-    // let userOtherInfo = wx.getStorageSync("USER_OTHER_INFO") || "";
     if(!!userInfo) {
-      this.getDetailRatio();
+      if(this.store.data.cartList.length <= 0) {
+        this.store.updateCart();
+      }
+      // this.getDetailRatio();
     }
     this.setData({
       userInfo,
-      // userOtherInfo,
     })
   },
 
@@ -274,7 +276,6 @@ create.Page(store, {
   onToPriceDetail({
     detail
   }) {
-    console.log(detail)
     router.replace({
       name: "priceDetail",
       data: {
@@ -453,7 +454,6 @@ create.Page(store, {
     }
     let isActivityCome = false;
     let data = {
-      orderType,
       storeGoodsInfos: [{
         storeNo: good.storeNo,
         goodsInfos: [{
@@ -469,8 +469,6 @@ create.Page(store, {
     };
     // 点击单独购买
     if(currentTarget && currentTarget.dataset.type === "alone") {
-      data.orderType = 1;
-      orderType = 1;
       isActivityCome = true;
     } else {
       // 活动购买
@@ -487,7 +485,6 @@ create.Page(store, {
       }
     }
     console.log("data", data);
-    console.log("event", event);
     wx.setStorageSync("CREATE_INTENSIVE", data);
     router.push({
       name: "createOrder",
@@ -568,4 +565,24 @@ create.Page(store, {
     })
   },
 
+  // 点击跳转店铺
+  onToStore() {
+    const {
+      good,
+    } = this.data;
+    let id = good.storeNo.slice(8, good.storeNo.length);
+    id = +id;
+    if(id < 123580) return;
+    router.push({
+      name: "store",
+      data: {
+        storeNo: good.storeNo,
+      },
+    })
+  },
+
+  // 点击跳转店铺
+  onToCart() {
+    router.goTabbar("cart");
+  },
 })

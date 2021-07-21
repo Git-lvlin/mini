@@ -90,7 +90,6 @@
   >
     <view class="good_list">
       <good-card
-        jump="{{true}}"
         wx:for="{{goodList}}"
         wx:key="index"
         data="{{item}}"

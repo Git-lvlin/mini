@@ -3,6 +3,7 @@ import store from "../../../store/good";
 import { IMG_CDN } from "../../../constants/common";
 import goodApi from "../../../apis/good";
 import router from "../../../utils/router";
+import { showModal, showToast } from "../../../utils/tools";
 
 create.Component(store, {
   options: {
@@ -81,12 +82,12 @@ create.Component(store, {
       id = +id;
       console.log("ShopId ~ id", id)
       if(id < 123580) return;
-      // router.push({
-      //   name: "store",
-      //   data: {
-      //     storeNo: store.storeNo,
-      //   },
-      // })
+      router.push({
+        name: "store",
+        data: {
+          storeNo: store.storeNo,
+        },
+      })
     },
     // 跳转商详
     onToDetail({
@@ -105,6 +106,25 @@ create.Component(store, {
           spuId: good.spuId,
         },
       })
-    }
+    },
+    // 点击删除商品
+    onDelete({
+      currentTarget,
+    }) {
+      const {
+        good,
+      } = currentTarget.dataset;
+      showModal({
+        content: "您确定要删除？",
+        ok() {
+          goodApi.removeCart({
+            skuIds: [good.skuId],
+          }).then(res => {
+            showToast({ title: "删除成功" });
+            store.updateCart();
+          });
+        },
+      })
+    },
   }
 })

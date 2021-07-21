@@ -33,7 +33,7 @@ Component({
       let buyMinNum = data.goodsInfos[index].buyMinNum;
       buyMinNum = buyMinNum < 1 ? 1 : buyMinNum;
       if(data.goodsInfos[index].skuNum <= buyMinNum) {
-        Toast({
+        showToast({
           message: `至少添加 ${data.goodsInfos[index].buyMinNum} 个商品`,
           context: this,
         });

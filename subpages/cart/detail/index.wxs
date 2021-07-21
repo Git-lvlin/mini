@@ -8,6 +8,17 @@ var getLastTime = function(time) {
   return endTime
 }
 
+var getPriceTitle = function (orderType) {
+  var titleType = {
+    "3": "单约价",
+    "4": "团约价",
+    "11": "约购价",
+    "15": "集约价",
+  };
+  return titleType[orderType];
+};
+
 module.exports = {
   getLastTime: getLastTime,
+  getPriceTitle: getPriceTitle,
 }

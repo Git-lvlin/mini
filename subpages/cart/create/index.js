@@ -147,6 +147,7 @@ create.Page(store, {
     postData.deliveryInfo = deliveryInfo;
     if(this.orderType == 15) {
       // 集约
+      console.log(1111)
       let data = wx.getStorageSync("CREATE_INTENSIVE");
       let {
         storeAdress,
@@ -159,8 +160,9 @@ create.Page(store, {
         selectAddressType,
         storeActivityGood: other,
       });
-    } else if(this.orderType == 3 || this.isActivityCome && this.orderType == 1 || this.orderType == 11) {
+    } else if(this.orderType == 3 || this.isActivityCome || this.orderType == 11) {
       // 单约 || 单独购买 || 1688
+      console.log(222)
       let data = wx.getStorageSync("CREATE_INTENSIVE");
       postData = {
         ...postData,
@@ -170,6 +172,7 @@ create.Page(store, {
         storeActivityGood: data
       })
     } else if(this.orderType == 4) {
+      console.log(333)
       // 团约
       postData = {
         ...postData,
@@ -179,11 +182,10 @@ create.Page(store, {
         storeActivityGood: teamGoods
       })
     } else {
+      console.log(444)
       // 普通商品
       goodList = wx.getStorageSync("GOOD_LIST");
       postData = {
-        orderType: 1,
-        objectId: 0,
         deliveryInfo,
         storeGoodsInfos: goodList
       };
@@ -314,6 +316,7 @@ create.Page(store, {
     let postData = {};
     if (this.orderType == 15 && selectAddressType.type == 2) {
       postData = {
+        changeStore: detail,
         note,
         deliveryInfo: {
           provinceId: storeAdress.provinceId,
@@ -325,6 +328,7 @@ create.Page(store, {
       }
     } else {
       postData = {
+        changeStore: detail,
         note,
         storeGoodsInfos,
       }
@@ -342,7 +346,15 @@ create.Page(store, {
 
   // 更新订单数据
   updateOrderAmount(postData) {
-    cartApi.getOrderAmount(postData).then(res => {
+    let {
+      orderInfo
+    } = this.data;
+    const {
+      changeStore,
+      ...data
+    } = postData;
+      console.log("🚀 ~ file: index.js ~ line 354 ~ updateOrderAmount ~ changeStore", changeStore)
+    cartApi.getOrderAmount(data).then(res => {
       const {
         payAmount,
         reduceAmount,
@@ -366,6 +378,13 @@ create.Page(store, {
         totalAmount: util.divide(totalAmount, 100),
         storeGoodsInfos: storeShippingFeeAmount
       }
+      if(changeStore.data && changeStore.data.storeNo) {
+        orderInfo.storeGoodsInfos[changeStore.idx] = {
+          ...orderInfo.storeGoodsInfos[changeStore.idx],
+          goodsInfos: changeStore.data.goodsInfos,
+        }
+      }
+      console.log("🚀 ~ file: index.js ~ line 381 ~ cartApi.getOrderAmount ~ orderInfo", orderInfo)
       this.setData({
         orderInfo
       })
@@ -436,8 +455,51 @@ create.Page(store, {
       if(!!activityId) postData.activityId = activityId;
       if(!!objectId) postData.objectId = objectId;
     }
-    orderInfo.storeGoodsInfos.forEach(item => {
-      // let storeGood = {"goodsInfos":[{"skuId":1,"skuNum":1,"spuId":2015}],"storeNo":"store_m_1"}
+    postData.storeGoodsInfos = this.getStoreGoodsInfos(orderInfo.storeGoodsInfos);
+    return postData;
+  },
+
+  // 提交订单 - 集约商品数据处理
+  getStoreGood() {
+    const {
+      storeAdress,
+      note,
+      orderInfo,
+      addressInfo,
+      selectAddressType,
+      orderToken,
+    } = this.data;
+    if(!addressInfo.consignee && selectAddressType.type == 3) {
+      showToast({ title: "请选择收货地址" });
+      return;
+    }
+    if(selectAddressType.type == 2 && !storeAdress.linkman && !storeAdress.phone) {
+      showToast({ title: "请填写提货人信息" });
+      return;
+    }
+    if(orderInfo.storeGoodsInfos.length < 1) {
+      showToast({ title: "未获取到商品信息，请重试" });
+      return;
+    }
+    let postData = {
+      payType: 0,
+      sourceId: "miniprogram",
+      token: orderToken,
+      totalAmount: util.multiply(orderInfo.totalAmount, 100),
+      payAmount: util.multiply(orderInfo.payAmount, 100),
+      deliveryMode: selectAddressType.type,
+      note,
+      shippingFeeAmount: orderInfo.shippingFeeAmount || 0,
+      deliveryInfo: this.mapAddress(storeAdress),
+      storeGoodsInfos: this.getStoreGoodsInfos(orderInfo.storeGoodsInfos),
+    }
+    return postData;
+  },
+  
+  // 遍历店铺商品
+  getStoreGoodsInfos(storeList) {
+    let storeGoodsInfos = [];
+    storeList.forEach(item => {
       let storeGood = {
         storeNo: item.storeNo,
         goodsInfos: []
@@ -452,54 +514,9 @@ create.Page(store, {
           skuNum: child.skuNum,
         });
       });
-      postData.storeGoodsInfos.push(storeGood);
-    })
-    return postData;
-  },
-
-  // 提交订单 - 集约商品数据处理
-  getStoreGood() {
-    const {
-      storeActivityGood,
-      storeAdress,
-      note,
-      orderInfo,
-      addressInfo,
-      selectAddressType,
-    } = this.data;
-    if(!addressInfo.consignee && selectAddressType.type == 3) {
-      showToast({ title: "请选择收货地址" });
-      return;
-    }
-    if(selectAddressType.type == 2 && !storeAdress.linkman && !storeAdress.phone) {
-      showToast({ title: "请填写提货人信息" });
-      return;
-    }
-    if(storeActivityGood.storeGoodsInfos.length < 1) {
-      showToast({ title: "未获取到商品信息，请重试" });
-      return;
-    }
-    const {
-      orderType,
-      objectId,
-      activityId,
-    } = storeActivityGood;
-    let postData = {
-      orderType,
-      payType: 0,
-      activityId,
-      objectId,
-      sourceId: "miniprogram",
-      token: orderToken,
-      totalAmount: util.multiply(orderInfo.totalAmount, 100),
-      payAmount: util.multiply(orderInfo.payAmount, 100),
-      deliveryMode: selectAddressType.type,
-      note,
-      shippingFeeAmount: orderInfo.shippingFeeAmount || 0,
-      deliveryInfo: this.mapAddress(storeAdress),
-      storeGoodsInfos: storeActivityGood.storeGoodsInfos,
-    }
-    return postData;
+      storeGoodsInfos.push(storeGood);
+    });
+    return storeGoodsInfos;
   },
 
   // 确认下单 跳转收银台
@@ -521,14 +538,14 @@ create.Page(store, {
         data: res,
       })
     }).catch(err => {
-      if(refreshOrderToken[err.code]) {
+      // if(refreshOrderToken[err.code]) {
         this.getOrderToken();
-      } else {
-        let timer = setTimeout(() => {
-          router.go();
-          clearTimeout(timer);
-        }, 1500);
-      }
+      // } else {
+        // let timer = setTimeout(() => {
+        //   router.go();
+        //   clearTimeout(timer);
+        // }, 1500);
+      // }
     });
   }
 })

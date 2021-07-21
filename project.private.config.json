@@ -13,12 +13,6 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/list/index",
-          "pathName": "pages/list/index",
-          "query": "",
-          "scene": null
-        },
-        {
           "name": "创建订单",
           "pathName": "subpages/cart/create/index",
           "query": "orderType=1",
@@ -51,7 +45,7 @@
         {
           "name": "商详",
           "pathName": "subpages/cart/detail/index",
-          "query": "activityId=0&objectId=&orderType=2&skuId=3293&spuId=2449&wsId=0",
+          "query": "activityId=0&objectId=&orderType=2&skuId=3600&spuId=2504&wsId=0",
           "scene": null
         },
         {
@@ -61,51 +55,15 @@
           "scene": null
         },
         {
-          "name": "subpages/cart/teamDetail/index",
-          "pathName": "subpages/cart/teamDetail/index",
-          "query": "orderType=3&spuId=2069&objectId=2&groupId=23772&skuId=84",
-          "scene": null
-        },
-        {
-          "name": "pages/webview/index",
-          "pathName": "pages/webview/index",
-          "query": "url=http%3A%2F%2Fwww.baidu.com",
-          "scene": null
-        },
-        {
           "name": "购物车",
           "pathName": "pages/cart/index",
           "query": "",
           "scene": null
         },
         {
-          "name": "pages/otherpay/index",
-          "pathName": "pages/otherpay/index",
-          "query": "id=1410138285051949057&payType=7&scene=1",
-          "scene": null
-        },
-        {
           "name": "比价详情",
           "pathName": "subpages/cart/priceDetail/index",
           "query": "id=60",
-          "scene": null
-        },
-        {
-          "name": "pages/test/index",
-          "pathName": "pages/test/index",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "subpages/cart/address/index",
-          "pathName": "subpages/cart/address/index",
-          "query": "",
-          "scene": null
-        },
-        {
-          "name": "subpages/cart/editAddress/index",
-          "pathName": "subpages/cart/editAddress/index",
-          "query": "data={\"address\":\"是的发送到发\",\"cityId\":\"2\",\"cityName\":\"北京市\",\"consignee\":\"木木\",\"districtId\":\"14\",\"districtName\":\"大兴区\",\"fullAddress\":\"北京市北京市大兴区是的发送到发\",\"id\":\"1409760393264574466\",\"isDefault\":false,\"latitude\":\"\",\"longitude\":\"\",\"memberId\":\"1409757599577092098\",\"phone\":\"18924245450\",\"placeName\":\"\",\"provinceId\":\"1\",\"provinceName\":\"北京市\",\"roomNo\":\"\"}",
           "scene": null
         }
       ]

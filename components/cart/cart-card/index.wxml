@@ -18,7 +18,7 @@
     </view>
   </view>
   <van-swipe-cell
-    right-width="{{ 150 }}"
+    right-width="{{ 75 }}"
     wx:for="{{store.skus}}"
     wx:key="skuId"
   >
@@ -53,8 +53,8 @@
       </view>
     </van-cell-group>
     <view slot="right" class="right_content">
-      <view class="right_btn collection"><text>移入\r\n收藏夹</text></view>
-      <view class="right_btn delete">删除</view>
+      <!-- <view class="right_btn collection"><text>移入\r\n收藏夹</text></view> -->
+      <view class="right_btn delete" data-good="{{item}}" bindtap="onDelete">删除</view>
     </view>
   </van-swipe-cell>
 

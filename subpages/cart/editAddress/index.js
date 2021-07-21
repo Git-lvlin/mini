@@ -118,7 +118,7 @@ Page({
     const data = {
       showPopup: false
     };
-    if(!!selectAddress && !selectAddress.area.name) {
+    if(!!selectAddress && selectAddress.area.name) {
     //   selectAddress.province = {};
     //   selectAddress.city = {};
     // } else {

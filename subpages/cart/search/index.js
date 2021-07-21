@@ -94,8 +94,8 @@ Page({
   // input 失焦
   handleInputBlur() {
     // setdata 冲突
-    const timer = setTimeout(() => {
-      clearTimeout(timer);
+    // const timer = setTimeout(() => {
+      // clearTimeout(timer);
       const {
         showAssociation
       } = this.data;
@@ -104,7 +104,7 @@ Page({
           showAssociation: false
         })
       }
-    }, 200);
+    // }, 300);
   },
 
   // input 聚焦
@@ -123,6 +123,7 @@ Page({
     const userInfo = getStorageUserInfo() || {};
     const {
       searchText,
+      showAssociation,
     } = this.data;
     goodApi.getAssociationList({
       keyword: searchText,
@@ -162,9 +163,11 @@ Page({
         keyList.push(item);
       });
       if(res.length) {
-        this.setData({
-          showAssociation: true,
-        });
+        if(!showAssociation) {
+          this.setData({
+            showAssociation: true,
+          });
+        }
       }
       this.setData({
         keyList,

@@ -1,5 +1,5 @@
 {
-  "navigationBarTextStyle": "white",
+  "navigationBarTextStyle": "black",
   "navigationStyle": "custom",
   "usingComponents": {
     "settlement-bar": "/components/cart/settlement-bar/index",

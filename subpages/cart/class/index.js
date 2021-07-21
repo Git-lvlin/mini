@@ -132,6 +132,7 @@ create.Page(store, {
     let goodsList = [];
     list.forEach(item => {
       goodsList.push({
+        ...item,
         spuId: item.id,
         skuId: item.defaultSkuId,
         goodsName: item.goodsName,
