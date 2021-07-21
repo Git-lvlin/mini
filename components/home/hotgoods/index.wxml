@@ -18,8 +18,6 @@
       class="good_item"
       wx:for="{{hotGoodList}}"
       wx:key="id"
-      data-data="{{item}}"
-      bindtap="onGood"
     >
       <good-card
         data="{{item}}"
