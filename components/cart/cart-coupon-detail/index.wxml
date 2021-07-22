@@ -11,7 +11,7 @@
 >
   <view class="price_popup_title">订单明细</view>
 
-  <view class=""></view>
+  <view class="coupon_desc">实际金额以提交订单页面金额为准</view>
 
   <view class="coupon_line" />
 
