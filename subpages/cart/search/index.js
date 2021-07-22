@@ -18,7 +18,10 @@ Page({
     keyList: [],
     goodList: [],
     showDeleteSearch: false,
+    // 显示清楚按钮
     showClear: false,
+    // 是否已搜索 
+    isSearch: false,
   },
 
   onShow() {
@@ -88,6 +91,7 @@ Page({
   }) {
     this.setData({
       searchText: detail.value,
+      isSearch: false,
     })
     debounce(this.getAssociation, 500)();
   },
@@ -269,9 +273,13 @@ Page({
       this.setData({
         goodList: list,
         showAssociation: false,
+        isSearch: true,
       })
     }).catch(() => {
       this.loading = false;
+      this.setData({
+        isSearch: true,
+      })
     })
   },
 

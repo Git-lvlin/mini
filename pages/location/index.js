@@ -1,7 +1,7 @@
 import { IMG_CDN } from '../../constants/common';
 import create from '../../utils/create';
 import store from '../../store/index';
-import { showToast, throttle } from '../../utils/tools';
+import { showModal, showToast, throttle } from '../../utils/tools';
 import goodApi from '../../apis/good';
 import router from '../../utils/router';
 
@@ -19,6 +19,7 @@ create.Page(store, {
 
   // 当前位置经纬度
   location: {},
+  openLocation: false,
 
   // 值单位 px
   touchMove: {
@@ -72,20 +73,36 @@ create.Page(store, {
         type: 'gps84',
         altitude: false,
         success(result) {
+          console.log("result", result);
           let data = {
             latitude: result.latitude,
             longitude: result.longitude,
           }
           that.location = data;
+          that.openLocation = true;
           that.setData(data);
           that.getNearbyStore(data);
         },
         fail(err) {
+          console.log("err", err);
+          that.openLocation = false;
+          that.openLocationTip();
           that.location = defLocation;
           that.getNearbyStore(defLocation);
         },
       });
     }
+  },
+
+  // 定位提示
+  openLocationTip(goBack = false) {
+    showModal({
+      content: "获取不到您的位置呢，请确认手机定位是否开始",
+      showCancel: goBack,
+      cancel() {
+        router.go();
+      },
+    });
   },
 
   // 附近店铺
@@ -149,6 +166,10 @@ create.Page(store, {
 
   // 点击搜索框
   onSearchInput() {
+    if(!this.openLocation) {
+      this.openLocationTip(true);
+      return;
+    }
     router.push({
       name: 'locationSearch',
       data: this.location

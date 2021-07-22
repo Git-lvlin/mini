@@ -27,7 +27,7 @@
       wx:if="{{canUseProfile}}"
       bindtap="onLogin"
     >登录+</van-button>
-    <view class="on_login" bindtap="onToHom">不登录，先看看</view>
+    <view class="on_login" bindtap="onToHome">不登录，先看看</view>
     <radio-group class="env_list" wx:if="{{changeEnv}}" bindchange="handleChangeEnv">
       <label class="env_item" wx:for="{{envList}}" wx:for-item="item" wx:key="value">
         <radio value="{{item.env}}" checked="{{item.env === currentEnv}}" /> {{item.name}}

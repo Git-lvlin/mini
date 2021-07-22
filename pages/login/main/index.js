@@ -247,6 +247,7 @@ create.Page(store, {
 
   // 不登录
   onToHome() {
+    console.log("asdfasdf")
     router.goTabbar();
   },
 

@@ -6,9 +6,9 @@ import router from './utils/router'
 
 // 环境变量 dev uat fat pro
 // ***【 环境如有变动 common.wxs 需更换域名 】***
-const SYS_ENV = 'uat';
+const SYS_ENV = 'pro';
 // 是否显示选择环境按钮
-const CHANGE_ENV = true;
+const CHANGE_ENV = false;
 
 App({
   onLaunch() {
@@ -27,6 +27,7 @@ App({
     // 设置环境变量 dev test prod
     wx.setStorageSync('SYS_ENV', SYS_ENV);
 
+    console.log("app launch")
     // 生成设备码校验是否填写邀请码
     this.getInputCode();
 
@@ -57,8 +58,9 @@ App({
   // 生成设备码校验是否填写邀请码
   getInputCode() {
     if(SYS_ENV === "dev") return;
-    const device_code = wx.getStorageSync("DEVICE_CODE");
-    if(device_code) return;
+    const deviceCode = wx.getStorageSync("DEVICE_CODE");
+    const isInputInvite = wx.getStorageSync("IS_INPUT_INVITE");
+    if(!!deviceCode && !!isInputInvite) return;
     wx.getSystemInfo({
       success (res) {
         const {
