@@ -7,6 +7,7 @@ export default {
     // setStorageUserInfo(data.memberInfo);
     wx.setStorageSync("ACCESS_TOKEN", data.accessToken);
     wx.setStorageSync("REFRESH_TOKEN", data.refreshToken);
+    wx.setStorageSync("USER_INFO", data.memberInfo);
     wx.setStorageSync("LOGIN_OVER", false);
     wx.removeStorage({
       key: 'LOGIN_INFO',

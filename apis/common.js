@@ -14,6 +14,8 @@ const url = {
 
 let isShowLoginMobal = store.data.showLoginMobel;
 let refreshingToken = false;
+let refreshNum = 0;
+let clearRefreshTime = null;
 
 const showLogin = (back) => {
   showModal({
@@ -77,6 +79,16 @@ export default {
       store.data.showLoginMobel = true;
       return ;
     }
+    if(refreshNum >= 3) {
+      // 连续刷新不成功，拦截一秒内的请求
+      refreshingToken = true;
+      clearRefreshTime = setTimeout(() => {
+        clearTimeout(clearRefreshTime);
+        refreshNum = 0;
+        refreshingToken = false;
+      }, 1000);
+    }
+    refreshNum += 1;
     postData = {
       refreshToken: wx.getStorageSync("REFRESH_TOKEN"),
       id: userInfo.id,
@@ -86,6 +98,7 @@ export default {
       wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
       store.data.showLoginMobel = false;
       refreshingToken = false;
+      refreshNum = 0;
       return res;
     }).catch(err => {
       // if(err.code == 405 || err.code == 200109 || err.code == 10018 || err.code == 200104) {

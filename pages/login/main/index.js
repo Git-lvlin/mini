@@ -202,7 +202,6 @@ create.Page(store, {
 
   // 获取用户其他信息
   getUserInfo(userInfo) {
-    console.log("其他信息", userInfo)
     userApis.getUserInfo({
       id: userInfo.id
     }, {
@@ -247,7 +246,6 @@ create.Page(store, {
 
   // 不登录
   onToHome() {
-    console.log("asdfasdf")
     router.goTabbar();
   },
 

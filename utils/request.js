@@ -3,6 +3,7 @@ import { HTTP_TIMEOUT, VERSION } from '../constants/index'
 import commonApi from '../apis/common'
 import store from '../store/index'
 import router from '../utils/router'
+import routes from '../constants/routes'
 
 let isRefreshing = false;
 let requestHistory = [];
@@ -64,6 +65,7 @@ const Reqeust = (params) => {
           if (res.data.code == REFRESH_TOKEN_INVALID) {
             // refreshToken过期退出登录
             if(!showLoginMobel) {
+              console.log("asdfasfasdfasdf");
               showModal({
                 content: "您的登录已过期，请登录",
                 confirmText: "去登录",
