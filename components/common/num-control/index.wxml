@@ -1,7 +1,7 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
 <view class="num_control"> 
-  <view class="control_view reduce_view {{num < 2 ? 'gray_view' : ''}}" bindtap="reduceNum">
+  <view class="control_view reduce_view {{num < 2 ? 'gray_view' : ''}}" catchtap="reduceNum">
     <image
       class="control_icon"
       src="{{tools.getImgUrl(num < 2 ? 'miniprogram/cart/reduce_gray.png' : 'miniprogram/cart/reduce.png')}}"
@@ -13,7 +13,7 @@
     class="num_input"
     bindblur="handleInput"
   />
-  <view class="control_view add_view" bindtap="addNum">
+  <view class="control_view add_view" catchtap="addNum">
     <image class="control_icon" src="{{tools.getImgUrl('miniprogram/cart/add.png')}}" />
   </view>
 </view>

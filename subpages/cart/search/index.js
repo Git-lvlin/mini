@@ -1,5 +1,5 @@
 import goodApi from "../../../apis/good"
-import { debounce, getStorageUserInfo } from "../../../utils/tools";
+import { debounce, getStorageUserInfo, showToast } from "../../../utils/tools";
 import util from "../../../utils/util";
 
 Page({
@@ -18,6 +18,7 @@ Page({
     keyList: [],
     goodList: [],
     showDeleteSearch: false,
+    showClear: false,
   },
 
   onShow() {
@@ -96,15 +97,19 @@ Page({
     // setdata 冲突
     // const timer = setTimeout(() => {
       // clearTimeout(timer);
-      const {
-        showAssociation
-      } = this.data;
-      if(showAssociation) {
-        this.setData({
-          showAssociation: false
-        })
-      }
+      // const {
+      //   showAssociation
+      // } = this.data;
+      // if(showAssociation) {
+      //   this.setData({
+      //     showAssociation: false
+      //   })
+      // }
     // }, 300);
+    
+    this.setData({
+      showClear: false,
+    })
   },
 
   // input 聚焦
@@ -115,6 +120,17 @@ Page({
     if(!!searchText) {
       this.getAssociation();
     }
+    this.setData({
+      showClear: true,
+    })
+  },
+
+  // 清除搜索信息
+  onClearSearch() {
+    this.setData({
+      searchText: "",
+      showAssociation: false,
+    })
   },
 
   // 关键词联想
@@ -135,7 +151,7 @@ Page({
       let tempList = [];
       const keyList = [];
       list.forEach((item, index) => {
-        if(index > 4) return; 
+        // if(index > 4) return; 
         tempList = item.split("<em>");
         item = [];
         tempList.forEach(child => {
@@ -236,6 +252,7 @@ Page({
       param.sort = sort;
     }
     goodApi.getSearchList(param).then(res => {
+      this.getHistorySearch();
       this.loading = false;
       this.searchPage.totalPage = res.totalpage;
       let list = res.records;
@@ -251,6 +268,7 @@ Page({
       }
       this.setData({
         goodList: list,
+        showAssociation: false,
       })
     }).catch(() => {
       this.loading = false;

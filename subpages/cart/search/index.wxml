@@ -23,6 +23,12 @@
             catchblur="handleInputBlur"
             catchfocus="onFocus"
           />
+          <!-- <image
+            class="clear_input"
+            wx:if="{{showClear}}"
+            src="{{tools.getImgUrl('miniprogram/common/clear_input.png')}}"
+            catchtap="onClearSearch"
+          /> -->
         </view>
       </view>
       <view class="flex_fix search_btn" bindtap="onSearch">搜索</view>

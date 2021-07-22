@@ -45,7 +45,7 @@
               <num-control
                 good="{{item}}"
                 num="{{item.quantity}}"
-                bind:change="handleStockChange"
+                catch:change="handleStockChange"
               />
             </view>
           </view>

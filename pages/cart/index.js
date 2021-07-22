@@ -4,7 +4,7 @@ import store from "../../store/good"
 import router from "../../utils/router";
 import goodApi from "../../apis/good";
 import homeApi from "../../apis/home";
-import { getStorageUserInfo, showToast } from "../../utils/tools";
+import { getStorageUserInfo, showToast, mapNum } from "../../utils/tools";
  
 create.Page(store, {
   use: [
@@ -48,6 +48,9 @@ create.Page(store, {
 
   onShow() {
     const userInfo = getStorageUserInfo();
+    const {
+      hotGoodList,
+    } = this.data;
     if(!!userInfo) {
       this.store.updateCart();
       this.setData({
@@ -56,7 +59,9 @@ create.Page(store, {
     }
     // 更新tabbar显示
     router.updateSelectTabbar(this, 2);
-    this.getHotGood();
+    if(hotGoodList.length < 1) {
+      this.getHotGood();
+    }
   },
 
   // 全选购物车
@@ -83,7 +88,7 @@ create.Page(store, {
     }, {
       showLoading: false
     }).then(res => {
-      const list = res.records;
+      const list = mapNum(res.records);
       let {
         hotGoodList
       } = this.data;

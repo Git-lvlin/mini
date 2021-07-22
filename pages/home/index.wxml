@@ -41,10 +41,10 @@
     />
 
     <!-- 比价模块 -->
-    <priceRatio
+    <!-- <priceRatio
       floor="{{item}}"
       wx:if="{{item.floorType === 9}}"
-    />
+    /> -->
 
     <!-- 豆腐块 -->
     <beancurd-cube
