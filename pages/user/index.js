@@ -125,7 +125,7 @@ create.Page(store, {
       orderTypeList[0].subNum = res.paid;
       orderTypeList[1].subNum = res.share;
       orderTypeList[2].subNum = res.deliver;
-      orderTypeList[3].subNum = res.receive;
+      // orderTypeList[3].subNum = res.receive;
       orderTypeList[4].subNum = res.afterSales;
       this.setData({
         orderTypeList,

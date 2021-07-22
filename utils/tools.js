@@ -6,6 +6,7 @@ import router from "../utils/router"
 import dayjs from '../miniprogram_npm/dayjs/index.js'
 import relativeTime from './dayjsplugin/relativeTime'
 import util from "./util"
+import { agreementUrl } from "../constants/common"
 
 dayjs.extend(relativeTime);
 
@@ -410,3 +411,16 @@ export const mapNum = (list = []) => {
   })
   return list
 };
+
+// 跳转协议
+export const jumpToAgreement = (type) => {
+  let url = agreementUrl[type];
+  if(!!url) {
+    router.push({
+      name: "webview",
+      data: {
+        url: encodeURIComponent(url),
+      },
+    })
+  }
+}

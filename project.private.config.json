@@ -65,6 +65,12 @@
           "pathName": "subpages/cart/priceDetail/index",
           "query": "id=60",
           "scene": null
+        },
+        {
+          "name": "subpages/user/setting/index",
+          "pathName": "subpages/user/setting/index",
+          "query": "",
+          "scene": null
         }
       ]
     }

@@ -1,7 +1,7 @@
 import create from '../../../utils/create'
 import store from '../../../store/index'
 import router from '../../../utils/router'
-import { getUserInfo, handleErrorCode, strToParamObj } from '../../../utils/tools'
+import { getUserInfo, handleErrorCode, strToParamObj, jumpToAgreement } from '../../../utils/tools'
 import { SOURCE_TYPE } from '../../../constants/index'
 import loginApis from '../../../apis/login'
 import userApis from '../../../apis/user'
@@ -230,11 +230,13 @@ create.Page(store, {
   },
 
   // 关闭条款弹窗
-  onClickTreaty() {
-    console.log(this)
-    this.setData({
-      showTreaty: true
-    })
+  onClickTreaty({
+    currentTarget
+  }) {
+    const {
+      type
+    } = currentTarget.dataset;
+    jumpToAgreement(type);
   },
 
   // 关闭条款弹窗

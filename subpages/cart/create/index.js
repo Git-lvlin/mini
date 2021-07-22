@@ -93,6 +93,8 @@ create.Page(store, {
     if(chooseAddress) {
       this.setData({
         addressInfo: chooseAddress
+      }, () => {
+        this.getConfirmInfo();
       })
       wx.removeStorage({
         key: "CHOOSE_ADDRESS"

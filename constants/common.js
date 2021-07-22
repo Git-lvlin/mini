@@ -14,6 +14,19 @@ export const ossHost = {
 // 图片cdn
 export const IMG_CDN = ossHost[ENV] || ossHost['pro'];
 
+// 协议
+const agreementHost = {
+  dev: "https://publicmobile-dev.yeahgo.com/web/agreement",
+  uat: "https://publicmobile-uat.yeahgo.com/web/agreement",
+  fat: "https://publicmobile-fat.yeahgo.com/web/agreement",
+  pro: "https://publicmobile.yeahgo.com/web/agreement",
+};
+export const agreementUrl = {
+  // 服务协议
+  service: `${agreementHost[ENV]}?reg=user&index=1`,
+  // 隐私政策
+  privacy: `${agreementHost[ENV]}?reg=user&index=0`,
+}
 
 // 字符类型资源位id
 export const PAY_TYPE_KEY = "MINIPAYTYPE"
