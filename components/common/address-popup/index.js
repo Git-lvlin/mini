@@ -1,5 +1,7 @@
 import cartApi from "../../../apis/order";
 import { getPinYin } from '../../../utils/pinyin'
+import { showToast } from "../../../utils/tools";
+
 
 const defaultAreaList = [];
 const defaultIndex = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
@@ -17,9 +19,9 @@ Component({
       type: Boolean,
       value: false,
       observer(newVal, oldVal) {
-        if(newVal !== oldVal && newVal) {
-          this.getProvince();
-        }
+        // if(newVal !== oldVal && newVal) {
+        //   this.getProvince();
+        // }
       },
     },
     editData: {
@@ -35,6 +37,8 @@ Component({
       value: false,
     },
   },
+
+  editFristLoad: false,
 
   data: {
     letterList: defaultIndex,
@@ -53,7 +57,9 @@ Component({
     },
   },
 
-  
+  ready() {
+    this.getProvince();
+  },
 
   methods: {
     // 获取省份
@@ -66,6 +72,7 @@ Component({
         } = this.data;
         let selectData = {};
         if(isEdit) {
+          this.editFristLoad = true;
           selectData = {
             id: editData.provinceId,
             type: "province",
@@ -111,14 +118,18 @@ Component({
           areaData.area = areaList;
         }
         this.setData({
+          areaData,
           areaList,
-          areaData
-        })
+        });
       });
     },
 
     // 格式化区域数据
     mapAddreass(list = [], selectData = {}) {
+      const {
+        isEdit,
+        areaData,
+      } = this.data;
       let letterList = [];
       let selectAddress = this.data.selectAddress;
       let areaList = JSON.stringify(defaultAreaList);
@@ -145,6 +156,12 @@ Component({
                 selectAddress.areaStr = `${selectAddress.province.name} ${selectAddress.city.name} ${selectAddress.area.name}`
                 selectAddress.isAct = "area";
                 this.editFristLoad = false;
+                if(isEdit) {
+                  this.triggerEvent("setAddress", {
+                    selectAddress,
+                    areaData
+                  })
+                }
               }
             }
             letterList.forEach(item => {
@@ -225,6 +242,7 @@ Component({
       } else if(selectAddress.isAct === "city") {
         // 提供镇区选择
         if(showArea) {
+          // 展示城区
           selectAddress.isAct = "area"
           selectAddress["area"] = {};
           this.setData({
@@ -232,6 +250,8 @@ Component({
           });
           this.getArea(data.id, false);
         } else {
+          // 不展示城区
+          selectAddress.isAct = "province"
           this.onCloseAddress({
             selectAddress,
             areaData,
@@ -249,6 +269,7 @@ Component({
     },
     // 关闭弹窗
     onCloseAddress(data) {
+      data = data.selectAddress ? data : {};
       this.triggerEvent("close", data);
     }
   }

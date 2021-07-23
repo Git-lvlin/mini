@@ -26,15 +26,19 @@ const url = {
   togetherUser: "/activity/option/group/personal/memberDynamic",
   
   detailRatio: "/contestprice/auth/contestprice/GetSimpleGoodsInfo",
+  priceDetail: "/contestprice/open/contestprice/GetContestDetail",
+  priceGoodList: "/contestprice/open/contestprice/GetHotGoodsList",
 
   searchHistory: "/search/auth/UserSearchHistory/getUserKeyword",
   clearSearchHistory: "/search/auth/userSearchHistory/clearUserKeyword",
-  hotSearch: "/search/auth/HotKeyword/index",
+  hotSearch: "/search/open/HotKeyword/index",
   searchList: "/search/option/opensearch/index",
-  associationList: "/search/option/opensearch/getSuggest",
+  associationList: "/search/open/opensearch/getSuggest",
 
   storeDetail: "/store/option/storeShop/show",
   storeGood: "/store/option/storeShop/salePage",
+
+  nearbyStore: "/store/option/memberShop/nearby",
 }
 
 export default {
@@ -99,7 +103,7 @@ export default {
   },
   // 选择sku
   getCheckSku(params, option) {
-    return Request.get(url.checkSku, params, option);
+    return Request.post(url.checkSku, params, option);
   },
   // 获取单约详情
   getPersonalDetail(params, option) {
@@ -129,6 +133,14 @@ export default {
   // 获取详情比价信息
   getDetailRatio(params, option) {
     return Request.get(url.detailRatio, params, option);
+  },
+  // 获取详情比价信息
+  getPriceDetail(params, option) {
+    return Request.get(url.priceDetail, params, option);
+  },
+  // 获取详情比价信息
+  getPriceGoodList(params, option) {
+    return Request.get(url.priceGoodList, params, option);
   },
 
   // 获取搜索历史
@@ -160,4 +172,9 @@ export default {
   getStoreGood(params, option) {
     return Request.get(url.storeGood, params, option);
   },
+  // 获取一定范围内的店铺数
+  getNearbyStore(params, option) {
+    return Request.get(url.nearbyStore, params, option);
+  },
+
 }

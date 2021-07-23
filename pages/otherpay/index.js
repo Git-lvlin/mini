@@ -36,7 +36,7 @@ Page({
       // 获取约卡充值支付信息
       this.getRechargePay(this.params);
     } else if(this.params.scene == 3) {
-      // 获取约卡充值支付信息
+      // 获取集约B端支付信息
       this.getIntensivePay(this.params);
     }
   },
@@ -66,6 +66,7 @@ Page({
   // 获取商品支付信息
   getPayInfo(data) {
     // id=1403266210801328130
+    console.log("普通商品支付")
     cartApi.getPayInfo({
       // id: data.id || "1403266210801328130",
       id: data.id,
@@ -74,6 +75,7 @@ Page({
     }, {
       showLoading: false
     }).then(res => {
+      console.log("普通商品支付", true)
       this.setData({
         payData: res,
       }, () => {
@@ -81,6 +83,7 @@ Page({
         wx.hideLoading();
       })
     }).catch(err => {
+      console.log("普通商品支付", false)
       const {
         payInfo,
       } = this.data;
@@ -93,6 +96,7 @@ Page({
 
   // 获取约卡支付信息
   getRechargePay(data) {
+    console.log("约卡支付")
     cartApi.getRechargePay({
       paymentNo: data.id,
       payType: 7,
@@ -119,7 +123,7 @@ Page({
 
   // 获取集约支付信息
   getIntensivePay(data) {
-    console.log("🚀 ~ file: index.js ~ line 122 ~ getIntensivePay ~ data", data)
+    console.log("getIntensivePay ~ data", data)
     cartApi.getIntensivePay({
       orderId: data.id,
       storeNo: data.storeNo,
@@ -150,6 +154,7 @@ Page({
 
   // 拉起微信支付
   openPay() {
+    console.log("调支付")
     const {
       payData,
       payInfo,
@@ -182,7 +187,7 @@ Page({
           payInfo
         })
         showToast({ title: "支付失败"});
-        router.goTabbar("user");
+        // router.goTabbar("user");
       }
     })
   },

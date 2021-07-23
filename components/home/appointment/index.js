@@ -1,6 +1,7 @@
 import homeApi from '../../../apis/home';
 import router from '../../../utils/router';
 import { mapNum } from '../../../utils/homeFloor';
+import { showToast } from '../../../utils/tools';
 
 
 Component({
@@ -8,15 +9,19 @@ Component({
     addGlobalClass: true,
   },
 
+  takeSpot: {},
+
   properties: {
     floor: {
       type: Object,
       value: {},
       observer(now, old) {
-        const nowStr = JSON.stringify(now);
-        const oldStr = JSON.stringify(old);
-        if(nowStr != oldStr) {
-          this.setGoodList(now.content);
+        let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
+        const nowTakeSpot = JSON.stringify(takeSpot);
+        const oldTakeSpot = JSON.stringify(this.takeSpot);
+        if(now.content && now.content.dataType && nowTakeSpot != oldTakeSpot) {
+          takeSpot = takeSpot && takeSpot.storeNo ? takeSpot : {};
+          this.setGoodList(now.content, takeSpot);
         }
       }
     },
@@ -30,9 +35,15 @@ Component({
     goodList: [],
   },
 
+  pageLifetimes: {
+    // show() {
+      // 页面被展示
+    // },
+  },
+
   methods: {
     // 设置商品列表数据
-    setGoodList(content) {
+    setGoodList(content, spot) {
       if(content.dataType === 1) {
         let homeCache = wx.getStorageSync("HOME_CACHE") || {};
         if(homeCache.goodList && !!homeCache.goodList.length) {
@@ -41,7 +52,7 @@ Component({
           })
         }
         homeApi.getFloorCustom(content.dataUrl, {
-          storeNo: "store_m_1"
+          storeNo: spot.storeNo || ""
         }).then(res => {
           let goodList = mapNum(res.goodsInfo)
           this.setData({
@@ -78,6 +89,10 @@ Component({
         spuId,
         wsId,
       } = currentTarget.dataset.data;
+      if(orderType == 5) {
+        showToast({ title: "您还不是店主，暂时不能下单!" });
+        return;
+      }
       const data = {
         activityId,
         objectId,

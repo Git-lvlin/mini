@@ -13,6 +13,7 @@
       wx:key="skuId"
     >
       <good-card
+        jump="{{false}}"
         data="{{item}}"
         priceTitle="{{priceTitle}}"
         bind:click="onToDetail"

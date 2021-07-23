@@ -28,6 +28,11 @@
       bindtap="onLogin"
     >登录+</van-button>
     <view class="on_login" bindtap="onToHome">不登录，先看看</view>
+    <radio-group class="env_list" wx:if="{{changeEnv}}" bindchange="handleChangeEnv">
+      <label class="env_item" wx:for="{{envList}}" wx:for-item="item" wx:key="value">
+        <radio value="{{item.env}}" checked="{{item.env === currentEnv}}" /> {{item.name}}
+      </label>
+    </radio-group>
   </view>
   <view class="other_login" />
   <view class="treaty">
@@ -39,8 +44,8 @@
         icon-size="32rpx"
       >
         登陆/注册即表示您已阅读并同意
-        <text class="red_text" catchtap="onClickTreaty">服务协议</text>和
-        <text class="red_text" catchtap="onClickTreaty">隐私政策</text>
+        <text class="red_text" data-type="service" catchtap="onClickTreaty">服务协议</text>和
+        <text class="red_text" data-type="privacy" catchtap="onClickTreaty">隐私政策</text>
       </van-radio>
     </van-radio-group>
   </view>

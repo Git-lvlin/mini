@@ -42,6 +42,16 @@
   height: 450rpx;
 }
 
+.env_list {
+  justify-content: space-between;
+  font-size: 24rpx;
+  margin-top: 40rpx;
+}
+
+.env_item {
+  padding-left: 24rpx;
+}
+
 .treaty {
   position: absolute;
   bottom: 80rpx;

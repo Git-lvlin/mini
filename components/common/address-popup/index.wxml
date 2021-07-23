@@ -1,3 +1,5 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
 <van-popup
   round
   show="{{ show }}"

@@ -1,30 +1,95 @@
 import create from '../../../utils/create'
 import store from '../../../store/index'
 import router from '../../../utils/router'
-import { getUserInfo, handleErrorCode, setStorageUserInfo } from '../../../utils/tools'
+import { getUserInfo, handleErrorCode, strToParamObj, jumpToAgreement } from '../../../utils/tools'
 import { SOURCE_TYPE } from '../../../constants/index'
 import loginApis from '../../../apis/login'
 import userApis from '../../../apis/user'
+import commonApis from '../../../apis/common'
 import tools from '../utils/login'
 
-create.Page(store, {
-  use: [
-    'motto'
-  ],
+const envList = [
+  {
+    name: "开发",
+    env: "dev",
+    value: 1,
+  },
+  {
+    name: "测试",
+    env: "uat",
+    value: 2,
+  },
+  {
+    name: "预发布",
+    env: "fat",
+    value: 3,
+  },
+  {
+    name: "生产",
+    env: "pro",
+    value: 4,
+  },
+];
 
+// 进入小程序场景值
+const codeScene = {
+  // 扫描二维码
+  1011: true,
+  // 长按图片识别二维码
+  1012: true,
+  // 扫描手机相册中选取的二维码
+  1013: true,
+  // 扫描小程序码
+  1047: true,
+  // 长按图片识别小程序码
+  1048: true,
+  // 扫描手机相册中选取的小程序码
+  1049: true,
+}
+
+const app = getApp();
+create.Page(store, {
   data: {
     showTreaty: false,
     canUseProfile: false,
-    radio: ''
+    radio: '',
+    envList,
+    changeEnv: app.globalData.changeEnv,
+    currentEnv: ''
   },
 
   onLoad(options) {
+    const sysEnv = wx.getStorageSync("SYS_ENV");
+    const {
+      changeEnv,
+      appScene,
+    } = app.globalData;
+    if(sysEnv && changeEnv) {
+      this.setData({
+        currentEnv: sysEnv,
+      })
+    }
     if (wx.getUserProfile) {
       this.setData({
         canUseProfile: true
       })
     } else {
       this.getUserSetting();
+    }
+    // 获取进入小程序场景值
+    if(codeScene[appScene]) {
+      // options.scene = "cf2a02ac71ca987860af70c2171d1512";
+      if(!options.scene) {
+        console.log("未获取到解析参数", options);
+      } else {
+        this.getShareParam(options);
+      }
+    }
+    console.log("options", options)
+    if(options.inviteCode) {
+      wx.setStorageSync("INVITE_INFO", {
+        inviteCode: options.inviteCode,
+      });
     }
     
     router.loginTo();
@@ -55,6 +120,19 @@ create.Page(store, {
       }
     }
     this.getCodeLogin(userInfo);
+  },
+
+  // 获取分享配置
+  getShareParam(data) {
+    commonApis.getShareParam({
+      scene: data.scene,
+    }).then(res => {
+      console.log(res)
+      const param = strToParamObj(res);
+      if(!!param.inviteCode) {
+        wx.setStorageSync("INVITE_INFO", param);
+      }
+    })
   },
   
   // 进入页面获取用户授权情况 - 旧api登录
@@ -124,7 +202,6 @@ create.Page(store, {
 
   // 获取用户其他信息
   getUserInfo(userInfo) {
-    console.log("其他信息", userInfo)
     userApis.getUserInfo({
       id: userInfo.id
     }, {
@@ -139,6 +216,12 @@ create.Page(store, {
     });
   },
 
+  // 切换环境
+  handleChangeEnv({ detail }) {
+    console.log(detail.value);
+    wx.setStorageSync("SYS_ENV", detail.value);
+  },
+
   // 勾选条件
   onChangeRadio(event) {
     this.setData({
@@ -147,11 +230,13 @@ create.Page(store, {
   },
 
   // 关闭条款弹窗
-  onClickTreaty() {
-    console.log(this)
-    this.setData({
-      showTreaty: true
-    })
+  onClickTreaty({
+    currentTarget
+  }) {
+    const {
+      type
+    } = currentTarget.dataset;
+    jumpToAgreement(type);
   },
 
   // 关闭条款弹窗

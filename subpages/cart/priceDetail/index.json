@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "查看更多价格",
+  "usingComponents": {
+    "price-mobel": "/components/common/price-mobel/index"
+  }
+}

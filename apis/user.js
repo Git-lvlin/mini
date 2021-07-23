@@ -4,7 +4,8 @@ const url = {
   defaultAddress: "/member/auth/memberAddress/findDefaultAddress",
   userInfo: "/member/auth/memberInfo/getUserCenter",
   userData: "/member/auth/memberInfo/getMemberAmountInfo",
-  orderCount: "/order/auth/order/userOrderCount"
+  orderCount: "/order/auth/order/userOrderCount",
+  updateUserInfo: "/member/auth/memberInfo/modifyMemberInfo",
 }
 
 export default {
@@ -19,6 +20,10 @@ export default {
   // 获取用户数据
   getUserData(params, option) {
     return Request.post(url.userData, params, option);
+  },
+  // 获取用户数据
+  updateUserInfo(params, option) {
+    return Request.post(url.updateUserInfo, params, option);
   },
   // 获取订单数量
   getOrderCount(params, option) {

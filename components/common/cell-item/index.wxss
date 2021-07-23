@@ -28,16 +28,16 @@
   color: #666666;
   font-size: 32rpx;
   line-height: 32rpx;
+  padding-right: 8rpx;
 }
 
 .icon_box,
 .cell_icon {
-  width: 24rpx;
-  height: 32rpx;
+  width: 16rpx;
+  height: 28rpx;
 }
 
 .cell_icon {
   vertical-align: middle;
-  margin-left: 8rpx;
   /* transform: translateX(-6rpx); */
 }

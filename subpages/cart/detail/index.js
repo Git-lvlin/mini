@@ -1,8 +1,9 @@
 import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
+import commonApi from '../../../apis/common'
 import { IMG_CDN } from '../../../constants/common'
-import { showModal, getStorageUserInfo } from '../../../utils/tools'
+import { showModal, getStorageUserInfo, showToast, objToParamStr } from '../../../utils/tools'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
 
@@ -11,7 +12,8 @@ create.Page(store, {
 
   use: [
     "systemInfo",
-    "cartList"
+    "cartList",
+    "cartListTotal",
   ],
 
   computed: {
@@ -58,8 +60,8 @@ create.Page(store, {
   onLoad(options) {
     let { systemInfo } = this.store.data;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
-    // if (!options.spuId && !!options.id) options.spuId = options.id;
     this.goodParams = options;
+    console.log("🚀 ~ file: index.js ~ line 63 ~ onLoad ~ this.goodParams", this.goodParams)
     let isActivityGood = 1;
     if(!!options.orderType) isActivityGood = options.orderType;
     this.setData({
@@ -74,20 +76,55 @@ create.Page(store, {
       // 拼成用户列表
       this.getTogetherUser();
     }
-    this.getDetailRatio();
   },
 
   onShow() {
     let userInfo = getStorageUserInfo();
-    let userOtherInfo = wx.getStorageSync("USER_OTHER_INFO") || "";
+    if(!!userInfo) {
+      if(this.store.data.cartList.length <= 0) {
+        this.store.updateCart();
+      }
+      // this.getDetailRatio();
+    }
     this.setData({
       userInfo,
-      userOtherInfo,
     })
   },
 
-  onShareAppMessage: function () {
-
+  // 转发
+  onShareAppMessage() {
+    const {
+      good,
+    } = this.data;
+    const {
+      orderType,
+      spuId,
+    } = this.goodParams;
+    let promise = null;
+    const pathParam = objToParamStr(this.goodParams);
+    const shareInfo = {
+      title: good.goodsName,
+      path: "/subpages/cart/detail/index",
+      imageUrl: good.imageList[0],
+    }
+    const userInfo = getStorageUserInfo();
+    if(userInfo) {
+      let params = {
+        shareType: 1,
+        contentType: 1,
+        shareObjectNo: spuId,
+        paramId: 1,
+        shareParams: this.goodParams,
+      };
+      if(orderType == 3 || orderType == 4) {
+        params.paramId = 3;
+        shareInfo.path = "/subpages/cart/teamDetail/index";
+      }
+      promise = commonApi.getShareInfo(params);
+      shareInfo.promise = promise;
+    }
+    shareInfo.path = `${shareInfo.path}${pathParam}`;
+    return shareInfo;
   },
 
   // 商品详情图片
@@ -131,8 +168,8 @@ create.Page(store, {
       params.skuId = skuId;
       goodApi.getPersonalDetail(params).then(res => {
         const good = res.curGoods;
-        const personalList = res.personalList.records;
-        const detailImg = good.images;
+        const personalList = res.personalList;
+        const detailImg = good && good.images || [];
         good.activityPrice = util.divide(good.activityPrice, 100);
         good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
         good.goodsMarketPrice = util.divide(good.marketPrice, 100);
@@ -235,6 +272,18 @@ create.Page(store, {
     });
   },
 
+  // 点击跳转比价详情
+  onToPriceDetail({
+    detail
+  }) {
+    router.replace({
+      name: "priceDetail",
+      data: {
+        id: detail.contestGoodsId,
+      }
+    })
+  },
+
   // 返回按钮
   onToBack() {
     router.go();
@@ -250,8 +299,13 @@ create.Page(store, {
   // 增加数量
   addCart() {
     let {
-      good
+      good,
+      quantity = 0,
     } = this.data;
+    if(good.goodsState != 1 || good.goodsVerifyState != 1) {
+      showToast({ title: "商品已下架" });
+      return;
+    }
     if(good.isMultiSpec == 1) {
       this.setData({
         specType: "add",
@@ -259,9 +313,19 @@ create.Page(store, {
       // 打开选择规格弹窗
       store.onChangeSpecState(true);
     } else {
+      if(quantity >= good.defaultSkuBuyMaxNum) {
+        showToast({ title: `最多购买${good.defaultSkuBuyMaxNum}件`});
+        return;
+      }
+      if(quantity < good.defaultSkuBuyMinNum) {
+        quantity = good.defaultSkuBuyMinNum;
+        // showToast({ title: `至少购买${quantity}件`});
+      } else {
+        quantity = 1
+      }
       let data = {
         skuId: good.defaultSkuId,
-        quantity: 1,
+        quantity,
         orderType: good.orderType,
         goodsFromType: good.goodsFromType,
       }
@@ -275,15 +339,17 @@ create.Page(store, {
   reduceCart() {
     let {
       good,
-      quantity,
+      quantity = 0,
     } = this.data;
-    if(quantity === 1) {
+    const minBuy = good.defaultSkuBuyMinNum > 1 ? good.defaultSkuBuyMinNum : 1;
+    if(quantity == minBuy) {
+      quantity = -good.defaultSkuBuyMinNum;
       showModal({
         content: "您确定要清除该商品？",
         ok: () => {
           this.updateCart({
             skuId: good.defaultSkuId,
-            quantity: -1,
+            quantity,
           })
         }
       });
@@ -304,7 +370,7 @@ create.Page(store, {
 
   // 更新购物车数量
   updateCart(data, showMsg = false) {
-    this.store.addCart(data, showMsg)
+    this.store.addCart(data, showMsg);
   },
 
   // 获取比价信息
@@ -336,6 +402,10 @@ create.Page(store, {
       good,
       skuId,
     } = this.data;
+    if(good.goodsState != 1 || good.goodsVerifyState != 1) {
+      showToast({ title: "商品已下架" });
+      return;
+    }
     if(good.isMultiSpec) {
       this.setData({
         specType: "buy",
@@ -365,6 +435,10 @@ create.Page(store, {
       selectAddressType,
       good,
     } = this.data;
+    if(good.goodsState != 1 || good.goodsVerifyState != 1) {
+      showToast({ title: "商品已下架" });
+      return;
+    }
     const {
       detail,
       currentTarget,
@@ -380,7 +454,6 @@ create.Page(store, {
     }
     let isActivityCome = false;
     let data = {
-      orderType,
       storeGoodsInfos: [{
         storeNo: good.storeNo,
         goodsInfos: [{
@@ -388,7 +461,7 @@ create.Page(store, {
           skuId: skuId ? skuId : good.defaultSkuId,
           activityId: good.activityId,
           objectId: good.objectId,
-          orderType: good.orderType,
+          orderType,
           skuNum,
           goodsFromType: good.goodsFromType,
         }]
@@ -396,8 +469,6 @@ create.Page(store, {
     };
     // 点击单独购买
     if(currentTarget && currentTarget.dataset.type === "alone") {
-      data.orderType = 1;
-      orderType = 1;
       isActivityCome = true;
     } else {
       // 活动购买
@@ -414,7 +485,6 @@ create.Page(store, {
       }
     }
     console.log("data", data);
-    console.log("event", event);
     wx.setStorageSync("CREATE_INTENSIVE", data);
     router.push({
       name: "createOrder",
@@ -495,4 +565,24 @@ create.Page(store, {
     })
   },
 
+  // 点击跳转店铺
+  onToStore() {
+    const {
+      good,
+    } = this.data;
+    let id = good.storeNo.slice(8, good.storeNo.length);
+    id = +id;
+    if(id < 123580) return;
+    router.push({
+      name: "store",
+      data: {
+        storeNo: good.storeNo,
+      },
+    })
+  },
+
+  // 点击跳转店铺
+  onToCart() {
+    router.goTabbar("cart");
+  },
 })

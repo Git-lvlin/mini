@@ -3,12 +3,11 @@ import store from '../../store/index'
 import router from '../../utils/router'
 import { orderList, otherSetting, USER_LEVEL } from '../../constants/user'
 import userApi from '../../apis/user'
-import { getStorageUserInfo, setStorageUserInfo } from '../../utils/tools'
+import { getStorageUserInfo, setStorageUserInfo, showToast } from '../../utils/tools'
 
 create.Page(store, {
   use: [
-    'systemInfo',
-    'motto'
+    'systemInfo'
   ],
 
   data: {
@@ -56,6 +55,10 @@ create.Page(store, {
     //   userData,
     // } = this.data;
     // 更新tabbar显示
+    const {
+      orderTypeList,
+      userData,
+    } = this.data;
     router.updateSelectTabbar(this, 3);
     const userInfo = getStorageUserInfo() || "";
     if(userInfo) {
@@ -63,9 +66,14 @@ create.Page(store, {
       this.updateUserInfo(userInfo);
       this.getUserData(userInfo);
       this.getOrderCount();
+    } else {
+      userData.forEach(item => item.value = 0);
+      orderTypeList.forEach(item => item.subNum = 0);
     }
     this.setData({
       userInfo,
+      orderTypeList,
+      userData,
     });
   },
 
@@ -93,6 +101,10 @@ create.Page(store, {
     userApi.getUserData({
       id: userInfo.id,
     }).then(res => {
+      let integralValue = res.integralValue;
+      if(!integralValue || integralValue == "null" || integralValue == "undefined") {
+        integralValue = 0;
+      }
       userData[0].value = res.balance || 0;
       userData[1].value = res.couponNum || 0;
       userData[2].value = res.integralValue || 0;
@@ -113,7 +125,7 @@ create.Page(store, {
       orderTypeList[0].subNum = res.paid;
       orderTypeList[1].subNum = res.share;
       orderTypeList[2].subNum = res.deliver;
-      orderTypeList[3].subNum = res.receive;
+      // orderTypeList[3].subNum = res.receive;
       orderTypeList[4].subNum = res.afterSales;
       this.setData({
         orderTypeList,
@@ -126,6 +138,15 @@ create.Page(store, {
     router.push({
       name: "login"
     })
+  },
+
+  // 点击跳转个人信息
+  onToInfo() {
+    const userInfo = getStorageUserInfo();
+    if(!userInfo) return;
+    router.push({
+      name: "information",
+    });
   },
 
   // 点击其他功能模块

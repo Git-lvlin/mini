@@ -1,10 +1,12 @@
 import { baseApi } from "../constants/index"
 import routes from "../constants/routes"
+import store from "../store/index"
 import commonApi from '../apis/common'
 import router from "../utils/router"
 import dayjs from '../miniprogram_npm/dayjs/index.js'
 import relativeTime from './dayjsplugin/relativeTime'
 import util from "./util"
+import { agreementUrl } from "../constants/common"
 
 dayjs.extend(relativeTime);
 
@@ -33,20 +35,27 @@ export const handleErrorCode = ({
   switch(code) {
     case 10010:
       // 未登录
-      if(mustLogin) {
-        showLogin();
-      } else {
+      // if(mustLogin) {
+      //   showLogin();
+      // } else {
         // showErrorMsg("您还未登录，请登录");
-        showModal({
-          content: "您还未登录，请登录",
-          confirmText: "去登录",
-          ok() {
-            router.push({
-              name: "login"
-            })
-          }
-        })
-      }
+        if(!store.data.showLoginMobel) {
+          store.data.showLoginMobel = true;
+          showModal({
+            content: "您还未登录，请登录",
+            confirmText: "去登录",
+            ok() {
+              store.data.showLoginMobel = false;
+              router.push({
+                name: "login"
+              })
+            },
+            cancel() {
+              store.data.showLoginMobel = false;
+            }
+          })
+        }
+      // }
       break;
     case 10011:
       // 服务不可用
@@ -310,15 +319,6 @@ export const throttle = (func, wait) => {
   }
 }
 
-
-// 取url参数
-export const getQueryString = (name) => {
-  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-  var r = window.location.search.substr(1).match(reg);
-  if (r != null) return unescape(r[2]);
-  return null;
-}
-
 // 对象转 param 字符串
 export const objToParamStr = (paramObj = {}) => {
   const sdata = [];
@@ -326,6 +326,20 @@ export const objToParamStr = (paramObj = {}) => {
     sdata.push(`${attr}=${paramObj[attr]}`);
   }
   return sdata.join('&');
+};
+
+// param 字符串转对象
+export const strToParamObj = (param = "") => {
+  const params = param.split("&");
+  const obj = {};
+  let child = "";
+  params.forEach(item => {
+    child = item.split("=");
+    if(!!child[0]) {
+      obj[child[0]] = child[1]
+    }
+  });
+  return obj;
 };
 
 // 设置登录后跳转地址
@@ -397,3 +411,16 @@ export const mapNum = (list = []) => {
   })
   return list
 };
+
+// 跳转协议
+export const jumpToAgreement = (type) => {
+  let url = agreementUrl[type];
+  if(!!url) {
+    router.push({
+      name: "webview",
+      data: {
+        url: encodeURIComponent(url),
+      },
+    })
+  }
+}

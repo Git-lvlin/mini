@@ -1,4 +1,5 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
+<wxs module="utils" src="./index.wxs" />
 
 <view class="container">
   <view class="banner_content">
@@ -35,7 +36,7 @@
 
   <!-- 商品标题模块 -->
   <view class="good_head">
-    <view class="good_price" wx:if="{{isActivityGood == 1 || isActivityGood == 2 || isActivityGood == 11}}">
+    <view class="good_price" wx:if="{{isActivityGood == 1 || isActivityGood == 2}}">
       <view class="price">
         ￥<text class="max_text">{{tools.getPriceSplit(good.goodsSaleMinPrice)}}</text>{{tools.getPriceSplit(good.goodsSaleMinPrice, 1)}}
         <view class="market_price ">￥{{good.goodsMarketPrice}}</view>
@@ -45,17 +46,20 @@
     </view>
     <view class="good_info">
       <view class="good_title">
-        <view class="text text_one_line">{{good.goodsName}}</view>
-        <view class="text_one_line">{{good.goodsDesc}}</view>
+        <view class="text">{{good.goodsName}}</view>
+        <view class="">{{good.goodsDesc}}</view>
       </view>
       <view
         class="store_show_sale"
-        wx:if="{{isActivityGood == 15 || isActivityGood == 3 || isActivityGood == 4}}"
+        wx:if="{{isActivityGood == 15 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11}}"
       >{{good.goodsSaleNum}}</view>
       <view class="add_cart" wx:if="{{isActivityGood == 1 || isActivityGood == 2}}">
-       <!-- || quantity && good.isMultiSpec == 1  -->
-        <view class="cart_btn" bindtap="addCart">加入购物车</view>
-        <!-- <view class="num_controller" wx:else>  wx:if="{{!quantity}}"
+        <view
+          class="cart_btn"
+          wx:if="{{!quantity || quantity && good.isMultiSpec == 1}}"
+          bindtap="addCart"
+        >加入购物车</view>
+        <view class="num_controller" wx:if="{{quantity && good.isMultiSpec == 0}}">
           <image
             class="icon"
             src="{{tools.getImgUrl('miniprogram/cart/reduce%402x.png')}}"
@@ -67,15 +71,15 @@
             src="{{tools.getImgUrl('miniprogram/cart/add%402x.png')}}"
             bindtap="addCart"
           />
-        </view> -->
+        </view>
       </view>
     </view>
-    <view class="store_price" wx:if="{{isActivityGood == 15 || isActivityGood == 3 || isActivityGood == 4}}">
-      <view class="store_price_title">{{isActivityGood == 15 ? '集约价' : '' }}{{isActivityGood == 3 ? '单约价' : '' }}：</view>
+    <view class="store_price" wx:if="{{isActivityGood == 15 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11}}">
+      <view class="store_price_title">{{ utils.getPriceTitle(isActivityGood) }}：</view>
       <price-mobel
         money="{{good.activityPrice != undefined ? good.activityPrice : good.goodsSaleMinPrice}}"
         marketMoney="{{good.goodsMarketPrice}}"
-        desc="{{isActivityGood == 15 ? '集约价：' : '' }}{{isActivityGood == 3 ? '市场价：' : '' }}"
+        desc="市场价："
         minSize="{{28}}"
         maxSize="{{48}}"
       />
@@ -84,7 +88,11 @@
 
   <view class="space_20" wx:if="{{ratioData.AveragePrice != undefined}}" />
 
-  <price-ratio-bar price="{{ratioData.AveragePrice}}" wx:if="{{ratioData.AveragePrice != undefined}}" />
+  <price-ratio-bar
+    data="{{ratioData}}"
+    wx:if="{{ratioData.AveragePrice != undefined}}"
+    bind:click="onToPriceDetail"
+  />
 
   <view class="space_20" wx:if="{{isActivityGood == 15}}" />
   
@@ -107,9 +115,9 @@
   </view>
   
   <!-- 拼单列表 -->
-  <block wx:if="{{isActivityGood == 3 || isActivityGood == 4}}">
+  <block wx:if="{{(isActivityGood == 3 || isActivityGood == 4) && !!personalList.length}}">
     <view class="space_20" />
-    <view class="buy_together" wx:if="{{personalList.length}}">
+    <view class="buy_together">
       <view class="together_head">
         <view class="together_title">{{personalList.length}}人正在拼单，立即参与</view>
         <view class="together_more" bindtap="onOpenTeam">查看全部<image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" /></view>
@@ -154,20 +162,43 @@
     bind:specAdd="specUpdateCart"
   />
 
-  <!-- 集约商品 || 1688商品 -->
-  <view class="to_buy" wx:if="{{isActivityGood == 15 || isActivityGood == 11}}">
-    <view class="to_buy_btn" bindtap="onBuy">立即购买</view>
+  <!-- 普通 || 1688商品 -->
+  <view class="flex_center to_buy" wx:if="{{isActivityGood == 1 || isActivityGood == 2 || isActivityGood == 11}}">
+    <view
+      class="flex_fix buy_bar_item"
+      wx:if="{{isActivityGood == 1 || isActivityGood == 2}}"
+      bindtap="onToCart"
+    >
+      <view class="label_num" wx:if="{{$.cartListTotal.checkedQuantity}}">{{$.cartListTotal.checkedQuantity}}</view>
+      <image class="bar_item_icon" src="{{tools.getImgUrl('miniprogram/common/mini_cart.png')}}" />
+      <view class="bar_item_name">购物车</view>
+    </view>
+    <view
+      class="flex_fix buy_bar_item"
+      wx:if="{{isActivityGood == 11}}"
+      bindtap="onToStore"
+    >
+      <image class="bar_item_icon" src="{{tools.getImgUrl('miniprogram/common/mini_store.png')}}" />
+      <view class="bar_item_name">店铺</view>
+    </view>
+    <view class="flex_fix buy_bar_space" />
+    <view class="to_buy_btn" data-type="alone" bindtap="onBuy">立即购买</view>
+  </view>
+
+  <!-- 集约商品 -->
+  <view class="intensive_buy" wx:if="{{isActivityGood == 15}}">
+    <view class="intensive_buy_btn" bindtap="onBuy">立即购买</view>
   </view>
 
   <!-- 普通商品结算 -->
-  <view wx:if="{{isActivityGood == 1 || isActivityGood == 2}}">
+  <!-- <view wx:if="{{isActivityGood == 1 || isActivityGood == 2}}">
     <settlement-bar />
-  </view>
+  </view> -->
 
   <!-- 拼团商品 底部bar -->
   <view class="bar_over_height" />
-  <view class="together_bar" wx:if="{{personalList.length}}">
-    <view class="flex_middle together_recommend" >
+  <view class="together_bar" wx:if="{{isActivityGood == 3}}">
+    <view class="flex_middle together_recommend" wx:if="{{personalList.length}}" >
       <view class="user_avatar">
         <van-image
           width="48rpx"

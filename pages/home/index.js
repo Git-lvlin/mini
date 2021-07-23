@@ -4,7 +4,8 @@ import router from '../../utils/router'
 import homeApi from '../../apis/home'
 import commonApi from '../../apis/common'
 import { IMG_CDN } from '../../constants/common'
-import { showModal } from '../../utils/tools'
+import { showModal, showToast } from '../../utils/tools'
+import { checkSetting } from '../../utils/wxSetting';
 
 create.Page(store, {
   touchTimer: null,
@@ -25,8 +26,10 @@ create.Page(store, {
     scrolling: false,
     scrollBottom: false,
     floor: {},
-    headBackCss: `background-image: url("${IMG_CDN}miniprogram/home/nav_back.png")`, 
+    headBackCss: `background-image: url(${IMG_CDN}miniprogram/home/nav_back.png)`, 
     activityAdvert: {},
+    locationAuth: false,
+    takeSpot: {},
   },
 
   onLoad(options) {
@@ -35,6 +38,9 @@ create.Page(store, {
     this.getSystemPopup();
     // 活动弹窗
     this.getAdvert(2);
+    let url = "https://www.kdocs.cn/p/115688640900r";
+    let route = url.match(/(http|https):\/\/([^/]+)(\S*)/);
+    console.log("route", route);
   },
 
   onReady() {
@@ -46,9 +52,16 @@ create.Page(store, {
         })
       }
     }).exec();
+    this.getLocationAuth(this);
   },
 
   onShow() {
+    const takeSpot = wx.getStorageSync("TAKE_SPOT");
+    if(takeSpot) {
+      this.setData({
+        takeSpot,
+      });
+    }
     this.getFloorList();
     // 更新tabbar显示
     router.updateSelectTabbar(this, 0);
@@ -138,24 +151,66 @@ create.Page(store, {
   onFixation({
     currentTarget
   }) {
-    // let url = currentTarget.dataset.url;
-    // if(!url) return;
+    let url = currentTarget.dataset.url;
+    console.log("🚀 ~ file: index.js ~ line 155 ~ url", url)
+    if(!url) return;
+    router.getUrlRoute(url);
     // router.push({
     //   name: url,
     // })
-    router.push({
-      name: "webview",
-      data: {
-        url: "http%3A%2F%2Fdev-yeahgo-publicmobile.waiad.icu%2Fmenu"
-      },
+    // router.push({
+    //   name: "webview",
+    //   data: {
+    //     url: "http%3A%2F%2Fdev-yeahgo-publicmobile.waiad.icu%2Fmenu"
+    //   },
+    // });
+  },
+  
+  // 获取为止权限
+  getLocationAuth: async (that) => {
+    const locationAuth = await checkSetting('userLocation', true);
+    that.setData({
+      locationAuth,
     });
   },
 
   // 跳转选择地址
   onToLocation() {
-    router.push({
-      name: 'location',
-    });
+    const {
+      locationAuth,
+    } = this.data;
+    if(!locationAuth) {
+      showModal({
+        content: "需要您授权地理位置才可使用",
+        ok(){
+          wx.openSetting({
+            success(result) {
+              if(result.errMsg === "openSetting:ok") {
+                const {
+                  authSetting,
+                } = result;
+                let state = authSetting['scope.userLocation'];
+                if(state) {
+                  router.push({
+                    name: 'location',
+                  });
+                } else {
+                  showToast('您没有授权成功呢！');
+                }
+              }
+            },
+            fail(err) {
+              showToast('您没有授权成功呢！');
+            },
+          });
+        }
+      })
+      
+    } else {
+      router.push({
+        name: 'location',
+      });
+    }
   },
 
   // 跳转搜索

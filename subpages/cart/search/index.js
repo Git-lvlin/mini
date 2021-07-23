@@ -1,5 +1,5 @@
 import goodApi from "../../../apis/good"
-import { debounce, getStorageUserInfo } from "../../../utils/tools";
+import { debounce, getStorageUserInfo, showToast } from "../../../utils/tools";
 import util from "../../../utils/util";
 
 Page({
@@ -18,6 +18,10 @@ Page({
     keyList: [],
     goodList: [],
     showDeleteSearch: false,
+    // 显示清楚按钮
+    showClear: false,
+    // 是否已搜索 
+    isSearch: false,
   },
 
   onShow() {
@@ -87,6 +91,7 @@ Page({
   }) {
     this.setData({
       searchText: detail.value,
+      isSearch: false,
     })
     debounce(this.getAssociation, 500)();
   },
@@ -94,17 +99,21 @@ Page({
   // input 失焦
   handleInputBlur() {
     // setdata 冲突
-    const timer = setTimeout(() => {
-      clearTimeout(timer);
-      const {
-        showAssociation
-      } = this.data;
-      if(showAssociation) {
-        this.setData({
-          showAssociation: false
-        })
-      }
-    }, 200);
+    // const timer = setTimeout(() => {
+      // clearTimeout(timer);
+      // const {
+      //   showAssociation
+      // } = this.data;
+      // if(showAssociation) {
+      //   this.setData({
+      //     showAssociation: false
+      //   })
+      // }
+    // }, 300);
+    
+    this.setData({
+      showClear: false,
+    })
   },
 
   // input 聚焦
@@ -115,6 +124,17 @@ Page({
     if(!!searchText) {
       this.getAssociation();
     }
+    this.setData({
+      showClear: true,
+    })
+  },
+
+  // 清除搜索信息
+  onClearSearch() {
+    this.setData({
+      searchText: "",
+      showAssociation: false,
+    })
   },
 
   // 关键词联想
@@ -123,6 +143,7 @@ Page({
     const userInfo = getStorageUserInfo() || {};
     const {
       searchText,
+      showAssociation,
     } = this.data;
     goodApi.getAssociationList({
       keyword: searchText,
@@ -134,7 +155,7 @@ Page({
       let tempList = [];
       const keyList = [];
       list.forEach((item, index) => {
-        if(index > 4) return; 
+        // if(index > 4) return; 
         tempList = item.split("<em>");
         item = [];
         tempList.forEach(child => {
@@ -162,9 +183,11 @@ Page({
         keyList.push(item);
       });
       if(res.length) {
-        this.setData({
-          showAssociation: true,
-        });
+        if(!showAssociation) {
+          this.setData({
+            showAssociation: true,
+          });
+        }
       }
       this.setData({
         keyList,
@@ -223,13 +246,17 @@ Page({
       size,
     } = this.searchPage;
     const userInfo = getStorageUserInfo();
-    goodApi.getSearchList({
+    const param = {
       page,
       size,
-      sort,
       keyword: searchText,
       requestMemberId: userInfo.id,
-    }).then(res => {
+    }
+    if(typeof sort === "string") {
+      param.sort = sort;
+    }
+    goodApi.getSearchList(param).then(res => {
+      this.getHistorySearch();
       this.loading = false;
       this.searchPage.totalPage = res.totalpage;
       let list = res.records;
@@ -237,7 +264,6 @@ Page({
         item.image = item.goodsImageUrl;
         item.title = item.goodsName;
         item.subtitle = item.goodsDesc;
-        item.spuId = item.id;
         item.salePrice = util.divide(item.goodsSaleMinPrice, 100);
       });
       if(page > 1) {
@@ -246,9 +272,14 @@ Page({
       }
       this.setData({
         goodList: list,
+        showAssociation: false,
+        isSearch: true,
       })
     }).catch(() => {
       this.loading = false;
+      this.setData({
+        isSearch: true,
+      })
     })
   },
 

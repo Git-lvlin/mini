@@ -8,7 +8,7 @@
   </nav-container>
 
   <scroll-view scroll-y class="content" bindscrolltolower="handleScrollBottom">
-    <view class="coupon">
+    <view class="coupon" wx:if="{{false}}">
       <view class="coupon_img" style="background-image: url({{tools.getImgUrl('miniprogram/cart/little_coupon_back.png')}})">领券</view>
       <view class="coupon_text">精选好券，抢到赚到</view>
       <image class="coupon_arrow_right" src="{{tools.getImgUrl('miniprogram/common/coupon_arrow_right.png')}}" />
@@ -19,7 +19,6 @@
       wx:key="id"
       store="{{item}}"
     />
-{{reas}}
     <view class="not_list" wx:if="{{!$.storeCartList.length && !!userInfo}}">
       <nodata
         top="{{48}}"

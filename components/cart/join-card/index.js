@@ -105,12 +105,18 @@ create.Component(store, {
       const {
         spuId,
         skuId,
+        activityId,
+        objectId,
+        orderType,
       } = good;
       router.push({
         name: "detail",
         data: {
           spuId,
           skuId,
+          activityId,
+          objectId,
+          orderType,
         },
       });
     },

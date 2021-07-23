@@ -13,12 +13,6 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/list/index",
-          "pathName": "pages/list/index",
-          "query": "",
-          "scene": null
-        },
-        {
           "name": "创建订单",
           "pathName": "subpages/cart/create/index",
           "query": "orderType=1",
@@ -39,7 +33,7 @@
         {
           "name": "登录",
           "pathName": "pages/login/main/index",
-          "query": "name=bak",
+          "query": "",
           "scene": null
         },
         {
@@ -51,7 +45,7 @@
         {
           "name": "商详",
           "pathName": "subpages/cart/detail/index",
-          "query": "image=http://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/goods/rc-upload-1620980448040-292%402x.png&orderId=4617617774317928000&spuId=2070&skuId=85&skuName=单位2&goodsName=四川春见粑粑丑柑 丑柑180g&salePrice=10&marketPrice=14&title=四川春见粑粑丑柑 丑柑180g单位2&objectId=4617617774317928662&id=2070&orderType=15&activityId=0&wsId=0&url=https://www.yeahgo.com/shopping/detail",
+          "query": "activityId=0&objectId=&orderType=2&skuId=3600&spuId=2504&wsId=0",
           "scene": null
         },
         {
@@ -61,38 +55,20 @@
           "scene": null
         },
         {
-          "name": "subpages/cart/detail/index",
-          "pathName": "subpages/cart/detail/index",
-          "query": "spuId=2263&skuId=1828&activityId=0&objectId=store_a_123931&orderType=11",
-          "scene": null
-        },
-        {
-          "name": "subpages/cart/teamDetail/index",
-          "pathName": "subpages/cart/teamDetail/index",
-          "query": "orderType=3&spuId=2069&objectId=2&groupId=23772&skuId=84",
-          "scene": null
-        },
-        {
-          "name": "pages/webview/index",
-          "pathName": "pages/webview/index",
-          "query": "url=http%3A%2F%2Fwww.baidu.com",
-          "scene": null
-        },
-        {
           "name": "购物车",
           "pathName": "pages/cart/index",
           "query": "",
           "scene": null
         },
         {
-          "name": "pages/otherpay/index",
-          "pathName": "pages/otherpay/index",
-          "query": "id=4632278027512842181&payType=7&scene=3&storeNo=store_m_123616&type=1",
+          "name": "比价详情",
+          "pathName": "subpages/cart/priceDetail/index",
+          "query": "id=60",
           "scene": null
         },
         {
-          "name": "pages/locationSearch/index",
-          "pathName": "pages/locationSearch/index",
+          "name": "subpages/user/setting/index",
+          "pathName": "subpages/user/setting/index",
           "query": "",
           "scene": null
         }

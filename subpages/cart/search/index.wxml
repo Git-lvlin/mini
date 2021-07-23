@@ -23,6 +23,12 @@
             catchblur="handleInputBlur"
             catchfocus="onFocus"
           />
+          <!-- <image
+            class="clear_input"
+            wx:if="{{showClear}}"
+            src="{{tools.getImgUrl('miniprogram/common/clear_input.png')}}"
+            catchtap="onClearSearch"
+          /> -->
         </view>
       </view>
       <view class="flex_fix search_btn" bindtap="onSearch">搜索</view>
@@ -48,7 +54,7 @@
       </view>
     </view>
   </view>
-  <view class="flex_fix search_history" wx:if="{{!goodList.length && !searchText}}" >
+  <view class="flex_fix search_history" wx:if="{{!isSearch}}" >
     <view class="history_clear" wx:if="{{historySearch.length}}">
       <view class="title">历史记录</view>
       <view class="clear" bindtap="onOpenDeleteHistory">
@@ -85,12 +91,11 @@
   <scroll-view
     scroll-y
     class="good_content"
-    wx:if="{{goodList.length}}"
+    wx:if="{{goodList.length && isSearch}}"
     bindscrolltolower="handleListBottom"
   >
     <view class="good_list">
       <good-card
-        jump="{{true}}"
         wx:for="{{goodList}}"
         wx:key="index"
         data="{{item}}"
@@ -98,7 +103,7 @@
     </view>
   </scroll-view>
 
-  <notdata wx:if="{{!!searchText && !goodList.length}}" />
+  <notdata wx:if="{{isSearch && !goodList.length}}" />
 
   <show-mobal
     show="{{ showDeleteSearch }}"

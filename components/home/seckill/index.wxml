@@ -8,7 +8,7 @@
         title="{{floor.header.title[0].name}}"
         desc="{{floor.header.subTitle[0].name}}"
       >
-        <view class="down_time" slot="body">
+        <!-- <view class="down_time" slot="body">
           <van-count-down
             use-slot time="{{ time }}"
             bind:change="handleTimeChange"
@@ -20,7 +20,7 @@
             <text class="time_mark">:</text>
             <text class="time_item">{{ timeData.seconds < 10 ? "0" + timeData.seconds : timeData.seconds }}</text>
           </van-count-down>
-        </view>
+        </view> -->
       </panel-title>
       <!-- 
         more
@@ -28,7 +28,7 @@
         actionUrl="{{floor.header.subTitle[0].actionUrl}}"
       -->
     </view>
-  <scroll-view scroll-x class="good_scroll" bindscrolltolower="handleScroll">
+  <scroll-view scroll-x class="good_scroll" show-scrollbar="{{false}}" bindscrolltolower="handleScroll">
     <view class="good_list">
       <view
         class="good_item"

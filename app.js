@@ -5,17 +5,19 @@ import md5 from './utils/md5'
 import router from './utils/router'
 
 // 环境变量 dev uat fat pro
-// ***【 图片CDN域名要改 2 处 】***
-const SYS_ENV = 'dev';
+// ***【 环境如有变动 common.wxs 需更换域名 】***
+const SYS_ENV = 'pro';
+// 是否显示选择环境按钮
+const CHANGE_ENV = false;
 
 App({
   onLaunch() {
+    // this.globalData.appScene = scene;
     const userInfo = getStorageUserInfo();
     store.data.userInfo = userInfo;
     store.data.defUserInfo = userInfo;
     // store.data.userOtherInfo = wx.getStorageSync("USER_OTHER_INFO");
     setTimeout(() => {
-      store.data.motto = "改变了12111111"
       console.log(store.data)
     }, 2000)
     
@@ -39,15 +41,25 @@ App({
     // }) ;
   },
 
+  onShow(options) {
+    const {
+      scene,
+    } = options;
+    this.globalData.appScene = scene;
+  },
+
   globalData: {
+    appScene: 1001,
     userInfo: null,
+    changeEnv: CHANGE_ENV,
   },
 
   // 生成设备码校验是否填写邀请码
   getInputCode() {
     if(SYS_ENV === "dev") return;
-    const device_code = wx.getStorageSync("DEVICE_CODE");
-    if(device_code) return;
+    const deviceCode = wx.getStorageSync("DEVICE_CODE");
+    const isInputInvite = wx.getStorageSync("IS_INPUT_INVITE");
+    if(!!deviceCode && !!isInputInvite) return;
     wx.getSystemInfo({
       success (res) {
         const {

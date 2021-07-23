@@ -1,6 +1,9 @@
 import homeApi from '../../../apis/home';
+import { VERSION } from '../../../constants/index';
 import { IMG_CDN } from '../../../constants/common'
 import { mapNum } from '../../../utils/homeFloor';
+import router from '../../../utils/router';
+import { getStorageUserInfo } from '../../../utils/tools';
 
 Component({
   properties: {
@@ -54,6 +57,25 @@ Component({
             data: homeCache,
           })
         }
+      }
+    },
+    onClickReceive() {
+      const userInfo = getStorageUserInfo(true);
+      if(!userInfo) {
+        return;
+      }
+      const token = wx.getStorageSync("ACCESS_TOKEN");
+      const {
+        floor,
+      } = this.data;
+      if(floor.header.title) {
+        const head = floor.header.title[0];
+        router.getUrlRoute(head.actionUrl, {
+            needLogin: true,
+            data: {
+              indexVersion: VERSION,
+            }
+        });
       }
     },
   }

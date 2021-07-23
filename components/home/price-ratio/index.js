@@ -91,5 +91,14 @@ Component({
         }
       });
     },
+    onToList() {
+      const {
+        floor,
+      } = this.data;
+      if(floor.header.title) {
+        const head = floor.header.title[0];
+        router.getUrlRoute(head.actionUrl);
+      }
+    },
   }
 })

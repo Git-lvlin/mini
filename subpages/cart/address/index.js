@@ -9,18 +9,18 @@ Page({
     listLoad: false,
   },
 
-  onLoad: function (options) {
+  onLoad(options) {
     if(options.isChoose) {
       this.isChoose = true;
     }
   },
 
-  onShow: function () {
+  onShow() {
     this.getAddressList();
   },
 
   
-  onHide: function () {
+  onHide() {
 
   },
 
@@ -57,9 +57,11 @@ Page({
       provinceName: data.provinceName,
       cityName: data.cityName,
       districtName: data.districtName,
-      isDefault: true,
+      isDefault: !data.isDefault,
     }
-    cartApi.updateAddress(postData).then(res => {
+    cartApi.updateAddress(postData, {
+      showLoading: false
+    }).then(res => {
       this.getAddressList();
     })
   },

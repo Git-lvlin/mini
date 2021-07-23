@@ -7,10 +7,6 @@ import userApis from '../../../apis/user'
 import tools from '../utils/login'
 
 create.Page(store, {
-  use: [
-    'motto'
-  ],
-
   data: {
     phoneNumber: "",
     code: "",
@@ -104,7 +100,6 @@ create.Page(store, {
       code,
     } = this.data;
     let userInfo = this.store.data.userInfo;
-    let loginInfo = wx.getStorageSync("LOGIN_INFO");
     if(!phoneNumber) {
       wx.showToast({
         title: "请获取/输入手机号码",
@@ -133,33 +128,53 @@ create.Page(store, {
       })
       return
     }
-    loginApis.bindPhone({
+    let loginInfo = wx.getStorageSync("LOGIN_INFO");
+    let inviteInfo = wx.getStorageSync("INVITE_INFO");
+    const isInvite = inviteInfo && inviteInfo.inviteCode ? true : false;
+    const data = {
       phoneNumber,
       sourceType: 4,
       wxUId: loginInfo.wxUId,
       icon: userInfo.avatarUrl,
       nickName: userInfo.nickName,
       gender: userInfo.gender,
-      authCode: code,
-    }).then(res => {
+      authCode: code
+    };
+    if(isInvite) {
+      data.inviteCode = inviteInfo.inviteCode;
+    }
+    loginApis.bindPhone(data).then(res => {
       const data = res;
+      wx.setStorageSync("ACCESS_TOKEN", data.accessToken);
+      wx.setStorageSync("REFRESH_TOKEN", data.refreshToken);
       store.data.userInfo = data.memberInfo;
       store.data.defUserInfo = data.memberInfo;
       tools.setUserInfo(data);
-      this.getUserInfo(data.memberInfo);
+      this.getUserInfo(data.memberInfo, isInvite);
+      if(isInvite) {
+        wx.removeStorage({
+          key: 'INVITE_INFO',
+        });
+      }
     });
   },
 
   // 获取用户其他信息
-  getUserInfo(userInfo) {
+  getUserInfo(userInfo, backHome) {
     userApis.getUserInfo({
       id: userInfo.id
+    }, {
+      showLoading: false,
     }).then(res => {
       store.data.userOtherInfo = res;
       wx.setStorageSync('USER_INFO', res);
-      tools.successJump(2);
-    }).catch(res => {
-
+      if(backHome) {
+        router.goTabbar();
+      } else {
+        tools.successJump(2);
+      }
+    }).catch(err => {
+      console.log("getUserInfo - err", err)
     })
   },
 

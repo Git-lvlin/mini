@@ -71,6 +71,7 @@ Component({
     }) {
       let data = currentTarget.dataset.data;
       console.log("跳转链接", data);
+      // router.getUrlRoute(data.actionUrl);
     },
   }
 })

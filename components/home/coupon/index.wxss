@@ -4,7 +4,6 @@
   height: 322rpx;
   padding: 8rpx 24rpx 30rpx;
   box-sizing: border-box;
-  background-image: url('https://dev-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/home/coupon_back.png');
   background-size: 100% 100%;
   background-position: left bottom;
 }

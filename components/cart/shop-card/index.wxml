@@ -18,7 +18,7 @@
             <view
               class="controller reduce_num"
               data-index="{{index}}"
-              bindtap="onReduceNum"
+              catchtap="onReduceNum"
             >
               <image
                 mode="widthFix"
@@ -35,7 +35,7 @@
                 class="num_icon"
                 data-index="{{index}}"
                 src="{{tools.getImgUrl('miniprogram/cart/add.png')}}"
-                bindtap="onAddNum"
+                catchtap="onAddNum"
               />
             </view>
           </view>
@@ -46,8 +46,8 @@
 
   <view class="total_price">
     <view class="txt">小计：</view>
-    <view class="text">￥{{tools.getPriceSplit(data.payAmount)}}<text class="min_price">{{tools.getPriceSplit(data.payAmount, 1)}}</text></view>
-    <view class="freight">(运费：￥{{data.shippingFeeAmount}})</view>
+    <view class="text">￥{{tools.getPriceSplit(data.totalAmount)}}<text class="min_price">{{tools.getPriceSplit(data.totalAmount, 1)}}</text></view>
+    <!-- <view class="freight">(运费：￥{{data.shippingFeeAmount}})</view> -->
   </view>
 
   <van-toast id="van-toast" />

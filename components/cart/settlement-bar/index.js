@@ -153,13 +153,25 @@ create.Component(store, {
     },
     // 清空购物车
     onClearCart() {
+      const that = this;
+      const {
+        cartList
+      } = this.store.data;
+      if(cartList.length <= 0) {
+        showToast({ title: "没有商品呢" });
+        return;
+      };
       showModal({
         content: "确定清空购物车？",
         ok() {
-          goodApi.checkedAllCart({
-            isChecked: false,
+          const skuIds = [];
+          cartList.forEach(item => {
+            skuIds.push(item.skuId);
+          });
+          goodApi.removeCart({
+            skuIds,
           }).then(res => {
-            this.store.updateCart();
+            that.store.updateCart();
           })
         }
       })

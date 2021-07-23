@@ -1,0 +1,6 @@
+<button
+  class="back_btn"
+  open-type="launchApp"
+  app-parameter="payBack"
+  binderror="launchAppError"
+>返回约购商城</button>

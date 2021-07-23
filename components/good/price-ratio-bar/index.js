@@ -5,7 +5,10 @@ Component({
   },
   
   properties: {
-
+    data: {
+      type: Object,
+      value: {},
+    }
   },
 
   data: {
@@ -13,6 +16,11 @@ Component({
   },
 
   methods: {
-
+    noToPriceDetail() {
+      const {
+        data,
+      } = this.data;
+      this.triggerEvent("click", data);
+    },
   }
 })

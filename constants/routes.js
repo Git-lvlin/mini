@@ -27,10 +27,6 @@ export default {
   bindPhone: {
     path: "/pages/login/bindPhone/index"
   },
-  // 选择地址
-  location: {
-    path: "/pages/location/index"
-  },
   // 集约列表
   intensive: {
     path: "/pages/intensive/index"
@@ -47,6 +43,15 @@ export default {
   invitation: {
     path: "/pages/invitation/index"
   },
+  // 选择自提点
+  location: {
+    path: "/pages/location/index"
+  },
+  // 搜索经纬度
+  locationSearch: {
+    path: "/pages/locationSearch/index"
+  },
+  
   
   
   // 分类列表
@@ -85,15 +90,28 @@ export default {
   teamDetail: {
     path: "/subpages/cart/teamDetail/index"
   },
-  // 参团详情
+  // 会员店
   store: {
     path: "/subpages/cart/store/index"
   },
 
 
   // 用户中心
+  // 设置
   setting: {
     path: "/subpages/user/setting/index"
+  },
+  // 用户中心
+  information: {
+    path: "/subpages/user/information/index"
+  },
+  // 修改用户信息
+  changeInfo: {
+    path: "/subpages/user/changeInfo/index"
+  },
+  // 更改绑定手机号
+  changePhone: {
+    path: "/subpages/user/changePhone/index"
   },
 
   list: {

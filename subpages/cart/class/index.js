@@ -4,7 +4,7 @@ import goodApi from '../../../apis/good'
 import util from '../../../utils/util'
 
 const defaultSecondCategory = [{
-  id: 999999999,
+  id: 9999999999999999,
   gcName: "推荐",
   gcIcon: ""
 }];
@@ -132,6 +132,7 @@ create.Page(store, {
     let goodsList = [];
     list.forEach(item => {
       goodsList.push({
+        ...item,
         spuId: item.id,
         skuId: item.defaultSkuId,
         goodsName: item.goodsName,

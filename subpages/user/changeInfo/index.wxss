@@ -1,0 +1,41 @@
+
+page {
+  background-color: #f5f5f5;
+}
+
+.info_cell {
+  padding-top: 32rpx;
+}
+
+.info_box {
+  padding: 28rpx 32rpx;
+  background-color: #fff;
+}
+
+.input {
+  height: 44rpx;
+  color: #333333;
+  font-size: 32rpx;
+  line-height: 44rpx;
+}
+
+.explain {
+  color: #999999;
+  font-size: 22rpx;
+  line-height: 32rpx;
+  margin: 16rpx 0 0 32rpx;
+}
+
+.save_btn {
+  width: 702rpx;
+  height: 96rpx;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 32rpx;
+  line-height: 96rpx;
+  text-align: center;
+  margin: 60rpx auto 0;
+  background-color: #e5352f;
+  border-radius: 16rpx;
+  box-shadow: 0rpx 6rpx 12rpx rgba(229, 53, 47, 0.4);
+}
