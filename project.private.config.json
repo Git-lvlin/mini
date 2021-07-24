@@ -67,8 +67,8 @@
           "scene": null
         },
         {
-          "name": "subpages/user/setting/index",
-          "pathName": "subpages/user/setting/index",
+          "name": "subpages/cart/class/index",
+          "pathName": "subpages/cart/class/index",
           "query": "",
           "scene": null
         }
