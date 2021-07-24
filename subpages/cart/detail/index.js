@@ -3,7 +3,7 @@ import store from '../../../store/good'
 import goodApi from '../../../apis/good'
 import commonApi from '../../../apis/common'
 import { IMG_CDN } from '../../../constants/common'
-import { showModal, getStorageUserInfo, showToast, objToParamStr } from '../../../utils/tools'
+import { showModal, getStorageUserInfo, showToast, objToParamStr,strToParamObj } from '../../../utils/tools'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
 import commonApis from '../../../apis/common'
@@ -164,6 +164,7 @@ create.Page(store, {
 
   // 获取分享配置
   getShareParam(data) {
+    console.log(data)
     commonApis.getShareParam({
       scene: data.scene,
     }).then(res => {
