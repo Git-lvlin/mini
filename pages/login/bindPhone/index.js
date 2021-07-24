@@ -132,7 +132,7 @@ create.Page(store, {
     let inviteInfo = wx.getStorageSync("INVITE_INFO");
     let betaInfo = wx.getStorageSync("BETA_INFO");
     const isInvite = inviteInfo && inviteInfo.inviteCode ? true : false;
-    const isBeta = betaInfo && betaInfo.inviteCode ? true : false;
+    const isBeta = betaInfo && betaInfo.betaCode ? true : false;
     const data = {
       phoneNumber,
       sourceType: 4,
