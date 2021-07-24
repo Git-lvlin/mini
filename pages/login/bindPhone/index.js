@@ -130,7 +130,9 @@ create.Page(store, {
     }
     let loginInfo = wx.getStorageSync("LOGIN_INFO");
     let inviteInfo = wx.getStorageSync("INVITE_INFO");
+    let betaInfo = wx.getStorageSync("BETA_INFO");
     const isInvite = inviteInfo && inviteInfo.inviteCode ? true : false;
+    const isBeta = betaInfo && betaInfo.inviteCode ? true : false;
     const data = {
       phoneNumber,
       sourceType: 4,
@@ -142,6 +144,9 @@ create.Page(store, {
     };
     if(isInvite) {
       data.inviteCode = inviteInfo.inviteCode;
+    }
+    if(isBeta) {
+      data.testCode = betaInfo.betaCode;
     }
     loginApis.bindPhone(data).then(res => {
       const data = res;

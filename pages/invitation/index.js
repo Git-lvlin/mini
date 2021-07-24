@@ -46,6 +46,7 @@ create.Page(store, {
     }).then(res => {
       if(res.invite) {
         wx.setStorageSync("IS_INPUT_INVITE", true);
+        wx.setStorageSync("BETA_INFO", {'betaCode':code});
         showToast({
           title: "提交成功",
           icon: "success",
