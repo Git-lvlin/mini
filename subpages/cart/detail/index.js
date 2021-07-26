@@ -3,10 +3,26 @@ import store from '../../../store/good'
 import goodApi from '../../../apis/good'
 import commonApi from '../../../apis/common'
 import { IMG_CDN } from '../../../constants/common'
-import { showModal, getStorageUserInfo, showToast, objToParamStr } from '../../../utils/tools'
+import { showModal, getStorageUserInfo, showToast, objToParamStr,strToParamObj } from '../../../utils/tools'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
-
+import commonApis from '../../../apis/common'
+// 进入小程序场景值
+const codeScene = {
+  // 扫描二维码
+  1011: true,
+  // 长按图片识别二维码
+  1012: true,
+  // 扫描手机相册中选取的二维码
+  1013: true,
+  // 扫描小程序码
+  1047: true,
+  // 长按图片识别小程序码
+  1048: true,
+  // 扫描手机相册中选取的小程序码
+  1049: true,
+}
+const app = getApp();
 create.Page(store, {
   goodParams: {},
 
@@ -57,24 +73,22 @@ create.Page(store, {
     specType: "buy",
   },
 
+  
+
   onLoad(options) {
-    let { systemInfo } = this.store.data;
-    let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
-    this.goodParams = options;
-    console.log("🚀 ~ file: index.js ~ line 63 ~ onLoad ~ this.goodParams", this.goodParams)
-    let isActivityGood = 1;
-    if(!!options.orderType) isActivityGood = options.orderType;
-    this.setData({
-      backTopHeight,
-      isActivityGood,
-      skuId: options.skuId,
-    })
-    this.getGoodDetail();
-    this.getDetailImg();
-    if(options.orderType == 3) {
-      // this.getTogetherList();
-      // 拼成用户列表
-      this.getTogetherUser();
+    const {
+      appScene,
+    } = app.globalData;
+    // 获取进入小程序场景值
+    if(codeScene[appScene]) {
+      // options.scene = "cf2a02ac71ca987860af70c2171d1512";
+      if(!options.scene) {
+        console.log("未获取到解析参数", options);
+      } else {
+        this.getShareParam(options);
+      }
+    }else{
+      this.hanldeGoodsParams(options)
     }
   },
 
@@ -125,6 +139,40 @@ create.Page(store, {
     }
     shareInfo.path = `${shareInfo.path}${pathParam}`;
     return shareInfo;
+  },
+
+  hanldeGoodsParams(options){
+    let { systemInfo } = this.store.data;
+    let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
+    this.goodParams = options;
+    console.log("🚀 ~ file: index.js ~ line 63 ~ onLoad ~ this.goodParams", this.goodParams)
+    let isActivityGood = 1;
+    if(!!options.orderType) isActivityGood = options.orderType;
+    this.setData({
+      backTopHeight,
+      isActivityGood,
+      skuId: options.skuId,
+    })
+    this.getGoodDetail();
+    this.getDetailImg();
+    if(options.orderType == 3) {
+      // this.getTogetherList();
+      // 拼成用户列表
+      this.getTogetherUser();
+    }
+  },
+
+  // 获取分享配置
+  getShareParam(data) {
+    console.log(data)
+    commonApis.getShareParam({
+      scene: data.scene,
+    }).then(res => {
+      console.log(res)
+      const param = strToParamObj(res);
+      this.setData(param)
+      this.hanldeGoodsParams(param)
+    })
   },
 
   // 商品详情图片
