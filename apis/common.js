@@ -1,7 +1,8 @@
 import Request from '../utils/request'
-import { showModal, setLoginRouter, getStorageUserInfo } from '../utils/tools'
+import { showModal, setLoginRouter, getStorageUserInfo, strToParamObj } from '../utils/tools'
 import router from '../utils/router'
 import store from '../store/index'
+import { CODE_SCENE } from '../constants/index'
 import homeApi from './home'
 
 const url = {
@@ -116,25 +117,6 @@ export default {
     })
   },
 
-  // 重新调需要登录接口
-  runOverList() {
-    const overList = wx.getStorageSync("OVER_LIST");
-    if(!overList.length) return ;
-    overList.forEach(item => {
-    console.log("🚀 ~ file: common.js ~ line 76 ~ runOverList ~ item", item)
-      if(item.method === "GET") {
-        Request.get({
-          ...item,
-        });
-      } else if(item.method === "POST") {
-        Request.post({
-          ...item,
-        });
-      }
-    });
-    wx.setStorageSync("OVER_LIST", []);
-  },
-
   // 获取商品分享参数
   getShareInfo(params) {
     return new Promise(resolve => {
@@ -148,6 +130,29 @@ export default {
     });
   },
 
+  // 解析分享参数
+  getShareParam(options = {}) {
+    return new Promise((resolve, reject) => {
+      const sceneData = wx.getLaunchOptionsSync()
+      console.log('——启动小程序的场景值:', sceneData.scene)
+      if(CODE_SCENE[sceneData.scene]) {
+        Request.post(url.shareParam, {
+          scene: options.scene,
+        }, {
+          showLoading: false
+        }).then(res => {
+          const param = strToParamObj(res);
+          resolve(param);
+        }).catch(err => {
+          options.err = err;
+          reject(options);
+        });
+      } else {
+        reject(options); 
+      }
+    })
+  },
+
   // 检查是否填写邀请码
   getInviteCode(params, option) {
     return Request.post(url.inviteCode, params, option);
@@ -156,10 +161,5 @@ export default {
   // 获取oss上传配置
   getOssConfig(params, option) {
     return Request.get(url.ossConfig, params, option);
-  },
-
-  // 解析分享参数
-  getShareParam(params, option) {
-    return Request.post(url.shareParam, params, option);
   },
 }

@@ -28,3 +28,19 @@ export const NODATA_LIST = [
 
 // 高德地图key
 export const MAP_KEY = "2755064499f1d1ff7f7bc61154a112b2";
+
+// 识别小程序码进入小程序场景值
+export const CODE_SCENE = {
+  // 扫描二维码
+  1011: true,
+  // 长按图片识别二维码
+  1012: true,
+  // 扫描手机相册中选取的二维码
+  1013: true,
+  // 扫描小程序码
+  1047: true,
+  // 长按图片识别小程序码
+  1048: true,
+  // 扫描手机相册中选取的小程序码
+  1049: true,
+}

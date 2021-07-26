@@ -33,7 +33,7 @@
         {
           "name": "登录",
           "pathName": "pages/login/main/index",
-          "query": "",
+          "query": "scene=cf2a02ac71ca987860af70c2171d1512",
           "scene": null
         },
         {
