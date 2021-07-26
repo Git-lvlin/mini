@@ -6,15 +6,21 @@ import router from "../utils/router"
 import dayjs from '../miniprogram_npm/dayjs/index.js'
 import relativeTime from './dayjsplugin/relativeTime'
 import util from "./util"
-import { agreementUrl } from "../constants/common"
+import { agreementUrl, ossHost } from "../constants/common"
 
 dayjs.extend(relativeTime);
 
 // 获取当前环境接口域名
 export const getBaseApiUrl = () => {
-  const env = wx.getStorageSync("SYS_ENV") || 'prod';
+  const env = wx.getStorageSync("SYS_ENV") || 'pro';
   return baseApi[env];
 }
+
+// 获取图片最新cdn地址
+export const getImgCdn = () => {
+  const env = wx.getStorageSync("SYS_ENV");
+  return ossHost[env];
+};
 
 // 提示信息
 const showErrorMsg = (msg, icon) => {
