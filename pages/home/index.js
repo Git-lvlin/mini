@@ -37,7 +37,7 @@ create.Page(store, {
     // 系统弹窗
     this.getSystemPopup();
     // 活动弹窗
-    this.getAdvert(2);
+    // this.getAdvert(2);
     let url = "https://www.kdocs.cn/p/115688640900r";
     let route = url.match(/(http|https):\/\/([^/]+)(\S*)/);
     console.log("route", route);
@@ -138,7 +138,7 @@ create.Page(store, {
   // 设置首页头部背景
   setHeadBack(style) {
     // let headBackCss = `background-color: #FC3B18`;
-    let headBackCss = `background-image: url("${IMG_CDN}miniprogram/home/nav_back.png")`;
+    let headBackCss = `background-image: url('${IMG_CDN}miniprogram/home/nav_back.png?v=2021')`;
     // if(style.backgroundImage) {
     //   headBackCss = `background-image: url(${style.backgroundImage})`
     // } else if(style.backgroundColor) {

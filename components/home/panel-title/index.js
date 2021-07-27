@@ -30,6 +30,10 @@ Component({
       type: Boolean,
       value: false,
     },
+    useDescSlot: {
+      type: Boolean,
+      value: false,
+    },
     more: {
       type: Boolean,
       value: false,
