@@ -19,6 +19,12 @@
   box-sizing: border-box;
 }
 
+.kill_icon {
+  width: 136rpx;
+  height: 36rpx;
+  vertical-align: middle;
+}
+
 .down_time {
   padding-bottom: 6rpx;
 }

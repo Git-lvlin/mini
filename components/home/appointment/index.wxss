@@ -9,12 +9,12 @@
   width: 120rpx;
   height: 34rpx;
   margin-left: 8rpx;
-  transform: translateY(-10rpx);
+  transform: translateY(-6rpx);
 }
 
 .appointment {
   width: 100%;
-  padding: 12rpx 24rpx 24rpx;
+  padding: 12rpx 24rpx 0;
   box-sizing: border-box;
   background-size: 100% 100%;
   background: linear-gradient(180deg, #FF4D2F 0%, #f5f5f5 100%);
@@ -45,6 +45,7 @@
 }
 
 .good_info {
+  position: relative;
   flex: 1;
   overflow: hidden;
 }
@@ -71,6 +72,32 @@
   margin-bottom: 12rpx;
 }
 
+.join_user {
+  margin-bottom: 12rpx;
+}
+
+.user_list {
+  margin-right: 8rpx;
+}
+
+.user_avatar {
+  position: relative;
+  width: 38rpx;
+  height: 38rpx;
+  border: 2rpx solid #fff;
+  border-radius: 50%;
+}
+
+.user_avatar:not(:first-child) {
+  margin-left: -12rpx;
+}
+
+.buy_num {
+  color: #e7532c;
+  font-size: 24rpx;
+  line-height: 38rpx;
+}
+
 .time_down {
   color: #e7512d;
   font-size: 28rpx;
@@ -78,11 +105,15 @@
   margin-bottom: 6rpx;
 }
 
+.time_text {
+  margin-left: 16rpx;
+}
+
 .price_title {
   font-weight: 600;
   color: #d7291d;
   font-size: 28rpx;
-  line-height: 40rpx;
+  line-height: 42rpx;
   margin-right: 6rpx;
 }
 
@@ -132,7 +163,35 @@
 }
 
 .sales {
+  flex: 1;
   color: #999999;
   font-size: 28rpx;
   line-height: 40rpx;
+}
+
+.to_buy {
+  width: 150rpx;
+  height: 64rpx;
+  background-color:#ea5534;
+  border-radius: 32rpx;
+}
+
+.def_buy {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.btn_text {
+  color: #ffffff;
+  font-size: 28rpx;
+  letter-spacing: 2.33rpx;
+  line-height: 64rpx;
+}
+
+.bottom_line {
+  width: 570rpx;
+  height: 2rpx;
+  margin: 24rpx auto 0;
+  background-color: #f5f5f5;
 }

@@ -3,7 +3,8 @@ import router from '../../../utils/router'
 Component({
   options: {
     // 在组件定义时的选项中启用多slot支持
-    multipleSlots: true
+    multipleSlots: true,
+    addGlobalClass: true,
   },
   properties: {
     title: {
@@ -41,6 +42,10 @@ Component({
     moreText: {
       type: String,
       value: "",
+    },
+    defMore: {
+      type: Boolean,
+      value: false,
     },
     actionUrl: {
       type: String,

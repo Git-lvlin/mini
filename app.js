@@ -22,9 +22,6 @@ App({
     // 设置环境变量 dev uat fat pro
     wx.setStorageSync('SYS_ENV', SYS_ENV);
 
-    // 生成设备码校验是否填写邀请码
-    this.getInputCode();
-
     // 
     // commonApi.getResourceDetail({
     //   resourceKey: "TABBAR",
@@ -41,6 +38,9 @@ App({
       scene,
     } = options;
     this.globalData.appScene = scene;
+    
+    // 生成设备码校验是否填写邀请码
+    this.getInputCode();
   },
 
   globalData: {

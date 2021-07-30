@@ -40,36 +40,58 @@
           </view>
           <view class="good_info">
             <view class="title text_one_line">{{item.title}}</view>
-            <view class="good_label">精选推荐</view>
-            <view class="flex_middle time_down">
+            <view class="good_label">{{item.goodsTag}}</view>
+            <view class="flex_middle join_user">
+              <view class="flex_middle user_list">
+                <image
+                  class="user_avatar"
+                  style="z-index: {{5 - index}}"
+                  wx:for="{{item.avatorList}}"
+                  wx:for-item="child"
+                  wx:key="index"
+                  wx:if="{{index < 3}}"
+                  src="{{child.icon}}"
+                />
+              </view>
+              <view class="buy_num">{{item.saleNum + item.virtualBuyNum}}人正在购买</view>
+            </view>
+            <view class="flex_middle time_down" wx:if="{{item.orderType == 15}}">
               <count-down
                 time="{{60 * 60 * 30}}"
                 color="#e7512d"
               />
-              后结束
+              <view class="time_text">后结束</view>
             </view>
             <view class="flex_middle price_box">
-              <view class="price_title">集约价</view>
+              <view class="price_title">
+                {{item.orderType == 2 ? "秒约价" : ""}}
+                {{item.orderType == 15 ? "集约价" : ""}}
+              </view>
               <price-mobel
                 money="{{item.salePrice}}"
-                max-size="{{28}}"
+                max-size="{{30}}"
                 min-size="{{24}}"
               />
             </view>
+            <view class="flex_center to_buy def_buy" wx:if="{{item.orderType == 2}}">
+              <view class="btn_text">去抢购</view>
+              <view class="right_arrow" />
+            </view>
           </view>
         </view>
-        <view class="sale_box">
+        <view class="sale_box" wx:if="{{item.orderType == 15}}">
           <view class="progress_box">
             <image class="fire_icon" src="{{tools.getImgUrl('miniprogram/home/appointment_fire.png')}}" />
             <view class="progress_line" />
             <view class="progress_text">已售50%</view>
           </view>
           <view class="sales">库存888件</view>
-          <view class="to_buy">
+          <view class="flex_fix flex_center to_buy">
             <view class="btn_text">去抢购</view>
             <view class="right_arrow" />
           </view>
         </view>
+        <view class="bottom_line" wx:if="{{goodList.length - 1 != index }}" />
       </view>
     </view>
   </scroll-view>

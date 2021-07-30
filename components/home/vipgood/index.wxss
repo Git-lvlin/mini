@@ -30,17 +30,22 @@
 }
 
 .label {
-  width: 120rpx;
+  width: 138rpx;
   height: 32rpx;
   color: #ffffff;
   font-size: 24rpx;
   line-height: 32rpx;
   text-align: center;
   background-size: 100% 100%;
+  border-radius: 32rpx;
+}
+
+.label_orgin {
+  background-image: linear-gradient(90deg, #ff9a00 0%, #ffd85e 100%);
 }
 
 .label_red {
-  width: 84rpx;
+  background-image: linear-gradient(90deg, #FF7A00 0%, #FF2800 100%);
 }
 
 .desc {

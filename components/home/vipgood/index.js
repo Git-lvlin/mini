@@ -2,6 +2,10 @@ import homeApi from '../../../apis/home';
 import router from '../../../utils/router';
 
 Component({
+  options: {
+    addGlobalClass: true,
+  },
+
   properties: {
     floor: {
       type: Object,

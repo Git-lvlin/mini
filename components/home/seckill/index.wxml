@@ -1,14 +1,16 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 <wxs module="utils" src="../../../wxs/homeFloor.wxs" />
 
-<view class="seckill" style="{{utils.getHeadBackCss(floor.style, tools.getImgUrl('miniprogram/home/seckill_back.png'))}}">
+<view class="seckill" style="{{utils.getHeadBackCss(floor.style)}}">
   <view class="sec_body">
     <view class="head">
       <panel-title
         title="{{floor.header.title[0].name}}"
-        desc="{{floor.header.subTitle[0].name}}"
+        useTitleSlot
+        defMore
       >
-        <!-- <view class="down_time" slot="body">
+        <image slot="title" class="kill_icon" src="{{tools.getImgUrl('miniprogram/home/kill_icon.png')}}" />
+        <view class="down_time" slot="body">
           <van-count-down
             use-slot time="{{ time }}"
             bind:change="handleTimeChange"
@@ -20,7 +22,7 @@
             <text class="time_mark">:</text>
             <text class="time_item">{{ timeData.seconds < 10 ? "0" + timeData.seconds : timeData.seconds }}</text>
           </van-count-down>
-        </view> -->
+        </view>
       </panel-title>
       <!-- 
         more

@@ -6,9 +6,10 @@
   <view class="slot">
     <slot name="body" />
   </view>
-  <view class="more" wx:if="{{more}}" bindtap="onToUrl">
+  <view class="flex_middle {{defMore ? 'def_more' : 'more'}}" wx:if="{{more || defMore}}" bindtap="onToUrl">
     <!-- <view>{{moreText}}</view> -->
     <view>查看更多</view>
-    <view class="more_arrow" />
+    <view class="more_arrow" wx:if="{{more}}" />
+    <view class="more_arrow_black" wx:if="{{defMore}}" />
   </view>
 </view>
