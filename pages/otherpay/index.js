@@ -49,16 +49,24 @@ Page({
   isLogin() {
     const openId = wx.getStorageSync("OPENID") || "";
     if(!openId) {
-      showModal({
-        content: "您还未登录，请登录！",
-        confirmText: "去登录",
-        ok() {
+      // showModal({
+      //   content: "您还未登录，请登录！",
+      //   confirmText: "去登录",
+      //   ok() {
           // setLoginRouter();
-          router.push({
+          const routerData = {
+            type: "page",
+            router: {
+              path: "/pages/otherpay/index",
+              data: this.params
+            },
+          };
+          wx.setStorageSync("LOGIN_TO_DATA", routerData);
+          router.replace({
             name: "login"
           })
-        },
-      })
+      //   },
+      // })
     }
     return openId;
   },

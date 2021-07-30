@@ -52,7 +52,7 @@ create.Page(store, {
   data: {
     showTreaty: false,
     canUseProfile: false,
-    radio: '',
+    radio: false,
     envList,
     changeEnv: app.globalData.changeEnv,
     currentEnv: ''
@@ -91,8 +91,6 @@ create.Page(store, {
         inviteCode: options.inviteCode,
       });
     }
-    
-    router.loginTo();
   },
 
   // 新API登录
@@ -224,8 +222,11 @@ create.Page(store, {
 
   // 勾选条件
   onChangeRadio(event) {
+    const {
+      radio,
+    } = this.data;
     this.setData({
-      radio: event.detail,
+      radio: !radio,
     });
   },
 

@@ -16,7 +16,7 @@
       loading-text="登录中..."
       wx:if="{{!canUseProfile}}"
       bind:getuserinfo="handleGetUerInfo"
-    >登录-</van-button>
+    >登录</van-button>
     <van-button
       color="#E5352F"
       custom-class="login_btn"
@@ -26,7 +26,7 @@
       loading-text="登录中..."
       wx:if="{{canUseProfile}}"
       bindtap="onLogin"
-    >登录+</van-button>
+    >登录</van-button>
     <view class="on_login" bindtap="onToHome">不登录，先看看</view>
     <radio-group class="env_list" wx:if="{{changeEnv}}" bindchange="handleChangeEnv">
       <label class="env_item" wx:for="{{envList}}" wx:for-item="item" wx:key="value">
@@ -38,10 +38,9 @@
   <view class="treaty">
     <van-radio-group value="{{ radio }}" bind:change="onChangeRadio">
       <van-radio
-        value="{{ radio }}"
-        name="1"
+        name="{{true}}"
         checked-color="#E5352F"
-        icon-size="32rpx"
+        icon-size="40rpx"
       >
         登陆/注册即表示您已阅读并同意
         <text class="red_text" data-type="service" catchtap="onClickTreaty">服务协议</text>和
