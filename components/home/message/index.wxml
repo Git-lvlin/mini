@@ -1,6 +1,6 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
-<view class="message">
+<view class="message" wx:if="{{msgList.length}}">
   <view class="flex_middle message_content">
     <view class="msg_label">约报</view>
     <view class="message_body">

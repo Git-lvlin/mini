@@ -5,6 +5,7 @@
   <view
     class="beancurd_content"
     style="{{utils.getHeadBackCss(floor.style)}}"
+    wx:if="{{goodTypeList.length}}"
   >
     <scroll-view
       scroll-x

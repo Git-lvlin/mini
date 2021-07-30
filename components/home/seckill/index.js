@@ -62,7 +62,6 @@ Component({
     getCustomData(page, pageSize = 15) {
       let homeCache = wx.getStorageSync("HOME_CACHE") || {};
       let time = 0;
-      let endTime = 0;
       const content = this.data.floor.content;
       homeApi.getFloorCustom(content.dataUrl, {
         page,
@@ -70,9 +69,8 @@ Component({
       }).then(res => {
         let list = [];
         let pageData = this.data.pageData;
-        time = new Date().getTime();
-        endTime = res.countdown < 1000000000000 ? res.countdown * 1000 : res.countdown;
-        time = endTime - time;
+        time = res.deadlineTime - res.currentTime;
+        time = !!time && time > 0 ? time : 0;
         if(page < 2) {
           list = mapNum(res.records);
         } else {

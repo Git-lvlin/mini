@@ -7,7 +7,6 @@
       <panel-title
         title="{{floor.header.title[0].name}}"
         useTitleSlot
-        defMore
       >
         <image slot="title" class="kill_icon" src="{{tools.getImgUrl('miniprogram/home/kill_icon.png')}}" />
         <view class="down_time" slot="body">
@@ -15,7 +14,7 @@
             use-slot time="{{ time }}"
             bind:change="handleTimeChange"
           >
-            <text class="time_item days" wx:if="{{timeData.days}}">{{ timeData.days }}天</text>
+            <!-- <text class="time_item days" wx:if="{{timeData.days}}">{{ timeData.days }}天</text> -->
             <text class="time_item">{{ timeData.hours < 10 ? "0" + timeData.hours : timeData.hours }}</text>
             <text class="time_mark">:</text>
             <text class="time_item">{{ timeData.minutes < 10 ? "0" + timeData.minutes : timeData.minutes }}</text>

@@ -34,17 +34,17 @@
     wx:key="floorId"
   >
     <!-- 约购商品 -->
-    <!-- <appointment
+    <appointment
       moreRouter="intensive"
       floor="{{item}}"
       wx:if="{{item.floorType === 1}}"
-    /> -->
+    />
 
     <!-- 优惠券 -->
-    <!-- <coupon
+    <coupon
       floor="{{item}}"
       wx:if="{{item.floorType === 2}}"
-    /> -->
+    />
 
     <!-- 比价模块 -->
     <!-- <priceRatio
@@ -53,22 +53,22 @@
     /> -->
 
     <!-- 快讯 -->
-    <!-- <message
+    <message
       floor="{{item}}"
       wx:if="{{item.floorType === 5}}"
-    /> -->
+    />
 
     <!-- 豆腐块 -->
-    <!-- <beancurd-cube
+    <beancurd-cube
       floor="{{item}}"
       wx:if="{{item.floorType === 3}}"
-    /> -->
+    />
 
     <!-- banner 轮播 -->
-    <!-- <banner
+    <banner
       floor="{{item}}"
       wx:if="{{item.floorType === 4}}"
-    /> -->
+    />
 
     <!-- 秒杀 -->
     <seckill
