@@ -73,7 +73,7 @@ const Reqeust = (params) => {
                   store.data.showLoginMobel = false;
                   setLoginRouter();
                   router.push({
-                    name: "login"
+                    name: "mobile"
                   })
                 },
                 cancel() {

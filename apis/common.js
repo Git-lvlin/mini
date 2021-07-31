@@ -24,7 +24,7 @@ const showLogin = (back) => {
     ok() {
       setLoginRouter();
       router.push({
-        name: "login"
+        name: "mobile"
       })
     },
     cancel() {

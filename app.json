@@ -5,6 +5,7 @@
     "pages/cart/index",
     "pages/user/index",
     "pages/login/main/index",
+    "pages/login/mobile/index",
     "pages/login/bindPhone/index",
     "pages/list/index",
     "pages/location/index",

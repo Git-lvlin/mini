@@ -136,7 +136,7 @@ create.Page(store, {
   // 跳转登录
   onToLogin() {
     router.push({
-      name: "login"
+      name: "mobile"
     })
   },
 

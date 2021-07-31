@@ -63,7 +63,7 @@ Page({
           };
           wx.setStorageSync("LOGIN_TO_DATA", routerData);
           router.replace({
-            name: "login"
+            name: "mobile"
           })
       //   },
       // })

@@ -47,7 +47,7 @@ export const handleErrorCode = ({
             ok() {
               store.data.showLoginMobel = false;
               router.push({
-                name: "login"
+                name: "mobile"
               })
             },
             cancel() {
@@ -241,7 +241,7 @@ export const getStorageUserInfo = (showLogin, goBack) => {
       confirmText: "去登录",
       ok() {
         router.push({
-          name: "login"
+          name: "mobile"
         })
       },
       cancel() {

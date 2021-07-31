@@ -68,6 +68,7 @@ export default {
   getOrderDetail(params, option) {
     return Request.get(url.orderDetail, params, option);
   },
+  
   // 获取支付信息
   getPayInfo(params, option) {
     return Request.post(url.payInfo, params, option);

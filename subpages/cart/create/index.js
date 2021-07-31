@@ -2,8 +2,11 @@ import create from '../../../utils/create'
 import store from '../../../store/index'
 import router from '../../../utils/router'
 import cartApi from '../../../apis/order'
+import commonApi from '../../../apis/common'
 import { getStorageUserInfo, showToast } from '../../../utils/tools'
+import { getPayInfo } from '../../../utils/orderPay'
 import util from '../../../utils/util'
+import { PAY_TYPE_KEY } from '../../../constants/common'
 
 const refreshOrderToken = {
   20802: "库存不足！",
@@ -28,6 +31,9 @@ create.Page(store, {
   ],
 
   orderType: 1,
+  payType: 2,
+  env: "pro",
+  orderId: "",
   
   // 是否活动商品单独购买
   isActivityCome: false,
@@ -68,6 +74,11 @@ create.Page(store, {
       teamGoods,
     });
     this.getOrderToken();
+    const env = wx.getStorageSync("SYS_ENV") || "pro";
+    this.env = env;
+    if(env === "fat" || env === "pro") {
+      this.getPayType();
+    }
   },
   
   onShow() {
@@ -237,6 +248,23 @@ create.Page(store, {
     });
   },
 
+  // 获取支付类型
+  getPayType() {
+    const that = this;
+    commonApi.getResourceDetail({
+      resourceKey: PAY_TYPE_KEY,
+    }, {
+      showLoading: false,
+    }).then(res => {
+      let list = res.data.records;
+      list.forEach((item, index) => {
+        if(item.state === 1 && item.payType === 7) {
+          that.payType = 7;
+        }
+      })
+    })
+  },
+
   // 组装提交的地址数据
   mapAddress(info) {
     if(!info.phone) return undefined;
@@ -355,7 +383,6 @@ create.Page(store, {
       changeStore,
       ...data
     } = postData;
-      console.log("🚀 ~ file: index.js ~ line 354 ~ updateOrderAmount ~ changeStore", changeStore)
     cartApi.getOrderAmount(data).then(res => {
       const {
         payAmount,
@@ -386,7 +413,6 @@ create.Page(store, {
           goodsInfos: changeStore.data.goodsInfos,
         }
       }
-      console.log("🚀 ~ file: index.js ~ line 381 ~ cartApi.getOrderAmount ~ orderInfo", orderInfo)
       this.setData({
         orderInfo
       })
@@ -533,12 +559,18 @@ create.Page(store, {
     }
     if(!postData) return;
     cartApi.createOrder(postData).then(res => {
-      wx.setStorageSync("order_info", res);
+      console.log("🚀 ~ file: index.js ~ line 562 ~ cartApi.createOrder ~ res", res)
       res.orderType = this.orderType;
-      router.replace({
-        name: "cashier",
-        data: res,
-      })
+      this.orderId = res.id;
+      if(this.env === "fat" || this.env === "pro") {
+        this.getPayInfo(res);
+        return;
+      }
+      // wx.setStorageSync("order_info", res);
+      // router.replace({
+      //   name: "cashier",
+      //   data: res,
+      // })
     }).catch(err => {
       // if(refreshOrderToken[err.code]) {
         this.getOrderToken();
@@ -549,5 +581,27 @@ create.Page(store, {
         // }, 1500);
       // }
     });
-  }
+  },
+
+  // 生产环境直接调支付
+  getPayInfo(orderInfo) {
+    getPayInfo({
+      id: this.orderId,
+      payType: this.payType,
+      pullPayment: true,
+    }).then(res => {
+      const {
+        payData,
+        isPay,
+      } = res;
+      wx.setStorageSync("pay_data", payData);
+      router.replace({
+        name: "cashier",
+        data: {
+          isPay,
+          ...orderInfo,
+        },
+      })
+    });
+  },
 })
