@@ -38,6 +38,9 @@ Page({
     } else if(this.params.scene == 3) {
       // 获取集约B端支付信息
       this.getIntensivePay(this.params);
+    } else if(this.params.scene == 4) {
+      // 获取集约B端支付信息
+      this.getBondPay(this.params);
     }
   },
 
@@ -75,16 +78,21 @@ Page({
   getPayInfo(data) {
     // id=1403266210801328130
     console.log("普通商品支付")
+    const {
+      payInfo,
+    } = this.data;
     cartApi.getPayInfo({
       // id: data.id || "1403266210801328130",
       id: data.id,
-      payType: 7,
+      payType: data.payType || 7,
       openId: data.openId,
     }, {
       showLoading: false
     }).then(res => {
       console.log("普通商品支付", true)
+      payInfo.state = 0;
       this.setData({
+        payInfo,
         payData: res,
       }, () => {
         this.openPay();
@@ -92,9 +100,6 @@ Page({
       })
     }).catch(err => {
       console.log("普通商品支付", false)
-      const {
-        payInfo,
-      } = this.data;
       payInfo.state = 3;
       this.setData({
         payInfo
@@ -105,23 +110,25 @@ Page({
   // 获取约卡支付信息
   getRechargePay(data) {
     console.log("约卡支付")
+    const {
+      payInfo,
+    } = this.data;
     cartApi.getRechargePay({
       paymentNo: data.id,
-      payType: 7,
+      payType: data.payType || 7,
       openId: data.openId,
     }).then(res => {
       console.log("获取约卡 res", res)
       res.prepayData = res.paymentParam;
+      payInfo.state = 0;
       this.setData({
+        payInfo,
         payData: res,
       }, () => {
         this.openPay();
         wx.hideLoading();
       })
     }).catch(err => {
-      const {
-        payInfo,
-      } = this.data;
       payInfo.state = 3;
       this.setData({
         payInfo
@@ -129,30 +136,58 @@ Page({
     });
   },
 
-  // 获取集约支付信息
+  // 获取集约B端支付信息
   getIntensivePay(data) {
+    const {
+      payInfo,
+    } = this.data;
     console.log("getIntensivePay ~ data", data)
     cartApi.getIntensivePay({
       orderId: data.id,
       storeNo: data.storeNo,
       type: data.type,
-      payType: 7,
+      payType: data.payType || 7,
       openId: data.openId,
     }, {
       notErrorMsg: true,
     }).then(res => {
       console.log("获取集约 res", res)
+      payInfo.state = 0;
       this.setData({
+        payInfo,
         payData: res,
       }, () => {
         this.openPay();
         // wx.hideLoading();
       })
     }).catch(err => {
-      console.log("🚀 ~ file: index.js ~ line 137 ~ getIntensivePay ~ err", err)
-      const {
+      payInfo.state = 3;
+      this.setData({
+        payInfo
+      })
+    });
+  },
+
+  // 店铺保证金
+  getBondPay(data) {
+    const {
+      payInfo,
+    } = this.data;
+    cartApi.getBondPay({
+      applyId: data.id,
+      payType: data.payType || 7,
+      payAmount: data.payAmount,
+      openId: data.openId,
+    }).then(res => {
+      console.log("保证金 res", res);
+      payInfo.state = 0;
+      this.setData({
         payInfo,
-      } = this.data;
+        payData: res,
+      }, () => {
+        this.openPay();
+      })
+    }).catch(err => {
       payInfo.state = 3;
       this.setData({
         payInfo

@@ -71,6 +71,12 @@
           "pathName": "subpages/user/setting/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "pages/otherpay/index",
+          "pathName": "pages/otherpay/index",
+          "query": "id=383&payType=7&scene=4&payAmount=1",
+          "scene": null
         }
       ]
     }

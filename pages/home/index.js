@@ -14,6 +14,7 @@ create.Page(store, {
   scrollLock: false,
   isFristLoad: true,
   floorTime: new Date().getTime(),
+  isMiniExamine: false,
 
   use: [
     "userInfo",
@@ -62,15 +63,37 @@ create.Page(store, {
         takeSpot,
       });
     }
-    this.getFloorList();
+    this.getMiniExamine();
     // 更新tabbar显示
     router.updateSelectTabbar(this, 0);
+  },
+
+  // 获取审核状态
+  getMiniExamine() {
+    commonApi.getResourceDetail({
+      resourceKey: "MINIEXAMINE",
+    }, {
+      showLoading: false,
+    }).then(res => {
+      const data = res.data;
+      const miniState = this.isMiniExamine;
+      if(data.state == 1 && !miniState) {
+        this.isMiniExamine = true;
+      } else if(data.state == 0 && miniState) {
+        this.isMiniExamine = false;
+      }
+      this.getFloorList();
+    }).catch(err => {
+      this.getFloorList();
+    });
   },
 
   // 获取首页楼层列表
   getFloorList() {
     let floor = wx.getStorageSync("HOME_FLOOR");
     let headBackCss = "";
+    // 2 代表小程序审核版本 3 代表小程序正试版本
+    let verifyVersionId = this.isMiniExamine ? 2 : 3;
     if(!!floor) {
       headBackCss = this.setHeadBack(floor.headData && floor.headData.style || "");
       this.setData({
@@ -80,7 +103,8 @@ create.Page(store, {
       // return ;
     }
     homeApi.getFloorList({
-      timeVersion: this.floorTime
+      timeVersion: this.floorTime,
+      verifyVersionId,
     }, {
       showLoading: this.isFristLoad,
     }).then(res => {

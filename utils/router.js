@@ -81,7 +81,13 @@ const goTabbar = (name = 'home') => {
 const loginTo = (routerData) => {
   const pages = getCurrentPages();
   const pagesLen = pages.length - 1;
-  const loginToData = !!routerData ? routerData : wx.getStorageSync("LOGIN_TO_DATA");
+  const storageRouter = wx.getStorageSync("LOGIN_TO_DATA");
+  const loginToData = !!routerData ? routerData : storageRouter;
+  if(!!storageRouter) {
+    wx.removeStorage({
+      key: 'LOGIN_TO_DATA'
+    });
+  }
   if(!!loginToData) {
     let {
       type,
@@ -116,25 +122,25 @@ const loginTo = (routerData) => {
       // } else {
         // const dataStr = encodeURIComponent(JSON.stringify(data));
         const dataStr = paramToStr(router.data);
-        if(routes.login.path === `/${pages[pagesLen].route}`) {
+        // if(routes.mobile.path === `/${pages[pagesLen].route}`) {
           wx.redirectTo({
             url: `${router.path}?${dataStr}`,
           });
-        } else {
-          // 不是登录页面，先返回登录页面再重置页面
-          index = pages.findIndex(item => item.route === routes.login.path);
-          delta = pagesLen - index;
-          console.log(1,new Date().getTime());
-          wx.navigateBack({
-            delta,
-            success() {
-              console.log(2, new Date().getTime());
-              wx.redirectTo({
-                url: `${router.path}?${dataStr}`,
-              });
-            }
-          });
-        }
+        // } else {
+        //   // 不是登录页面，先返回登录页面再重置页面
+        //   index = pages.findIndex(item => item.route === routes.login.path);
+        //   delta = pagesLen - index;
+        //   console.log(1,new Date().getTime());
+        //   wx.navigateBack({
+        //     delta,
+        //     success() {
+        //       console.log(2, new Date().getTime());
+        //       wx.redirectTo({
+        //         url: `${router.path}?${dataStr}`,
+        //       });
+        //     }
+        //   });
+        // }
       // } 
     }
   }

@@ -17,6 +17,7 @@ const url = {
   intensivePay: "/store/auth/wholesale/payOrder",
   orderDetail: "/order/auth/order/orderDetail",
   orderAmount: "/order/auth/orderAmount",
+  bondPay: "/store/auth/memberShop/apply/pay",
   orderToken: "/order/auth/orderToken",
   
 }
@@ -80,6 +81,10 @@ export default {
   // 集约支付信息
   getIntensivePay(params, option) {
     return Request.post(url.intensivePay, params, option);
+  },
+  // 店铺保证金
+  getBondPay(params, option) {
+    return Request.post(url.bondPay, params, option);
   },
   // 刷新订单token
   getOrderToken(params, option) {
