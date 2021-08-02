@@ -172,6 +172,8 @@ create.Page(store, {
       encryptedData: data.encryptedData,
       iv: data.iv,
       openId: data.openId,
+    }, {
+      showLoading: false,
     }).then(res => {
       data.phoneNumber = res.phoneNumber;
       this.onBindPhone(data);
@@ -195,7 +197,9 @@ create.Page(store, {
     if(isBeta) {
       data.testCode = betaInfo.betaCode;
     }
-    loginApis.notCodeBind(data).then(res => {
+    loginApis.notCodeBind(data, {
+      showLoading: false,
+    }).then(res => {
       const data = res;
       wx.setStorageSync("ACCESS_TOKEN", data.accessToken);
       wx.setStorageSync("REFRESH_TOKEN", data.refreshToken);
