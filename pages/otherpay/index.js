@@ -28,7 +28,6 @@ Page({
     if(!openId) return;
     wx.showLoading();
     this.params.openId = openId;
-    console.log("🚀 ~ file: index.js ~ line 31 ~ onShow ~ this.params", this.params)
     if(this.params.scene == 1) {
       // 获取商品下单支付信息
       this.getPayInfo(this.params);
@@ -39,7 +38,7 @@ Page({
       // 获取集约B端支付信息
       this.getIntensivePay(this.params);
     } else if(this.params.scene == 4) {
-      // 获取集约B端支付信息
+      // 获取保证金支付信息
       this.getBondPay(this.params);
     }
   },
@@ -141,15 +140,12 @@ Page({
     const {
       payInfo,
     } = this.data;
-    console.log("getIntensivePay ~ data", data)
     cartApi.getIntensivePay({
       orderId: data.id,
       storeNo: data.storeNo,
       type: data.type,
       payType: data.payType || 7,
       openId: data.openId,
-    }, {
-      notErrorMsg: true,
     }).then(res => {
       console.log("获取集约 res", res)
       payInfo.state = 0;

@@ -65,6 +65,10 @@ Page({
           ...shareParams,
           url: link,
         },
+        ext: {
+          ...shareParams,
+          url: link,
+        },
       };
       promise = commonApi.getShareInfo(params);
       shareInfo.promise = promise;

@@ -61,6 +61,7 @@ Page({
         shareObjectNo: spuId,
         paramId: 3,
         shareParams: this.goodParams,
+        ext: this.goodParams,
       };
       promise = commonApi.getShareInfo(params);
       shareInfo.promise = promise;

@@ -129,6 +129,7 @@ create.Page(store, {
         shareObjectNo: spuId,
         paramId: 1,
         shareParams: this.goodParams,
+        ext: this.goodParams,
       };
       if(orderType == 3 || orderType == 4) {
         params.paramId = 3;

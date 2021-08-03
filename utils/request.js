@@ -104,7 +104,7 @@ const Reqeust = (params) => {
             }
           }
           // 返回错误码处理
-          if(!params.notErrorMsg && !this.refreshToken) {
+          if(!params.notErrorMsg && !isRefreshing) {
             handleErrorCode({
               params,
               code: res.data.code,
