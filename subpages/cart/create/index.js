@@ -34,6 +34,8 @@ create.Page(store, {
   payType: 2,
   env: "pro",
   orderId: "",
+  // 修改的商品信息
+  changeStoreData: [],
   
   // 是否活动商品单独购买
   isActivityCome: false,
@@ -173,7 +175,7 @@ create.Page(store, {
         selectAddressType,
         storeActivityGood: other,
       });
-    } else if(this.orderType == 3 || this.isActivityCome || this.orderType == 11) {
+    }  else if(this.orderType == 3 || this.isActivityCome || this.orderType == 11) {
       // 单约 || 单独购买 || 1688
       console.log(222)
       let data = wx.getStorageSync("CREATE_INTENSIVE");
@@ -202,6 +204,9 @@ create.Page(store, {
         deliveryInfo,
         storeGoodsInfos: goodList
       };
+    }
+    if(this.changeStoreData.length) {
+      postData.storeGoodsInfos = this.changeStoreData;
     }
     cartApi.getConfirmInfo(postData).then(res => {
       let orderInfo = res;
@@ -371,6 +376,7 @@ create.Page(store, {
         }
       }
     }
+    this.changeStoreData = postData.storeGoodsInfos;
     this.updateOrderAmount(postData);
   },
 
@@ -559,18 +565,17 @@ create.Page(store, {
     }
     if(!postData) return;
     cartApi.createOrder(postData).then(res => {
-      console.log("🚀 ~ file: index.js ~ line 562 ~ cartApi.createOrder ~ res", res)
       res.orderType = this.orderType;
       this.orderId = res.id;
       if(this.env === "fat" || this.env === "pro") {
         this.getPayInfo(res);
         return;
       }
-      // wx.setStorageSync("order_info", res);
-      // router.replace({
-      //   name: "cashier",
-      //   data: res,
-      // })
+      wx.setStorageSync("order_info", res);
+      router.replace({
+        name: "cashier",
+        data: res,
+      })
     }).catch(err => {
       // if(refreshOrderToken[err.code]) {
         this.getOrderToken();

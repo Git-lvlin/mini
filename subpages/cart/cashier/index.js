@@ -54,6 +54,9 @@ Page({
     let orderCreateTime = "";
     if(payData && payData.orderCreateTime && options.isPay) {
       orderCreateTime = payData.orderCreateTime;
+      wx.removeStorage({
+        key: 'pay_data'
+      });
     }
     this.setData({
       payAmount: util.divide(options.payAmount, 100),
