@@ -595,7 +595,6 @@ create.Page(store, {
       payType: this.payType,
       pullPayment: true,
     }).then(res => {
-      console.log("🚀 ~ file: index.js ~ line 599 ~ getPayInfo ~ res", res)
       const {
         payData,
         isPay,

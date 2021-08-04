@@ -50,10 +50,10 @@ Page({
     this.id = options.id
     let downTime = options.payDeadline - options.currentTime;
     const sysEnv = wx.getStorageSync("SYS_ENV") || "pro";
-    const payData = wx.getStorageSync("pay_data");
+    const payData = wx.getStorageSync("pay_data") || {};
     let orderCreateTime = "";
     if(payData && payData.orderCreateTime && options.isPay) {
-      orderCreateTime = payData.orderCreateTime;
+      orderCreateTime = dayjs(payData.orderCreateTime).format("YYYY-MM-DD HH:mm:ss");
       wx.removeStorage({
         key: 'pay_data'
       });
@@ -62,6 +62,7 @@ Page({
       payAmount: util.divide(options.payAmount, 100),
       downTime,
       sysEnv,
+      payData,
       orderCreateTime,
       isPay: options.isPay,
       orderType: options.orderType,

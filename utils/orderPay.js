@@ -63,6 +63,10 @@ export const onOrderPay = ({
   }
   const payObj = JSON.parse(payData.prepayData);
   return new Promise((resolve, reject) => {
+    // resolve({
+    //   isPay: true,
+    //   payData,
+    // });
     wx.requestPayment({
       timeStamp: payObj.timeStamp,
       nonceStr: payObj.nonceStr,
