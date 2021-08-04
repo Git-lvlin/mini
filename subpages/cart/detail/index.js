@@ -479,7 +479,6 @@ create.Page(store, {
       spuId,
       skuId,
     } = this.goodParams;
-    let skuNum = 1;
     const {
       selectAddressType,
       good,
@@ -488,6 +487,7 @@ create.Page(store, {
       showToast({ title: "商品已下架" });
       return;
     }
+    let skuNum = good.buyMinNum > 0 ? good.buyMinNum : 1;
     const {
       detail,
       currentTarget,

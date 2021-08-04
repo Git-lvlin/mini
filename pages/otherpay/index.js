@@ -1,6 +1,6 @@
 import cartApi from '../../apis/order'
 import router from '../../utils/router';
-import { getStorageUserInfo, showModal, showToast } from '../../utils/tools'
+import { getStorageUserInfo, handleErrorCode, showModal, showToast } from '../../utils/tools'
 
 Page({
   params: {},
@@ -86,7 +86,8 @@ Page({
       payType: data.payType || 7,
       openId: data.openId,
     }, {
-      showLoading: false
+      showLoading: false,
+      notErrorMsg: true,
     }).then(res => {
       console.log("普通商品支付", true)
       payInfo.state = 0;
@@ -98,8 +99,13 @@ Page({
         wx.hideLoading();
       })
     }).catch(err => {
-      console.log("普通商品支付", false)
-      payInfo.state = 3;
+      console.log("普通商品支付", err)
+      if(err.code == 20806) {
+        payInfo.state = 4;
+      } else {
+        payInfo.state = 3;
+        this.handleErrorInfo(err);
+      }
       this.setData({
         payInfo
       })
@@ -128,7 +134,11 @@ Page({
         wx.hideLoading();
       })
     }).catch(err => {
-      payInfo.state = 3;
+      // if(err.code == 10110) {
+      //   payInfo.state = 4;
+      // } else {
+        payInfo.state = 3;
+      // }
       this.setData({
         payInfo
       })
@@ -146,6 +156,8 @@ Page({
       type: data.type,
       payType: data.payType || 7,
       openId: data.openId,
+    }, {
+      notErrorMsg: true,
     }).then(res => {
       console.log("获取集约 res", res)
       payInfo.state = 0;
@@ -157,7 +169,12 @@ Page({
         // wx.hideLoading();
       })
     }).catch(err => {
-      payInfo.state = 3;
+      if(err.code == 30202) {
+        payInfo.state = 4;
+      } else {
+        payInfo.state = 3;
+        this.handleErrorInfo(err);
+      }
       this.setData({
         payInfo
       })
@@ -174,6 +191,8 @@ Page({
       payType: data.payType || 7,
       payAmount: data.payAmount,
       openId: data.openId,
+    }, {
+      notErrorMsg: true,
     }).then(res => {
       console.log("保证金 res", res);
       payInfo.state = 0;
@@ -184,10 +203,23 @@ Page({
         this.openPay();
       })
     }).catch(err => {
-      payInfo.state = 3;
+      if(err.code == 10110) {
+        payInfo.state = 4;
+      } else {
+        payInfo.state = 3;
+        this.handleErrorInfo(err);
+      }
       this.setData({
         payInfo
       })
+    });
+  },
+
+  // 获取支付信息错误
+  handleErrorInfo(data) {
+    handleErrorCode({
+      code: data ? data.code : 10018,
+      msg: data ? data.msg : "",
     });
   },
 

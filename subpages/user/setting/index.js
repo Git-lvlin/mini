@@ -2,16 +2,20 @@ import create from "../../../utils/create";
 import store from "../../../store/index";
 import { VERSION } from "../../../constants/index";
 import router from "../../../utils/router";
-import { jumpToAgreement } from "../../../utils/tools";
+import { getStorageUserInfo, jumpToAgreement } from "../../../utils/tools";
 
 create.Page(store, {
 
   data: {
     version: VERSION,
+    userInfo: "",
   },
 
-  onLoad: function (options) {
-
+  onLoad(options) {
+    const userInfo = getStorageUserInfo() || "";
+    this.setData({
+      userInfo
+    });
   },
 
   onClickService() {

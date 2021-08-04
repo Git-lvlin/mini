@@ -78,7 +78,7 @@ create.Page(store, {
     this.getOrderToken();
     const env = wx.getStorageSync("SYS_ENV") || "pro";
     this.env = env;
-    if(env === "fat" || env === "pro") {
+    if(env === "uat" || env === "fat" || env === "pro") {
       this.getPayType();
     }
   },
@@ -567,7 +567,7 @@ create.Page(store, {
     cartApi.createOrder(postData).then(res => {
       res.orderType = this.orderType;
       this.orderId = res.id;
-      if(this.env === "fat" || this.env === "pro") {
+      if(this.env === "uat" || this.env === "fat" || this.env === "pro") {
         this.getPayInfo(res);
         return;
       }
@@ -595,6 +595,7 @@ create.Page(store, {
       payType: this.payType,
       pullPayment: true,
     }).then(res => {
+      console.log("🚀 ~ file: index.js ~ line 599 ~ getPayInfo ~ res", res)
       const {
         payData,
         isPay,

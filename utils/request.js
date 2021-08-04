@@ -52,7 +52,6 @@ const Reqeust = (params) => {
       header,
       timeout: HTTP_TIMEOUT,
       success: async function(res) {
-        opions.showLoading && wx.hideLoading();
         // 判断是否返回数据包
         const data = !!params.dataPackage ? res.data : res.data.data;
         // console.log(params.url, res.data)
@@ -60,7 +59,6 @@ const Reqeust = (params) => {
         if (res.statusCode === 200 && res.data.code === 0 && res.data.success) {
           // resolve(data);
           resolve(data)
-          opions.showLoading && wx.hideLoading();
         } else {
           if (res.data.code == REFRESH_TOKEN_INVALID) {
             // refreshToken过期退出登录
@@ -126,10 +124,10 @@ const Reqeust = (params) => {
             mustLogin: params.mustLogin,
           });
         }
-        opions.showLoading && wx.hideLoading();
         reject(error);
       },
       complete(res) {
+        opions.showLoading && wx.hideLoading();
         // console.log("request ~ ", params.url, res.data);
       },
     })

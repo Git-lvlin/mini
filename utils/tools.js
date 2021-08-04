@@ -27,7 +27,7 @@ const showErrorMsg = (msg, icon) => {
 
 // 错误码处理
 export const handleErrorCode = ({
-  params,
+  params = {},
   code,
   msg,
   mustLogin = false,

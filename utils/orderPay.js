@@ -27,6 +27,10 @@ export const getPayInfo = (data) => {
         onOrderPay({
           data,
           payData,
+        }).then(res => {
+          resolve({ ...res });
+        }).catch(err => {
+          reject({ ...err });
         });
       } else {
         let isPay = false;
