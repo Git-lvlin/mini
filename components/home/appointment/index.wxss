@@ -126,7 +126,7 @@
   position: relative;
   width: 314rpx;
   height: 30rpx;
-  margin-left: 12rpx;
+  margin-left: 24rpx;
   margin-right: 12rpx;
   background-color: #fec7c7;
   border: 2rpx solid #ea5634;
@@ -136,7 +136,7 @@
 .fire_icon {
   position: absolute;
   top: -6rpx;
-  left: -12rpx;
+  left: -24rpx;
   z-index: 3;
   width: 42rpx;
   height: 44rpx;

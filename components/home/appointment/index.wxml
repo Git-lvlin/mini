@@ -42,7 +42,7 @@
           <view class="good_info">
             <view class="title text_one_line">{{item.title}}</view>
             <view class="good_label">{{item.goodsTag}}</view>
-            <view class="flex_middle join_user">
+            <view class="flex_middle join_user" wx:if="{{orderType == 1 || orderType == 2}}">
               <view class="flex_middle user_list">
                 <image
                   class="user_avatar"
@@ -83,10 +83,10 @@
         <view class="sale_box" wx:if="{{item.orderType == 15}}">
           <view class="progress_box">
             <image class="fire_icon" src="{{tools.getImgUrl('miniprogram/home/appointment_fire.png')}}" />
-            <view class="progress_line" />
-            <view class="progress_text">已售50%</view>
+            <view class="progress_line" style="width: {{item.saleNumDisplay || 0}}%" />
+            <view class="progress_text">已售{{item.saleNumDisplay}}%</view>
           </view>
-          <view class="sales">库存888件</view>
+          <view class="sales">库存{{item.stockNum}}件</view>
           <view class="flex_fix flex_center to_buy">
             <view class="btn_text">去抢购</view>
             <view class="right_arrow" />
