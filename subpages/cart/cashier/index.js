@@ -222,7 +222,7 @@ Page({
   },
 
   onSuccess() {
-    router.goTabbar();
+    router.goTabbar("user");
   },
 
   handleCloseTeam() {
