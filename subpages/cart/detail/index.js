@@ -77,16 +77,6 @@ create.Page(store, {
     }else{
       this.hanldeGoodsParams(options)
     }
-    // else {
-    //   commonApis.getShareParam(options).then(res => {
-    //     console.log(res)
-    //     const param = res;
-    //     this.setData(param);
-    //     this.hanldeGoodsParams(param);
-    //   }).catch(err => {
-    //     this.hanldeGoodsParams(options)
-    //   })
-    // }
   },
 
   onShow() {
@@ -159,7 +149,6 @@ create.Page(store, {
       this.getTogetherUser();
     }
   },
-
 
   // 获取分享配置
   getShareParam(data) {

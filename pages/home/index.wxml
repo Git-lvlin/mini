@@ -53,10 +53,10 @@
     /> -->
 
     <!-- 快讯 -->
-    <message
+    <!-- <message
       floor="{{item}}"
       wx:if="{{item.floorType === 5}}"
-    />
+    /> -->
 
     <!-- 豆腐块 -->
     <beancurd-cube
@@ -69,12 +69,6 @@
       floor="{{item}}"
       wx:if="{{item.floorType === 4}}"
     />
-
-    <!-- 快讯 -->
-    <!-- <message
-      floor="{{item}}"
-      wx:if="{{item.floorType === 5}}"
-    /> -->
 
     <!-- 秒杀 -->
     <seckill

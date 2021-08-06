@@ -10,5 +10,6 @@
   app-parameter="payBack"
   wx:if="{{payInfo.state != 0}}"
   binderror="launchAppError"
+  bindtap="onToHome"
 >返回约购商城</button>
 <!-- <button bindtap="openPay">点击支付</button> -->

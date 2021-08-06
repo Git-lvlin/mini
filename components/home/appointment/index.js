@@ -38,32 +38,13 @@ Component({
     goodList: [],
   },
 
-  ready() {
-    this.loadData();
-  },
-
   pageLifetimes: {
-    show() {
+    // show() {
       // 页面被展示
-      this.loadData();
-    },
+    // },
   },
 
   methods: {
-    // 加载数据
-    loadData() {
-      const {
-        floor,
-      } = this.data;
-      if(floor.content && floor.content.dataType) {
-        let spot = wx.getStorageSync("TAKE_SPOT") || {};
-        spot = spot && spot.storeNo ? spot : {};
-        if((spot.storeNo == takeSpot.storeNo) && takeSpot.storeNo != undefined) return;
-        takeSpot = spot;
-        this.setGoodList(floor.content, spot);
-      }
-    },
-
     // 设置商品列表数据
     setGoodList(content, spot) {
       if(content.dataType === 1) {

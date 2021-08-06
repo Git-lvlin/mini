@@ -262,4 +262,9 @@ Page({
       }
     })
   },
+
+  // 返回首页
+  onToHome() {
+    router.goTabbar();
+  },
 })
