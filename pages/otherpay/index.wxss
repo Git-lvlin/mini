@@ -7,6 +7,15 @@
   padding-top: 96rpx;
 }
 
+.desc_text {
+  width: 520rpx;
+  font-size: 28rpx;
+  color: #666;
+  text-align: center;
+  line-height: 42rpx;
+  margin: 16rpx auto 0;
+}
+
 .back_btn {
   position: fixed;
   bottom: 20%;

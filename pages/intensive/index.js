@@ -30,7 +30,7 @@ create.Page(store, {
     hotGood: [],
   },
 
-  onLoad: function (options) {
+  onLoad(options) {
     // store.updateCart();
     this.getBannerList();
     if(!store.data.userOtherInfo.isShopMaster) {
@@ -71,8 +71,9 @@ create.Page(store, {
     let {
       intensiveGood
     } = this.data;
+    let spot = wx.getStorageSync("TAKE_SPOT") || {};
     homeApi.getIntensiveGood({
-      storeNo: "store_m_1",
+      storeNo: spot.storeNo || "",
       page,
       pageSize,
     }).then(res => {

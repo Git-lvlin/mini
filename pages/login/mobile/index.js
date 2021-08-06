@@ -49,10 +49,12 @@ const codeScene = {
 
 const app = getApp();
 create.Page(store, {
+  loginCode: "",
+
   data: {
     showTreaty: false,
     canUseProfile: false,
-    radio: false,
+    radio: true,
     envList,
     changeEnv: app.globalData.changeEnv,
     currentEnv: ''
@@ -93,33 +95,6 @@ create.Page(store, {
     }
   },
 
-  // 新API登录
-  onLogin: async function() {
-    // 生命周期内登录过了
-    if(!this.data.radio) {
-      wx.showToast({
-        title: '请先勾选服务协议和隐私政策',
-        icon: 'none',
-        mask: false,
-      });
-      return;
-    }
-    let userInfo = "";
-    if(!!this.data.$.defUserInfo) {
-      userInfo = this.data.$.defUserInfo;
-    } else {
-      try {
-        const res = await getUserInfo();
-        userInfo = res.userInfo
-      } 
-      catch(err) {
-        console.log("🚀 ~ login err", err)
-        return
-      }
-    }
-    this.getCodeLogin(userInfo);
-  },
-
   // 获取分享配置
   getShareParam(data) {
     commonApis.getShareParam({
@@ -132,70 +107,112 @@ create.Page(store, {
       }
     })
   },
-  
-  // 进入页面获取用户授权情况 - 旧api登录
-  getUserSetting() {
-    var that = this;
-    //查看是否授权
-    wx.getSetting({
-      success(res) {
-        if (res.authSetting['scope.userInfo']) {
-          that.getCodeLogin(getUserInfo(false));
-        } else {
-          //用户没有授权
-          console.log("用户没有授权");
-          that.setData({ userAuth : false})
-        }
+
+  // 获取code 获取code 需要前置，所有用tap
+  getCode(){
+    const that = this;
+    wx.login({
+      success(result) {
+        that.loginCode = result.code
       }
     });
   },
 
-  // 点击授权 - 旧api登录
-  handleGetUerInfo(res) {
-    if(!!res.detail.userInfo){
-      this.getCodeLogin(res.detail.userInfo);
-    } else {
-      console.log("用户按了拒绝按钮")
+  // 获取用户openid 登录
+  getCodeLogin(event) {
+    const that = this;
+    // 生命周期内登录过了
+    if(!this.data.radio) {
+      wx.showToast({
+        title: '请先勾选服务协议和隐私政策',
+        icon: 'none',
+        mask: false,
+      });
+      return;
+    }
+    const eventData = event.detail || {};
+    if (eventData.errMsg == "getPhoneNumber:ok") {
+      // wx.login({
+      //   success: (result)=>{
+          loginApis.userLogin({
+            code: that.loginCode,
+            sourceType: SOURCE_TYPE,
+          }, {
+            notErrorMsg: true,
+          }).then(res => {
+            const memberInfo = res.memberInfo;
+            eventData.openId = memberInfo.openId;
+            eventData.uId = memberInfo.uId;
+            wx.setStorageSync("OPENID", memberInfo.openId);
+            tools.setUserInfo(res);
+            this.getUserInfo(res.memberInfo);
+            // commonApis.runOverList();
+          }).catch(err => {
+            if(err.code === 200102) {
+              wx.setStorageSync("LOGIN_INFO", err.data);
+              if(err.data.memberInfo) {
+                const memberInfo = err.data.memberInfo;
+                wx.setStorageSync("OPENID", memberInfo.openId);
+                eventData.openId = memberInfo.openId;
+                eventData.uId = memberInfo.uId;
+                this.handleGetPhone(eventData);
+              }
+            } else {
+              handleErrorCode(err.code);
+            }
+          })
+      //   },
+      // });
     }
   },
-
-  // 获取用户openid 登录
-  getCodeLogin(userInfo) {
-    const that = this;
-    wx.login({
-      success: (result)=>{
-        loginApis.userLogin({
-          code: result.code,
-          sourceType: SOURCE_TYPE,
-        }, {
-          notErrorMsg: true,
-        }).then(res => {
-          const memberInfo = res.memberInfo;
-          // store.data.userInfo = memberInfo;
-          // store.data.defUserInfo = memberInfo;
-          wx.setStorageSync("OPENID", memberInfo.openId);
-          tools.setUserInfo(res);
-          this.getUserInfo(res.memberInfo);
-          // commonApis.runOverList();
-        }).catch(err => {
-          if(err.code === 200102) {
-            wx.setStorageSync("LOGIN_INFO", err.data);
-            store.data.userInfo = userInfo;
-            store.data.defUserInfo = userInfo;
-            if(err.data.memberInfo) {
-              wx.setStorageSync("OPENID", err.data.memberInfo.openId);
-            }
-            router.push({
-              name: "bindPhone"
-            });
-          } else {
-            handleErrorCode(err.code);
-          }
-        })
-      },
-      fail: ()=>{}
+  
+  // 获取手机号
+  handleGetPhone(data) {
+    loginApis.getPhoneNumber({
+      encryptedData: data.encryptedData,
+      iv: data.iv,
+      openId: data.openId,
+    }, {
+      showLoading: false,
+    }).then(res => {
+      data.phoneNumber = res.phoneNumber;
+      this.onBindPhone(data);
     });
-    this.setData({ userAuth : true, userInfo: userInfo})
+  },
+
+  // 绑定手机号
+  onBindPhone(uInfo) {
+    const inviteInfo = wx.getStorageSync("INVITE_INFO");
+    const betaInfo = wx.getStorageSync("BETA_INFO");
+    const isInvite = inviteInfo && inviteInfo.inviteCode ? true : false;
+    const isBeta = betaInfo && betaInfo.betaCode ? true : false;
+    const data = {
+      phoneNumber: uInfo.phoneNumber,
+      sourceType: 4,
+      wxUId: uInfo.uId,
+    };
+    if(isInvite) {
+      data.inviteCode = inviteInfo.inviteCode;
+    }
+    if(isBeta) {
+      data.testCode = betaInfo.betaCode;
+    }
+    loginApis.notCodeBind(data, {
+      showLoading: false,
+    }).then(res => {
+      const data = res;
+      wx.setStorageSync("ACCESS_TOKEN", data.accessToken);
+      wx.setStorageSync("REFRESH_TOKEN", data.refreshToken);
+      // store.data.userInfo = data.memberInfo;
+      // store.data.defUserInfo = data.memberInfo;
+      tools.setUserInfo(data);
+      this.getUserInfo(data.memberInfo);
+      if(isInvite) {
+        wx.removeStorage({
+          key: 'INVITE_INFO',
+        });
+      }
+    });
   },
 
   // 获取用户其他信息
@@ -205,8 +222,8 @@ create.Page(store, {
     }, {
       showLoading: false,
     }).then(res => {
-      store.data.userInfo = res;
-      store.data.defUserInfo = res;
+      // store.data.userInfo = res;
+      // store.data.defUserInfo = res;
       wx.setStorageSync('USER_INFO', res);
       tools.successJump();
     }).catch(err => {

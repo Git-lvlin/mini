@@ -3,25 +3,28 @@ import router from '../../../utils/router';
 import { mapNum } from '../../../utils/homeFloor';
 import { showToast } from '../../../utils/tools';
 
+let tempSpot = {};
 
 Component({
   options: {
     addGlobalClass: true,
   },
 
-  takeSpot: {},
-
   properties: {
     floor: {
       type: Object,
       value: {},
       observer(now, old) {
+        old = old ? old : {};
         let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
-        const nowTakeSpot = JSON.stringify(takeSpot);
-        const oldTakeSpot = JSON.stringify(this.takeSpot);
-        if(now.content && now.content.dataType && nowTakeSpot != oldTakeSpot) {
+        const oldData = JSON.stringify(old.content);
+        const nowData = JSON.stringify(now.content);
+        if(now.content && now.content.dataType) {
           takeSpot = takeSpot && takeSpot.storeNo ? takeSpot : {};
-          this.setGoodList(now.content, takeSpot);
+          if(takeSpot.storeNo != tempSpot.storeNo || oldData != nowData) {
+            tempSpot = takeSpot;
+            this.setGoodList(now.content, takeSpot);
+          }
         }
       }
     },

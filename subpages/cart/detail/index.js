@@ -84,6 +84,7 @@ create.Page(store, {
       // options.scene = "cf2a02ac71ca987860af70c2171d1512";
       if(!options.scene) {
         console.log("未获取到解析参数", options);
+        this.hanldeGoodsParams(options)
       } else {
         this.getShareParam(options);
       }
@@ -129,6 +130,7 @@ create.Page(store, {
         shareObjectNo: spuId,
         paramId: 1,
         shareParams: this.goodParams,
+        ext: this.goodParams,
       };
       if(orderType == 3 || orderType == 4) {
         params.paramId = 3;
@@ -478,7 +480,6 @@ create.Page(store, {
       spuId,
       skuId,
     } = this.goodParams;
-    let skuNum = 1;
     const {
       selectAddressType,
       good,
@@ -487,6 +488,7 @@ create.Page(store, {
       showToast({ title: "商品已下架" });
       return;
     }
+    let skuNum = good.buyMinNum > 0 ? good.buyMinNum : 1;
     const {
       detail,
       currentTarget,

@@ -11,6 +11,16 @@ const url = {
   advert: "/public/open/adimgs",
 }
 
+const getExamine = (params) => {
+  const state = wx.getStorageSync("EXAMINE") || false;
+  const verifyVersionId = state ? 2 : 3;
+  params = {
+    verifyVersionId,
+    ...params
+  };
+  return params;
+}
+
 export default {
   // 首页楼层通用接口数据
   getFloorList(params, options) {
@@ -19,6 +29,7 @@ export default {
 
   // 获取banner列表
   getBannerList(params, options) {
+    params = getExamine(params);
     return Request.get(url.bannerList, params, options)
   },
 
@@ -29,6 +40,7 @@ export default {
 
   // 获取热销商品
   getHotGood(params, option) {
+    // params = getExamine(params);
     return Request.get(url.hotGood, params, option);
   },
 

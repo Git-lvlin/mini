@@ -3,6 +3,7 @@ import store from '../../../store/index'
 import router from '../../../utils/router'
 import util from '../../../utils/util'
 import { getStorageUserInfo, showToast } from '../../../utils/tools'
+import { getPayInfo, onOrderPay } from '../../../utils/orderPay'
 import dayjs from '../../../miniprogram_npm/dayjs/index'
 import { IMG_CDN, PAY_TYPE_KEY } from '../../../constants/common'
 import commonApi from '../../../apis/common'
@@ -38,6 +39,7 @@ Page({
     payData: {},
     teamPopup: false,
     hotGood: [],
+    orderCreateTime: "",
   },
 
   onLoad: function (options) {
@@ -48,10 +50,21 @@ Page({
     this.id = options.id
     let downTime = options.payDeadline - options.currentTime;
     const sysEnv = wx.getStorageSync("SYS_ENV") || "pro";
+    const payData = wx.getStorageSync("pay_data") || {};
+    let orderCreateTime = "";
+    if(payData && payData.orderCreateTime && options.isPay) {
+      orderCreateTime = dayjs(payData.orderCreateTime).format("YYYY-MM-DD HH:mm:ss");
+      wx.removeStorage({
+        key: 'pay_data'
+      });
+    }
     this.setData({
       payAmount: util.divide(options.payAmount, 100),
       downTime,
       sysEnv,
+      payData,
+      orderCreateTime,
+      isPay: options.isPay,
       orderType: options.orderType,
     })
     // 获取支付类型
@@ -85,24 +98,28 @@ Page({
     }
   },
 
-  // 获取支付信息
-  getPayInfo(isNotPayment) {
-    const userInfo = getStorageUserInfo(true, true);
-    if(!userInfo) return;
-    const openId = wx.getStorageSync("OPENID");
-    cartApi.getPayInfo({
+  /**
+   * 获取支付信息
+   * isNotPayment boolean 是否是模拟支付
+   * */ 
+  getPayInfo(isNotPayment = false) {
+    getPayInfo({
       id: this.id,
       payType: this.payType,
-      openId,
+      isNotPayment,
     }).then(res => {
-      if(isNotPayment) {
+      const {
+        payData,
+        isPay,
+      } = res;
+      if(isPay) {
         this.setData({
-          isPay: true,
-        });
+          isPay
+        })
       }
       this.setData({
-        payData: res,
-        orderCreateTime: dayjs(res.orderCreateTime).format("YYYY-MM-DD HH:mm:ss"),
+        payData,
+        orderCreateTime: dayjs(payData.orderCreateTime).format("YYYY-MM-DD HH:mm:ss"),
       })
     });
   },
@@ -181,30 +198,23 @@ Page({
   onPay() {
     const that = this;
     if(this.payType === 0) {
-      const userInfo = getStorageUserInfo(true, true);
-      if(!userInfo) return;
       this.getPayInfo(true)
       return ;
     }
     const payData = this.data.payData;
-    const payObj = JSON.parse(payData.prepayData);
-    wx.requestPayment({
-      timeStamp: payObj.timeStamp,
-      nonceStr: payObj.nonceStr,
-      package: payObj.packageKey,
-      // package: `prepay_id=${payObj.prepayId}`,
-      signType: payObj.signType,
-      paySign: payObj.paySign,
-      success (res) {
-        that.setData({
-          isPay: true,
-        })
-      },
-      fail (res) {
-        showToast({ title: "支付失败"});
-        router.goTabbar("user");
-      }
-    })
+    const data = {
+      payType: this.payType,
+    };
+    onOrderPay({
+      data,
+      payData,
+    }).then(res => {
+      that.setData({
+        isPay: true,
+      })
+    }).catch(err => {
+
+    });
   },
 
   getOrderDetail() {
@@ -212,7 +222,7 @@ Page({
   },
 
   onSuccess() {
-    router.goTabbar();
+    router.goTabbar("user");
   },
 
   handleCloseTeam() {

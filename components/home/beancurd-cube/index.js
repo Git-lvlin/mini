@@ -104,9 +104,9 @@ Component({
     }) {
       let data = currentTarget.dataset.data;
       console.log("豆腐块跳转链接", data.actionUrl)
-      router.push({
-        name: 'classList',
-      });
+      if(!!data.actionUrl) {
+        router.getUrlRoute(data.actionUrl);
+      }
     },
   }
 })

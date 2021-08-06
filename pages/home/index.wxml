@@ -59,10 +59,10 @@
     />
 
     <!-- 快讯 -->
-    <message
+    <!-- <message
       floor="{{item}}"
       wx:if="{{item.floorType === 5}}"
-    />
+    /> -->
 
     <!-- 秒杀 -->
     <seckill
@@ -71,10 +71,10 @@
     />
 
     <!-- 会员 / 店主专享 -->
-    <vipgood
+    <!-- <vipgood
       floor="{{item}}"
       wx:if="{{item.floorType === 7}}"
-    />
+    /> -->
 
     <!-- 热销商品 -->
     <view id="hotGoods"
