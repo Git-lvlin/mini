@@ -57,6 +57,10 @@ export const otherSetting = [
  * 用户等级
 */
 export const USER_LEVEL = {
+  0: {
+    name: "普通会员",
+    icon: `${IMG_CDN}miniprogram/user/levelIcon/user_label_1.png`
+  },
   1: {
     name: "普通会员",
     icon: `${IMG_CDN}miniprogram/user/levelIcon/user_label_1.png`

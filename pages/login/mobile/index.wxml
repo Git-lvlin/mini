@@ -9,24 +9,15 @@
     <van-button
       color="#E5352F"
       custom-class="login_btn"
-      open-type="getUserInfo"
-      type="primary"
-      block
-      loading-type="spinner"
-      loading-text="登录中..."
-      wx:if="{{!canUseProfile}}"
-      bind:getuserinfo="handleGetUerInfo"
-    >登录</van-button>
-    <van-button
-      color="#E5352F"
-      custom-class="login_btn"
+      open-type="getPhoneNumber"
       type="primary"
       block
       loading-type="spinner"
       loading-text="登录中..."
       wx:if="{{canUseProfile}}"
-      bindtap="onLogin"
-    >登录</van-button>
+      bind:getphonenumber="getCodeLogin"
+      bindtap="getCode"
+    >微信手机号登录</van-button>
     <view class="on_login" bindtap="onToHome">不登录，先看看</view>
     <radio-group class="env_list" wx:if="{{changeEnv}}" bindchange="handleChangeEnv">
       <label class="env_item" wx:for="{{envList}}" wx:for-item="item" wx:key="value">

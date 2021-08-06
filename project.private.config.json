@@ -19,21 +19,15 @@
           "scene": null
         },
         {
-          "name": "收银",
-          "pathName": "subpages/cart/cashier/index",
-          "query": "currentTime=1620463329650&deadlineTime=1620463929549&id=1390950134550970400&orderSn=16204633292334430869&payAmount=1&payDeadline=1620463929549",
-          "scene": null
-        },
-        {
           "name": "用户中心",
           "pathName": "pages/user/index",
           "query": "",
           "scene": null
         },
         {
-          "name": "登录",
-          "pathName": "pages/login/main/index",
-          "query": "scene=cf2a02ac71ca987860af70c2171d1512",
+          "name": "pages/login/mobile/index",
+          "pathName": "pages/login/mobile/index",
+          "query": "",
           "scene": null
         },
         {
@@ -61,15 +55,15 @@
           "scene": null
         },
         {
-          "name": "比价详情",
-          "pathName": "subpages/cart/priceDetail/index",
-          "query": "id=60",
+          "name": "pages/otherpay/index",
+          "pathName": "pages/otherpay/index",
+          "query": "id=4646952351775589821&payType=7&scene=1&storeNo=store_m_124064&type=1",
           "scene": null
         },
         {
           "name": "subpages/cart/class/index",
           "pathName": "subpages/cart/class/index",
-          "query": "",
+          "query": "category_id=4",
           "scene": null
         }
       ]

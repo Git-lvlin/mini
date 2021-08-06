@@ -15,9 +15,8 @@ create.Page(store, {
     "cartList",
   ],
 
-  /**
-   * 页面的初始数据
-   */
+  categoryId: "",
+
   data: {
     classPopupState: false,
     classScrollHeight: 521,
@@ -39,6 +38,9 @@ create.Page(store, {
       bottomBarHeight,
     } = this.data.$.systemInfo;
     let classScrollHeight = screenHeight * rpxRatio - navTotalHeight - bottomBarHeight - 172 - 16 - 104;
+    if(!!options.category_id) {
+      this.categoryId = options.category_id;
+    }
     this.setData({
       classScrollHeight
     });
@@ -59,7 +61,7 @@ create.Page(store, {
     params
   }) {
     goodApi.getCategory(params, { showLoading: !!second ? true : false }).then(res => {
-      const classId = res.records[0].id
+      const classId = this.categoryId ? this.categoryId : res.records[0].id
       if(!second) {
         this.setData({
           fristCategory: res.records,

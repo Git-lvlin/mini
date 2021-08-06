@@ -1,7 +1,7 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 <wxs module="utils" src="../../../wxs/homeFloor.wxs" />
 
-<view class="seckill" style="{{utils.getHeadBackCss(floor.style)}}">
+<view class="seckill" style="{{utils.getHeadBackCss(floor.style)}}" wx:if="{{secGoodList.length}}">
   <view class="sec_body">
     <view class="head">
       <panel-title

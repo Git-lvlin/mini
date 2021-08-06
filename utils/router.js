@@ -81,7 +81,13 @@ const goTabbar = (name = 'home') => {
 const loginTo = (routerData) => {
   const pages = getCurrentPages();
   const pagesLen = pages.length - 1;
-  const loginToData = !!routerData ? routerData : wx.getStorageSync("LOGIN_TO_DATA");
+  const storageRouter = wx.getStorageSync("LOGIN_TO_DATA");
+  const loginToData = !!routerData ? routerData : storageRouter;
+  if(!!storageRouter) {
+    wx.removeStorage({
+      key: 'LOGIN_TO_DATA'
+    });
+  }
   if(!!loginToData) {
     let {
       type,
@@ -101,39 +107,41 @@ const loginTo = (routerData) => {
     } else if(type === "home") {
       goTabbar();
     } else if(type === "page") {
-      if(!delta && !router.path) {
-        wx.showToast({
-          title: '哎呀，找不到页面',
-          icon: 'none',
-        });
-        return
-      }
+      // if(!delta && !router.path) {
+      //   wx.showToast({
+      //     title: '哎呀，找不到页面',
+      //     icon: 'none',
+      //   });
+      //   return
+      // }
       // 检查需跳转页面是否已在pages内，在就返回，不在就重置当前页面
       let index = pages.findIndex(item => item.route === router.path);
-      delta = pagesLen - index;
-      if(delta > 1) {
-        go(delta);
-      } else {
+      // delta = pagesLen - index;
+      // if(delta && delta > 1) {
+      //   go(delta);
+      // } else {
         // const dataStr = encodeURIComponent(JSON.stringify(data));
-        const dataStr = paramToStr(data);
-        if(routes.login.path === pages[pagesLen].route) {
+        const dataStr = paramToStr(router.data);
+        // if(routes.mobile.path === `/${pages[pagesLen].route}`) {
           wx.redirectTo({
-            url: `${router}?${dataStr}`,
+            url: `${router.path}?${dataStr}`,
           });
-        } else {
-          // 不是登录页面，先返回登录页面再重置页面
-          index = pages.findIndex(item => item.route === routes.login.path);
-          delta = pagesLen - index;
-          wx.navigateBack({
-            delta,
-            successs() {
-              wx.redirectTo({
-                url: `${router}?${dataStr}`,
-              });
-            }
-          });
-        }
-      } 
+        // } else {
+        //   // 不是登录页面，先返回登录页面再重置页面
+        //   index = pages.findIndex(item => item.route === routes.login.path);
+        //   delta = pagesLen - index;
+        //   console.log(1,new Date().getTime());
+        //   wx.navigateBack({
+        //     delta,
+        //     success() {
+        //       console.log(2, new Date().getTime());
+        //       wx.redirectTo({
+        //         url: `${router.path}?${dataStr}`,
+        //       });
+        //     }
+        //   });
+        // }
+      // } 
     }
   }
 };

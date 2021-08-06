@@ -1,7 +1,7 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 <wxs module="utils" src="../../../wxs/homeFloor.wxs" />
 
-<view class="beancurd" >
+<view class="beancurd" wx:if="{{goodTypeList.length}}" >
   <view
     class="beancurd_content"
     style="{{utils.getHeadBackCss(floor.style)}}"

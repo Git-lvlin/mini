@@ -62,20 +62,31 @@ create.Page(store, {
   
 
   onLoad(options) {
-    // options.scene = "cf2a02ac71ca987860af70c2171d1512";
-    if(!options.scene) {
-      console.log("未获取到解析参数", options);
-      this.hanldeGoodsParams(options)
-    } else {
-      commonApis.getShareParam(options).then(res => {
-        console.log(res)
-        const param = res;
-        this.setData(param);
-        this.hanldeGoodsParams(param);
-      }).catch(err => {
+    const {
+      appScene,
+    } = app.globalData;
+    // 获取进入小程序场景值
+    if(codeScene[appScene]) {
+      // options.scene = "cf2a02ac71ca987860af70c2171d1512";
+      if(!options.scene) {
+        console.log("未获取到解析参数", options);
         this.hanldeGoodsParams(options)
-      })
+      } else {
+        this.getShareParam(options);
+      }
+    }else{
+      this.hanldeGoodsParams(options)
     }
+    // else {
+    //   commonApis.getShareParam(options).then(res => {
+    //     console.log(res)
+    //     const param = res;
+    //     this.setData(param);
+    //     this.hanldeGoodsParams(param);
+    //   }).catch(err => {
+    //     this.hanldeGoodsParams(options)
+    //   })
+    // }
   },
 
   onShow() {
@@ -115,6 +126,7 @@ create.Page(store, {
         shareObjectNo: spuId,
         paramId: 1,
         shareParams: this.goodParams,
+        ext: this.goodParams,
       };
       if(orderType == 3 || orderType == 4) {
         params.paramId = 3;
@@ -146,6 +158,21 @@ create.Page(store, {
       // 拼成用户列表
       this.getTogetherUser();
     }
+  },
+
+
+  // 获取分享配置
+  getShareParam(data) {
+    commonApis.getShareParam({
+      scene: data.scene,
+    }).then(res => {
+      console.log(res)
+      const param = strToParamObj(res);
+      this.setData(param)
+      this.hanldeGoodsParams(param)
+    }).catch(err => {
+      this.hanldeGoodsParams(data);
+    });
   },
 
   // 商品详情图片
@@ -451,7 +478,6 @@ create.Page(store, {
       spuId,
       skuId,
     } = this.goodParams;
-    let skuNum = 1;
     const {
       selectAddressType,
       good,
@@ -460,6 +486,7 @@ create.Page(store, {
       showToast({ title: "商品已下架" });
       return;
     }
+    let skuNum = good.buyMinNum > 0 ? good.buyMinNum : 1;
     const {
       detail,
       currentTarget,

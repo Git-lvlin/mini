@@ -33,7 +33,7 @@ const showErrorMsg = (msg, icon) => {
 
 // 错误码处理
 export const handleErrorCode = ({
-  params,
+  params = {},
   code,
   msg,
   mustLogin = false,
@@ -46,6 +46,7 @@ export const handleErrorCode = ({
       // } else {
         // showErrorMsg("您还未登录，请登录");
         if(!store.data.showLoginMobel) {
+          console.log(store);
           store.data.showLoginMobel = true;
           showModal({
             content: "您还未登录，请登录",
@@ -53,7 +54,7 @@ export const handleErrorCode = ({
             ok() {
               store.data.showLoginMobel = false;
               router.push({
-                name: "login"
+                name: "mobile"
               })
             },
             cancel() {
@@ -247,7 +248,7 @@ export const getStorageUserInfo = (showLogin, goBack) => {
       confirmText: "去登录",
       ok() {
         router.push({
-          name: "login"
+          name: "mobile"
         })
       },
       cancel() {

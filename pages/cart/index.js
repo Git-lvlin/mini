@@ -165,18 +165,22 @@ create.Page(store, {
         goodsInfos: [],
       };
       item.skus.forEach(child => {
-        if(child.isChecked) isSelect = true;
-        store.goodsInfos.push({
-          spuId: child.spuId,
-          skuId: child.skuId,
-          skuNum: child.quantity,
-          // goodsFromType: "",
-          orderType: child.orderType,
-          objectId: child.objectId,
-          activityId: child.activityId,
-        })
+        if(child.isChecked) {
+          isSelect = true;
+          store.goodsInfos.push({
+            spuId: child.spuId,
+            skuId: child.skuId,
+            skuNum: child.quantity,
+            // goodsFromType: "",
+            orderType: child.orderType,
+            objectId: child.objectId,
+            activityId: child.activityId,
+          })
+        }
       });
-      goodList.push(store);
+      if(!!store.goodsInfos.length) {
+        goodList.push(store);
+      }
     });
     if(!isSelect) {
       showToast({ title: "请选择下单商品" });
