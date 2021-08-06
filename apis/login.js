@@ -8,6 +8,7 @@ const url = {
   notCodeBind: "/member/open/wxCodeBlind",
   changeBindPhone: "/member/auth/wxBlindAuth",
   getPhone: "/member/open/memberInfo/minProgramDecrypt",
+  loginOut: "/member/open/loginOut",
 }
 
 export default {
@@ -43,6 +44,10 @@ export default {
   // 解密微信获取的手机号
   getPhoneNumber(params, option) {
     return Request.post(url.getPhone, params, option);
+  },
+
+  loginOut(params, option) {
+    return Request.post(url.loginOut, params, option);
   },
 
 }

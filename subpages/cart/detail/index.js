@@ -84,6 +84,7 @@ create.Page(store, {
       // options.scene = "cf2a02ac71ca987860af70c2171d1512";
       if(!options.scene) {
         console.log("未获取到解析参数", options);
+        this.hanldeGoodsParams(options)
       } else {
         this.getShareParam(options);
       }

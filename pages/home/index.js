@@ -83,6 +83,10 @@ create.Page(store, {
         this.isMiniExamine = false;
       }
       this.getFloorList();
+      wx.setStorage({
+        key: "EXAMINE",
+        data: this.isMiniExamine,
+      })
     }).catch(err => {
       this.getFloorList();
     });
