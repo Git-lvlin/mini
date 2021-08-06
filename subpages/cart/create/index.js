@@ -85,16 +85,6 @@ create.Page(store, {
   
   onShow() {
     this.getDefaultAddress();
-    if(this.orderType == 15) {
-      let userData = wx.getStorageSync("STORE_SHIPPER_INFO");
-      if(!userData) return;
-      const storeAdress = this.data.storeAdress;
-      storeAdress.linkman = userData.user;
-      storeAdress.phone = userData.phone;
-      this.setData({
-        storeAdress
-      });
-    }
   },
 
   // 获取默认地址
@@ -135,10 +125,14 @@ create.Page(store, {
   // 设置提货人
   setStoreAddress(address) {
     let data = wx.getStorageSync("CREATE_INTENSIVE");
+    let userData = wx.getStorageSync("STORE_SHIPPER_INFO");
     let {
       storeAdress,
     } = data;
-    if(!!address.consignee) {
+    if(userData) {
+      storeAdress.linkman = userData.user;
+      storeAdress.phone = userData.phone;
+    } else if (!!address.consignee) {
       storeAdress.linkman = address.consignee;
       storeAdress.phone = address.phone;
     } else {
@@ -245,6 +239,8 @@ create.Page(store, {
   getOrderToken() {
     cartApi.getOrderToken({}, {
       showLoading: false,
+    }, {
+      showLoading: false
     }).then(res => {
       console.log(res)
       this.setData({
@@ -507,7 +503,7 @@ create.Page(store, {
       showToast({ title: "请选择收货地址" });
       return;
     }
-    if(selectAddressType.type == 2 && !storeAdress.linkman && !storeAdress.phone) {
+    if(selectAddressType.type == 2 && (!storeAdress.linkman || !storeAdress.phone)) {
       showToast({ title: "请填写提货人信息" });
       return;
     }
@@ -563,7 +559,7 @@ create.Page(store, {
     } else {
       postData = this.getStoreGood();
     }
-    if(!postData) return;
+    if(!postData || !postData.deliveryInfo) return;
     cartApi.createOrder(postData).then(res => {
       res.orderType = this.orderType;
       this.orderId = res.id;

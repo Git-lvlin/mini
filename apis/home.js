@@ -40,7 +40,7 @@ export default {
 
   // 获取热销商品
   getHotGood(params, option) {
-    // params = getExamine(params);
+    params = getExamine(params);
     return Request.get(url.hotGood, params, option);
   },
 
