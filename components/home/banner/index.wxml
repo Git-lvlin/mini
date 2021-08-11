@@ -1,5 +1,5 @@
 
-<view class="banner">
+<view class="banner" wx:if="{{bannerList.length}}">
   <swiper
     class="swiper"
     indicator-dots

@@ -24,7 +24,7 @@ const showLogin = (back) => {
     ok() {
       setLoginRouter();
       router.push({
-        name: "login"
+        name: "mobile"
       })
     },
     cancel() {
@@ -38,7 +38,7 @@ const showLogin = (back) => {
 
 export default {
   // 获取资源位数据
-  getResourceDetail(params) {
+  getResourceDetail(params, option = {}) {
     return new Promise((resolve, reject) => {
       const postData = {
         ...params
@@ -49,7 +49,7 @@ export default {
       } else {
         postData.timeVersion = new Date().getTime();
       }
-      Request.get(url.resource, postData).then(res => {
+      Request.get(url.resource, postData, option).then(res => {
         if(!!res.data) {
           resolve(res)
           wx.setStorage({

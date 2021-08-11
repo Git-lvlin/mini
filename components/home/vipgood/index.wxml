@@ -38,7 +38,7 @@
         width="130rpx"
         height="130rpx"
         fit="cover"
-        wx:for="{{vipGood.userTagList.info}}"
+        wx:for="{{vipGood.shopTagList.info}}"
         wx:key="id"
         src="{{item.image}}"
         data-data="{{item}}"

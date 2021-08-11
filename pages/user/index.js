@@ -136,7 +136,7 @@ create.Page(store, {
   // 跳转登录
   onToLogin() {
     router.push({
-      name: "login"
+      name: "mobile"
     })
   },
 
@@ -157,6 +157,10 @@ create.Page(store, {
       type,
       path
     } = currentTarget.dataset;
+    if(path == "address") {
+      const userInfo = getStorageUserInfo(true);
+      if(!userInfo) return;
+    }
     if(type === 1) {
       router.push({
         name: path

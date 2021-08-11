@@ -1,6 +1,6 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
-<view class="message">
+<view class="message" wx:if="{{msgList.length}}">
   <view class="message_content">
     <image class="massage_icon" src="{{tools.getImgUrl('miniprogram/home/message_icon.png')}}" />
     <view class="line" />

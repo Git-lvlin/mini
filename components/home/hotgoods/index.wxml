@@ -1,6 +1,6 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
-<view class="hotgoods">
+<view class="hotgoods" wx:if="{{hotGoodList.length}}">
   <view class="head" style="background-image: url({{tools.getImgUrl('miniprogram/home/seckill_back.png')}})">
     <image class="hot_icon" src="{{tools.getImgUrl('miniprogram/home/fire.png')}}" />
     <view class="hot_title">

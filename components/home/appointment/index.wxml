@@ -4,6 +4,7 @@
 <view
   class="appointment"
   style="{{utils.getHeadBackCss(floor.style, tools.getImgUrl('miniprogram/home/appointment_back.png'))}}"
+  wx:if="{{goodList.length}}"
 >
   <panel-title
     desc="{{floor.header.subTitle[0].name}}"

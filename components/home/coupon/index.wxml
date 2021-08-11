@@ -4,6 +4,7 @@
 <view
   class="coupon"
   style="{{utils.getHeadBackCss(floor.style, tools.getImgUrl('miniprogram/home/coupon_back.png'))}}"
+  wx:if="{{couponList.length}}"
 >
   <panel-title
     title="{{floor.header.title[0].name}}"

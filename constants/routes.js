@@ -23,6 +23,10 @@ export default {
   login: {
     path: "/pages/login/main/index"
   },
+  // 手机登录
+  mobile: {
+    path: "/pages/login/mobile/index"
+  },
   // 绑定手机
   bindPhone: {
     path: "/pages/login/bindPhone/index"
