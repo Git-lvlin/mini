@@ -3,6 +3,7 @@ import store from '../../../store/good'
 import goodApi from '../../../apis/good'
 import commonApi from '../../../apis/common'
 import { IMG_CDN } from '../../../constants/common'
+import { CODE_SCENE } from '../../../constants/index'
 import { showModal, getStorageUserInfo, showToast, objToParamStr } from '../../../utils/tools'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
@@ -59,14 +60,12 @@ create.Page(store, {
     specType: "buy",
   },
 
-  
-
   onLoad(options) {
     const {
       appScene,
     } = app.globalData;
     // 获取进入小程序场景值
-    if(codeScene[appScene]) {
+    if(CODE_SCENE[appScene]) {
       // options.scene = "cf2a02ac71ca987860af70c2171d1512";
       if(!options.scene) {
         console.log("未获取到解析参数", options);

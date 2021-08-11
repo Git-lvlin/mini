@@ -103,7 +103,7 @@
     </view>
   </scroll-view>
 
-  <notdata wx:if="{{isSearch && !goodList.length}}" />
+  <notdata type="search" wx:if="{{isSearch && !goodList.length}}" />
 
   <show-mobal
     show="{{ showDeleteSearch }}"
