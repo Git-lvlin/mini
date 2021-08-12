@@ -10,7 +10,7 @@ export const SYS_ENV = 'uat';
 export const CHANGE_ENV = true;
 
 // 小程序版本号
-export const VERSION = "1.0.1";
+export const VERSION = "1.0.2";
 
 // 服务器接口域名S
 export const baseApi = {

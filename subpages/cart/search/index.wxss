@@ -1,9 +1,12 @@
 
 .container {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+}
+
+.page_back {
+  background: linear-gradient(180deg, #fff 0%, #f5f5f5 100%);
 }
 
 .search_content {
@@ -162,7 +165,8 @@
 .search_history {
   flex: 1;
   width: 100%;
-  overflow: hidden;
+  overflow-y: auto;
+  background: linear-gradient(180deg, #fff 0%, #f5f5f5 100%);
 }
 
 .history_clear {

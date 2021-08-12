@@ -86,6 +86,8 @@
         </view>
       </view>
     </view>
+
+    <view class="recommend_box"></view>
   </view>
 
   <scroll-view
