@@ -69,7 +69,17 @@ export const handleErrorCode = ({
       break;
     case 10013:
       // 系统升级 服务不可用
-      showErrorMsg("系统升级中，请稍后重试");
+      const pages = getCurrentPages();
+      if(!pages.length) { return }
+      const curUrl = `/${pages[pages.length - 1].route}`;
+      if(routes["maintain"].path == curUrl) {
+        showErrorMsg("系统维护中，请稍后重试");
+      } else {
+        router.replace({
+          name: "maintain",
+          frist: true,
+        })
+      }
       break;
     case 10014:
       // accessToken 无效
