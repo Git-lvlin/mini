@@ -14,7 +14,8 @@
     "pages/webview/index",
     "pages/invitation/index",
     "pages/locationSearch/index",
-    "pages/test/index"
+    "pages/test/index",
+    "pages/maintain/index"
   ],
   "subpackages": [
     {
