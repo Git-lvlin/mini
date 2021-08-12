@@ -55,6 +55,11 @@ export default {
   locationSearch: {
     path: "/pages/locationSearch/index"
   },
+  // 系统维护
+  maintain: {
+    path: "/pages/maintain/index"
+  },
+  
   
   
   

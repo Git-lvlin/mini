@@ -1,0 +1,27 @@
+
+.box {
+  height: 100vh;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 32rpx;
+  color: #333;
+  text-align: center;
+}
+
+.reload_btn {
+  /* position: absolute;
+  bottom: 160rpx;
+  left: 50%; */
+  width: 240rpx;
+  height: 80rpx;
+  font-size: 28rpx;
+  color: rgb(226, 89, 89);
+  text-align: center;
+  line-height: 80rpx;
+  margin-top: 80rpx;
+  /* background-color: rgb(226, 89, 89); */
+  border: 2rpx solid rgb(226, 89, 89);
+  border-radius: 40rpx;
+}
