@@ -56,6 +56,7 @@ create.Page(store, {
     teamDetail: {},
     wayIcon: `${IMG_CDN}miniprogram/common/def_choose.png`,
     wayIconSelect: `${IMG_CDN}miniprogram/common/choose.png`,
+    intensiveBack: `${IMG_CDN}miniprogram/cart/jiyue_back.png`,
     // buy 立即购买  add 添加到购物车
     specType: "buy",
   },

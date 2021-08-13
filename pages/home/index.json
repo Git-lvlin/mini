@@ -12,6 +12,7 @@
     "vipgood": "/components/home/vipgood/index",
     "priceRatio": "/components/home/price-ratio/index",
     "hotgoods": "/components/home/hotgoods/index",
+    "classgoods": "/components/home/classgoods/index",
     "advert-popup": "/components/home/advert-popup/index"
   }
 }

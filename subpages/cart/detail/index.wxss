@@ -49,6 +49,47 @@
   padding: 20rpx 24rpx 28rpx;
 }
 
+.intensive_price {
+  justify-content: space-between;
+  height: 120rpx;
+  background-size: 100% 100%;
+}
+
+.intensive_price_mobel {
+  padding-top: 24rpx;
+  padding-left: 24rpx;
+}
+
+.intensive_time {
+  position: relative;
+  width: 236rpx;
+  height: 120rpx;
+}
+
+.intensive_time_back {
+  position: absolute;
+  width: 236rpx;
+  height: 120rpx;
+}
+
+.intensive_time_text {
+  position: relative;
+  z-index: 2;
+  font-weight: 600;
+  color: #d72a1e;
+  font-size: 26rpx;
+  line-height: 36rpx;
+  padding-top: 18rpx;
+  padding-left: 36rpx;
+  margin-bottom: 8rpx;
+}
+
+.intensive_end {
+  position: relative;
+  z-index: 2;
+  padding-left: 36rpx;
+}
+
 .good_price {
   display: flex;
   align-items: flex-end;
@@ -150,6 +191,116 @@
   margin: 0 8rpx;
 }
 
+
+.intensive_progress {
+
+}
+
+.progress_box {
+  position: relative;
+  width: 480rpx;
+  height: 30rpx;
+  margin-top: 8rpx;
+  margin-left: 24rpx;
+  margin-right: 12rpx;
+  background-color: #fec7c7;
+  border: 2rpx solid #ea5634;
+  border-radius: 15rpx;
+}
+
+.fire_icon {
+  position: absolute;
+  top: -6rpx;
+  left: -24rpx;
+  z-index: 3;
+  width: 42rpx;
+  height: 44rpx;
+}
+
+.progress_line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 188rpx;
+  height: 30rpx;
+  background-image: linear-gradient(90deg,#eb6e39 0%,#ea3e34 100%);
+  border-radius: 15rpx;
+}
+
+.progress_text {
+  position: relative;
+  z-index: 5;
+  color: #ffffff;
+  font-size: 24rpx;
+  line-height: 30rpx;
+  text-align: center;
+}
+
+.intensive_sale {
+  color: #999999;
+  font-size: 28rpx;
+  line-height: 32rpx;
+}
+
+/* 集约参与人 */
+.intensive_join {
+  padding: 32rpx 28rpx;
+  margin-top: 32rpx;
+  background-color: #FFF6F4;
+  border-radius: 8rpx;
+}
+
+.join_info {
+  font-weight: 600;
+  color: #333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin-bottom: 24rpx;
+}
+
+.join_red {
+  color: #d7291d;
+}
+
+.intensive_join_user {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16rpx;
+}
+
+.join_item {
+  position: relative;
+  margin-right: 16rpx;
+  margin-bottom: 8rpx;
+}
+
+.join_buy_num {
+  position: absolute;
+  top: 0;
+  right: -16rpx;
+  height: 28rpx;
+  color: #fff;
+  font-size: 20rpx;
+  line-height: 28rpx;
+  padding: 0 8rpx;
+  background-color: #d7291d;
+  border: 2rpx solid #fff;
+  border-radius: 28rpx 28rpx 28rpx 0;
+}
+
+.current_user_avatar {
+  margin-right: 8rpx;
+}
+
+.current_text {
+  color: #333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  padding-bottom: 8rpx;
+}
+
+
 .store_price {
   display: flex;
   align-items: flex-end;
@@ -175,17 +326,16 @@
   color: #333333;
   font-size: 32rpx;
   line-height: 44rpx;
-  margin-bottom: 20rpx;
 }
 
 .pick_way {
+  flex: 1;
   justify-content: space-around;
 }
 
 .pick_way_item {
-  width: 252rpx;
   height: 80rpx;
-  padding: 0 24rpx;
+  padding: 0 20rpx;
   background-color: #f9f9f9;
   border: 2rpx solid #cccccc;
   border-radius: 16rpx;
@@ -211,6 +361,26 @@
   color: #e5352f;
 }
 
+
+/* 集约商品提示 */
+.intensive_tip {
+  padding: 24rpx;
+}
+
+.intensive_tip_title {
+  font-weight: 600;
+  color: #333333;
+  font-size: 32rpx;
+  line-height: 44rpx;
+  margin-bottom: 12rpx;
+}
+
+.intensive_tip_text {
+  color: #333333;
+  font-size: 28rpx;
+  letter-spacing: 2rpx;
+  line-height: 40rpx;
+}
 
 
 /* 拼单 */

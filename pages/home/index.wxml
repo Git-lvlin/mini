@@ -91,6 +91,16 @@
         floor="{{item}}"
       />
     </view>
+
+    <!-- 分类商品 -->
+    <view id="classGoods"
+      wx:if="{{item.floorType === 11}}"
+    >
+      <classgoods
+        scrollBottom="{{scrollBottom}}"
+        floor="{{item}}"
+      />
+    </view>
   </block>
 
   <!-- 固定位 tools.getImgUrl('miniprogram/home/receive_coupon.gif') -->

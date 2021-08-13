@@ -34,8 +34,36 @@
     <view class="swiper_num">{{swiperCurrent}}/{{!!good.imageList ? good.imageList.length : 1}}</view>
   </view>
 
+  <store-panel />
   <!-- 商品标题模块 -->
+  <view
+    style="background-image: url({{intensiveBack}})"
+    class="flex_middle intensive_price"
+    wx:if="{{isActivityGood == 15}}"
+  >
+    <view class="intensive_price_mobel">
+      <price-mobel
+        money="{{good.activityPrice != undefined ? good.activityPrice : good.goodsSaleMinPrice}}"
+        marketMoney="{{good.goodsMarketPrice}}"
+        minSize="{{32}}"
+        maxSize="{{72}}"
+        color="#fff"
+        defaultColor="#fff"
+      />
+    </view>
+    <view class="intensive_time">
+      <image class="intensive_time_back" src="{{tools.getImgUrl('miniprogram/cart/jiyue_time.png')}}" />
+      <view class="intensive_time_text">距活动结束仅剩</view>
+      <view class="intensive_end">
+        <count-down
+          time="{{ 123456 }}"
+          isFull
+        />
+      </view>
+    </view>
+  </view>
   <view class="good_head">
+    <!-- 普通商品价格 -->
     <view class="good_price" wx:if="{{isActivityGood == 1 || isActivityGood == 2}}">
       <view class="price">
         ￥<text class="max_text">{{tools.getPriceSplit(good.goodsSaleMinPrice)}}</text>{{tools.getPriceSplit(good.goodsSaleMinPrice, 1)}}
@@ -45,14 +73,16 @@
       <view class="sales">{{good.goodsSaleNum}}</view>
     </view>
     <view class="good_info">
+      <!-- 商品标题 -->
       <view class="good_title">
         <view class="text">{{good.goodsName}}</view>
         <view class="">{{good.goodsDesc}}</view>
       </view>
       <view
         class="store_show_sale"
-        wx:if="{{isActivityGood == 15 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11}}"
+        wx:if="{{isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11}}"
       >{{good.goodsSaleNum}}</view>
+      <!-- 加入购物车 -->
       <view class="add_cart" wx:if="{{isActivityGood == 1 || isActivityGood == 2}}">
         <view
           class="cart_btn"
@@ -74,7 +104,57 @@
         </view>
       </view>
     </view>
-    <view class="store_price" wx:if="{{isActivityGood == 15 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11}}">
+    <!-- 集约进度 -->
+    <view class="flex_middle intensive_progress" wx:if="{{isActivityGood == 15}}">
+      <view class="progress_box">
+        <image class="fire_icon" src="{{tools.getImgUrl('miniprogram/home/appointment_fire.png')}}" />
+        <view class="progress_line" style="width: {{20 || 0}}%" />
+        <view class="progress_text">已售{{20}}%</view>
+      </view>
+      <view class="intensive_sale">已约1654件</view>
+    </view>
+    <!-- 集约参与人 -->
+    <view class="intensive_join">
+      <view class="flex_center join_info">
+        <view class="join_red">162545</view>人已约
+        <view class="join_red">162545</view>件
+      </view>
+      <view class="intensive_join_user">
+        <view class="join_item">
+          <van-image
+            width="62rpx"
+            height="62rpx"
+            round
+          />
+          <view class="join_buy_num">2件</view>
+        </view>
+        <view class="join_item">
+          <van-image
+            width="62rpx"
+            height="62rpx"
+            round
+          />
+          <view class="join_buy_num">2件</view>
+        </view>
+      </view>
+      <view class="flex_center current_user">
+        <van-image
+          width="52rpx"
+          height="52rpx"
+          round
+          custom-class="current_user_avatar"
+        />
+        <van-image
+          width="52rpx"
+          height="52rpx"
+          round
+          custom-class="current_user_avatar"
+        />
+        <view class="current_text">老鳄鱼<text class="join_red">1</text>分钟前参与集约</view>
+      </view>
+    </view>
+    <!-- 单约团约价格显示 -->
+    <view class="store_price" wx:if="{{isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11}}">
       <view class="store_price_title">{{ utils.getPriceTitle(isActivityGood) }}：</view>
       <price-mobel
         money="{{good.activityPrice != undefined ? good.activityPrice : good.goodsSaleMinPrice}}"
@@ -96,9 +176,9 @@
 
   <view class="space_20" wx:if="{{isActivityGood == 15}}" />
   
-  <!-- 提货地址 -->
-  <view class="pick_info" wx:if="{{isActivityGood == 15}}" >
-    <view class="pick_info_title">选择配送方式：</view>
+  <!-- 集约提货地址 -->
+  <view class="flex_middle pick_info" wx:if="{{isActivityGood == 15}}" >
+    <view class="flex_fix pick_info_title">选择配送方式：</view>
     <view class="flex_middle pick_way">
       <view
         class="flex_middle pick_way_item {{!item.status ? '' : 'way_item_act'}}"
@@ -112,6 +192,14 @@
         <view class="pick_way_name">{{item.name}}</view>
       </view>
     </view>
+  </view>
+
+  <view class="space_20" wx:if="{{isActivityGood == 15}}" />
+
+  <!-- 集约提示 -->
+  <view class="intensive_tip" wx:if="{{isActivityGood == 15}}">
+    <view class="intensive_tip_title">温馨提示：</view>
+    <view class="intensive_tip_text">如有商品质量问题，可以申请更换商品，暂不支持直接退货。</view>
   </view>
   
   <!-- 拼单列表 -->
