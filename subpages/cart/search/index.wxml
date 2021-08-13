@@ -86,8 +86,10 @@
         </view>
       </view>
     </view>
-
-    <view class="recommend_box"></view>
+    <!-- 猜你喜欢 -->
+    <view id="user_like">
+      <user-like/>
+    </view>
   </view>
 
   <scroll-view

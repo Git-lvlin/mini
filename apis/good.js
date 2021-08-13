@@ -34,6 +34,7 @@ const url = {
   hotSearch: "/search/open/HotKeyword/index",
   searchList: "/search/option/opensearch/index",
   associationList: "/search/open/opensearch/getSuggest",
+  userLike:"/goods/option/userLike",
 
   storeDetail: "/store/option/storeShop/show",
   storeGood: "/store/option/storeShop/salePage",
@@ -162,6 +163,10 @@ export default {
   // 搜索联想
   getAssociationList(params, option) {
     return Request.post(url.associationList, params, option);
+  },
+  //获取猜你喜欢商品列表
+  getUserLike(params, option) {
+    return Request.get(url.userLike, params, option);
   },
 
   // 获取店铺详情

@@ -22,6 +22,7 @@ Page({
     showClear: false,
     // 是否已搜索 
     isSearch: false,
+    scrollBottom: false,
   },
 
   onShow() {
@@ -302,4 +303,24 @@ Page({
       this.onSearch();
     }
   },
+
+  // onPageScroll(e) {
+  //   let {
+  //     scrollBottom,
+  //   } = this.data;
+
+  //   if(scrollBottom) {
+  //     this.setData({
+  //       scrollBottom: false,
+  //     })
+  //   }
+  // },
+
+  // 页面滚动到底部
+  // onReachBottom() {
+  //   console.log(0)
+  //   this.setData({
+  //     scrollBottom: true,
+  //   })
+  // }
 })
