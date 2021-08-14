@@ -374,7 +374,6 @@ export const setLoginRouter = (path) => {
 }
 
 
-
 export const getRelativeTime = (time) => {
   const timeStr = dayjs().from(dayjs(time));
   let str = '';
@@ -408,6 +407,18 @@ export const getRelativeTime = (time) => {
     str = `${num}年前`;
   }
   return str;
+};
+
+
+// 格式化销量
+export const mapSales = (sale, text = "万") => {
+  sale = +sale || 0;
+  if(sale < 9999) {
+    return sale;
+  } else {
+    sale = parseInt(sale / 10000);
+    return `${sale}${text}+`
+  }
 };
 
 // 转为浮点数

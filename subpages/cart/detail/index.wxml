@@ -34,7 +34,6 @@
     <view class="swiper_num">{{swiperCurrent}}/{{!!good.imageList ? good.imageList.length : 1}}</view>
   </view>
 
-  <store-panel />
   <!-- 商品标题模块 -->
   <view
     style="background-image: url({{intensiveBack}})"
@@ -201,6 +200,10 @@
     <view class="intensive_tip_title">温馨提示：</view>
     <view class="intensive_tip_text">如有商品质量问题，可以申请更换商品，暂不支持直接退货。</view>
   </view>
+
+  <view class="space_20" wx:if="{{isActivityGood == 15}}" />
+  
+  <store-panel wx:if="{{isActivityGood == 15}}" />
   
   <!-- 拼单列表 -->
   <block wx:if="{{(isActivityGood == 3 || isActivityGood == 4) && !!personalList.length}}">

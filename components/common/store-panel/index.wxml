@@ -1,2 +1,41 @@
-<!--components/common/store-panel/index.wxml-->
-<text>components/common/store-panel/index.wxml</text>
+
+<view class="store_panel">
+  <view class="flex_middle store_box">
+    <view class="store_img">
+      <van-image
+        width="88rpx"
+        height="88rpx"
+        round
+      />
+    </view>
+    <view class="store_info">
+      <view class="store_name">满京华</view>
+      <view class="store_data">商品数量: 4<text class="store_info_text">已约3万+</text></view>
+    </view>
+    <view class="flex_center store_btn">
+      进店逛逛
+      <view class="right_arrow_red" />
+    </view>
+  </view>
+  <view class="flex_middle store_good">
+    <view class="store_good_item">
+      <view class="good_cover">
+        <van-image
+          width="224rpx"
+          height="224rpx"
+          src=""
+        />
+      </view>
+      <view class="good_name text_one_line">地方阿斯蒂芬卡萨卡卡卡水电费</view>
+      <view class="flex_middle price_box">
+        <price-mobel
+          custom-class="flex_fix"
+          price="{{122}}"
+          minSize="{{20}}"
+          maxSize="{{24}}"
+        />
+        <view class="sale_text">已约12</view>
+      </view>
+    </view>
+  </view>
+</view>
