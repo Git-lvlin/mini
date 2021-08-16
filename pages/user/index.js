@@ -221,16 +221,6 @@ create.Page(store, {
       url: downLoadImg.backGroundImg,
       success: function (res) {
         var benUrl = res.tempFilePath;
-        // wx.saveFile({
-        //   tempFilePath:benUrl,
-        //   success (res) {
-        //     const savedFilePath = res.savedFilePath
-        //   },
-        //   complete(res){
-        //     console.log('res',res)
-    
-        //   }
-        // })
         //图片保存到本地相册
         wx.saveImageToPhotosAlbum({
           filePath: benUrl,
