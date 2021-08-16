@@ -78,6 +78,16 @@
     <van-popup show="{{ showPopup }}" closeable round bind:close="onHidePopup">
       <view class="popup_content">请下载约购APP体验完整功能</view>
     </van-popup>
+
+    <van-popup show="{{ showSharePopup }}" custom-style="background: transparent"  closeable round bind:close="onHideSharePopup">
+       <view class="share_poster">
+        <image class="share_photo" src="{{tools.getImgUrl('miniprogram/user/share-app/bg%402x.png')}}"/>
+       </view> 
+        <view class="save_picture" bindtap="onSavePicture">
+          <image src="{{tools.getImgUrl('miniprogram/user/share-app/save_photograph.png')}}" class="pic1"/>
+          <text lines="1" class="word2">保存图片</text>
+        </view>
+    </van-popup>
   </view>
 </view>
 
