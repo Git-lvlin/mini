@@ -2,7 +2,7 @@ import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
 import commonApi from '../../../apis/common'
-import { IMG_CDN } from '../../../constants/common'
+import { IMG_CDN, DETAIL_SERVICE_LIST } from '../../../constants/common'
 import { CODE_SCENE } from '../../../constants/index'
 import { showModal, getStorageUserInfo, showToast, objToParamStr } from '../../../utils/tools'
 import util from '../../../utils/util'
@@ -53,7 +53,10 @@ create.Page(store, {
     personalList: [],
     togetherList: [],
     togetherUser: [],
+    intensiveUser: [],
+    currentSku: {},
     teamDetail: {},
+    serviceList: DETAIL_SERVICE_LIST,
     wayIcon: `${IMG_CDN}miniprogram/common/def_choose.png`,
     wayIconSelect: `${IMG_CDN}miniprogram/common/choose.png`,
     intensiveBack: `${IMG_CDN}miniprogram/cart/jiyue_back.png`,
@@ -226,15 +229,32 @@ create.Page(store, {
       goodApi.getGoodDetail(params).then(res => {
         let good = res;
         let selectAddressType = "";
+        let currentSku = {};
         good.goodsSaleMinPrice = util.divide(good.goodsSaleMinPrice, 100);
         good.goodsMarketPrice = util.divide(good.goodsMarketPrice, 100);
         if(good.sendTypeList) {
           selectAddressType = good.sendTypeList.find(item => item.status == 1);
         }
+        if(good.goodsState == 1) {
+          if(good.isMultiSpec == 0) {
+            currentSku = {
+              skuId,
+              buyMaxNum: good.buyMaxNum,
+              buyMinNum: good.buyMinNum,
+              skuName: good.skuName,
+              skuNum: good.buyMinNum > 1 ? good.buyMinNum : 1,
+            };
+          }
+        }
         this.setData({
+          currentSku,
           good,
           selectAddressType,
-        })
+        });
+        if(orderType == 15) {
+          // 集约用户列表
+          this.getIntensiveUser(good.storeSaleSumNum || 100);
+        }
       });
     }
   },
@@ -296,6 +316,21 @@ create.Page(store, {
     });
   },
 
+  // 获取参与集约用户列表
+  getIntensiveUser(num) {
+    let {
+      orderType,
+    } = this.goodParams
+    goodApi.getIntensiveUser({
+      orderType,
+      saleNum: 17,
+    }).then(res => {
+      this.setData({
+        intensiveUser: res
+      })
+    });
+  },
+
   // 获取拼团详情
   getTeamDetail(data) {
     goodApi.getTeamDetail({
@@ -338,38 +373,31 @@ create.Page(store, {
     let {
       good,
       quantity = 0,
+      currentSku,
     } = this.data;
     if(good.goodsState != 1 || good.goodsVerifyState != 1) {
       showToast({ title: "商品已下架" });
       return;
     }
-    if(good.isMultiSpec == 1) {
-      this.setData({
-        specType: "add",
-      });
-      // 打开选择规格弹窗
-      store.onChangeSpecState(true);
-    } else {
-      if(quantity >= good.defaultSkuBuyMaxNum) {
-        showToast({ title: `最多购买${good.defaultSkuBuyMaxNum}件`});
-        return;
-      }
-      if(quantity < good.defaultSkuBuyMinNum) {
-        quantity = good.defaultSkuBuyMinNum;
-        // showToast({ title: `至少购买${quantity}件`});
-      } else {
-        quantity = 1
-      }
-      let data = {
-        skuId: good.defaultSkuId,
-        quantity,
-        orderType: good.orderType,
-        goodsFromType: good.goodsFromType,
-      }
-      if(good.activityId) data.activityId = good.activityId;
-      if(good.objectId) data.objectId = good.objectId;
-      this.updateCart(data);
+    if(quantity >= currentSku.buyMaxNum) {
+      showToast({ title: `最多购买${currentSku.buyMaxNum}件`});
+      return;
     }
+    if(quantity < currentSku.buyMinNum) {
+      quantity = currentSku.buyMinNum;
+      // showToast({ title: `至少购买${quantity}件`});
+    } else {
+      quantity = 1
+    }
+    let data = {
+      skuId: currentSku.skuId,
+      quantity,
+      orderType: good.orderType,
+      goodsFromType: good.goodsFromType,
+    }
+    if(good.activityId) data.activityId = good.activityId;
+    if(good.objectId) data.objectId = good.objectId;
+    this.updateCart(data);
   },
 
   // 减少数量
@@ -377,15 +405,16 @@ create.Page(store, {
     let {
       good,
       quantity = 0,
+      currentSku,
     } = this.data;
-    const minBuy = good.defaultSkuBuyMinNum > 1 ? good.defaultSkuBuyMinNum : 1;
+    const minBuy = currentSku.buyMinNum > 1 ? currentSku.buyMinNum : 1;
     if(quantity == minBuy) {
-      quantity = -good.defaultSkuBuyMinNum;
+      quantity = -currentSku.buyMinNum;
       showModal({
         content: "您确定要清除该商品？",
         ok: () => {
           this.updateCart({
-            skuId: good.defaultSkuId,
+            skuId: currentSku.skuId,
             quantity,
           })
         }
@@ -393,7 +422,7 @@ create.Page(store, {
       return ;
     }
     this.updateCart({
-      skuId: good.defaultSkuId,
+      skuId: currentSku.skuId,
       quantity: -1,
     })
   },
@@ -429,29 +458,33 @@ create.Page(store, {
     });
   },
 
-  // 点击立即购买
-  onBuy(event) {
+  // 多规格设置当前sku
+  setCurrentSku({ detail }) {
+    if(detail.skuId) {
+      this.setData({
+        currentSku: detail,
+      })
+    }
+  },
+
+  // 打开选规格弹窗
+  openSpecPopup() {
     if(!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
     }
     const {
       good,
-      skuId,
     } = this.data;
     if(good.goodsState != 1 || good.goodsVerifyState != 1) {
       showToast({ title: "商品已下架" });
       return;
     }
-    if(good.isMultiSpec) {
-      this.setData({
-        specType: "buy",
-      });
-      // 打开选择规格弹窗
-      store.onChangeSpecState(true);
-    } else {
-      this.onToCreate(event)
-    }
+    this.setData({
+      specType: "buy",
+    });
+    // 打开选择规格弹窗
+    store.onChangeSpecState(true);
   },
 
   // 跳转确认订单
@@ -470,6 +503,7 @@ create.Page(store, {
     const {
       selectAddressType,
       good,
+      currentSku,
     } = this.data;
     if(good.goodsState != 1 || good.goodsVerifyState != 1) {
       showToast({ title: "商品已下架" });
@@ -477,8 +511,7 @@ create.Page(store, {
     }
     let skuNum = good.buyMinNum > 0 ? good.buyMinNum : 1;
     const {
-      detail,
-      currentTarget,
+      currentTarget = {},
     } = event;
     // if(!this.data.userOtherInfo.isShopMaster && orderType == 15) {
     //   showToast({ title: "很抱歉，你不店主不能下单"})
@@ -486,8 +519,8 @@ create.Page(store, {
     // }
     // 选择规格回来下单
     if(good.isMultiSpec) {
-      skuId = detail.skuId;
-      skuNum = detail.skuNum;
+      skuId = currentSku.skuId;
+      skuNum = currentSku.skuNum;
     }
     let isActivityCome = false;
     let data = {
@@ -495,7 +528,7 @@ create.Page(store, {
         storeNo: good.storeNo,
         goodsInfos: [{
           spuId: spuId ? spuId : good.id,
-          skuId: skuId ? skuId : good.defaultSkuId,
+          skuId: skuId ? skuId : currentSku.skuId,
           activityId: good.activityId,
           objectId: good.objectId,
           orderType,
@@ -513,8 +546,8 @@ create.Page(store, {
       if(!!objectId && objectId != undefined) data.objectId = objectId;
       if(!!good.objectId) data.objectId = good.objectId;
       if(orderType == 3) {
-        data.objectId = detail.groupId;
-        objectId = detail.groupId;
+        data.objectId = currentSku.groupId;
+        objectId = currentSku.groupId;
       }
       if(orderType == 15) {
         data.storeAdress = good.storeAdress;

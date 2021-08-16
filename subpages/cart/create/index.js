@@ -277,6 +277,7 @@ create.Page(store, {
       provinceName: info.provinceName,
       cityId: info.cityId,
       cityName: info.cityName,
+      districtId: info.districtId,
       districtName: info.districtName,
       fullAddress: info.fullAddress,
       streetName: info.streetName || "",
@@ -352,6 +353,7 @@ create.Page(store, {
         deliveryInfo: {
           provinceId: storeAdress.provinceId,
           cityId: storeAdress.cityId,
+          districtId: storeAdress.districtId,
           districtName: storeAdress.districtName,
           streetName: storeAdress.streetName || "",
         },
@@ -367,6 +369,7 @@ create.Page(store, {
         postData.deliveryInfo = {
           provinceId: addressInfo.provinceId,
           cityId: addressInfo.cityId,
+          districtId: storeAdress.districtId,
           districtName: addressInfo.districtName,
           streetName: addressInfo.streetName || "",
         }

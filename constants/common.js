@@ -42,3 +42,10 @@ export const ORDER_TYPE = {
   11: "1688",
   15: "集约",
 }
+
+// 详情服务内容
+export const DETAIL_SERVICE_LIST = [
+  "正品保障",
+  "损坏包换",
+  "直采低价",
+]
