@@ -81,7 +81,7 @@
 
     <van-popup show="{{ showSharePopup }}" custom-style="background: transparent"  closeable round bind:close="onHideSharePopup">
        <view class="share_poster">
-        <image class="share_photo" src="{{tools.getImgUrl('miniprogram/user/share-app/bg%402x.png')}}"/>
+        <image class="share_photo" src="{{downLoadImg.backGroundImg}}"/>
        </view> 
         <view class="save_picture" bindtap="onSavePicture">
           <image src="{{tools.getImgUrl('miniprogram/user/share-app/save_photograph.png')}}" class="pic1"/>
