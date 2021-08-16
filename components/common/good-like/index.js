@@ -36,8 +36,8 @@ Component({
       } = this.data;
       if(jump) {
         let params = {
-          spuId: data.spuId,
-          skuId: data.skuId,
+          spuId: data.id,
+          skuId: data.defaultSkuId,
         };
         params.activityId = data.activityId || 0;
         params.objectId = data.objectId || 0;

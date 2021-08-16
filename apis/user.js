@@ -6,6 +6,7 @@ const url = {
   userData: "/member/auth/memberInfo/getMemberAmountInfo",
   orderCount: "/order/auth/order/userOrderCount",
   updateUserInfo: "/member/auth/memberInfo/modifyMemberInfo",
+  getDownLoadImg:"/share/option/shareParam/getDownLoadImg"
 }
 
 export default {
@@ -29,5 +30,9 @@ export default {
   getOrderCount(params, option) {
     return Request.post(url.orderCount, params, option);
   },
+  //获取app海报和二维码
+  getDownLoadImg(params,option){
+    return Request.post(url.getDownLoadImg,params, option);
+  }
 
 }

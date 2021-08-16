@@ -57,7 +57,7 @@
 }
 
 .cart_num {
-  position: absolute;
+  /* position: absolute;
   top: -10rpx;
   right: 4rpx;
   min-width: 12rpx;
@@ -70,5 +70,34 @@
   padding: 0 4rpx;
   background-color: #ffffff;
   border: 2rpx solid #c73e30;
-  border-radius: 20rpx;
+  border-radius: 20rpx; */
+  color: rgba(231, 117, 92, 1);
+  font-size: 24rpx;
+  
+}
+
+.good_store{
+  margin-top: 16rpx;
+  display: flex;
+  align-items: center;
+}
+
+.store_name{
+  color: #666666;
+  font-size: 24rpx;
+  width: 144rpx;
+  height: 34rpx;
+}
+
+.advance{
+  display: flex;
+  align-items: center;
+  margin-left: 60rpx;
+}
+.advance_store{
+  font-size: 24rpx;
+  color: #333333;
+  height: 34rpx;
+  width: 96rpx;
+  line-height: 34rpx;
 }
