@@ -18,6 +18,7 @@ const url = {
   detailImg: "/goods/open/detailImages",
   skuList: "/goods/open/skus",
   checkSku: "/goods/option/goodsSpecList",
+  intensiveUser: "/goods/option/goodsRandomVirtual",
   personalDetail: "/activity/option/group/personal/goodsInfo",
   pushTogether: "/activity/auth/group/createSingle",
   memberList: "/activity/option/group/personal/memberList",
@@ -130,6 +131,11 @@ export default {
   getTogetherUser(params, option) {
     return Request.post(url.togetherUser, params, option);
   },
+  // 获取参与集约用户
+  getIntensiveUser(params, option) {
+    return Request.post(url.intensiveUser, params, option);
+  },
+
 
   // 获取详情比价信息
   getDetailRatio(params, option) {

@@ -1,4 +1,6 @@
 {
   "component": true,
-  "usingComponents": {}
+  "usingComponents": {
+    "price-mobel": "/components/common/price-mobel/index"
+  }
 }
