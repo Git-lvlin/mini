@@ -1,21 +1,30 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
-<view class="hotgoods" wx:if="{{hotGoodList.length}}">
-  <view class="head" style="background-image: url({{tools.getImgUrl('miniprogram/home/seckill_back.png')}})">
-    <image class="hot_icon" src="{{tools.getImgUrl('miniprogram/home/fire.png')}}" />
-    <view class="hot_title">
-      <panel-title 
-        title="{{floor.header.title[0].name}}"
-        desc="{{floor.header.subTitle[0].name}}"
-      />
+<view class="hotgoods">
+  <view id="class-head" class="head" style="top: {{topSearchHeight + $.systemInfo.statusHeight}}rpx" wx:if="{{classTabList}}">
+    <view class="tab_item"
+      wx:for="{{classTabList}}"
+      wx:key="id"
+      data-index="{{index}}"
+      bindtap="tabHandle"
+    >
+      <block wx:if="{{index===classIndex}}">
+        <view class="act_title">{{item.name}}</view>
+        <view wx:if="{{!isFixedTop}}" class="act_sub_title">{{item.showTip}}</view>
+        <view wx:else class="sub_title_sticky_box">
+          <image class="sub_title_sticky" src="{{tools.getImgUrl('miniprogram/home/class_tab_is_sticky.png')}}" />
+        </view>
+      </block>
+      <block wx:else>
+        <view class="title">{{item.name}}</view>
+        <block wx:if="{{!isFixedTop}}">
+          <view class="sub_title">{{item.showTip}}</view>
+        </block>
+        <view wx:else class="sub_title" style="opacity: 0">{{item.showTip}}</view>
+      </block>
     </view>
-    <!-- 
-      more
-      moreText="{{floor.header.subTitle[0].action}}"
-      actionUrl="{{floor.header.subTitle[0].actionUrl}}"
-    -->
   </view>
-  <view class="good_list">
+  <view class="good_list" wx:if="{{hotGoodList.length}}">
     <view
       class="good_item"
       wx:for="{{hotGoodList}}"
