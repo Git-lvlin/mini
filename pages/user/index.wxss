@@ -226,7 +226,7 @@ page{
   height: 870rpx;
 }
 .save_picture{
-  margin-left: 220rpx;
+  margin-left: 225rpx;
   margin-top: 30rpx;
 }
 .pic1 {

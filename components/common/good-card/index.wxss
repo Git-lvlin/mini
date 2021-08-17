@@ -72,7 +72,7 @@
   border: 2rpx solid #c73e30;
   border-radius: 20rpx; */
   color: rgba(231, 117, 92, 1);
-  font-size: 24rpx;
+  font-size: 20rpx;
   
 }
 
