@@ -106,6 +106,11 @@ create.Component(store, {
             });
           });
         }
+        this.triggerEvent("setSku", {
+          skuId: curSku.id,
+          skuName: curSku.skuName,
+          skuNum: curSku.buyMinNum ? curSku.buyMinNum : 1,
+        });
         this.setData({
           skuData: res,
           skuList: res.specList,
@@ -201,17 +206,29 @@ create.Component(store, {
         quantity,
       } = this.data;
       console.log(quantity, stock)
-      if(specType === "buy") {
-        this.triggerEvent("specBuy", {
+      // if(specType === "buy") {
+        // this.triggerEvent("specBuy", {
+        //   skuId: curSku.id,
+        //   skuNum: stock,
+        // });
+        this.triggerEvent("setSku", {
           skuId: curSku.id,
+          skuName: curSku.skuName,
           skuNum: stock,
+          buyMaxNum: curSku.buyMaxNum,
+          buyMinNum: curSku.buyMinNum,
         });
-      } else if(specType === "add") {
-        this.triggerEvent("specAdd", {
-          skuId: curSku.id,
-          quantity: stock + quantity,
-        });
-      }
+      // } else if(specType === "add") {
+      //   // this.triggerEvent("specAdd", {
+      //   //   skuId: curSku.id,
+      //   //   quantity: stock + quantity,
+      //   // });
+      //   this.triggerEvent("setSku", {
+      //     skuId: curSku.id,
+      //     skuName: curSku.skuName,
+      //     skuNum: stock + quantity,
+      //   });
+      // }
       this.onClose();
     },
   }

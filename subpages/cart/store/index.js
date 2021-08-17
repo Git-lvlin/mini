@@ -51,7 +51,7 @@ Page({
   },
 
   // 获取商品列表
-  getStoreGood(sort) {
+  getStoreGood(sort = "") {
     if(this.loading) return;
     let {
       goodList
@@ -61,12 +61,15 @@ Page({
       size,
     } = this.goodPage;
     this.loading = true;
-    goodApi.getStoreGood({
+    const data = {
       storeNo: this.id,
       page,
       size,
-      sort,
-    }).then(res => {
+    }
+    if(!!sort) {
+      data.sort = sort;
+    }
+    goodApi.getStoreGood(data).then(res => {
       this.loading = false;
       this.goodPage.totalPage = res.totalPage;
       let list = res.records;

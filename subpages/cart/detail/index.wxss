@@ -123,14 +123,7 @@
   color: #E7755C;
 }
 
-.good_info {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-}
-
 .good_title {
-  width: 520rpx;
   font-size: 28rpx;
   color: #A4A4A4;
   word-wrap: break-word;
@@ -141,6 +134,18 @@
   color: #222222;
   font-weight: 500;
   margin-bottom: 8rpx;
+}
+
+.good_desc_box {
+  justify-content: space-between;
+}
+
+.desc_text {
+  flex: 1;
+  font-size: 28rpx;
+  color: #A4A4A4;
+  line-height: 40rpx;
+  margin-right: 32rpx;
 }
 
 .store_show_sale {
@@ -175,20 +180,23 @@
 }
 
 .icon {
-  width: 48rpx;
-  height: 48rpx;
+  width: 42rpx;
+  height: 42rpx;
   vertical-align: middle;
 }
 
 .num_input {
-  width: 44rpx;
+  width: 72rpx;
   height: 48rpx;
   font-size: 28rpx;
-  color: #000000;
+  font-weight: 600;
+  color: #E5352F;
   line-height: 48rpx;
   text-align: center;
   padding: 0;
   margin: 0 8rpx;
+  background: #F5F5F5;
+  border-radius: 4rpx;
 }
 
 
@@ -266,6 +274,7 @@
 .intensive_join_user {
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap;
   margin-bottom: 16rpx;
 }
 
@@ -312,6 +321,79 @@
   color: #e7532c;
   font-size: 28rpx;
   line-height: 40rpx;
+}
+
+.sec_label {
+  width: 112rpx;
+  height: 36rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #DC3D2E;
+  line-height: 36rpx;
+  text-align: center;
+  background-image: linear-gradient(90deg, #FFD672 0%, #FDEEC1 100%);
+  border-radius: 18rpx 18rpx 18rpx 0;
+  margin: 0 0 6rpx 8rpx;
+}
+
+.sec_market_price {
+  font-size: 26rpx;
+  color: #B2B2B2;
+  line-height: 36rpx;
+  margin-left: 16rpx;
+}
+
+/* 选择规格 */
+.spec_conetnt {
+  padding: 16rpx 24rpx;
+}
+
+.info_bar {
+  display: flex;
+  align-items: flex-start;
+  padding: 16rpx 0;
+}
+
+.info_bar_name {
+  width: 72rpx;
+  height: 40rpx;
+  font-size: 28rpx;
+  color: #999999;
+  line-height: 40rpx;
+  padding-right: 16rpx;
+}
+
+.info_bar_value {
+  flex: 1;
+  line-height: 40rpx;
+  padding-right: 24rpx;
+}
+
+.sec_name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #E5352F;
+  line-height: 40rpx;
+}
+
+.service_list {
+  flex-wrap: wrap;
+}
+
+.service_item {
+  margin-right: 32rpx;
+}
+
+.service_icon {
+  width: 32rpx;
+  height: 32rpx;
+}
+
+.service_name {
+  font-size: 28rpx;
+  color: #666666;
+  line-height: 40rpx;
+  padding-left: 4rpx;
 }
 
 

@@ -25,7 +25,7 @@ Component({
   },
 
   data: {
-
+  
   },
 
   methods: {
@@ -50,6 +50,21 @@ Component({
       } else {
         this.triggerEvent("click", data);
       }
+    },
+    // 点击跳转店铺
+    onToStore() {
+      const {
+        data
+      } = this.data;
+      let id = data.storeNo.slice(8, data.storeNo.length);
+      id = +id;
+      if(id < 123580) return;
+      router.push({
+        name: "store",
+        data: {
+          storeNo: data.storeNo,
+        },
+      })
     }
   }
 })

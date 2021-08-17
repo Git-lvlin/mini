@@ -13,10 +13,10 @@
       <view class="store_name text_one_line">{{storeDetail.storeName}}</view>
       <view class="store_good">商品 {{storeDetail.saleGoodsTotal}}</view>
     </view>
-    <view class="flex_center contact">
+    <!-- <view class="flex_center contact">
       <image class="envelope_icon" src="{{tools.getImgUrl('miniprogram/user/contact_icon.png')}}" />
       联系商家
-    </view>
+    </view> -->
   </view>
 
   <view class="store_good_content" wx:if="{{goodList.length}}">

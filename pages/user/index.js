@@ -16,6 +16,7 @@ create.Page(store, {
     userAuth: true,
     canUseUserProfile: true,
     banner: "",
+    showSharePopup: false,
     showPopup: false,
     userData: [
       {
@@ -32,6 +33,7 @@ create.Page(store, {
       },
     ],
     userInfo: "",
+    downLoadImg:{}
   },
 
   onLoad: function (options) {
@@ -161,6 +163,15 @@ create.Page(store, {
       const userInfo = getStorageUserInfo(true);
       if(!userInfo) return;
     }
+    if(path == "share") {
+      this.showSharePopup()
+      userApi.getDownLoadImg({}).then((res)=>{
+        this.setData({
+          downLoadImg:res
+        })
+      })
+      return
+    }
     if(type === 1) {
       router.push({
         name: path
@@ -173,6 +184,17 @@ create.Page(store, {
   showPopup() {
     this.setData({
       showPopup: true,
+    })
+  },
+  showSharePopup() {
+    this.setData({
+      showSharePopup: true,
+    })
+  },
+
+  onHideSharePopup() {
+    this.setData({
+      showSharePopup: false,
     })
   },
 
@@ -188,4 +210,112 @@ create.Page(store, {
       url: '/dokit/index/index',
     })
   },
+
+//保存图片
+onSavePicture(){
+    const {
+      downLoadImg
+    } = this.data;
+    // 下载文件  
+    wx.downloadFile({
+      url: downLoadImg.backGroundImg,
+      success: function (res) {
+        console.log("下载文件：success");
+        console.log(res);
+
+        // 保存图片到系统相册  
+        wx.saveImageToPhotosAlbum({
+          filePath: res.tempFilePath,
+          success(res) {
+            console.log("保存图片：success");
+            wx.showToast({
+              title: '保存成功',
+            });
+          },
+          fail(res) {
+            console.log("保存图片：fail");
+            console.log(res);
+          }
+        })
+      },
+      fail: function (res) {
+        console.log("下载文件：fail");
+        console.log(res);
+      }
+    })
+  },
+  onSavePicClick: function (e) {
+    var that = this;
+    console.log("onSavePicClick");
+    console.log(e);
+    var downloadUrl = e.currentTarget.dataset.img;
+
+    if (!wx.saveImageToPhotosAlbum) {
+      wx.showModal({
+        title: '提示',
+        content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+      })
+      return;
+    }
+
+    // 可以通过 wx.getSetting 先查询一下用户是否授权了 "scope.writePhotosAlbum" 这个 scope  
+    wx.getSetting({
+
+      success(res) {
+        console.log("getSetting: success");
+        if (!res.authSetting['scope.writePhotosAlbum']) {
+          // 接口调用询问  
+          wx.authorize({
+            scope: 'scope.writePhotosAlbum',
+            success() {
+              that.downloadImage(downloadUrl);
+            },
+            fail() {
+              // 用户拒绝了授权  
+              wx.showModal({
+                title: '保存图片',
+                content: '保存图片需要您授权',
+                showCancel: true,
+                confirmText: '确定',
+
+                success: function (res) {
+                  if (res.confirm) {
+                    console.log(12134);
+                    // 打开设置页面  
+                    wx.openSetting({
+                      success: function (data) {
+                        if (data.authSetting['scope.writePhotosAlbum']) {
+                          console.log("授权成功");
+                          that.downloadImage(downloadUrl);
+                        } else {
+                          console.log("授权失败");
+                        }
+                      },
+                      fail: function (data) {
+                        console.log("openSetting: fail");
+                      }
+                    });
+                  } else if (res.cancel) {
+                    console.log('用户点击取消')
+                  }
+
+                }
+              })
+
+
+
+            }
+          })
+        } else {
+          that.downloadImage(downloadUrl)
+        }
+      },
+      fail(res) {
+        console.log("getSetting: fail");
+        console.log(res);
+      }
+
+    })
+
+  }
 })
