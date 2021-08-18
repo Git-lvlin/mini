@@ -13,7 +13,7 @@ var getPriceTitle = function (orderType) {
     "2": "",
     "3": "单约价：",
     "4": "团约价：",
-    "11": "约购价：",
+    "11": "",
     "15": "集约价：",
   };
   return titleType[orderType];
@@ -24,7 +24,7 @@ var getPriceDesc = function (orderType) {
     "2": "",
     "3": "市场价",
     "4": "市场价",
-    "11": "市场价",
+    "11": "",
     "15": "市场价",
   };
   return descType[orderType];

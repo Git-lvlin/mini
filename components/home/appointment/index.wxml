@@ -42,7 +42,7 @@
           <view class="good_info">
             <view class="title text_one_line">{{item.title}}</view>
             <view class="good_label">{{item.goodsTag}}</view>
-            <view class="flex_middle join_user" wx:if="{{orderType == 1 || orderType == 2}}">
+            <view class="flex_middle join_user" wx:if="{{item.orderType == 1 || item.orderType == 2}}">
               <view class="flex_middle user_list">
                 <image
                   class="user_avatar"
