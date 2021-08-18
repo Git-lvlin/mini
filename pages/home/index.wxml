@@ -6,8 +6,8 @@
     bindtouchend="handleTouchEnd"
 >
   <!-- 导航栏地址 -->
-  <view class="nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx;{{headBackCss}}">
-    <view class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx;{{headBackCss}}">
+  <view class="nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx;{{headBackCss}};height:{{navigationBarHeight}}rpx">
+    <view id="nav_body_id" class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx;{{headBackCss}};height:{{navigationBarHeight}}rpx">
       <view class="nav_location">
         <image class="location_icon" src="{{tools.getImgUrl('miniprogram/home/location.png')}}" />
         <view class="flex_middle address" bindtap="onToLocation">
@@ -19,7 +19,7 @@
         </view>
         <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/triangle_bottom.png')}}" />
       </view>
-      <view class="search_content">
+      <view id="top_search" class="search_content" style="">
         <view class="search_body" bindtap="onToSearch">
           <image class="search_icon" src="{{tools.getImgUrl('miniprogram/home/search.png')}}" />
           <view class="search_text">请输入商品名称</view>
@@ -83,14 +83,14 @@
     /> -->
 
     <!-- 热销商品 -->
-    <view id="hotGoods"
+    <!-- <view id="hotGoods"
       wx:if="{{item.floorType === 8}}"
     >
       <hotgoods
         scrollBottom="{{scrollBottom}}"
         floor="{{item}}"
       />
-    </view>
+    </view> -->
 
     <!-- 分类商品 -->
     <view id="classGoods"
@@ -99,6 +99,8 @@
       <classgoods
         scrollBottom="{{scrollBottom}}"
         floor="{{item}}"
+        isFixedTop="{{isFixedTop}}"
+        topSearchHeight="{{navigationBarHeight}}"
       />
     </view>
   </block>

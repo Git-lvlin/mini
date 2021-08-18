@@ -211,66 +211,110 @@ create.Page(store, {
     })
   },
 
-  //保存图片
-  onSavePicture(){
+//保存图片
+onSavePicture(){
     const {
       downLoadImg
     } = this.data;
-    console.log('downLoadImg.backGroundImg',downLoadImg.backGroundImg)
+    // 下载文件  
     wx.downloadFile({
       url: downLoadImg.backGroundImg,
       success: function (res) {
-        var benUrl = res.tempFilePath;
-        //图片保存到本地相册
+        console.log("下载文件：success");
+        console.log(res);
+
+        // 保存图片到系统相册  
         wx.saveImageToPhotosAlbum({
-          filePath: benUrl,
-          //授权成功，保存图片
-          success: function (data) {
+          filePath: res.tempFilePath,
+          success(res) {
+            console.log("保存图片：success");
             wx.showToast({
               title: '保存成功',
-              icon: 'success',
-              duration: 2000
-            })
+            });
           },
-          //授权失败
-          fail: function (err) {
-            if (err.errMsg) {//重新授权弹框确认
-                wx.showModal({
-                  title: '提示',
-                  content: '您好,请先授权，在保存此图片。',
-                  showCancel: false,
-                  success(res) {
-                    if (res.confirm) {//重新授权弹框用户点击了确定
-                      wx.openSetting({//进入小程序授权设置页面
-                        success(settingdata) {
-                          console.log(settingdata)
-                          if (settingdata.authSetting['scope.writePhotosAlbum']) {//用户打开了保存图片授权开关
-                            wx.saveImageToPhotosAlbum({
-                              filePath: benUrl,
-                              success: function (data) {
-                                wx.showToast({
-                                  title: '保存成功',
-                                  icon: 'success',
-                                  duration: 2000
-                                })
-                              },
-                            })
-                          } else {//用户未打开保存图片到相册的授权开关
-                            wx.showModal({
-                              title: '温馨提示',
-                              content: '授权失败，请稍后重新获取',
-                              showCancel: false,
-                            })
-                          }
-                        }
-                      })
-                    } 
-                  }
-                })
-            }
+          fail(res) {
+            console.log("保存图片：fail");
+            console.log(res);
           }
         })
+      },
+      fail: function (res) {
+        console.log("下载文件：fail");
+        console.log(res);
       }
+    })
+  },
+  onSavePicClick: function (e) {
+    var that = this;
+    console.log("onSavePicClick");
+    console.log(e);
+    var downloadUrl = e.currentTarget.dataset.img;
+
+    if (!wx.saveImageToPhotosAlbum) {
+      wx.showModal({
+        title: '提示',
+        content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
+      })
+      return;
+    }
+
+    // 可以通过 wx.getSetting 先查询一下用户是否授权了 "scope.writePhotosAlbum" 这个 scope  
+    wx.getSetting({
+
+      success(res) {
+        console.log("getSetting: success");
+        if (!res.authSetting['scope.writePhotosAlbum']) {
+          // 接口调用询问  
+          wx.authorize({
+            scope: 'scope.writePhotosAlbum',
+            success() {
+              that.downloadImage(downloadUrl);
+            },
+            fail() {
+              // 用户拒绝了授权  
+              wx.showModal({
+                title: '保存图片',
+                content: '保存图片需要您授权',
+                showCancel: true,
+                confirmText: '确定',
+
+                success: function (res) {
+                  if (res.confirm) {
+                    console.log(12134);
+                    // 打开设置页面  
+                    wx.openSetting({
+                      success: function (data) {
+                        if (data.authSetting['scope.writePhotosAlbum']) {
+                          console.log("授权成功");
+                          that.downloadImage(downloadUrl);
+                        } else {
+                          console.log("授权失败");
+                        }
+                      },
+                      fail: function (data) {
+                        console.log("openSetting: fail");
+                      }
+                    });
+                  } else if (res.cancel) {
+                    console.log('用户点击取消')
+                  }
+
+                }
+              })
+
+
+
+            }
+          })
+        } else {
+          that.downloadImage(downloadUrl)
+        }
+      },
+      fail(res) {
+        console.log("getSetting: fail");
+        console.log(res);
+      }
+
     })
 
   }

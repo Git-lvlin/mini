@@ -1,8 +1,14 @@
 import homeApi from "../../../apis/home"
 import { mapNum } from "../../../utils/homeFloor";
 import router from "../../../utils/router";
+import create from "../../../utils/create";
+import store from "../../../store/index";
+import { objToParamStr, strToParamObj } from "../../../utils/tools";
 
-Component({
+create.Component(store, {
+  use: [
+    "systemInfo"
+  ],
 
   properties: {
     floor: {
@@ -12,7 +18,7 @@ Component({
         const nowStr = JSON.stringify(now);
         const oldStr = JSON.stringify(old);
         if(nowStr != oldStr) {
-          this.setGoodList(now.content);
+          this.setClassList(now.content);
         }
       }
     },
@@ -24,35 +30,68 @@ Component({
           this.handleScroll();
         }
       }
+    },
+    topSearchHeight: {
+      type: Number,
+      value: 0,
+      observer(nowVal, oldVal) {
+      }
+    },
+    isFixedTop: {
+      type: Boolean,
+      value: false,
+      observer(nowVal, oldVal) {
+      }
     }
   },
 
   data: {
     hotGoodList: [],
+    classTabList: [],
+    indexData: 0,
+    classIndex: 0,
     pageData: {
-      pageSize: 15,
-      page: 1,
-      totalPage: 1,
+      next: 0,
+      size: 10,
+      hasNext: false,
     },
+    param: {
+      index: 0,
+      size: 10,
+      next: 0,
+      isTab: false,
+    }
   },
 
   methods: {
-    // 设置商品列表数据
-    setGoodList(content) {
+    tabHandle({currentTarget}) {
+      // 更新当前tab数据
+      const index = currentTarget.dataset.index;
+      const indexData = this.data.classTabList[index];
+      this.setData({
+        indexData: indexData,
+        classIndex: index
+      }, () => {
+        // 请求当前tab列表数据
+        this.getListData({index:index, isTab: true})
+      })
+    },
+    // 设置商品分类数据
+    setClassList(content) {
       let homeCache = wx.getStorageSync("HOME_CACHE") || {};
       if(content.dataType === 1) {
-        if(homeCache.hotGoodList && !!homeCache.hotGoodList.length) {
+        if(homeCache.classTabList && !!homeCache.classTabList.length) {
           this.setData({
-            hotGoodList: homeCache.hotGoodList,
+            classTabList: homeCache.classTabList,
           })
         }
         this.getCustomData(1);
       } else {
         this.setData({
-          hotGoodList: mapNum(content.data)
+          classTabList: mapNum(content.data)
         })
-        if(homeCache.hotGoodList) {
-          delete homeCache.hotGoodList;
+        if(homeCache.classTabList) {
+          delete homeCache.classTabList;
           wx.setStorage({
             key: "HOME_CACHE",
             data: homeCache,
@@ -60,7 +99,71 @@ Component({
         }
       }
     },
-    // 获取数据
+    // 获取商品列表数据
+    getListData({index=0, size=10, next=0, isTab=false, paging=false}) {
+      // 先判断缓存
+      let homeCache = wx.getStorageSync("HOME_CACHE") || {};
+      // 有缓存直接用缓存更新数据
+      console.log('index', index)
+      console.log('homeCache', homeCache)
+      if (homeCache.classTabAllCache[index] && !paging) {
+        console.log('有缓存!', homeCache.classTabAllCache)
+        // 当前分类最近一次的商品列表
+        const nowData = homeCache.classTabAllCache[index].hotGoodList;
+        // 当前分类最近一次的列表分页信息
+        const pageData = homeCache.classTabAllCache[index].pageData;
+        this.setData({
+          hotGoodList: nowData,
+          pageData: pageData
+        })
+        return
+      }
+      console.log('请求数据并加缓存')
+      // 没缓存请求数据并加缓存
+      const init = this.data.classTabList[index];
+      const urlData = init.actionUrl?.split('?');
+      const initUrl = urlData[0];
+      const initTabData = urlData[1];
+      const param = strToParamObj(initTabData)
+      const newParam = {
+        ...param,
+        size: size,
+        next: next
+      }
+      const lastParam = objToParamStr(newParam)
+      const verifyVersionStr = '&verifyVersionId=1' // 修正为配置1数据(与app同步，默认配置为3)
+      const requestUrl = initUrl + '?' + lastParam + verifyVersionStr
+      homeApi.getFloorCustom(requestUrl).then(res => {
+        console.log('获取的当前分类商品列表', res)
+        let bigArr;
+        if (isTab) {
+          bigArr = res.records
+        } else {
+          bigArr = this.data.hotGoodList.concat(res.records)
+        }
+        const itemData = {
+          next: res.next,
+          size: size,
+          hasNext: res.hasNext
+        }
+        this.setData({
+          hotGoodList: bigArr,
+          pageData: itemData
+        })
+        homeCache.classTabAllCache = {
+          ...homeCache.classTabAllCache,
+          [index]: {
+            pageData: itemData,
+            hotGoodList: bigArr
+          },
+        }
+        wx.setStorage({
+          key: "HOME_CACHE",
+          data: homeCache,
+        })
+      })
+    },
+    // 获取classtab数据
     getCustomData(page, pageSize = 15) {
       let homeCache = wx.getStorageSync("HOME_CACHE") || {};
       const content = this.data.floor.content;
@@ -68,21 +171,13 @@ Component({
         page,
         pageSize,
       }).then(res => {
-        let list = [];
-        let pageData = this.data.pageData;
-        if(page < 2) {
-          list = mapNum(res.records);
-        } else {
-          list = homeCache.hotGoodList;
-          list = list.concat(mapNum(res.records));
-        }
-        pageData.totalPage = res.totalPage;
-        pageData.page = page;
+        let list = res;
         this.setData({
-          hotGoodList: list,
-          pageData,
+          classTabList: list
+        }, () => {
+          this.getListData(this.data.param)
         });
-        homeCache.hotGoodList = list
+        homeCache.classTabList = list
         wx.setStorage({
           key: "HOME_CACHE",
           data: homeCache,
@@ -95,8 +190,8 @@ Component({
       const {
         pageData,
       } = this.data;
-      if(pageData.page < pageData.totalPage) {
-        this.getCustomData(pageData.page + 1);
+      if(pageData.hasNext) {
+        this.getListData({index: this.data.classIndex, size: pageData.size, next: pageData.next, paging: true});
       }
     },
     // 跳转详情
@@ -121,5 +216,6 @@ Component({
         }
       });
     },
-  }
+  },
+
 })

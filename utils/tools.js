@@ -209,8 +209,10 @@ export const getSystemInfo = () => {
   // 此高度基于右上角菜单在导航栏位置垂直居中计算得到 单位rpx
   // systemInfo.menuToNavHeight = (top - systemInfo.statusBarHeight) * rpxRatio;
   systemInfo.menuToNavHeight = (top - systemInfo.statusBarHeight) * data.pixelRatio;
+  systemInfo.navHeight = (height + (top - systemInfo.statusBarHeight) * 2);
   systemInfo.navBarHeight = (height + (top - systemInfo.statusBarHeight) * 2) * rpxRatio;
   systemInfo.statusHeight = systemInfo.statusBarHeight * rpxRatio;
+  systemInfo.navTotalHeightPx = systemInfo.navHeight + systemInfo.statusBarHeight;
   systemInfo.navTotalHeight = systemInfo.statusHeight + systemInfo.navBarHeight;
   systemInfo.bottomBarHeight = (data.screenHeight - data.safeArea.bottom) * rpxRatio
   if(data.system.indexOf("iOS")) {
