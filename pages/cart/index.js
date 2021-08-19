@@ -52,7 +52,7 @@ create.Page(store, {
       hotGoodList,
     } = this.data;
     if(!!userInfo) {
-      this.store.updateCart();
+      this.store.updateCart(true);
       this.setData({
         userInfo,
       })
@@ -70,7 +70,7 @@ create.Page(store, {
     goodApi.checkedAllCart({
       isChecked: !this.data.selectAll,
     }).then(res => {
-      this.store.updateCart();
+      this.store.updateCart(true);
     })
   },
 

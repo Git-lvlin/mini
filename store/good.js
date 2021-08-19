@@ -1,5 +1,6 @@
 import main from './index'
 import goodApi from '../apis/good'
+import cartApi from '../apis/order'
 import { showToast, mapNum } from "../utils/tools"
 import util from "../utils/util"
 
@@ -54,12 +55,63 @@ const getCartList = () => {
   })
 }
 
+// 获取购物车总金额
+const getStoreGoodsTotle = (storeList) => {
+    console.log("storeList ~ storeList", storeList)
+  let storeGoodsInfos = [];
+  let storeGood = {};
+  let checkedQuantity = 0;
+  storeList.forEach(item => {
+    storeGood = {
+      storeNo: item.storeNo,
+      goodsInfos: []
+    };
+    item.skus.forEach(child => {
+      if(child.isChecked) {
+        checkedQuantity += 1;
+        storeGood.goodsInfos.push({
+          objectId: child.objectId,
+          activityId: child.activityId,
+          orderType: child.orderType,
+          spuId: child.spuId,
+          skuId: child.skuId,
+          skuNum: child.quantity,
+        });
+      }
+    });
+    if (storeGood.goodsInfos.length) {
+      storeGoodsInfos.push(storeGood);
+    }
+  });
+  if(!storeGoodsInfos.length) {
+    store.data.cartListTotal = {
+      subtotal: 0,
+      subtotalPromotion: 0,
+      freight: 0,
+      checkedQuantity: 0,
+    };
+    return ;
+  }
+  cartApi.getConfirmInfo({
+    storeGoodsInfos,
+    fromCart: 1,
+  }).then(res => {
+    let cartListTotal = res;
+    cartListTotal.subtotal = util.divide(cartListTotal.totalAmount || 0, 100);
+    cartListTotal.subtotalPromotion = util.divide(cartListTotal.payAmount || 0, 100);
+    cartListTotal.freight = util.divide(cartListTotal.shippingFeeAmount || 0, 100);
+    cartListTotal.checkedQuantity = checkedQuantity;
+    store.data.cartListTotal = cartListTotal;
+  });
+}
+
 // 按店铺获取商品列表
 const getStoreCartList = () => {
   goodApi.getStoreCartList({}, {
     showLoading: false,
   }).then(res => {
     let list = res.stores;
+    getStoreGoodsTotle(list);
     list.forEach(item => {
       item.skus = mapNum(item.skus)
     });
@@ -68,10 +120,13 @@ const getStoreCartList = () => {
 }
 
 // 更新购物车数据
-const updateCart = () => {
-  getCartList();
-  getStoreCartList();
-  getCartTotal();
+const updateCart = (isCart = false) => {
+  if(!isCart) {
+    getCartList();
+  } else {
+    getStoreCartList();
+    // getCartTotal();
+  }
 }
 
 // 获取用户信息

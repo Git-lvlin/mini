@@ -426,9 +426,9 @@ create.Page(store, {
 
   // 打开优惠券弹窗
   onOpenCoupon() {
-    // this.setData({
-    //   couponPopup: true
-    // })
+    this.setData({
+      couponPopup: true
+    })
   },
 
   // 监听优惠券弹窗关闭

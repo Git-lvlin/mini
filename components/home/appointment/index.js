@@ -58,6 +58,7 @@ Component({
           storeNo: spot.storeNo || ""
         }).then(res => {
           let goodList = mapNum(res.goodsInfo)
+          goodList = goodList.slice(0, goodList.length > 2 ? 2 : goodList.length);
           this.setData({
             goodList
           });

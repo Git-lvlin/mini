@@ -4,6 +4,7 @@
   "usingComponents": {
     "shop-card": "/components/cart/shop-card/index",
     "price-mobel": "/components/common/price-mobel/index",
-    "coupon-popup": "/components/cart/coupon-popup/index"
+    "coupon-popup": "/components/cart/coupon-popup/index",
+    "down-app-code": "/components/common/down-app-code/index"
   }
 }

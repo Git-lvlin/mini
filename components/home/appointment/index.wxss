@@ -76,8 +76,27 @@
   margin-bottom: 12rpx;
 }
 
-.user_list {
+.user_avatar_conetnt {
+  width: 104rpx;
+  overflow: hidden;
   margin-right: 8rpx;
+}
+
+.user_list {
+  width: 480rpx;
+  animation: userAvatarAct 10s linear infinite;
+}
+
+@keyframes userAvatarAct {
+  0% {
+    transform: translateX(0%);
+  }
+  99.99% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
 }
 
 .user_avatar {

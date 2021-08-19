@@ -9,7 +9,11 @@
       src="{{tools.getImgUrl('miniprogram/cart/good_back.png')}}"
       bindtap="onToBack"
     />
-    <user-together-banner list="{{togetherUser}}" top="{{backTopHeight + 96}}" />
+    <user-together-banner
+      orderType="{{isActivityGood}}"
+      list="{{togetherUser}}"
+      top="{{backTopHeight + 560}}"
+    />
     <swiper
       class="banner"
       indicator-dots="{{true}}"
@@ -51,13 +55,16 @@
       />
     </view>
     <view class="intensive_time">
-      <image class="intensive_time_back" src="{{tools.getImgUrl('miniprogram/cart/jiyue_time.png')}}" />
-      <view class="intensive_time_text">距活动结束仅剩</view>
-      <view class="intensive_end">
-        <count-down
-          time="{{ (good.leftTime || 0) * 1000 }}"
-          isFull
-        />
+      <image class="intensive_time_back" src="{{tools.getImgUrl('miniprogram/cart/jiyue_time.png?v=2021')}}" />
+      <view class="flex_center intensive_time_box ">
+        <view class="intensive_time_text">距活动结束仅剩</view>
+        <view class="intensive_end">
+          <count-down
+            time="{{ (good.leftTime || 0) * 1000 }}"
+            isFull
+            needDay
+          />
+        </view>
       </view>
     </view>
   </view>
@@ -113,7 +120,7 @@
             />
             <view class="join_buy_num" wx:if="{{item.buyNum > 1}}">{{item.buyNum}}件</view>
           </view>
-          <view class="join_item" wx:if="{{index == 7}}">
+          <view class="join_item other_join" wx:if="{{index == 7}}">
             <van-image
               width="62rpx"
               height="62rpx"

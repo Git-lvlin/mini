@@ -106,8 +106,8 @@ create.Component(store, {
       // 有缓存直接用缓存更新数据
       console.log('index', index)
       console.log('homeCache', homeCache)
-      if (homeCache.classTabAllCache[index] && !paging) {
-        console.log('有缓存!', homeCache.classTabAllCache)
+      console.log('有缓存!', homeCache.classTabAllCache)
+      if (homeCache.classTabAllCache && homeCache.classTabAllCache[index] && !paging) {
         // 当前分类最近一次的商品列表
         const nowData = homeCache.classTabAllCache[index].hotGoodList;
         // 当前分类最近一次的列表分页信息
@@ -134,12 +134,14 @@ create.Component(store, {
       const verifyVersionStr = '&verifyVersionId=1' // 修正为配置1数据(与app同步，默认配置为3)
       const requestUrl = initUrl + '?' + lastParam + verifyVersionStr
       homeApi.getFloorCustom(requestUrl).then(res => {
+        const {
+          hotGoodList,
+        } = this.data;
         console.log('获取的当前分类商品列表', res)
-        let bigArr;
-        if (isTab) {
-          bigArr = res.records
-        } else {
-          bigArr = this.data.hotGoodList.concat(res.records)
+        let bigArr = mapNum(res.records);
+        console.log("🚀 ~ file: index.js ~ line 142 ~ homeApi.getFloorCustom ~ bigArr", bigArr)
+        if (!isTab) {
+          bigArr = hotGoodList.concat(bigArr)
         }
         const itemData = {
           next: res.next,

@@ -9,6 +9,7 @@ Page({
     totalPage: 1,
   },
   loading: false,
+  sort: "",
 
   data: {
     searchText: "",
@@ -235,7 +236,7 @@ Page({
   },
 
   // 点击搜索
-  onSearch(sort) {
+  onSearch() {
     if(this.loading) return;
     this.loading = true;
     let {
@@ -253,10 +254,12 @@ Page({
       keyword: searchText,
       requestMemberId: userInfo.id,
     }
-    if(typeof sort === "string") {
-      param.sort = sort;
+    if(!!this.sort) {
+      param.sort = this.sort;
     }
-    goodApi.getSearchList(param).then(res => {
+    goodApi.getSearchList(param, {
+      showLoading: !goodList.length
+    }).then(res => {
       this.getHistorySearch();
       this.loading = false;
       this.searchPage.totalPage = res.totalpage;
@@ -266,6 +269,7 @@ Page({
         item.title = item.goodsName;
         item.subtitle = item.goodsDesc;
         item.salePrice = util.divide(item.goodsSaleMinPrice, 100);
+        item.marketPrice = util.divide(item.skuMarketPrice, 100);
       });
       if(page > 1) {
         list = goodList.concat(list);
@@ -289,7 +293,8 @@ Page({
     detail
   }) {
     this.searchPage.page = 1;
-    this.onSearch(detail.sort);
+    this.sort = detail.sort;
+    this.onSearch();
   },
 
   // 监听滚动到底部

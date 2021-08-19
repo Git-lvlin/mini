@@ -39,7 +39,7 @@
         {
           "name": "商详",
           "pathName": "subpages/cart/detail/index",
-          "query": "spuId=2538&skuId=3667&activityId=0&objectId=0&orderType=2",
+          "query": "activityId=0&objectId=4647293761078952743&orderType=15&skuId=3638&spuId=2513&wsId=0",
           "scene": null
         },
         {

@@ -13,7 +13,7 @@
     <view class="good_sku text_one_line">{{data.goodsDesc}}</view>
     <view class="good_price">
         <view class="flex_middle">
-          <price-mobel money="{{data.goodsSaleMinPrice}}" minSize="{{24}}" defaultColor="#ccc" marketMoney="{{data.skuMarketPrice}}" />
+          <price-mobel money="{{data.salePrice}}" minSize="{{24}}" defaultColor="#ccc" marketMoney="{{data.marketPrice}}" />
         </view>
         <view class="cart">
           <view class="cart_num">{{data.goodsSaleNumDesc}}</view>

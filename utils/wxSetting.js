@@ -1,3 +1,4 @@
+import { showModal, showToast } from "./tools";
 
 /**
  * 获取授权
@@ -54,32 +55,54 @@ export const checkSetting = async (auth, needAuth = false) => {
     resAuth = [];
     authValueType = 2;
   }
-  const settingData = await wx.getSetting();
-  if(settingData.errMsg === "getSetting:ok") {
-    const authSetting = settingData.authSetting;
-    if(authValueType === 1) {
-      resAuth = authSetting[`scope.${auth}`];
-    } else {
-      auth.forEach(item => {
-        resAuth.push(!!authSetting[`scope.${item}`]);
-      })
-    }
-  }
-  if(needAuth) {
-    if(!resAuth && authValueType === 1) {
-      resAuth = await getAuth(auth, resAuth, authValueType);
-    }
-    if(authValueType === 2) {
-      let notAllTrue = false;
-      resAuth.forEach(item => {
-        if(!item) {
-          notAllTrue = true;
+  return new Promise((resolve, reject) => {
+    wx.getSetting({
+      success: function (res) {
+        if(res.errMsg === "getSetting:ok") {
+          const authSetting = res.authSetting;
+          if(authValueType === 1) {
+            resAuth = authSetting[`scope.${auth}`];
+          } else {
+            auth.forEach(item => {
+              resAuth.push(!!authSetting[`scope.${item}`]);
+            })
+          }
         }
-      })
-      if(notAllTrue) {
-        resAuth = await getAuth(auth, resAuth, authValueType);
-      }
-    }
-  }
-  return resAuth;
+        if(needAuth) {
+          if(!resAuth && authValueType === 1) {
+            if(resAuth === undefined) {
+              resAuth = getAuth(auth, resAuth, authValueType);
+            } else {
+              wx.openSetting({
+                success: (result) => {
+                  resAuth = result.authSetting[`scope.${auth}`];
+                  if(!resAuth) {
+                    showToast({
+                      title: "您还未授权呢"
+                    })
+                  }
+                  resolve(resAuth);
+                },
+              });
+            }
+          } else if (!resAuth && authValueType === 2) {
+            let notAllTrue = false;
+            resAuth.forEach(item => {
+              if(!item) {
+                notAllTrue = true;
+              }
+            })
+            if(notAllTrue) {
+              resAuth = getAuth(auth, resAuth, authValueType);
+            }
+            resolve(resAuth);
+          } else {
+            resolve(resAuth);
+          }
+        } else {
+          resolve(resAuth);
+        }
+      },
+    });
+  });
 };

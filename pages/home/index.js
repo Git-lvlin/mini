@@ -27,7 +27,7 @@ create.Page(store, {
     scrolling: false,
     scrollBottom: false,
     floor: {},
-    headBackCss: `background-image: url(${IMG_CDN}miniprogram/home/nav_back.png)`, 
+    headBackCss: `background-image: url(${IMG_CDN}miniprogram/home/nav_back.png?v=2021)`, 
     activityAdvert: {},
     locationAuth: false,
     takeSpot: {},
@@ -179,7 +179,7 @@ create.Page(store, {
   // 设置首页头部背景
   setHeadBack(style) {
     // let headBackCss = `background-color: #FC3B18`;
-    let headBackCss = `background-image: url('${IMG_CDN}miniprogram/home/nav_back.png?v=2021')`;
+    let headBackCss = `background-image: url('${IMG_CDN}miniprogram/home/nav_back.png?v=2022')`;
     // if(style.backgroundImage) {
     //   headBackCss = `background-image: url(${style.backgroundImage})`
     // } else if(style.backgroundColor) {

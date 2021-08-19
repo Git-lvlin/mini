@@ -36,7 +36,7 @@ create.Component(store, {
         isChecked: !store.isChecked,
         storeNo: store.storeNo,
       }).then(res => {
-        this.store.updateCart();
+        this.store.updateCart(true);
       })
     },
     // 商品单选
@@ -49,7 +49,7 @@ create.Component(store, {
       goodApi.checkedCart({
         skuId: id
       }).then(res => {
-        this.store.updateCart();
+        this.store.updateCart(true);
       })
     },
     // 商品数变化
@@ -121,7 +121,7 @@ create.Component(store, {
             skuIds: [good.skuId],
           }).then(res => {
             showToast({ title: "删除成功" });
-            store.updateCart();
+            store.updateCart(true);
           });
         },
       })

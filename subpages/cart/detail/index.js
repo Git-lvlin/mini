@@ -255,6 +255,9 @@ create.Page(store, {
           // 集约用户列表
           this.getIntensiveUser(good.storeSaleSumNum || 100);
         }
+        if(orderType == 2) {
+          this.getSecUser();
+        }
       });
     }
   },
@@ -277,6 +280,22 @@ create.Page(store, {
     this.setData({
       good,
       selectAddressType: current, 
+    });
+  },
+
+  // 秒约参与用户
+  getSecUser() {
+    let {
+      orderType,
+    } = this.goodParams
+    goodApi.getIntensiveUser({
+      orderType,
+      saleNum: 5,
+    }).then(res => {
+      const list = res.records.slice(0, 5);
+      this.setData({
+        togetherUser: list
+      })
     });
   },
 
@@ -504,12 +523,16 @@ create.Page(store, {
       selectAddressType,
       good,
       currentSku,
+      quantity,
     } = this.data;
     if(good.goodsState != 1 || good.goodsVerifyState != 1) {
       showToast({ title: "商品已下架" });
       return;
     }
     let skuNum = good.buyMinNum > 0 ? good.buyMinNum : 1;
+    if(!good.isMultiSpec) {
+      skuNum = quantity > skuNum ? quantity : skuNum;
+    }
     const {
       currentTarget = {},
     } = event;

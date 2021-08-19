@@ -1,6 +1,7 @@
 import goodApi from "../../../apis/good"
 import { mapNum } from "../../../utils/homeFloor";
 import router from "../../../utils/router";
+import util from "../../../utils/util";
 
 Component({
 
@@ -83,9 +84,14 @@ Component({
         //   pageData.next = parseInt(res.next)++;
         // }
         // pageData.hasNext = res.hasNext;
+        const list = res.records;
+        list.forEach(item => {
+          item.goodsSaleMinPrice = util.divide(item.goodsSaleMinPrice, 100);
+          item.goodsMarketPrice = util.divide(item.goodsMarketPrice, 100);
+        });
         this.setData({
           // pageData,
-          userLike: res.records
+          userLike: list
         })
       });
     },

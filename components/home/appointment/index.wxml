@@ -26,6 +26,8 @@
         class=" good_item"
         wx:for="{{goodList}}"
         wx:key="id"
+        wx:for-index="idx"
+        wx:if="{{idx < 2}}"
         data-data="{{item}}"
         bindtap="onToDetail"
       >
@@ -43,22 +45,26 @@
             <view class="title text_one_line">{{item.title}}</view>
             <view class="good_label">{{item.goodsTag}}</view>
             <view class="flex_middle join_user" wx:if="{{item.orderType == 1 || item.orderType == 2}}">
-              <view class="flex_middle user_list">
-                <image
-                  class="user_avatar"
-                  style="z-index: {{5 - index}}"
-                  wx:for="{{item.avatorList}}"
-                  wx:for-item="child"
-                  wx:key="index"
-                  wx:if="{{index < 3}}"
-                  src="{{child.icon}}"
-                />
+              <view class="user_avatar_conetnt">
+                <view
+                  class="flex_middle user_list {{item.avatorList.length ? 'user_list_act' : ''}}"
+                >
+                  <image
+                    class="flex_fix user_avatar"
+                    style="z-index: {{20 - index}}"
+                    wx:for="{{item.avatorList}}"
+                    wx:for-item="child"
+                    wx:key="index"
+                    wx:if="{{index < 18}}"
+                    src="{{child.icon}}"
+                  />
+                </view>
               </view>
               <view class="buy_num">{{item.saleNum + item.virtualBuyNum}}人正在购买</view>
             </view>
             <view class="flex_middle time_down" wx:if="{{item.orderType == 15}}">
               <count-down
-                time="{{60 * 60 * 30}}"
+                time="{{item.deadlineTime || 100}}"
                 color="#e7512d"
               />
               <view class="time_text">后结束</view>
@@ -92,7 +98,7 @@
             <view class="right_arrow" />
           </view>
         </view>
-        <view class="bottom_line" wx:if="{{goodList.length - 1 != index }}" />
+        <view class="bottom_line" wx:if="{{goodList.length - 1 != index && goodList[index] }}" />
       </view>
     </view>
   </scroll-view>

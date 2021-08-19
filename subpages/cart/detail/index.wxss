@@ -62,14 +62,18 @@
 
 .intensive_time {
   position: relative;
-  width: 236rpx;
-  height: 120rpx;
+  width: 328rpx;
+  height: 120rpx; 
 }
 
 .intensive_time_back {
   position: absolute;
-  width: 236rpx;
+  width: 328rpx;
   height: 120rpx;
+}
+
+.intensive_time_box {
+  flex-direction: column;
 }
 
 .intensive_time_text {
@@ -284,6 +288,10 @@
   margin-bottom: 8rpx;
 }
 
+.other_join {
+  margin-left: 32rpx;
+}
+
 .join_buy_num {
   position: absolute;
   top: 0;
@@ -340,6 +348,7 @@
   font-size: 26rpx;
   color: #B2B2B2;
   line-height: 36rpx;
+  text-decoration: line-through;
   margin-left: 16rpx;
 }
 
