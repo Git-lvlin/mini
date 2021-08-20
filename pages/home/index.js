@@ -333,7 +333,7 @@ create.Page(store, {
       query.select('#classGoods').boundingClientRect()
       query.selectViewport().scrollOffset()
       query.exec((res) => {
-        console.log('res', res)
+        // console.log('res', res)
         if (res && res[0].top > 0) {
           navbarInitTop = parseInt(res[0].top);
           const topData = {
@@ -346,7 +346,7 @@ create.Page(store, {
         }
       })
     }
-    console.log(detail.scrollTop);
+    // console.log(detail.scrollTop);
     let scrollTop = parseInt(detail.scrollTop); //滚动条距离顶部高度
     // 判断'滚动条'滚动的距离 和 '元素在初始时'距顶部的距离进行判断
     // console.log('this.data.navbarInitTo', navbarInitTop)

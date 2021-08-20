@@ -115,7 +115,8 @@ create.Component(store, {
         const pageData = homeCache.classTabAllCache[index].pageData;
         this.setData({
           hotGoodList: nowData,
-          pageData: pageData
+          pageData: pageData,
+          classTabList: homeCache.classTabList || []
         })
         return
       }
@@ -177,16 +178,14 @@ create.Component(store, {
         pageSize,
       }).then(res => {
         let list = res;
+        console.log("🚀 ~ file: index.js ~ line 181 ~ getCustomData ~ list", list)
+        homeCache.classTabList = list
+        wx.setStorageSync("HOME_CACHE", homeCache);
         this.setData({
           classTabList: list
         }, () => {
           this.getListData(this.data.param)
         });
-        homeCache.classTabList = list
-        wx.setStorage({
-          key: "HOME_CACHE",
-          data: homeCache,
-        })
       });
     },
 
