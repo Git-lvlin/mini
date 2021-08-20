@@ -87,9 +87,9 @@
       </view>
     </view>
     <!-- 猜你喜欢 -->
-    <view id="user_like">
+    <!-- <view id="user_like">
       <user-like/>
-    </view>
+    </view> -->
   </view>
 
   <scroll-view
