@@ -4,6 +4,8 @@
   <scroll-view
     scroll-x
     class="tab_scroll"
+    enhanced="{{true}}"
+    show-scrollbar="{{false}}"
   >
     <view id="class-head" class="head" wx:if="{{classTabList}}">
       <view class="tab_item"

@@ -19,7 +19,13 @@
         actionUrl="{{floor.header.subTitle[0].actionUrl}}"
       -->
     </view>
-  <scroll-view scroll-x class="good_scroll" show-scrollbar="{{false}}" bindscrolltolower="handleScroll">
+  <scroll-view
+    scroll-x
+    class="good_scroll"
+    enhanced="{{true}}"
+    show-scrollbar="{{false}}"
+    bindscrolltolower="handleScroll"
+  >
     <view class="good_list">
       <view
         class="good_item"

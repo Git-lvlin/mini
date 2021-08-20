@@ -178,7 +178,6 @@ create.Component(store, {
         pageSize,
       }).then(res => {
         let list = res;
-        console.log("🚀 ~ file: index.js ~ line 181 ~ getCustomData ~ list", list)
         homeCache.classTabList = list
         wx.setStorageSync("HOME_CACHE", homeCache);
         this.setData({
