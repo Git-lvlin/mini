@@ -41,7 +41,7 @@ create.Component(store, {
       value: false,
       observer(nowVal, oldVal) {
       }
-    }
+    },
   },
 
   data: {
@@ -72,6 +72,7 @@ create.Component(store, {
         classIndex: index
       }, () => {
         // 请求当前tab列表数据
+        this.data.isFixedTop&&this.triggerEvent("setScroll", {});
         this.getListData({index:index, isTab: true})
       })
     },
@@ -141,7 +142,7 @@ create.Component(store, {
         const {
           hotGoodList,
         } = this.data;
-        let bigArr = mapNum(res.records);
+        let bigArr = mapNum(res.records) || [];
         if (!isTab) {
           bigArr = hotGoodList.concat(bigArr)
         }

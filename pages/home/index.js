@@ -294,7 +294,10 @@ create.Page(store, {
   },
  
   // 监听页面滚动
-  onPageScroll(e) {
+  // onPageScroll(e) {
+  onViewScroll({
+    detail
+  }) {
     let {
       fixationTop,
       isOnGoods,
@@ -322,12 +325,13 @@ create.Page(store, {
     //   clearTimeout(this.onTimeTimer)
     // }, 200);
 
-    if (this.data.navbarInitTop === 0) {
+    if (this.data.navbarInitTop <= 10) {
       //获取节点距离顶部的距离
       const query = this.createSelectorQuery()
       query.select('#classGoods').boundingClientRect()
       query.selectViewport().scrollOffset()
       query.exec((res) => {
+        console.log('res', res)
         if (res && res[0].top > 0) {
           const navbarInitTop = parseInt(res[0].top);
           this.setData({
@@ -336,8 +340,10 @@ create.Page(store, {
         }
       })
     }
-    let scrollTop = parseInt(e.scrollTop); //滚动条距离顶部高度
+    console.log(detail.scrollTop);
+    let scrollTop = parseInt(detail.scrollTop); //滚动条距离顶部高度
     // 判断'滚动条'滚动的距离 和 '元素在初始时'距顶部的距离进行判断
+    console.log('this.data.navbarInitTo', this.data.navbarInitTop)
     let isSatisfy = scrollTop >= (this.data.navbarInitTop - 20) ? true : false;
     // 为了防止不停的setData, 这儿做了一个等式判断。 只有处于吸顶的临界值才会不相等
     if (this.data.isFixedTop === isSatisfy) {
@@ -345,6 +351,31 @@ create.Page(store, {
     }
     this.setData({
       isFixedTop: isSatisfy
+    })
+  },
+
+  // 设置view 滚动高度
+  setScroll() {
+    const {
+      navigationBarHeight,
+      navbarInitTop,
+    } = this.data;
+    const {
+      systemInfo,
+    } = this.store.data;
+    console.log('navbarInitTop111', navbarInitTop - systemInfo.navHeight)
+    this.setData({
+      scrollTop: navbarInitTop - 114,
+    })
+  },
+
+  // 更新置顶状态
+  setIsFixedTop({
+    detail,
+  }) {
+    console.log(detail);
+    this.setData({
+      isFixedTop: detail
     })
   },
 
