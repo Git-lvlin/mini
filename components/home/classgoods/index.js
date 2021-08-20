@@ -136,7 +136,7 @@ create.Component(store, {
       }
       const lastParam = objToParamStr(newParam)
       const verifyVersionStr = '&verifyVersionId=1' // 修正为配置1数据(与app同步，默认配置为3)
-      const requestUrl = initUrl + '?' + lastParam + verifyVersionStr
+      const requestUrl = initUrl + '?' + lastParam
       homeApi.getFloorCustom(requestUrl).then(res => {
         const {
           hotGoodList,
