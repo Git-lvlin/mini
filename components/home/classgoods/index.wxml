@@ -36,4 +36,7 @@
       />
     </view>
   </view>
+  <view class="no_data" wx:if="{{!hotGoodList.length}}">
+    <nodata type="content" title="哎呀，没有找到商品" />
+  </view>
 </view>

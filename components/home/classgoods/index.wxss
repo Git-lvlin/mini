@@ -98,3 +98,7 @@
   flex-grow: 0;
   flex-shrink: 0;
 }
+
+.no_data {
+  padding-bottom: 360rpx
+}

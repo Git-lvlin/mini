@@ -38,6 +38,7 @@
     refresher-default-style="none"
     refresher-triggered="{{refresherTriggered}}"
     bindrefresherrefresh="onPullDownRefresh"
+    bindscroll="onViewScroll"
   >
     <!-- 加载gif -->
     <image
@@ -118,6 +119,8 @@
           scrollBottom="{{scrollBottom}}"
           floor="{{item}}"
           isFixedTop="{{isFixedTop}}"
+          bind:setScroll="setScroll"
+          bind:setIsTop="setIsFixedTop"
         />
       </view>
     </block>
