@@ -72,7 +72,7 @@ create.Component(store, {
         classIndex: index
       }, () => {
         // 请求当前tab列表数据
-        this.data.isFixedTop&&this.triggerEvent("setScroll", {});
+        // this.data.isFixedTop&&this.triggerEvent("setScroll", {});
         this.getListData({index:index, isTab: true})
       })
     },

@@ -37,6 +37,7 @@ create.Page(store, {
     showLoadImg: false,
     refresherTriggered: false,
     scrollTop: 0,
+    leaveTop: 0,
   },
   onLoad(options) {
     console.log("home", this.store.data);
@@ -302,6 +303,7 @@ create.Page(store, {
       fixationTop,
       isOnGoods,
       scrollBottom,
+      navbarInitTop,
     } = this.data;
 
     if(scrollBottom) {
@@ -325,7 +327,7 @@ create.Page(store, {
     //   clearTimeout(this.onTimeTimer)
     // }, 200);
 
-    if (this.data.navbarInitTop <= 10) {
+    if (detail.scrollTop < 10) {
       //获取节点距离顶部的距离
       const query = this.createSelectorQuery()
       query.select('#classGoods').boundingClientRect()
@@ -333,18 +335,23 @@ create.Page(store, {
       query.exec((res) => {
         console.log('res', res)
         if (res && res[0].top > 0) {
-          const navbarInitTop = parseInt(res[0].top);
-          this.setData({
-            navbarInitTop: navbarInitTop
-          });
+          navbarInitTop = parseInt(res[0].top);
+          const topData = {
+            navbarInitTop
+          };
+          if(detail.scrollTop == 0 || navbarInitTop == 0) {
+            topData.leaveTop = navbarInitTop;
+          }
+          this.setData(topData);
         }
       })
     }
     console.log(detail.scrollTop);
     let scrollTop = parseInt(detail.scrollTop); //滚动条距离顶部高度
     // 判断'滚动条'滚动的距离 和 '元素在初始时'距顶部的距离进行判断
-    console.log('this.data.navbarInitTo', this.data.navbarInitTop)
-    let isSatisfy = scrollTop >= (this.data.navbarInitTop - 20) ? true : false;
+    // console.log('this.data.navbarInitTo', navbarInitTop)
+    let isSatisfy = scrollTop >= (navbarInitTop - 20) ? true : false;
+    // let isSatisfy = navbarInitTop < 138 ? true : false;
     // 为了防止不停的setData, 这儿做了一个等式判断。 只有处于吸顶的临界值才会不相等
     if (this.data.isFixedTop === isSatisfy) {
       return false
@@ -359,13 +366,13 @@ create.Page(store, {
     const {
       navigationBarHeight,
       navbarInitTop,
+      leaveTop,
     } = this.data;
     const {
       systemInfo,
     } = this.store.data;
-    console.log('navbarInitTop111', navbarInitTop - systemInfo.navHeight)
     this.setData({
-      scrollTop: navbarInitTop - 114,
+      scrollTop: leaveTop - 136,
     })
   },
 
