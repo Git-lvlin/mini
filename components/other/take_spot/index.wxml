@@ -19,7 +19,7 @@
       /> -->
     </view>
     <view class="store_location text_two_line">
-      <text class="distance">距离{{data.distanceText}}</text>
+      <text class="distance">距离{{data.distanceUnit}}</text>
       {{data.fullAddress}}
     </view>
   </view>

@@ -107,7 +107,7 @@ create.Page(store, {
 
   // 附近店铺
   getNearbyStore(data) {
-    const {
+    let {
       currentSpot,
     } = this.data;
     goodApi.getNearbyStore({
@@ -119,6 +119,7 @@ create.Page(store, {
       let list = [];
       let fullAddress = "";
       let selected = false;
+      let tempData = {};
       if(res.length > 0) {
         res.forEach((item, index) => {
           // 遍历地址
@@ -130,23 +131,30 @@ create.Page(store, {
           fullAddress += item.address;
           item.fullAddress = fullAddress;
           // 计算距离
-          item.distance = +item.distance;
-          if(item.distance > 1000) {
-            item.distanceText = `${(item.distance / 1000).toFixed(1)}KM`;
-          } else {
-            item.distanceText = `${item.distance.toFixed(0)}M`;
-          }
-          if(currentSpot.storeNo == item.storeNo) {
-            selected = true;
-          }
-          list.push({
+          // item.distance = +item.distance;
+          // if(item.distance > 1000) {
+          //   item.distanceText = `${(item.distance / 1000).toFixed(1)}KM`;
+          // } else {
+          //   item.distanceText = `${item.distance.toFixed(0)}M`;
+          // }
+          tempData = {
             ...item,
             width: 23,
             height: 32,
             id: 10 + index,
             selected,
             iconPath: deflocationIcon,
-          })
+          }
+          if(currentSpot.storeNo == item.storeNo) {
+            tempData.selected = true;
+            currentSpot = tempData;
+            wx.setStorage({
+              key: "TAKE_SPOT",
+              data: tempData,
+            });
+          }
+
+          list.push(tempData)
         })
         // list[0] = {
         //   ...list[0],
@@ -157,6 +165,7 @@ create.Page(store, {
         // }
         this.setData({
           markers: list,
+          currentSpot,
           latitude: list[0].latitude,
           longitude: list[0].longitude,
         });
