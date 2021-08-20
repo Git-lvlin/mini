@@ -15,7 +15,7 @@
         <view class="flex_middle">
           <price-mobel money="{{data.salePrice}}" minSize="{{24}}" defaultColor="#ccc" marketMoney="{{data.marketPrice}}" />
         </view>
-        <view class="cart">
+        <view class="flex_fix cart">
           <view class="cart_num">{{data.goodsSaleNumDesc}}</view>
         </view>
     </view>

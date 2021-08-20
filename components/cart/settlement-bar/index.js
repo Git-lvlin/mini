@@ -9,7 +9,7 @@ create.Component(store, {
   use: [
     "systemInfo",
     "cartList",
-    "cartListTotal",
+    "goodListTotal",
   ],
 
   // store 属性计算

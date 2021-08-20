@@ -1,7 +1,6 @@
 import homeApi from '../../../apis/home';
 import router from '../../../utils/router';
-import { mapNum } from '../../../utils/homeFloor';
-import { showToast } from '../../../utils/tools';
+import { showToast, mapNum } from '../../../utils/tools';
 
 let tempSpot = {};
 
@@ -57,6 +56,7 @@ Component({
         homeApi.getFloorCustom(content.dataUrl, {
           storeNo: spot.storeNo || ""
         }).then(res => {
+          console.log("🚀 ~ file: index.js ~ line 63 ~ setGoodList ~ res", res)
           let goodList = mapNum(res.goodsInfo)
           goodList = goodList.slice(0, goodList.length > 2 ? 2 : goodList.length);
           this.setData({

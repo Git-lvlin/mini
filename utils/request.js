@@ -58,6 +58,7 @@ const Reqeust = (params) => {
         //数据请求成功判断
         if (res.statusCode === 200 && res.data.code === 0 && res.data.success) {
           // resolve(data);
+          opions.showLoading && wx.hideLoading();
           resolve(data)
         } else {
           if (res.data.code == REFRESH_TOKEN_INVALID) {
@@ -109,6 +110,8 @@ const Reqeust = (params) => {
               msg: res.data.msg,
               mustLogin: params.mustLogin,
             });
+          } else {
+            opions.showLoading && wx.hideLoading();
           }
           if(res.data.code !== ACCESS_TOKEN_INVALID) {
             reject(res.data);
@@ -123,11 +126,12 @@ const Reqeust = (params) => {
             msg: !!error && !!error.data ? error.data.msg : "",
             mustLogin: params.mustLogin,
           });
+        } else {
+          opions.showLoading && wx.hideLoading();
         }
         reject(error);
       },
       complete(res) {
-        opions.showLoading && wx.hideLoading();
         // console.log("request ~ ", params.url, res.data);
       },
     })

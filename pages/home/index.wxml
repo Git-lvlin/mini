@@ -6,7 +6,7 @@
     bindtouchend="handleTouchEnd"
 >
   <!-- 导航栏地址 -->
-  <view class="nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx;{{headBackCss}};height:{{navigationBarHeight}}rpx">
+  <view class="nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx;height:{{navigationBarHeight}}rpx">
     <view id="nav_body_id" class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx;{{headBackCss}};height:{{navigationBarHeight}}rpx">
       <view class="nav_location">
         <image class="location_icon" src="{{tools.getImgUrl('miniprogram/home/location.png')}}" />
@@ -29,81 +29,91 @@
     </view>
   </view>
 
-  <block
-    wx:for="{{floor.floors}}"
-    wx:key="floorId"
-  >
-    <!-- 约购商品 -->
-    <appointment
-      moreRouter="intensive"
-      floor="{{item}}"
-      wx:if="{{item.floorType === 1}}"
+
+  <view class="home_content">
+    <!-- 加载gif -->
+    <image
+      class="pul_icon"
+      wx:if="{{showLoadImg}}"
+      src="{{tools.getImgUrl('miniprogram/home/homeloading.gif')}}"
     />
-
-    <!-- 优惠券 -->
-    <coupon
-      floor="{{item}}"
-      wx:if="{{item.floorType === 2}}"
-    />
-
-    <!-- 比价模块 -->
-    <!-- <priceRatio
-      floor="{{item}}"
-      wx:if="{{item.floorType === 9}}"
-    /> -->
-
-    <!-- 快讯 -->
-    <!-- <message
-      floor="{{item}}"
-      wx:if="{{item.floorType === 5}}"
-    /> -->
-
-    <!-- 豆腐块 -->
-    <beancurd-cube
-      floor="{{item}}"
-      wx:if="{{item.floorType === 3}}"
-    />
-
-    <!-- banner 轮播 -->
-    <banner
-      floor="{{item}}"
-      wx:if="{{item.floorType === 4}}"
-    />
-
-    <!-- 秒杀 -->
-    <seckill
-      floor="{{item}}"
-      wx:if="{{item.floorType === 6}}"
-    />
-
-    <!-- 会员 / 店主专享 -->
-    <!-- <vipgood
-      floor="{{item}}"
-      wx:if="{{item.floorType === 7}}"
-    /> -->
-
-    <!-- 热销商品 -->
-    <!-- <view id="hotGoods"
-      wx:if="{{item.floorType === 8}}"
+    <block
+      wx:for="{{floor.floors}}"
+      wx:key="floorId"
     >
-      <hotgoods
-        scrollBottom="{{scrollBottom}}"
-        floor="{{item}}"
-      />
-    </view> -->
 
-    <!-- 分类商品 -->
-    <view id="classGoods"
-      wx:if="{{item.floorType === 11}}"
-    >
-      <classgoods
-        scrollBottom="{{scrollBottom}}"
+      <!-- 约购商品 -->
+      <appointment
+        moreRouter="intensive"
         floor="{{item}}"
-        isFixedTop="{{isFixedTop}}"
-        topSearchHeight="{{navigationBarHeight}}"
+        wx:if="{{item.floorType === 1}}"
       />
-    </view>
-  </block>
+
+      <!-- 优惠券 -->
+      <coupon
+        floor="{{item}}"
+        wx:if="{{item.floorType === 2}}"
+      />
+
+      <!-- 比价模块 -->
+      <!-- <priceRatio
+        floor="{{item}}"
+        wx:if="{{item.floorType === 9}}"
+      /> -->
+
+      <!-- 快讯 -->
+      <!-- <message
+        floor="{{item}}"
+        wx:if="{{item.floorType === 5}}"
+      /> -->
+
+      <!-- 豆腐块 -->
+      <beancurd-cube
+        floor="{{item}}"
+        wx:if="{{item.floorType === 3}}"
+      />
+
+      <!-- banner 轮播 -->
+      <banner
+        floor="{{item}}"
+        wx:if="{{item.floorType === 4}}"
+      />
+
+      <!-- 秒杀 -->
+      <seckill
+        floor="{{item}}"
+        wx:if="{{item.floorType === 6}}"
+      />
+
+      <!-- 会员 / 店主专享 -->
+      <!-- <vipgood
+        floor="{{item}}"
+        wx:if="{{item.floorType === 7}}"
+      /> -->
+
+      <!-- 热销商品 -->
+      <!-- <view id="hotGoods"
+        wx:if="{{item.floorType === 8}}"
+      >
+        <hotgoods
+          scrollBottom="{{scrollBottom}}"
+          floor="{{item}}"
+        />
+      </view> -->
+
+      <!-- 分类商品 -->
+      <view id="classGoods"
+        wx:if="{{item.floorType === 11}}"
+      >
+        <classgoods
+          scrollBottom="{{scrollBottom}}"
+          floor="{{item}}"
+          isFixedTop="{{isFixedTop}}"
+          topSearchHeight="{{navigationBarHeight}}"
+        />
+      </view>
+    </block>
+  </view>
 
   <!-- 固定位 tools.getImgUrl('miniprogram/home/receive_coupon.gif') -->
   <!-- ((!isOnGoods && scrolling) || isOnGoods) -->

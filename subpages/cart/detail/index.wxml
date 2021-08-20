@@ -310,7 +310,7 @@
       wx:if="{{isActivityGood == 1 || isActivityGood == 2}}"
       bindtap="onToCart"
     >
-      <view class="label_num" wx:if="{{$.cartListTotal.checkedQuantity}}">{{$.cartListTotal.checkedQuantity}}</view>
+      <view class="label_num" wx:if="{{$.goodListTotal.checkedQuantity}}">{{$.goodListTotal.checkedQuantity}}</view>
       <image class="bar_item_icon" src="{{tools.getImgUrl('miniprogram/common/mini_cart.png')}}" />
       <view class="bar_item_name">购物车</view>
     </view>

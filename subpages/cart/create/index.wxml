@@ -66,7 +66,7 @@
         />
       </view>
 
-      <view class="order_price" wx:if="{{orderToken}}">
+      <view class="order_price" wx:if="{{orderToken && orderInfo.storeGoodsInfos.length}}">
         <view class="cell_item">
           <view class="cell_name">商品金额</view>
           <view class="cell_value">￥{{orderInfo.totalAmount}}</view>

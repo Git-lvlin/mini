@@ -17,6 +17,7 @@ create.Page(store, {
     "systemInfo",
     "cartList",
     "cartListTotal",
+    "goodListTotal",
   ],
 
   computed: {
@@ -255,7 +256,7 @@ create.Page(store, {
           // 集约用户列表
           this.getIntensiveUser(good.storeSaleSumNum || 100);
         }
-        if(orderType == 2) {
+        if(orderType == 2 || orderType == 11) {
           this.getSecUser();
         }
       });

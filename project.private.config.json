@@ -71,6 +71,12 @@
           "pathName": "subpages/cart/search/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "subpages/cart/store/index",
+          "pathName": "subpages/cart/store/index",
+          "query": "storeNo=store_m_124058",
+          "scene": null
         }
       ]
     }

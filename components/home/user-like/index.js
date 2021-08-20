@@ -1,5 +1,5 @@
 import goodApi from "../../../apis/good"
-import { mapNum } from "../../../utils/homeFloor";
+import { mapNum } from "../../../utils/tools";
 import router from "../../../utils/router";
 import util from "../../../utils/util";
 

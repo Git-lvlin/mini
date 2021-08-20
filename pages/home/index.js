@@ -34,6 +34,7 @@ create.Page(store, {
     navbarInitTop: 0, //导航栏初始化距顶部的距离
     isFixedTop: false, //是否固定顶部
     topSearchHeight: 0,
+    showLoadImg: false,
   },
   onLoad(options) {
     console.log("home", this.store.data);
@@ -41,9 +42,12 @@ create.Page(store, {
     this.getSystemPopup();
     // 活动弹窗
     // this.getAdvert(2);
-    let url = "https://www.kdocs.cn/p/115688640900r";
-    let route = url.match(/(http|https):\/\/([^/]+)(\S*)/);
-    console.log("route", route);
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      this.setData({
+        showLoadImg: true
+      });
+    });
   },
 
   onReady() {
@@ -106,7 +110,7 @@ create.Page(store, {
   },
 
   // 获取首页楼层列表
-  getFloorList() {
+  getFloorList(isReload = false) {
     let floor = wx.getStorageSync("HOME_FLOOR");
     let headBackCss = "";
     // 2 代表小程序审核版本 3 代表小程序正试版本
@@ -126,6 +130,11 @@ create.Page(store, {
       showLoading: this.isFristLoad,
     }).then(res => {
       this.isFristLoad = true;
+      if(isReload) {
+        this.setData({
+          floor: {}
+        })
+      }
       headBackCss = this.setHeadBack(res.headData && res.headData.style || "");
       this.setData({
         floor: res,
@@ -341,5 +350,13 @@ create.Page(store, {
     this.setData({
       scrollBottom: true,
     })
+  },
+
+  // 下拉刷新
+  onPullDownRefresh() {
+    wx.removeStorageSync("HOME_FLOOR");
+    wx.removeStorageSync("HOME_CACHE");
+    this.getFloorList(true);
+    wx.stopPullDownRefresh();
   }
 })

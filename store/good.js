@@ -28,7 +28,7 @@ const setCartNum = (data) => {
   goodApi.setCartNum(data, {
     showLoading: false
   }).then(res => {
-    store.updateCart();
+    store.updateCart(true);
   });
 }
 
@@ -37,11 +37,11 @@ const getCartTotal = () => {
   goodApi.getCartTotal({}, {
     showLoading: false,
   }).then(res => {
-    let cartListTotal = res;
-    cartListTotal.subtotal = util.divide(cartListTotal.subtotal, 100);
-    cartListTotal.subtotalPromotion = util.divide(cartListTotal.subtotalPromotion, 100);
-    cartListTotal.freight = util.divide(cartListTotal.freight, 100);
-    store.data.cartListTotal = cartListTotal;
+    let goodListTotal = res;
+    goodListTotal.subtotal = util.divide(goodListTotal.subtotal, 100);
+    goodListTotal.subtotalPromotion = util.divide(goodListTotal.subtotalPromotion, 100);
+    goodListTotal.freight = util.divide(goodListTotal.freight, 100);
+    store.data.goodListTotal = goodListTotal;
   })
 }
 
@@ -121,12 +121,12 @@ const getStoreCartList = () => {
 
 // 更新购物车数据
 const updateCart = (isCart = false) => {
-  if(!isCart) {
+  // if(!isCart) {
     getCartList();
-  } else {
+    getCartTotal();
+  // } else {
     getStoreCartList();
-    // getCartTotal();
-  }
+  // }
 }
 
 // 获取用户信息
@@ -145,6 +145,14 @@ const store = {
     cartList: [],
     // 按店铺购物车列表
     storeCartList: [],
+    // 商品汇总数据
+    goodListTotal: {
+      "quantity": 0,
+      "subtotal": 0,
+      "subtotalPromotion": 0,
+      "freight": 0,
+      "checkedQuantity": 0
+    },
     // 购物车汇总数据
     cartListTotal: {
       "quantity": 0,

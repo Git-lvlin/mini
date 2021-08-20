@@ -73,6 +73,8 @@ create.Component(store, {
         this.store.setCartNum(data);
       }
     },
+    // 用于点击阻止事件冒泡
+    onNum() {},
     // 点击跳转店铺
     onToShop() {
       const {

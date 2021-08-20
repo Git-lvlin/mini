@@ -1,10 +1,12 @@
 import goodApi from '../../../apis/good'
 import router from '../../../utils/router';
-import { showToast } from '../../../utils/tools';
+import { mapNum, showToast } from '../../../utils/tools';
+import util from '../../../utils/util';
 
 Page({
   storeNo: "",
   id: "",
+  sort: "",
   goodPage: {
     page: 1,
     size: 10,
@@ -42,7 +44,7 @@ Page({
   // 获取店铺信息
   getStoreDetail() {
     goodApi.getStoreDetail({
-      storeNo: this.id,
+      storeNo: this.storeNo,
     }).then(res => {
       this.setData({
         storeDetail: res,
@@ -51,7 +53,7 @@ Page({
   },
 
   // 获取商品列表
-  getStoreGood(sort = "") {
+  getStoreGood() {
     if(this.loading) return;
     let {
       goodList
@@ -62,17 +64,24 @@ Page({
     } = this.goodPage;
     this.loading = true;
     const data = {
-      storeNo: this.id,
+      storeNo: this.storeNo,
       page,
       size,
     }
-    if(!!sort) {
-      data.sort = sort;
+    if(!!this.sort) {
+      data.sort = this.sort;
     }
     goodApi.getStoreGood(data).then(res => {
       this.loading = false;
       this.goodPage.totalPage = res.totalPage;
-      let list = res.records;
+      let list = res.records || [];
+      list.forEach(item => {
+        item.salePrice = util.divide(item.salePrice, 100);
+        item.marketPrice = util.divide(item.marketPrice, 100);
+        item.image = item.goodsImageUrl;
+        item.title = item.goodsName;
+        item.goodsSaleNumDesc = item.saleNum;
+      });
       if(page > 1) {
         goodList = goodList.concat(list);
       } else {
@@ -92,7 +101,8 @@ Page({
   }) {
     this.goodPage.page = 1;
     this.goodPage.totalPage = 1;
-    this.getStoreGood(detail.sort || "");
+    this.sort = detail.sort || "";
+    this.getStoreGood();
   },
 
   // 滚动到底部 

@@ -23,7 +23,7 @@
           round
         />
       </view>
-      <view class="order_text">{{orderType == 2 ? item.desc : item.leaveStr + '发起了拼单！'}}</view>
+      <view class="order_text">{{orderType != 3 ? item.desc : item.leaveStr + '发起了拼单！'}}</view>
     </view>
   </swiper-item>
 </swiper>

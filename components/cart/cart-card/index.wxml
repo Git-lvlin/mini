@@ -40,7 +40,7 @@
           <view class="good_info">
             <view class="good_title text_one_line">{{item.skuName}}</view>
             <view class="good_desc text_one_line">{{item.goodsName}}</view>
-            <view class="price_info">
+            <view class="price_info" catchtap="onNum">
               <view class="good_price">¥{{item.salePrice}}</view>
               <num-control
                 good="{{item}}"

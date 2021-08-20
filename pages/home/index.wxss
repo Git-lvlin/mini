@@ -102,6 +102,22 @@ page {
 }
 
 
+.home_content {
+  position: relative;
+}
+
+
+.pul_icon {
+  position: absolute;
+  top: -160rpx;
+  left: 50%;
+  z-index: 0;
+  width: 160rpx;
+  height: 160rpx;
+  transform: translateX(-50%);
+}
+
+
 .fixation {
   position: fixed;
   right: 24rpx;

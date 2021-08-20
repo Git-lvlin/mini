@@ -556,6 +556,13 @@ create.Page(store, {
   onToCashier() {
     let userInfo = getStorageUserInfo(true, true);
     if(!userInfo) return;
+    const {
+      orderInfo,
+    } = this.data;
+    if(!orderInfo.storeGoodsInfos || !orderInfo.storeGoodsInfos.length) {
+      showToast({ title: "未获取到商品信息" });
+      return;
+    }
     let postData = {};
     if (this.orderType != 15) {
       postData = this.getSubmitGood();

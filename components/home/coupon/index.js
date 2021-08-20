@@ -1,9 +1,8 @@
 import homeApi from '../../../apis/home';
 import { VERSION } from '../../../constants/index';
 import { IMG_CDN } from '../../../constants/common'
-import { mapNum } from '../../../utils/homeFloor';
 import router from '../../../utils/router';
-import { getStorageUserInfo } from '../../../utils/tools';
+import { getStorageUserInfo, mapNum } from '../../../utils/tools';
 
 Component({
   properties: {

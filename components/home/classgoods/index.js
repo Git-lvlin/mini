@@ -1,9 +1,8 @@
 import homeApi from "../../../apis/home"
-import { mapNum } from "../../../utils/homeFloor";
 import router from "../../../utils/router";
 import create from "../../../utils/create";
 import store from "../../../store/index";
-import { objToParamStr, strToParamObj } from "../../../utils/tools";
+import { objToParamStr, strToParamObj, mapNum } from "../../../utils/tools";
 
 create.Component(store, {
   use: [
@@ -76,6 +75,7 @@ create.Component(store, {
         this.getListData({index:index, isTab: true})
       })
     },
+
     // 设置商品分类数据
     setClassList(content) {
       let homeCache = wx.getStorageSync("HOME_CACHE") || {};
@@ -88,7 +88,7 @@ create.Component(store, {
         this.getCustomData(1);
       } else {
         this.setData({
-          classTabList: mapNum(content.data)
+          classTabList: content.data
         })
         if(homeCache.classTabList) {
           delete homeCache.classTabList;
@@ -99,13 +99,13 @@ create.Component(store, {
         }
       }
     },
+
     // 获取商品列表数据
     getListData({index=0, size=10, next=0, isTab=false, paging=false}) {
       // 先判断缓存
       let homeCache = wx.getStorageSync("HOME_CACHE") || {};
       // 有缓存直接用缓存更新数据
       console.log('index', index)
-      console.log('homeCache', homeCache)
       console.log('有缓存!', homeCache.classTabAllCache)
       if (homeCache.classTabAllCache && homeCache.classTabAllCache[index] && !paging) {
         // 当前分类最近一次的商品列表
@@ -120,7 +120,11 @@ create.Component(store, {
       }
       console.log('请求数据并加缓存')
       // 没缓存请求数据并加缓存
-      const init = this.data.classTabList[index];
+      const {
+        classTabList,
+      } = this.data;
+      if(!classTabList[index]) return;
+      const init = classTabList[index];
       const urlData = init.actionUrl?.split('?');
       const initUrl = urlData[0];
       const initTabData = urlData[1];
@@ -137,9 +141,7 @@ create.Component(store, {
         const {
           hotGoodList,
         } = this.data;
-        console.log('获取的当前分类商品列表', res)
         let bigArr = mapNum(res.records);
-        console.log("🚀 ~ file: index.js ~ line 142 ~ homeApi.getFloorCustom ~ bigArr", bigArr)
         if (!isTab) {
           bigArr = hotGoodList.concat(bigArr)
         }

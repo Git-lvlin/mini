@@ -426,6 +426,7 @@ export const mapSales = (sale, text = "万") => {
 
 // 转为浮点数
 export const mapNum = (list = []) => {
+  list = !!list ? list : [];
   list.forEach(item => {
     if(item.marketPrice) {
       item.marketPrice = util.divide(item.marketPrice, 100);

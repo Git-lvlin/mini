@@ -1,5 +1,5 @@
 import homeApi from "../../../apis/home";
-import { mapNum } from "../../../utils/homeFloor";
+import { mapNum } from "../../../utils/tools";
 import router from "../../../utils/router";
 
 Component({
