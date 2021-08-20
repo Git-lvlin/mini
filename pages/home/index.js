@@ -35,6 +35,8 @@ create.Page(store, {
     isFixedTop: false, //是否固定顶部
     topSearchHeight: 0,
     showLoadImg: false,
+    refresherTriggered: false,
+    scrollTop: 0,
   },
   onLoad(options) {
     console.log("home", this.store.data);
@@ -356,7 +358,10 @@ create.Page(store, {
   onPullDownRefresh() {
     wx.removeStorageSync("HOME_FLOOR");
     wx.removeStorageSync("HOME_CACHE");
-    this.getFloorList(true);
-    wx.stopPullDownRefresh();
+    this.setData({
+      refresherTriggered: true
+    }, () => {
+      this.getFloorList(true);
+    });
   }
 })

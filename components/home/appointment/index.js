@@ -56,7 +56,6 @@ Component({
         homeApi.getFloorCustom(content.dataUrl, {
           storeNo: spot.storeNo || ""
         }).then(res => {
-          console.log("🚀 ~ file: index.js ~ line 63 ~ setGoodList ~ res", res)
           let goodList = mapNum(res.goodsInfo)
           goodList = goodList.slice(0, goodList.length > 2 ? 2 : goodList.length);
           this.setData({

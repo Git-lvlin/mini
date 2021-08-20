@@ -2,11 +2,11 @@
 
 <view
   class="container"
-    bindtouchmove="handleTouchMove"
-    bindtouchend="handleTouchEnd"
+  bindtouchmove="handleTouchMove"
+  bindtouchend="handleTouchEnd"
 >
   <!-- 导航栏地址 -->
-  <view class="nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx;height:{{navigationBarHeight}}rpx">
+  <view class="flex_fix nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx;height:{{navigationBarHeight}}rpx">
     <view id="nav_body_id" class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx;{{headBackCss}};height:{{navigationBarHeight}}rpx">
       <view class="nav_location">
         <image class="location_icon" src="{{tools.getImgUrl('miniprogram/home/location.png')}}" />
@@ -30,7 +30,15 @@
   </view>
 
 
-  <view class="home_content">
+  <scroll-view
+    class="home_content"
+    scroll-y
+    scroll-top="{{scrollTop}}"
+    refresher-enabled
+    refresher-default-style="none"
+    refresher-triggered="{{refresherTriggered}}"
+    bindrefresherrefresh="onPullDownRefresh"
+  >
     <!-- 加载gif -->
     <image
       class="pul_icon"
@@ -102,6 +110,7 @@
       </view> -->
 
       <!-- 分类商品 -->
+      <!-- topSearchHeight="{{navigationBarHeight}}" -->
       <view id="classGoods"
         wx:if="{{item.floorType === 11}}"
       >
@@ -109,11 +118,10 @@
           scrollBottom="{{scrollBottom}}"
           floor="{{item}}"
           isFixedTop="{{isFixedTop}}"
-          topSearchHeight="{{navigationBarHeight}}"
         />
       </view>
     </block>
-  </view>
+  </scroll-view>
 
   <!-- 固定位 tools.getImgUrl('miniprogram/home/receive_coupon.gif') -->
   <!-- ((!isOnGoods && scrolling) || isOnGoods) -->
@@ -134,5 +142,5 @@
   <advert-popup advert="{{activityAdvert}}" />
 
   <!-- 底部占位 -->
-  <view class="bar_height" />
+  <view class="flex_fix bar_height" />
 </view>

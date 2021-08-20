@@ -1,7 +1,7 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
 <view class="hotgoods">
-  <view id="class-head" class="head" style="top: {{topSearchHeight + $.systemInfo.statusHeight}}rpx" wx:if="{{classTabList}}">
+  <view id="class-head" class="head" style="top: 0rpx" wx:if="{{classTabList}}">
     <view class="tab_item"
       wx:for="{{classTabList}}"
       wx:key="id"

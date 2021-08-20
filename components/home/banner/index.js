@@ -31,7 +31,6 @@ Component({
           })
         }
         homeApi.getFloorCustom(content.dataUrl).then(res => {
-          console.log("🚀 ~ file: index.js ~ line 34 ~ homeApi.getFloorCustom ~ res", content.dataUrl)
           this.setData({
             bannerList: res
           });
