@@ -141,6 +141,7 @@ create.Page(store, {
       this.setData({
         floor: res,
         headBackCss,
+        refresherTriggered: false,
       });
       wx.setStorage({ key: "HOME_FLOOR", data: res });
     })
