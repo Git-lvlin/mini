@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "订单支付",
-  "usingComponents": {
-    "van-icon": "/miniprogram_npm/@vant/weapp/icon/index"
-  }
-}

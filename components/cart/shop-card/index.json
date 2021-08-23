@@ -1,6 +1,0 @@
-{
-  "component": true,
-  "usingComponents": {
-    "van-toast": "/miniprogram_npm/@vant/weapp/toast/index"
-  }
-}

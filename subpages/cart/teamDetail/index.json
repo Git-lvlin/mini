@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": "参团详情",
-  "usingComponents": {
-    "price-mobel": "/components/common/price-mobel/index",
-    "count-down": "/components/common/count-down/index",
-    "together-user": "/components/good/together-user/index",
-    "hot-good": "/components/good/hot-good/index"
-  }
-}

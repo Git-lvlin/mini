@@ -1,8 +1,0 @@
-{
-  "component": true,
-  "usingComponents": {
-    "panel-title": "/components/home/panel-title/index",
-    "count-down": "/components/common/count-down/index",
-    "nodata": "/components/common/nodata/index"
-  }
-}
