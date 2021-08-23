@@ -101,7 +101,8 @@ create.Page(store, {
       scene: data.scene,
     }).then(res => {
       console.log(res)
-      const param = strToParamObj(res);
+      // const param = strToParamObj(res);
+      const param = res;
       if(!!param.inviteCode) {
         wx.setStorageSync("INVITE_INFO", param);
       }

@@ -4,7 +4,7 @@ import goodApi from '../../../apis/good'
 import commonApi from '../../../apis/common'
 import { IMG_CDN, DETAIL_SERVICE_LIST } from '../../../constants/common'
 import { CODE_SCENE } from '../../../constants/index'
-import { showModal, getStorageUserInfo, showToast, objToParamStr } from '../../../utils/tools'
+import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj } from '../../../utils/tools'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
 import commonApis from '../../../apis/common'
@@ -160,7 +160,8 @@ create.Page(store, {
       scene: data.scene,
     }).then(res => {
       console.log(res)
-      const param = strToParamObj(res);
+      // const param = strToParamObj(res);
+      const param = res;
       this.setData(param)
       this.hanldeGoodsParams(param)
     }).catch(err => {
