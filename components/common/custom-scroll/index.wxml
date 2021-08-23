@@ -1,0 +1,31 @@
+<scroll-view 
+  style="height: {{!!height?height:'100%'}};"
+  scroll-y
+  enhanced="{{true}}"
+  refresher-background="{{refresherBack}}"
+  refresher-enabled="{{openRefresher}}"
+  refresher-threshold="{{40}}"
+  refresher-triggered="{{isRefreshLoading}}"
+  bindrefresherrefresh="handleRefresherRefresh"
+  bindscrolltolower="handleScrollTolower"
+  bindscroll="hanldeScroll"
+  scroll-top="{{scrollOffset}}"
+>
+	<!-- 自定义的加载样式 -->
+  <view
+    class="flex-row align-start width-full"
+    slot="refresher"
+    style="height: 70rpx;background-color:{{refresherBack}};"
+  >
+    <view
+      class="t-center width-full"
+      style="background-color:{{refresherBack}};"
+    >
+      <van-loading
+        size="20px"
+        type="spinner"
+      />
+    </view>
+  </view>
+  <slot />
+</scroll-view>

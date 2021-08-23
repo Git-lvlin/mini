@@ -1,0 +1,56 @@
+
+.cell_item {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 40rpx 0 40rpx 32rpx;
+  background-color: #fff;
+}
+
+.round_top {
+  border-radius: 24rpx 24rpx 0 0;
+}
+
+.round_bottom {
+  border-radius: 0 0 24rpx 24rpx;
+}
+
+.border {
+  border-bottom: 2rpx solid #f5f5f5;
+}
+
+.cell_name {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 128rpx;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+
+.cell_value {
+  flex: 1;
+  padding-right: 32rpx;
+}
+
+.cell_input {
+  flex: 1;
+  height: 40rpx;
+  color: #333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.input-placeholder {
+  color: #cccccc;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}

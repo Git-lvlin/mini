@@ -1,0 +1,18 @@
+
+<view class="container">
+  <cell-item
+    title="头像"
+    soltRight
+    clickType="cell"
+    bind:cell="onAvatar"
+  >
+    <van-image
+      width="96rpx"
+      height="96rpx"
+      round
+      src="{{userInfo.icon}}"
+    />
+  </cell-item>
+  <cell-item title="昵称" value="{{userInfo.nickName}}" jump bind:value="onName"/>
+  <cell-item title="绑定的手机号" value="{{userInfo.phoneNumber}}" />
+</view>

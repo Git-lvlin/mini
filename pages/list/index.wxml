@@ -1,0 +1,14 @@
+<nav-bar
+ statusColor="white"
+/>
+<custom-scroll
+  height="500rpx"
+  fetchFunction="{{fetchFunction}}"
+  params="{{params}}"
+  bind:handleRes="handleRes"
+  bind:hanldeScroll="hanldeScroll"
+>
+  <view wx:for="{{sList}}" wx:key="item" >
+    {{item}}
+  </view>
+</custom-scroll>

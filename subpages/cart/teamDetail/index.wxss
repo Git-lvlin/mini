@@ -1,0 +1,90 @@
+page {
+  background-color: #f5f5f5;
+}
+
+.team_detail {
+  padding: 42rpx 24rpx 48rpx 24rpx;
+  margin-bottom: 72rpx;
+  background-color: #fff;
+}
+
+.good_content {
+  width: 662rpx;
+  height: 240rpx;
+  padding: 20rpx;
+  margin-bottom: 24rpx;
+  background-color:#ffffff;
+  border-radius: 16rpx;
+  box-shadow: 0rpx  4rpx  8rpx rgba(0, 0, 0, 0.1);
+}
+
+.cover {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 240rpx;
+  height: 240rpx;
+  margin-right: 24rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.title {
+  height: 84rpx;
+  color: #333333;
+  font-size: 32rpx;
+  line-height: 42rpx;
+  margin-bottom: 24rpx;
+}
+
+.desc {
+  height: 30rpx;
+  color: #999999;
+  font-size: 24rpx;
+  line-height: 30rpx;
+  margin-bottom: 42rpx;
+}
+
+.price_text {
+  color: #e7532c;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin-right: 6rpx;
+}
+
+
+.time_text {
+  font-weight: 600;
+  color: #333333;
+  font-size: 36rpx;
+  line-height: 50rpx;
+  margin-right: 12rpx;
+}
+
+.text_center {
+  text-align: center;
+}
+
+.time_end {
+  width: 600rpx;
+  color: #666666;
+  font-size: 32rpx;
+  line-height: 44rpx;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.red {
+  color: #e7532c;
+}
+
+.btn {
+  width: 702rpx;
+  height: 96rpx;
+  color: #ffffff;
+  font-size: 32rpx;
+  line-height: 96rpx;
+  text-align: center;
+  margin: 0 auto;
+  background-color: #d7291d;
+  border-radius: 48rpx;
+}

@@ -1,0 +1,19 @@
+{
+  "navigationBarTextStyle": "white",
+  "navigationStyle": "custom",
+  "onReachBottomDistance": 0,
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "appointment": "/components/home/appointment/index",
+    "coupon": "/components/home/coupon/index",
+    "beancurd-cube": "/components/home/beancurd-cube/index",
+    "banner": "/components/home/banner/index",
+    "message": "/components/home/message/index",
+    "seckill": "/components/home/seckill/index",
+    "vipgood": "/components/home/vipgood/index",
+    "priceRatio": "/components/home/price-ratio/index",
+    "hotgoods": "/components/home/hotgoods/index",
+    "classgoods": "/components/home/classgoods/index",
+    "advert-popup": "/components/home/advert-popup/index"
+  }
+}

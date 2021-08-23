@@ -1,0 +1,51 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+<wxs module="utils" src="../../../wxs/homeFloor.wxs" />
+
+<view class="seckill" style="{{utils.getHeadBackCss(floor.style)}}" wx:if="{{secGoodList.length}}">
+  <view class="sec_body">
+    <view class="head">
+      <panel-title
+        title="{{floor.header.title[0].name}}"
+        useTitleSlot
+      >
+        <image slot="title" class="kill_icon" src="{{tools.getImgUrl('miniprogram/home/kill_icon.png')}}" />
+        <view class="down_time" slot="body">
+          <count-down time="{{ time }}" needDay isFull />
+        </view>
+      </panel-title>
+      <!-- 
+        more
+        moreText="{{floor.header.subTitle[0].action}}"
+        actionUrl="{{floor.header.subTitle[0].actionUrl}}"
+      -->
+    </view>
+  <scroll-view
+    scroll-x
+    class="good_scroll"
+    enhanced="{{true}}"
+    show-scrollbar="{{false}}"
+    bindscrolltolower="handleScroll"
+  >
+    <view class="good_list">
+      <view
+        class="good_item"
+        wx:for="{{secGoodList}}"
+        wx:key="id"
+        data-data="{{item}}"
+        bindtap="onGood"
+      >
+        <van-image
+          width="150rpx"
+          height="150rpx"
+          fit="cover"
+          src="{{item.image}}"
+        />
+        <view class="price" style="background-image: url({{tools.getImgUrl('miniprogram/home/kill_price.png')}})">
+          <view class="sale">￥<text class="sale_text">{{item.salePrice}}</text></view>
+          <view class="market">￥{{item.marketPrice}}</view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+  </view>
+</view>

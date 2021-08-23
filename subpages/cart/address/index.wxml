@@ -1,0 +1,61 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="container">
+  <block wx:if="{{addressList.length}}">
+    <view class="address_list">
+      <view
+        class="address_item"
+        wx:for="{{addressList}}"
+        wx:key="id"
+      >
+        <view class="address_head">
+          <view class="address_info" data-data="{{item}}" catchtap="onChooseAddress">
+            <view class="author"><text>{{item.consignee}}</text><text class="phone">{{item.phone}}</text></view>
+            <view class="address text_two_line">
+              <text class="def_address" wx:if="{{item.isDefault}}">默认</text>
+              {{item.provinceName}} {{item.cityName}} {{item.districtName}} {{item.address}}
+            </view>
+          </view>
+          <image
+            class="edit_icon"
+            src="{{tools.getImgUrl('miniprogram/common/edit%402x.png')}}"
+            data-data="{{item}}"
+            catchtap="onToEditAddress"
+          />
+        </view>
+        <view
+          class="address_footer"
+          data-data="{{item}}"
+          catchtap="onUpdateAddress"
+        >
+          <image
+            class="choose_icon"
+            wx:if="{{item.isDefault}}"
+            src="{{tools.getImgUrl('miniprogram/common/choose.png')}}"
+          />
+          <image
+            class="choose_icon"
+            wx:else
+            src="{{tools.getImgUrl('miniprogram/common/def_choose.png')}}"
+          />
+          <view class="footer_text">默认地址</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="add_content">
+      <view class="btn" bindtap="onToEditAddress">
+        <image class="btn_icon" src="{{tools.getImgUrl('miniprogram/common/white_add.png')}}" />添加收货地址
+      </view>
+    </view>
+  </block>
+
+  <view class="no_address" wx:if="{{listLoad && !addressList.length}}">
+    <nodata
+      title="您还没有收货地址，请点击下方+新建"
+    />
+    <view class="no_data_btn" bindtap="onToEditAddress">
+      <image class="btn_icon" src="{{tools.getImgUrl('miniprogram/common/white_add.png')}}" />添加收货地址
+    </view>
+  </view>
+</view>

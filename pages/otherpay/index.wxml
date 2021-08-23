@@ -1,0 +1,15 @@
+
+<view class="bay_text" wx:if="{{payInfo.state === 1}}">支付成功</view>
+<view class="bay_text" wx:if="{{payInfo.state === 2}}">支付失败</view>
+<view class="bay_text" wx:if="{{payInfo.state === 3 || payInfo.state === 4}}">支付出错啦！</view>
+<view class="desc_text" wx:if="{{payInfo.state === 4}}">登录小程序的手机号必须与约购APP账号保持一致才可使用微信支付</view>
+
+<button
+  class="back_btn"
+  open-type="launchApp"
+  app-parameter="payBack"
+  wx:if="{{payInfo.state != 0}}"
+  binderror="launchAppError"
+  bindtap="onToHome"
+>返回约购商城</button>
+<!-- <button bindtap="openPay">点击支付</button> -->

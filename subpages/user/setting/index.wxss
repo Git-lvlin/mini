@@ -1,0 +1,18 @@
+
+page {
+  background-color: #f5f5f5;
+}
+
+.box {
+  margin-top: 20rpx;
+}
+
+.login_out {
+  width: 750rpx;
+  height: 108rpx;
+  color: #333333;
+  font-size: 32rpx;
+  line-height: 108rpx;
+  text-align: center;
+  background-color: #ffffff;
+}

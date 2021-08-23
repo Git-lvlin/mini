@@ -1,0 +1,129 @@
+/* pages/login/login.wxss */
+.container {
+  position: relative;
+  padding: 0 64rpx;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 80rpx;
+  margin-bottom: 100rpx;
+}
+
+.bind_right {
+  margin-right: 32rpx;
+}
+
+.input {
+  padding-bottom: 32rpx;
+  margin-bottom: 50rpx;
+  border-bottom: 2rpx solid #f5f5f5;
+}
+
+.input_num {
+  font-size: 48rpx;
+  color: #333;
+  font-weight: 800;
+}
+
+.input_num_pla {
+  font-size: 36rpx;
+  color: #ccc;
+  font-weight: 400;
+}
+
+.phone_code {
+  display: flex;
+  align-items: center;
+  margin-bottom: 80rpx;
+}
+
+.code_list {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 40rpx;
+}
+
+.code_item {
+  width: 94rpx;
+  height: 124rpx;
+  text-align: center;
+  font-size: 48rpx;
+  color: #333333;
+  font-weight: 800;
+  line-height: 124rpx;
+  border-bottom: 2rpx solid #f5f5f5;
+}
+
+.input_controller {
+  width: 0;
+  height: 0;
+  padding: 0;
+  border: none;
+}
+
+.down_time {
+  font-size: 28rpx;
+  color: #CCCCCC;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.get_code {
+  width: 140rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #E5352F;
+  margin-right: 6rpx;
+}
+
+.login_btn {
+  width: 100% !important;
+  height: 96rpx !important;
+  border-radius: 16rpx !important;
+  font-size: 32px;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+.get_phone {
+  height: 40rpx;
+  font-size: 28rpx !important;
+  color: #999999;
+  text-align: center;
+  font-weight: 400;
+  padding: 0;
+  margin-top: 48rpx;
+  background-color: transparent;
+  border: none;
+}
+
+.get_phone:active {
+  background-color: transparent;
+}
+
+.help {
+  position: fixed;
+  bottom: 80rpx;
+  left: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20rpx;
+  color: #999999;
+  text-align: center;
+  line-height: 32rpx;
+  transform: translateX(-48rpx);
+}
+
+.icon {
+  vertical-align: middle;
+}
+
+.help .text {
+  padding-left: 8rpx;
+}

@@ -1,0 +1,19 @@
+<view
+  class="cell_item {{roundTop ? 'round_top' : ''}} {{roundBottom ? 'round_bottom' : ''}} {{border ? 'border' : ''}}"
+>
+  <view class="cell_name">{{name}}</view>
+  <view class="flex_middle cell_value">
+    <input
+      type="{{inputType}}"
+      class="cell_input {{textAlign}}"
+      maxlength="{{maxLength}}"
+      placeholder="{{placeholder}}"
+      placeholder-class="input-placeholder"
+      bindinput="handleInput"
+      disabled="{{read}}"
+    />
+    <view class="flex_fix" wx:if="{{slotRight}}">
+      <slot />
+    </view>
+  </view>
+</view>

@@ -1,0 +1,34 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+<wxs module="utils" src="../../../wxs/homeFloor.wxs" />
+
+<view class="beancurd" wx:if="{{goodTypeList.length}}" >
+  <view
+    class="beancurd_content"
+    style="{{utils.getHeadBackCss(floor.style)}}"
+    wx:if="{{goodTypeList.length}}"
+  >
+    <scroll-view
+      scroll-x
+      class="beancurd_scroll"
+      bindscroll="handleScroll"
+    >
+      <view class="beancurd_body">
+        <view class="beancurd_list">
+          <view
+            class="beancurd_item"
+            wx:for="{{goodTypeList}}"
+            wx:key="index"
+            data-data="{{item}}"
+            bindtap="onToClass"
+          >
+            <image class="beancurd_img" src="{{item.image}}" />
+            <view class="name text_one_line">{{item.title}}</view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="progress_back">
+      <view class="progress {{goodTypeList.length < 5 ? 'progress_full' : ''}}" style="left: {{scrollListWidth}}rpx" />
+    </view>
+  </view>
+</view>

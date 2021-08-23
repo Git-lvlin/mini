@@ -1,0 +1,48 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view
+  class="join_card {{border ? 'join_card_border' : ''}}"
+  style="width: {{width}}"
+  bindtap="onToDetail"
+>
+  <van-image
+    width="160rpx"
+    height="160rpx"
+    fit="cover"
+    custom-class="good_img"
+    src="{{good.thumbnail}}"
+  />
+  <view class="card_info">
+    <view class="title text_one_line">{{good.goodsName}}</view>
+    <view class="desc text_one_line">{{good.skuName}}</view>
+    <!-- <view class="sale">月销 {{good.goodsSaleNum}}件</view> -->
+    <view class="sale">{{!!good.goodsSaleNum ? good.goodsSaleNum : "" }}</view>
+    <view class="price">
+      <view class="text"><text class="unit">￥</text>{{good.salePrice}}<view class="market_price">¥{{good.marketPrice}} </view></view>
+      <view class="num_controller" wx:if="{{control}}">
+        <image
+          class="icon"
+          wx:if="{{!!quantity ? quantity : good.quantity}}"
+          src="{{tools.getImgUrl('miniprogram/cart/reduce%402x.png')}}"
+          catchtap="reduceStock"
+        />
+        <!-- <input
+          class="num_input"
+          value="{{stock}}"
+          wx:if="{{stock}}"
+          {{source === 'cart' ? good.quantity : util.getQuantity(good, $.cartList)}}
+        /> -->
+        <view
+          class="num_input"
+          wx:if="{{!!quantity ? quantity : good.quantity}}"
+        >{{!!quantity ? quantity : good.quantity}}</view>
+        <image
+          class="icon"
+          src="{{tools.getImgUrl('miniprogram/cart/add%402x.png')}}"
+          catchtap="addStock"
+        />
+      </view>
+    </view>
+  </view>
+  <!-- <view class="right_space" /> -->
+</view>

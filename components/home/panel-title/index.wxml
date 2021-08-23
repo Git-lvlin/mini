@@ -1,0 +1,15 @@
+<view class="panel-title {{!!center ? 'center' : ''}}" style="color: {{color}};">
+  <view class="title" wx:if="{{title && !useTitleSlot}}">{{title}}</view>
+  <slot wx:if="{{useTitleSlot}}" name="title" />
+  <view class="desc" wx:if="{{desc && !useDescSlot}}">{{desc}}</view>
+  <slot wx:if="{{useDescSlot}}" name="desc" />
+  <view class="slot">
+    <slot name="body" />
+  </view>
+  <view class="flex_middle {{defMore ? 'def_more' : 'more'}}" wx:if="{{more || defMore}}" bindtap="onToUrl">
+    <!-- <view>{{moreText}}</view> -->
+    <view>查看更多</view>
+    <view class="more_arrow" wx:if="{{more}}" />
+    <view class="more_arrow_black" wx:if="{{defMore}}" />
+  </view>
+</view>

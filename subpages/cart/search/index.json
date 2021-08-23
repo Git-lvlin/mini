@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "商品搜索",
+  "usingComponents": {
+    "van-search": "/miniprogram_npm/@vant/weapp/search/index",
+    "notdata": "/components/common/nodata/index",
+    "good-card": "/components/common/good-card/index",
+    "screen-bar": "/components/common/screen-bar/index",
+    "show-mobal": "/components/common/show-modal/index",
+    "user-like": "/components/home/user-like/index"
+  }
+}

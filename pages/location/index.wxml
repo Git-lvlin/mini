@@ -1,0 +1,73 @@
+<wxs module="tools" src="../../wxs/common.wxs" />
+
+<view class="container">
+  <cover-view class="flex_middle search_box" bindtap="onSearchInput">
+    <cover-image class="search_icon" src="{{tools.getImgUrl('miniprogram/common/search%402x.png')}}" />
+    <cover-view class="search_text">小区/写字楼/学校等</cover-view>
+  </cover-view>
+
+  <view class="map_container">
+    <map
+      class="map"
+      id="map"
+      longitude="{{longitude}}"
+      latitude="{{latitude}}"
+      scale="13"
+      markers="{{markers}}"
+      show-location="true"
+      bindmarkertap="makertap"
+    />
+  </view>
+
+  <!-- <view class="map_text">
+    <text class="h1">{{textData.name}}</text>
+    <text>{{textData.desc}}</text>
+  </view> -->
+
+  <view class="footer" style="padding-bottom: {{$.systemInfo.bottomBarHeight}}rpx">
+    <view
+      class="store_panel {{barState ? 'store_panel_top' : ''}}"
+    >
+      <!-- catchtouchstart="handleTouchStart"
+      catchtouchmove="handleTouchMove"
+      catchtouchend="handleTouchEnd" -->
+      <view
+        class="panel_haed_bar"
+        bindtap="onClickBarLine"
+      >
+        <view class="bar_line" />
+      </view>
+      <view class="store_spot_list">
+        <view class="current_spot" wx:if="{{currentSpot.storeNo}}">
+          <view class="current_spot_text">当前自提点</view>
+          <take-spot
+            data="{{currentSpot}}"
+            bind:click="onCurrentSpot"
+          />
+        </view>
+        <view class="other_spot">
+          <view class="current_spot_text">当前定位附近的自提点</view>
+          <take-spot
+            wx:for="{{markers}}"
+            wx:key="id"
+            data="{{item}}"
+            bind:click="onTakeSpot"
+          />
+        </view>
+      </view>
+    </view>
+
+    <view class="confirm_box">
+      <view
+        class="confirm_btn"
+        style="background-image: url({{tools.getImgUrl('miniprogram/location/confirm_btn_back.png')}});"
+        bindtap="onConfirm"
+      >确认提货点</view>
+    </view>
+  </view>
+
+  <address-popup
+    show="{{ showPopup }}"
+    bind:close="onCloseAddress"
+  />
+</view>

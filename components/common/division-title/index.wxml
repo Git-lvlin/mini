@@ -1,0 +1,7 @@
+
+<view class="flex_center head_content">
+  <view class="line left_line" style="width: {{width}}rpx" />
+  <view class="title" style="color: {{color}};font-size: {{size}}rpx">{{title}}</view>
+  <solt />
+  <view class="line right_line" style="width: {{width}}rpx" />
+</view>

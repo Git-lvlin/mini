@@ -1,0 +1,30 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="hotgoods" wx:if="{{hotGoodList.length}}">
+  <view class="head" style="background-image: url({{tools.getImgUrl('miniprogram/home/seckill_back.png')}})">
+    <image class="hot_icon" src="{{tools.getImgUrl('miniprogram/home/fire.png')}}" />
+    <view class="hot_title">
+      <panel-title 
+        title="{{floor.header.title[0].name}}"
+        desc="{{floor.header.subTitle[0].name}}"
+      />
+    </view>
+    <!-- 
+      more
+      moreText="{{floor.header.subTitle[0].action}}"
+      actionUrl="{{floor.header.subTitle[0].actionUrl}}"
+    -->
+  </view>
+  <view class="good_list">
+    <view
+      class="good_item"
+      wx:for="{{hotGoodList}}"
+      wx:key="id"
+    >
+      <good-card
+        data="{{item}}"
+        size="344rpx"
+      />
+    </view>
+  </view>
+</view>

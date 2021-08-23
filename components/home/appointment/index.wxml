@@ -1,0 +1,105 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+<wxs module="utils" src="../../../wxs/homeFloor.wxs" />
+
+  <!-- style="{{utils.getHeadBackCss(floor.style, tools.getImgUrl('miniprogram/home/appointment_back.png'))}}" -->
+<view
+  class="appointment"
+  wx:if="{{goodList.length}}"
+>
+  <panel-title
+    desc="{{floor.header.subTitle[0].name}}"
+    color="#fff"
+    moreColor="#fff"
+    more
+    moreText="{{floor.header.subTitle[0].action}}"
+    actionUrl="{{floor.header.subTitle[0].actionUrl}}"
+    useTitleSlot
+    useDescSlot
+  >
+    <!-- actionUrl="{{moreRouter ? moreRouter : floor.header.subTitle[0].actionUrl}}" -->
+    <image class="title_img" slot="title" src="{{tools.getImgUrl('miniprogram/home/appointment_title.png?v=2021')}}" />
+    <image class="desc_img" slot="desc" src="{{tools.getImgUrl('miniprogram/home/appointment_desc.png')}}" />
+  </panel-title>
+  <scroll-view scroll-x class="list">
+    <view class="good_list">
+      <view
+        class=" good_item"
+        wx:for="{{goodList}}"
+        wx:key="id"
+        wx:for-index="idx"
+        wx:if="{{idx < 2}}"
+        data-data="{{item}}"
+        bindtap="onToDetail"
+      >
+        <view class="flex_middle good_box">
+          <view class="flex_fix cover_img">
+            <van-image
+              width="200rpx"
+              height="200rpx"
+              fit="cover"
+              class="cover"
+              src="{{item.image}}"
+            />
+          </view>
+          <view class="good_info">
+            <view class="title text_one_line">{{item.title}}</view>
+            <view class="good_label">{{item.goodsTag}}</view>
+            <view class="flex_middle join_user" wx:if="{{item.orderType == 1 || item.orderType == 2}}">
+              <view class="user_avatar_conetnt">
+                <view
+                  class="flex_middle user_list {{item.avatorList.length ? 'user_list_act' : ''}}"
+                >
+                  <image
+                    class="flex_fix user_avatar"
+                    style="z-index: {{20 - index}}"
+                    wx:for="{{item.avatorList}}"
+                    wx:for-item="child"
+                    wx:key="index"
+                    wx:if="{{index < 18}}"
+                    src="{{child.icon}}"
+                  />
+                </view>
+              </view>
+              <view class="buy_num">{{item.saleNum + item.virtualBuyNum}}人正在购买</view>
+            </view>
+            <view class="flex_middle time_down" wx:if="{{item.orderType == 15}}">
+              <count-down
+                time="{{item.deadlineTime || 100}}"
+                color="#e7512d"
+              />
+              <view class="time_text">后结束</view>
+            </view>
+            <view class="flex_middle price_box">
+              <view class="price_title">
+                {{item.orderType == 2 ? "秒约价" : ""}}
+                {{item.orderType == 15 ? "集约价" : ""}}
+              </view>
+              <price-mobel
+                money="{{item.salePrice}}"
+                max-size="{{30}}"
+                min-size="{{24}}"
+              />
+            </view>
+            <view class="flex_center to_buy def_buy" wx:if="{{item.orderType == 2}}">
+              <view class="btn_text">去抢购</view>
+              <view class="right_arrow" />
+            </view>
+          </view>
+        </view>
+        <view class="sale_box" wx:if="{{item.orderType == 15}}">
+          <view class="progress_box">
+            <image class="fire_icon" src="{{tools.getImgUrl('miniprogram/home/appointment_fire.png')}}" />
+            <view class="progress_line" style="width: {{item.saleNumDisplay || 0}}%" />
+            <view class="progress_text">已售{{item.saleNumDisplay}}%</view>
+          </view>
+          <view class="sales">库存{{item.stockNum}}件</view>
+          <view class="flex_fix flex_center to_buy">
+            <view class="btn_text">去抢购</view>
+            <view class="right_arrow" />
+          </view>
+        </view>
+        <view class="bottom_line" wx:if="{{goodList.length - 1 != index && goodList[index] }}" />
+      </view>
+    </view>
+  </scroll-view>
+</view>

@@ -1,0 +1,7 @@
+
+<!-- <nodata type="network" /> -->
+<view class="flex_center box">
+  <view class="title">系统维护中...</view>
+  <view class="reload_btn" bindtap="onTry">重新加载</view>
+</view>
+

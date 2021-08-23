@@ -1,0 +1,61 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="cart_card">
+  <view class="select_content head_content">
+    <image
+      class="select_icon"
+      src="{{store.isChecked ? selectIcon : notSelectIcon}}"
+      bindtap="onChooseAll"
+    />
+    <view class="select_info" bindtap="onToShop">
+      <van-image
+        width="40rpx"
+        height="40rpx"
+        custom-class="store_icon"
+        src="{{store.storeLogo}}"
+      />
+      <view class="store_name">{{store.storeName}}</view>
+    </view>
+  </view>
+  <van-swipe-cell
+    right-width="{{ 75 }}"
+    wx:for="{{store.skus}}"
+    wx:key="skuId"
+  >
+    <van-cell-group>
+      <view class="select_content good_content">
+        <image
+          class="select_icon"
+          src="{{item.isChecked ? selectIcon : notSelectIcon}}"
+          data-id="{{item.skuId}}"
+          bindtap="onChooseGood"
+        />
+        <view class="select_info" data-good="{{item}}" bindtap="onToDetail">
+          <van-image 
+            width="180rpx"
+            height="180rpx"
+            custom-class="good_img"
+            src="{{item.thumbnail}}"
+          />
+          <view class="good_info">
+            <view class="good_title text_one_line">{{item.skuName}}</view>
+            <view class="good_desc text_one_line">{{item.goodsName}}</view>
+            <view class="price_info" catchtap="onNum">
+              <view class="good_price">¥{{item.salePrice}}</view>
+              <num-control
+                good="{{item}}"
+                num="{{item.quantity}}"
+                catch:change="handleStockChange"
+              />
+            </view>
+          </view>
+        </view>
+      </view>
+    </van-cell-group>
+    <view slot="right" class="right_content">
+      <!-- <view class="right_btn collection"><text>移入\r\n收藏夹</text></view> -->
+      <view class="right_btn delete" data-good="{{item}}" bindtap="onDelete">删除</view>
+    </view>
+  </van-swipe-cell>
+
+</view>

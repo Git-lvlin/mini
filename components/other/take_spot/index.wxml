@@ -1,0 +1,27 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="flex_middle take_spot" bindtap="onClick">
+  <view class="flex_fix store_avatar">
+    <van-image
+      width="136rpx"
+      height="136rpx"
+      radius="16rpx"
+      src="{{data.storeLogo}}"
+    />
+  </view>
+  <view class="store_info">
+    <view class="flex_middle store_title">
+      <view class="title_text text_one_line">{{data.storeName}}</view>
+      <!-- <image
+        class="flex_fix recommend_label"
+        src="{{tools.getImgUrl('miniprogram/location/hand_recommend.png')}}"
+        wx:if="{{data.selected}}"
+      /> -->
+    </view>
+    <view class="store_location text_two_line">
+      <text class="distance">距离{{data.distanceUnit}}</text>
+      {{data.fullAddress}}
+    </view>
+  </view>
+  <image class="flex_fix select_icon" src="{{data.selected ? select : defSelect }}" />
+</view>

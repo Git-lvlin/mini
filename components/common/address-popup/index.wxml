@@ -1,0 +1,78 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<van-popup
+  round
+  show="{{ show }}"
+  position="bottom"
+  closeable
+  custom-style="height: 1100rpx;"
+  bind:close="onCloseAddress"
+>
+  <view class="address_content">
+    <view class="address_head">
+      <view class="head_content">
+        <view class="head_title">请选择所在地区</view>
+        <view class="country_list">
+          <view class="country_child">中国大陆</view>
+        </view>
+        <view class="area_detail">
+          <view
+            class="area_text {{selectAddress.isAct === 'province' ? 'area_text_act' : ''}}"
+            data-type="province"
+            bindtap="onSelectAddressType"
+          >{{!!selectAddress.province.name ? selectAddress.province.name : "请选择" }}</view>
+          <view
+            class="area_text {{selectAddress.isAct === 'city' ? 'area_text_act' : ''}}"
+            data-type="city"
+            bindtap="onSelectAddressType"
+          >{{!!selectAddress.city.name ? selectAddress.city.name : "请选择" }}</view>
+          <view
+            class="area_text {{selectAddress.isAct === 'area' ? 'area_text_act' : ''}}"
+            data-type="area"
+            wx:if="{{showArea}}"
+            bindtap="onSelectAddressType"
+          >{{!!selectAddress.area.name ? selectAddress.area.name : "请选择" }}</view>
+        </view>
+      </view>
+    </view>
+    <view class="address_list">
+      <scroll-view scroll-y class="address_scroll" >
+        <view
+          wx:for="{{areaList}}"
+          wx:key="letter"
+          wx:if="{{!!item.children.length}}"
+          class="add_list"
+        >
+          <view class="area_list_text area_list_title" >{{item.letter}}</view>
+          <view
+            wx:for="{{item.children}}"
+            wx:for-index="idx"
+            wx:key="idx"
+            wx:for-item="child"
+            class="area_list_text"
+            data-data="{{child.data}}"
+            data-idx="{{idx}}"
+            data-pidx="{{index}}"
+            bindtap="onSelectArea"
+          >
+            <image
+              class="select_icon"
+              wx:if="{{selectAddress[selectAddress.isAct].pidx === index && selectAddress[selectAddress.isAct].idx === idx}}"
+              src="{{tools.getImgUrl('miniprogram/cart/order/addres_select.png')}}"
+            />
+            {{child.name}}
+          </view>
+        </view>
+      </scroll-view>
+
+      <view class="letter_list" wx:if="{{false}}">
+        <view
+          wx:for="{{letterList}}"
+          wx:key="index"
+          class="letter_item"
+        >{{item}}</view>
+      </view>
+    </view>
+
+  </view>
+</van-popup>

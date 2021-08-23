@@ -1,0 +1,21 @@
+
+.title {
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+
+.line {
+  width: 96rpx;
+  height: 2rpx;
+}
+
+.left_line {
+  margin-right: 12rpx;
+  background: linear-gradient(-90deg, #d8d8d8 0%, rgba(216, 216, 216, 0) 100%);
+}
+
+.right_line {
+  margin-left: 12rpx;
+  background: linear-gradient(90deg, #d8d8d8 0%, rgba(216, 216, 216, 0) 100%);
+}

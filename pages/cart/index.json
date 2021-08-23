@@ -1,0 +1,11 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "nav-container": "/components/common/nav-container",
+    "cart-card": "/components/cart/cart-card/index",
+    "cart-coupon-detail": "/components/cart/cart-coupon-detail/index",
+    "show-modal": "/components/common/show-modal/index",
+    "nodata": "/components/common/nodata/index",
+    "good-card": "/components/common/good-card/index"
+  }
+}

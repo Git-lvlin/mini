@@ -1,0 +1,144 @@
+<wxs src="../../../wxs/common.wxs" module="tools" />
+
+<view class="container">
+  <view class="good_box">
+    <view class="flex_fix good_image">
+      <van-image
+        width="240rpx"
+        height="240rpx"
+        src="{{goodInfo.goodsImgCover}}"
+      />
+    </view>
+    <view class="good_info">
+      <view class="good_title text_two_line">{{goodInfo.goodsName}}</view>
+      <view class="good_desc text_two_line" wx:if="{{goodInfo.goodsDec}}">{{goodInfo.goodsDec}}</view>
+      <view class="flex_middle info_label ranking_label">
+        <image class="flex_fix label_icon" src="{{tools.getImgUrl('miniprogram/home/price/ranking.png')}}" />
+        <view class="label_text">{{goodInfo.gcRangName}}类销量排名第{{goodInfo.gcRang}}</view>
+      </view>
+      <view class="flex_middle info_label sale_label">
+        <image class="flex_fix label_icon" src="{{tools.getImgUrl('miniprogram/home/price/sale_icon.png')}}" />
+        <view class="label_text">销量{{goodInfo.saleNum}}</view>
+      </view>
+      <view class="flex_middle price_box">
+        <price-mobel
+          title="约购价 "
+          money="{{goodInfo.goodsPrice}}"
+          defaultColor="#e5352f"
+        />
+        <view class="buy_btn" data-good="{{goodInfo}}" bindtap="onToDetail">去购买</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="price_trend">
+    <view class="panle_title echart_box_title">价格走势</view>
+    <view class="echart_box">
+      <view class="flex_center price_module">
+        <view class="flex_fix price_module_item">
+          <view class="price_module_text red_text">¥{{goodInfo.goodsPrice}}</view>
+          <view class="price_module_name">当前价</view>
+        </view>
+        <view class="price_module_line" />
+        <view class="flex_fix price_module_item">
+          <view class="price_module_text">¥{{goodInfo.averagePrice}}</view>
+          <view class="price_module_name">平均价</view>
+        </view>
+        <view class="price_module_line" />
+        <view class="flex_fix price_module_item">
+          <view class="price_module_text">¥{{goodInfo.minPrice}}</view>
+          <view class="price_module_name">30天最低</view>
+        </view>
+        <view class="price_module_line" />
+        <view class="flex_fix price_module_item">
+          <view class="price_module_text">¥{{goodInfo.maxPrice}}</view>
+          <view class="price_module_name">30天最高</view>
+        </view>
+      </view>
+      <canvas
+        canvas-id="lineCanvas"
+        disable-scroll="true"
+        class="canvas"
+        bindtouchstart="touchHandler"
+      ></canvas>
+      <view class="flex_middle data_desc">
+        数据来自电商平台公开价格信息
+        <image class="data_desc_icon" src="{{tools.getImgUrl('miniprogram/common/ask.png')}}" />
+      </view>
+      <!-- <button type="primary" bindtap="updateData">更新数据</button> -->
+    </view>
+    <view class="other_price {{showOtherPrice ? '' : 'other_price_bottom'}}">
+      <view class="flex_center other_price_btn" bindtap="onClickOther">
+        查看更多商城价格
+        <image class="price_btn_icon {{showOtherPrice ? 'btn_icon_act' : ''}}" src="{{tools.getImgUrl('miniprogram/home/price/price_spot.png')}}" />
+      </view>
+      <view class="other_price_list" wx:if="{{showOtherPrice}}">
+        <view
+          class="flex_middle other_price_item"
+          wx:for="{{goodInfo.platformPrice}}"
+          wx:key="index"
+        >
+          <image class="other_price_icon" src="{{item.icon}}" />
+          <view class="other_name">{{item.platform}}</view>
+          <view class="other_price_text">¥{{item.price}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="price_reduction" wx:if="{{false}}">
+    <view class="flex_middle price_reduction_head">
+      <view class="panle_title">价格提醒</view>
+      <view class="reduction_head_desc">低于此价格就会推送给您</view>
+    </view>
+    <view class="flex_middle set_price">
+      <view class="flex_middle input_box">
+        ¥<input type="number" class="input" bindinput="handleInput"/>
+      </view>
+      <view class="flex_fix set_price_btn">设置</view>
+    </view>
+    <view class="flex_middle price_desc">
+      <image class="price_desc_icon" src="{{tools.getImgUrl('miniprogram/home/price/monitor.png')}}" />
+      <view class="price_desc">正在监控中价格 ￥9.88</view>
+    </view>
+  </view>
+
+  <view class="low_price">
+    <view class="panle_title">约购最低价</view>
+    <view class="low_price_list">
+      <view
+        class="flex_middle low_price_item"
+        wx:for="{{goodList}}"
+        wx:key="index"
+        data-good="{{item}}"
+        bindtap="onToDetail"
+      >
+        <view class="img_box">
+          <van-image
+            width="200rpx"
+            height="200rpx"
+            custom-class="img_middle"
+            src="{{item.image}}"
+          />
+          <view class="reduction_proportion">降价{{item.goodsContestRate}}%</view>
+        </view>
+        <view class="good_info">
+          <view class="good_title text_one_line">{{item.title}}</view>
+          <view class="flex_middle info_label ranking_label">
+            <image class="flex_fix label_icon" src="{{tools.getImgUrl('miniprogram/home/price/ranking.png')}}" />
+            <view class="label_text">{{item.gcName}}类销量排名第{{item.gcRang}}</view>
+          </view>
+          <view class="flex_middle info_label sale_label">
+            <image class="flex_fix label_icon" src="{{tools.getImgUrl('miniprogram/home/price/sale_icon.png')}}" />
+            <view class="label_text">销量{{item.saleNum}}</view>
+          </view>
+          <view class="price_num">共有{{item.contestPlatformNum}}个商场比价</view>
+          <price-mobel
+            money="{{item.salePrice}}"
+            marketMoney="{{item.marketPrice}}"
+          />
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

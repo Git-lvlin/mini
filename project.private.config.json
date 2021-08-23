@@ -1,0 +1,84 @@
+{
+  "setting": {},
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "创建订单",
+          "pathName": "subpages/cart/create/index",
+          "query": "orderType=1",
+          "scene": null
+        },
+        {
+          "name": "用户中心",
+          "pathName": "pages/user/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/login/mobile/index",
+          "pathName": "pages/login/mobile/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "搜搜",
+          "pathName": "subpages/cart/search/index",
+          "query": "name=bak",
+          "scene": null
+        },
+        {
+          "name": "商详",
+          "pathName": "subpages/cart/detail/index",
+          "query": "activityId=0&objectId=4647293761078952743&orderType=15&skuId=3638&spuId=2513&wsId=0",
+          "scene": null
+        },
+        {
+          "name": "选择地理位置",
+          "pathName": "pages/location/index",
+          "query": "name=bak",
+          "scene": null
+        },
+        {
+          "name": "购物车",
+          "pathName": "pages/cart/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "pages/otherpay/index",
+          "pathName": "pages/otherpay/index",
+          "query": "id=4646952351775589821&payType=7&scene=1&storeNo=store_m_124064&type=1",
+          "scene": null
+        },
+        {
+          "name": "subpages/cart/class/index",
+          "pathName": "subpages/cart/class/index",
+          "query": "category_id=4",
+          "scene": null
+        },
+        {
+          "name": "商品搜索",
+          "pathName": "subpages/cart/search/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "subpages/cart/store/index",
+          "pathName": "subpages/cart/store/index",
+          "query": "storeNo=store_m_124058",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

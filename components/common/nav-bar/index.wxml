@@ -1,0 +1,36 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="nav_container">
+  <view class="seize_seat" style="height: {{navTotalHeight}}rpx;" wx:if="{{!useCustomBack}}"/>
+  <view class="nav_content" style="color: {{fontColor}} !important;{{ useCustomBack ? 'background-color:transparent' : 'background-color:' + background }};">
+    <view class="status_bar" style="height: {{$.systemInfo.statusHeight}}rpx;" />
+      <view class="nav_bar" style="min-height: {{$.systemInfo.navBarHeight}}rpx;">
+        <view class="nav_default" style="height: {{$.systemInfo.navBarHeight}}rpx;">
+          <view class="back_icon {{isHome ? 'back_icon_home' : ''}}">
+            <van-icon name="arrow-left" size="20" bind:click="onClickBack"/>
+          <block wx:if="{{isHome}}">
+            <view class="back_icon_line" style="background-color: {{fontColor}}" />
+            <van-icon name="wap-home-o" size="24" bind:click="onClickHome"/>
+          </block>
+        </view>
+        <view class="nav_title" wx:if="{{!titleIsSearch}}">{{title}}</view>
+        <view class="head_search" wx:if="{{titleIsSearch}}" bindtap="onToSearch" >
+          <image class="search_icon" src="{{tools.getImgUrl('miniprogram/common/search%402x.png')}}" />
+          <text>搜索</text>
+        </view>
+      </view>
+      <view class="nav_search" wx:if="{{showSearch}}" >
+        <van-search
+          value="{{ value }}"
+          shape="round"
+          use-action-slot
+          background="{{background}}"
+          placeholder="请输入搜索关键词"
+        >
+          <view slot="action" bind:tap="onClick">搜索</view>
+        </van-search>
+      </view>
+    </view>
+    <slot wx:if="{{useCustomBack}}" name="slot_back" />
+  </view>
+</view>

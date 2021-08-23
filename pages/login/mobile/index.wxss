@@ -1,0 +1,71 @@
+/* pages/login/login.wxss */
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  justify-content: center;
+  height: 100vh;
+  padding: 0 64rpx;
+}
+
+.header {
+  margin-top: 60rpx;
+}
+
+.header .title {
+  width: 356rpx;
+  height: 80rpx;
+  font-size: 56rpx;
+  color: #333333;
+  font-weight: 500;
+  margin: 16rpx 0 160rpx 0;
+}
+
+.login_btn {
+  width: 100% !important;
+  height: 96rpx !important;
+  border-radius: 16rpx !important;
+  font-size: 32px;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+.on_login {
+  font-size: 28rpx;
+  color: #999999;
+  text-align: center;
+  margin-top: 48rpx;
+}
+
+.other_login{
+  height: 450rpx;
+}
+
+.env_list {
+  justify-content: space-between;
+  font-size: 24rpx;
+  margin-top: 40rpx;
+}
+
+.env_item {
+  padding-left: 24rpx;
+}
+
+.treaty {
+  position: absolute;
+  bottom: 80rpx;
+  left: 50%;
+  display: flex;
+  justify-content: center;
+  font-size: 20rpx;
+  color: #999999;
+  text-align: center;
+  line-height: 28rpx;
+  margin-left: -266rpx;
+}
+
+.treaty .red_text {
+  color: #E5352F ;
+  text-decoration: underline;
+}

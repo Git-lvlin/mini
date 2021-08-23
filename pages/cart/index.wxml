@@ -1,0 +1,95 @@
+<wxs module="tools" src="../../wxs/common.wxs" />
+
+<view class="container">
+  <nav-container
+    headBackCss="background: #f5f5f5"
+  >
+    <view slot="content" class="nav_title">购物车</view>
+  </nav-container>
+
+  <scroll-view scroll-y class="content" bindscrolltolower="handleScrollBottom">
+    <view class="coupon" wx:if="{{false}}">
+      <view class="coupon_img" style="background-image: url({{tools.getImgUrl('miniprogram/cart/little_coupon_back.png')}})">领券</view>
+      <view class="coupon_text">精选好券，抢到赚到</view>
+      <image class="coupon_arrow_right" src="{{tools.getImgUrl('miniprogram/common/coupon_arrow_right.png')}}" />
+    </view>
+
+    <cart-card
+      wx:for="{{$.storeCartList}}"
+      wx:key="id"
+      store="{{item}}"
+    />
+    <view class="not_list" wx:if="{{!$.storeCartList.length && !!userInfo}}">
+      <nodata
+        top="{{48}}"
+        type="cart"
+      />
+      <view class="to_browse" bindtap="onToHome">去逛逛吧</view>
+    </view>
+
+    <view class="not_login" wx:if="{{!userInfo}}">
+      <nodata
+        title="去添加点什么吧"
+        top="{{48}}"
+      />
+    </view>
+
+    <view class="hot_sale" wx:if="{{hotGoodList.length}}">
+      <view class="hot_sale_head">
+        <view class="hot_head_line left_line" />
+        <image class="hot_icon" src="{{tools.getImgUrl('miniprogram/cart/hot.png')}}" />
+        热销好货
+        <view class="hot_head_line right_line" />
+      </view>
+      <view class="hot_list">
+        <block
+          wx:for="{{hotGoodList}}"
+          wx:key="skuId"
+        >
+          <good-card
+            data="{{item}}"
+            size="318rpx"
+          />
+        </block>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="footer">
+    <view class="footer footer_content" >
+      <view class="settlement">
+        <view class="select_all">
+          <image
+            class="choose_icon"
+            src="{{selectAll ? choose : defChoose}}"
+            bindtap="onSelectCartAll"
+          />全选
+        </view>
+        <view class="settlement_content">
+          <view class="settlement_info">
+            <view class="price">合计：¥{{$.cartListTotal.subtotalPromotion}}</view>
+            <view
+              class="price_desc"
+              bindtap="openCouopnDetail"
+            >已优惠{{tools.floatReduce($.cartListTotal.subtotal, $.cartListTotal.subtotalPromotion)}}，查看明细<text class="arrow_top {{showCouponPopup ? 'arrow_act' : ''}}" /></view>
+          </view>
+          <view class="settlement_btn" bindtap="onToOrder">结算({{$.cartListTotal.checkedQuantity}})</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  
+  <cart-coupon-detail
+    total="{{$.cartListTotal}}"
+    show="{{ showCouponPopup }}"
+    bind:close="handleCloseCouponDetail"
+  />
+
+  <show-modal
+    show="{{ showDeleteGood }}"
+    content="您确定要删除商品吗？"
+    bind:ok="handleDeleteGood"
+    bind:close="handleCloseDeleteGood"
+  />
+</view>

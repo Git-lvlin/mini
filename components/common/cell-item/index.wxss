@@ -1,0 +1,43 @@
+
+.cell_box {
+  padding-left: 32rpx;
+  background-color: #fff;
+}
+
+.cell_info {
+  justify-content: space-between;
+  padding: 46rpx 32rpx 46rpx 0;
+}
+
+.border {
+  border-bottom: 2rpx solid #f5f5f5;
+}
+
+.title {
+  font-weight: 600;
+  color: #333333;
+  font-size: 32rpx;
+  line-height: 32rpx;
+}
+
+.right_box {
+  /* flex: 1; */
+}
+
+.value {
+  color: #666666;
+  font-size: 32rpx;
+  line-height: 32rpx;
+  padding-right: 8rpx;
+}
+
+.icon_box,
+.cell_icon {
+  width: 16rpx;
+  height: 28rpx;
+}
+
+.cell_icon {
+  vertical-align: middle;
+  /* transform: translateX(-6rpx); */
+}

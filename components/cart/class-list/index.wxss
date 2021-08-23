@@ -1,0 +1,153 @@
+
+.class_list {
+  position: relative;
+}
+
+.class_scroll {
+  width: 100vw;
+  height: 172rpx;
+}
+
+.class_scroll_list {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+  height: 172rpx;
+}
+
+.class_item {
+  position: relative;
+  flex-shrink: 0;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 144rpx;
+  height: 136rpx;
+  padding-bottom: 20rpx;
+}
+
+.class_img {
+  overflow: hidden;
+  width: 80rpx;
+  height: 80rpx;
+  border: 4rpx solid #fff;
+  border-radius: 50%;
+}
+
+.class_name {
+  width: 112rpx;
+  height: 32rpx;
+  font-size: 22rpx;
+  color: #fff;
+  font-weight: 500;
+  line-height: 32rpx;
+  text-align: center;
+  margin-top: 12rpx;
+  border-radius: 32rpx;
+}
+
+.class_item_act .class_img {
+  transform: scale(1.15);
+  transition: transform .1s linear;
+  transform-origin: 50% 100% 0;
+}
+
+.class_item_act .class_name {
+  color: #D7291D;
+  background: #FFFFFF;
+}
+
+.class_item_other {
+  flex-shrink: 0;
+  flex-grow: 0;
+  width: 80rpx;
+  height: 172rpx;
+}
+
+
+.horn_top {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  margin-left: -10rpx;
+  border: 10rpx solid transparent;
+  border-bottom-color: #fff;
+}
+
+
+.open_all {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80rpx;
+  height: 172rpx;
+  font-size: 24rpx;
+  color: #fff;
+  line-height: 30rpx;
+  font-weight: 500;
+  background: #D7291D;
+}
+
+.class_popup_content {
+  padding: 32rpx 0 2rpx;
+}
+
+.class_popup_title {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;padding-left: 10rpx;
+}
+
+.class_popup_list {
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 650rpx;
+  padding-top: 32rpx;
+  overflow-y: auto;
+}
+
+.class_popup_item {
+  flex-shrink: 0;
+  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 20%;
+  height: 148rpx;
+  margin-bottom: 46rpx;
+}
+
+.popup_item_img {
+  flex-shrink: 0;
+  flex-grow: 0;
+  width: 80rpx;
+  height: 80rpx !important;
+  border: 4rpx solid transparent;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.popup_item_name {
+  width: 122rpx;
+  height: 38rpx;
+  font-size: 22rpx;
+  color: #333;
+  line-height: 38rpx;
+  text-align: center;
+  margin-top: 8rpx;
+  border-radius: 38rpx;
+}
+
+.popup_item_act .popup_item_img {
+  border: 4rpx solid #D7291D;
+}
+
+.popup_item_act .popup_item_name {
+  color: #fff;
+  background-color: #D7291D;
+}

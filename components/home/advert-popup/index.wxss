@@ -1,0 +1,26 @@
+
+.advert_content {
+  position: relative;
+  /* transform: translateY(-40rpx); */
+  text-align: center;
+  padding-top: 58rpx;
+}
+
+.advert_close {
+  position: absolute;
+  right: 68rpx;
+  top: 0;
+  width: 66rpx;
+  height: 66rpx;
+}
+
+.advert_img {
+  width: 750rpx;
+  height: 720rpx;
+}
+
+.advert_btn {
+  width: 268rpx;
+  height: 98rpx;
+  margin-top: 80rpx;
+}

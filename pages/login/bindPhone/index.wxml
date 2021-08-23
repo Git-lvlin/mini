@@ -1,0 +1,58 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="container">
+  <view class="header">
+    <van-image width="72rpx" height="72rpx" src="{{tools.getImgUrl('miniprogram/common/wechat.png')}}" custom-class="bind_right" />
+    <van-image width="48rpx" height="48rpx" src="{{tools.getImgUrl('miniprogram/common/link.png')}}" custom-class="bind_right" />
+    <van-image width="72rpx" height="72rpx" src="{{tools.getImgUrl('miniprogram/common/logo.png')}}" />
+  </view>
+  <view class="bind">
+    <view class="input">
+      <input
+        type="number"
+        class="input_num"
+        maxlength="11"
+        value="{{phoneNumber}}"
+        placeholder-class="input_num_pla"
+        placeholder="请输入手机号"
+        bindinput="handleInputPhone"
+      />
+    </view>
+    <view class="phone_code">
+      <view class="code_list">
+        <view type="number" maxlength="1" class="code_item" data-index="1" bindtap="onInputCode">{{!!inputNum[0] ? inputNum[0] : ""}}</view>
+        <view type="number" maxlength="1" class="code_item" data-index="2" bindtap="onInputCode">{{!!inputNum[1] ? inputNum[1] : ""}}</view>
+        <view type="number" maxlength="1" class="code_item" data-index="3" bindtap="onInputCode">{{!!inputNum[2] ? inputNum[2] : ""}}</view>
+        <view type="number" maxlength="1" class="code_item" data-index="4" bindtap="onInputCode">{{!!inputNum[3] ? inputNum[3] : ""}}</view>
+      </view>
+      <view class="get_code">
+        <text bindtap="onGetCode" wx:if="{{downTime === 0}}">获取验证码</text>
+        <van-count-down
+          time="{{ downTime }}"
+          auto-start
+          use-slot
+          wx:if="{{downTime > 0}}"
+          bind:change="onChangeTime"
+        >
+          <text class="down_time">重新获取 {{timeData.seconds}}s</text>
+        </van-count-down>
+      </view>
+      <input type="number" class="input_controller" maxlength="4" focus="{{inputFocus}}" bindinput="handleInputCode"/>
+    </view>
+    <van-button
+      color="#E5352F"
+      custom-class="login_btn"
+      type="primary"
+      block
+      loading-type="spinner"
+      loading-text="绑定中..."
+      bind:click="onBindPhone"
+    >完成绑定</van-button>
+    <button class="get_phone" bind:getphonenumber="handleGetPhone" open-type="getPhoneNumber">获取手机号，快速绑定</button>
+  </view>
+  <view class="help">
+    <van-image width="32rpx" height="32rpx" src="{{tools.getImgUrl('miniprogram/common/ask.png')}}" custom-class="icon" />
+    <text class="text">帮助</text>
+  </view>
+</view>
+

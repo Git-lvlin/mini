@@ -1,0 +1,52 @@
+<wxs module="tools" src="../../../wxs/common.wxs"/>
+
+<view class="price_ratio" >
+  <image
+    class="price_header"
+    mode="widthFix"
+    src="{{tools.getImgUrl('/miniprogram/home/price_ratio_header.gif')}}"
+    bindtap="onToList"
+  />
+  <view
+    class="flex_middle good_list"
+    style="background-image: url('{{tools.getImgUrl('/miniprogram/home/price_ratio_body.png')}}')"
+  >
+    <view
+      class="good_item"
+      wx:for="{{priceRatioGood}}"
+      wx:key="id"
+      wx:if="{{index < 4}}"
+      data-data="{{item}}"
+      bindtap="onGood"
+    >
+      <view class="good_img">
+        <van-image
+          width="156rpx"
+          height="156rpx"
+          src="{{item.image}}"
+        />
+      </view>
+      <view
+        class="label_select_text margin_bottom_12"
+        wx:if="{{item.goodsContestRate < 1}}"
+      >精选特惠</view>
+      <view
+        class="flex_middle label_percent_text margin_bottom_12"
+        style="background-image: url('{{tools.getImgUrl('/miniprogram/home/price_label_back.png')}}')"
+        wx:if="{{item.goodsContestRate}}"
+      >
+        <view>降价</view>
+        <view class="percent_text">{{item.goodsContestRate}}%</view>
+      </view>
+      <view class="price">
+        <price-model
+          minSize="{{20}}"
+          maxSize="{{28}}"
+          color="#e9574e"
+          money="{{item.salePrice}}"
+          marketMoney="{{item.marketPrice}}"
+        />
+      </view>
+    </view>
+  </view>
+</view>

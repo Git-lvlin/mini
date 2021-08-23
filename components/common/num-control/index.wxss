@@ -1,0 +1,44 @@
+
+.num_control {
+  display: flex;
+  align-items: center;
+}
+
+.control_view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56rpx;
+  height: 56rpx;
+  border-top: 2rpx solid #999;
+  border-bottom: 2rpx solid #999;
+}
+
+.reduce_view {
+  border-left: 2rpx solid #999;
+  border-radius: 16rpx 0 0 16rpx;
+}
+
+.gray_view {
+  border-top: 2rpx solid #eee;
+  border-bottom: 2rpx solid #eee;
+  border-left: 2rpx solid #eee;
+}
+
+.add_view {
+  border-right: 2rpx solid #999;
+  border-radius: 0 16rpx 16rpx 0;
+}
+
+.control_icon {
+  width: 20rpx;
+  height: 20rpx;
+}
+
+.num_input {
+  width: 86rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  text-align: center;
+  border: 2rpx solid #999;
+}

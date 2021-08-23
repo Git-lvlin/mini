@@ -1,0 +1,26 @@
+
+.bay_text {
+  font-size: 48rpx;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+  padding-top: 96rpx;
+}
+
+.desc_text {
+  width: 520rpx;
+  font-size: 28rpx;
+  color: #666;
+  text-align: center;
+  line-height: 42rpx;
+  margin: 16rpx auto 0;
+}
+
+.back_btn {
+  position: fixed;
+  bottom: 20%;
+  left: 50%;
+  color: #fff;
+  background-color: #d7291d;
+  transform: translateX(-50%);
+}

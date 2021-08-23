@@ -1,0 +1,113 @@
+
+.seckill {
+  padding: 0 0 24rpx;
+  margin: 24rpx 24rpx 0;
+  /* background-size: 726rpx 360rpx; */
+  background-size: 740rpx 360rpx;
+  background-position: -20rpx -20rpx;
+  border-radius: 16rpx;
+}
+
+.head {
+  padding: 16rpx;
+}
+
+.sec_body {
+  width: 100%;
+  /* height: 320rpx; */ 
+  padding: 0 16rpx;
+  box-sizing: border-box;
+}
+
+.kill_icon {
+  width: 136rpx;
+  height: 36rpx;
+  vertical-align: middle;
+}
+
+.down_time {
+  padding-bottom: 6rpx;
+}
+
+.time_item {
+  display: inline-block;
+  vertical-align: middle;
+  width: 36rpx;
+  height: 36rpx;
+  color: #ffffff;
+  font-size: 24rpx;
+  letter-spacing: 2rpx;
+  line-height: 36rpx;
+  text-align: center;
+  background-color: #ea3627;
+  border-radius: 6rpx;
+}
+
+.days {
+  width: auto;
+  padding: 0 6rpx;
+  margin-right: 16rpx;
+}
+
+.time_mark {
+  font-weight: 600;
+  color: #d7291d;
+  padding: 0 4rpx;
+}
+
+.good_scroll {
+  width: 100%;
+  background-color: #fff;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.good_list {
+  display: inline-flex;
+  align-items: center;
+  padding: 24rpx 16rpx 0;
+  border-radius: 16rpx;
+}
+
+.good_item {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 150rpx;
+}
+
+.good_item:not(:last-child) {
+  margin-right: 40rpx;
+}
+
+.price {
+  width: 150rpx;
+  height: 34rpx;
+  display: flex;
+  align-items: flex-end;
+  margin-top: 15rpx;
+  background-size: 100% 100%;
+}
+
+.sale {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 72rpx;
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 18rpx;
+  line-height: 28rpx;
+  padding-left: 8rpx;
+}
+
+.sale_text {
+  font-size: 28rpx;
+}
+
+.market {
+  font-weight: 500;
+  color: #d89f42;
+  font-size: 18rpx;
+  text-decoration: line-through;
+  line-height: 26rpx;
+  padding-left: 12rpx;
+}

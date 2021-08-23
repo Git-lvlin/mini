@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "van-swipe-cell": "/miniprogram_npm/@vant/weapp/swipe-cell/index",
+    "num-control": "/components/common/num-control/index"
+  }
+}

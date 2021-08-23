@@ -1,0 +1,97 @@
+@import './miniprogram_npm/@vant/weapp/common/index.wxss';
+
+page{
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
+    Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei',
+    sans-serif;
+}
+
+image {
+  vertical-align: middle;
+}
+
+.flex_middle {
+  display: flex;
+  align-items: center;
+}
+
+.flex_center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex_fix {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+/*单行溢出省略*/
+.text_one_line {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  word-break: break-all;
+}
+
+/* 多行省略号 */
+.text_two_line {
+  word-break: break-all;
+  white-space: normal;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  overflow: hidden;
+}
+
+.img_middle{
+  vertical-align: middle;
+}
+
+.right_arrow {
+  width: 12rpx;
+  height: 12rpx;
+  border-top: 4rpx solid #FFF;
+  border-right: 4rpx solid #FFF;
+  transform: rotate(45deg);
+}
+
+.right_arrow_simple {
+  width: 12rpx;
+  height: 12rpx;
+  border-top: 2rpx solid #FFF;
+  border-right: 2rpx solid #FFF;
+  transform: rotate(45deg);
+}
+
+.right_arrow_gray {
+  width: 12rpx;
+  height: 12rpx;
+  border-top: 4rpx solid #ccc;
+  border-right: 4rpx solid #ccc;
+  transform: rotate(45deg);
+}
+
+.right_arrow_black {
+  width: 12rpx;
+  height: 12rpx;
+  border-top: 4rpx solid #333;
+  border-right: 4rpx solid #333;
+  transform: rotate(45deg);
+}
+
+.right_arrow_red {
+  width: 12rpx;
+  height: 12rpx;
+  border-top: 4rpx solid #d7291d;
+  border-right: 4rpx solid #d7291d;
+  transform: rotate(45deg) translateX(-4rpx);
+}
+
+.safe_bottom {
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}

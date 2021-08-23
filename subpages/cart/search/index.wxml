@@ -1,0 +1,118 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="container">
+  <view class="flex_fix search_content">
+    <view style="height: {{!!goodList.length && !!searchText ? 168 : 96}}rpx" />
+    <view class="flex_middle search_wrap">
+      <view class="flex_middle search_box">
+        <!-- <view class="flex_fix flex_middle good_type">
+          <view class="type_text">单约</view>
+          <view class="type_icon" />
+          <view class="flex_center select_type">
+            <view class="select_item">商品</view>
+            <view class="select_item">店铺</view>
+          </view>
+        </view> -->
+        <view class="flex_middle search">
+          <image class="flex_fix search_icon" src="{{tools.getImgUrl('miniprogram/common/search@2x.png')}}" />
+          <input
+            class="search_input"
+            value="{{ searchText }}"
+            placeholder="搜索想要的商品"
+            bindinput="handleSearchInput"
+            catchblur="handleInputBlur"
+            catchfocus="onFocus"
+          />
+          <!-- <image
+            class="clear_input"
+            wx:if="{{showClear}}"
+            src="{{tools.getImgUrl('miniprogram/common/clear_input.png')}}"
+            catchtap="onClearSearch"
+          /> -->
+        </view>
+      </view>
+      <view class="flex_fix search_btn" bindtap="onSearch">搜索</view>
+    </view>
+    <view class="screen_box" wx:if="{{goodList.length && searchText}}" >
+      <screen-bar bind:click="onScreenItem" />
+    </view>
+    <view class="search_association" wx:if="{{showAssociation}}">
+      <view
+        class="association_item"
+        bindtap="onCloseAssociation"
+        wx:for="{{keyList}}"
+        wx:key="index"
+        data-association="{{item}}"
+      >
+        <text
+          class="{{child.type ? 'association_red' : ''}}"
+          wx:for="{{item}}"
+          wx:for-item="child"
+          wx:for-index="idx"
+          wx:key="idx"
+        >{{child.text}}</text>
+      </view>
+    </view>
+  </view>
+  <view class="flex_fix search_history" wx:if="{{!isSearch}}" >
+    <view class="history_clear" wx:if="{{historySearch.length}}">
+      <view class="title">历史记录</view>
+      <view class="clear" bindtap="onOpenDeleteHistory">
+        <image class="clear_icon" src="{{tools.getImgUrl('miniprogram/common/delete@2x.png')}}" />
+        清空
+      </view>
+    </view>
+    <view class="option_list" wx:if="{{historySearch.length}}">
+      <view
+        class="item"
+        wx:for="{{historySearch}}"
+        wx:key="index"
+        data-keyword="{{item.keyword}}"
+        bindtap="onSearchLabel"
+      >{{item.keyword}}</view>
+    </view>
+    <view class="hot_search" wx:if="{{hotSearch.length}}">
+      <view class="hot_title">热门搜索</view>
+      <view class="option_list">
+        <view
+          class="item"
+          wx:for="{{hotSearch}}"
+          wx:key="id"
+          data-keyword="{{item.keyword}}"
+          bindtap="onSearchLabel"
+        >
+          <image class="icon" wx:if="{{!!item.isHot}}" src="{{tools.getImgUrl('miniprogram/cart/hot.png')}}" />
+          {{item.keyword}}
+        </view>
+      </view>
+    </view>
+    <!-- 猜你喜欢 -->
+    <!-- <view id="user_like">
+      <user-like/>
+    </view> -->
+  </view>
+
+  <scroll-view
+    scroll-y
+    class="good_content"
+    wx:if="{{goodList.length && isSearch}}"
+    bindscrolltolower="handleListBottom"
+  >
+    <view class="good_list">
+      <good-card
+        wx:for="{{goodList}}"
+        wx:key="index"
+        data="{{item}}"
+      />
+    </view>
+  </scroll-view>
+
+  <notdata type="search" wx:if="{{isSearch && !goodList.length}}" />
+
+  <show-mobal
+    show="{{ showDeleteSearch }}"
+    content="您确定要删除商品吗？"
+    bind:ok="clearSearchHistory"
+    bind:close="handleCloseDeleteSearch"
+  />
+</view>

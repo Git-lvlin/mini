@@ -1,0 +1,92 @@
+
+.nav_container{
+  position: relative;
+}
+
+.seize_seat {
+  position: relative;
+  z-index: 2;
+}
+
+.nav_content{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.status_bar{
+  position: relative;
+  z-index: 2;
+  height: 40rpx;
+}
+
+.nav_bar{
+  position: relative;
+  z-index: 3;
+  min-height: 88rpx;
+}
+
+.nav_default{
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.back_icon{
+  position: absolute;
+  top: 50%;
+  left: 24rpx;
+  transform: translateY(-50%);
+}
+
+.back_icon_home{
+  top: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 174rpx;
+  height: 64rpx;
+  border: 4rpx solid #ddd;
+  border-radius: 64rpx;
+  transform: translateY(-50%);
+}
+
+.back_icon_line{
+  width: 4rpx;
+  height: 36rpx;
+  margin-right: 20rpx;
+  margin-left: 10rpx;
+  background-color: #333;
+}
+
+.nav_title{
+  text-align: center;
+  line-height: 60rpx;
+}
+
+.head_search {
+  position: absolute;
+  left: 88rpx;
+  bottom: 50%;
+  width: calc(100vw - 150px - 64rpx);
+  height: 58rpx;
+  font-size: 28rpx;
+  color: #CCCCCC;
+  line-height: 58rpx;
+  padding-left: 64rpx;
+  background: #FFFFFF;
+  border-radius: 28rpx;
+  transform: translateY(50%);
+}
+
+.search_icon {
+  position: absolute;
+  top: 10rpx;
+  left: 16rpx;
+  width: 40rpx;
+  height: 40rpx;
+}

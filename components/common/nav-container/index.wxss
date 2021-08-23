@@ -1,0 +1,47 @@
+.nav_content {
+  width: 100%;
+  height: 80rpx;
+  background-position: left bottom;
+  background-size: 100% auto;
+}
+
+.nav_body {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  height: 80rpx;
+  background-position: left bottom;
+  background-size: 100% auto;
+}
+
+.nav_location {
+  display: flex;
+  align-items: center;
+  height: 80rpx;
+  padding-left: 24rpx;
+}
+
+.location_icon {
+  width: 32rpx;
+  height: 36rpx;
+  margin-right: 8rpx;
+}
+
+.address {
+  max-width: 374rpx;
+  height: 48rpx;
+  font-weight: 500;
+  color: #ffffff;
+  font-size: 32rpx;
+  letter-spacing: 2rpx;
+  line-height: 48rpx;
+  margin-right: 14rpx;
+}
+
+.right_icon {
+  width: 36rpx;
+  height: 36rpx;
+  transform: scale(-1);
+}

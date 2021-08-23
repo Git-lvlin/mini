@@ -1,0 +1,110 @@
+
+
+.couopn_item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.white_back {
+  position: absolute;
+  left: 220rpx;
+  top: 0;
+  z-index: 0;
+  width: 30rpx;
+  height: 238rpx;
+  background-color: #fff;
+}
+
+.conpon_price {
+  position: relative;
+  z-index: 2;
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 250rpx;
+  height: 238rpx;
+  background-size: 100% 100%;
+}
+
+.price {
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 52rpx;
+  line-height: 74rpx;
+}
+
+.price .text {
+  font-weight: 900;
+  color: #ffffff;
+  font-size: 80rpx;
+  line-height: 102rpx;
+}
+
+.desc {
+  color: #ffffff;
+  font-size: 24rpx;
+  letter-spacing: 1.6rpx;
+  line-height: 34rpx;
+  margin-top: 32rpx;
+}
+
+.coupon_info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding-right: 32rpx;
+  background-color: #fff;
+}
+
+.content {
+  flex: 1;
+  overflow: hidden;
+  height: 174rpx;
+  padding: 32rpx 0 32rpx 32rpx;
+}
+
+.coupon_head {
+  display: flex;
+  align-items: center;
+  padding-bottom: 66rpx;
+}
+
+.label {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 112rpx;
+  height: 30rpx;
+  color:#ffffff;
+  font-size: 20rpx;
+  line-height: 30rpx;
+  text-align: center;
+  margin-right: 10rpx;
+  background-image: linear-gradient(143.68deg,#ff8957 0%,#ff5a57 100%);
+  border-radius: 14rpx;
+}
+
+.coupon_title {
+  flex: 1;
+  overflow: hidden;
+  color: #333333;
+  font-size: 26rpx;
+  line-height: 30rpx;
+}
+
+.time {
+  color: #999999;
+  font-size: 22rpx;
+  line-height: 32rpx;
+}
+
+.select_icon,
+.select {
+  width: 36rpx;
+  height: 36rpx;
+}

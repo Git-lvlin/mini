@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "选择自提点",
+  "usingComponents": {
+    "address-popup": "/components/common/address-popup/index"
+  }
+}

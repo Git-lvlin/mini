@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "个人信息",
+  "usingComponents": {
+    "cell-item": "/components/common/cell-item/index"
+  }
+}

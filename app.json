@@ -1,0 +1,134 @@
+{
+  "pages": [
+    "pages/home/index",
+    "pages/community/index",
+    "pages/cart/index",
+    "pages/user/index",
+    "pages/login/main/index",
+    "pages/login/mobile/index",
+    "pages/login/bindPhone/index",
+    "pages/list/index",
+    "pages/location/index",
+    "pages/intensive/index",
+    "pages/otherpay/index",
+    "pages/webview/index",
+    "pages/invitation/index",
+    "pages/locationSearch/index",
+    "pages/test/index",
+    "pages/maintain/index"
+  ],
+  "subpackages": [
+    {
+      "root": "dokit",
+      "pages": [
+        "appInformation/appInformation",
+        "h5door/h5door",
+        "logs/logs",
+        "positionSimulation/positionSimulation",
+        "storage/storage",
+        "index/index",
+        "debug/debug"
+      ]
+    },
+    {
+      "root": "subpages/community",
+      "pages": [
+        "main/index"
+      ]
+    },
+    {
+      "root": "subpages/cart",
+      "pages": [
+        "create/index",
+        "detail/index",
+        "class/index",
+        "address/index",
+        "search/index",
+        "cashier/index",
+        "editAddress/index",
+        "changeShipper/index",
+        "teamDetail/index",
+        "store/index",
+        "priceDetail/index"
+      ]
+    },
+    {
+      "root": "subpages/user",
+      "pages": [
+        "main/index",
+        "setting/index",
+        "changeInfo/index",
+        "changePhone/index",
+        "information/index"
+      ]
+    }
+  ],
+  "preloadRule": {
+    "pages/home/index": {
+      "network": "all",
+      "packages": [
+        "subpages/cart",
+        "subpages/user",
+        "subpages/community"
+      ]
+    },
+    "pages/cart/index": {
+      "network": "all",
+      "packages": [
+        "subpages/cart",
+        "subpages/user",
+        "subpages/community"
+      ]
+    },
+    "pages/user/index": {
+      "network": "all",
+      "packages": [
+        "subpages/user",
+        "subpages/cart",
+        "dokit"
+      ]
+    }
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "约购",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#000000",
+    "selectedColor": "#000000",
+    "backgroundColor": "#000000",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "/images/tabbar/home@3x.png",
+        "selectedIconPath": "/images/tabbar/actHome@3x.png"
+      },
+      {
+        "pagePath": "pages/cart/index",
+        "text": "购物车",
+        "iconPath": "/images/tabbar/cart@3x.png",
+        "selectedIconPath": "/images/tabbar/actCart@3x.png"
+      },
+      {
+        "pagePath": "pages/user/index",
+        "text": "我的",
+        "iconPath": "/images/tabbar/me@3x.png",
+        "selectedIconPath": "/images/tabbar/actMe@3x.png"
+      }
+    ]
+  },
+  "usingComponents": {
+    "van-image": "/miniprogram_npm/@vant/weapp/image/index"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "方便确定您当前位置"
+    }
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

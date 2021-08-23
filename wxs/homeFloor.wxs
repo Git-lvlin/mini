@@ -1,0 +1,17 @@
+
+var getHeadBackCss = function(style, defUrl) {
+  var url = !!defUrl ? defUrl : 'https://dev-yeahgo-oss.waiad.com/miniprogram/home/appointment_back.png'
+  var headBackCss = "background-image: url(" + url + ")";
+  if(!!style && style.backgroundImage) {
+    headBackCss = "background-image: url(" + style.backgroundImage + ")";
+  } else if(!!style && style.backgroundColor) {
+    headBackCss = "background-color: " + style.backgroundColor;
+  } else if(!defUrl) {
+    headBackCss = "background-color: #fff";
+  }
+  return headBackCss;
+}
+
+module.exports = {
+  getHeadBackCss: getHeadBackCss,
+}

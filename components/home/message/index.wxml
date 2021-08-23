@@ -1,0 +1,28 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="message" wx:if="{{msgList.length}}">
+  <view class="flex_middle message_content">
+    <view class="msg_label">约报</view>
+    <view class="message_body">
+      <swiper 
+        class="message_list"
+        circular
+        vertical
+        autoplay
+        interval="3000"
+        duration="800"
+      >
+        <swiper-item
+          class="message_item text_one_line"
+          wx:for="{{msgList}}"
+          wx:key="id"
+          data-data="{{item}}"
+          bindtap="onMsg"
+        >
+          <text>{{item.title}}</text>
+        </swiper-item>
+      </swiper>
+    </view>
+    <view class="right_arrow_black" />
+  </view>
+</view>

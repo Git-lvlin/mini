@@ -1,0 +1,39 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+<wxs module="utils" src="../../../wxs/homeFloor.wxs" />
+
+<view
+  class="coupon"
+  style="{{utils.getHeadBackCss(floor.style, tools.getImgUrl('miniprogram/home/coupon_back.png'))}}"
+  wx:if="{{couponList.length}}"
+>
+  <panel-title
+    title="{{floor.header.title[0].name}}"
+    desc="{{floor.header.subTitle[0].name}}"
+    color="#fff"
+    moreText="{{floor.header.subTitle[0].action}}"
+    actionUrl="{{floor.header.subTtle[0].actionUrl}}"
+  />
+  <view class="coupon_list">
+    <view
+      class="coupon_item"
+      style="background-image: url('{{item.lqStatus === 1 ? coupon : couponSelect}}');"
+      wx:for="{{couponList}}"
+      wx:key="id"
+      wx:if="{{index < 3}}"
+    >
+      <price-mobel
+        money="{{item.freeAmount}}"
+        maxSize="{{48}}"
+      />
+      <view class="desc">满{{item.usefulAmount}}可用</view>
+    </view>
+  </view>
+
+  <view class="receive">
+    <image
+      class="receive_btn"
+      src="{{tools.getImgUrl('miniprogram/home/receive_coupon.png')}}"
+      bindtap="onClickReceive"
+    />
+  </view>
+</view>

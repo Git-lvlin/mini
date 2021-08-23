@@ -1,0 +1,35 @@
+/* 分享弹窗 */
+.share_poster{
+  overflow: hidden;
+  width: 550rpx;
+  height: 870rpx;
+  border-bottom-left-radius: 30rpx;
+  border-bottom-right-radius: 30rpx;
+}
+
+.share_photo{
+  width: 550rpx;
+  height: 870rpx;
+}
+
+.save_picture{
+  margin-left: 225rpx;
+  margin-top: 30rpx;
+}
+
+.pic1 {
+  width: 103rpx;
+  height: 103rpx;
+}
+
+.word2 {
+  width: 109rpx;
+  display: block;
+  overflow-wrap: break-word;
+  color: rgba(255,255,255,1);
+  font-size: 27rpx;
+  font-family: PingFangSC-Regular;
+  white-space: nowrap;
+  line-height: 38rpx;
+  text-align: center;
+}

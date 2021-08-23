@@ -1,0 +1,14 @@
+
+<view class="nodata" style="padding-top: {{top}}rpx">
+  <view class="list">
+    <view
+      class="nodata_item"
+      wx:for="{{imgList}}"
+      wx:key="type"
+      wx:if="{{item.type === type}}"
+    >
+      <image class="img" src="{{item.img}}" />
+      <view class="title">{{!!title ? title : item.title}}</view>
+    </view>
+  </view>
+</view>
