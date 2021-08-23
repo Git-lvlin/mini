@@ -13,17 +13,19 @@ const url = {
 
 const getExamine = (params) => {
   const state = wx.getStorageSync("EXAMINE") || false;
-  const verifyVersionId = state ? 2 : 3;
-  params = {
-    verifyVersionId,
-    ...params
-  };
+  if(state) {
+    params = {
+      verifyVersionId: 2,
+      ...params
+    };
+  }
   return params;
 }
 
 export default {
   // 首页楼层通用接口数据
   getFloorList(params, options) {
+    params.floorVersion = '1.0.2'
     return Request.get(url.floorList, params, options)
   },
 
@@ -51,6 +53,7 @@ export default {
       showLoading: false,
       ...options,
     }
+    params = getExamine(params);
     return Request.get(url, params, option)
   },
 

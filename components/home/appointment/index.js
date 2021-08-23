@@ -1,7 +1,6 @@
 import homeApi from '../../../apis/home';
 import router from '../../../utils/router';
-import { mapNum } from '../../../utils/homeFloor';
-import { showToast } from '../../../utils/tools';
+import { showToast, mapNum } from '../../../utils/tools';
 
 let tempSpot = {};
 
@@ -58,6 +57,7 @@ Component({
           storeNo: spot.storeNo || ""
         }).then(res => {
           let goodList = mapNum(res.goodsInfo)
+          goodList = goodList.slice(0, goodList.length > 2 ? 2 : goodList.length);
           this.setData({
             goodList
           });

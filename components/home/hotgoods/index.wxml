@@ -7,11 +7,13 @@
       <panel-title 
         title="{{floor.header.title[0].name}}"
         desc="{{floor.header.subTitle[0].name}}"
-        more
-        moreText="{{floor.header.subTitle[0].action}}"
-        actionUrl="{{floor.header.subTitle[0].actionUrl}}"
       />
     </view>
+    <!-- 
+      more
+      moreText="{{floor.header.subTitle[0].action}}"
+      actionUrl="{{floor.header.subTitle[0].actionUrl}}"
+    -->
   </view>
   <view class="good_list">
     <view

@@ -6,15 +6,21 @@ import router from "../utils/router"
 import dayjs from '../miniprogram_npm/dayjs/index.js'
 import relativeTime from './dayjsplugin/relativeTime'
 import util from "./util"
-import { agreementUrl } from "../constants/common"
+import { agreementUrl, ossHost } from "../constants/common"
 
 dayjs.extend(relativeTime);
 
 // 获取当前环境接口域名
 export const getBaseApiUrl = () => {
-  const env = wx.getStorageSync("SYS_ENV") || 'prod';
+  const env = wx.getStorageSync("SYS_ENV") || 'pro';
   return baseApi[env];
 }
+
+// 获取图片最新cdn地址
+export const getImgCdn = () => {
+  const env = wx.getStorageSync("SYS_ENV");
+  return ossHost[env];
+};
 
 // 提示信息
 const showErrorMsg = (msg, icon) => {
@@ -41,6 +47,7 @@ export const handleErrorCode = ({
         // showErrorMsg("您还未登录，请登录");
         if(!store.data.showLoginMobel) {
           console.log(store);
+          clearLoginInfo();
           store.data.showLoginMobel = true;
           showModal({
             content: "您还未登录，请登录",
@@ -202,8 +209,10 @@ export const getSystemInfo = () => {
   // 此高度基于右上角菜单在导航栏位置垂直居中计算得到 单位rpx
   // systemInfo.menuToNavHeight = (top - systemInfo.statusBarHeight) * rpxRatio;
   systemInfo.menuToNavHeight = (top - systemInfo.statusBarHeight) * data.pixelRatio;
+  systemInfo.navHeight = (height + (top - systemInfo.statusBarHeight) * 2);
   systemInfo.navBarHeight = (height + (top - systemInfo.statusBarHeight) * 2) * rpxRatio;
   systemInfo.statusHeight = systemInfo.statusBarHeight * rpxRatio;
+  systemInfo.navTotalHeightPx = systemInfo.navHeight + systemInfo.statusBarHeight;
   systemInfo.navTotalHeight = systemInfo.statusHeight + systemInfo.navBarHeight;
   systemInfo.bottomBarHeight = (data.screenHeight - data.safeArea.bottom) * rpxRatio
   if(data.system.indexOf("iOS")) {
@@ -368,7 +377,6 @@ export const setLoginRouter = (path) => {
 }
 
 
-
 export const getRelativeTime = (time) => {
   const timeStr = dayjs().from(dayjs(time));
   let str = '';
@@ -404,8 +412,21 @@ export const getRelativeTime = (time) => {
   return str;
 };
 
+
+// 格式化销量
+export const mapSales = (sale, text = "万") => {
+  sale = +sale || 0;
+  if(sale < 9999) {
+    return sale;
+  } else {
+    sale = parseInt(sale / 10000);
+    return `${sale}${text}+`
+  }
+};
+
 // 转为浮点数
 export const mapNum = (list = []) => {
+  list = !!list ? list : [];
   list.forEach(item => {
     if(item.marketPrice) {
       item.marketPrice = util.divide(item.marketPrice, 100);

@@ -51,8 +51,12 @@ create.Page(store, {
     });
   },
 
-  onShow() {
-    
+  onUnload() {
+    this.setData({
+      fristCategory: [],
+      secondCategory: [],
+      goodsList: [],
+    })
   },
 
   // 获取一级二级分类
@@ -93,6 +97,7 @@ create.Page(store, {
     const params = {
       gcId1: selectFristClass,
       size: 10,
+      next: ""
     }
     if(!!next) params.next = next;
     goodApi.getRecommends(params).then(res => {

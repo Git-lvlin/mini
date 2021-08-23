@@ -22,6 +22,7 @@
     <view class="not_list" wx:if="{{!$.storeCartList.length && !!userInfo}}">
       <nodata
         top="{{48}}"
+        type="cart"
       />
       <view class="to_browse" bindtap="onToHome">去逛逛吧</view>
     </view>

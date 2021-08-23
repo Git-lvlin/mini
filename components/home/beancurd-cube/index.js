@@ -38,7 +38,8 @@ Component({
           })
         }
         homeApi.getFloorCustom(content.dataUrl).then(res => {
-          let list = this.mapTypeList(res);
+          // let list = this.mapTypeList(res);
+          let list = res;
           homeCache.goodTypeList = list;
           this.setData({
             goodTypeList: list
@@ -49,7 +50,8 @@ Component({
           })
         });
       } else {
-        let list = this.mapTypeList(content.data);
+        // let list = this.mapTypeList(content.data);
+        let list = content.data;
         this.setData({
           goodTypeList: list
         })

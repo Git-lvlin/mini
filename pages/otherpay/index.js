@@ -258,8 +258,26 @@ Page({
           payInfo
         })
         showToast({ title: "支付失败"});
+        that.cancelPay();
         // router.goTabbar("user");
       }
     })
+  },
+
+  // 取消支付/支付失败
+  cancelPay() {
+    const {
+      id,
+    } = this.params;
+    cartApi.cancelPay({
+      outTradeNo: id
+    }).then(res => {
+      console.log("取消支付回调", res);
+    });
+  },
+
+  // 返回首页
+  onToHome() {
+    router.goTabbar();
   },
 })

@@ -1,4 +1,5 @@
 import homeApi from "../../../apis/home";
+import router from "../../../utils/router";
 
 Component({
   options: {
@@ -62,10 +63,9 @@ Component({
     }) {
       let data = currentTarget.dataset.data;
       console.log("msg跳转", data.actionUrl);
-      // router.push({
-      //   name: 'detail',
-      //   data
-      // });
+      if(data.actionUrl) {
+        router.getUrlRoute(data.actionUrl);
+      }
     },
   }
 })

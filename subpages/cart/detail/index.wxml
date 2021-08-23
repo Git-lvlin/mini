@@ -9,7 +9,11 @@
       src="{{tools.getImgUrl('miniprogram/cart/good_back.png')}}"
       bindtap="onToBack"
     />
-    <user-together-banner list="{{togetherUser}}" top="{{backTopHeight + 96}}" />
+    <user-together-banner
+      orderType="{{isActivityGood}}"
+      list="{{togetherUser}}"
+      top="{{backTopHeight + 560}}"
+    />
     <swiper
       class="banner"
       indicator-dots="{{true}}"
@@ -35,8 +39,38 @@
   </view>
 
   <!-- 商品标题模块 -->
+  <view
+    style="background-image: url({{intensiveBack}})"
+    class="flex_middle intensive_price"
+    wx:if="{{isActivityGood == 15}}"
+  >
+    <view class="intensive_price_mobel">
+      <price-mobel
+        money="{{good.activityPrice != undefined ? good.activityPrice : good.goodsSaleMinPrice}}"
+        marketMoney="{{good.goodsMarketPrice}}"
+        minSize="{{32}}"
+        maxSize="{{72}}"
+        color="#fff"
+        defaultColor="#fff"
+      />
+    </view>
+    <view class="intensive_time">
+      <image class="intensive_time_back" src="{{tools.getImgUrl('miniprogram/cart/jiyue_time.png?v=2021')}}" />
+      <view class="flex_center intensive_time_box ">
+        <view class="intensive_time_text">距活动结束仅剩</view>
+        <view class="intensive_end">
+          <count-down
+            time="{{ (good.leftTime || 0) * 1000 }}"
+            isFull
+            needDay
+          />
+        </view>
+      </view>
+    </view>
+  </view>
   <view class="good_head">
-    <view class="good_price" wx:if="{{isActivityGood == 1 || isActivityGood == 2}}">
+    <!-- 普通商品价格 -->
+    <view class="good_price" wx:if="{{isActivityGood == 1}}">
       <view class="price">
         ￥<text class="max_text">{{tools.getPriceSplit(good.goodsSaleMinPrice)}}</text>{{tools.getPriceSplit(good.goodsSaleMinPrice, 1)}}
         <view class="market_price ">￥{{good.goodsMarketPrice}}</view>
@@ -45,14 +79,86 @@
       <view class="sales">{{good.goodsSaleNum}}</view>
     </view>
     <view class="good_info">
+      <!-- 商品标题 -->
       <view class="good_title">
         <view class="text">{{good.goodsName}}</view>
-        <view class="">{{good.goodsDesc}}</view>
+        <view class="flex_middle good_desc_box">
+          <view class="desc_text text_one_line">{{good.goodsDesc}}</view>
+          <view
+            class="store_show_sale"
+            wx:if="{{isActivityGood == 2 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11}}"
+          >{{good.goodsSaleNum}}</view>
+        </view>
       </view>
-      <view
-        class="store_show_sale"
-        wx:if="{{isActivityGood == 15 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11}}"
-      >{{good.goodsSaleNum}}</view>
+    </view>
+    <!-- 集约进度 -->
+    <view class="flex_middle intensive_progress" wx:if="{{isActivityGood == 15}}">
+      <view class="progress_box">
+        <image class="fire_icon" src="{{tools.getImgUrl('miniprogram/home/appointment_fire.png')}}" />
+        <view class="progress_line" style="width: {{good.percentage || 0}}%" />
+        <view class="progress_text">已售{{good.percentage || 0}}%</view>
+      </view>
+      <view class="intensive_sale">{{good.storeSaleSumNum || 0}}</view>
+    </view>
+    <!-- 集约参与人 -->
+    <view class="intensive_join" wx:if="{{isActivityGood == 15 && intensiveUser.records.length}}">
+      <view class="flex_center join_info">
+        <view class="join_red">{{intensiveUser.buyerNum || 0}}</view>人已约
+        <view class="join_red">{{intensiveUser.saleNum || 0}}</view>件
+      </view>
+      <view class="intensive_join_user">
+        <block
+          wx:for="{{intensiveUser.records}}"
+          wx:key="index"
+        >
+          <view class="join_item" >
+            <van-image
+              width="62rpx"
+              height="62rpx"
+              round
+              src="{{item.icon}}"
+            />
+            <view class="join_buy_num" wx:if="{{item.buyNum > 1}}">{{item.buyNum}}件</view>
+          </view>
+          <view class="join_item other_join" wx:if="{{index == 7}}">
+            <van-image
+              width="62rpx"
+              height="62rpx"
+              round
+              src="{{tools.getImgUrl('miniprogram/common/intensive_more.png')}}"
+            />
+          </view>
+        </block>
+      </view>
+      <view class="flex_center current_user">
+        <van-image
+          width="52rpx"
+          height="52rpx"
+          round
+          custom-class="current_user_avatar"
+          src="{{intensiveUser.records[0].icon}}"
+        />
+        <view class="current_text">{{intensiveUser.records[0].nickName}}<text class="join_red"></text>{{intensiveUser.records[0].desc}}</view>
+      </view>
+    </view>
+    <!-- 单约团约价格显示 -->
+    <view class="store_price" wx:if="{{isActivityGood == 2 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11}}">
+      <view class="flex_middle" style="flex: 1;">
+        <view class="store_price_title">{{ utils.getPriceTitle(isActivityGood) }}</view>
+        <price-mobel
+          money="{{good.activityPrice != undefined ? good.activityPrice : good.goodsSaleMinPrice}}"
+          marketMoney="{{isActivityGood == 2 ? 0 : good.goodsMarketPrice}}"
+          desc="{{ utils.getPriceDesc(isActivityGood) }}"
+          minSize="{{28}}"
+          maxSize="{{48}}"
+          defaultColor="#B2B2B2"
+        />
+        <block wx:if="{{isActivityGood == 2}}">
+          <view class="sec_label">秒约特惠</view>
+          <view class="sec_market_price">市场价￥{{good.goodsMarketPrice}}</view>
+        </block>
+      </view>
+      <!-- 加入购物车 -->
       <view class="add_cart" wx:if="{{isActivityGood == 1 || isActivityGood == 2}}">
         <view
           class="cart_btn"
@@ -62,27 +168,49 @@
         <view class="num_controller" wx:if="{{quantity && good.isMultiSpec == 0}}">
           <image
             class="icon"
-            src="{{tools.getImgUrl('miniprogram/cart/reduce%402x.png')}}"
+            src="{{tools.getImgUrl('miniprogram/cart/reduce%402x.png?v=2021')}}"
             bindtap="reduceCart"
           />
           <view class="num_input" >{{quantity}}</view>
           <image
             class="icon"
-            src="{{tools.getImgUrl('miniprogram/cart/add%402x.png')}}"
+            src="{{tools.getImgUrl('miniprogram/cart/add%402x.png?v=2021')}}"
             bindtap="addCart"
           />
         </view>
       </view>
     </view>
-    <view class="store_price" wx:if="{{isActivityGood == 15 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11}}">
-      <view class="store_price_title">{{ utils.getPriceTitle(isActivityGood) }}：</view>
-      <price-mobel
-        money="{{good.activityPrice != undefined ? good.activityPrice : good.goodsSaleMinPrice}}"
-        marketMoney="{{good.goodsMarketPrice}}"
-        desc="市场价："
-        minSize="{{28}}"
-        maxSize="{{48}}"
-      />
+  </view>
+
+  <view class="space_20" />
+
+  <!-- 选择规格 -->
+  <view class="spec_conetnt">
+    <view
+      class="flex_middle info_bar"
+      wx:if="{{good.isMultiSpec == 1}}"
+      bindtap="openSpecPopup"
+    >
+      <view class="flex_fix info_bar_name">已选</view>
+      <view class="info_bar_value">
+        <view class="sec_name">{{currentSku.skuId ? currentSku.skuName : '请选择商品规格'}}</view>
+      </view>
+      <view class="flex_fix right_arrow_gray" />
+    </view>
+    <view class="flex_middle info_bar">
+      <view class="flex_fix info_bar_name">服务</view>
+      <view class="info_bar_value">
+        <view class="flex_middle service_list">
+          <view
+            class="flex_middle service_item"
+            wx:for="{{serviceList}}"
+            wx:key="index"
+          >
+            <image class="service_icon" src="{{tools.getImgUrl('miniprogram/common/detail_right.png')}}" />
+            <view class="service_name">{{item}}</view>
+          </view>
+        </view>
+      </view>
     </view>
   </view>
 
@@ -96,9 +224,9 @@
 
   <view class="space_20" wx:if="{{isActivityGood == 15}}" />
   
-  <!-- 提货地址 -->
-  <view class="pick_info" wx:if="{{isActivityGood == 15}}" >
-    <view class="pick_info_title">选择配送方式：</view>
+  <!-- 集约提货地址 -->
+  <view class="flex_middle pick_info" wx:if="{{isActivityGood == 15}}" >
+    <view class="flex_fix pick_info_title">选择配送方式：</view>
     <view class="flex_middle pick_way">
       <view
         class="flex_middle pick_way_item {{!item.status ? '' : 'way_item_act'}}"
@@ -113,6 +241,18 @@
       </view>
     </view>
   </view>
+
+  <view class="space_20" wx:if="{{isActivityGood == 15}}" />
+
+  <!-- 提示 -->
+  <view class="intensive_tip" wx:if="{{isActivityGood == 15}}">
+    <view class="intensive_tip_title">温馨提示：</view>
+    <view class="intensive_tip_text">如有商品质量问题，可以申请更换商品，暂不支持直接退货。</view>
+  </view>
+
+  <view class="space_20" wx:if="{{isActivityGood == 15}}" />
+  
+  <store-panel good="{{good}}" wx:if="{{isActivityGood == 15}}" />
   
   <!-- 拼单列表 -->
   <block wx:if="{{(isActivityGood == 3 || isActivityGood == 4) && !!personalList.length}}">
@@ -160,6 +300,7 @@
     specType="{{specType}}"
     bind:specBuy="onToCreate"
     bind:specAdd="specUpdateCart"
+    bind:setSku="setCurrentSku"
   />
 
   <!-- 普通 || 1688商品 -->
@@ -169,7 +310,7 @@
       wx:if="{{isActivityGood == 1 || isActivityGood == 2}}"
       bindtap="onToCart"
     >
-      <view class="label_num" wx:if="{{$.cartListTotal.checkedQuantity}}">{{$.cartListTotal.checkedQuantity}}</view>
+      <view class="label_num" wx:if="{{$.goodListTotal.checkedQuantity}}">{{$.goodListTotal.checkedQuantity}}</view>
       <image class="bar_item_icon" src="{{tools.getImgUrl('miniprogram/common/mini_cart.png')}}" />
       <view class="bar_item_name">购物车</view>
     </view>
@@ -182,12 +323,12 @@
       <view class="bar_item_name">店铺</view>
     </view>
     <view class="flex_fix buy_bar_space" />
-    <view class="to_buy_btn" data-type="alone" bindtap="onBuy">立即购买</view>
+    <view class="to_buy_btn" data-type="alone" bindtap="onToCreate">立即购买</view>
   </view>
 
   <!-- 集约商品 -->
   <view class="intensive_buy" wx:if="{{isActivityGood == 15}}">
-    <view class="intensive_buy_btn" bindtap="onBuy">立即购买</view>
+    <view class="intensive_buy_btn" bindtap="onToCreate">立即购买</view>
   </view>
 
   <!-- 普通商品结算 -->
@@ -222,7 +363,7 @@
       <view
         class="flex_center order_btn_item"
         data-type="alone"
-        bindtap="onBuy"
+        bindtap="onToCreate"
       >
         <view class="mar_price">￥{{good.goodsSaleMinPrice}}</view>
         <view class="mar_price">单独购买</view>
@@ -251,6 +392,6 @@
     data="{{teamDetail}}"
     show="{{showTogetherPopup}}"
     bind:close="handleCloseTogetherPopup"
-    bind:jump="onBuy"
+    bind:jump="onToCreate"
   />
 </view>

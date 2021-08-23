@@ -5,10 +5,10 @@
   <view class="good_panel">
     <view class="good_head">
       <view class="title">{{vipGood.userTagList.title || ""}}</view>
-      <view
-        class="label label_orgin"
-        style="background-image: url({{tools.getImgUrl('miniprogram/home/vip_origin.png')}})"
-      >{{vipGood.userTagList.tag || ""}}</view>
+      <view class="flex_center label label_orgin">
+        更多商品
+        <view class="right_arrow_simple" />
+      </view>
     </view>
     <view class="desc desc_origin">{{vipGood.userTagList.subtitle || ""}}</view>
     <view class="good_list">
@@ -27,10 +27,10 @@
   <view class="good_panel">
     <view class="good_head">
       <view class="title">{{vipGood.shopTagList.title || ""}}</view>
-      <view
-        class="label label_red"
-        style="background-image: url({{tools.getImgUrl('miniprogram/home/vip_red.png')}})"
-      >{{vipGood.shopTagList.tag || ""}}</view>
+      <view class="flex_center label label_red">
+        更多商品
+        <view class="right_arrow_simple" />
+      </view>
     </view>
     <view class="desc desc_red">{{vipGood.shopTagList.subtitle || ""}}</view>
     <view class="good_list">

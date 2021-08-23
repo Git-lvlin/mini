@@ -1,0 +1,23 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="usergoods" wx:if="{{userLike.length}}">
+  <view class="head" style="background-image: url({{tools.getImgUrl('miniprogram/home/user-like/like_background.png')}})">
+    <image class="user_icon" src="{{tools.getImgUrl('miniprogram/home/user-like/crown.png')}}" />
+    <view class="user_title">
+       <view class="like_title">猜你喜欢</view>
+       <view class="like_introduce">大家都选择的优质好商品</view>
+    </view>
+  </view>
+  <view class="user_like_card">
+    <view
+      class="good_item"
+      wx:for="{{userLike}}"
+      wx:key="id"
+    >
+      <good-like
+        data="{{item}}"
+        size="240rpx"
+      />
+    </view>
+  </view>
+</view>

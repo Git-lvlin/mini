@@ -2,6 +2,7 @@
   "component": true,
   "usingComponents": {
     "panel-title": "/components/home/panel-title/index",
-    "van-count-down": "/miniprogram_npm/@vant/weapp/count-down/index"
+    "count-down": "/components/common/count-down/index",
+    "nodata": "/components/common/nodata/index"
   }
 }

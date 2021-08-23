@@ -39,7 +39,7 @@
         {
           "name": "商详",
           "pathName": "subpages/cart/detail/index",
-          "query": "activityId=0&objectId=&orderType=2&skuId=3600&spuId=2504&wsId=0",
+          "query": "activityId=0&objectId=4647293761078952743&orderType=15&skuId=3638&spuId=2513&wsId=0",
           "scene": null
         },
         {
@@ -64,6 +64,18 @@
           "name": "subpages/cart/class/index",
           "pathName": "subpages/cart/class/index",
           "query": "category_id=4",
+          "scene": null
+        },
+        {
+          "name": "商品搜索",
+          "pathName": "subpages/cart/search/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "subpages/cart/store/index",
+          "pathName": "subpages/cart/store/index",
+          "query": "storeNo=store_m_124058",
           "scene": null
         }
       ]

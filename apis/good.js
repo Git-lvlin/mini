@@ -18,6 +18,7 @@ const url = {
   detailImg: "/goods/open/detailImages",
   skuList: "/goods/open/skus",
   checkSku: "/goods/option/goodsSpecList",
+  intensiveUser: "/goods/option/goodsRandomVirtual",
   personalDetail: "/activity/option/group/personal/goodsInfo",
   pushTogether: "/activity/auth/group/createSingle",
   memberList: "/activity/option/group/personal/memberList",
@@ -34,6 +35,7 @@ const url = {
   hotSearch: "/search/open/HotKeyword/index",
   searchList: "/search/option/opensearch/index",
   associationList: "/search/open/opensearch/getSuggest",
+  userLike:"/goods/option/userLike",
 
   storeDetail: "/store/option/storeShop/show",
   storeGood: "/store/option/storeShop/salePage",
@@ -129,6 +131,11 @@ export default {
   getTogetherUser(params, option) {
     return Request.post(url.togetherUser, params, option);
   },
+  // 获取参与集约用户
+  getIntensiveUser(params, option) {
+    return Request.post(url.intensiveUser, params, option);
+  },
+
 
   // 获取详情比价信息
   getDetailRatio(params, option) {
@@ -162,6 +169,10 @@ export default {
   // 搜索联想
   getAssociationList(params, option) {
     return Request.post(url.associationList, params, option);
+  },
+  //获取猜你喜欢商品列表
+  getUserLike(params, option) {
+    return Request.get(url.userLike, params, option);
   },
 
   // 获取店铺详情

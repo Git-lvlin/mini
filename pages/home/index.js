@@ -27,33 +27,53 @@ create.Page(store, {
     scrolling: false,
     scrollBottom: false,
     floor: {},
-    headBackCss: `background-image: url(${IMG_CDN}miniprogram/home/nav_back.png)`, 
+    headBackCss: `background-image: url(${IMG_CDN}miniprogram/home/nav_back.png?v=2021)`, 
     activityAdvert: {},
     locationAuth: false,
     takeSpot: {},
+    navbarInitTop: 0, //导航栏初始化距顶部的距离
+    isFixedTop: false, //是否固定顶部
+    topSearchHeight: 0,
+    showLoadImg: false,
+    refresherTriggered: false,
+    scrollTop: 0,
+    leaveTop: 0,
   },
-
   onLoad(options) {
     console.log("home", this.store.data);
     // 系统弹窗
     this.getSystemPopup();
     // 活动弹窗
-    this.getAdvert(2);
-    let url = "https://www.kdocs.cn/p/115688640900r";
-    let route = url.match(/(http|https):\/\/([^/]+)(\S*)/);
-    console.log("route", route);
+    // this.getAdvert(2);
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      this.setData({
+        showLoadImg: true
+      });
+    });
   },
 
   onReady() {
     let query = wx.createSelectorQuery();
+    const {
+      systemInfo,
+    } = this.store.data;
     query.select('#fixation').boundingClientRect((rect) => {
       if(rect) {
         this.setData({
-          fixationTop: rect.top
+          fixationTop: rect.top,
         })
       }
     }).exec();
     this.getLocationAuth(this);
+    query.select('#top_search').boundingClientRect((rect) => {
+      if(rect) {
+        this.setData({
+          topSearchHeight: rect.height,
+          navigationBarHeight:systemInfo.navBarHeight+(systemInfo.rpxRatio*rect.height)
+        })
+      }
+    }).exec();
   },
 
   onShow() {
@@ -93,7 +113,7 @@ create.Page(store, {
   },
 
   // 获取首页楼层列表
-  getFloorList() {
+  getFloorList(isReload = false) {
     let floor = wx.getStorageSync("HOME_FLOOR");
     let headBackCss = "";
     // 2 代表小程序审核版本 3 代表小程序正试版本
@@ -113,10 +133,16 @@ create.Page(store, {
       showLoading: this.isFristLoad,
     }).then(res => {
       this.isFristLoad = true;
+      if(isReload) {
+        this.setData({
+          floor: {}
+        })
+      }
       headBackCss = this.setHeadBack(res.headData && res.headData.style || "");
       this.setData({
         floor: res,
         headBackCss,
+        refresherTriggered: false,
       });
       wx.setStorage({ key: "HOME_FLOOR", data: res });
     })
@@ -166,7 +192,7 @@ create.Page(store, {
   // 设置首页头部背景
   setHeadBack(style) {
     // let headBackCss = `background-color: #FC3B18`;
-    let headBackCss = `background-image: url("${IMG_CDN}miniprogram/home/nav_back.png")`;
+    let headBackCss = `background-image: url('${IMG_CDN}miniprogram/home/nav_back.png?v=2022')`;
     // if(style.backgroundImage) {
     //   headBackCss = `background-image: url(${style.backgroundImage})`
     // } else if(style.backgroundColor) {
@@ -269,11 +295,15 @@ create.Page(store, {
   },
  
   // 监听页面滚动
-  onPageScroll(e) {
+  // onPageScroll(e) {
+  onViewScroll({
+    detail
+  }) {
     let {
       fixationTop,
       isOnGoods,
       scrollBottom,
+      navbarInitTop,
     } = this.data;
 
     if(scrollBottom) {
@@ -296,6 +326,64 @@ create.Page(store, {
     //   this.scrollLock = false;
     //   clearTimeout(this.onTimeTimer)
     // }, 200);
+
+    if (detail.scrollTop < 10) {
+      //获取节点距离顶部的距离
+      const query = this.createSelectorQuery()
+      query.select('#classGoods').boundingClientRect()
+      query.selectViewport().scrollOffset()
+      query.exec((res) => {
+        // console.log('res', res)
+        if (res && res[0].top > 0) {
+          navbarInitTop = parseInt(res[0].top);
+          const topData = {
+            navbarInitTop
+          };
+          if(detail.scrollTop == 0 || navbarInitTop == 0) {
+            topData.leaveTop = navbarInitTop;
+          }
+          this.setData(topData);
+        }
+      })
+    }
+    // console.log(detail.scrollTop);
+    let scrollTop = parseInt(detail.scrollTop); //滚动条距离顶部高度
+    // 判断'滚动条'滚动的距离 和 '元素在初始时'距顶部的距离进行判断
+    // console.log('this.data.navbarInitTo', navbarInitTop)
+    let isSatisfy = scrollTop >= (navbarInitTop - 20) ? true : false;
+    // let isSatisfy = navbarInitTop < 138 ? true : false;
+    // 为了防止不停的setData, 这儿做了一个等式判断。 只有处于吸顶的临界值才会不相等
+    if (this.data.isFixedTop === isSatisfy) {
+      return false
+    }
+    this.setData({
+      isFixedTop: isSatisfy
+    })
+  },
+
+  // 设置view 滚动高度
+  setScroll() {
+    const {
+      navigationBarHeight,
+      navbarInitTop,
+      leaveTop,
+    } = this.data;
+    const {
+      systemInfo,
+    } = this.store.data;
+    this.setData({
+      scrollTop: leaveTop - 136,
+    })
+  },
+
+  // 更新置顶状态
+  setIsFixedTop({
+    detail,
+  }) {
+    console.log(detail);
+    this.setData({
+      isFixedTop: detail
+    })
   },
 
   // 页面滚动到底部
@@ -303,5 +391,16 @@ create.Page(store, {
     this.setData({
       scrollBottom: true,
     })
+  },
+
+  // 下拉刷新
+  onPullDownRefresh() {
+    wx.removeStorageSync("HOME_FLOOR");
+    wx.removeStorageSync("HOME_CACHE");
+    this.setData({
+      refresherTriggered: true
+    }, () => {
+      this.getFloorList(true);
+    });
   }
 })

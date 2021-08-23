@@ -277,6 +277,7 @@ create.Page(store, {
       provinceName: info.provinceName,
       cityId: info.cityId,
       cityName: info.cityName,
+      districtId: info.districtId,
       districtName: info.districtName,
       fullAddress: info.fullAddress,
       streetName: info.streetName || "",
@@ -352,6 +353,7 @@ create.Page(store, {
         deliveryInfo: {
           provinceId: storeAdress.provinceId,
           cityId: storeAdress.cityId,
+          districtId: storeAdress.districtId,
           districtName: storeAdress.districtName,
           streetName: storeAdress.streetName || "",
         },
@@ -367,6 +369,7 @@ create.Page(store, {
         postData.deliveryInfo = {
           provinceId: addressInfo.provinceId,
           cityId: addressInfo.cityId,
+          districtId: storeAdress.districtId,
           districtName: addressInfo.districtName,
           streetName: addressInfo.streetName || "",
         }
@@ -423,9 +426,9 @@ create.Page(store, {
 
   // 打开优惠券弹窗
   onOpenCoupon() {
-    // this.setData({
-    //   couponPopup: true
-    // })
+    this.setData({
+      couponPopup: true
+    })
   },
 
   // 监听优惠券弹窗关闭
@@ -553,6 +556,13 @@ create.Page(store, {
   onToCashier() {
     let userInfo = getStorageUserInfo(true, true);
     if(!userInfo) return;
+    const {
+      orderInfo,
+    } = this.data;
+    if(!orderInfo.storeGoodsInfos || !orderInfo.storeGoodsInfos.length) {
+      showToast({ title: "未获取到商品信息" });
+      return;
+    }
     let postData = {};
     if (this.orderType != 15) {
       postData = this.getSubmitGood();

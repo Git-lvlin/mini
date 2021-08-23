@@ -1,7 +1,7 @@
 
 .panel-title {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .center {
@@ -27,19 +27,36 @@
 }
 
 .more {
-  display: flex;
-  align-items: center;
-  color: #333333;
+  height: 40rpx;
+  color: #ea5534;
   font-size: 24rpx;
-  line-height: 36rpx;
-  margin-right: 12rpx;
+  line-height: 40rpx;
+  padding: 0 16rpx;
+  background-color: #ffffff;
+  border-radius: 20rpx;
+}
+
+.def_more {
+  height: 40rpx;
+  color: #333;
+  font-size: 24rpx;
+  line-height: 40rpx;
 }
 
 .more_arrow {
   width: 12rpx;
   height: 12rpx;
   margin-top: -2rpx;
-  border-top: 2rpx solid;
-  border-right: 2rpx solid;
+  border-top: 2rpx solid #ea5534;
+  border-right: 2rpx solid #ea5534;
+  transform: rotate(45deg);
+}
+
+.more_arrow_black {
+  width: 12rpx;
+  height: 12rpx;
+  margin-top: -2rpx;
+  border-top: 2rpx solid #333;
+  border-right: 2rpx solid #333;
   transform: rotate(45deg);
 }

@@ -1,5 +1,6 @@
 import create from "../../../utils/create";
 import store from "../../../store/good";
+import { showToast } from "../../../utils/tools";
 
 Component({
 
@@ -24,7 +25,16 @@ Component({
         num,
         good,
       } = this.data;
-      this.triggerEvent("change", { type:"add", good, num: 1})
+      if (num < good.buyMinNum) {
+        num = good.buyMinNum - num;
+      } else {
+        num = 1
+      }
+      if (num >= good.buyMaxNum) {
+        showToast({ title: `最多购买${good.buyMaxNum}` })
+        return;
+      }
+      this.triggerEvent("change", { type:"add", good, num})
       // const good = {
       //   skuId,
       //   quantity: 1,
@@ -37,7 +47,8 @@ Component({
         num,
         good,
       } = this.data;
-      if(num < 2) return;
+      let min = good.buyMinNum > 0 ? good.buyMinNum : 1;
+      if(num <= min) return;
       this.triggerEvent("change", { type:"add", good, num: -1})
     },
 
@@ -49,6 +60,13 @@ Component({
         good,
       } = this.data;
       let nowValue = Number(detail.value) || num;
+      if (nowValue < good.buyMinNum) {
+        nowValue = good.buyMinNum - nowValue;
+      }
+      if (num >= good.buyMaxNum) {
+        showToast({ title: `最多购买${good.buyMaxNum}` })
+        return;
+      }
       // if(nowValue === num || nowValue < 1) return;
       // nowValue = nowValue - num;
       this.triggerEvent("change", { type: "set", good, num: nowValue})

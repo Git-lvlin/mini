@@ -76,14 +76,16 @@ create.Page(store, {
     } else {
       this.getUserSetting();
     }
-    // 获取进入小程序场景值
-    if(codeScene[appScene]) {
-      // options.scene = "cf2a02ac71ca987860af70c2171d1512";
-      if(!options.scene) {
-        console.log("未获取到解析参数", options);
-      } else {
-        this.getShareParam(options);
-      }
+    // options.scene = "cf2a02ac71ca987860af70c2171d1512";
+    if(!options.scene) {
+      console.log("未获取到解析参数", options);
+    } else {
+      // 解析解密分享参数
+      commonApis.getShareParam(options).then(res => {
+        if(!!res.inviteCode) {
+          wx.setStorageSync("INVITE_INFO", res);
+        }
+      });
     }
     console.log("options", options)
     if(options.inviteCode) {
@@ -118,19 +120,6 @@ create.Page(store, {
       }
     }
     this.getCodeLogin(userInfo);
-  },
-
-  // 获取分享配置
-  getShareParam(data) {
-    commonApis.getShareParam({
-      scene: data.scene,
-    }).then(res => {
-      console.log(res)
-      const param = strToParamObj(res);
-      if(!!param.inviteCode) {
-        wx.setStorageSync("INVITE_INFO", param);
-      }
-    })
   },
   
   // 进入页面获取用户授权情况 - 旧api登录
@@ -176,7 +165,6 @@ create.Page(store, {
           wx.setStorageSync("OPENID", memberInfo.openId);
           tools.setUserInfo(res);
           this.getUserInfo(res.memberInfo);
-          // commonApis.runOverList();
         }).catch(err => {
           if(err.code === 200102) {
             wx.setStorageSync("LOGIN_INFO", err.data);

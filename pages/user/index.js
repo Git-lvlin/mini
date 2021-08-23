@@ -16,6 +16,7 @@ create.Page(store, {
     userAuth: true,
     canUseUserProfile: true,
     banner: "",
+    showSharePopup: false,
     showPopup: false,
     userData: [
       {
@@ -32,6 +33,7 @@ create.Page(store, {
       },
     ],
     userInfo: "",
+    downLoadImg:{}
   },
 
   onLoad: function (options) {
@@ -161,6 +163,10 @@ create.Page(store, {
       const userInfo = getStorageUserInfo(true);
       if(!userInfo) return;
     }
+    if(path == "share") {
+      this.showSharePopup()
+      return
+    }
     if(type === 1) {
       router.push({
         name: path
@@ -173,6 +179,17 @@ create.Page(store, {
   showPopup() {
     this.setData({
       showPopup: true,
+    })
+  },
+  showSharePopup() {
+    this.setData({
+      showSharePopup: true,
+    })
+  },
+
+  onHideSharePopup() {
+    this.setData({
+      showSharePopup: false,
     })
   },
 

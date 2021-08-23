@@ -1,10 +1,11 @@
 import commonApi from "../../../apis/common";
 import userApi from "../../../apis/user";
-import { IMG_CDN } from "../../../constants/common";
 import { USER_LEVEL } from "../../../constants/user";
 import router from "../../../utils/router";
-import { getStorageUserInfo, setStorageUserInfo, showModal, showToast } from "../../../utils/tools";
+import { getStorageUserInfo, setStorageUserInfo, showModal, showToast, getImgCdn } from "../../../utils/tools";
 import { getCofigData, getOssImgWH } from "../../../utils/uploadAliyun";
+
+const IMG_CDN = getImgCdn();
 
 Page({
   fileConfig: {

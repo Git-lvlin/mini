@@ -19,13 +19,13 @@ Component({
       },
       {
         text: "销量",
-        key: "goodsSaleMinPrice",
+        key: "goodsSaleNum",
         type: "DESC",
         selected: false,
       },
       {
         text: "价格",
-        key: "goodsSaleNum",
+        key: "goodsSaleMinPrice",
         type: "DESC", // ASC
         selected: false,
       }

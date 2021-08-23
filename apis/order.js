@@ -19,6 +19,7 @@ const url = {
   orderAmount: "/order/auth/orderAmount",
   bondPay: "/store/auth/memberShop/apply/pay",
   orderToken: "/order/auth/orderToken",
+  cancelPay: "/payment/open/adaPay/payCancel",
   
 }
 
@@ -89,6 +90,10 @@ export default {
   // 刷新订单token
   getOrderToken(params, option) {
     return Request.post(url.orderToken, params, option);
+  },
+  // 用户支付失败 - APP拉起微信支付时，用户没有支付成功
+  cancelPay(params, option) {
+    return Request.post(url.cancelPay, params, option);
   },
 
 }

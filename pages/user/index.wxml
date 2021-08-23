@@ -78,6 +78,8 @@
     <van-popup show="{{ showPopup }}" closeable round bind:close="onHidePopup">
       <view class="popup_content">请下载约购APP体验完整功能</view>
     </van-popup>
+
+    <down-app-code show="{{ showSharePopup }}" bind:close="onHideSharePopup" /> 
   </view>
 </view>
 

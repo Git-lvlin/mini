@@ -9,6 +9,7 @@ Page({
     totalPage: 1,
   },
   loading: false,
+  sort: "",
 
   data: {
     searchText: "",
@@ -22,6 +23,7 @@ Page({
     showClear: false,
     // 是否已搜索 
     isSearch: false,
+    scrollBottom: false,
   },
 
   onShow() {
@@ -234,7 +236,7 @@ Page({
   },
 
   // 点击搜索
-  onSearch(sort) {
+  onSearch() {
     if(this.loading) return;
     this.loading = true;
     let {
@@ -252,10 +254,12 @@ Page({
       keyword: searchText,
       requestMemberId: userInfo.id,
     }
-    if(typeof sort === "string") {
-      param.sort = sort;
+    if(!!this.sort) {
+      param.sort = this.sort;
     }
-    goodApi.getSearchList(param).then(res => {
+    goodApi.getSearchList(param, {
+      showLoading: !goodList.length
+    }).then(res => {
       this.getHistorySearch();
       this.loading = false;
       this.searchPage.totalPage = res.totalpage;
@@ -265,6 +269,7 @@ Page({
         item.title = item.goodsName;
         item.subtitle = item.goodsDesc;
         item.salePrice = util.divide(item.goodsSaleMinPrice, 100);
+        item.marketPrice = util.divide(item.skuMarketPrice, 100);
       });
       if(page > 1) {
         list = goodList.concat(list);
@@ -288,7 +293,8 @@ Page({
     detail
   }) {
     this.searchPage.page = 1;
-    this.onSearch(detail.sort);
+    this.sort = detail.sort;
+    this.onSearch();
   },
 
   // 监听滚动到底部
@@ -302,4 +308,24 @@ Page({
       this.onSearch();
     }
   },
+
+  // onPageScroll(e) {
+  //   let {
+  //     scrollBottom,
+  //   } = this.data;
+
+  //   if(scrollBottom) {
+  //     this.setData({
+  //       scrollBottom: false,
+  //     })
+  //   }
+  // },
+
+  // 页面滚动到底部
+  // onReachBottom() {
+  //   console.log(0)
+  //   this.setData({
+  //     scrollBottom: true,
+  //   })
+  // }
 })

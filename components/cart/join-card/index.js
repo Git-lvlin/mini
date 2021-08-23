@@ -58,18 +58,31 @@ create.Component(store, {
     addStock() {
       // let stock = this.data.good.quantity + 1;
       const {
-        quantity
+        quantity,
+        good,
       } = this.data;
-      this.handleChangeNum(1, quantity < 1);
+      let num = 1;
+      if (quantity < good.defaultSkuBuyMinNum) {
+        num = good.defaultSkuBuyMinNum - quantity;
+      }
+      if (num >= good.defaultSkuBuyMaxNum) {
+        showToast({ title: `最多购买${good.defaultSkuBuyMaxNum}` })
+        return;
+      }
+      this.handleChangeNum(num, quantity < 1);
     },
     reduceStock() {
       const that = this;
-      let quantity = this.data.quantity;
-      if(quantity === 1) {
+      let {
+        quantity,
+        good,
+      } = this.data;
+      let min = good.defaultSkuBuyMinNum > 0 ? good.defaultSkuBuyMinNum : 1;
+      if(quantity === min) {
         showModal({
           content: "您确定要删除该商品吗？",
           ok() {
-            that.handleChangeNum(-1);
+            that.handleChangeNum(-min);
           }
         })
         return ;
