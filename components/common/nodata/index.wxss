@@ -12,6 +12,6 @@
 
 .title {
   font-size: 28rpx;
-  color: #999999;
+  color: #666;
   margin-top: 16rpx;
 }

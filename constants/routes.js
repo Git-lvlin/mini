@@ -122,6 +122,10 @@ export default {
   changePhone: {
     path: "/subpages/user/changePhone/index"
   },
+  // 我的优惠券
+  coupon: {
+    path: "/subpages/user/coupon/index"
+  },
 
   list: {
     path: "/pages/list/index"
