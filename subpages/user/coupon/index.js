@@ -25,7 +25,6 @@ const defPage = {
 }
 
 Page({
-  selectType: 1,
   pageData: {
     ...defPage
   },
@@ -34,6 +33,9 @@ Page({
     barList: topBarList,
     isLoad: false,
     conponList: [],
+    selectType: 1,
+    isNotData: false,
+    showSharePopup: false,
   },
 
   onLoad(options) {
@@ -45,9 +47,18 @@ Page({
       page,
       totalPage,
     } = this.pageData;
+    const {
+      isNotData
+    } = this.data;
     if(page < totalPage) {
       this.pageData.page += 1;
       this.getCouponList();
+    } else {
+      if(!isNotData) {
+        this.setData({
+          isNotData: true,
+        })
+      }
     }
   },
 
@@ -62,10 +73,12 @@ Page({
       pageSize,
     } = this.pageData;
     let {
-      conponList
+      conponList,
+      selectType,
+      isNotData,
     } = this.data;
     let data = {
-      status: this.selectType,
+      status: selectType,
       memberId: userInfo.id,
       page,
       pageSize,
@@ -82,6 +95,7 @@ Page({
       });
       if(page == 1) {
         conponList = list;
+        isNotData = page == 1 && list.length > 0 && list.length < pageSize ? true : false;
       } else {
         conponList = conponList.concat(list);
       }
@@ -105,7 +119,6 @@ Page({
     this.pageData = {
       ...defPage
     }
-    this.selectType = data.type;
     barList.forEach(item => {
       if(item.type == data.type) {
         item.selected = true;
@@ -115,8 +128,10 @@ Page({
     });
     this.setData({
       barList,
+      selectType: data.type,
+    }, () => {
+      this.getCouponList();
     })
-    this.getCouponList();
   },
 
   onOpenRule({
@@ -132,5 +147,17 @@ Page({
     this.setData({
       conponList,
     })
-  }
+  },
+
+  onToUse() {
+    this.setData({
+      showSharePopup: true,
+    })
+  },
+
+  onHideSharePopup() {
+    this.setData({
+      showSharePopup: false,
+    })
+  },
 })
