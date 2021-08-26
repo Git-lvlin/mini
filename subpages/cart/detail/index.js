@@ -63,6 +63,7 @@ create.Page(store, {
     intensiveBack: `${IMG_CDN}miniprogram/cart/jiyue_back.png`,
     // buy 立即购买  add 添加到购物车
     specType: "buy",
+    refuseText: "",
   },
 
   onLoad(options) {
@@ -197,6 +198,7 @@ create.Page(store, {
     let params = {
       id: spuId, 
     };
+    let refuseText = "";
     if(!!orderType) {
       params = {
         ...params,
@@ -248,9 +250,13 @@ create.Page(store, {
             };
           }
         }
+        good.refuseArea && good.refuseArea.forEach((item, index) => {
+          refuseText += `${item.areaName}${index != good.refuseArea.length - 1? '、' : ''}`;
+        });
         this.setData({
           currentSku,
           good,
+          refuseText,
           selectAddressType,
         });
         if(orderType == 15) {
@@ -679,5 +685,19 @@ create.Page(store, {
   // 点击跳转店铺
   onToCart() {
     router.goTabbar("cart");
+  },
+
+  // 打开不销售区域弹窗
+  openAreaPopup() {
+    this.setData({
+      showAreaPopup: true,
+    });
+  },
+
+  // 关闭不销售区域弹窗
+  onCloseArea() {
+    this.setData({
+      showAreaPopup: false,
+    });
   },
 })

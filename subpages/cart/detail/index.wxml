@@ -195,7 +195,18 @@
       <view class="info_bar_value">
         <view class="sec_name">{{currentSku.skuId ? currentSku.skuName : '请选择商品规格'}}</view>
       </view>
-      <view class="flex_fix right_arrow_gray" />
+      <view class="flex_fix right_spot right_arrow_gray" />
+    </view>
+    <view
+      class="flex_middle info_bar"
+      wx:if="{{refuseText}}"
+      bindtap="openAreaPopup"
+    >
+      <view class="flex_fix info_bar_name">不销售地区</view>
+      <view class="info_bar_value">
+        <view class="text_one_line">{{refuseText}}</view>
+      </view>
+      <view class="flex_fix right_spot right_arrow_gray" />
     </view>
     <view class="flex_middle info_bar">
       <view class="flex_fix info_bar_name">服务</view>
@@ -394,4 +405,25 @@
     bind:close="handleCloseTogetherPopup"
     bind:jump="onToCreate"
   />
+
+  <!-- 不销售区域 -->
+  <van-popup
+    show="{{ showAreaPopup }}"
+    position="bottom"
+    round
+    closeable
+    safe-area-inset-bottom
+    bind:close="onCloseArea"
+  >
+    <view class="not_sale_popup">
+      <view class="flex_fix not_sale_title">不销售区域</view>
+      <view class="not_sale_list">
+        <view
+          class="no_sale_item"
+          wx:for="{{good.refuseArea}}"
+          wx:key="index"
+        >{{item.areaName}}；</view>
+      </view>
+    </view>
+  </van-popup>
 </view>

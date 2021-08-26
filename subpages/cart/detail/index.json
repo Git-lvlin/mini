@@ -11,6 +11,7 @@
     "together-popup": "/components/good/together-popup/index",
     "count-down": "/components/common/count-down/index",
     "store-panel": "/components/common/store-panel/index",
-    "price-ratio-bar": "/components/good/price-ratio-bar/index"
+    "price-ratio-bar": "/components/good/price-ratio-bar/index",
+    "van-popup": "/miniprogram_npm/@vant/weapp/popup/index"
   }
 }
