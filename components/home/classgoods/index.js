@@ -107,7 +107,6 @@ create.Component(store, {
         this.setData({
           hotGoodList: nowData,
           pageData: pageData,
-          classTabList: homeCache.classTabList || []
         }, () => {
           this.setScroll();
         })
