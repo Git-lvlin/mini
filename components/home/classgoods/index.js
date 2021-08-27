@@ -30,17 +30,9 @@ create.Component(store, {
         }
       }
     },
-    topSearchHeight: {
-      type: Number,
-      value: 0,
-      observer(nowVal, oldVal) {
-      }
-    },
     isFixedTop: {
       type: Boolean,
       value: false,
-      observer(nowVal, oldVal) {
-      }
     },
   },
 
@@ -72,7 +64,6 @@ create.Component(store, {
         classIndex: index
       }, () => {
         // 请求当前tab列表数据
-        // this.data.isFixedTop&&this.triggerEvent("setScroll", {});
         this.getListData({index:index, isTab: true})
       })
     },
@@ -117,6 +108,8 @@ create.Component(store, {
           hotGoodList: nowData,
           pageData: pageData,
           classTabList: homeCache.classTabList || []
+        }, () => {
+          this.setScroll();
         })
         return
       }
@@ -155,6 +148,8 @@ create.Component(store, {
         this.setData({
           hotGoodList: bigArr,
           pageData: itemData
+        }, () => {
+          this.setScroll();
         })
         homeCache.classTabAllCache = {
           ...homeCache.classTabAllCache,
@@ -169,6 +164,12 @@ create.Component(store, {
         })
       })
     },
+
+    // 设置滚动条高度
+    setScroll() {
+      this.data.isFixedTop && this.triggerEvent("setScroll", {});
+    },
+
     // 获取classtab数据
     getCustomData(page, pageSize = 15) {
       let homeCache = wx.getStorageSync("HOME_CACHE") || {};

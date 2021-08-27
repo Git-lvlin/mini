@@ -15,6 +15,8 @@ create.Page(store, {
   isFristLoad: true,
   floorTime: new Date().getTime(),
   isMiniExamine: false,
+  // 是否是点击设置滚动高度
+  isSetScroll: false,
 
   use: [
     "userInfo",
@@ -31,13 +33,17 @@ create.Page(store, {
     activityAdvert: {},
     locationAuth: false,
     takeSpot: {},
-    navbarInitTop: 0, //导航栏初始化距顶部的距离
-    isFixedTop: false, //是否固定顶部
     topSearchHeight: 0,
     showLoadImg: false,
     refresherTriggered: false,
     scrollTop: 0,
     leaveTop: 0,
+    scrollToTop: 0,
+    //导航栏初始化距顶部的距离
+    classGoodToTop: 0,
+    leaveTopL: 0,
+    //是否固定顶部
+    isFixedTop: false,
   },
   onLoad(options) {
     console.log("home", this.store.data);
@@ -86,6 +92,22 @@ create.Page(store, {
     this.getMiniExamine();
     // 更新tabbar显示
     router.updateSelectTabbar(this, 0);
+
+    setTimeout(() => {
+      const query = wx.createSelectorQuery()
+      query.select('#home_scroll').boundingClientRect()
+      query.select('#classGoods').boundingClientRect().exec((res) => {
+        if (res && res.length > 1) {
+          let scrollToTop = res[0].top;
+          let classGoodToTop = res[1].top;
+          this.setData({
+            scrollToTop,
+            classGoodToTop,
+            leaveTopL: classGoodToTop - scrollToTop
+          });
+        }
+      })
+    }, 1000);
   },
 
   // 获取审核状态
@@ -303,7 +325,8 @@ create.Page(store, {
       fixationTop,
       isOnGoods,
       scrollBottom,
-      navbarInitTop,
+      scrollToTop,
+      classGoodToTop,
     } = this.data;
 
     if(scrollBottom) {
@@ -311,6 +334,23 @@ create.Page(store, {
         scrollBottom: false,
       })
     }
+    //滚动条距离顶部高度
+    let scrollTop = detail.scrollTop;
+    if(!this.isSetScroll) {
+      // 判断'滚动条'滚动的距离 和 '元素在初始时'距顶部的距离进行判断
+      let isSatisfy = scrollTop >= (classGoodToTop - scrollToTop - 5) ? true : false;
+      // let isSatisfy = navbarInitTop < 138 ? true : false;
+      // 为了防止不停的setData, 这儿做了一个等式判断。 只有处于吸顶的临界值才会不相等
+      if (this.data.isFixedTop === isSatisfy) {
+        return false
+      }
+      this.setData({
+        isFixedTop: isSatisfy
+      })
+    } else {
+      this.isSetScroll = false;
+    }
+
     // 判断是否在热销商品区域
     // if(this.scrollLock) return;
     // let goodTop = 1000;
@@ -326,53 +366,22 @@ create.Page(store, {
     //   this.scrollLock = false;
     //   clearTimeout(this.onTimeTimer)
     // }, 200);
-
-    if (detail.scrollTop < 10) {
-      //获取节点距离顶部的距离
-      const query = this.createSelectorQuery()
-      query.select('#classGoods').boundingClientRect()
-      query.selectViewport().scrollOffset()
-      query.exec((res) => {
-        // console.log('res', res)
-        if (res && res[0].top > 0) {
-          navbarInitTop = parseInt(res[0].top);
-          const topData = {
-            navbarInitTop
-          };
-          if(detail.scrollTop == 0 || navbarInitTop == 0) {
-            topData.leaveTop = navbarInitTop;
-          }
-          this.setData(topData);
-        }
-      })
-    }
-    // console.log(detail.scrollTop);
-    let scrollTop = parseInt(detail.scrollTop); //滚动条距离顶部高度
-    // 判断'滚动条'滚动的距离 和 '元素在初始时'距顶部的距离进行判断
-    // console.log('this.data.navbarInitTo', navbarInitTop)
-    let isSatisfy = scrollTop >= (navbarInitTop - 20) ? true : false;
-    // let isSatisfy = navbarInitTop < 138 ? true : false;
-    // 为了防止不停的setData, 这儿做了一个等式判断。 只有处于吸顶的临界值才会不相等
-    if (this.data.isFixedTop === isSatisfy) {
-      return false
-    }
-    this.setData({
-      isFixedTop: isSatisfy
-    })
   },
 
   // 设置view 滚动高度
   setScroll() {
     const {
-      navigationBarHeight,
-      navbarInitTop,
-      leaveTop,
+      scrollToTop,
+      classGoodToTop,
     } = this.data;
     const {
       systemInfo,
     } = this.store.data;
+    let scrollTop = classGoodToTop - scrollToTop;
+    // 滚动监听不准确
+    this.isSetScroll = true;
     this.setData({
-      scrollTop: leaveTop - 136,
+      scrollTop,
     })
   },
 

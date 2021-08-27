@@ -745,6 +745,9 @@
 }
 
 .no_sale_item {
+  font-size: 28rpx;
+  color: #333333;
+  line-height: 48rpx;
   white-space: pre-wrap;
   word-wrap: break-word;
   padding-bottom: 16rpx;

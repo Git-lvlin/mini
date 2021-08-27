@@ -31,6 +31,7 @@
 
 
   <scroll-view
+    id="home_scroll"
     class="home_content"
     scroll-y
     scroll-top="{{scrollTop}}"
@@ -77,22 +78,22 @@
       /> -->
 
       <!-- 豆腐块 -->
-      <beancurd-cube
+      <!-- <beancurd-cube
         floor="{{item}}"
         wx:if="{{item.floorType === 3}}"
-      />
+      /> -->
 
       <!-- banner 轮播 -->
-      <banner
+      <!-- <banner
         floor="{{item}}"
         wx:if="{{item.floorType === 4}}"
-      />
+      /> -->
 
       <!-- 秒杀 -->
-      <seckill
+      <!-- <seckill
         floor="{{item}}"
         wx:if="{{item.floorType === 6}}"
-      />
+      /> -->
 
       <!-- 会员 / 店主专享 -->
       <!-- <vipgood
@@ -111,7 +112,6 @@
       </view> -->
 
       <!-- 分类商品 -->
-      <!-- topSearchHeight="{{navigationBarHeight}}" -->
       <view id="classGoods"
         wx:if="{{item.floorType === 11}}"
       >
@@ -120,8 +120,8 @@
           floor="{{item}}"
           isFixedTop="{{isFixedTop}}"
           bind:setScroll="setScroll"
-          bind:setIsTop="setIsFixedTop"
         />
+          <!-- bind:setIsTop="setIsFixedTop" -->
       </view>
     </block>
   </scroll-view>
