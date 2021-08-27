@@ -95,7 +95,7 @@ create.Component(store, {
     // 获取商品列表数据
     getListData({index=0, size=10, next=0, isTab=false, paging=false}) {
       // 先判断缓存
-      let homeCache = wx.getStorageSync("HOME_CACHE") || {};
+      let homeCache = wx.getStorageSync("HOMECACHE") || {};
       // 有缓存直接用缓存更新数据
       console.log('index', index)
       console.log('有缓存!', homeCache.classTabAllCache)
@@ -157,7 +157,7 @@ create.Component(store, {
             hotGoodList: bigArr
           },
         }
-        wx.setStorage({
+        wx.setStorageSync({
           key: "HOME_CACHE",
           data: homeCache,
         })

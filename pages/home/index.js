@@ -94,6 +94,7 @@ create.Page(store, {
     router.updateSelectTabbar(this, 0);
 
     setTimeout(() => {
+      if(this.data.classGoodToTop) { return ;}
       const query = wx.createSelectorQuery()
       query.select('#home_scroll').boundingClientRect()
       query.select('#classGoods').boundingClientRect().exec((res) => {
