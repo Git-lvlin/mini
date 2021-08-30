@@ -28,8 +28,8 @@
 
 .swiper_num {
   position: absolute;
-  right: 50%;
-  bottom: 30rpx;
+  right: 24rpx;
+  bottom: 28rpx;
   height: 40rpx;
   font-size: 24rpx;
   color: #FFFFFF;
@@ -40,7 +40,6 @@
   padding: 0 16rpx;
   background: linear-gradient(144deg, #ED8065 0%, #D7291D 100%);
   border-radius: 40rpx;
-  transform: translateX(50%);
 }
 
 

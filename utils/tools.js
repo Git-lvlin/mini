@@ -456,3 +456,10 @@ export const jumpToAgreement = (type) => {
     })
   }
 }
+
+// 店铺是否为会员店
+export const haveStore = (storeNo) => {
+  let id = storeNo.slice(8, storeNo.length) || 1;
+  id = +id;
+  return id < 123580 ? false : true;
+};

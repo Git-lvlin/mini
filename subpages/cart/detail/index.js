@@ -4,7 +4,7 @@ import goodApi from '../../../apis/good'
 import commonApi from '../../../apis/common'
 import { IMG_CDN, DETAIL_SERVICE_LIST } from '../../../constants/common'
 import { CODE_SCENE } from '../../../constants/index'
-import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj } from '../../../utils/tools'
+import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj, haveStore } from '../../../utils/tools'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
 import commonApis from '../../../apis/common'
@@ -64,6 +64,9 @@ create.Page(store, {
     // buy 立即购买  add 添加到购物车
     specType: "buy",
     refuseText: "",
+    secJoinUser: [],
+    // 店铺信息
+    storeInfo: {},
   },
 
   onLoad(options) {
@@ -85,9 +88,12 @@ create.Page(store, {
   },
 
   onShow() {
+    const {
+      orderType
+    } = this.goodParams;
     let userInfo = getStorageUserInfo();
     if(!!userInfo) {
-      if(this.store.data.cartList.length <= 0) {
+      if(this.store.data.cartList.length <= 0 && !!orderType) {
         this.store.updateCart();
       }
       // this.getDetailRatio();
@@ -146,6 +152,16 @@ create.Page(store, {
       isActivityGood,
       skuId: options.skuId,
     })
+    if(!options.orderType) {
+      showModal({
+        content: "商品数据有误",
+        showCancel: false,
+        ok() {
+          router.go();
+        },
+       });
+      return;
+    }
     this.getGoodDetail();
     this.getDetailImg();
     if(options.orderType == 3) {
@@ -196,8 +212,11 @@ create.Page(store, {
       spuId,
     } = this.goodParams
     let params = {
-      id: spuId, 
+      spuId,
     };
+    if(!!skuId) {
+      params.skuId = skuId;
+    }
     let refuseText = "";
     if(!!orderType) {
       params = {
@@ -207,9 +226,9 @@ create.Page(store, {
       if(objectId) params.objectId = objectId;
       if(activityId) params.activityId = activityId;
     }
+    // 单约详情
     if(orderType == 3) {
       params.spuId = spuId;
-      params.skuId = skuId;
       goodApi.getPersonalDetail(params).then(res => {
         const good = res.curGoods;
         const personalList = res.personalList;
@@ -229,6 +248,54 @@ create.Page(store, {
           detailImg,
         })
       })
+    // 秒约，C端集约，1688详情
+    } else if(orderType == 2 || orderType == 11 || orderType == 15) {
+      goodApi.getGoodDetailNew(params).then(res => {
+        let good = res;
+        let selectAddressType = "";
+        let currentSku = {};
+        good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
+        good.goodsMarketPrice = util.divide(good.marketPrice, 100);
+        if(good.sendTypeList) {
+          selectAddressType = good.sendTypeList.find(item => item.status == 1);
+        }
+        if(good.goodsState == 1) {
+          if(good.isMultiSpec == 0) {
+            currentSku = {
+              skuId,
+              buyMaxNum: good.buyMaxNum,
+              buyMinNum: good.buyMinNum,
+              skuName: good.skuName,
+              skuNum: good.buyMinNum > 1 ? good.buyMinNum : 1,
+            };
+          }
+        }
+        good.refuseArea && good.refuseArea.forEach((item, index) => {
+          refuseText += `${item.areaName}${index != good.refuseArea.length - 1? '；' : ''}`;
+        });
+        this.setData({
+          currentSku,
+          good,
+          refuseText,
+          selectAddressType,
+        });
+        if(orderType == 15) {
+          // 集约用户列表
+          this.getIntensiveUser(good.storeSaleSumNum || 100);
+          // 获取商品详情
+          const isStore = haveStore(good.storeNo);
+          if(isStore) {
+            this.getStoreInfo({
+              orderType,
+              storeNo: good.storeNo,
+            });
+          }
+        }
+        if(orderType == 2 || orderType == 11) {
+          this.getSecUser();
+        }
+      });
+    // 其他详情
     } else {
       goodApi.getGoodDetail(params).then(res => {
         let good = res;
@@ -251,7 +318,7 @@ create.Page(store, {
           }
         }
         good.refuseArea && good.refuseArea.forEach((item, index) => {
-          refuseText += `${item.areaName}${index != good.refuseArea.length - 1? '、' : ''}`;
+          refuseText += `${item.areaName}${index != good.refuseArea.length - 1? '；' : ''}`;
         });
         this.setData({
           currentSku,
@@ -259,15 +326,23 @@ create.Page(store, {
           refuseText,
           selectAddressType,
         });
-        if(orderType == 15) {
-          // 集约用户列表
-          this.getIntensiveUser(good.storeSaleSumNum || 100);
-        }
-        if(orderType == 2 || orderType == 11) {
-          this.getSecUser();
-        }
       });
     }
+  },
+
+  // 集约获取店铺信息
+  getStoreInfo({
+    orderType,
+    storeNo,
+  }) {
+    goodApi.getStoreInfo({
+      orderType,
+      storeNo,
+    }).then(res => {
+      this.setData({
+        storeInfo: res
+      })
+    });
   },
 
   // 集约切换配送方式
@@ -302,7 +377,7 @@ create.Page(store, {
     }).then(res => {
       const list = res.records.slice(0, 5);
       this.setData({
-        togetherUser: list
+        secJoinUser: list
       })
     });
   },
@@ -402,7 +477,7 @@ create.Page(store, {
       quantity = 0,
       currentSku,
     } = this.data;
-    if(good.goodsState != 1 || good.goodsVerifyState != 1) {
+    if(good.goodsState != 1) {
       showToast({ title: "商品已下架" });
       return;
     }
@@ -503,7 +578,8 @@ create.Page(store, {
     const {
       good,
     } = this.data;
-    if(good.goodsState != 1 || good.goodsVerifyState != 1) {
+    console.log("🚀 ~ file: index.js ~ line 581 ~ openSpecPopup ~ good", good)
+    if(good.goodsState != 1) {
       showToast({ title: "商品已下架" });
       return;
     }
@@ -533,7 +609,7 @@ create.Page(store, {
       currentSku,
       quantity,
     } = this.data;
-    if(good.goodsState != 1 || good.goodsVerifyState != 1) {
+    if(good.goodsState != 1) {
       showToast({ title: "商品已下架" });
       return;
     }

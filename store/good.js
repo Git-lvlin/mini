@@ -57,7 +57,6 @@ const getCartList = () => {
 
 // 获取购物车总金额
 const getStoreGoodsTotle = (storeList) => {
-    console.log("storeList ~ storeList", storeList)
   let storeGoodsInfos = [];
   let storeGood = {};
   let checkedQuantity = 0;

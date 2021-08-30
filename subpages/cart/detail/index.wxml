@@ -1,7 +1,7 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 <wxs module="utils" src="./index.wxs" />
 
-<view class="container">
+<view class="container" wx:if="{{!!isActivityGood}}">
   <view class="banner_content">
     <image
       class="back_icon"
@@ -10,9 +10,16 @@
       bindtap="onToBack"
     />
     <user-together-banner
+      wx:if="{{isActivityGood == 3}}"
       orderType="{{isActivityGood}}"
       list="{{togetherUser}}"
-      top="{{backTopHeight + 560}}"
+      top="{{backTopHeight + 96}}"
+    />
+    <user-together-banner
+      wx:if="{{isActivityGood == 2 || isActivityGood == 11}}"
+      orderType="{{isActivityGood}}"
+      list="{{secJoinUser}}"
+      top="{{backTopHeight + 610}}"
     />
     <swiper
       class="banner"
@@ -263,7 +270,7 @@
 
   <view class="space_20" wx:if="{{isActivityGood == 15}}" />
   
-  <store-panel good="{{good}}" wx:if="{{isActivityGood == 15}}" />
+  <store-panel storeInfo="{{storeInfo}}" wx:if="{{isActivityGood == 15}}" />
   
   <!-- 拼单列表 -->
   <block wx:if="{{(isActivityGood == 3 || isActivityGood == 4) && !!personalList.length}}">
