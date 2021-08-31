@@ -7,7 +7,7 @@
     enhanced="{{true}}"
     show-scrollbar="{{false}}"
   >
-    <view id="class-head" class="head" wx:if="{{classTabList}}">
+    <view id="class-head" class="head">
       <view class="tab_item"
         wx:for="{{classTabList}}"
         wx:key="id"

@@ -78,22 +78,22 @@
       /> -->
 
       <!-- 豆腐块 -->
-      <beancurd-cube
+      <!-- <beancurd-cube
         floor="{{item}}"
         wx:if="{{item.floorType === 3}}"
-      />
+      /> -->
 
       <!-- banner 轮播 -->
-      <banner
+      <!-- <banner
         floor="{{item}}"
         wx:if="{{item.floorType === 4}}"
-      />
+      /> -->
 
       <!-- 秒杀 -->
-      <seckill
+      <!-- <seckill
         floor="{{item}}"
         wx:if="{{item.floorType === 6}}"
-      />
+      /> -->
 
       <!-- 会员 / 店主专享 -->
       <!-- <vipgood

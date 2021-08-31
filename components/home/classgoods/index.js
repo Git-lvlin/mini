@@ -70,6 +70,7 @@ create.Component(store, {
 
     // 设置商品分类数据
     setClassList(content) {
+      console.log(1111111);
       let homeCache = wx.getStorageSync("HOME_CACHE") || {};
       if(content.dataType === 1) {
         if(homeCache.classTabList && !!homeCache.classTabList.length) {
@@ -77,41 +78,60 @@ create.Component(store, {
             classTabList: homeCache.classTabList,
           })
         }
-        this.getCustomData(1);
+        this.getCustomData();
       } else {
         this.setData({
           classTabList: content.data
         })
-        if(homeCache.classTabList) {
-          delete homeCache.classTabList;
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          })
-        }
+        homeCache.classTabList = content.data;
+        wx.setStorage({
+          key: "HOME_CACHE",
+          data: homeCache,
+        })
       }
+    },
+
+    // 获取classtab数据
+    getCustomData(page, pageSize = 15) {
+      console.log(22222222);
+      let homeCache = wx.getStorageSync("HOME_CACHE") || {};
+      const content = this.data.floor.content;
+      homeApi.getFloorCustom(content.dataUrl, {
+        page,
+        pageSize,
+      }).then(res => {
+        let list = res;
+        homeCache.classTabList = list
+        wx.setStorageSync("HOME_CACHE", homeCache);
+        this.setData({
+          classTabList: list
+        }, () => {
+          this.getListData(this.data.param)
+        });
+      });
     },
 
     // 获取商品列表数据
     getListData({index=0, size=10, next=0, isTab=false, paging=false}) {
+      console.log(333333333333);
       // 先判断缓存
       let homeCache = wx.getStorageSync("HOMECACHE") || {};
       // 有缓存直接用缓存更新数据
       console.log('index', index)
       console.log('有缓存!', homeCache.classTabAllCache)
-      if (homeCache.classTabAllCache && homeCache.classTabAllCache[index] && !paging) {
-        // 当前分类最近一次的商品列表
-        const nowData = homeCache.classTabAllCache[index].hotGoodList;
-        // 当前分类最近一次的列表分页信息
-        const pageData = homeCache.classTabAllCache[index].pageData;
-        this.setData({
-          hotGoodList: nowData,
-          pageData: pageData,
-        }, () => {
-          this.setScroll();
-        })
-        return
-      }
+      // if (homeCache.classTabAllCache && homeCache.classTabAllCache[index] && !paging) {
+      //   // 当前分类最近一次的商品列表
+      //   const nowData = homeCache.classTabAllCache[index].hotGoodList;
+      //   // 当前分类最近一次的列表分页信息
+      //   const pageData = homeCache.classTabAllCache[index].pageData;
+      //   this.setData({
+      //     hotGoodList: nowData,
+      //     pageData: pageData,
+      //   }, () => {
+      //     this.setScroll();
+      //   })
+      //   return
+      // }
       console.log('请求数据并加缓存')
       // 没缓存请求数据并加缓存
       const {
@@ -157,35 +177,13 @@ create.Component(store, {
             hotGoodList: bigArr
           },
         }
-        wx.setStorageSync({
-          key: "HOME_CACHE",
-          data: homeCache,
-        })
+        wx.setStorageSync("HOME_CACHE", homeCache);
       })
     },
 
     // 设置滚动条高度
     setScroll() {
       this.data.isFixedTop && this.triggerEvent("setScroll", {});
-    },
-
-    // 获取classtab数据
-    getCustomData(page, pageSize = 15) {
-      let homeCache = wx.getStorageSync("HOME_CACHE") || {};
-      const content = this.data.floor.content;
-      homeApi.getFloorCustom(content.dataUrl, {
-        page,
-        pageSize,
-      }).then(res => {
-        let list = res;
-        homeCache.classTabList = list
-        wx.setStorageSync("HOME_CACHE", homeCache);
-        this.setData({
-          classTabList: list
-        }, () => {
-          this.getListData(this.data.param)
-        });
-      });
     },
 
     // 滚动到底
