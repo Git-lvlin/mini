@@ -14,16 +14,13 @@ Component({
       type: Object,
       value: {},
       observer(now, old) {
-        old = old ? old : {};
         let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
-        const oldData = JSON.stringify(old.content);
-        const nowData = JSON.stringify(now.content);
-        if(now.content && now.content.dataType) {
-          takeSpot = takeSpot && takeSpot.storeNo ? takeSpot : {};
-          if(takeSpot.storeNo != tempSpot.storeNo || oldData != nowData) {
-            tempSpot = takeSpot;
-            this.setGoodList(now.content, takeSpot);
-          }
+        takeSpot = takeSpot && takeSpot.storeNo ? takeSpot : {};
+        if(takeSpot.storeNo != tempSpot.storeNo) {
+          tempSpot = takeSpot;
+        }
+        if(now && now.content) {
+          this.setGoodList(now.content, takeSpot);
         }
       }
     },
@@ -38,9 +35,18 @@ Component({
   },
 
   pageLifetimes: {
-    // show() {
+    show() {
       // 页面被展示
-    // },
+      const {
+        floor,
+      } = this.data;
+      let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
+      takeSpot = takeSpot && takeSpot.storeNo ? takeSpot : {};
+      if(takeSpot.storeNo != tempSpot.storeNo) {
+        tempSpot = takeSpot;
+        this.setGoodList(floor.content, takeSpot);
+      }
+    },
   },
 
   methods: {

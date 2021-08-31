@@ -6,8 +6,8 @@ Component({
     advert: {
       type: Object,
       value: {},
-      observer(newVal, oldVal) {
-        if(JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
+      observer(now, oldVal) {
+        if(now && now.content) {
           this.timer = setTimeout(() => {
             clearTimeout(this.timer);
             this.onClose();
