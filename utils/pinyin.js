@@ -22,7 +22,6 @@ const mkRslt = (arr) => {
     if (strlen == 1) {
       for (let k = 0; k < arrRslt.length; k++) {
         arrRslt[k] += str;
-        // console.log(str)
       }
     } else {
       let tmpArr = arrRslt.slice(0);

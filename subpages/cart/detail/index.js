@@ -176,7 +176,6 @@ create.Page(store, {
     commonApis.getShareParam({
       scene: data.scene,
     }).then(res => {
-      console.log(res)
       // const param = strToParamObj(res);
       const param = res;
       this.setData(param)
@@ -578,7 +577,6 @@ create.Page(store, {
     const {
       good,
     } = this.data;
-    console.log("🚀 ~ file: index.js ~ line 581 ~ openSpecPopup ~ good", good)
     if(good.goodsState != 1) {
       showToast({ title: "商品已下架" });
       return;
@@ -661,7 +659,6 @@ create.Page(store, {
         data.selectAddressType = selectAddressType;
       }
     }
-    console.log("data", data);
     wx.setStorageSync("CREATE_INTENSIVE", data);
     router.push({
       name: "createOrder",

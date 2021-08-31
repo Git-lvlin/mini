@@ -82,7 +82,6 @@ Page({
       groupId,
       objectId,
     }).then(res => {
-      console.log("getPosterDetail ~ res", res)
       const good = res.curGoods;
       const groupInfo = res;
       good.salePrice = util.divide(good.salePrice, 100);

@@ -58,7 +58,6 @@ Component({
       currentTarget
     }) {
       let data = currentTarget.dataset.data;
-      console.log("banner跳转", data.actionUrl)
       router.getUrlRoute(data.actionUrl);
     },
   }

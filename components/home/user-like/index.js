@@ -6,29 +6,6 @@ import util from "../../../utils/util";
 Component({
 
   properties: {
-    // floor: {
-    //   type: Object,
-    //   value: {},
-    //   observer(now, old) {
-    //     const nowStr = JSON.stringify(now);
-    //     const oldStr = JSON.stringify(old);
-    //     if(nowStr != oldStr) {
-    //       this.getUserLike(now.content);
-    //     }
-    //   }
-    // },
-    // scrollBottom: {
-    //   type: Boolean,
-    //   value: false,
-    //   observer(nowVal, oldVal) {
-    //     console.log('nowVal',nowVal)
-    //     console.log('oldVal',oldVal)
-    //     if(nowVal !== oldVal && nowVal) {
-    //       console.log(11111)
-    //       this.handleScroll();
-    //     }
-    //   }
-    // }
   },
 
   data: {

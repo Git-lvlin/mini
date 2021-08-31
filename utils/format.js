@@ -24,7 +24,6 @@ export default {
   // 检查密码
   checkPassword(value) {
     let hasChinese = /[\u4e00-\u9fa5]/.test(value)
-    // console.log(hasNum,hasWord,hasSymbol,hasChinese);
     return hasChinese
   },
 }

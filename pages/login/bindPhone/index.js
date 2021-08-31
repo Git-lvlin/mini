@@ -71,7 +71,6 @@ create.Page(store, {
     }).then(res => {
       this.getMsgCode(phoneNumber);
     }).catch(err => {
-      console.log("checkBindPhone ~ err", err)
     });
   },
 
@@ -179,7 +178,6 @@ create.Page(store, {
         tools.successJump(2);
       }
     }).catch(err => {
-      console.log("getUserInfo - err", err)
     })
   },
 

@@ -89,7 +89,6 @@ Page({
       showLoading: false,
       notErrorMsg: true,
     }).then(res => {
-      console.log("普通商品支付", true)
       payInfo.state = 0;
       this.setData({
         payInfo,
@@ -99,7 +98,6 @@ Page({
         wx.hideLoading();
       })
     }).catch(err => {
-      console.log("普通商品支付", err)
       if(err.code == 20806) {
         payInfo.state = 4;
       } else {
@@ -123,7 +121,6 @@ Page({
       payType: data.payType || 7,
       openId: data.openId,
     }).then(res => {
-      console.log("获取约卡 res", res)
       res.prepayData = res.paymentParam;
       payInfo.state = 0;
       this.setData({
@@ -159,7 +156,6 @@ Page({
     }, {
       notErrorMsg: true,
     }).then(res => {
-      console.log("获取集约 res", res)
       payInfo.state = 0;
       this.setData({
         payInfo,
@@ -194,7 +190,6 @@ Page({
     }, {
       notErrorMsg: true,
     }).then(res => {
-      console.log("保证金 res", res);
       payInfo.state = 0;
       this.setData({
         payInfo,

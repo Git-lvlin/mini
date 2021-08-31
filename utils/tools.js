@@ -46,7 +46,6 @@ export const handleErrorCode = ({
       // } else {
         // showErrorMsg("您还未登录，请登录");
         if(!store.data.showLoginMobel) {
-          console.log(store);
           clearLoginInfo();
           store.data.showLoginMobel = true;
           showModal({

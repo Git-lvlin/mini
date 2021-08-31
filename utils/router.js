@@ -228,7 +228,6 @@ const getUrlRoute = (url, opt) => {
     })
     }
   }
-  console.log("getUrlRoute ~ data", data);
   return data;
 }
  

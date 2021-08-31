@@ -35,7 +35,6 @@ create.Page(store, {
 
   // 点击授权
   handleGetUerInfo(res) {
-    console.log(res)
     // rawData
     if(!!res.detail.userInfo){ // 返回用户信息
       this.getCodeLogin(res.detail.userInfo);
@@ -46,13 +45,11 @@ create.Page(store, {
 
   // 获取用户openid 登录
   getCodeLogin (userInfo) {
-    console.log(userInfo);
     this.setData({ userAuth : true, userInfo: userInfo})
   },
 
   // 点击图片
   onClickImg(event) {
-    console.log(event);
     wx.previewImage({
       urls: [event.target.dataset.src] // 需要预览的图片http链接列表
     })

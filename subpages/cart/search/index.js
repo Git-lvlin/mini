@@ -141,7 +141,6 @@ Page({
 
   // 关键词联想
   getAssociation() {
-    console.log(this.data);
     const userInfo = getStorageUserInfo() || {};
     const {
       searchText,
@@ -323,7 +322,6 @@ Page({
 
   // 页面滚动到底部
   // onReachBottom() {
-  //   console.log(0)
   //   this.setData({
   //     scrollBottom: true,
   //   })

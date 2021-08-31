@@ -59,13 +59,10 @@ Component({
               });
             },
             fail(res) {
-              console.log("保存图片：fail");
-              console.log(res);
             }
           })
         },
         fail: function (res) {
-          console.log(res);
         }
       })
     },

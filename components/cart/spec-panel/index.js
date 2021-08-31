@@ -25,7 +25,6 @@ create.Component(store, {
       } = data;
       if(specType === "add") {
         const cartList = store.data.cartList;
-        // console.log("🚀  ~ cartList", cartList)
         // const currentCart = [];
         // cartList.forEach(item => {
         //   if(item.spuId == good.id) {
@@ -205,7 +204,6 @@ create.Component(store, {
         stock,
         quantity,
       } = this.data;
-      console.log(quantity, stock)
       // if(specType === "buy") {
         // this.triggerEvent("specBuy", {
         //   skuId: curSku.id,

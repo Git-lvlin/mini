@@ -62,7 +62,6 @@ Component({
       currentTarget
     }) {
       let data = currentTarget.dataset.data;
-      console.log("msg跳转", data.actionUrl);
       if(data.actionUrl) {
         router.getUrlRoute(data.actionUrl);
       }

@@ -54,7 +54,6 @@ const Reqeust = (params) => {
       success: async function(res) {
         // 判断是否返回数据包
         const data = !!params.dataPackage ? res.data : res.data.data;
-        // console.log(params.url, res.data)
         //数据请求成功判断
         if (res.statusCode === 200 && res.data.code === 0 && res.data.success) {
           // resolve(data);
@@ -64,7 +63,6 @@ const Reqeust = (params) => {
           if (res.data.code == REFRESH_TOKEN_INVALID) {
             // refreshToken过期退出登录
             if(!showLoginMobel) {
-              console.log("asdfasfasdfasdf");
               showModal({
                 content: "您的登录已过期，请登录",
                 confirmText: "去登录",
@@ -132,7 +130,6 @@ const Reqeust = (params) => {
         reject(error);
       },
       complete(res) {
-        // console.log("request ~ ", params.url, res.data);
       },
     })
   })

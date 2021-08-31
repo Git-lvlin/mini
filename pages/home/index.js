@@ -48,7 +48,6 @@ create.Page(store, {
     isFixedTop: false,
   },
   onLoad(options) {
-    console.log("home", this.store.data);
     // 系统弹窗
     this.getMiniExamine();
     this.getSystemPopup();
@@ -231,7 +230,6 @@ create.Page(store, {
     currentTarget
   }) {
     let url = currentTarget.dataset.url;
-    console.log("🚀 ~ file: index.js ~ line 155 ~ url", url)
     if(!url) return;
     router.getUrlRoute(url);
     // router.push({
@@ -392,7 +390,6 @@ create.Page(store, {
   setIsFixedTop({
     detail,
   }) {
-    console.log(detail);
     this.setData({
       isFixedTop: detail
     })
