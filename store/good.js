@@ -4,6 +4,14 @@ import cartApi from '../apis/order'
 import { showToast, mapNum } from "../utils/tools"
 import util from "../utils/util"
 
+// 默认汇总数据
+const defCartTotal = {
+  "quantity": 0,
+  "subtotal": 0,
+  "subtotalPromotion": 0,
+  "freight": 0,
+  "checkedQuantity": 0
+}
 
 // 设置规格弹窗状态
 const onChangeSpecState = (state) => {
@@ -132,6 +140,14 @@ const updateCart = (isCart = false) => {
 const getUserInfo = () => {
   return main.data.userInfo
 }
+
+// 清空购物车数据
+const clearCart = () => {
+  store.data.cartList = [];
+  store.data.storeCartList = [];
+  store.data.goodListTotal = { ...defCartTotal };
+  store.data.cartListTotal = { ...defCartTotal };
+}
  
 const store = {
   data:{
@@ -145,21 +161,9 @@ const store = {
     // 按店铺购物车列表
     storeCartList: [],
     // 商品汇总数据
-    goodListTotal: {
-      "quantity": 0,
-      "subtotal": 0,
-      "subtotalPromotion": 0,
-      "freight": 0,
-      "checkedQuantity": 0
-    },
+    goodListTotal: { ...defCartTotal },
     // 购物车汇总数据
-    cartListTotal: {
-      "quantity": 0,
-      "subtotal": 0,
-      "subtotalPromotion": 0,
-      "freight": 0,
-      "checkedQuantity": 0
-    },
+    cartListTotal: { ...defCartTotal },
     // 确认订单提交的商品数据
     orderGoodList: [],
   },
@@ -171,6 +175,7 @@ const store = {
   getStoreCartList,
   updateCart,
   getUserInfo,
+  clearCart,
   //调试开关，打开可以在 console 面板查看到 store 变化的 log
   debug: true,
   //当为 true 时，无脑全部更新，组件或页面不需要声明 use

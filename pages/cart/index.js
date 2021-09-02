@@ -56,6 +56,8 @@ create.Page(store, {
       this.setData({
         userInfo,
       })
+    } else {
+      this.store.clearCart();
     }
     // 更新tabbar显示
     router.updateSelectTabbar(this, 2);

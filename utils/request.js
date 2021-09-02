@@ -26,7 +26,6 @@ const REFRESH_TOKEN_INVALID = 10015;
 const Reqeust = (params) => {
   const baseUrl = getBaseApiUrl();
   const token = wx.getStorageSync("ACCESS_TOKEN");
-  const showLoginMobel = store.data.showLoginMobel;
   const header = {
     'Content-Type': !params.contentType ? 'application/json' : params.contentType,
     v: VERSION,
@@ -62,22 +61,25 @@ const Reqeust = (params) => {
         } else {
           if (res.data.code == REFRESH_TOKEN_INVALID) {
             // refreshToken过期退出登录
-            if(!showLoginMobel) {
+            if(!store.data.showLoginMobel) {
+              store.setShowLoginMobel(true);
               showModal({
                 content: "您的登录已过期，请登录",
                 confirmText: "去登录",
                 ok() {
-                  store.data.showLoginMobel = false;
+                  store.setShowLoginMobel(false);
                   setLoginRouter();
                   router.push({
                     name: "mobile"
                   })
                 },
                 cancel() {
-                  store.data.showLoginMobel = false;
+                  store.setShowLoginMobel(false);
+                  router.goTabbar();
                 }
               })
             }
+            opions.showLoading && wx.hideLoading();
             reject(res.data);
             clearLoginInfo();
             return null;
