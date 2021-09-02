@@ -233,6 +233,12 @@ create.Page(store, {
   // 切换环境
   handleChangeEnv({ detail }) {
     wx.setStorageSync("SYS_ENV", detail.value);
+    wx.removeStorage({
+      key: 'HOME_FLOOR'
+    });
+    wx.removeStorage({
+      key: 'HOME_CACHE'
+    });
   },
 
   // 勾选条件

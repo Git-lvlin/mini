@@ -215,9 +215,8 @@ create.Page(store, {
       data,
     } = currentTarget.dataset;
     if(!!data.action) {
-      const userInfo = getStorageUserInfo();
-      if(data.action == "couopn" && !userInfo) {
-        showToast({ title: "请先登录" });
+      const userInfo = getStorageUserInfo(true);
+      if(data.action == "coupon" && !userInfo) {
         return;
       }
       router.push({
