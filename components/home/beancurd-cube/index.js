@@ -15,7 +15,7 @@ Component({
       observer(now, old) {
         const nowStr = JSON.stringify(now);
         const oldStr = JSON.stringify(old);
-        if(nowStr != oldStr) {
+        if(now && now.content) {
           this.setClassList(now.content);
         }
       }
@@ -105,7 +105,6 @@ Component({
       currentTarget
     }) {
       let data = currentTarget.dataset.data;
-      console.log("豆腐块跳转链接", data.actionUrl)
       if(!!data.actionUrl) {
         router.getUrlRoute(data.actionUrl);
       }

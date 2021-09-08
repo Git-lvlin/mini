@@ -9,7 +9,7 @@ Component({
       observer(now, old) {
         const nowStr = JSON.stringify(now);
         const oldStr = JSON.stringify(old);
-        if(nowStr != oldStr) {
+        if(now && now.content) {
           this.setBannerList(now.content);
         }
       }
@@ -58,7 +58,6 @@ Component({
       currentTarget
     }) {
       let data = currentTarget.dataset.data;
-      console.log("banner跳转", data.actionUrl)
       router.getUrlRoute(data.actionUrl);
     },
   }

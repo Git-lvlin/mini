@@ -26,6 +26,7 @@ create.Page(store, {
       {
         text: "优惠券",
         value: 0,
+        action: "coupon"
       },
       {
         text: "积分",
@@ -205,4 +206,22 @@ create.Page(store, {
       url: '/dokit/index/index',
     })
   },
+
+  // 点击用户数据
+  onUserData({
+    currentTarget
+  }) {
+    const {
+      data,
+    } = currentTarget.dataset;
+    if(!!data.action) {
+      const userInfo = getStorageUserInfo(true);
+      if(data.action == "coupon" && !userInfo) {
+        return;
+      }
+      router.push({
+        name: data.action,
+      });
+    }
+  }
 })

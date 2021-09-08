@@ -1,17 +1,17 @@
 
-<view class="store_panel">
+<view class="store_panel" wx:if="{{storeInfo && storeInfo.storeName}}">
   <view class="flex_middle store_box">
     <view class="store_img">
       <van-image
         width="88rpx"
         height="88rpx"
         round
-        src="{{good.storeLogo}}"
+        src="{{storeInfo.storeLogo}}"
       />
     </view>
     <view class="store_info">
-      <view class="store_name">{{good.storeName}}</view>
-      <view class="store_data">商品数量: {{good.storeSkuSumNum || 0}}<text class="store_info_text">{{good.storeSaleSumNum}}</text></view>
+      <view class="store_name">{{storeInfo.storeName}}</view>
+      <view class="store_data">商品数量: {{storeInfo.storeSkuSumNum || 0}}<text class="store_info_text">{{good.storeSaleSumNum}}</text></view>
     </view>
     <view class="flex_center store_btn" bindtap="onStore">
       进店逛逛

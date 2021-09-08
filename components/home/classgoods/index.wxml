@@ -1,16 +1,16 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
-<view class="hotgoods">
+<view class="hotgoods" wx:if="{{classTabList && classTabList.length}}">
   <scroll-view
     scroll-x
     class="tab_scroll"
     enhanced="{{true}}"
     show-scrollbar="{{false}}"
   >
-    <view id="class-head" class="head" wx:if="{{classTabList}}">
+    <view id="class-head" class="head">
       <view class="tab_item"
         wx:for="{{classTabList}}"
-        wx:key="id"
+        wx:key="index"
         data-index="{{index}}"
         bindtap="tabHandle"
       >
@@ -35,7 +35,7 @@
     <view
       class="good_item"
       wx:for="{{hotGoodList}}"
-      wx:key="id"
+      wx:key="index"
     >
       <good-card
         data="{{item}}"

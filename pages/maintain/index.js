@@ -8,7 +8,6 @@ Page({
   onTry() {
     debounce(() => {
       homeApi.getBannerList({}).then(res => {
-      console.log("🚀 ~ file: index.js ~ line 10 ~ homeApi.getBannerList ~ res", res)
         router.goTabbar();
       }).catch(err => {});
     })();

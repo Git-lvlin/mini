@@ -156,7 +156,6 @@ create.Page(store, {
     postData.deliveryInfo = deliveryInfo;
     if(this.orderType == 15) {
       // 集约
-      console.log(1111)
       let data = wx.getStorageSync("CREATE_INTENSIVE");
       let {
         storeAdress,
@@ -171,7 +170,6 @@ create.Page(store, {
       });
     }  else if(this.orderType == 3 || this.isActivityCome || this.orderType == 11) {
       // 单约 || 单独购买 || 1688
-      console.log(222)
       let data = wx.getStorageSync("CREATE_INTENSIVE");
       postData = {
         ...postData,
@@ -181,7 +179,6 @@ create.Page(store, {
         storeActivityGood: data
       })
     } else if(this.orderType == 4) {
-      console.log(333)
       // 团约
       postData = {
         ...postData,
@@ -191,7 +188,6 @@ create.Page(store, {
         storeActivityGood: teamGoods
       })
     } else {
-      console.log(444)
       // 普通商品
       goodList = wx.getStorageSync("GOOD_LIST");
       postData = {
@@ -242,7 +238,6 @@ create.Page(store, {
     }, {
       showLoading: false
     }).then(res => {
-      console.log(res)
       this.setData({
         orderToken: res,
       })
@@ -369,7 +364,7 @@ create.Page(store, {
         postData.deliveryInfo = {
           provinceId: addressInfo.provinceId,
           cityId: addressInfo.cityId,
-          districtId: storeAdress.districtId,
+          districtId: addressInfo.districtId,
           districtName: addressInfo.districtName,
           streetName: addressInfo.streetName || "",
         }

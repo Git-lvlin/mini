@@ -14,7 +14,6 @@ Page({
       return;
     }
     const link = decodeURIComponent(options.url);
-    console.log("webview ~ link", link)
     this.setData({
       link,
     });

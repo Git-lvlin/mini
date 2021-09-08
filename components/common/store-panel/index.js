@@ -1,5 +1,6 @@
 import util from "../../../utils/util"
 import router from "../../../utils/router"
+import { haveStore } from "../../../utils/tools";
 
 Component({
   options: {
@@ -7,11 +8,11 @@ Component({
   },
 
   properties: {
-    good: {
+    storeInfo: {
       type: Object,
       value: {},
       observer(nVal, oVal) {
-        if(nVal.topPriceList && nVal.topPriceList.length) {
+        if(nVal && nVal.topPriceList && nVal.topPriceList.length) {
           nVal.topPriceList.forEach(item => {
             item.price = util.divide(item.price, 100);
             item.marketPrice = util.divide(item.marketPrice, 100);
@@ -31,15 +32,15 @@ Component({
   methods: {
     onStore() {
       const {
-        good,
+        storeInfo,
       } = this.data;
-      let id = good.storeNo.slice(8, good.storeNo.length);
-      id = +id;
-      if(id < 123580) return;
+      const storeNo = storeInfo.storeAddress.storeNo;
+      const isStore = haveStore(storeNo);
+      if(!isStore) return;
       router.push({
         name: "store",
         data: {
-          storeNo: good.storeNo,
+          storeNo,
         },
       })
     },

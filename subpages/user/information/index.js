@@ -59,7 +59,6 @@ Page({
     }, {
       showLoading: false,
     }).then(res => {
-      console.log(res)
       this.fileConfig.ossConfig = res;
       this.uploadImg();
     });
@@ -89,7 +88,6 @@ Page({
       success(res) {
         if (res.statusCode == "200") {
           const avatarUrl = getOssImgWH(IMG_CDN + path, 200, 200);
-          console.log("🚀 ~ file: index.js ~ line 89 ~ success ~ avatarUrl", avatarUrl)
           that.updateUserAvatar(avatarUrl);
           console.log("阿里云OSS上传图片成功" + avatarUrl );
         } else {
@@ -97,7 +95,6 @@ Page({
         }
       },
       fail(err) {
-        console.log("uploadImg ~ err", err)
         wx.showToast({
           title: "上传失败",
           icon: 'none',

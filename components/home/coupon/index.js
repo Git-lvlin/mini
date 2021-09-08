@@ -12,7 +12,7 @@ Component({
       observer(now, old) {
         const nowStr = JSON.stringify(now);
         const oldStr = JSON.stringify(old);
-        if(nowStr != oldStr) {
+        if(now && now.content) {
           this.setCouponList(now.content);
         }
       }

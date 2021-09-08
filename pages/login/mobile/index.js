@@ -87,7 +87,6 @@ create.Page(store, {
         this.getShareParam(options);
       }
     }
-    console.log("options", options)
     if(options.inviteCode) {
       wx.setStorageSync("INVITE_INFO", {
         inviteCode: options.inviteCode,
@@ -100,7 +99,6 @@ create.Page(store, {
     commonApis.getShareParam({
       scene: data.scene,
     }).then(res => {
-      console.log(res)
       // const param = strToParamObj(res);
       const param = res;
       if(!!param.inviteCode) {
@@ -234,8 +232,13 @@ create.Page(store, {
 
   // 切换环境
   handleChangeEnv({ detail }) {
-    console.log(detail.value);
     wx.setStorageSync("SYS_ENV", detail.value);
+    wx.removeStorage({
+      key: 'HOME_FLOOR'
+    });
+    wx.removeStorage({
+      key: 'HOME_CACHE'
+    });
   },
 
   // 勾选条件

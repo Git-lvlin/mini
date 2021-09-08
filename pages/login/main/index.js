@@ -78,7 +78,6 @@ create.Page(store, {
     }
     // options.scene = "cf2a02ac71ca987860af70c2171d1512";
     if(!options.scene) {
-      console.log("未获取到解析参数", options);
     } else {
       // 解析解密分享参数
       commonApis.getShareParam(options).then(res => {
@@ -87,7 +86,6 @@ create.Page(store, {
         }
       });
     }
-    console.log("options", options)
     if(options.inviteCode) {
       wx.setStorageSync("INVITE_INFO", {
         inviteCode: options.inviteCode,
@@ -115,7 +113,6 @@ create.Page(store, {
         userInfo = res.userInfo
       } 
       catch(err) {
-        console.log("🚀 ~ login err", err)
         return
       }
     }
@@ -204,7 +201,6 @@ create.Page(store, {
 
   // 切换环境
   handleChangeEnv({ detail }) {
-    console.log(detail.value);
     wx.setStorageSync("SYS_ENV", detail.value);
   },
 

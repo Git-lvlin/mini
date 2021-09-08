@@ -4,8 +4,8 @@
   bind:change="onChangeTime"
 >
   <view class="flex_middle" style="font-size: {{fontSize}}rpx;line-height: {{fontSize}}rpx;{{!!color && !isFull ? 'color: ' + color : ''}}">
-    <view class="{{isFull ? 'together_timer' : ''}}" wx:if="{{needDay}}">{{ timeData.days < 10 ? '0' + timeData.days : timeData.days }}</view>
-    <text class="{{isFull ? 'timer_util' : ''}}" wx:if="{{needDay}}">天</text>
+    <view class="{{isFull ? 'together_timer' : ''}}" wx:if="{{needDay && timeData.days}}">{{ timeData.days < 10 ? '0' + timeData.days : timeData.days }}</view>
+    <text class="{{isFull ? 'timer_util' : ''}}" wx:if="{{needDay && timeData.days}}">天</text>
     <view class="{{isFull ? 'together_timer' : ''}}">{{ timeData.hours < 10 ? '0' + timeData.hours : timeData.hours }}</view>
     <text class="{{isFull ? 'timer_util' : ''}}">:</text>
     <view class="{{isFull ? 'together_timer' : ''}}">{{ timeData.minutes < 10 ? '0' + timeData.minutes : timeData.minutes }}</view>

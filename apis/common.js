@@ -1,5 +1,5 @@
 import Request from '../utils/request'
-import { showModal, setLoginRouter, getStorageUserInfo, strToParamObj } from '../utils/tools'
+import { showModal, setLoginRouter, getStorageUserInfo, strToParamObj, clearLoginInfo } from '../utils/tools'
 import router from '../utils/router'
 import store from '../store/index'
 import { CODE_SCENE } from '../constants/index'
@@ -29,9 +29,7 @@ const showLogin = (back) => {
       })
     },
     cancel() {
-      if(back) {
-        router.go();
-      }
+      router.goTabbar();
     }
   })
 }
@@ -76,6 +74,7 @@ export default {
     const refreshToken = wx.getStorageSync("REFRESH_TOKEN");
     if(!refreshToken) return;
     if(!userInfo && !isShowLoginMobal) {
+      clearLoginInfo();
       showLogin();
       store.data.showLoginMobel = true;
       return ;
@@ -103,10 +102,7 @@ export default {
       return res;
     }).catch(err => {
       // if(err.code == 405 || err.code == 200109 || err.code == 10018 || err.code == 200104) {
-        wx.removeStorageSync("ACCESS_TOKEN");
-        wx.removeStorageSync("REFRESH_TOKEN");
-        wx.removeStorageSync("USER_INFO");
-        wx.removeStorageSync("USER_OTHER_INFO");
+        clearLoginInfo();
         if(!isShowLoginMobal) {
           showLogin(true);
           store.data.showLoginMobel = true;

@@ -59,7 +59,8 @@
         "setting/index",
         "changeInfo/index",
         "changePhone/index",
-        "information/index"
+        "information/index",
+        "coupon/index"
       ]
     }
   ],

@@ -16,7 +16,7 @@ create.Component(store, {
       observer(now, old) {
         const nowStr = JSON.stringify(now);
         const oldStr = JSON.stringify(old);
-        if(nowStr != oldStr) {
+        if(now && now.content) {
           this.setClassList(now.content);
         }
       }
@@ -30,17 +30,9 @@ create.Component(store, {
         }
       }
     },
-    topSearchHeight: {
-      type: Number,
-      value: 0,
-      observer(nowVal, oldVal) {
-      }
-    },
     isFixedTop: {
       type: Boolean,
       value: false,
-      observer(nowVal, oldVal) {
-      }
     },
   },
 
@@ -63,19 +55,6 @@ create.Component(store, {
   },
 
   methods: {
-    tabHandle({currentTarget}) {
-      // 更新当前tab数据
-      const index = currentTarget.dataset.index;
-      const indexData = this.data.classTabList[index];
-      this.setData({
-        indexData: indexData,
-        classIndex: index
-      }, () => {
-        // 请求当前tab列表数据
-        // this.data.isFixedTop&&this.triggerEvent("setScroll", {});
-        this.getListData({index:index, isTab: true})
-      })
-    },
 
     // 设置商品分类数据
     setClassList(content) {
@@ -86,28 +65,45 @@ create.Component(store, {
             classTabList: homeCache.classTabList,
           })
         }
-        this.getCustomData(1);
+        this.getCustomData();
       } else {
         this.setData({
           classTabList: content.data
         })
-        if(homeCache.classTabList) {
-          delete homeCache.classTabList;
+        homeCache.classTabList = content.data;
+        wx.setStorage({
+          key: "HOME_CACHE",
+          data: homeCache,
+        })
+      }
+    },
+
+    // 获取classtab数据
+    getCustomData() {
+      let homeCache = wx.getStorageSync("HOME_CACHE") || {};
+      const content = this.data.floor.content;
+      homeApi.getFloorCustom(content.dataUrl, {}).then(res => {
+        let list = res;
+        homeCache.classTabList = list
+        this.setData({
+          classTabList: list
+        }, () => {
           wx.setStorage({
             key: "HOME_CACHE",
             data: homeCache,
-          })
-        }
-      }
+          });
+          this.getListData(this.data.param)
+        });
+      });
     },
 
     // 获取商品列表数据
     getListData({index=0, size=10, next=0, isTab=false, paging=false}) {
       // 先判断缓存
-      let homeCache = wx.getStorageSync("HOME_CACHE") || {};
+      let homeCache = wx.getStorageSync("HOMECACHE") || {};
+      // console.log("🚀getListData ~ homeCache", homeCache)
+      // console.log("🚀  ~ getListData ~ data", this.data)
       // 有缓存直接用缓存更新数据
-      console.log('index', index)
-      console.log('有缓存!', homeCache.classTabAllCache)
       if (homeCache.classTabAllCache && homeCache.classTabAllCache[index] && !paging) {
         // 当前分类最近一次的商品列表
         const nowData = homeCache.classTabAllCache[index].hotGoodList;
@@ -116,16 +112,16 @@ create.Component(store, {
         this.setData({
           hotGoodList: nowData,
           pageData: pageData,
-          classTabList: homeCache.classTabList || []
+        }, () => {
+          this.setScroll();
         })
         return
       }
-      console.log('请求数据并加缓存')
       // 没缓存请求数据并加缓存
       const {
         classTabList,
       } = this.data;
-      if(!classTabList[index]) return;
+      // if(!classTabList[index]) return;
       const init = classTabList[index];
       const urlData = init.actionUrl?.split('?');
       const initUrl = urlData[0];
@@ -155,6 +151,8 @@ create.Component(store, {
         this.setData({
           hotGoodList: bigArr,
           pageData: itemData
+        }, () => {
+          this.setScroll();
         })
         homeCache.classTabAllCache = {
           ...homeCache.classTabAllCache,
@@ -163,29 +161,26 @@ create.Component(store, {
             hotGoodList: bigArr
           },
         }
-        wx.setStorage({
-          key: "HOME_CACHE",
-          data: homeCache,
-        })
+        wx.setStorageSync("HOME_CACHE", homeCache);
       })
     },
-    // 获取classtab数据
-    getCustomData(page, pageSize = 15) {
-      let homeCache = wx.getStorageSync("HOME_CACHE") || {};
-      const content = this.data.floor.content;
-      homeApi.getFloorCustom(content.dataUrl, {
-        page,
-        pageSize,
-      }).then(res => {
-        let list = res;
-        homeCache.classTabList = list
-        wx.setStorageSync("HOME_CACHE", homeCache);
-        this.setData({
-          classTabList: list
-        }, () => {
-          this.getListData(this.data.param)
-        });
-      });
+
+    // 更新当前tab数据
+    tabHandle({currentTarget}) {
+      const index = currentTarget.dataset.index;
+      const indexData = this.data.classTabList[index];
+      this.setData({
+        indexData: indexData,
+        classIndex: index
+      }, () => {
+        // 请求当前tab列表数据
+        this.getListData({index:index, isTab: true})
+      })
+    },
+
+    // 设置滚动条高度
+    setScroll() {
+      this.data.isFixedTop && this.triggerEvent("setScroll", {});
     },
 
     // 滚动到底

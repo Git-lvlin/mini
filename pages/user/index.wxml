@@ -32,7 +32,12 @@
         wx:for="{{userData}}"
         wx:key="index"
       >
-        <view class="user_data_item" wx:if="{{index != 0}}">
+        <view
+          class="user_data_item"
+          wx:if="{{index != 0}}"
+          data-data="{{item}}"
+          bindtap="onUserData"
+        >
           <view class="data_item_value">{{item.value}}</view>
           <view>{{item.text}}</view>
         </view>

@@ -15,6 +15,7 @@ const url = {
   subtotal: "/cart/auth/cart/subtotal",
 
   detail: "/goods/option/info",
+  detailNew: "/goods/option/goodsInfo",
   detailImg: "/goods/open/detailImages",
   skuList: "/goods/open/skus",
   checkSku: "/goods/option/goodsSpecList",
@@ -37,6 +38,7 @@ const url = {
   associationList: "/search/open/opensearch/getSuggest",
   userLike:"/goods/option/userLike",
 
+  storeInfo: "/goods/option/goodsDetailStoreInfo",
   storeDetail: "/store/option/storeShop/show",
   storeGood: "/store/option/storeShop/salePage",
 
@@ -95,9 +97,13 @@ export default {
   getDetailImg(params, option) {
     return Request.get(url.detailImg, params, option);
   },
-  // 获取商品详情
+  // 获取商品详情 - 旧
   getGoodDetail(params, option) {
     return Request.get(url.detail, params, option);
+  },
+  // 获取商品详情（秒约、c端集约、1688） - 新
+  getGoodDetailNew(params, option) {
+    return Request.post(url.detailNew, params, option);
   },
   // 获取sku列表
   getSkuList(params, option) {
@@ -175,7 +181,11 @@ export default {
     return Request.get(url.userLike, params, option);
   },
 
-  // 获取店铺详情
+  // 获取店铺详情 - 商品详情页面
+  getStoreInfo(params, option) {
+    return Request.post(url.storeInfo, params, option);
+  },
+  // 获取店铺详情 - 店铺详情页面
   getStoreDetail(params, option) {
     return Request.get(url.storeDetail, params, option);
   },

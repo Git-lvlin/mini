@@ -73,7 +73,6 @@ create.Page(store, {
         type: 'gps84',
         altitude: false,
         success(result) {
-          console.log("result", result);
           let data = {
             latitude: result.latitude,
             longitude: result.longitude,
@@ -84,7 +83,6 @@ create.Page(store, {
           that.getNearbyStore(data);
         },
         fail(err) {
-          console.log("err", err);
           that.openLocation = false;
           that.openLocationTip();
           that.location = defLocation;
@@ -292,14 +290,12 @@ create.Page(store, {
 
   // 监听移动bar
   handleTouchStart({ changedTouches }) {
-    console.log("start", changedTouches[0]);
     let data = changedTouches[0];
     this.touchMove.start = data.pageY;
   },
 
   // 监听移动bar
   handleTouchMove({ changedTouches }) {
-    console.log("move", changedTouches[0]);
     const data = changedTouches[0];
     let spotBottom = 0;
     const move = data.pageY;
@@ -324,7 +320,6 @@ create.Page(store, {
 
   // 监听移动bar
   handleTouchEnd({ changedTouches }) {
-    console.log("end", changedTouches[0]);
     let data = changedTouches[0];
     let spotBottom = 0;
     const end = data.pageY;

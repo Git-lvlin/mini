@@ -19,7 +19,6 @@ const getAuth = async (auth, value, type) => {
       }
     })
   }
-  console.log(" getAuth state 21", state);
   return state;
 }
 
