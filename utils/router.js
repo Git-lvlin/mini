@@ -1,5 +1,6 @@
 import routeMap from "../constants/routeMap";
-import routes from "../constants/routes"
+import routes from "../constants/routes";
+import commonApi from "../apis/common";
 import { getStorageUserInfo, objToParamStr, strToParamObj } from "./tools";
  
 const paramToStr = (data) => {
@@ -159,21 +160,15 @@ const updateSelectTabbar = (that, index) => {
 }
 
 // 解析字符串url路由
-const getUrlRoute = (url, opt) => {
+const getUrlRoute = async (url, opt) => {
   const option = {
     isJump: true,
     needLogin: false,
+    webLogin: true,
     ...opt,
   }
   let userInfo = {};
   let token = "";
-  if(option.needLogin) {
-    userInfo = getStorageUserInfo(true);
-    if(!userInfo) {
-      return null;
-    }
-    token = wx.getStorageSync("ACCESS_TOKEN");
-  }
   if(!url) {
     return null;
   }
@@ -192,11 +187,18 @@ const getUrlRoute = (url, opt) => {
     // 自主开发WEB页面
     data.routeType = "web";
     let connector = url.indexOf("?") > -1 ? "&" : "?"
-    if(option.needLogin) {
-      url = `${url}${connector}memberId=${userInfo.id}&token=${token}`;
+    if(option.webLogin) {
+      console.log(1);
+      userInfo = getStorageUserInfo() || {};
+      if(!!userInfo.id) {
+        await commonApi.refreshToken();
+      }
+      console.log(111);
+      token = wx.getStorageSync("ACCESS_TOKEN") || "";
+      url = `${url}${connector}memberId=${userInfo.id || ""}&token=${token}`;
     }
     if(option.data) {
-      url = `${url}${option.needLogin ? "&" : connector}${objToParamStr(option.data)}`;
+      url = `${url}${option.webLogin ? "&" : connector}${objToParamStr(option.data)}`;
     }
     data.params.url = encodeURIComponent(url);
     if(option.isJump) {
@@ -206,6 +208,13 @@ const getUrlRoute = (url, opt) => {
       })
     }
   } else if(routeMap[data.route]) {
+    if(option.needLogin) {
+      userInfo = getStorageUserInfo(true);
+      if(!userInfo) {
+        return null;
+      }
+      token = wx.getStorageSync("ACCESS_TOKEN");
+    }
     // 小程序页面
     data.routeType = "route";
     data.route = routeMap[data.route];

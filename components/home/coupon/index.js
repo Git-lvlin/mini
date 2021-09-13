@@ -58,19 +58,26 @@ Component({
         }
       }
     },
+
+    getReceive() {
+      homeApi.getCouponState({}, {
+        showloading: false,
+      }).then(res => {
+        
+      });
+    },
+
     onClickReceive() {
       const userInfo = getStorageUserInfo(true);
       if(!userInfo) {
         return;
       }
-      const token = wx.getStorageSync("ACCESS_TOKEN");
       const {
         floor,
       } = this.data;
       if(floor.header.title) {
         const head = floor.header.title[0];
         router.getUrlRoute(head.actionUrl, {
-            needLogin: true,
             data: {
               indexVersion: VERSION,
             }
