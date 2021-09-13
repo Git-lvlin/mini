@@ -606,6 +606,7 @@ create.Page(store, {
       good,
       currentSku,
       quantity,
+      storeInfo,
     } = this.data;
     if(good.goodsState != 1) {
       showToast({ title: "商品已下架" });
@@ -655,7 +656,7 @@ create.Page(store, {
         objectId = currentSku.groupId;
       }
       if(orderType == 15) {
-        data.storeAdress = good.storeAdress;
+        data.storeAdress = storeInfo.storeAddress;
         data.selectAddressType = selectAddressType;
       }
     }
