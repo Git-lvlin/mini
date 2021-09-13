@@ -5,7 +5,6 @@ const url = {
   bannerList: "/cms/open/banner/list",
   intensiveGood: "/activity/open/wholesaleGoodsList",
   hotGood: "/activity/open/tagGoodsList",
-  couponState: "/activity/option/getMemberCouponLqStatus",
 
   shareInfo: "/share/option/shareParam/queryShareContent",
 
@@ -70,10 +69,5 @@ export default {
   // 获取首页广告
   getAdvert(params, option) {
     return Request.post(url.advert, params, option);
-  },
-
-  // 获取优惠券领取状态
-  getCouponState(params, option) {
-    return Request.get(url.couponState, params, option);
   },
 }
