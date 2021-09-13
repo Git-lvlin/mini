@@ -369,8 +369,16 @@ create.Page(store, {
   getSecUser() {
     let {
       orderType,
+      activityId,
+      objectId,
+      skuId,
+      spuId,
     } = this.goodParams
     goodApi.getIntensiveUser({
+      activityId,
+      objectId,
+      skuId,
+      spuId,
       orderType,
       saleNum: 5,
     }).then(res => {
