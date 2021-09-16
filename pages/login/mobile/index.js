@@ -157,7 +157,10 @@ create.Page(store, {
                 this.handleGetPhone(eventData);
               }
             } else {
-              handleErrorCode(err.code);
+              handleErrorCode({
+                code: err.code,
+                msg: err.msg,
+              });
             }
           })
       //   },
