@@ -235,14 +235,17 @@ Page({
   },
 
   // 点击搜索
-  onSearch() {
+  onSearch(event) {
+    if(event) {
+      this.searchPage.page = 1;
+    }
     if(this.loading) return;
     this.loading = true;
     let {
       searchText,
       goodList,
     } = this.data;
-    const {
+    let {
       page,
       size,
     } = this.searchPage;
@@ -270,6 +273,7 @@ Page({
         item.salePrice = util.divide(item.goodsSaleMinPrice, 100);
         item.marketPrice = util.divide(item.skuMarketPrice, 100);
       });
+      console.log("🚀 ~ file: index.js ~ line 277 ~ onSearch ~ page", page)
       if(page > 1) {
         list = goodList.concat(list);
         // list = list.concat(list);

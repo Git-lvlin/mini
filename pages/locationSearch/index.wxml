@@ -3,7 +3,7 @@
 <view class="container">
   <view class="flex_fix flex_middle search_content">
     <view class="flex_fix flex_middle address_info" bindtap="onOpenCity">
-      <view class="city">{{cityData.city}}</view>
+      <view class="city">{{cityData.district}}</view>
       <image class="icon" src="{{tools.getImgUrl('miniprogram/common/down_spot.png')}}" />
     </view>
     <view class="flex_middle search_info" >
@@ -50,7 +50,6 @@
 
   <address-popup
     show="{{ showPopup }}"
-    showArea="{{false}}"
     bind:close="onCloseAddress"
   />
 </view>

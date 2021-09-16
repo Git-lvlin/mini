@@ -59,7 +59,7 @@
         wx:if="{{item.floorType === 1}}"
       />
 
-      <!-- 优惠券 -->
+      <!-- 红包 -->
       <coupon
         floor="{{item}}"
         wx:if="{{item.floorType === 2}}"
@@ -118,6 +118,7 @@
         <classgoods
           scrollBottom="{{scrollBottom}}"
           floor="{{item}}"
+          refreshering="{{refresherTriggered}}"
           isFixedTop="{{isFixedTop}}"
           bind:setScroll="setScroll"
         />

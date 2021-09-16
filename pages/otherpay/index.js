@@ -100,6 +100,7 @@ Page({
     }).catch(err => {
       if(err.code == 20806) {
         payInfo.state = 4;
+        wx.hideLoading();
       } else {
         payInfo.state = 3;
         this.handleErrorInfo(err);
@@ -138,6 +139,8 @@ Page({
       // }
       this.setData({
         payInfo
+      }, () => {
+        wx.hideLoading();
       })
     });
   },
@@ -162,11 +165,12 @@ Page({
         payData: res,
       }, () => {
         this.openPay();
-        // wx.hideLoading();
+        wx.hideLoading();
       })
     }).catch(err => {
       if(err.code == 30202) {
         payInfo.state = 4;
+        wx.hideLoading();
       } else {
         payInfo.state = 3;
         this.handleErrorInfo(err);
@@ -196,10 +200,12 @@ Page({
         payData: res,
       }, () => {
         this.openPay();
+        wx.hideLoading();
       })
     }).catch(err => {
       if(err.code == 10110) {
         payInfo.state = 4;
+        wx.hideLoading();
       } else {
         payInfo.state = 3;
         this.handleErrorInfo(err);

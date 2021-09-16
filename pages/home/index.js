@@ -138,7 +138,7 @@ create.Page(store, {
   },
 
   // 获取首页楼层列表
-  getFloorList() {
+  getFloorList(isReload) {
     let floor = wx.getStorageSync("HOME_FLOOR");
     let headBackCss = "";
     // 2 代表小程序审核版本 3 代表小程序正试版本
@@ -158,6 +158,11 @@ create.Page(store, {
     }, {
       showLoading: this.isFristLoad,
     }).then(res => {
+      if(isReload) {
+        this.setData({
+          floor: {}
+        })
+      };
       clearTimeout(this.floorTimer);
       this.isFristLoad = true;
       headBackCss = this.setHeadBack(res.headData && res.headData.style || "");
@@ -252,10 +257,20 @@ create.Page(store, {
   },
 
   // 跳转选择地址
-  onToLocation() {
-    const {
+  onToLocation: async function() {
+    let {
       locationAuth,
     } = this.data;
+    let auth = false;
+    if(!locationAuth) {
+      auth = await checkSetting('userLocation', true);
+      if(auth) {
+        locationAuth = true;
+        this.setData({
+          locationAuth,
+        });
+      }
+    }
     if(!locationAuth) {
       showModal({
         content: "需要您授权地理位置才可使用",
@@ -406,10 +421,12 @@ create.Page(store, {
   onPullDownRefresh() {
     wx.removeStorageSync("HOME_FLOOR");
     wx.removeStorageSync("HOME_CACHE");
-    this.setData({
-      refresherTriggered: true
-    }, () => {
-      this.getFloorList();
-    });
+    setTimeout(() => {
+      this.setData({
+        refresherTriggered: true,
+      }, () => {
+        this.getFloorList(true);
+      });
+    }, 500)
   }
 })

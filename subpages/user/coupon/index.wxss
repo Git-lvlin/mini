@@ -38,7 +38,7 @@ page {
   background-color: #e5352f;
 }
 
-/* 优惠券列表 */
+/* 红包列表 */
 .coupon_scroll {
   flex: 1;
   height: 600rpx;

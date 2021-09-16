@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "我的优惠券",
+  "navigationBarTitleText": "我的红包",
   "usingComponents": {
     "nodata": "/components/common/nodata/index",
     "down-app-code": "/components/common/down-app-code/index"

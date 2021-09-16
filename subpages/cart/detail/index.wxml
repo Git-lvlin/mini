@@ -105,7 +105,7 @@
         <view class="progress_line" style="width: {{good.percentage || 0}}%" />
         <view class="progress_text">已售{{good.percentage || 0}}%</view>
       </view>
-      <view class="intensive_sale">{{good.storeSaleSumNum || 0}}</view>
+      <view class="intensive_sale">{{good.goodsSaleNum}}</view>
     </view>
     <!-- 集约参与人 -->
     <view class="intensive_join" wx:if="{{isActivityGood == 15 && intensiveUser.records.length}}">

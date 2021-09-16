@@ -11,6 +11,7 @@ const url = {
   inviteCode: "/public/option/invationcode/check/internaltest/app",
   ossConfig: "/public/open/uploadConfig/findByBizCode",
   shareParam: "/share/option/shareParam/getScene",
+  coordinate: "/cms/open/location/getLocation",
 }
 
 let isShowLoginMobal = store.data.showLoginMobel;
@@ -157,5 +158,10 @@ export default {
   // 获取oss上传配置
   getOssConfig(params, option) {
     return Request.get(url.ossConfig, params, option);
+  },
+
+  // 根据地址获取经纬度
+  getCoordinate(params, option) {
+    return Request.get(url.coordinate, params, option);
   },
 }
