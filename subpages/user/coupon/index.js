@@ -62,7 +62,7 @@ Page({
     }
   },
 
-  // 获取优惠券
+  // 获取红包
   getCouponList() {
     const userInfo = getStorageUserInfo(true, true);
     if(!userInfo) {

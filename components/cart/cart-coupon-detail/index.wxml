@@ -23,11 +23,11 @@
     <view class="popup_cell_name">优惠明细</view>
   </view>
   <view class="popup_cell">
-    <view class="popup_cell_name gray_text">优惠券</view>
+    <view class="popup_cell_name gray_text">红包</view>
     <view class="popup_cell_value">-¥{{tools.floatReduce(total.subtotal, total.subtotalPromotion)}}</view>
   </view> -->
   <view class="popup_cell red_cell">
-    <view class="popup_cell_name ">优惠券</view>
+    <view class="popup_cell_name ">红包</view>
     <view class="popup_cell_value">-¥{{tools.floatReduce(total.subtotal, total.subtotalPromotion)}}</view>
   </view>
   <view class="popup_cell">

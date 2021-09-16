@@ -68,7 +68,7 @@ Page({
       orderType: options.orderType,
     })
     // 获取支付类型
-    commonApi.getResourceDetail({
+    !options.loadedPay && commonApi.getResourceDetail({
       resourceKey: PAY_TYPE_KEY,
     }, {
       showLoading: false,

@@ -34,6 +34,10 @@ create.Component(store, {
       type: Boolean,
       value: false,
     },
+    refreshering: {
+      type: Boolean,
+      value: false,
+    },
   },
 
   data: {
@@ -100,7 +104,7 @@ create.Component(store, {
     // 获取商品列表数据
     getListData({index=0, size=10, next=0, isTab=false, paging=false}) {
       // 先判断缓存
-      let homeCache = wx.getStorageSync("HOMECACHE") || {};
+      let homeCache = {}; // wx.getStorageSync("HOME_CACHE") || 
       // console.log("🚀getListData ~ homeCache", homeCache)
       // console.log("🚀  ~ getListData ~ data", this.data)
       // 有缓存直接用缓存更新数据
@@ -120,6 +124,7 @@ create.Component(store, {
       // 没缓存请求数据并加缓存
       const {
         classTabList,
+        refreshering,
       } = this.data;
       // if(!classTabList[index]) return;
       const init = classTabList[index];

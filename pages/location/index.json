@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "选择自提点",
   "usingComponents": {
-    "take-spot": "/components/other/take_spot/index"
+    "take-spot": "/components/other/take_spot/index",
+    "nodata": "/components/common/nodata/index"
   }
 }

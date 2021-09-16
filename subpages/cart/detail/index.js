@@ -2,6 +2,7 @@ import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
 import commonApi from '../../../apis/common'
+import homeApi from '../../../apis/home'
 import { IMG_CDN, DETAIL_SERVICE_LIST } from '../../../constants/common'
 import { CODE_SCENE } from '../../../constants/index'
 import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj, haveStore } from '../../../utils/tools'
@@ -67,6 +68,7 @@ create.Page(store, {
     secJoinUser: [],
     // 店铺信息
     storeInfo: {},
+    shareInfo: "",
   },
 
   onLoad(options) {
@@ -103,43 +105,7 @@ create.Page(store, {
     })
   },
 
-  // 转发
-  onShareAppMessage() {
-    const {
-      good,
-    } = this.data;
-    const {
-      orderType,
-      spuId,
-    } = this.goodParams;
-    let promise = null;
-    const pathParam = objToParamStr(this.goodParams);
-    const shareInfo = {
-      title: good.goodsName,
-      path: "/subpages/cart/detail/index",
-      imageUrl: good.imageList[0],
-    }
-    const userInfo = getStorageUserInfo();
-    if(userInfo) {
-      let params = {
-        shareType: 1,
-        contentType: 1,
-        shareObjectNo: spuId,
-        paramId: 1,
-        shareParams: this.goodParams,
-        ext: this.goodParams,
-      };
-      if(orderType == 3 || orderType == 4) {
-        params.paramId = 3;
-        shareInfo.path = "/subpages/cart/teamDetail/index";
-      }
-      promise = commonApi.getShareInfo(params);
-      shareInfo.promise = promise;
-    }
-    shareInfo.path = `${shareInfo.path}${pathParam}`;
-    return shareInfo;
-  },
-
+  // 基础数据
   hanldeGoodsParams(options){
     let { systemInfo } = this.store.data;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
@@ -171,7 +137,68 @@ create.Page(store, {
     }
   },
 
-  // 获取分享配置
+  // 获取分享参数
+  getShareInfo() {
+    const {
+      orderType,
+      spuId,
+    } = this.goodParams;
+    const shareParams = {
+      shareType: 1,
+      contentType: 1,
+      shareObjectNo: spuId,
+      paramId: 1,
+      shareParams: this.goodParams,
+      ext: this.goodParams,
+    }
+    if(orderType == 3 || orderType == 4) {
+      shareParams.paramId = 3;
+    }
+    homeApi.getShareInfo(shareParams, {
+      showLoading: false,
+    }).then(res => {
+      const shareInfo = {
+        title: res.title || "约购超值集约！快来体验吧～",
+        path: res.shareUrl,
+        imageUrl: res.thumbData,
+      };
+      this.setData({
+        shareInfo,
+      })
+    });
+  },
+
+  // 转发
+  onShareAppMessage() {
+    const {
+      good,
+      shareInfo,
+    } = this.data;
+    const {
+      orderType,
+    } = this.goodParams;
+    const pathParam = objToParamStr(this.goodParams);
+    let info = {
+      title: "约购超值集约！快来体验吧～",
+      path: "/subpages/cart/detail/index?",
+      imageUrl: good.goodsImageUrl,
+    }
+    if(orderType == 3 || orderType == 4) {
+      info.path = "/subpages/cart/teamDetail/index?";
+    }
+    if(shareInfo && shareInfo.path) {
+      info = {
+        ...info,
+        ...shareInfo
+      }
+      info.imageUrl = info.imageUrl ? info.imageUrl : good.goodsImageUrl;
+    } else {
+      info.path = `${info.path}${pathParam}`;
+    }
+    return info;
+  },
+
+  // 解析分享配置
   getShareParam(data) {
     commonApis.getShareParam({
       scene: data.scene,
@@ -370,9 +397,12 @@ create.Page(store, {
     let {
       orderType,
     } = this.goodParams
+    const {
+      good,
+    } = this.data;
     goodApi.getIntensiveUser({
       orderType,
-      saleNum: 5,
+      saleNum: good.goodsSaleNumVal,
     }).then(res => {
       const list = res.records.slice(0, 5);
       this.setData({
@@ -422,9 +452,12 @@ create.Page(store, {
     let {
       orderType,
     } = this.goodParams
+    const {
+      good,
+    } = this.data;
     goodApi.getIntensiveUser({
       orderType,
-      saleNum: 17,
+      saleNum: good.goodsSaleNumVal,
     }).then(res => {
       this.setData({
         intensiveUser: res

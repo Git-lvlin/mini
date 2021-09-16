@@ -37,7 +37,7 @@ export default {
     return Request.post(url.getDownLoadImg, params, option);
   },
 
-  // 获取优惠券列表
+  // 获取红包列表
   getCouponList(params, option){
     return Request.post(url.couponList, params, option);
   },

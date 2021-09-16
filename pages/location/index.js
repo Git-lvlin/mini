@@ -20,6 +20,7 @@ create.Page(store, {
   // 当前位置经纬度
   location: {},
   openLocation: false,
+  fristLoad: true,
 
   // 值单位 px
   touchMove: {
@@ -34,13 +35,13 @@ create.Page(store, {
     textData: {},
     showPopup: false,
     spotBottom: 0,
-    barState: false,
+    barState: true,
     currentSpot: {},
+    listIsLoad: false,
   },
 
   onShow() {
     const that = this;
-    // this.getPoiAround();
     const takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
     const searchSpot = wx.getStorageSync("SEARCH_SPOT");
     let spotData = "";
@@ -64,15 +65,15 @@ create.Page(store, {
       wx.removeStorage({
         key: 'SEARCH_SPOT',
       });
-      return;
-    }
-    if(this.location.latitude) {
+    } else if(this.location.latitude) {
       that.getNearbyStore(this.location);
-    } else {
+    }
+    if(this.fristLoad && !spotData.latitude) {
       wx.getLocation({
         type: 'gps84',
         altitude: false,
         success(result) {
+          that.fristLoad = false;
           let data = {
             latitude: result.latitude,
             longitude: result.longitude,
@@ -80,13 +81,13 @@ create.Page(store, {
           that.location = data;
           that.openLocation = true;
           that.setData(data);
-          that.getNearbyStore(data);
+          !spotData.latitude && that.getNearbyStore(data);
         },
         fail(err) {
           that.openLocation = false;
           that.openLocationTip();
           that.location = defLocation;
-          that.getNearbyStore(defLocation);
+          !spotData.latitude && that.getNearbyStore(defLocation);
         },
       });
     }
@@ -163,9 +164,16 @@ create.Page(store, {
         // }
         this.setData({
           markers: list,
+          listIsLoad: true,
           currentSpot,
-          latitude: list[0].latitude,
-          longitude: list[0].longitude,
+          // latitude: list[0].latitude,
+          // longitude: list[0].longitude,
+        });
+      } else {
+        this.setData({
+          markers: [],
+          listIsLoad: true,
+          currentSpot: {},
         });
       }
     })

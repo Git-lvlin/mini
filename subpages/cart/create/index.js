@@ -10,7 +10,7 @@ import { PAY_TYPE_KEY } from '../../../constants/common'
 
 const refreshOrderToken = {
   20802: "库存不足！",
-  20809: "优惠券不可用",
+  20809: "红包不可用",
 }
 
 const backDetail = {
@@ -107,15 +107,15 @@ create.Page(store, {
     cartApi.getDefaultAddress({}, {
       showLoading: false,
     }).then(res => {
+      if(this.orderType == 15) {
+        this.setStoreAddress(res);
+      }
       if(!addressInfo.consignee) {
         this.setData({
           addressInfo: res,
         }, () => {
           this.getConfirmInfo();
         })
-        if(this.orderType == 15) {
-          this.setStoreAddress(res);
-        }
       }
     }).catch(err => {
       this.setStoreAddress(err);
@@ -345,13 +345,14 @@ create.Page(store, {
       postData = {
         changeStore: detail,
         note,
-        deliveryInfo: {
-          provinceId: storeAdress.provinceId,
-          cityId: storeAdress.cityId,
-          districtId: storeAdress.districtId,
-          districtName: storeAdress.districtName,
-          streetName: storeAdress.streetName || "",
-        },
+        deliveryInfo: this.mapAddress(storeAdress),
+        // deliveryInfo: {
+        //   provinceId: storeAdress.provinceId,
+        //   cityId: storeAdress.cityId,
+        //   districtId: storeAdress.districtId,
+        //   districtName: storeAdress.districtName,
+        //   streetName: storeAdress.streetName || "",
+        // },
         storeGoodsInfos,
       }
     } else {
@@ -361,13 +362,14 @@ create.Page(store, {
         storeGoodsInfos,
       }
       if (addressInfo.provinceId) {
-        postData.deliveryInfo = {
-          provinceId: addressInfo.provinceId,
-          cityId: addressInfo.cityId,
-          districtId: addressInfo.districtId,
-          districtName: addressInfo.districtName,
-          streetName: addressInfo.streetName || "",
-        }
+        postData.deliveryInfo = this.mapAddress(addressInfo);
+        // postData.deliveryInfo = {
+        //   provinceId: addressInfo.provinceId,
+        //   cityId: addressInfo.cityId,
+        //   districtId: addressInfo.districtId,
+        //   districtName: addressInfo.districtName,
+        //   streetName: addressInfo.streetName || "",
+        // }
       }
     }
     this.changeStoreData = postData.storeGoodsInfos;
@@ -419,14 +421,14 @@ create.Page(store, {
     });
   },
 
-  // 打开优惠券弹窗
+  // 打开红包弹窗
   onOpenCoupon() {
     this.setData({
       couponPopup: true
     })
   },
 
-  // 监听优惠券弹窗关闭
+  // 监听红包弹窗关闭
   handleCloseCoupon() {
     this.setData({
       couponPopup: false
@@ -605,6 +607,7 @@ create.Page(store, {
         name: "cashier",
         data: {
           isPay,
+          loadedPay: true,
           ...orderInfo,
         },
       })

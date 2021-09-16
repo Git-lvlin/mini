@@ -54,6 +54,7 @@
             bind:click="onTakeSpot"
           />
         </view>
+        <nodata wx:if="{{listIsLoad && !markers.length}}" title="附近没有店铺呢" type="search" top="{{20}}" />
       </view>
     </view>
 

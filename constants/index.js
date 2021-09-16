@@ -69,7 +69,7 @@ export const NODATA_LIST = [
   {
     type: "coupon",
     img: `${IMG_CDN}miniprogram/common/nodata/coupon.png`,
-    title: "暂无优惠券"
+    title: "暂无红包"
   },
   {
     type: "data",

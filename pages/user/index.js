@@ -24,7 +24,7 @@ create.Page(store, {
         value: 0,
       },
       {
-        text: "优惠券",
+        text: "红包",
         value: 0,
         action: "coupon"
       },
