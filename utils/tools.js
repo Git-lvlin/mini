@@ -66,11 +66,11 @@ export const handleErrorCode = ({
       break;
     case 10011:
       // 服务不可用
-      showErrorMsg("服务暂不可用，请稍后重试");
+      showErrorMsg(msg || "服务暂不可用，请稍后重试");
       break;
     case 10012:
       // 限流
-      showErrorMsg("当前访问人数较多，请稍后重试");
+      showErrorMsg(msg || "当前访问人数较多，请稍后重试");
       // router
       break;
     case 10013:
@@ -79,7 +79,7 @@ export const handleErrorCode = ({
       if(!pages.length) { return }
       const curUrl = `/${pages[pages.length - 1].route}`;
       if(routes["maintain"].path == curUrl) {
-        showErrorMsg("系统维护中，请稍后重试");
+        showErrorMsg(msg || "系统维护中，请稍后重试");
       } else {
         router.replace({
           name: "maintain",
@@ -103,15 +103,15 @@ export const handleErrorCode = ({
       break;
     case 10016:
       // 请求地址不存在
-      showErrorMsg("服务暂不可用，请稍后重试");
+      showErrorMsg(msg || "服务暂不可用，请稍后重试");
       break;
     case 10017:
       // 黑名单用户
-      showErrorMsg("暂不可用，请联系客服");
+      showErrorMsg(msg || "暂不可用，请联系客服");
       break;
     case 10018:
       // 系统异常
-      showErrorMsg("系统异常");
+      showErrorMsg(msg || "系统异常");
       break;
     case 10110:
       // 业务错误
