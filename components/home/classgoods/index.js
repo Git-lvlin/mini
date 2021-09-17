@@ -75,10 +75,7 @@ create.Component(store, {
           classTabList: content.data
         })
         homeCache.classTabList = content.data;
-        wx.setStorage({
-          key: "HOME_CACHE",
-          data: homeCache,
-        })
+        wx.setStorageSync("HOME_CACHE", homeCache)
       }
     },
 
@@ -92,10 +89,7 @@ create.Component(store, {
         this.setData({
           classTabList: list
         }, () => {
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          });
+          wx.setStorageSync("HOME_CACHE", homeCache);
           this.getListData(this.data.param)
         });
       });
