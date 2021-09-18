@@ -208,12 +208,13 @@ create.Page(store, {
       // store.data.userInfo = data.memberInfo;
       // store.data.defUserInfo = data.memberInfo;
       tools.setUserInfo(data);
-      this.getUserInfo(data.memberInfo);
       if(isInvite) {
+        wx.setStorageSync("INVITE_REGISTER", true);
         wx.removeStorage({
           key: 'INVITE_INFO',
         });
       }
+      this.getUserInfo(data.memberInfo);
     });
   },
 

@@ -97,6 +97,7 @@ create.Page(store, {
     if(!!userInfo) {
       if(this.store.data.cartList.length <= 0 && !!orderType) {
         this.store.updateCart();
+        this.getShareInfo();
       }
       // this.getDetailRatio();
     }
@@ -118,6 +119,12 @@ create.Page(store, {
       isActivityGood,
       skuId: options.skuId,
     })
+    if(options && options.inviteCode) {
+      wx.setStorageSync("INVITE_INFO", {
+        inviteCode: options.inviteCode,
+        shareMemberId: options.shareMemberId,
+      });
+    }
     if(!options.orderType) {
       showModal({
         content: "商品数据有误",

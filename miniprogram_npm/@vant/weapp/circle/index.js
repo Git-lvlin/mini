@@ -41,7 +41,8 @@ component_1.VantComponent({
       value: color_1.WHITE,
     },
     color: {
-      type: null,
+      type: String,
+      optionalTypes: [Object],
       value: color_1.BLUE,
       observer: function () {
         var _this = this;
@@ -176,24 +177,30 @@ component_1.VantComponent({
         this.drawCircle(value);
         return;
       }
-      this.clearInterval();
+      this.clearMockInterval();
       this.currentValue = this.currentValue || 0;
-      this.interval = setInterval(function () {
-        if (_this.currentValue !== value) {
-          if (_this.currentValue < value) {
-            _this.currentValue += STEP;
+      var run = function () {
+        _this.interval = setTimeout(function () {
+          if (_this.currentValue !== value) {
+            if (Math.abs(_this.currentValue - value) < STEP) {
+              _this.currentValue = value;
+            } else if (_this.currentValue < value) {
+              _this.currentValue += STEP;
+            } else {
+              _this.currentValue -= STEP;
+            }
+            _this.drawCircle(_this.currentValue);
+            run();
           } else {
-            _this.currentValue -= STEP;
+            _this.clearMockInterval();
           }
-          _this.drawCircle(_this.currentValue);
-        } else {
-          _this.clearInterval();
-        }
-      }, 1000 / speed);
+        }, 1000 / speed);
+      };
+      run();
     },
-    clearInterval: function () {
+    clearMockInterval: function () {
       if (this.interval) {
-        clearInterval(this.interval);
+        clearTimeout(this.interval);
         this.interval = null;
       }
     },
@@ -206,6 +213,6 @@ component_1.VantComponent({
     });
   },
   destroyed: function () {
-    this.clearInterval();
+    this.clearMockInterval();
   },
 });

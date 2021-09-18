@@ -31,7 +31,7 @@
       <van-radio
         name="{{true}}"
         checked-color="#E5352F"
-        icon-size="40rpx"
+        icon-size="{{18}}"
       >
         登陆/注册即表示您已阅读并同意
         <!-- <text class="red_text" data-type="service" catchtap="onClickTreaty">服务协议</text>和 -->
