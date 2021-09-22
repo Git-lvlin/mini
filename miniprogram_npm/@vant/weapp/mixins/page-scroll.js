@@ -12,7 +12,7 @@ function onPageScroll(event) {
     }
   });
 }
-exports.pageScrollMixin = function (scroller) {
+var pageScrollMixin = function (scroller) {
   return Behavior({
     attached: function () {
       var page = utils_1.getCurrentPage();
@@ -29,12 +29,15 @@ exports.pageScrollMixin = function (scroller) {
     detached: function () {
       var _a;
       var page = utils_1.getCurrentPage();
-      page.vanPageScroller =
-        ((_a = page.vanPageScroller) === null || _a === void 0
-          ? void 0
-          : _a.filter(function (item) {
-              return item !== scroller;
-            })) || [];
+      if (utils_1.isDef(page)) {
+        page.vanPageScroller =
+          ((_a = page.vanPageScroller) === null || _a === void 0
+            ? void 0
+            : _a.filter(function (item) {
+                return item !== scroller;
+              })) || [];
+      }
     },
   });
 };
+exports.pageScrollMixin = pageScrollMixin;
