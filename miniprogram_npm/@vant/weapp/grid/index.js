@@ -10,7 +10,8 @@ component_1.VantComponent({
       observer: 'updateChildren',
     },
     gutter: {
-      type: null,
+      type: Number,
+      optionalTypes: [String],
       value: 0,
       observer: 'updateChildren',
     },
@@ -39,6 +40,11 @@ component_1.VantComponent({
     },
     iconSize: {
       type: String,
+      observer: 'updateChildren',
+    },
+    reverse: {
+      type: Boolean,
+      value: false,
       observer: 'updateChildren',
     },
   },

@@ -25,12 +25,14 @@ component_1.VantComponent({
       value: 'round',
     },
     iconSize: {
-      type: null,
+      type: Number,
+      optionalTypes: [String],
       value: 20,
     },
   },
   data: {
     parentDisabled: false,
+    direction: 'vertical',
   },
   methods: {
     emitChange: function (value) {

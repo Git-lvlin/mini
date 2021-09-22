@@ -71,6 +71,7 @@ export const checkSetting = async (auth, needAuth = false) => {
           if(!resAuth && authValueType === 1) {
             if(resAuth === undefined) {
               resAuth = getAuth(auth, resAuth, authValueType);
+              resolve(resAuth);
             } else {
               wx.openSetting({
                 success: (result) => {

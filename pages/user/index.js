@@ -165,8 +165,10 @@ create.Page(store, {
       if(!userInfo) return;
     }
     if(path == "share") {
+      const userInfo = getStorageUserInfo(true);
+      if(!userInfo) return;
       this.showSharePopup()
-      return
+      return;
     }
     if(type === 1) {
       router.push({

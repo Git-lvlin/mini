@@ -62,7 +62,8 @@
   color: #999999;
   text-align: center;
   line-height: 28rpx;
-  margin-left: -266rpx;
+  white-space: nowrap;
+  transform: translateX(-50%);
 }
 
 .treaty .red_text {

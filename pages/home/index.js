@@ -46,6 +46,8 @@ create.Page(store, {
     leaveTopL: 0,
     //是否固定顶部
     isFixedTop: false,
+    // 邀请注册成功
+    inviteRegister: false,
   },
   onLoad(options) {
     // 系统弹窗
@@ -114,7 +116,7 @@ create.Page(store, {
   },
 
   // 获取审核状态
-  getMiniExamine() {
+  getMiniExamine(isReload = false) {
     commonApi.getResourceDetail({
       resourceKey: "MINIEXAMINE",
     }, {
@@ -123,17 +125,28 @@ create.Page(store, {
       const data = res.data;
       const miniState = this.isMiniExamine;
       if(data.state == 1 && !miniState) {
+        // 审核
         this.isMiniExamine = true;
-      } else if(data.state == 0 && miniState) {
+      } else if(data.state == 0) {
+        // 正式版
         this.isMiniExamine = false;
+        const inviteRegister = wx.getStorageSync("INVITE_REGISTER") || false;
+        if(inviteRegister) {
+          this.setData({
+            inviteRegister,
+          });
+          wx.removeStorage({
+            key: 'INVITE_REGISTER',
+          })
+        }
       }
-      this.getFloorList();
+      this.getFloorList(isReload);
       wx.setStorage({
         key: "EXAMINE",
         data: this.isMiniExamine,
       })
     }).catch(err => {
-      this.getFloorList();
+      this.getFloorList(isReload);
     });
   },
 
@@ -425,8 +438,15 @@ create.Page(store, {
       this.setData({
         refresherTriggered: true,
       }, () => {
-        this.getFloorList(true);
+        this.getMiniExamine(true);
       });
     }, 500)
+  },
+  
+  // 关闭下载弹窗
+  onHideSharePopup() {
+    this.setData({
+      inviteRegister: false,
+    })
   }
 })

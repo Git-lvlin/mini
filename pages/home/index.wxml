@@ -145,6 +145,9 @@
   <!-- 活动弹窗 -->
   <advert-popup advert="{{activityAdvert}}" />
 
+  <!-- 下载app 二维码 -->
+  <down-app-code show="{{inviteRegister}}" bind:close="onHideSharePopup" />
+
   <!-- 底部占位 -->
   <view class="flex_fix bar_height" />
 </view>

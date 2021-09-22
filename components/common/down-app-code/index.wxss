@@ -1,20 +1,42 @@
-/* 分享弹窗 */
-.share_poster{
+
+.code_content {
+  position: relative;
+  width: 100%;
   overflow: hidden;
-  width: 550rpx;
-  height: 870rpx;
-  border-bottom-left-radius: 30rpx;
-  border-bottom-right-radius: 30rpx;
+  padding-top: 40rpx;
 }
 
-.share_photo{
-  width: 550rpx;
-  height: 870rpx;
+.close_img {
+  position: absolute;
+  top: 0;
+  right: 40rpx;
+  z-index: 9;
+  width: 46rpx;
+  height: 46rpx;
+  opacity: 0.8;
+}
+
+/* 分享弹窗 */
+.share_poster{
+}
+
+.canvas_code {
+  position: relative;
+  left: 50%;
+  width: 740rpx;
+  height: 832rpx;
+  transform: translateX(-50%);
+}
+
+.qrcode {
+  position: absolute;
+  left: -500rpx;
+  /* visibility: hidden; */
 }
 
 .save_picture{
-  margin-left: 225rpx;
-  margin-top: 30rpx;
+  flex-direction: column;
+  padding-top: 32rpx;
 }
 
 .pic1 {
@@ -23,13 +45,8 @@
 }
 
 .word2 {
-  width: 109rpx;
-  display: block;
-  overflow-wrap: break-word;
-  color: rgba(255,255,255,1);
-  font-size: 27rpx;
-  font-family: PingFangSC-Regular;
-  white-space: nowrap;
-  line-height: 38rpx;
-  text-align: center;
+  padding-top: 12rpx;
+  font-size: 30rpx;
+  color: #FFFFFF;
+  line-height: 42rpx;
 }
