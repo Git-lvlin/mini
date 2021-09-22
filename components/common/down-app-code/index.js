@@ -1,6 +1,5 @@
 import userApi from "../../../apis/user"
 import { checkSetting } from "../../../utils/wxSetting";
-import QRCode from '../../../utils/weappQrcode.js';
 import drawQrcode from '../../../miniprogram_npm/weapp-qrcode/index'
 
 const url = "https://publicmobile-dev.yeahgo.com/web/share?inviteCode=ri2ez4lio16";
