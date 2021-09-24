@@ -166,7 +166,7 @@ create.Component(store, {
             hotGoodList: bigArr
           },
         }
-        wx.setStorageSync("HOME_CACHE", homeCache);
+        // wx.setStorageSync("HOME_CACHE", homeCache);
       })
     },
 
