@@ -56,7 +56,6 @@ create.Page(store, {
             addressComponent,
           } = data[0].regeocodeData;
           this.selectLocation = addressComponent.streetNumber.location;
-          console.log("🚀 ~ file: index.js ~ line 58 ~ success ~ addressComponent", addressComponent)
           that.setData({
             cityData: addressComponent,
           });
