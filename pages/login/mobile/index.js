@@ -1,7 +1,7 @@
 import create from '../../../utils/create'
 import store from '../../../store/index'
 import router from '../../../utils/router'
-import { getUserInfo, handleErrorCode, strToParamObj, jumpToAgreement } from '../../../utils/tools'
+import { getUserInfo, handleErrorCode, strToParamObj, jumpToAgreement, showModal, debounce, showToast } from '../../../utils/tools'
 import { SOURCE_TYPE } from '../../../constants/index'
 import loginApis from '../../../apis/login'
 import userApis from '../../../apis/user'
@@ -50,6 +50,7 @@ const codeScene = {
 const app = getApp();
 create.Page(store, {
   loginCode: "",
+  getShareConut: 1,
 
   data: {
     showTreaty: false,
@@ -79,14 +80,14 @@ create.Page(store, {
       this.getUserSetting();
     }
     // 获取进入小程序场景值
-    if(codeScene[appScene]) {
+    // if(codeScene[appScene]) {
       // options.scene = "cf2a02ac71ca987860af70c2171d1512";
-      if(!options.scene) {
-        console.log("未获取到解析参数", options);
-      } else {
-        this.getShareParam(options);
-      }
+    if(!options.scene) {
+      console.log("未获取到解析参数", options);
+    } else {
+      this.getShareParam(options);
     }
+    // }
     if(options.inviteCode) {
       wx.setStorageSync("INVITE_INFO", {
         inviteCode: options.inviteCode,
@@ -98,12 +99,45 @@ create.Page(store, {
   getShareParam(data) {
     commonApis.getShareParam({
       scene: data.scene,
+    }, {
+      notErrorMsg: true,
     }).then(res => {
       // const param = strToParamObj(res);
       const param = res;
+      wx.removeStorage({
+        key: 'SHARE_SCENE'
+      });
       if(!!param.inviteCode) {
         wx.setStorageSync("INVITE_INFO", param);
       }
+      if(this.getShareConut > 3) {
+        showToast({ title: "参数获取成功，请登录" });
+      }
+    }).catch(err => {
+      if(this.getShareConut < 3) {
+        this.getShareConut += 1;
+        debounce(() => {
+          this.getShareParam(data);
+        }, 200)();
+      } else {
+        this.handleGetShareScene(data);
+        wx.setStorageSync("SHARE_SCENE", data.scene);
+      }
+    })
+  },
+
+  // 解析分享参数失败
+  handleGetShareScene(data) {
+    const that = this;
+    showModal({
+      content: "缺少必要参数，请检查网络连接",
+      confirmText: "重试",
+      ok() {
+        that.getShareConut += 1;
+        that.getShareParam({
+          scene: data.scene,
+        });
+      },
     })
   },
 
@@ -126,6 +160,13 @@ create.Page(store, {
         title: '请先勾选服务协议和隐私政策',
         icon: 'none',
         mask: false,
+      });
+      return;
+    }
+    const scene = wx.getStorageSync("SHARE_SCENE") || "";
+    if(!!scene) {
+      this.handleGetShareScene({
+        scene
       });
       return;
     }

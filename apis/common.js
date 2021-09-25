@@ -128,25 +128,26 @@ export default {
   },
 
   // 解析分享参数
-  getShareParam(options = {}) {
+  getShareParam(options = {}, params = {}) {
     return new Promise((resolve, reject) => {
       const sceneData = wx.getLaunchOptionsSync()
       console.log('——启动小程序的场景值:', sceneData.scene)
-      if(CODE_SCENE[sceneData.scene]) {
+      // if(CODE_SCENE[sceneData.scene]) {
         Request.post(url.shareParam, {
           scene: options.scene,
         }, {
-          showLoading: false
+          showLoading: false,
+          ...params
         }).then(res => {
           const param = strToParamObj(res);
           resolve(param);
         }).catch(err => {
-          options.err = err;
+          options.error = err;
           reject(options);
         });
-      } else {
-        reject(options); 
-      }
+      // } else {
+      //   reject(options); 
+      // }
     })
   },
 

@@ -13,6 +13,8 @@ import commonApis from '../../../apis/common'
 const app = getApp();
 create.Page(store, {
   goodParams: {},
+  // 规格加载完毕
+  specLoaded: false,
 
   use: [
     "systemInfo",
@@ -266,6 +268,9 @@ create.Page(store, {
         const good = res.curGoods;
         const personalList = res.personalList;
         const detailImg = good && good.images || [];
+        if(!good.isMultiSpec) {
+          this.specLoaded = true;
+        }
         good.activityPrice = util.divide(good.activityPrice, 100);
         good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
         good.goodsMarketPrice = util.divide(good.marketPrice, 100);
@@ -287,6 +292,9 @@ create.Page(store, {
         let good = res;
         let selectAddressType = "";
         let currentSku = {};
+        if(!good.isMultiSpec) {
+          this.specLoaded = true;
+        }
         good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
         good.goodsMarketPrice = util.divide(good.marketPrice, 100);
         if(good.sendTypeList) {
@@ -334,6 +342,9 @@ create.Page(store, {
         let good = res;
         let selectAddressType = "";
         let currentSku = {};
+        if(!good.isMultiSpec) {
+          this.specLoaded = true;
+        }
         good.goodsSaleMinPrice = util.divide(good.goodsSaleMinPrice, 100);
         good.goodsMarketPrice = util.divide(good.goodsMarketPrice, 100);
         if(good.sendTypeList) {
@@ -516,6 +527,9 @@ create.Page(store, {
       quantity = 0,
       currentSku,
     } = this.data;
+    if(!this.specLoaded) {
+      return;
+    }
     if(good.goodsState != 1) {
       showToast({ title: "商品已下架" });
       return;
@@ -548,6 +562,9 @@ create.Page(store, {
       quantity = 0,
       currentSku,
     } = this.data;
+    if(!this.specLoaded) {
+      return;
+    }
     const minBuy = currentSku.buyMinNum > 1 ? currentSku.buyMinNum : 1;
     if(quantity == minBuy) {
       quantity = -currentSku.buyMinNum;
@@ -601,6 +618,7 @@ create.Page(store, {
 
   // 多规格设置当前sku
   setCurrentSku({ detail }) {
+    this.specLoaded = true;
     if(detail.skuId) {
       this.setData({
         currentSku: detail,
@@ -648,6 +666,10 @@ create.Page(store, {
       quantity,
       storeInfo,
     } = this.data;
+    console.log("🚀 ~ file: index.js ~ line 673 ~ onToCreate ~ this.specLoaded", this.specLoaded)
+    if(!this.specLoaded) {
+      return;
+    }
     if(good.goodsState != 1) {
       showToast({ title: "商品已下架" });
       return;
