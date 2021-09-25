@@ -2,7 +2,7 @@ import homeApi from "../../../apis/home"
 import router from "../../../utils/router";
 import create from "../../../utils/create";
 import store from "../../../store/index";
-import { objToParamStr, strToParamObj, mapNum } from "../../../utils/tools";
+import { objToParamStr, strToParamObj, mapNum, debounce } from "../../../utils/tools";
 
 create.Component(store, {
   use: [
@@ -17,7 +17,9 @@ create.Component(store, {
         const nowStr = JSON.stringify(now);
         const oldStr = JSON.stringify(old);
         if(now && now.content) {
-          this.setClassList(now.content);
+          debounce(() => {
+            this.setClassList(now.content);
+          }, 200)();
         }
       }
     },
@@ -75,10 +77,7 @@ create.Component(store, {
           classTabList: content.data
         })
         homeCache.classTabList = content.data;
-        wx.setStorage({
-          key: "HOME_CACHE",
-          data: homeCache,
-        })
+        wx.setStorageSync("HOME_CACHE", homeCache);
       }
     },
 
@@ -87,15 +86,12 @@ create.Component(store, {
       let homeCache = wx.getStorageSync("HOME_CACHE") || {};
       const content = this.data.floor.content;
       homeApi.getFloorCustom(content.dataUrl, {}).then(res => {
-        let list = res;
-        homeCache.classTabList = list
+        const list = res;
         this.setData({
           classTabList: list
         }, () => {
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          });
+          homeCache.classTabList = list
+          wx.setStorageSync("HOME_CACHE", homeCache);
           this.getListData(this.data.param)
         });
       });

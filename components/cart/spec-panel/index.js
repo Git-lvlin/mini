@@ -56,7 +56,7 @@ create.Component(store, {
             this.getCheckSku({
               skuId,
             });
-          }, 1000)();
+          }, 200)();
         }
       }
     },
