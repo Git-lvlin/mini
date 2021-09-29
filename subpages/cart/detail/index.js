@@ -5,7 +5,7 @@ import commonApi from '../../../apis/common'
 import homeApi from '../../../apis/home'
 import { IMG_CDN, DETAIL_SERVICE_LIST } from '../../../constants/common'
 import { CODE_SCENE } from '../../../constants/index'
-import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj, haveStore } from '../../../utils/tools'
+import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj, haveStore, debounce } from '../../../utils/tools'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
 import commonApis from '../../../apis/common'
@@ -71,6 +71,8 @@ create.Page(store, {
     // 店铺信息
     storeInfo: {},
     shareInfo: "",
+    stockOver: 1,
+    stockOverText: "",
   },
 
   onLoad(options) {
@@ -93,8 +95,11 @@ create.Page(store, {
 
   onShow() {
     const {
-      orderType
+      orderType,
     } = this.goodParams;
+    const {
+      good,
+    } = this.data;
     let userInfo = getStorageUserInfo();
     if(!!userInfo) {
       if(this.store.data.cartList.length <= 0 && !!orderType) {
@@ -103,6 +108,11 @@ create.Page(store, {
       }
       // this.getDetailRatio();
     }
+    debounce(() => {
+      if(!good.imageList && !good.goodsName) {
+        this.hanldeGoodsParams(this.goodParams);
+      }
+    }, 600)();
     this.setData({
       userInfo,
     })
@@ -113,7 +123,6 @@ create.Page(store, {
     let { systemInfo } = this.store.data;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
     this.goodParams = options;
-    console.log("🚀 ~ file: index.js ~ line 63 ~ onLoad ~ this.goodParams", this.goodParams)
     let isActivityGood = 1;
     if(!!options.orderType) isActivityGood = options.orderType;
     this.setData({
@@ -164,6 +173,8 @@ create.Page(store, {
       shareParams.paramId = 3;
     }
     homeApi.getShareInfo(shareParams, {
+      showLoading: false,
+    }, {
       showLoading: false,
     }).then(res => {
       const shareInfo = {
@@ -284,6 +295,8 @@ create.Page(store, {
           personalList,
           good,
           detailImg,
+        }, () => {
+          this.handleGoodStock();
         })
       })
     // 秒约，C端集约，1688详情
@@ -292,11 +305,16 @@ create.Page(store, {
         let good = res;
         let selectAddressType = "";
         let currentSku = {};
+        let nowTime = new Date().getTime();
         if(!good.isMultiSpec) {
           this.specLoaded = true;
         }
         good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
         good.goodsMarketPrice = util.divide(good.marketPrice, 100);
+        if(good.deadlineTime) {
+          good.lastTime = good.deadlineTime - nowTime;
+          good.lastTime = good.lastTime > 0 ? good.lastTime : 0;
+        }
         if(good.sendTypeList) {
           selectAddressType = good.sendTypeList.find(item => item.status == 1);
         }
@@ -306,6 +324,7 @@ create.Page(store, {
               skuId,
               buyMaxNum: good.buyMaxNum,
               buyMinNum: good.buyMinNum,
+              stockNum: good.goodsStockNum,
               skuName: good.skuName,
               skuNum: good.buyMinNum > 1 ? good.buyMinNum : 1,
             };
@@ -319,6 +338,8 @@ create.Page(store, {
           good,
           refuseText,
           selectAddressType,
+        }, () => {
+          this.handleGoodStock();
         });
         if(orderType == 15) {
           // 集约用户列表
@@ -356,6 +377,7 @@ create.Page(store, {
               skuId,
               buyMaxNum: good.buyMaxNum,
               buyMinNum: good.buyMinNum,
+              stockNum: good.goodsStockNum,
               skuName: good.skuName,
               skuNum: good.buyMinNum > 1 ? good.buyMinNum : 1,
             };
@@ -369,6 +391,8 @@ create.Page(store, {
           good,
           refuseText,
           selectAddressType,
+        }, () => {
+          this.handleGoodStock();
         });
       });
     }
@@ -421,6 +445,8 @@ create.Page(store, {
     goodApi.getIntensiveUser({
       orderType,
       saleNum: good.goodsSaleNumVal,
+    }, {
+      showLoading: false,
     }).then(res => {
       const list = res.records.slice(0, 5);
       this.setData({
@@ -458,6 +484,8 @@ create.Page(store, {
     goodApi.getTogetherUser({
       spuId,
       skuId,
+    }, {
+      showLoading: false
     }).then(res => {
       this.setData({
         togetherUser: res.records
@@ -476,6 +504,8 @@ create.Page(store, {
     goodApi.getIntensiveUser({
       orderType,
       saleNum: good.goodsSaleNumVal,
+    }, {
+      showLoading: false
     }).then(res => {
       this.setData({
         intensiveUser: res
@@ -526,12 +556,18 @@ create.Page(store, {
       good,
       quantity = 0,
       currentSku,
+      stockOver,
     } = this.data;
+    let stockOverData = this.handleGoodStock(currentSku.stockNum);
     if(!this.specLoaded) {
       return;
     }
     if(good.goodsState != 1) {
       showToast({ title: "商品已下架" });
+      return;
+    }
+    if(stockOverData.stockOver != 0) {
+      this.onStockOver(stockOverData.stockOver);
       return;
     }
     if(quantity >= currentSku.buyMaxNum) {
@@ -585,6 +621,44 @@ create.Page(store, {
     })
   },
 
+  // 判断是否还有库存
+  handleGoodStock(stock) {
+    const {
+      good,
+      currentSku,
+    } = this.data;
+    const {
+      orderType
+    } = this.goodParams;
+    let stockOver = 0;
+    let stockOverText = "";
+    let nowTime = new Date().getTime();
+    let stockNum = stock !== undefined ? stock : good.goodsStockNum;
+    if(stockNum <= 0) {
+      // 已售罄
+      stockOver = 1;
+      stockOverText = "已售罄"
+    } else {
+      if(stockNum < good.buyMinNum || stockNum < good.batchNumber) {
+        stockOver = 2;
+        stockOverText = "库存不足"
+      }
+    }
+    if(orderType == 15 && nowTime >= good.deadlineTime) {
+      stockOver = 3;
+      stockOverText = "活动已结束"
+    }
+    let result = {
+      stockOver,
+      stockOverText
+    };
+    if(stock !== undefined) {
+      return result; 
+    } else {
+      this.setData(result);
+    }
+  },
+
   // 多规格更新购物车数量
   specUpdateCart({
     detail,
@@ -623,6 +697,9 @@ create.Page(store, {
       this.setData({
         currentSku: detail,
       })
+      // , () => {
+      //   this.handleGoodStock();
+      // }
     }
   },
 
@@ -666,12 +743,16 @@ create.Page(store, {
       quantity,
       storeInfo,
     } = this.data;
-    console.log("🚀 ~ file: index.js ~ line 673 ~ onToCreate ~ this.specLoaded", this.specLoaded)
+    let stockOverData = this.handleGoodStock(currentSku.stockNum);
     if(!this.specLoaded) {
       return;
     }
     if(good.goodsState != 1) {
       showToast({ title: "商品已下架" });
+      return;
+    }
+    if(stockOverData.stockOver != 0) {
+      this.onStockOver(stockOverData.stockOver);
       return;
     }
     let skuNum = good.buyMinNum > 0 ? good.buyMinNum : 1;
@@ -835,5 +916,25 @@ create.Page(store, {
     this.setData({
       showAreaPopup: false,
     });
+  },
+
+  // 商品已售罄
+  onStockOver(state) {
+    let {
+      stockOver,
+      good,
+    } = this.data;
+    const overType = state !== undefined && typeof state === 'number' ? state : stockOver;
+    let errText = !!good.isMultiSpec ? "当前规格" : "商品";
+    let errTextAfter = !!good.isMultiSpec ? "，请选择其他规格" : "";
+    if(!!good.isMultiSpec) {
+      if(overType == 1) {
+        showToast({ title: `当前规格已售罄，请选择其他规格` });
+      } else if(overType == 2) {
+        showToast({ title: `当前规格库存不足，请选择其他规格` });
+      } else if(overType == 3) {
+        // showToast({ title: `活动已结束` });
+      }
+    }
   },
 })

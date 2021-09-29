@@ -19,7 +19,7 @@ create.Component(store, {
         if(now && now.content) {
           debounce(() => {
             this.setClassList(now.content);
-          }, 200)();
+          }, 300)();
         }
       }
     },

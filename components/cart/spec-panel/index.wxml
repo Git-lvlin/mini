@@ -52,9 +52,9 @@
     </view>
     <view class="btn_content">
       <view
-        class="btn {{curSku.stockOver ? 'def_btn' : ''}}"
-        bindtap="{{curSku.stockOver ? '': 'onConfirm'}}"
-      >{{curSku.stockOver ? '已售罄': '确定'}}</view>
+        class="btn {{curSku.stockOver == 1 || curSku.stockOver == 2 ? 'def_btn' : ''}}"
+        bindtap="{{curSku.stockOver == 1 || curSku.stockOver == 2 ? '': 'onConfirm'}}"
+      >{{curSku.stockOver == 1 || curSku.stockOver == 2 ? curSku.stockOverText : '确定'}}</view>
     </view>
   </view>
 </van-popup>

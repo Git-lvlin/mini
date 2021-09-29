@@ -463,7 +463,7 @@ create.Page(store, {
       return;
     }
     if(orderInfo.storeGoodsInfos.length < 1) {
-      showToast({ title: "未获取到商品信息，请重试" });
+      showToast({ title: "抱歉，爆品好货已售光，下次早点抢哦" });
       return;
     }
     const postData = {
@@ -508,7 +508,7 @@ create.Page(store, {
       return;
     }
     if(orderInfo.storeGoodsInfos.length < 1) {
-      showToast({ title: "未获取到商品信息，请重试" });
+      showToast({ title: "抱歉，爆品好货已售光，下次早点抢哦" });
       return;
     }
     let postData = {
@@ -557,7 +557,7 @@ create.Page(store, {
       orderInfo,
     } = this.data;
     if(!orderInfo.storeGoodsInfos || !orderInfo.storeGoodsInfos.length) {
-      showToast({ title: "未获取到商品信息" });
+      showToast({ title: "抱歉，爆品好货已售光，下次早点抢哦" });
       return;
     }
     let postData = {};
