@@ -95,7 +95,16 @@ create.Component(store, {
       goodApi.getCheckSku(postData).then(res => {
         const curSku = res.curSku;
         curSku.salePrice = util.divide(curSku.salePrice, 100);
-        curSku.stockOver = curSku.stockNum <= 0 ? true : false;
+        curSku.stockOver = 0;
+        if(curSku.stockNum <= 0) {
+          curSku.stockOver = 1;
+          curSku.stockOverText = "已售罄";
+        } else {
+          if(curSku.stockNum < curSku.buyMinNum || curSku.stockNum < curSku.batchNumber) {
+            curSku.stockOver = 2;
+            curSku.stockOverText = "库存不足";
+          }
+        }
         if(fristLoad) {
           res.specList.forEach((item, index) => {
             item.specValue.forEach(child => {
@@ -105,11 +114,15 @@ create.Component(store, {
             });
           });
         }
-        this.triggerEvent("setSku", {
-          skuId: curSku.id,
-          skuName: curSku.skuName,
-          skuNum: curSku.buyMinNum ? curSku.buyMinNum : 1,
-        });
+        if(fristLoad) {
+          this.triggerEvent("setSku", {
+            skuId: curSku.id,
+            skuName: curSku.skuName,
+            stockNum: good.stockNum,
+            buyMaxNum: curSku.buyMaxNum,
+            skuNum: curSku.buyMinNum ? curSku.buyMinNum : 1,
+          });
+        }
         this.setData({
           skuData: res,
           skuList: res.specList,
@@ -213,6 +226,7 @@ create.Component(store, {
           skuId: curSku.id,
           skuName: curSku.skuName,
           skuNum: stock,
+          stockNum: curSku.stockNum,
           buyMaxNum: curSku.buyMaxNum,
           buyMinNum: curSku.buyMinNum,
         });
