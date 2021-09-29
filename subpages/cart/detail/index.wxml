@@ -67,7 +67,7 @@
         <view class="intensive_time_text">距活动结束仅剩</view>
         <view class="intensive_end">
           <count-down
-            time="{{ (good.leftTime || 0) * 1000 }}"
+            time="{{good.lastTime || 0}}"
             isFull
             needDay
           />
@@ -341,12 +341,27 @@
       <view class="bar_item_name">店铺</view>
     </view>
     <view class="flex_fix buy_bar_space" />
-    <view class="to_buy_btn" data-type="alone" bindtap="onToCreate">立即购买</view>
+    <view
+      class="gray_buy_btn"
+      wx:if="{{stockOver == 1 || stockOver == 2 || stockOver == 3}}"
+      bindtap="onStockOver"
+    >{{stockOverText}}</view>
+    <view
+      class="to_buy_btn"
+      data-type="alone"
+      bindtap="onToCreate"
+      wx:else
+    >立即购买</view>
   </view>
 
   <!-- 集约商品 -->
   <view class="intensive_buy" wx:if="{{isActivityGood == 15}}">
-    <view class="intensive_buy_btn" bindtap="onToCreate">立即购买</view>
+    <view
+      class="gray_buy_btn"
+      wx:if="{{stockOver == 1 || stockOver == 2 || stockOver == 3}}"
+      bindtap="onStockOver"
+    >{{stockOverText}}</view>
+    <view class="intensive_buy_btn" wx:else bindtap="onToCreate">立即购买</view>
   </view>
 
   <!-- 普通商品结算 -->

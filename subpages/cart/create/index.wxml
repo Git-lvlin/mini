@@ -116,7 +116,10 @@
         title="合计金额："
         money="{{orderInfo.payAmount}}"
       />
-      <view class="submit_btn" bindtap="onToCashier">去支付</view>
+      <view
+        class="submit_btn {{!orderInfo.storeGoodsInfos ? 'btn_gray' : ''}}"
+        bindtap="{{!orderInfo.storeGoodsInfos ? '' : 'onToCashier'}}"
+      >去支付</view>
     </view>
   </view>
 

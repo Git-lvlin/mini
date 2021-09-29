@@ -129,6 +129,6 @@
 }
 
 .def_btn {
-  color: #333;
+  color: #777;
   background: #f0f0f0;
 }

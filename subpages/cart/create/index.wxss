@@ -333,3 +333,7 @@ page {
   background-image: linear-gradient(270deg,#fb5f2a 0%,#e5352f 100%);
   border-radius: 34rpx;
 }
+
+.btn_gray {
+  background: #ccc;
+}
