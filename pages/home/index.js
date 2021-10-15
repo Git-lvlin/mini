@@ -455,7 +455,13 @@ create.Page(store, {
   },
 
   // 页面滚动到底部
-  onReachBottom() {
+  // onReachBottom() {
+  //   this.setData({
+  //     scrollBottom: true,
+  //   })
+  // },
+
+  handleScrollBottom() {
     this.setData({
       scrollBottom: true,
     })

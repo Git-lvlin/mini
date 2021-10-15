@@ -8,9 +8,9 @@ import { objToParamStr } from '../../../utils/tools';
 Page({
   goodParam: {},
   hotGoodPage: {
-    page: 1,
-    pageSize: 10,
-    totalPage: 1,
+    hasNext: false,
+    next: "",
+    size: 20,
   },
   loading: false,
 
@@ -29,11 +29,9 @@ Page({
 
   onReachBottom() {
     const {
-      page,
-      totalPage,
+      hasNext
     } = this.hotGoodPage;
-    if(!this.loading && page < totalPage) {
-      this.hotGoodPage.page += 1;
+    if(!this.loading && hasNext) {
       this.getHotGood();
     }
   },
@@ -99,18 +97,22 @@ Page({
   getHotGood() {
     if(this.loading) return;
     const {
-      page,
-      pageSize,
+      next,
+      size,
     } = this.hotGoodPage;
     let {
       hotGood,
     } = this.data;
     this.loading = true;
-    homeApi.getHotGood({
-      page,
-      pageSize,
-    }).then(res => {
-      this.hotGoodPage.totalPage = res.totalPage;
+    const postData = {
+      size,
+    };
+    if(!!next) {
+      postData.next = next;
+    }
+    homeApi.getHotGood(postData).then(res => {
+      this.hotGoodPage.hasNext = res.hasNext;
+      this.hotGoodPage.next = res.next;
       const list = res.records;
       if(page > 1) {
         hotGood = hotGood.concat(list);

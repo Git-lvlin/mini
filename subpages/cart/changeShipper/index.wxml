@@ -4,6 +4,7 @@
     name="提货人"
     label="user"
     roundTop
+    maxLength="10"
     placeholder="输入收件人"
     bind:input="handleInput"
   />

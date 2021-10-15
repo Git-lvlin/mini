@@ -5,6 +5,7 @@ const url = {
   bannerList: "/cms/open/banner/list",
   intensiveGood: "/activity/open/wholesaleGoodsList",
   hotGood: "/activity/open/tagGoodsList",
+  hotGoodV2: "/activity/open/tagGoodsListV2",
 
   shareInfo: "/share/option/shareParam/queryShareContent",
 
@@ -43,7 +44,14 @@ export default {
   // 获取热销商品
   getHotGood(params, option) {
     params = getExamine(params);
-    return Request.get(url.hotGood, params, option);
+    let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
+    if(takeSpot.storeNo) {
+      params = {
+        ...params,
+        storeNo: takeSpot.storeNo,
+      }
+    }
+    return Request.get(url.hotGoodV2, params, option);
   },
 
   // 调用楼层接口 - 接口

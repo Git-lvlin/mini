@@ -4,9 +4,9 @@ import store from '../../store/good'
 import util from '../../utils/util'
 
 const defaultPage = {
-  page: 1,
-  pageSize: 10,
-  totalPage: 1,
+  next: "",
+  hasNext: false,
+  size: 20,
 };
 
 create.Page(store, {
@@ -41,11 +41,9 @@ create.Page(store, {
 
   onReachBottom: function () {
     const {
-      page,
-      totalPage,
+      hasNext
     } = this.hotPage;
-    if(!this.intensiveLoading && page < totalPage) {
-      this.hotPage.page = page + 1;
+    if(hasNext) {
       this.getHotGood();
     }
   },
@@ -125,24 +123,24 @@ create.Page(store, {
   // 今日必约
   getHotGood() {
     const {
-      page,
-      pageSize,
+      next,
+      size,
     } = this.hotPage;
     let {
       hotGood
     } = this.data;
-    homeApi.getHotGood({
-      page,
-      pageSize,
+    const postData = {
       tagCode: "day_yeahgo",
-    }).then(res => {
-      this.hotPage.totalPage = res.totalPage;
+      size,
+    };
+    if(!!next) {
+      postData.next = next;
+    }
+    homeApi.getHotGood(postData).then(res => {
+      this.hotPage.hasNext = res.hasNext;
+      this.hotPage.next = res.next;
       let list = this.mapHotNum(res.records);
-      if(page > 1) {
-        hotGood = hotGood.concat(list);
-      } else {
-        hotGood = list;
-      }
+      hotGood = hotGood.concat(list);
       this.setData({
         hotGood,
       })

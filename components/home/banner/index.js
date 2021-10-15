@@ -35,10 +35,7 @@ Component({
             bannerList: res
           });
           homeCache.bannerList = res;
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          })
+          wx.setStorageSync("HOME_CACHE", homeCache);
         });
       } else {
         this.setData({
@@ -46,10 +43,7 @@ Component({
         })
         if(homeCache.bannerList) {
           delete homeCache.bannerList;
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          })
+          wx.setStorageSync("HOME_CACHE", homeCache);
         }
       }
     },
