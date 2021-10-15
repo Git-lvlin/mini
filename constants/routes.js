@@ -32,8 +32,8 @@ export default {
     path: "/pages/login/bindPhone/index"
   },
   // 集约列表
-  intensive: {
-    path: "/pages/intensive/index"
+  storeIntensive: {
+    path: "/pages/storeIntensive/index"
   },
   // 集约列表
   otherpay: {

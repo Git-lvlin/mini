@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "约着买更便宜",
+  "usingComponents": {
+    "good-little-card": "/components/common/good-little-card/index",
+    "join-card": "/components/cart/join-card/index"
+  }
+}

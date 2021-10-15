@@ -23,7 +23,7 @@ export default {
   // 会员店专享
   "/home/vip": "",
   // 集约页面
-  "/home/intensive": "intensive",
+  "/home/intensive": "storeIntensive",
   
   // 商品详情
   "/shopping/detail": "detail",

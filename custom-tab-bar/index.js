@@ -19,8 +19,10 @@ create.Component(store, {
         index: 0,
         pagePath: "/pages/home/index",
         name: "首页",
-        iconPath: `${IMG_CDN}common/barIcon/home@3x.png`,
-        selectedIconPath: `${IMG_CDN}common/barIcon/actHome@3x.png`
+        // iconPath: `${IMG_CDN}common/barIcon/home@3x.png`,
+        // selectedIconPath: `${IMG_CDN}common/barIcon/actHome@3x.png`,
+        iconPath: `../images/tabbar/home@3x.png`,
+        selectedIconPath: `../images/tabbar/actHome@3x.png`,
       },{
       //   index: 1,
       //   pagePath: "/pages/community/index",
@@ -28,17 +30,24 @@ create.Component(store, {
       //   iconPath: `${IMG_CDN}common/barIcon/community@3x.png`,
       //   selectedIconPath: `${IMG_CDN}common/barIcon/actCommunity@3x.png`
       // },{
+      //   index: 2,
+      //   pagePath: "/pages/cart/index",
+      //   name: "购物车",
+      //   iconPath: `${IMG_CDN}common/barIcon/cart@3x.png`,
+      //   selectedIconPath: `${IMG_CDN}common/barIcon/actCart@3x.png`
+      // },{
         index: 2,
-        pagePath: "/pages/cart/index",
-        name: "购物车",
-        iconPath: `${IMG_CDN}common/barIcon/cart@3x.png`,
-        selectedIconPath: `${IMG_CDN}common/barIcon/actCart@3x.png`
+        pagePath: "/pages/intensive/index",
+        name: "",
+        special: "intensive",
+        iconPath: `../images/tabbar/intensive.png`,
+        selectedIconPath: `../images/tabbar/intensive.png`
       },{
         index: 3,
         pagePath: "/pages/user/index",
         name: "我的",
-        iconPath: `${IMG_CDN}common/barIcon/me@3x.png`,
-        selectedIconPath: `${IMG_CDN}common/barIcon/actMe@3x.png`
+        iconPath: `../images/tabbar/me@3x.png`,
+        selectedIconPath: `../images/tabbar/actMe@3x.png`
       }
     ]
   },

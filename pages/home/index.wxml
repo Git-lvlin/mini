@@ -55,7 +55,7 @@
 
       <!-- 约购商品 -->
       <appointment
-        moreRouter="intensive"
+        moreRouter="storeIntensive"
         floor="{{item}}"
         wx:if="{{item.floorType === 1}}"
       />

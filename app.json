@@ -9,13 +9,14 @@
     "pages/login/bindPhone/index",
     "pages/list/index",
     "pages/location/index",
-    "pages/intensive/index",
+    "pages/storeIntensive/index",
     "pages/otherpay/index",
     "pages/webview/index",
     "pages/invitation/index",
     "pages/locationSearch/index",
     "pages/test/index",
-    "pages/maintain/index"
+    "pages/maintain/index",
+    "pages/intensive/index"
   ],
   "subpackages": [
     {
@@ -109,10 +110,10 @@
         "selectedIconPath": "/images/tabbar/actHome@3x.png"
       },
       {
-        "pagePath": "pages/cart/index",
-        "text": "购物车",
-        "iconPath": "/images/tabbar/cart@3x.png",
-        "selectedIconPath": "/images/tabbar/actCart@3x.png"
+        "pagePath": "pages/intensive/index",
+        "text": " ",
+        "iconPath": "/images/tabbar/intensive.png",
+        "selectedIconPath": "/images/tabbar/intensive.png"
       },
       {
         "pagePath": "pages/user/index",
