@@ -4,13 +4,13 @@ import { IMG_CDN } from './common'
 
 // 初始环境变量 dev uat fat pro
 // ***【 环境如有变动 common.wxs 需更换域名 】***
-export const SYS_ENV = 'pro';
+export const SYS_ENV = 'uat';
 // DEVICE_CODE	1ae15f4549d3152281ca6c28e6ae6ad6
 // 是否显示选择环境按钮
-export const CHANGE_ENV = false;
+export const CHANGE_ENV = true;
 
 // 小程序版本号
-export const VERSION = "1.0.5";
+export const VERSION = "2.0.0";
 
 // 服务器接口域名S
 export const baseApi = {

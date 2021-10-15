@@ -48,7 +48,10 @@ create.Page(store, {
     isFixedTop: false,
     // 邀请注册成功
     inviteRegister: false,
+    // 显示的楼层
+    isShowFloor: {},
   },
+
   onLoad(options) {
     // 系统弹窗
     this.getMiniExamine();
@@ -154,6 +157,7 @@ create.Page(store, {
   getFloorList(isReload) {
     let floor = wx.getStorageSync("HOME_FLOOR");
     let headBackCss = "";
+    let isShowFloor = {};
     // 2 代表小程序审核版本 3 代表小程序正试版本
     let verifyVersionId = this.isMiniExamine ? 2 : 3;
     if(!!floor) {
@@ -179,8 +183,14 @@ create.Page(store, {
       clearTimeout(this.floorTimer);
       this.isFristLoad = true;
       headBackCss = this.setHeadBack(res.headData && res.headData.style || "");
+      if(res.floors && res.floors.length) {
+        res.floors.forEach(item => {
+          isShowFloor[item.floorType] = true;
+        })
+      }
       this.setData({
         floor: res,
+        isShowFloor,
         headBackCss,
         refresherTriggered: false,
       });
@@ -358,6 +368,7 @@ create.Page(store, {
       classGoodToTop,
     } = this.data;
 
+    // this.getRecordScrollTop();
     if(scrollBottom) {
       this.setData({
         scrollBottom: false,
@@ -395,6 +406,26 @@ create.Page(store, {
     //   this.scrollLock = false;
     //   clearTimeout(this.onTimeTimer)
     // }, 200);
+  },
+  
+
+  // 获取楼层距离顶部距离
+  getRecordScrollTop() { 
+    const query = wx.createSelectorQuery();
+    query.select('#home_scroll').boundingClientRect();
+    query.select('#classGoods').boundingClientRect().exec((res) => {
+      console.log("🚀 ~ file: index.js ~ line 417 ~ query.select ~ res", res[0])
+      console.log("🚀 ~ file: index.js ~ line 417 ~ query.select ~ res", res[1])
+      if (res && res.length > 1) {
+        let scrollToTop = res[0].top;
+        let classGoodToTop = res[1].top;
+        // this.setData({
+        //   scrollToTop,
+        //   classGoodToTop,
+        //   leaveTopL: classGoodToTop - scrollToTop,
+        // });
+      }
+    });
   },
 
   // 设置view 滚动高度
