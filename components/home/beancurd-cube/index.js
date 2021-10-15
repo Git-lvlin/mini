@@ -44,10 +44,7 @@ Component({
           this.setData({
             goodTypeList: list
           });
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          })
+          wx.setStorageSync("HOME_CACHE", homeCache);
         });
       } else {
         // let list = this.mapTypeList(content.data);
@@ -57,10 +54,7 @@ Component({
         })
         if(homeCache.goodTypeList) {
           delete homeCache.goodTypeList;
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          })
+          wx.setStorageSync("HOME_CACHE", homeCache);
         }
       }
     },

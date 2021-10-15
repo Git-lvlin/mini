@@ -68,10 +68,7 @@ Component({
             goodList
           });
           homeCache.goodList = goodList;
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          })
+          wx.setStorageSync("HOME_CACHE", homeCache);
         });
       } else {
         this.setData({
@@ -79,10 +76,7 @@ Component({
         })
         if(homeCache.goodList) {
           delete homeCache.goodList;
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          })
+          wx.setStorageSync("HOME_CACHE", homeCache);
         }
       }
     },
