@@ -19,9 +19,9 @@ Page({
 
   id: "",
   goodPage: {
-    page: 1,
-    pageSize: 3,
-    totalPage: 1,
+    hasNext: false,
+    next: "",
+    size: 20,
   },
   loading: false,
   payType: 7,
@@ -125,22 +125,24 @@ Page({
   },
 
   // 获取热销商品
-  getHotGood(nowPage) {
+  getHotGood() {
     let {
-      page,
-      pageSize,
+      next,
+      size,
     } = this.goodPage;
     if(this.loading) return;
-    page = !!nowPage ? nowPage : page;
     this.loading = true;
-    homeApi.getHotGood({
-      page,
-      pageSize,
-    }, {
+    const postData = {
+      size,
+    };
+    if(!!next) {
+      postData.next = next;
+    }
+    homeApi.getHotGood(postData, {
       showLoading: false,
     }).then(res => {
-      this.goodPage.totalPage = res.totalPage;
-      this.goodPage.page = page;
+      this.goodPage.hasNext = res.hasNext;
+      this.goodPage.next = next;
       let hotGood = this.data.hotGood;
       if(page != 1) {
         hotGood = hotGood.concat(this.handleListPrice(res.records));
@@ -247,11 +249,10 @@ Page({
 
   onReachBottom() {
     const {
-      page,
-      totalPage
+      hasNext
     } = this.goodPage;
-    if(!this.loading && page < totalPage) {
-      this.getHotGood(page + 1);
+    if(!this.loading && hasNext) {
+      this.getHotGood();
     }
   },
 })

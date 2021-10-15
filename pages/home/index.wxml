@@ -39,6 +39,7 @@
     refresher-default-style="none"
     refresher-triggered="{{refresherTriggered}}"
     bindrefresherrefresh="onPullDownRefresh"
+    bindscrolltolower="handleScrollBottom"
     bindscroll="onViewScroll"
   >
     <!-- 加载gif -->

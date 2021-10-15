@@ -243,19 +243,19 @@ create.Page(store, {
     loginApis.notCodeBind(data, {
       showLoading: false,
     }).then(res => {
-      const data = res;
-      wx.setStorageSync("ACCESS_TOKEN", data.accessToken);
-      wx.setStorageSync("REFRESH_TOKEN", data.refreshToken);
+      const result = res;
+      wx.setStorageSync("ACCESS_TOKEN", result.accessToken);
+      wx.setStorageSync("REFRESH_TOKEN", result.refreshToken);
       // store.data.userInfo = data.memberInfo;
       // store.data.defUserInfo = data.memberInfo;
-      tools.setUserInfo(data);
+      tools.setUserInfo(result);
       if(isInvite) {
         wx.setStorageSync("INVITE_REGISTER", true);
         wx.removeStorage({
           key: 'INVITE_INFO',
         });
       }
-      this.getUserInfo(data.memberInfo);
+      this.getUserInfo(result.memberInfo);
     });
   },
 

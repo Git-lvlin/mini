@@ -33,10 +33,7 @@ Component({
             })
             if(homeCache.vipGood) {
               delete homeCache.vipGood;
-              wx.setStorage({
-                key: "HOME_CACHE",
-                data: homeCache,
-              })
+              wx.setStorageSync("HOME_CACHE", homeCache);
             }
           }
         }
@@ -63,10 +60,7 @@ Component({
           vipGood: res
         });
         homeCache.vipGood = res;
-        wx.setStorage({
-          key: "HOME_CACHE",
-          data: homeCache,
-        })
+        wx.setStorageSync("HOME_CACHE", homeCache);
       });
     },
     // 跳转详情

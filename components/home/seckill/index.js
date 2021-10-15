@@ -51,10 +51,7 @@ Component({
         })
         if(homeCache.secGood) {
           delete homeCache.secGood;
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          })
+          wx.setStorageSync("HOME_CACHE", homeCache);
         }
       }
     },
@@ -88,10 +85,7 @@ Component({
           list,
           countDown: res.countdown,
         }
-        wx.setStorage({
-          key: "HOME_CACHE",
-          data: homeCache,
-        })
+        wx.setStorageSync("HOME_CACHE", homeCache);
       });
     },
 
