@@ -3,6 +3,7 @@ import router from "../../../utils/router";
 import create from "../../../utils/create";
 import store from "../../../store/index";
 import { objToParamStr, strToParamObj, mapNum, debounce } from "../../../utils/tools";
+import { FLOOR_TYPE } from "../../../constants/home";
 
 create.Component(store, {
   use: [
@@ -190,7 +191,8 @@ create.Component(store, {
 
     // 设置滚动条高度
     setScroll(isGetNext) {
-      this.data.isFixedTop && !isGetNext && this.triggerEvent("setScroll", {});
+      
+      this.data.isFixedTop && !isGetNext && this.triggerEvent("setScroll", {floorType: FLOOR_TYPE.classGood});
     },
 
     // 滚动到底

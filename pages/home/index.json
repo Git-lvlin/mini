@@ -15,6 +15,8 @@
     "hotgoods": "/components/home/hotgoods/index",
     "classgoods": "/components/home/classgoods/index",
     "down-app-code": "/components/common/down-app-code/index",
-    "advert-popup": "/components/home/advert-popup/index"
+    "advert-popup": "/components/home/advert-popup/index",
+    "activity-cube": "/components/home/activity-cube/index",
+    "seckill-v2": "/components/home/seckill-v2/index"
   }
 }

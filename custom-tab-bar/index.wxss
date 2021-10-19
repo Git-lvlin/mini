@@ -38,7 +38,7 @@
 
 .intensive_icon {
   position: absolute;
-  bottom: 2rpx;
+  bottom: 4rpx;
   width: 192rpx;
   height: 142rpx;
 }
