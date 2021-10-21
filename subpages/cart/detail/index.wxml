@@ -166,7 +166,7 @@
         </block>
       </view>
       <!-- 加入购物车 -->
-      <view class="add_cart" wx:if="{{isActivityGood == 1 || isActivityGood == 2}}">
+      <!-- <view class="add_cart" wx:if="{{isActivityGood == 1 || isActivityGood == 2}}">
         <view
           class="cart_btn"
           wx:if="{{!quantity || quantity && good.isMultiSpec == 1}}"
@@ -185,7 +185,7 @@
             bindtap="addCart"
           />
         </view>
-      </view>
+      </view> -->
     </view>
   </view>
 

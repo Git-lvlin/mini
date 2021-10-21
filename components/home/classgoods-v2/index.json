@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "good-card": "../classgood-card/index",
+    "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
+    "nodata": "/components/common/nodata/index"
+  }
+}

@@ -36,6 +36,10 @@ Component({
     bold: {
       type: Number,
       value: 0
+    },
+    showMarket: {
+      type: Boolean,
+      value: true,
     }
   },
 

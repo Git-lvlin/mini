@@ -202,7 +202,6 @@ const getUrlRoute = (url, opt) => {
       url = `${url}${option.needLogin ? "&" : connector}${objToParamStr(option.data)}`;
     }
     data.params.url = encodeURIComponent(url);
-    console.log("🚀 ~ file: router.js ~ line 202 ~ getUrlRoute ~ data.params.url", data.params.url)
     if(option.isJump) {
       push({
         name: "webview",
