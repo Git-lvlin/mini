@@ -102,5 +102,5 @@
 }
 
 .no_data {
-  padding-bottom: 120rpx;
+  padding-bottom: 280rpx;
 }

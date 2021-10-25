@@ -165,8 +165,11 @@ create.Component(store, {
         next: pageData.next,
         size: pageData.size,
       };
+      if(postData.gcId1) {
+        postData.gcId1 = +postData.gcId1;
+      }
       if(!!actData.actionCGUrl) {
-        resData = Request.post(actData.actionUrl, postData, requestOption);
+        resData = Request.post(url, postData, requestOption);
       } else {
         resData = Request.get(url, postData, requestOption);
       }
@@ -183,9 +186,12 @@ create.Component(store, {
           },
           goodList: list,
         };
+        pageData.next = res.next,
+        pageData.hasNext = res.hasNext,
         this.setData({
           goodList: list,
           cacheData,
+          pageData,
         });
       });
     },
@@ -224,7 +230,10 @@ create.Component(store, {
         data,
         idx,
       } = currentTarget.dataset;
-      if(!!cacheData[idx] && idx != actClassIdx) {
+      if(!!cacheData[idx]) {
+        if(idx == actClassIdx) {
+          return
+        }
         let {
           secondClass,
           goodList,
