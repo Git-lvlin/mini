@@ -1,1 +1,78 @@
-/* pages/intensive/index.wxss */
+
+page {
+  background-color: #f5f5f5;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.nav_content {
+  width: 100%;
+  background-position: left bottom;
+  background-size: 100% auto;
+}
+
+.nav_body {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  background-position: left bottom;
+  background-size: 100% auto;
+}
+
+.nav_location {
+  display: flex;
+  align-items: center;
+  height: 80rpx;
+  padding-left: 24rpx;
+}
+
+.location_icon {
+  width: 48rpx;
+  height: 48rpx;
+  margin-right: 4rpx;
+}
+
+.address {
+  max-width: 420rpx;
+  height: 48rpx;
+  font-weight: 500;
+  color: black;
+  font-size: 32rpx;
+  letter-spacing: 2rpx;
+  line-height: 48rpx;
+  margin-right: 8rpx;
+}
+
+.right_icon {
+  width: 14rpx;
+  height: 10rpx;
+}
+
+.home_content {
+  position: relative;
+  flex: 1;
+  height: 1000rpx;
+}
+
+.pul_icon {
+  position: absolute;
+  top: -120rpx;
+  left: 50%;
+  z-index: 0;
+  width: 160rpx;
+  height: 160rpx;
+  transform: translateX(-50%);
+}
+
+.bar_height {
+  height: 98rpx;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}

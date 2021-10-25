@@ -1,0 +1,43 @@
+
+<view class="list">
+  <view class="title-box">
+    <span class="after">—</span>
+    <span class="title">集约专享</span>
+    <span class="after">—</span>
+  </view>
+  
+  <block wx:for="{{listData}}" wx:for-index="idx" wx:for-item="item">
+    <view class="list-item">
+      <van-image
+        width="100%"
+        src="{{item.goodsImageUrl}}"
+      />
+      <view class="name">{{item.goodsName}}</view>
+      <view class="time-box">
+        <van-count-down use-slot time="{{ time }}" bind:change="onChange">
+          <text class="time">{{ timeData.hours }}:</text>
+          <text class="time">{{ timeData.minutes }}:</text>
+          <text class="time">{{ timeData.seconds }}</text>
+        </van-count-down>
+      </view>
+      <view class="progress-bar-box">
+        <view class="left-box">
+          <van-image
+            width="38rpx"
+            height="40rpx"
+            src="{{progressBarIcon}}"
+          />
+          <view class="progress-bar">
+            <view class="progress-now" style="width:{{item.saleNumDisplay}}%">已售{{item.saleNumDisplay}}%</view>
+          </view>
+        </view>
+        <view class="num-box">库存{{item.stockNum}}件</view>
+      </view>
+      <view class="last-li">
+        <view class="price"><span class="price-after">¥</span> {{item.goodsSalePrice/100}}</view>
+        <view class="btn">立即抢购</view>
+      </view>
+    </view>
+  </block>
+  
+</view>

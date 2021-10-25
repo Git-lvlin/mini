@@ -1,2 +1,57 @@
-<!--pages/intensive/index.wxml-->
-<text>pages/intensive/index.wxml</text>
+<wxs module="tools" src="../../wxs/common.wxs" />
+
+<view
+  class="container"
+  bindtouchmove="handleTouchMove"
+  bindtouchend="handleTouchEnd"
+>
+  <!-- 导航栏地址 -->
+  <view class="flex_fix nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx;height:{{$.systemInfo.navBarHeight}}rpx">
+    <view id="nav_body_id" class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx;background: #fff;height:{{$.systemInfo.navBarHeight}}rpx">
+      <view class="nav_location">
+        <image class="location_icon" src="{{tools.getImgUrl('miniprogram/home/location-black.png')}}" />
+        <view class="flex_middle address" bindtap="onToLocation">
+          <view class="location_address text_one_line">{{takeSpot.address || '选择自提点' }}</view>
+        </view>
+        <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/triangle_bottom_black.png')}}" />
+      </view>
+    </view>
+  </view>
+
+
+  <scroll-view
+    id="home_scroll"
+    class="home_content"
+    scroll-y
+    scroll-top="{{scrollTop}}"
+    refresher-enabled
+    refresher-default-style="none"
+    refresher-triggered="{{refresherTriggered}}"
+    bindrefresherrefresh="onPullDownRefresh"
+    bindscrolltolower="handleScrollBottom"
+    bindscroll="onViewScroll"
+  >
+    <!-- 加载gif -->
+    <image
+      class="pul_icon"
+      wx:if="{{showLoadImg}}"
+      src="{{tools.getImgUrl('miniprogram/home/homeloading.gif')}}"
+    />
+    <!-- banner 轮播 -->
+    <banner
+      floor="{{bannerData}}"
+      wx:if="{{bannerData}}"
+    />
+    <!-- 集约专享 -->
+    <list
+      floor="{{listData}}"
+    />
+    <!-- 优选推荐 -->
+    <recommend
+      floor="{{recommendData}}"
+    />
+  </scroll-view>
+
+  <!-- 底部占位 -->
+  <view class="flex_fix bar_height" />
+</view>
