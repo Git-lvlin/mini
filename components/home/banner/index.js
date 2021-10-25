@@ -2,6 +2,10 @@ import homeApi from "../../../apis/home";
 import router from "../../../utils/router";
 
 Component({
+  options: {
+    addGlobalClass: true,
+  },
+
   properties: {
     floor: {
       type: Object,
@@ -18,6 +22,7 @@ Component({
 
   data: {
     bannerList: [],
+    actIndex: 0,
   },
 
   methods: {
@@ -54,5 +59,14 @@ Component({
       let data = currentTarget.dataset.data;
       router.getUrlRoute(data.actionUrl);
     },
+    // 监听banner切换
+    handleSwiperChange({ detail }) {
+      const {
+        current,
+      } = detail;
+      this.setData({
+        actIndex: current
+      })
+    }
   }
 })

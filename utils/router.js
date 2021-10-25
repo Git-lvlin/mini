@@ -168,12 +168,12 @@ const getUrlRoute = (url, opt) => {
   let userInfo = {};
   let token = "";
   if(option.needLogin) {
-    userInfo = getStorageUserInfo(true);
+    userInfo = getStorageUserInfo(option.needLogin);
     if(!userInfo) {
       return null;
     }
-    token = wx.getStorageSync("ACCESS_TOKEN");
   }
+  token = wx.getStorageSync("ACCESS_TOKEN") || '';
   if(!url) {
     return null;
   }
@@ -191,14 +191,18 @@ const getUrlRoute = (url, opt) => {
   if(data.route.indexOf("/web/") > -1) {
     // 自主开发WEB页面
     data.routeType = "web";
-    let connector = url.indexOf("?") > -1 ? "&" : "?"
     if(option.needLogin) {
-      url = `${url}${connector}memberId=${userInfo.id}&token=${token}`;
+      url = `${url}${url.indexOf("?") > -1 ? "&" : "?"}memberId=${userInfo.id}`;
+    }
+    if(!!token) {
+      url = `${url}${url.indexOf("?") > -1 ? "&" : "?"}token=${token}`;
     }
     if(option.data) {
+      let connector = url.indexOf("?") > -1 ? "&" : "?";
       url = `${url}${option.needLogin ? "&" : connector}${objToParamStr(option.data)}`;
     }
     data.params.url = encodeURIComponent(url);
+    console.log("🚀 ~ file: router.js ~ line 202 ~ getUrlRoute ~ data.params.url", data.params.url)
     if(option.isJump) {
       push({
         name: "webview",
