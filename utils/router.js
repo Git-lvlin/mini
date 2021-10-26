@@ -209,14 +209,32 @@ const getUrlRoute = (url, opt) => {
       })
     }
   } else if(routeMap[data.route]) {
+    const appTabbar = routeMap.appTabbar;
     // 小程序页面
     data.routeType = "route";
     data.route = routeMap[data.route];
+    if(data.route == 'home') {
+      const tabData = appTabbar[+data.params.index];
+      if(!!tabData.route) {
+        data.isTabbar = tabData.isTabbar;
+        data.route = tabData.route;
+      } else {
+        return ;
+      }
+    }
+    console.log("getUrlRoute ~ data", data);
+
     if(option.isJump) {
-      push({
-        name: data.route,
-        data: data.params,
-      })
+      if(!!data.isTabbar) {
+        goTabbar({
+          name: data.route,
+        })
+      } else {
+        push({
+          name: data.route,
+          data: data.params,
+        })
+      }
     }
   } else {
     // 无法识别的页面

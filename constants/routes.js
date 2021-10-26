@@ -9,6 +9,11 @@ export default {
     type: "tabbar",
     path: "/pages/community/index",
   },
+  // 集约
+  intensive: {
+    type: "tabbar",
+    path: "/pages/intensive/index"
+  },
   // 购物车
   cart: {
     type: "tabbar",
@@ -102,6 +107,10 @@ export default {
   // 会员店
   store: {
     path: "/subpages/cart/store/index"
+  },
+  // 签到
+  signin: {
+    path: "/subpages/cart/signin/index"
   },
 
 
