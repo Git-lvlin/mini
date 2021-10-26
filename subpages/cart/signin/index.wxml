@@ -1,6 +1,6 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
-<image class="sign_back" src="{{tools.getImgUrl('miniprogram/sign/sign-back.png')}}" />
+<image class="sign_back" bindtap="onBack" src="{{tools.getImgUrl('miniprogram/sign/sign-back.png')}}" />
 
 <view class="container">
   <view class="flex_fix">
@@ -18,7 +18,7 @@
         <text class="res_total_money">{{signInfo.signAmount || 0}}</text>
         元
       </view>
-      <view class="flex_fix flex_center red_total_btn">
+      <view class="flex_fix flex_center red_total_btn" bindtap="onOpenRule">
         明细
         <image class="red_right" src="{{tools.getImgUrl('miniprogram/sign/red-total-right.png')}}" />
       </view>
@@ -29,7 +29,7 @@
         <view class="flex_center sign_label_back" style="background-image: url({{tools.getImgUrl('miniprogram/sign/red-title-label-back.png')}})">
           <image class="sign_label_title" src="{{tools.getImgUrl('miniprogram/sign/red-label-text.png')}}" />
         </view>
-        <view class="rule">
+        <view class="rule" bindtap="onOpenRule">
           <image class="rule_icon" src="{{tools.getImgUrl('miniprogram/common/ask.png')}}" />
           规则
         </view>
@@ -71,7 +71,7 @@
     </view>
   </view>
 
-  <view class="good_content">
+  <view class="good_content" wx:if="{{goodList.length}}">
     <view class="good_content_back">
       <image class="good_content_title" src="{{tools.getImgUrl('miniprogram/sign/red-good-title-label.png')}}" />
       <view class="gradual_back" />
@@ -80,11 +80,17 @@
     <view class="good_box">
       <view class="good_head_height" />
       <view class="good_list">
-        <view class="flex_middle good_item">
-          <image class="flex_fix good_cover" src="" />
+        <view
+          class="flex_middle good_item"
+          wx:for="{{goodList}}"
+          wx:key="index"
+        >
+          <image class="flex_fix good_cover" src="{{item.goodsImageUrl}}" />
           <view class="good_info">
-            <view class="good_name text_two_line">驾驶的飞机看as撒旦法阿斯蒂芬阿斯蒂芬阿斯蒂芬</view>
-            <view class="good_label">红包可抵扣10元</view>
+            <view class="good_info_head">
+              <view class="good_name text_two_line">{{item.goodsName}}</view>
+              <view class="good_label">红包可抵扣10元</view>
+            </view>
             <view class="good_price_box">
               <view class="flex_middle sale_price">
                 到手价
@@ -121,6 +127,65 @@
         <view class="red_popup_btn" bindtap="onCloseRed">{{resPopupActType == 1 ? '太棒了！开心收下' : '知道了'}}</view>
         <view class="red_popup_tip" wx:if="{{signInfo.signNumber < 7 && resPopupActType == 1}}">明日签到可获得{{signList[signInfo.signNumber].value}}元红包</view>
       </view>
+    </view>
+  </van-popup>
+
+  <van-popup
+    show="{{rulePopup}}"
+    position="bottom"
+    closeable
+    custom-style="background-color: transparent;"
+    bind:close="onCloseRule"
+  >
+    <view class="rule_content">
+      <view class="rule_title">活动规则</view>
+      <view class="rule_text">{{signInfo.signRedRule.remark}}</view>
+    </view>
+  </van-popup>
+
+  <van-popup
+    show="{{redDetailPopup}}"
+    position="bottom"
+    closeable
+    custom-style="background-color: transparent;"
+    bind:close="onCloseRule"
+  >
+    <view class="rule_content">
+      <view class="rule_title">签到红包明细</view>
+      <view class="flex_middle red_use">
+        <view
+          class="red_btn_item {{redUseType == '' ? 'red_use_act' : ''}}"
+          data-type=""
+          bindtap="onChangeUseType"
+        >全部明细</view>
+        <view
+          class="red_btn_item {{redUseType == 1 ? 'red_use_act' : ''}}"
+          data-type="{{1}}"
+          bindtap="onChangeUseType"
+        >仅看获得</view>
+        <view
+          class="red_btn_item {{redUseType == 2 ? 'red_use_act' : ''}}"
+          data-type="{{2}}"
+          bindtap="onChangeUseType"
+        >仅看使用</view>
+      </view>
+      <scroll-view
+        class="red_use_scroll"
+        scroll-y
+        bindscrolltolower="handleScrollBottom"
+      >
+        <view class="red_use_list">
+          <view class="flex_middle use_item" wx:for="{{redUseList}}" wx:key="index">
+            <view class="use_info">
+              <view class="use_name">{{item.channelName}}</view>
+              <view class="use_time">{{item.createTime}}</view>
+            </view>
+            <view
+              class="flex_fix use_money {{item.recordType == 1 ? 'red_text' : 'green_text'}}"
+            >{{item.recordType == 1 ? '+' : ''}}{{item.changeValue}}</view>
+          </view>
+        </view>
+      </scroll-view>
     </view>
   </van-popup>
 </view>

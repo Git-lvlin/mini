@@ -309,7 +309,12 @@ page {
 
 .good_info {
   position: relative;
+  flex: 1;
   margin-left: 16rpx;
+}
+
+.good_info_head {
+  height: 144rpx;
 }
 
 .good_label {
@@ -342,6 +347,7 @@ page {
   font-size: 24rpx;
   color: #999999;
   line-height: 34rpx;
+  text-decoration: line-through;
 }
 
 
@@ -435,4 +441,106 @@ page {
   font-size: 32rpx;
   color: #FFE7B2;
   margin-top: 18rpx;
+}
+
+
+/* 活动规则 */
+.rule_content {
+  padding: 0 32rpx 90rpx;
+  background-color: #fff;
+  border-radius: 34rpx 34rpx 0 0;
+}
+
+.rule_title {
+  font-size: 36rpx;
+  color: #333333;
+  font-weight: 600;
+  line-height: 50rpx;
+  text-align: center;
+  padding: 48rpx 0;
+}
+
+.rule_text {
+  max-height: 65vh;
+  font-size: 28rpx;
+  color: #666666;
+  line-height: 44rpx;
+  white-space: pre-wrap;
+  overflow-y: auto;
+}
+
+/* 签到红包明细 */
+.red_btn_item {
+  width: 170rpx;
+  height: 80rpx;
+  box-sizing: border-box;
+  font-size: 22rpx;
+  color: #666666;
+  line-height: 80rpx;
+  text-align: center;
+  margin-right: 12rpx;
+  background: #F5F5F5;
+  border-radius: 8rpx;
+}
+
+.red_use_act{
+  font-weight: 600;
+  color: #FA0D1E;
+  background: #FFE9EA;
+  border: 2rpx solid #FA0D1E;
+}
+
+.red_use_scroll {
+  width: 686rpx;
+  height: 598rpx;
+  margin-top: 16rpx;
+}
+
+.red_use_list {
+  width: 686rpx;
+  box-sizing: border-box;
+  padding: 0 24rpx;
+  background: #FAFAFA;
+  border-radius: 8rpx;
+  overflow-y: auto;
+}
+
+.use_item {
+  padding: 26rpx 0;
+}
+
+.use_item:not(:last-child) {
+  border-bottom: 2px solid #EEEEEE;  
+}
+
+.use_info {
+  flex: 1;
+}
+
+.use_name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333333;
+  line-height: 40rpx;
+  margin-top: 4rpx;
+}
+
+.use_time {
+  font-size: 20rpx;
+  color: #999999;
+  line-height: 28rpx;
+}
+
+.use_money {
+  font-size: 30rpx;
+  font-weight: 600;
+  line-height: 42rpx;
+}
+
+.red_text {
+  color: #FF3333;
+}
+
+.green_text {
+  color: #51C380;
 }
