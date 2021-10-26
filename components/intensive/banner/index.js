@@ -3,15 +3,15 @@ import router from "../../../utils/router";
 
 Component({
   properties: {
-    floor: {
-      type: Object,
-      value: {},
+    images: {
+      type: Array,
+      value: [],
       observer(now, old) {
-        console.log('observer')
+        console.log('observer', now, old)
         // const nowStr = JSON.stringify(now);
         // const oldStr = JSON.stringify(old);
-        if(now.content) {
-          this.setBannerList(now.content);
+        if(now) {
+          this.setBannerList(now);
         }
       }
     },
@@ -22,30 +22,10 @@ Component({
   },
 
   methods: {
-    setBannerList(content) {
-      let cache = wx.getStorageSync("INTENSIVE_CACHE") || {};
-      if(content.dataType === 1) {
-        if(cache.bannerList && !!cache.bannerList.length) {
-          this.setData({
-            bannerList: cache.bannerList
-          })
-        }
-        homeApi.getFloorCustom(content.dataUrl).then(res => {
-          this.setData({
-            bannerList: res
-          });
-          cache.bannerList = res;
-          wx.setStorageSync("INTENSIVE_CACHE", cache);
-        });
-      } else {
-        this.setData({
-          bannerList: content.data
-        })
-        if(cache.bannerList) {
-          delete cache.bannerList;
-          wx.setStorageSync("INTENSIVE_CACHE", cache);
-        }
-      }
+    setBannerList(data) {
+      this.setData({
+        bannerList: data
+      })
     },
     // 跳转详情
     onBanner({

@@ -79,10 +79,15 @@
   width: 100%;
 }
 .left-box {
-  padding-left: 24rpx;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+}
+.hot-img {
+  position: relative;
+  top: 2rpx;
+  left: 14rpx;
+  margin-left: 10rpx;
 }
 .progress-bar {
   width: 470rpx;
@@ -92,6 +97,18 @@
   border: 2rpx solid #EA5634;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+}
+.progress-bar > view {
+  float: left;
+}
+.poor {
+  height: 100%;
+  text-align: center;
+  font-size: 24rpx;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #FFFFFF;
+  line-height: 30rpx;
 }
 .progress-now {
   height: 100%;
@@ -122,7 +139,7 @@
   font-weight: bold;
   color: #D7291D;
   line-height: 30rpx;
-  letter-spacing: 2rpx;
+  letter-spacing: 1rpx;
 }
 .btn {
   width: 144rpx;
@@ -135,4 +152,9 @@
   color: #FFFFFF;
   line-height: 60rpx;
   text-align: center;
+}
+
+
+.van-count-down{
+  color: #E7512D !important;
 }

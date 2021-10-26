@@ -1,34 +1,41 @@
-
-<view class="list">
+<wxs module="tools" src="../../../wxs/common.wxs" />
+<view class="list" wx:if="{{listData}}">
   <view class="title-box">
-    <span class="after">—</span>
-    <span class="title">集约专享</span>
-    <span class="after">—</span>
+    <text class="after">—</text>
+    <text class="title">集约专享</text>
+    <text class="after">—</text>
   </view>
   
-  <block wx:for="{{listData}}" wx:for-index="idx" wx:for-item="item">
+  <block wx:for="{{listData.records}}" wx:key="id">
     <view class="list-item">
       <van-image
         width="100%"
+        height="700rpx"
         src="{{item.goodsImageUrl}}"
       />
       <view class="name">{{item.goodsName}}</view>
       <view class="time-box">
-        <van-count-down use-slot time="{{ time }}" bind:change="onChange">
+        <van-count-down type="primary" time="{{ item.time }}" format="DD天HH:mm:ss 后结束" />
+        <!-- <van-count-down use-slot time="{{ item }}" bind:change="onChange">
+          <text class="time">{{ timeData.days }}</text>
+          <text class="time">天</text>
           <text class="time">{{ timeData.hours }}:</text>
           <text class="time">{{ timeData.minutes }}:</text>
           <text class="time">{{ timeData.seconds }}</text>
-        </van-count-down>
+          <text class="time">后结束</text>
+        </van-count-down> -->
       </view>
       <view class="progress-bar-box">
         <view class="left-box">
           <van-image
+            class="hot-img"
             width="38rpx"
-            height="40rpx"
-            src="{{progressBarIcon}}"
+            height="44rpx"
+            src="{{tools.getImgUrl('miniprogram/intensive/hot.png')}}"
           />
           <view class="progress-bar">
-            <view class="progress-now" style="width:{{item.saleNumDisplay}}%">已售{{item.saleNumDisplay}}%</view>
+            <view class="progress-now" wx:if="{{item.saleNumDisplay>0}}" style="width:{{item.saleNumDisplay}}%">{{item.saleNumDisplay>=50?'已售'+item.saleNumDisplay+'%':''}}</view>
+            <view wx:if="{{item.saleNumDisplay<50}}" style="width:{{100-item.saleNumDisplay}}%" class="poor">已售{{item.saleNumDisplay}}%</view>
           </view>
         </view>
         <view class="num-box">库存{{item.stockNum}}件</view>

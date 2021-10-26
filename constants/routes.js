@@ -39,6 +39,9 @@ export default {
   otherpay: {
     path: "/pages/otherpay/index"
   },
+  seckill: {
+    path: "/pages/seckill/index"
+  },
   // webview
   webview: {
     path: "/pages/webview/index"

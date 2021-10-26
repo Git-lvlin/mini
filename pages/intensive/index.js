@@ -45,28 +45,10 @@ create.Page(store, {
     leaveTopL: 0,
     //是否固定顶部
     isFixedTop: false,
-    bannerData: [],
-    intensiveData: [],
+    bannerData: {},
+    intensiveData: {},
     recommendData: [],
     remindData: [],
-    listData: [
-      {
-        goodsName: 'adasdasd',
-        goodsImageUrl: '',
-        goodsSalePrice: 10000,
-        stockNum: 123, // 库存
-        saleNumDisplay: 12, // 已售进度条
-        deadlineTime: 123124, // 结束时间戳
-      },
-      {
-        goodsName: 'adasdasd',
-        goodsImageUrl: '',
-        goodsSalePrice: 10000,
-        stockNum: 123, // 库存
-        saleNumDisplay: 12, // 已售进度条
-        deadlineTime: 123124, // 结束时间戳
-      }
-    ],
     recommendData: [
       {
         goodsName: 'adasdasd',
@@ -133,10 +115,11 @@ create.Page(store, {
 
   // 初始化
   init() {
-    this.getBannerData()
-    // this.getIntensiveData()
-    // this.getRecommendData()
-    // this.getRemindData()
+    Promise.all([this.getBannerData(),this.getIntensiveData(), this.getRecommendData()]).then((res) => {
+      this.setData({
+        refresherTriggered: false,
+      })
+    })
   },
 
   // 获取banner
@@ -146,53 +129,55 @@ create.Page(store, {
       location: 2,
       verifyVersionId: this.isMiniExamine ? 2 : 3,
     }
-    homeApi.getBannerList(params).then(res => {
-      this.setData({
-        bannerData: res.data
-      })
-    });
+    return new Promise((reject) => {
+      homeApi.getBannerList(params).then((res) => {
+        this.setData({
+          bannerData: res
+        }, () => {
+          reject()
+        })
+      });
+    }) 
+
   },
 
   // 获取集约列表
   getIntensiveData() {
+    let spot = wx.getStorageSync("TAKE_SPOT") || {};
     let params = {
-      useType: 5,
-      location: 2,
-      verifyVersionId: this.isMiniExamine ? 2 : 3,
+      storeNo: spot.storeNo || '',
+      page: 1,
+      size: 3,
     }
-    homeApi.getBannerList(params).then(res => {
-      this.setData({
-        intensiveData: res.data
-      })
-    });
+    return new Promise((reject) => {
+      homeApi.getIntensiveGood(params).then(res => {
+        this.setData({
+          intensiveData: res
+        }, () => {
+          reject()
+        })
+      });
+    })
   },
 
-  // 获取优选推荐
+  // 提醒采购商品列表
   getRecommendData() {
+    let spot = wx.getStorageSync("TAKE_SPOT") || {};
     let params = {
-      useType: 5,
-      location: 2,
-      verifyVersionId: this.isMiniExamine ? 2 : 3,
+      page:1,
+      size:5,
+      storeNo: spot.storeNo || '',
     }
-    homeApi.getBannerList(params).then(res => {
-      this.setData({
-        recommendData: res.data
-      })
-    });
-  },
+    return new Promise((reject) => {
+      homeApi.getStoreNotInSkus(params).then(res => {
+        this.setData({
+          recommendData: res
+        }, () => {
+          reject()
+        })
+      });
+    })
 
-  // 获取提醒列表
-  getRemindData() {
-    let params = {
-      useType: 5,
-      location: 2,
-      verifyVersionId: this.isMiniExamine ? 2 : 3,
-    }
-    homeApi.getBannerList(params).then(res => {
-      this.setData({
-        remindData: res.data
-      })
-    });
   },
 
   // 获取审核状态
@@ -396,8 +381,6 @@ create.Page(store, {
 
   // 下拉刷新
   onPullDownRefresh() {
-    wx.removeStorageSync("HOME_FLOOR");
-    wx.removeStorageSync("HOME_CACHE");
     setTimeout(() => {
       this.setData({
         refresherTriggered: true,

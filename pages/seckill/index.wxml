@@ -1,0 +1,10 @@
+<wxs module="tools" src="../../wxs/common.wxs" />
+<view class="container">
+  <view class="banner">
+    <van-image
+      width="38rpx"
+      height="40rpx"
+      src="{{tools.getImgUrl('miniprogram/seckill/seckill-bg.png')}}"
+    />
+  </view>
+</view>

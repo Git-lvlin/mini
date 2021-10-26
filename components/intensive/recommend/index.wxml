@@ -11,7 +11,7 @@
     <text class="tips-text">优选商品当前店铺没有售卖，点击提醒店主去采购</text>
   </view>
 
-  <block wx:for="{{listData}}" wx:for-index="idx" wx:for-item="item">
+  <block wx:for="{{listData}}" wx:key="id">
     <view class="list-item">
       <van-image
         class="img"

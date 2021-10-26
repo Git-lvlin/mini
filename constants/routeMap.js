@@ -24,6 +24,8 @@ export default {
   "/home/vip": "",
   // 集约页面
   "/home/intensive": "storeIntensive",
+  // 秒杀
+  "/seckill": "seckill",
   
   // 商品详情
   "/shopping/detail": "detail",

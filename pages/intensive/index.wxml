@@ -38,13 +38,14 @@
       src="{{tools.getImgUrl('miniprogram/home/homeloading.gif')}}"
     />
     <!-- banner 轮播 -->
-    <banner
-      floor="{{bannerData}}"
+    <banners
       wx:if="{{bannerData}}"
+      images="{{bannerData}}"
     />
     <!-- 集约专享 -->
     <list
-      floor="{{listData}}"
+      wx:if="{{intensiveData}}"
+      floor="{{intensiveData}}"
     />
     <!-- 优选推荐 -->
     <recommend

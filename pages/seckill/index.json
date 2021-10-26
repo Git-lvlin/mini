@@ -4,8 +4,5 @@
   "onReachBottomDistance": 0,
   "enablePullDownRefresh": false,
   "usingComponents": {
-    "banners": "/components/intensive/banner/index",
-    "list": "/components/intensive/list/index",
-    "recommend": "/components/intensive/recommend/index"
   }
 }
