@@ -50,7 +50,8 @@
         "changeShipper/index",
         "teamDetail/index",
         "store/index",
-        "priceDetail/index"
+        "priceDetail/index",
+        "signin/index"
       ]
     },
     {

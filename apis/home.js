@@ -1,4 +1,4 @@
-import Request from '../utils/request.js'
+import Request from '../utils/request'
 
 const url = {
   floorList: "/cms/open/home/list",

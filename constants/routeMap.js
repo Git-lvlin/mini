@@ -14,6 +14,29 @@ export default {
 
   // 首页
   "/tab/index": "home",
+  appTabbar: {
+    // app首页
+    0: {
+      isTabbar: true,
+      route: 'home',
+    },
+    1: {
+      isTabbar: false,
+      route: 'seckill',
+    },
+    2: {
+      isTabbar: true,
+      route: 'intensive',
+    },
+    3: {
+      isTabbar: false,
+      route: '',
+    },
+    4: {
+      isTabbar: true,
+      route: 'user',
+    },
+  },
   // 分类页面
   "/home/category": "classList",
   // 搜索页面
@@ -26,6 +49,8 @@ export default {
   "/home/intensive": "storeIntensive",
   // 秒杀
   "/seckill": "seckill",
+  // 签到活动
+  "/flutter/mine/sign_in/detail": "signin",
   
   // 商品详情
   "/shopping/detail": "detail",

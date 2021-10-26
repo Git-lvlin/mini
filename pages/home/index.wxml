@@ -115,8 +115,8 @@
       <!-- 分类商品 -->
       <view id="classGoods" wx:if="{{item.floorType === 11}}">
         <classgoods
-          scrollBottom="{{scrollBottom}}"
           floor="{{item}}"
+          scrollBottom="{{scrollBottom}}"
           refreshering="{{refresherTriggered}}"
           isFixedTop="{{floorTopDistance[11] - scrollTopDistance < 0}}"
           bind:setScroll="setScroll"
@@ -131,6 +131,16 @@
       <!-- 秒杀第二版 -->
       <view wx:if="{{item.floorType === 14}}">
         <seckill-v2 floor="{{item}}" />
+      </view>
+
+      <!-- 分类商品列表第二版 -->
+      <view wx:if="{{item.floorType === 13}}">
+        <classgoods-v2
+          floor="{{item}}"
+          scrollBottom="{{scrollBottom}}"
+          refreshering="{{refresherTriggered}}"
+          isFixedTop="{{floorTopDistance[11] - scrollTopDistance < 0}}"
+        />
       </view>
     </block>
   </scroll-view>
@@ -155,6 +165,9 @@
 
   <!-- 下载app 二维码 -->
   <down-app-code show="{{inviteRegister}}" bind:close="onHideSharePopup" />
+
+  <!-- 二级分类弹窗 -->
+  <classgoods-popup />
 
   <!-- 底部占位 -->
   <view class="flex_fix bar_height" />
