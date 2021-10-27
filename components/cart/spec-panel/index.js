@@ -8,41 +8,40 @@ create.Component(store, {
   use: [
     "systemInfo",
     "showSpecPopup",
-    "cartList",
   ],
 
   computed: {
     // 购物车商品用
-    quantity(scope) {
-      const {
-        data,
-        store,
-      } = scope;
-      let quantity = 0;
-      const {
-        specType,
-        good,
-      } = data;
-      if(specType === "add") {
-        const cartList = store.data.cartList;
-        // const currentCart = [];
-        // cartList.forEach(item => {
-        //   if(item.spuId == good.id) {
-        //     currentCart.push({
-        //       skuId: item.skuId,
-        //       quantity: item.quantity,
-        //       stockNum: item.stockNum,
-        //       buyMinNum: item.buyMinNum,
-        //       buyMaxNum: item.buyMaxNum,
-        //     })
-        //   }
-        // });
-        // scope.setData({
-        //   currentCart,
-        // });
-      }
-      return quantity
-    },
+    // quantity(scope) {
+    //   const {
+    //     data,
+    //     store,
+    //   } = scope;
+    //   let quantity = 0;
+    //   const {
+    //     specType,
+    //     good,
+    //   } = data;
+    //   if(specType === "add") {
+    //     const cartList = store.data.cartList;
+    //     // const currentCart = [];
+    //     // cartList.forEach(item => {
+    //     //   if(item.spuId == good.id) {
+    //     //     currentCart.push({
+    //     //       skuId: item.skuId,
+    //     //       quantity: item.quantity,
+    //     //       stockNum: item.stockNum,
+    //     //       buyMinNum: item.buyMinNum,
+    //     //       buyMaxNum: item.buyMaxNum,
+    //     //     })
+    //     //   }
+    //     // });
+    //     // scope.setData({
+    //     //   currentCart,
+    //     // });
+    //   }
+    //   return quantity
+    // },
   },
   
   properties: {
@@ -64,6 +63,7 @@ create.Component(store, {
       type: String,
       value: "",
     },
+    // add || buy
     specType: {
       type: String,
       value: "",
@@ -100,7 +100,7 @@ create.Component(store, {
           curSku.stockOver = 1;
           curSku.stockOverText = "已售罄";
         } else {
-          if(curSku.stockNum < curSku.buyMinNum || curSku.stockNum < curSku.batchNumber) {
+          if(curSku.stockNum < curSku.buyMinNum) {
             curSku.stockOver = 2;
             curSku.stockOverText = "库存不足";
           }
@@ -168,15 +168,12 @@ create.Component(store, {
       const {
         curSku,
         stock,
-        quantity,
-        specType
       } = this.data;
       let {
         buyMinNum,
       } = curSku;
       buyMinNum = buyMinNum < 1 ? 1 : buyMinNum;
-      let totalNum = specType === "buy" ? stock : stock + quantity;
-      if(totalNum > buyMinNum) {
+      if(stock > buyMinNum) {
         this.setData({
           stock: stock - 1
         })
@@ -189,8 +186,6 @@ create.Component(store, {
       const {
         curSku,
         stock,
-        quantity,
-        specType,
       } = this.data;
       const {
         buyMaxNum,
@@ -199,8 +194,7 @@ create.Component(store, {
         showToast({ title: "没有足够库存啦" });
         return ;
       }
-      let totalNum = specType === "buy" ? stock : stock + quantity;
-      if(totalNum < buyMaxNum) {
+      if(stock < buyMaxNum) {
         this.setData({
           stock: stock + 1
         })
@@ -215,13 +209,8 @@ create.Component(store, {
         specType,
         curSku,
         stock,
-        quantity,
       } = this.data;
-      // if(specType === "buy") {
-        // this.triggerEvent("specBuy", {
-        //   skuId: curSku.id,
-        //   skuNum: stock,
-        // });
+      if(specType === "buy") {
         this.triggerEvent("setSku", {
           skuId: curSku.id,
           skuName: curSku.skuName,
@@ -230,17 +219,21 @@ create.Component(store, {
           buyMaxNum: curSku.buyMaxNum,
           buyMinNum: curSku.buyMinNum,
         });
-      // } else if(specType === "add") {
-      //   // this.triggerEvent("specAdd", {
-      //   //   skuId: curSku.id,
-      //   //   quantity: stock + quantity,
-      //   // });
-      //   this.triggerEvent("setSku", {
-      //     skuId: curSku.id,
-      //     skuName: curSku.skuName,
-      //     skuNum: stock + quantity,
-      //   });
-      // }
+        this.triggerEvent("specBuy", {
+          skuId: curSku.id,
+          skuNum: stock,
+        });
+      } else if(specType === "add") {
+        this.triggerEvent("setSku", {
+          skuId: curSku.id,
+          skuName: curSku.skuName,
+          skuNum: stock,
+        });
+        this.triggerEvent("specAdd", {
+          skuId: curSku.id,
+          quantity: stock,
+        });
+      }
       this.onClose();
     },
   }

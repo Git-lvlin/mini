@@ -28,7 +28,7 @@ create.Component(store, {
       type: Object,
       value: {},
       observer(now, old) {
-        if(now && now.content) {
+        if(now && now.content && this.data.fristLoad) {
           this.setClassList(now.content);
         }
       }
@@ -53,6 +53,7 @@ create.Component(store, {
   },
 
   data: {
+    fristLoad: false,
     scrollListWidth: 0,
     classList: [],
     actClassIdx: "",
@@ -62,6 +63,18 @@ create.Component(store, {
     },
     secondClass: [],
     cacheData: {},
+  },
+
+  ready() {
+    const {
+      floor,
+    } = this.data;
+    if(floor && floor.content) {
+      this.setClassList(floor.content);
+      this.setData({
+        fristLoad: true,
+      })
+    }
   },
 
   methods: {
@@ -201,7 +214,6 @@ create.Component(store, {
       const {
         pageData
       } = this.data;
-      console.log("🚀 ~ handleScrollBottom ~ pageData", pageData)
       if(pageData.hasNext) {
         this.getGoodList();
       }
@@ -235,7 +247,7 @@ create.Component(store, {
           return
         }
         let {
-          secondClass,
+          secondClass = [],
           goodList,
           pageData,
         } = cacheData[idx];

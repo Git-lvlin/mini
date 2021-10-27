@@ -18,26 +18,26 @@ create.Page(store, {
 
   use: [
     "systemInfo",
-    "cartList",
-    "cartListTotal",
-    "goodListTotal",
+    // "cartList",
+    // "cartListTotal",
+    // "goodListTotal",
   ],
 
   computed: {
-    quantity: ({
-      options,
-      store,
-    }) => {
-      const cartList = store.data.cartList;
-      const goodId = options.spuId;
-      let quantity = 0;
-      cartList.forEach(item => {
-        if(item.spuId === goodId) {
-          quantity = item.quantity
-        }
-      })
-      return quantity
-    }
+    // quantity: ({
+    //   options,
+    //   store,
+    // }) => {
+    //   const cartList = store.data.cartList;
+    //   const goodId = options.spuId;
+    //   let quantity = 0;
+    //   cartList.forEach(item => {
+    //     if(item.spuId === goodId) {
+    //       quantity = item.quantity
+    //     }
+    //   })
+    //   return quantity
+    // }
   },
 
   data: {
@@ -81,7 +81,6 @@ create.Page(store, {
     } = app.globalData;
     // 获取进入小程序场景值
     if(CODE_SCENE[appScene]) {
-      // options.scene = "cf2a02ac71ca987860af70c2171d1512";
       if(!options.scene) {
         console.log("未获取到解析参数", options);
         this.hanldeGoodsParams(options)
@@ -103,7 +102,7 @@ create.Page(store, {
     let userInfo = getStorageUserInfo();
     if(!!userInfo) {
       if(this.store.data.cartList.length <= 0 && !!orderType) {
-        this.store.updateCart();
+        // this.store.updateCart();
         this.getShareInfo();
       }
       // this.getDetailRatio();
@@ -556,14 +555,9 @@ create.Page(store, {
       good,
       quantity = 0,
       currentSku,
-      stockOver,
     } = this.data;
     let stockOverData = this.handleGoodStock(currentSku.stockNum);
     if(!this.specLoaded) {
-      return;
-    }
-    if(good.goodsState != 1) {
-      showToast({ title: "商品已下架" });
       return;
     }
     if(stockOverData.stockOver != 0) {
@@ -621,44 +615,6 @@ create.Page(store, {
     })
   },
 
-  // 判断是否还有库存
-  handleGoodStock(stock) {
-    const {
-      good,
-      currentSku,
-    } = this.data;
-    const {
-      orderType
-    } = this.goodParams;
-    let stockOver = 0;
-    let stockOverText = "";
-    let nowTime = new Date().getTime();
-    let stockNum = stock !== undefined ? stock : good.goodsStockNum;
-    if(stockNum <= 0) {
-      // 已售罄
-      stockOver = 1;
-      stockOverText = "已售罄"
-    } else {
-      if(stockNum < good.buyMinNum || stockNum < good.batchNumber) {
-        stockOver = 2;
-        stockOverText = "库存不足"
-      }
-    }
-    if(orderType == 15 && nowTime >= good.deadlineTime) {
-      stockOver = 3;
-      stockOverText = "活动已结束"
-    }
-    let result = {
-      stockOver,
-      stockOverText
-    };
-    if(stock !== undefined) {
-      return result; 
-    } else {
-      this.setData(result);
-    }
-  },
-
   // 多规格更新购物车数量
   specUpdateCart({
     detail,
@@ -669,6 +625,45 @@ create.Page(store, {
   // 更新购物车数量
   updateCart(data, showMsg = false) {
     this.store.addCart(data, showMsg);
+  },
+
+  // 判断是否还有库存
+  handleGoodStock() {
+    const {
+      good,
+    } = this.data;
+    const {
+      orderType
+    } = this.goodParams;
+    let stockOver = 0;
+    let stockOverText = "";
+    let nowTime = new Date().getTime();
+    let stockNum = good.goodsStockNum;
+    if(stockNum <= 0) {
+      // 已售罄
+      stockOver = 1;
+      stockOverText = "已售罄"
+    } else {
+      // B端集约最小购买量一定是步增的倍数，其他不校验
+      if(stockNum < good.buyMinNum) {
+        stockOver = 2;
+        stockOverText = "库存不足"
+      }
+    }
+    if(orderType == 15 && nowTime >= good.deadlineTime) {
+      stockOver = 3;
+      stockOverText = "活动已结束"
+    }
+    if(good.goodsState != 1) {
+      stockOver = 4;
+      stockOverText = "商品已下架"
+    }
+    let result = {
+      stockOver,
+      stockOverText
+    };
+    this.setData(result);
+    return result; 
   },
 
   // 获取比价信息
@@ -704,7 +699,7 @@ create.Page(store, {
   },
 
   // 打开选规格弹窗
-  openSpecPopup() {
+  openSpecPopup(event) {
     if(!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
@@ -716,11 +711,22 @@ create.Page(store, {
       showToast({ title: "商品已下架" });
       return;
     }
-    this.setData({
-      specType: "buy",
-    });
-    // 打开选择规格弹窗
-    store.onChangeSpecState(true);
+    if(good.isMultiSpec) {
+      this.setData({
+        specType: "buy",
+      }, () => {
+        // 打开选择规格弹窗
+        store.onChangeSpecState(true);
+      });
+    } else {
+      this.onToCreate(event)
+    }
+
+    // this.setData({
+    //   specType: "buy",
+    // });
+    // // 打开选择规格弹窗
+    // store.onChangeSpecState(true);
   },
 
   // 跳转确认订单
@@ -740,7 +746,6 @@ create.Page(store, {
       selectAddressType,
       good,
       currentSku,
-      quantity,
       storeInfo,
     } = this.data;
     let stockOverData = this.handleGoodStock(currentSku.stockNum);
@@ -752,13 +757,10 @@ create.Page(store, {
       return;
     }
     if(stockOverData.stockOver != 0) {
-      this.onStockOver(stockOverData.stockOver);
+      // this.onStockOver(stockOverData.stockOver);
       return;
     }
     let skuNum = good.buyMinNum > 0 ? good.buyMinNum : 1;
-    if(!good.isMultiSpec) {
-      skuNum = quantity > skuNum ? quantity : skuNum;
-    }
     const {
       currentTarget = {},
     } = event;

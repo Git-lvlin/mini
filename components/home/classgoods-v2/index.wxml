@@ -5,6 +5,8 @@
     <scroll-view
       scroll-x
       class="classgood_scroll"
+      enhanced
+      show-scrollbar="{{false}}"
     >
       <view class="classgood_list">
         <view
