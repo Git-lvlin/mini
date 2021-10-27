@@ -6,11 +6,10 @@ Component({
     styleIsolation: 'shared'
   },
   properties: {
-    floor: {
+    intensiveList: {
       type: Object,
       value: {},
       observer(now, old) {
-        console.log('observer')
         // const nowStr = JSON.stringify(now);
         // const oldStr = JSON.stringify(old);
         if(now.records) {
@@ -22,18 +21,8 @@ Component({
 
   data: {
     listData: {},
-    nowTime: 0,
-    timeData: {},
   },
   methods: {
-    onChange(e) {
-      this.setData({
-        timeData: e.detail,
-      });
-    },
-    setStyle() {
-      get
-    },
     setListData(data) {
       data.records = data.records.map((item) => {
         return {
@@ -43,15 +32,29 @@ Component({
       })
       this.setData({
         listData: data,
-        nowTime: data.currentTime
       })
     },
     // 跳转详情
-    onBanner({
+    onGood({
       currentTarget
     }) {
-      let data = currentTarget.dataset.data;
-      router.getUrlRoute(data.actionUrl);
+      let {
+        spuId,
+        skuId,
+        activityId,
+        objectId,
+        orderType,
+      } = currentTarget.dataset.data;
+      router.push({
+        name: 'detail',
+        data: {
+          spuId,
+          skuId,
+          activityId,
+          objectId,
+          orderType,
+        }
+      });
     },
   }
 })

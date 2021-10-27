@@ -1,8 +1,8 @@
 {
-  "navigationBarTextStyle": "black",
+  "navigationBarTextStyle": "white",
   "navigationStyle": "custom",
   "onReachBottomDistance": 0,
-  "enablePullDownRefresh": false,
+  "enablePullDownRefresh": true,
   "usingComponents": {
   }
 }

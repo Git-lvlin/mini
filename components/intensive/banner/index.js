@@ -7,7 +7,6 @@ Component({
       type: Array,
       value: [],
       observer(now, old) {
-        console.log('observer', now, old)
         // const nowStr = JSON.stringify(now);
         // const oldStr = JSON.stringify(old);
         if(now) {

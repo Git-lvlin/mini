@@ -5,6 +5,7 @@ const url = {
   bannerList: "/cms/open/banner/list",
   intensiveGood: "/activity/open/wholesaleGoodsList",
   getStoreNotInSkus: "/activity/option/getStoreNotInSkus",
+  remindStorekeeperBuy: "/activity/auth/remindStorekeeperBuy",
   hotGood: "/activity/open/tagGoodsList",
   hotGoodV2: "/activity/open/tagGoodsListV2",
 
@@ -46,6 +47,11 @@ export default {
   // 获取提醒店主商品列表
   getStoreNotInSkus(params, option) {
     return Request.post(url.getStoreNotInSkus, params, option);
+  },
+
+  // 提醒店主采购
+  remindStorekeeperBuy(params, option) {
+    return Request.post(url.remindStorekeeperBuy, params, option);
   },
 
   // 获取热销商品

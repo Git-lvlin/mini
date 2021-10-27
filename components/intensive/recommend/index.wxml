@@ -1,9 +1,9 @@
 
 <view class="list">
   <view class="title-box">
-    <span class="after">—</span>
-    <span class="title">优选推荐</span>
-    <span class="after">—</span>
+    <text class="after">—</text>
+    <text class="title">优选推荐</text>
+    <text class="after">—</text>
   </view>
   
   <view class="tips-box">
@@ -11,8 +11,8 @@
     <text class="tips-text">优选商品当前店铺没有售卖，点击提醒店主去采购</text>
   </view>
 
-  <block wx:for="{{listData}}" wx:key="id">
-    <view class="list-item">
+  <block wx:for="{{listData.records}}" wx:key="id">
+    <view class="list-item" data-data="{{item}}" bindtap="onGood">
       <van-image
         class="img"
         width="200rpx"
@@ -23,9 +23,9 @@
         <view class="name">{{item.goodsName}}</view>
         <view class="price-box">
           <text class="price1"><text class="span">¥</text>{{item.goodsSalePrice/100}}</text>
-          <text class="price2">{{item.goodsSalePrice/100}}</text>
+          <text class="price2">{{item.marketPrice/100}}</text>
         </view>
-        <view class="btn {{btnType==1?'ed':''}}">{{btnType==1?'已提醒':'提醒店主采购'}}</view>
+        <view class="btn {{item.isRemind?'ed':''}}" data-item="{{item}}" bindtap="remind">{{item.isRemind?'已提醒':'提醒店主采购'}}</view>
       </view>
     </view>
   </block>

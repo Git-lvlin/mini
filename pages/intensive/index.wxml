@@ -45,11 +45,11 @@
     <!-- 集约专享 -->
     <list
       wx:if="{{intensiveData}}"
-      floor="{{intensiveData}}"
+      intensiveList="{{intensiveData}}"
     />
     <!-- 优选推荐 -->
     <recommend
-      floor="{{recommendData}}"
+      remindList="{{recommendData}}"
     />
   </scroll-view>
 

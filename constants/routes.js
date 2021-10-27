@@ -44,6 +44,7 @@ export default {
   otherpay: {
     path: "/pages/otherpay/index"
   },
+  // 秒杀爆品
   seckill: {
     path: "/pages/seckill/index"
   },

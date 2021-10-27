@@ -3,45 +3,29 @@ import router from "../../../utils/router";
 
 Component({
   properties: {
-    floor: {
+    remindList: {
       type: Object,
       value: {},
       observer(now, old) {
-        console.log('observer')
+        console.log('now', now)
         // const nowStr = JSON.stringify(now);
         // const oldStr = JSON.stringify(old);
-        if(now.content) {
-          this.setBannerList(now.content);
+        if(now) {
+          this.setList(now);
         }
       }
     },
   },
 
   data: {
-    listData: [
-      {
-        goodsName: '已售进度条已售进度条已售进度条已售进度条已售进度条已售进度条',
-        goodsImageUrl: '',
-        goodsSalePrice: 10000,
-        stockNum: 123, // 库存
-        saleNumDisplay: 51, // 已售进度条
-        deadlineTime: 30 * 60 * 60 * 1000, // 结束时间戳
-      },
-      {
-        goodsName: 'adasdasd',
-        goodsImageUrl: '',
-        goodsSalePrice: 10000,
-        stockNum: 123, // 库存
-        saleNumDisplay: 51, // 已售进度条
-        deadlineTime: 30 * 60 * 60 * 1000, // 结束时间戳
-      }
-    ],
+    listData: [],
     currentTime: 1123123, // 系统当前时间
     size: 10,
     page: 1,
     total: 1,
     totalPage: 2,
     timeData: {},
+    flag: true,
   },
   onChange(e) {
     this.setData({
@@ -49,37 +33,68 @@ Component({
     });
   },
   methods: {
-    setBannerList(content) {
-      let cache = wx.getStorageSync("INTENSIVE_CACHE") || {};
-      if(content.dataType === 1) {
-        if(cache.bannerList && !!cache.bannerList.length) {
-          this.setData({
-            bannerList: cache.bannerList
-          })
+    setList(data) {
+      this.setData({
+        listData: data
+      })
+    },
+    // 提醒店主采购
+    remind(e) {
+      let spot = wx.getStorageSync("TAKE_SPOT") || {};
+      let { wsId, spuId, skuId, isRemind } = e.currentTarget.dataset.item
+      if (!isRemind && this.data.flag) {
+        this.setData({flag: false})
+        let params = {
+          wsId: wsId,
+          skuId: skuId,
+          spuId: spuId,
+          storeNo: spot.storeNo || ''
         }
-        homeApi.getFloorCustom(content.dataUrl).then(res => {
-          this.setData({
-            bannerList: res
-          });
-          cache.bannerList = res;
-          wx.setStorageSync("INTENSIVE_CACHE", cache);
+        homeApi.remindStorekeeperBuy(params).then((res) => {
+          this.getRecommendData()
         });
-      } else {
-        this.setData({
-          bannerList: content.data
-        })
-        if(cache.bannerList) {
-          delete cache.bannerList;
-          wx.setStorageSync("INTENSIVE_CACHE", cache);
-        }
       }
     },
+    // 提醒采购商品列表
+    getRecommendData() {
+      let spot = wx.getStorageSync("TAKE_SPOT") || {};
+      let params = {
+        page: 1,
+        size: 99,
+        storeNo: spot.storeNo || '',
+      }
+      return new Promise((reject) => {
+        homeApi.getStoreNotInSkus(params).then(res => {
+          this.setData({
+            listData: res
+          }, () => {
+            this.setData({flag: true})
+            reject()
+          })
+        });
+      })
+    },
     // 跳转详情
-    onBanner({
+    onGood({
       currentTarget
     }) {
-      let data = currentTarget.dataset.data;
-      router.getUrlRoute(data.actionUrl);
+      let {
+        spuId,
+        skuId,
+        activityId,
+        objectId,
+        orderType,
+      } = currentTarget.dataset.data;
+      router.push({
+        name: 'detail',
+        data: {
+          spuId,
+          skuId,
+          activityId,
+          objectId,
+          orderType,
+        }
+      });
     },
   }
 })

@@ -49,24 +49,7 @@ create.Page(store, {
     intensiveData: {},
     recommendData: [],
     remindData: [],
-    recommendData: [
-      {
-        goodsName: 'adasdasd',
-        goodsImageUrl: '',
-        goodsSalePrice: 10000,
-        stockNum: 123, // 库存
-        saleNumDisplay: 12, // 已售进度条
-        deadlineTime: 123124, // 结束时间戳
-      },
-      {
-        goodsName: 'adasdasd',
-        goodsImageUrl: '',
-        goodsSalePrice: 10000,
-        stockNum: 123, // 库存
-        saleNumDisplay: 12, // 已售进度条
-        deadlineTime: 123124, // 结束时间戳
-      }
-    ],
+    recommendData: [],
   },
 
   onLoad(options) {
@@ -147,7 +130,7 @@ create.Page(store, {
     let params = {
       storeNo: spot.storeNo || '',
       page: 1,
-      size: 3,
+      size: 99,
     }
     return new Promise((reject) => {
       homeApi.getIntensiveGood(params).then(res => {
@@ -164,8 +147,8 @@ create.Page(store, {
   getRecommendData() {
     let spot = wx.getStorageSync("TAKE_SPOT") || {};
     let params = {
-      page:1,
-      size:5,
+      page: 1,
+      size: 99,
       storeNo: spot.storeNo || '',
     }
     return new Promise((reject) => {
@@ -177,7 +160,6 @@ create.Page(store, {
         })
       });
     })
-
   },
 
   // 获取审核状态
