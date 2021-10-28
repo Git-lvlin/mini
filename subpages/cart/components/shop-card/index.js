@@ -1,4 +1,4 @@
-import { showToast } from '../../../utils/tools';
+import { showToast } from '../../../../utils/tools';
 
 Component({
   options: {

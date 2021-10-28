@@ -98,6 +98,10 @@
   vertical-align: middle;
 }
 
+.gray_add {
+  opacity: 0.15;
+}
+
 .value {
   min-width: 32rpx;
   height: 40rpx;

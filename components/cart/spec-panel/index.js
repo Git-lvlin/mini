@@ -63,7 +63,7 @@ create.Component(store, {
       type: String,
       value: "",
     },
-    // add || buy
+    // add 加入购物车 || buy 立即购买
     specType: {
       type: String,
       value: "",
@@ -71,7 +71,7 @@ create.Component(store, {
   },
 
   data: {
-    stock: 1,
+    skuNum: 1,
     skuList: [],
     checkSpec: [],
     curSku: {},
@@ -120,14 +120,14 @@ create.Component(store, {
             skuName: curSku.skuName,
             stockNum: good.stockNum,
             buyMaxNum: curSku.buyMaxNum,
-            skuNum: curSku.buyMinNum ? curSku.buyMinNum : 1,
+            skuNum: curSku.buyMinNum > 0 ? curSku.buyMinNum : 1,
           });
         }
         this.setData({
           skuData: res,
           skuList: res.specList,
           curSku,
-          stock: curSku.buyMinNum,
+          skuNum: curSku.buyMinNum > 0 ? curSku.buyMinNum : 1,
           checkSpec,
         })
       })
@@ -160,46 +160,42 @@ create.Component(store, {
     onClose() {
       store.onChangeSpecState(false)
       this.setData({
-        stock: 1,
+        skuNum: 1,
       })
     },
 
     onReduceNum() {
-      const {
+      let {
         curSku,
-        stock,
+        skuNum,
       } = this.data;
       let {
         buyMinNum,
       } = curSku;
+      const batchNumber = curSku.batchNumber > 0 ? curSku.batchNumber : 1;
       buyMinNum = buyMinNum < 1 ? 1 : buyMinNum;
-      if(stock > buyMinNum) {
+      skuNum = skuNum - batchNumber;
+      if(skuNum >= buyMinNum) {
         this.setData({
-          stock: stock - 1
+          skuNum
         })
-      } else {
-        showToast({ title: `至少购买${buyMinNum}件` });
       }
     },
 
     onAddNum() {
-      const {
+      let {
         curSku,
-        stock,
+        skuNum,
       } = this.data;
+      const batchNumber = curSku.batchNumber > 10 ? curSku.batchNumber : 20;
       const {
         buyMaxNum,
       } = curSku;
-      if(stock >= buyMaxNum) {
-        showToast({ title: "没有足够库存啦" });
-        return ;
-      }
-      if(stock < buyMaxNum) {
+      skuNum = skuNum + batchNumber;
+      if(skuNum <= buyMaxNum && skuNum <= curSku.stockNum) {
         this.setData({
-          stock: stock + 1
+          skuNum
         })
-      } else {
-        showToast({ title: `最多购买${buyMaxNum}件` });
       }
     },
 
@@ -208,30 +204,30 @@ create.Component(store, {
         good,
         specType,
         curSku,
-        stock,
+        skuNum,
       } = this.data;
       if(specType === "buy") {
         this.triggerEvent("setSku", {
           skuId: curSku.id,
           skuName: curSku.skuName,
-          skuNum: stock,
+          skuNum,
           stockNum: curSku.stockNum,
           buyMaxNum: curSku.buyMaxNum,
           buyMinNum: curSku.buyMinNum,
         });
         this.triggerEvent("specBuy", {
           skuId: curSku.id,
-          skuNum: stock,
+          skuNum,
         });
       } else if(specType === "add") {
         this.triggerEvent("setSku", {
           skuId: curSku.id,
           skuName: curSku.skuName,
-          skuNum: stock,
+          skuNum,
         });
         this.triggerEvent("specAdd", {
           skuId: curSku.id,
-          quantity: stock,
+          quantity,
         });
       }
       this.onClose();

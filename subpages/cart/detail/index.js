@@ -719,7 +719,7 @@ create.Page(store, {
         store.onChangeSpecState(true);
       });
     } else {
-      this.onToCreate(event)
+      this.onToCreate()
     }
 
     // this.setData({
@@ -730,7 +730,7 @@ create.Page(store, {
   },
 
   // 跳转确认订单
-  onToCreate(event) {
+  onToCreate() {
     if(!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
@@ -749,11 +749,8 @@ create.Page(store, {
       storeInfo,
     } = this.data;
     let stockOverData = this.handleGoodStock(currentSku.stockNum);
+    // 多规格商品，规格时候已加载
     if(!this.specLoaded) {
-      return;
-    }
-    if(good.goodsState != 1) {
-      showToast({ title: "商品已下架" });
       return;
     }
     if(stockOverData.stockOver != 0) {
@@ -761,13 +758,6 @@ create.Page(store, {
       return;
     }
     let skuNum = good.buyMinNum > 0 ? good.buyMinNum : 1;
-    const {
-      currentTarget = {},
-    } = event;
-    // if(!this.data.userOtherInfo.isShopMaster && orderType == 15) {
-    //   showToast({ title: "很抱歉，你不店主不能下单"})
-    //   return;
-    // }
     // 选择规格回来下单
     if(good.isMultiSpec) {
       skuId = currentSku.skuId;
@@ -780,37 +770,30 @@ create.Page(store, {
         goodsInfos: [{
           spuId: spuId ? spuId : good.id,
           skuId: skuId ? skuId : currentSku.skuId,
-          activityId: good.activityId,
-          objectId: good.objectId,
+          activityId: activityId || good.activityId || '',
+          objectId: objectId || good.objectId || '',
           orderType,
           skuNum,
           goodsFromType: good.goodsFromType,
         }]
       }]
     };
-    // 点击单独购买
-    if(currentTarget && currentTarget.dataset.type === "alone") {
-      isActivityCome = true;
-    } else {
-      // 活动购买
-      if(!!activityId && activityId != undefined) data.activityId = activityId;
-      if(!!objectId && objectId != undefined) data.objectId = objectId;
-      if(!!good.objectId) data.objectId = good.objectId;
-      if(orderType == 3) {
-        data.objectId = currentSku.groupId;
-        objectId = currentSku.groupId;
-      }
-      if(orderType == 15) {
-        data.storeAdress = storeInfo.storeAddress;
-        data.selectAddressType = selectAddressType;
-      }
+    // 活动购买
+    if(orderType == 3) {
+      data.objectId = currentSku.groupId;
+      objectId = currentSku.groupId;
     }
-    wx.setStorageSync("CREATE_INTENSIVE", data);
+    if(orderType == 15) {
+      data.storeAdress = storeInfo.storeAddress;
+      data.selectAddressType = selectAddressType;
+      wx.setStorageSync("CREATE_INTENSIVE", data);
+    } else {
+      wx.setStorageSync("GOOD_LIST", data);
+    }
     router.push({
       name: "createOrder",
       data: {
         orderType,
-        isActivityCome,
         activityId: !!activityId ? activityId : "",
         objectId: !!objectId ? objectId : "",
       }

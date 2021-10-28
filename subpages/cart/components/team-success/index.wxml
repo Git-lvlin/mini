@@ -1,4 +1,4 @@
-<wxs module="tools" src="../../../wxs/common.wxs" />
+<wxs module="tools" src="../../../../wxs/common.wxs" />
 
 <van-popup
   show="{{show}}" 

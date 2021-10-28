@@ -5,6 +5,6 @@
     "nav-bar": "/components/common/nav-bar/index",
     "join-card": "/components/cart/join-card/index",
     "settlement-bar": "/components/cart/settlement-bar/index",
-    "class-list": "/components/cart/class-list/index"
+    "class-list": "../components/class-list/index"
   }
 }

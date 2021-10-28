@@ -1,4 +1,4 @@
-<wxs module="tools" src="../../../wxs/common.wxs" />
+<wxs module="tools" src="../../../../wxs/common.wxs" />
 
 <view class="flex_middle price_ratio">
   <view class="flex_middle price_box">

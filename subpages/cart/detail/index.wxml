@@ -265,7 +265,7 @@
   <!-- 提示 -->
   <view class="intensive_tip" wx:if="{{isActivityGood == 15}}">
     <view class="intensive_tip_title">温馨提示：</view>
-    <view class="intensive_tip_text">如有商品质量问题，可以申请更换商品，暂不支持直接退货。</view>
+    <view class="intensive_tip_text">集约商品，如有商品质量问题，可以申请更换商品，暂不支持直接退货。</view>
   </view>
 
   <view class="space_20" wx:if="{{isActivityGood == 15}}" />
@@ -346,7 +346,6 @@
     >{{stockOverText}}</view>
     <view
       class="to_buy_btn"
-      data-type="alone"
       bindtap="openSpecPopup"
       wx:else
     >立即购买</view>

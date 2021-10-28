@@ -1,4 +1,4 @@
-<wxs module="tools" src="../../../wxs/common.wxs" />
+<wxs module="tools" src="../../../../wxs/common.wxs" />
 
 <view class="hot_sale">
   <view class="hot_sale_head">

@@ -153,7 +153,7 @@ create.Page(store, {
       teamGoods,
     } = this.data;
     let deliveryInfo = this.mapAddress(addressInfo);
-    postData.deliveryInfo = deliveryInfo;
+    // postData.deliveryInfo = deliveryInfo;
     if(this.orderType == 15) {
       // 集约
       let data = wx.getStorageSync("CREATE_INTENSIVE");
@@ -163,13 +163,13 @@ create.Page(store, {
         ...other
       } = data;
       postData = other;
-      postData.deliveryInfo = this.mapAddress(storeAdress);
+      deliveryInfo = this.mapAddress(storeAdress);
       this.setData({
         selectAddressType,
         storeActivityGood: other,
       });
-    }  else if(this.orderType == 3 || this.isActivityCome || this.orderType == 11) {
-      // 单约 || 单独购买 || 1688
+    }  else if(this.orderType == 3) {
+      // 单约
       let data = wx.getStorageSync("CREATE_INTENSIVE");
       postData = {
         ...postData,
@@ -189,10 +189,10 @@ create.Page(store, {
       })
     } else {
       // 普通商品
-      goodList = wx.getStorageSync("GOOD_LIST");
+      goodList = wx.getStorageSync("GOOD_LIST") || [];
       postData = {
-        deliveryInfo,
-        storeGoodsInfos: goodList
+        // deliveryInfo,
+        storeGoodsInfos: goodList.storeGoodsInfos
       };
     }
     if(this.changeStoreData.length) {
@@ -222,6 +222,7 @@ create.Page(store, {
         });
       })
       if(haveMinSkuNum) {
+        postData.deliveryInfo = deliveryInfo;
         this.updateOrderAmount(postData);
         // return;
       }

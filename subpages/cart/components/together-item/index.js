@@ -1,4 +1,4 @@
-import util from "../../../utils/util";
+import util from "../../../../utils/util";
 
 Component({
   options: {

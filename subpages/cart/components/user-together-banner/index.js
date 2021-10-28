@@ -1,4 +1,4 @@
-import { getRelativeTime } from "../../../utils/tools";
+import { getRelativeTime } from "../../../../utils/tools";
 
 Component({
   properties: {

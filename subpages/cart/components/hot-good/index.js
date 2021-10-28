@@ -1,5 +1,5 @@
-import { IMG_CDN } from '../../../constants/common'
-import router from "../../../utils/router";
+import { IMG_CDN } from '../../../../constants/common'
+import router from "../../../../utils/router";
 
 Component({
 

@@ -2,7 +2,7 @@
   "component": true,
   "usingComponents": {
     "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
-    "together-user": "/components/good/together-user/index",
+    "together-user": "../together-user/index",
     "count-down": "/components/common/count-down/index"
   }
 }
