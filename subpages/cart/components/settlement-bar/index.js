@@ -1,9 +1,9 @@
-import create from '../../../utils/create'
-import store from '../../../store/good'
-import router from '../../../utils/router'
-import { getStorageUserInfo, showModal, showToast } from '../../../utils/tools'
-import { IMG_CDN } from '../../../constants/common'
-import goodApi from '../../../apis/good'
+import create from '../../../../utils/create'
+import store from '../../../../store/good'
+import router from '../../../../utils/router'
+import { getStorageUserInfo, showModal, showToast } from '../../../../utils/tools'
+import { IMG_CDN } from '../../../../constants/common'
+import goodApi from '../../../../apis/good'
 
 create.Component(store, {
   use: [

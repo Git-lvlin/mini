@@ -2,7 +2,7 @@
   "navigationBarTextStyle": "black",
   "navigationStyle": "custom",
   "usingComponents": {
-    "settlement-bar": "/components/cart/settlement-bar/index",
+    "settlement-bar": "../components/settlement-bar/index",
     "spec-panel": "/components/cart/spec-panel/index",
     "price-mobel": "/components/common/price-mobel/index",
     "count-down": "/components/common/count-down/index",

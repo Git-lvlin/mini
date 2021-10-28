@@ -4,7 +4,7 @@
     "van-tree-select": "/miniprogram_npm/@vant/weapp/tree-select/index",
     "nav-bar": "/components/common/nav-bar/index",
     "join-card": "/components/cart/join-card/index",
-    "settlement-bar": "/components/cart/settlement-bar/index",
+    "settlement-bar": "../components/settlement-bar/index",
     "class-list": "../components/class-list/index"
   }
 }
