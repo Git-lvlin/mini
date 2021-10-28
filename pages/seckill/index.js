@@ -1,19 +1,56 @@
 import router from "../../utils/router";
-
+import seckillApi from '../../apis/seckill'
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    timeData: {},
+    seckillData: {},
+    itemIndex: 0,
+    active: 0,
   },
-
+  iconChange(e) {
+    console.log('eeeeeee', e.detail.current)
+    this.setData({
+      itemIndex: e.detail.current
+    })
+  },
+  // 返回上一页
+  onBack() {
+    router.go();
+  },
+  tabChange(event) {
+    wx.showToast({
+      title: `切换到标签 ${event.detail.name}`,
+      icon: 'none',
+    });
+  },
+  onChange(e) {
+    this.setData({
+      timeData: e.detail,
+    });
+  },
+  getUserIcon() {
+    let param = {
+      indexVersion: 1,
+      verifyVersionId: 1,
+      next: 0,
+      size: 20,
+      dayCode: 'today'
+    }
+    seckillApi.getXsmsGoodsList(param).then(res => {
+      this.setData({
+        seckillData: res
+      })
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.getUserIcon()
   },
 
   /**
