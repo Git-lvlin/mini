@@ -46,7 +46,7 @@ create.Page(store, {
     addressInfo: {},
     orderInfo: {},
     useCoupon: true,
-    couponPopup: false,
+    couponPopup: true,
     note: "",
     storeAdress: "",
     storeActivityGood: "",
@@ -54,6 +54,8 @@ create.Page(store, {
     activityId: "",
     selectAddressType: "",
     orderToken: "",
+    // 是否允许选择红包
+    unOpenCoupon: false,
   },
 
   onLoad(options) {
@@ -62,6 +64,7 @@ create.Page(store, {
     let orderType = options.orderType || 1;
     // 团约商品
     let teamGoods = options.orderType == 4 ? options : {};
+    let unOpenCoupon = options.orderType == 17 || options.orderType == 18 ? false : true;
     if (teamGoods.storeGoodsInfos) {
       teamGoods.storeGoodsInfos =JSON.parse(options.storeGoodsInfos);
     }
@@ -69,6 +72,7 @@ create.Page(store, {
     // 活动页面 - 单独购买
     this.isActivityCome = !!options.isActivityCome;
     this.setData({
+      unOpenCoupon,
       backTopHeight,
       orderType,
       objectId: options.objectId ? options.objectId : "",
@@ -221,6 +225,17 @@ create.Page(store, {
           }
         });
       })
+      if(orderInfo.usefulCoupon) {
+        orderInfo.usefulCoupon = this.mapCoupon(orderInfo.usefulCoupon);
+        orderInfo.usefulCoupon.forEach(item => {
+          if(!!item.isDefault) {
+            orderInfo.currentCoupon = item;
+          }
+        });
+      }
+      if(orderInfo.unusefulCoupon) {
+        orderInfo.unusefulCoupon = this.mapCoupon(orderInfo.unusefulCoupon);
+      }
       if(haveMinSkuNum) {
         postData.deliveryInfo = deliveryInfo;
         this.updateOrderAmount(postData);
@@ -230,6 +245,16 @@ create.Page(store, {
         orderInfo,
       })
     })
+  },
+
+  // 遍历优惠券数据
+  mapCoupon(list = []) {
+    list.forEach(item => {
+      item.usefulAmount = util.divide(item.usefulAmount, 100);
+      item.freeDiscount = util.divide(item.freeDiscount, 100);
+      item.couponAmount = util.divide(item.couponAmount, 100);
+    });
+    return list;
   },
 
   // 获取订单token
@@ -390,6 +415,12 @@ create.Page(store, {
       }
     }
     this.changeStoreData = postData.storeGoodsInfos;
+    if(orderInfo.currentCoupon) {
+      postData.couponAmount = util.multiply(orderInfo.currentCoupon.couponAmount, 100);
+      if(orderInfo.currentCoupon.memberCouponId) {
+        postData.couponId = orderInfo.currentCoupon.memberCouponId;
+      }
+    }
     this.updateOrderAmount(postData);
   },
 
@@ -440,6 +471,12 @@ create.Page(store, {
 
   // 打开红包弹窗
   onOpenCoupon() {
+    const {
+      unOpenCoupon,
+    } = this.data;
+    if(!unOpenCoupon) {
+      return
+    }
     this.setData({
       couponPopup: true
     })
@@ -498,6 +535,12 @@ create.Page(store, {
       deliveryInfo: this.mapAddress(addressInfo),
       storeGoodsInfos: [],
     };
+    if(orderInfo.currentCoupon) {
+      postData.couponAmount = util.multiply(orderInfo.currentCoupon.couponAmount, 100);
+      if(orderInfo.currentCoupon.memberCouponId) {
+        postData.couponId = orderInfo.currentCoupon.memberCouponId;
+      }
+    }
     if(orderType == 3 || orderType == 4 || orderType == 11) {
       if(!!activityId) postData.activityId = activityId;
       if(!!objectId) postData.objectId = objectId;

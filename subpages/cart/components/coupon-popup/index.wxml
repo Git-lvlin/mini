@@ -10,8 +10,8 @@
     <view class="coupon_head">
       <view class="title">红包</view>
       <view class="tab_list">
-        <view class="tab_item" data-type="{{1}}" bindtap="onClickTab">可用红包(1)</view>
-        <view class="tab_item" data-type="{{2}}" bindtap="onClickTab">不可用红包(5)</view>
+        <view class="tab_item" data-type="{{1}}" bindtap="onClickTab">可用红包({{usefulCoupon.length}})</view>
+        <view class="tab_item" data-type="{{2}}" bindtap="onClickTab">不可用红包({{unusefulCoupon.length}})</view>
         <view class="active_line {{active === 2 ? 'active_line_right' : ''}}" />
       </view>
       <view class="choose_coupon">
@@ -20,8 +20,11 @@
       </view>
     </view>
     <view class="coupon_list">
-      <coupon-item />
-      <coupon-item />
+      <coupon-item
+        wx:for="{{active == 1 ? usefulCoupon : unusefulCoupon}}"
+        wx:key="index"
+        coupon="{{item}}"
+      />
     </view>
     <view class="comfirm_btn">
       <view class="btn" bindtap="onClose">确定</view>

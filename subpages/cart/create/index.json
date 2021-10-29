@@ -3,7 +3,6 @@
   "navigationBarTextStyle": "white",
   "usingComponents": {
     "price-mobel": "/components/common/price-mobel/index",
-    "down-app-code": "/components/common/down-app-code/index",
     "shop-card": "../components/shop-card/index",
     "coupon-popup": "../components/coupon-popup/index",
     "set-sku-num": "../components/set-sku-num/index"

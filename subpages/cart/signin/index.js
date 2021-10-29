@@ -222,4 +222,30 @@ create.Page(store, {
       redDetailPopup: false
     })
   },
+
+  // 跳转商品详情
+  onToDetail({
+    currentTarget,
+  }) {
+    const {
+      good,
+    } = currentTarget.dataset;
+    const {
+      spuId = '',
+      skuId = '',
+      activityId = '',
+      objectId = '',
+      orderType = '',
+    } = good;
+    router.push({
+      name: "detail",
+      data: {
+        spuId,
+        skuId,
+        activityId,
+        objectId,
+        orderType,
+      },
+    });
+  },
 })

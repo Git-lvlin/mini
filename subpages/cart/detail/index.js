@@ -96,9 +96,6 @@ create.Page(store, {
     const {
       orderType,
     } = this.goodParams;
-    const {
-      good,
-    } = this.data;
     let userInfo = getStorageUserInfo();
     if(!!userInfo) {
       if(this.store.data.cartList.length <= 0 && !!orderType) {
@@ -108,10 +105,10 @@ create.Page(store, {
       // this.getDetailRatio();
     }
     debounce(() => {
-      if(!good.imageList && !good.goodsName) {
+      if(!this.data.good.imageList && !this.data.good.goodsName) {
         this.hanldeGoodsParams(this.goodParams);
       }
-    }, 600)();
+    }, 1000)();
     this.setData({
       userInfo,
     })
@@ -299,7 +296,45 @@ create.Page(store, {
         })
       })
     // 秒约，C端集约，1688详情
-    } else if(orderType == 2 || orderType == 11 || orderType == 15) {
+    } else if(orderType == 1) {
+      goodApi.getGoodDetail(params).then(res => {
+        let good = res;
+        let selectAddressType = "";
+        let currentSku = {};
+        if(!good.isMultiSpec) {
+          this.specLoaded = true;
+        }
+        good.goodsSaleMinPrice = util.divide(good.goodsSaleMinPrice, 100);
+        good.goodsMarketPrice = util.divide(good.goodsMarketPrice, 100);
+        if(good.sendTypeList) {
+          selectAddressType = good.sendTypeList.find(item => item.status == 1);
+        }
+        if(good.goodsState == 1) {
+          if(good.isMultiSpec == 0) {
+            currentSku = {
+              skuId,
+              buyMaxNum: good.buyMaxNum,
+              buyMinNum: good.buyMinNum,
+              stockNum: good.goodsStockNum,
+              skuName: good.skuName,
+              skuNum: good.buyMinNum > 1 ? good.buyMinNum : 1,
+            };
+          }
+        }
+        good.refuseArea && good.refuseArea.forEach((item, index) => {
+          refuseText += `${item.areaName}${index != good.refuseArea.length - 1? '；' : ''}`;
+        });
+        this.setData({
+          currentSku,
+          good,
+          refuseText,
+          selectAddressType,
+        }, () => {
+          this.handleGoodStock();
+        });
+      });
+    // 其他详情
+    } else {
       goodApi.getGoodDetailNew(params).then(res => {
         let good = res;
         let selectAddressType = "";
@@ -355,44 +390,6 @@ create.Page(store, {
         if(orderType == 2 || orderType == 11) {
           this.getSecUser();
         }
-      });
-    // 其他详情
-    } else {
-      goodApi.getGoodDetail(params).then(res => {
-        let good = res;
-        let selectAddressType = "";
-        let currentSku = {};
-        if(!good.isMultiSpec) {
-          this.specLoaded = true;
-        }
-        good.goodsSaleMinPrice = util.divide(good.goodsSaleMinPrice, 100);
-        good.goodsMarketPrice = util.divide(good.goodsMarketPrice, 100);
-        if(good.sendTypeList) {
-          selectAddressType = good.sendTypeList.find(item => item.status == 1);
-        }
-        if(good.goodsState == 1) {
-          if(good.isMultiSpec == 0) {
-            currentSku = {
-              skuId,
-              buyMaxNum: good.buyMaxNum,
-              buyMinNum: good.buyMinNum,
-              stockNum: good.goodsStockNum,
-              skuName: good.skuName,
-              skuNum: good.buyMinNum > 1 ? good.buyMinNum : 1,
-            };
-          }
-        }
-        good.refuseArea && good.refuseArea.forEach((item, index) => {
-          refuseText += `${item.areaName}${index != good.refuseArea.length - 1? '；' : ''}`;
-        });
-        this.setData({
-          currentSku,
-          good,
-          refuseText,
-          selectAddressType,
-        }, () => {
-          this.handleGoodStock();
-        });
       });
     }
   },
