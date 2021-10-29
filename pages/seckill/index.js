@@ -34,6 +34,21 @@ Page({
     });
   },
   getUserIcon(code) {
+    const tomorrow = wx.getStorageSync("SECKILL_TOMORROW") || false;
+    const today = wx.getStorageSync("SECKILL_TODAY") || false;
+    if (code === 'tomorrow' && tomorrow) {
+      this.setData({
+        tomorrow: tomorrow
+      })
+      return
+    }
+    if (code === 'today' && today) {
+      this.setData({
+        seckillData: today
+      })
+      return
+    }
+
     let param = {
       indexVersion: 1,
       verifyVersionId: 1,
@@ -46,9 +61,17 @@ Page({
         this.setData({
           tomorrow: res
         })
+        wx.setStorage({
+          key: "SECKILL_TOMORROW",
+          data: res,
+        })
       } else {
         this.setData({
           seckillData: res
+        })
+        wx.setStorage({
+          key: "SECKILL_TODAY",
+          data: res,
         })
       }
 
@@ -102,7 +125,7 @@ Page({
    */
   onShow: function () {
     // 更新tabbar显示
-    router.updateSelectTabbar(this, 1);
+    // router.updateSelectTabbar(this, 1);
   },
 
   /**
@@ -123,7 +146,12 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    wx.removeStorage('SECKILL_TOMORROW')
+    wx.removeStorage('SECKILL_TODAY')
+    this.getUserIcon('today')
+    setTimeout(() => {
+      wx.stopPullDownRefresh()
+    }, 500)
   },
 
   /**
