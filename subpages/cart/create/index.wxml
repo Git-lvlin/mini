@@ -126,4 +126,10 @@
   <!-- <coupon-popup show="{{couponPopup}}" bind:close="handleCloseCoupon" /> -->
 
   <down-app-code show="{{couponPopup}}" bind:close="handleCloseCoupon" />
+  
+  <set-sku-num
+    show="{{showSetNum}}"
+    good="{{setSkuGood}}"
+    bind:confirm="handleSetSkuNum"
+  />
 </view>

@@ -28,7 +28,7 @@
               />
               <image mode="widthFix" class="num_icon" wx:else src="{{tools.getImgUrl('miniprogram/cart/reduce_gray.png')}}" />
             </view>
-            <view class="number">{{item.skuNum}}</view>
+            <view class="number" data-index="{{index}}" bindtap="onOpenSetSku">{{item.skuNum}}</view>
             <view class="controller add_num" data-index="{{index}}" catchtap="onAddNum">
               <image
                 mode="widthFix"

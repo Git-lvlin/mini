@@ -187,7 +187,7 @@ create.Component(store, {
         curSku,
         skuNum,
       } = this.data;
-      const batchNumber = curSku.batchNumber > 10 ? curSku.batchNumber : 20;
+      const batchNumber = curSku.batchNumber > 0 ? curSku.batchNumber : 1;
       const {
         buyMaxNum,
       } = curSku;

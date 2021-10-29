@@ -1,6 +1,7 @@
-import { showToast } from '../../../../utils/tools';
+import create from '../../../../utils/create'
+import store from '../../../../store/index'
 
-Component({
+create.Component(store, {
   options: {
     addGlobalClass: true
   },
@@ -30,20 +31,14 @@ Component({
         idx
       } = this.data;
       let index = currentTarget.dataset.index;
-      let buyMinNum = data.goodsInfos[index].buyMinNum;
-      buyMinNum = buyMinNum < 1 ? 1 : buyMinNum;
-      if(data.goodsInfos[index].skuNum <= buyMinNum) {
-        showToast({
-          message: `至少添加 ${data.goodsInfos[index].buyMinNum} 个商品`,
-          context: this,
-        });
-        return ;
+      const good = data.goodsInfos[index];
+      let buyMinNum = good.buyMinNum < 1 ? 1 : good.buyMinNum;
+      const batchNumber = good.batchNumber > 0 ? good.batchNumber : 1;
+      const skuNum = good.skuNum - batchNumber;
+      if(skuNum >= buyMinNum) {
+        data.goodsInfos[index].skuNum -= batchNumber;
+        this.triggerEvent("changeNum", { data, idx});
       }
-      data.goodsInfos[index].skuNum -= 1;
-      // this.setData({
-      //   data,
-      // })
-      this.triggerEvent("changeNum", { data, idx});
     },
 
     onAddNum({
@@ -54,16 +49,31 @@ Component({
         idx
       } = this.data;
       let index = currentTarget.dataset.index;
-      if(data.goodsInfos[index].skuNum >= data.goodsInfos[index].buyMaxNum) {
-        showToast( {
-          title: "哎呀，库存不够啦",
-        });
+      const good = data.goodsInfos[index];
+      const batchNumber = good.batchNumber > 0 ? good.batchNumber : 1;
+      const skuNum = good.skuNum + batchNumber;
+      // if(skuNum <= good.buyMaxNum && skuNum <= good.stockNum) {
+      if(skuNum <= good.buyMaxNum) {
+        data.goodsInfos[index].skuNum += batchNumber;
+        this.triggerEvent("changeNum", { data, idx});
       }
-      data.goodsInfos[index].skuNum += 1;
-      // this.setData({
-      //   data,
-      // })
-      this.triggerEvent("changeNum", { data, idx});
+    },
+
+    onOpenSetSku({
+      currentTarget
+    }) {
+      let {
+        data,
+        idx
+      } = this.data;
+      let index = currentTarget.dataset.index;
+      const good = data.goodsInfos[index];
+      this.store.data.skuNumData = {
+        data: good,
+        index,
+        pidx: idx,
+      }
+      this.store.setSkuNumPopup(true)
     }
   }
 })

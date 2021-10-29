@@ -125,7 +125,10 @@
           </block>
         </view>
         <view class="red_popup_btn" bindtap="onCloseRed">{{resPopupActType == 1 ? '太棒了！开心收下' : '知道了'}}</view>
-        <view class="red_popup_tip" wx:if="{{signInfo.signNumber < 7 && resPopupActType == 1}}">明日签到可获得{{signList[signInfo.signNumber].value}}元红包</view>
+        <view
+          class="red_popup_tip"
+          wx:if="{{signInfo.signNumber < 7 && resPopupActType == 1 && signList[signInfo.signNumber].value > 0}}"
+        >明日签到可获得{{signList[signInfo.signNumber].value}}元红包</view>
       </view>
     </view>
   </van-popup>

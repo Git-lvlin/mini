@@ -1,0 +1,42 @@
+<wxs module="tools" src="../../../../wxs/common.wxs"/>
+
+<van-popup
+  z-index="{{999}}"
+  show="{{ $.skuNumPopup }}"
+  custom-style="background-color: transparent;"
+  bind:close="onClose"
+>
+  <view class="num_box">
+    <view class="box_title">修改购买数</view>
+    <view class="controller_box">
+      <view class="controller_item reduce_btn" bindtap="onReduceNum">
+        <image
+          mode="widthFix"
+          class="num_icon"
+          wx:if="{{true}}"
+          src="{{tools.getImgUrl('miniprogram/cart/reduce.png')}}"
+        />
+        <image mode="widthFix" class="num_icon" wx:else src="{{tools.getImgUrl('miniprogram/cart/reduce_gray.png')}}" />
+      </view>
+      <input
+        type="number"
+        class="controller_num"
+        value="{{skuNum}}"
+        bindinput="handleInput"
+        bindchange="handleChangeInput"
+      />
+      <!-- {{skuNum disable_icon}} -->
+      <view class="controller_item add_btn" bindtap="onAddNum">
+        <image
+          mode="widthFix"
+          class="num_icon "
+          src="{{tools.getImgUrl('miniprogram/cart/add.png')}}"
+        />
+      </view>
+    </view>
+    <view class="btn_box">
+      <view class="btn_item cancel_btn" bindtap="onClose">取消</view>
+      <view class="btn_item confirm_btn" bindtap="onConfirm">确定</view>
+    </view>
+  </view>
+</van-popup>

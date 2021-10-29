@@ -309,13 +309,29 @@ create.Page(store, {
     })
   },
 
+  // 弹窗修改购买数
+  handleSetSkuNum({
+    detail
+  }) {
+    let {
+      orderInfo,
+    } = this.data;
+    let store = orderInfo.storeGoodsInfos[detail.pidx];
+    store.goodsInfos[detail.index] = detail.data;
+    this.handleChangeNum({
+      detail: {
+        idx: detail.pidx,
+        data: store,
+      }
+    });
+  },
+
   // 监听修改下单数量
   handleChangeNum({
     detail
   }) {
     let {
       orderInfo,
-      storeActivityGood,
       storeAdress,
       addressInfo,
       note,
