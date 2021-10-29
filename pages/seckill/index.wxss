@@ -200,7 +200,6 @@
   width: 40rpx;
   height: 40rpx;
   border-radius: 50%;
-  overflow: hidden;
 }
 .poor {
   position: relative;
@@ -316,7 +315,10 @@
   color: #FFFFFF;
   text-align: center;
 }
-
+.btn-t-ed {
+  background: #CCCCCC;
+  box-shadow: none;
+}
 
 .bottom-swiper-box {
   padding-right: 4rpx;
@@ -325,8 +327,8 @@
   bottom: 200rpx;
   width: 200rpx;
   height: 56rpx;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 28rpx;
+  /* background: rgba(0, 0, 0, 0.6);
+  border-radius: 28rpx; */
   overflow: hidden;
   z-index: 9;
 }
@@ -334,6 +336,10 @@
 
 }
 .bottom-swiper-item {
+  width: 200rpx;
+  height: 56rpx;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 28rpx;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -361,3 +367,17 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.go-top {
+  position: fixed;
+  right: 4rpx;
+  bottom: 182rpx;
+  width: 120rpx;
+  height: 120rpx;
+  z-index: 9;
+}
+.go-top-img {
+  width: 100%;
+  height: 100%;
+}
+

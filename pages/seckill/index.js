@@ -1,18 +1,16 @@
 import router from "../../utils/router";
-import seckillApi from '../../apis/seckill'
-Page({
+import seckillApi from '../../apis/seckill';
 
-  /**
-   * 页面的初始数据
-   */
+Page({
   data: {
     timeData: {},
     seckillData: {},
     itemIndex: 0,
     active: 0,
+    tomorrow: {},
+    showTop: false,
   },
   iconChange(e) {
-    console.log('eeeeeee', e.detail.current)
     this.setData({
       itemIndex: e.detail.current
     })
@@ -22,35 +20,74 @@ Page({
     router.go();
   },
   tabChange(event) {
-    wx.showToast({
-      title: `切换到标签 ${event.detail.name}`,
-      icon: 'none',
-    });
+    this.setData({
+      active: event.detail.name
+    }, () => {
+      let code = event.detail.name?'tomorrow':'today'
+      this.getUserIcon(code)
+    })
+
   },
   onChange(e) {
     this.setData({
       timeData: e.detail,
     });
   },
-  getUserIcon() {
+  getUserIcon(code) {
     let param = {
       indexVersion: 1,
       verifyVersionId: 1,
       next: 0,
-      size: 20,
-      dayCode: 'today'
+      size: 99,
+      dayCode: code
     }
     seckillApi.getXsmsGoodsList(param).then(res => {
-      this.setData({
-        seckillData: res
-      })
+      if (code === 'tomorrow') {
+        this.setData({
+          tomorrow: res
+        })
+      } else {
+        this.setData({
+          seckillData: res
+        })
+      }
+
     })
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
+  onRemind({currentTarget}) {
+    let param = {
+      cmsId: currentTarget.dataset.data[0].cmsId,
+      spuId: currentTarget.dataset.data[1].spuId
+    }
+    seckillApi.getXsmsNotice(param).then(res => {
+      this.getUserIcon('tomorrow')
+    })
+
+  },
+  // 跳转详情
+  onGood({
+    currentTarget
+  }) {
+    let {
+      spuId,
+      skuId,
+      activityId,
+      objectId,
+      orderType,
+    } = currentTarget.dataset.data;
+    router.push({
+      name: 'detail',
+      data: {
+        spuId,
+        skuId,
+        activityId,
+        objectId,
+        orderType,
+      }
+    });
+  },
   onLoad: function (options) {
-    this.getUserIcon()
+    this.getUserIcon('today')
   },
 
   /**
