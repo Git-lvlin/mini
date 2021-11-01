@@ -39,12 +39,21 @@
           <text>数量</text>
           <view class="num">
             <view class="controller" bindtap="onReduceNum">
-              <image class="controller_img" wx:if="{{stock > 1}}" src="{{tools.getImgUrl('miniprogram/cart/reduce.png')}}" />
+              <image class="controller_img" wx:if="{{skuNum > curSku.buyMinNum}}" src="{{tools.getImgUrl('miniprogram/cart/reduce.png')}}" />
               <image class="controller_img" wx:else src="{{tools.getImgUrl('miniprogram/cart/reduce_gray.png')}}" />
             </view>
-            <view class="value">{{specType === "buy" ? stock : stock + quantity}}</view>
+            <view class="value">{{skuNum}}</view>
             <view class="controller" bindtap="onAddNum">
-              <image class="controller_img" src="{{tools.getImgUrl('miniprogram/cart/add.png')}}" />
+              <image
+                class="controller_img gray_add"
+                wx:if="{{skuNum + (curSku.batchNumber || 1) > curSku.buyMaxNum || skuNum + (curSku.batchNumber || 1) > curSku.stockNum}}"
+                src="{{tools.getImgUrl('miniprogram/cart/add.png')}}"
+              />
+              <image
+                class="controller_img"
+                wx:else
+                src="{{tools.getImgUrl('miniprogram/cart/add.png')}}"
+              />
             </view>
           </view>
         </view>

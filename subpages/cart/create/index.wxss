@@ -144,8 +144,8 @@ page {
 .right_icon {
   flex-grow: 0;
   flex-shrink: 0;
-  width: 16rpx;
-  height: 28rpx;
+  width: 12rpx;
+  height: 22rpx;
 }
 
 .store_address {
@@ -235,11 +235,9 @@ page {
 }
 
 .cell_value {
-  font-weight: 600;
   color: #333333;
   font-size: 28rpx;
   line-height: 40rpx;
-  padding-right: 34rpx;
 }
 
 .coupon {
@@ -250,16 +248,24 @@ page {
   margin-right: 16rpx;
 }
 
+.signin_text {
+  color: #777;
+  font-size: 24rpx;
+  line-height: 40rpx;
+}
+
 .coupon_money {
-  font-weight: 600;
-  color: #333333;
+  color: #e5352f;
   font-size: 28rpx;
   line-height: 40rpx;
-  padding-right: 16rpx;
 }
 
 .coupon_money_more {
   color: #e5352f;
+}
+
+.coupon_jump {
+  margin-left: 16rpx;
 }
 
 .input_msg {

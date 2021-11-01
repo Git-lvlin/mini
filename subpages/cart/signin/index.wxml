@@ -84,19 +84,21 @@
           class="flex_middle good_item"
           wx:for="{{goodList}}"
           wx:key="index"
+          data-good="{{item}}"
+          bindtap="onToDetail"
         >
           <image class="flex_fix good_cover" src="{{item.goodsImageUrl}}" />
           <view class="good_info">
             <view class="good_info_head">
               <view class="good_name text_two_line">{{item.goodsName}}</view>
-              <view class="good_label">红包可抵扣10元</view>
+              <view class="good_label">{{item.deductionDesc}}</view>
             </view>
             <view class="good_price_box">
               <view class="flex_middle sale_price">
                 到手价
-                <price-mobel money="{{112.32}}" maxSize="{{40}}" />
+                <price-mobel money="{{item.goodsSalePrice}}" maxSize="{{40}}" />
               </view>
-              <view class="market_price">销售价¥19.3</view>
+              <view class="market_price">销售价¥{{item.goodsMarketPrice}}</view>
             </view>
             <view class="buy_btn">抢购</view>
           </view>
@@ -125,7 +127,10 @@
           </block>
         </view>
         <view class="red_popup_btn" bindtap="onCloseRed">{{resPopupActType == 1 ? '太棒了！开心收下' : '知道了'}}</view>
-        <view class="red_popup_tip" wx:if="{{signInfo.signNumber < 7 && resPopupActType == 1}}">明日签到可获得{{signList[signInfo.signNumber].value}}元红包</view>
+        <view
+          class="red_popup_tip"
+          wx:if="{{signInfo.signNumber < 7 && resPopupActType == 1 && signList[signInfo.signNumber].value > 0}}"
+        >明日签到可获得{{signList[signInfo.signNumber].value}}元红包</view>
       </view>
     </view>
   </van-popup>

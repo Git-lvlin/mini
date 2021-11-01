@@ -8,41 +8,40 @@ create.Component(store, {
   use: [
     "systemInfo",
     "showSpecPopup",
-    "cartList",
   ],
 
   computed: {
     // 购物车商品用
-    quantity(scope) {
-      const {
-        data,
-        store,
-      } = scope;
-      let quantity = 0;
-      const {
-        specType,
-        good,
-      } = data;
-      if(specType === "add") {
-        const cartList = store.data.cartList;
-        // const currentCart = [];
-        // cartList.forEach(item => {
-        //   if(item.spuId == good.id) {
-        //     currentCart.push({
-        //       skuId: item.skuId,
-        //       quantity: item.quantity,
-        //       stockNum: item.stockNum,
-        //       buyMinNum: item.buyMinNum,
-        //       buyMaxNum: item.buyMaxNum,
-        //     })
-        //   }
-        // });
-        // scope.setData({
-        //   currentCart,
-        // });
-      }
-      return quantity
-    },
+    // quantity(scope) {
+    //   const {
+    //     data,
+    //     store,
+    //   } = scope;
+    //   let quantity = 0;
+    //   const {
+    //     specType,
+    //     good,
+    //   } = data;
+    //   if(specType === "add") {
+    //     const cartList = store.data.cartList;
+    //     // const currentCart = [];
+    //     // cartList.forEach(item => {
+    //     //   if(item.spuId == good.id) {
+    //     //     currentCart.push({
+    //     //       skuId: item.skuId,
+    //     //       quantity: item.quantity,
+    //     //       stockNum: item.stockNum,
+    //     //       buyMinNum: item.buyMinNum,
+    //     //       buyMaxNum: item.buyMaxNum,
+    //     //     })
+    //     //   }
+    //     // });
+    //     // scope.setData({
+    //     //   currentCart,
+    //     // });
+    //   }
+    //   return quantity
+    // },
   },
   
   properties: {
@@ -64,6 +63,7 @@ create.Component(store, {
       type: String,
       value: "",
     },
+    // add 加入购物车 || buy 立即购买
     specType: {
       type: String,
       value: "",
@@ -71,7 +71,7 @@ create.Component(store, {
   },
 
   data: {
-    stock: 1,
+    skuNum: 1,
     skuList: [],
     checkSpec: [],
     curSku: {},
@@ -100,7 +100,7 @@ create.Component(store, {
           curSku.stockOver = 1;
           curSku.stockOverText = "已售罄";
         } else {
-          if(curSku.stockNum < curSku.buyMinNum || curSku.stockNum < curSku.batchNumber) {
+          if(curSku.stockNum < curSku.buyMinNum) {
             curSku.stockOver = 2;
             curSku.stockOverText = "库存不足";
           }
@@ -120,14 +120,14 @@ create.Component(store, {
             skuName: curSku.skuName,
             stockNum: good.stockNum,
             buyMaxNum: curSku.buyMaxNum,
-            skuNum: curSku.buyMinNum ? curSku.buyMinNum : 1,
+            skuNum: curSku.buyMinNum > 0 ? curSku.buyMinNum : 1,
           });
         }
         this.setData({
           skuData: res,
           skuList: res.specList,
           curSku,
-          stock: curSku.buyMinNum,
+          skuNum: curSku.buyMinNum > 0 ? curSku.buyMinNum : 1,
           checkSpec,
         })
       })
@@ -160,52 +160,42 @@ create.Component(store, {
     onClose() {
       store.onChangeSpecState(false)
       this.setData({
-        stock: 1,
+        skuNum: 1,
       })
     },
 
     onReduceNum() {
-      const {
+      let {
         curSku,
-        stock,
-        quantity,
-        specType
+        skuNum,
       } = this.data;
       let {
         buyMinNum,
       } = curSku;
+      const batchNumber = curSku.batchNumber > 0 ? curSku.batchNumber : 1;
       buyMinNum = buyMinNum < 1 ? 1 : buyMinNum;
-      let totalNum = specType === "buy" ? stock : stock + quantity;
-      if(totalNum > buyMinNum) {
+      skuNum = skuNum - batchNumber;
+      if(skuNum >= buyMinNum) {
         this.setData({
-          stock: stock - 1
+          skuNum
         })
-      } else {
-        showToast({ title: `至少购买${buyMinNum}件` });
       }
     },
 
     onAddNum() {
-      const {
+      let {
         curSku,
-        stock,
-        quantity,
-        specType,
+        skuNum,
       } = this.data;
+      const batchNumber = curSku.batchNumber > 0 ? curSku.batchNumber : 1;
       const {
         buyMaxNum,
       } = curSku;
-      if(stock >= buyMaxNum) {
-        showToast({ title: "没有足够库存啦" });
-        return ;
-      }
-      let totalNum = specType === "buy" ? stock : stock + quantity;
-      if(totalNum < buyMaxNum) {
+      skuNum = skuNum + batchNumber;
+      if(skuNum <= buyMaxNum && skuNum <= curSku.stockNum) {
         this.setData({
-          stock: stock + 1
+          skuNum
         })
-      } else {
-        showToast({ title: `最多购买${buyMaxNum}件` });
       }
     },
 
@@ -214,33 +204,32 @@ create.Component(store, {
         good,
         specType,
         curSku,
-        stock,
-        quantity,
+        skuNum,
       } = this.data;
-      // if(specType === "buy") {
-        // this.triggerEvent("specBuy", {
-        //   skuId: curSku.id,
-        //   skuNum: stock,
-        // });
+      if(specType === "buy") {
         this.triggerEvent("setSku", {
           skuId: curSku.id,
           skuName: curSku.skuName,
-          skuNum: stock,
+          skuNum,
           stockNum: curSku.stockNum,
           buyMaxNum: curSku.buyMaxNum,
           buyMinNum: curSku.buyMinNum,
         });
-      // } else if(specType === "add") {
-      //   // this.triggerEvent("specAdd", {
-      //   //   skuId: curSku.id,
-      //   //   quantity: stock + quantity,
-      //   // });
-      //   this.triggerEvent("setSku", {
-      //     skuId: curSku.id,
-      //     skuName: curSku.skuName,
-      //     skuNum: stock + quantity,
-      //   });
-      // }
+        this.triggerEvent("specBuy", {
+          skuId: curSku.id,
+          skuNum,
+        });
+      } else if(specType === "add") {
+        this.triggerEvent("setSku", {
+          skuId: curSku.id,
+          skuName: curSku.skuName,
+          skuNum,
+        });
+        this.triggerEvent("specAdd", {
+          skuId: curSku.id,
+          quantity,
+        });
+      }
       this.onClose();
     },
   }

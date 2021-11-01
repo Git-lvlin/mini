@@ -18,26 +18,26 @@ create.Page(store, {
 
   use: [
     "systemInfo",
-    "cartList",
-    "cartListTotal",
-    "goodListTotal",
+    // "cartList",
+    // "cartListTotal",
+    // "goodListTotal",
   ],
 
   computed: {
-    quantity: ({
-      options,
-      store,
-    }) => {
-      const cartList = store.data.cartList;
-      const goodId = options.spuId;
-      let quantity = 0;
-      cartList.forEach(item => {
-        if(item.spuId === goodId) {
-          quantity = item.quantity
-        }
-      })
-      return quantity
-    }
+    // quantity: ({
+    //   options,
+    //   store,
+    // }) => {
+    //   const cartList = store.data.cartList;
+    //   const goodId = options.spuId;
+    //   let quantity = 0;
+    //   cartList.forEach(item => {
+    //     if(item.spuId === goodId) {
+    //       quantity = item.quantity
+    //     }
+    //   })
+    //   return quantity
+    // }
   },
 
   data: {
@@ -81,7 +81,6 @@ create.Page(store, {
     } = app.globalData;
     // 获取进入小程序场景值
     if(CODE_SCENE[appScene]) {
-      // options.scene = "cf2a02ac71ca987860af70c2171d1512";
       if(!options.scene) {
         console.log("未获取到解析参数", options);
         this.hanldeGoodsParams(options)
@@ -97,22 +96,19 @@ create.Page(store, {
     const {
       orderType,
     } = this.goodParams;
-    const {
-      good,
-    } = this.data;
     let userInfo = getStorageUserInfo();
     if(!!userInfo) {
       if(this.store.data.cartList.length <= 0 && !!orderType) {
-        this.store.updateCart();
+        // this.store.updateCart();
         this.getShareInfo();
       }
       // this.getDetailRatio();
     }
     debounce(() => {
-      if(!good.imageList && !good.goodsName) {
+      if(!this.data.good.imageList && !this.data.good.goodsName) {
         this.hanldeGoodsParams(this.goodParams);
       }
-    }, 600)();
+    }, 1000)();
     this.setData({
       userInfo,
     })
@@ -300,7 +296,45 @@ create.Page(store, {
         })
       })
     // 秒约，C端集约，1688详情
-    } else if(orderType == 2 || orderType == 11 || orderType == 15) {
+    } else if(orderType == 1) {
+      goodApi.getGoodDetail(params).then(res => {
+        let good = res;
+        let selectAddressType = "";
+        let currentSku = {};
+        if(!good.isMultiSpec) {
+          this.specLoaded = true;
+        }
+        good.goodsSaleMinPrice = util.divide(good.goodsSaleMinPrice, 100);
+        good.goodsMarketPrice = util.divide(good.goodsMarketPrice, 100);
+        if(good.sendTypeList) {
+          selectAddressType = good.sendTypeList.find(item => item.status == 1);
+        }
+        if(good.goodsState == 1) {
+          if(good.isMultiSpec == 0) {
+            currentSku = {
+              skuId,
+              buyMaxNum: good.buyMaxNum,
+              buyMinNum: good.buyMinNum,
+              stockNum: good.goodsStockNum,
+              skuName: good.skuName,
+              skuNum: good.buyMinNum > 1 ? good.buyMinNum : 1,
+            };
+          }
+        }
+        good.refuseArea && good.refuseArea.forEach((item, index) => {
+          refuseText += `${item.areaName}${index != good.refuseArea.length - 1? '；' : ''}`;
+        });
+        this.setData({
+          currentSku,
+          good,
+          refuseText,
+          selectAddressType,
+        }, () => {
+          this.handleGoodStock();
+        });
+      });
+    // 其他详情
+    } else {
       goodApi.getGoodDetailNew(params).then(res => {
         let good = res;
         let selectAddressType = "";
@@ -356,44 +390,6 @@ create.Page(store, {
         if(orderType == 2 || orderType == 11) {
           this.getSecUser();
         }
-      });
-    // 其他详情
-    } else {
-      goodApi.getGoodDetail(params).then(res => {
-        let good = res;
-        let selectAddressType = "";
-        let currentSku = {};
-        if(!good.isMultiSpec) {
-          this.specLoaded = true;
-        }
-        good.goodsSaleMinPrice = util.divide(good.goodsSaleMinPrice, 100);
-        good.goodsMarketPrice = util.divide(good.goodsMarketPrice, 100);
-        if(good.sendTypeList) {
-          selectAddressType = good.sendTypeList.find(item => item.status == 1);
-        }
-        if(good.goodsState == 1) {
-          if(good.isMultiSpec == 0) {
-            currentSku = {
-              skuId,
-              buyMaxNum: good.buyMaxNum,
-              buyMinNum: good.buyMinNum,
-              stockNum: good.goodsStockNum,
-              skuName: good.skuName,
-              skuNum: good.buyMinNum > 1 ? good.buyMinNum : 1,
-            };
-          }
-        }
-        good.refuseArea && good.refuseArea.forEach((item, index) => {
-          refuseText += `${item.areaName}${index != good.refuseArea.length - 1? '；' : ''}`;
-        });
-        this.setData({
-          currentSku,
-          good,
-          refuseText,
-          selectAddressType,
-        }, () => {
-          this.handleGoodStock();
-        });
       });
     }
   },
@@ -556,14 +552,9 @@ create.Page(store, {
       good,
       quantity = 0,
       currentSku,
-      stockOver,
     } = this.data;
     let stockOverData = this.handleGoodStock(currentSku.stockNum);
     if(!this.specLoaded) {
-      return;
-    }
-    if(good.goodsState != 1) {
-      showToast({ title: "商品已下架" });
       return;
     }
     if(stockOverData.stockOver != 0) {
@@ -621,44 +612,6 @@ create.Page(store, {
     })
   },
 
-  // 判断是否还有库存
-  handleGoodStock(stock) {
-    const {
-      good,
-      currentSku,
-    } = this.data;
-    const {
-      orderType
-    } = this.goodParams;
-    let stockOver = 0;
-    let stockOverText = "";
-    let nowTime = new Date().getTime();
-    let stockNum = stock !== undefined ? stock : good.goodsStockNum;
-    if(stockNum <= 0) {
-      // 已售罄
-      stockOver = 1;
-      stockOverText = "已售罄"
-    } else {
-      if(stockNum < good.buyMinNum || stockNum < good.batchNumber) {
-        stockOver = 2;
-        stockOverText = "库存不足"
-      }
-    }
-    if(orderType == 15 && nowTime >= good.deadlineTime) {
-      stockOver = 3;
-      stockOverText = "活动已结束"
-    }
-    let result = {
-      stockOver,
-      stockOverText
-    };
-    if(stock !== undefined) {
-      return result; 
-    } else {
-      this.setData(result);
-    }
-  },
-
   // 多规格更新购物车数量
   specUpdateCart({
     detail,
@@ -669,6 +622,45 @@ create.Page(store, {
   // 更新购物车数量
   updateCart(data, showMsg = false) {
     this.store.addCart(data, showMsg);
+  },
+
+  // 判断是否还有库存
+  handleGoodStock() {
+    const {
+      good,
+    } = this.data;
+    const {
+      orderType
+    } = this.goodParams;
+    let stockOver = 0;
+    let stockOverText = "";
+    let nowTime = new Date().getTime();
+    let stockNum = good.goodsStockNum;
+    if(stockNum <= 0) {
+      // 已售罄
+      stockOver = 1;
+      stockOverText = "已售罄"
+    } else {
+      // B端集约最小购买量一定是步增的倍数，其他不校验
+      if(stockNum < good.buyMinNum) {
+        stockOver = 2;
+        stockOverText = "库存不足"
+      }
+    }
+    if(orderType == 15 && nowTime >= good.deadlineTime) {
+      stockOver = 3;
+      stockOverText = "活动已结束"
+    }
+    if(good.goodsState != 1) {
+      stockOver = 4;
+      stockOverText = "商品已下架"
+    }
+    let result = {
+      stockOver,
+      stockOverText
+    };
+    this.setData(result);
+    return result; 
   },
 
   // 获取比价信息
@@ -704,7 +696,7 @@ create.Page(store, {
   },
 
   // 打开选规格弹窗
-  openSpecPopup() {
+  openSpecPopup(event) {
     if(!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
@@ -716,15 +708,26 @@ create.Page(store, {
       showToast({ title: "商品已下架" });
       return;
     }
-    this.setData({
-      specType: "buy",
-    });
-    // 打开选择规格弹窗
-    store.onChangeSpecState(true);
+    if(good.isMultiSpec) {
+      this.setData({
+        specType: "buy",
+      }, () => {
+        // 打开选择规格弹窗
+        store.onChangeSpecState(true);
+      });
+    } else {
+      this.onToCreate()
+    }
+
+    // this.setData({
+    //   specType: "buy",
+    // });
+    // // 打开选择规格弹窗
+    // store.onChangeSpecState(true);
   },
 
   // 跳转确认订单
-  onToCreate(event) {
+  onToCreate() {
     if(!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
@@ -740,32 +743,18 @@ create.Page(store, {
       selectAddressType,
       good,
       currentSku,
-      quantity,
       storeInfo,
     } = this.data;
     let stockOverData = this.handleGoodStock(currentSku.stockNum);
+    // 多规格商品，规格时候已加载
     if(!this.specLoaded) {
       return;
     }
-    if(good.goodsState != 1) {
-      showToast({ title: "商品已下架" });
-      return;
-    }
     if(stockOverData.stockOver != 0) {
-      this.onStockOver(stockOverData.stockOver);
+      // this.onStockOver(stockOverData.stockOver);
       return;
     }
     let skuNum = good.buyMinNum > 0 ? good.buyMinNum : 1;
-    if(!good.isMultiSpec) {
-      skuNum = quantity > skuNum ? quantity : skuNum;
-    }
-    const {
-      currentTarget = {},
-    } = event;
-    // if(!this.data.userOtherInfo.isShopMaster && orderType == 15) {
-    //   showToast({ title: "很抱歉，你不店主不能下单"})
-    //   return;
-    // }
     // 选择规格回来下单
     if(good.isMultiSpec) {
       skuId = currentSku.skuId;
@@ -778,37 +767,30 @@ create.Page(store, {
         goodsInfos: [{
           spuId: spuId ? spuId : good.id,
           skuId: skuId ? skuId : currentSku.skuId,
-          activityId: good.activityId,
-          objectId: good.objectId,
+          activityId: activityId || good.activityId || '',
+          objectId: objectId || good.objectId || '',
           orderType,
           skuNum,
           goodsFromType: good.goodsFromType,
         }]
       }]
     };
-    // 点击单独购买
-    if(currentTarget && currentTarget.dataset.type === "alone") {
-      isActivityCome = true;
-    } else {
-      // 活动购买
-      if(!!activityId && activityId != undefined) data.activityId = activityId;
-      if(!!objectId && objectId != undefined) data.objectId = objectId;
-      if(!!good.objectId) data.objectId = good.objectId;
-      if(orderType == 3) {
-        data.objectId = currentSku.groupId;
-        objectId = currentSku.groupId;
-      }
-      if(orderType == 15) {
-        data.storeAdress = storeInfo.storeAddress;
-        data.selectAddressType = selectAddressType;
-      }
+    // 活动购买
+    if(orderType == 3) {
+      data.objectId = currentSku.groupId;
+      objectId = currentSku.groupId;
     }
-    wx.setStorageSync("CREATE_INTENSIVE", data);
+    if(orderType == 15) {
+      data.storeAdress = storeInfo.storeAddress;
+      data.selectAddressType = selectAddressType;
+      wx.setStorageSync("CREATE_INTENSIVE", data);
+    } else {
+      wx.setStorageSync("GOOD_LIST", data);
+    }
     router.push({
       name: "createOrder",
       data: {
         orderType,
-        isActivityCome,
         activityId: !!activityId ? activityId : "",
         objectId: !!objectId ? objectId : "",
       }

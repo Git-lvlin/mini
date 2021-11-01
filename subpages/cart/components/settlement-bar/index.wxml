@@ -1,0 +1,60 @@
+<wxs module="tools" src="../../../../wxs/common.wxs" />
+<view >
+  <view class="settlement_conetnt" style="z-index: {{barIndex}}">
+    <view class="cart_icon" bindtap="onOpenCart">
+      <van-image width="84rpx" height="84rpx" src="{{tools.getImgUrl('miniprogram/cart/class_cart@2x.png')}}" />
+      <view class="cart_num" wx:if="{{$.goodListTotal.checkedQuantity}}">{{$.goodListTotal.checkedQuantity}}</view>
+    </view>
+    <view class="settlement_price">
+      <view class="price">
+        <view class="unit">￥</view>
+        {{$.goodListTotal.subtotalPromotion}}
+        <view class="market_price">￥{{$.goodListTotal.subtotal}}</view>
+      </view>
+      <view class="delivery">{{$.goodListTotal.freight == 0 ? "免配送费" : "配送费：￥" + $.goodListTotal.freight }}</view>
+    </view>
+    <view class="settlement_btn" bindtap="onToCreateOrder">去下单</view>
+  </view>
+  <van-popup
+    round
+    show="{{ showClassPopup }}"
+    position="bottom"
+    closeable
+    custom-style="bottom: {{bottomBarHeight}}rpx;height: 800rpx;padding-bottom: 0;"
+    bind:close="onCloseCart"
+  >
+    <view class="desc">
+      <view>已减{{tools.floatReduce($.goodListTotal.subtotal, $.goodListTotal.subtotalPromotion)}}元</view>
+      <view class="gary">已包含：配送费、商品减免</view>
+    </view>
+    <view class="goods">
+      <view class="goods_head">
+        <image class="select_icon" src="{{selectAll ? selectIcon : icon}}" bindtap="onSelectCard" />
+        <view class="all_text" bindtap="onSelectCard">全选</view>
+        <view class="goods_num">（共计{{$.goodListTotal.checkedQuantity}}件商品）</view>
+        <view class="clear" bindtap="onClearCart">
+          <image class="clear_icon" src="{{tools.getImgUrl('miniprogram/cart/delete.png')}}" />
+          <view>清空</view>
+        </view>
+      </view>
+      <scroll-view scroll-y class="goods_list">
+        <view class="good_item" wx:for="{{$.cartList}}" wx:key="id">
+          <image
+            class="list_icon select_icon"
+            src="{{item.isChecked ? selectIcon : icon}}"
+            data-id="{{item.skuId}}"
+            data-checked="{{item.skuId}}"
+            bindtap="onSelectGood"
+          />
+          <view class="good_card">
+            <join-cart
+              good="{{item}}"
+              width="100%"
+              source="cart"
+            />
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </van-popup>
+</view>
