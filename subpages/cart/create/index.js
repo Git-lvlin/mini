@@ -46,7 +46,7 @@ create.Page(store, {
     addressInfo: {},
     orderInfo: {},
     useCoupon: true,
-    couponPopup: true,
+    couponPopup: false,
     note: "",
     storeAdress: "",
     storeActivityGood: "",

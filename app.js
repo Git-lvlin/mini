@@ -1,4 +1,5 @@
 import store from './store/index'
+import uma from './libs/uma'
 import { getSystemInfo, getStorageUserInfo } from './utils/tools'
 import commonApi from './apis/common'
 import md5 from './utils/md5'
@@ -6,6 +7,20 @@ import router from './utils/router'
 import { SYS_ENV, CHANGE_ENV } from './constants/index'
 
 App({
+  umengConfig:{
+    //由友盟分配的APP_KEY
+    appKey: '617f5bace0f9bb492b46419c',
+    // 是否使用openid进行统计，此项为false时将使用友盟+随机ID进行用户统计。
+    // 使用openid来统计微信小程序的用户，会使统计的指标更为准确，对系统准确性要求高的应用推荐使用OpenID。
+    useOpenid: true,
+    // 是否需要通过友盟后台获取openid，如若需要，请到友盟后台设置appId及secret
+    autoGetOpenid: true,
+    //是否打开调试模式
+    debug: false,
+    // 上传用户信息，上传后可以查看有头像的用户分享信息，同时在查看用户画像时，公域画像的准确性会提升。
+    uploadUserInfo: true
+  },
+
   onLaunch() {
     // this.globalData.appScene = scene;
     const userInfo = getStorageUserInfo();
@@ -50,6 +65,7 @@ App({
     appScene: 1001,
     userInfo: null,
     changeEnv: CHANGE_ENV,
+    uma: uma,
   },
 
   // 生成设备码校验是否填写邀请码
@@ -120,5 +136,12 @@ App({
         content: '当前微信版本过低，无法使用该功能，请升级到最新微信版本后重试。'
       })
     }
+  },
+
+  // 埋点数据上报
+  trackEvent(eventId, params = {}) {
+    console.log(wx.uma);
+    if(!eventId) return;
+    wx.uma.trackEvent(eventId, params);
   },
 })

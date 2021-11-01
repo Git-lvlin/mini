@@ -8,7 +8,7 @@
   position: absolute;
   top: 24rpx;
   left: 24rpx;
-  z-index: 10;
+  z-index: 110;
   width: 686rpx;
   height: 64rpx;
   padding-left: 16rpx;
@@ -16,16 +16,37 @@
   border-radius: 32rpx;
 }
 
+.area_box {
+  margin-right: 20rpx;
+  border-right: 2rpx solid #ccc;
+}
+
+.area_name {
+  color: #000;
+  font-size: 28rpx;
+  line-height: 32rpx;
+  padding: 0 16rpx 0 8rpx;
+}
+
+.area_icon {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: 16rpx;
+  transform: rotate(-90deg);
+}
+
 .search_icon {
   width: 40rpx;
   height: 40rpx;
-  margin-right: 8rpx;
+  margin-right: 16rpx;
 }
 
-.search_text {
-  color: #cccccc;
+.sreach_input {
+  height: 36rpx;
+  color: #333;
   font-size: 28rpx;
-  line-height: 40rpx;
+  line-height: 36rpx;
+  padding: 0;
 }
 
 /* 地图 */

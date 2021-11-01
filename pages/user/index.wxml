@@ -2,7 +2,7 @@
 
 <view class="container">
   <view class="nav_back" style="padding-top: {{$.systemInfo.statusHeight}}rpx">
-    <image class="nav_back_img" src="{{tools.getImgUrl('miniprogram/user/user_back.png?v=20210617')}}" />
+    <image class="nav_back_img" src="{{tools.getImgUrl('https://uat-yeahgo.oss-cn-shenzhen.aliyuncs.com/miniprogram/common/back_gray%402x.png')}}" />
   </view>
   <view class="content">
     <view class="nav_height" style="height: {{$.systemInfo.statusHeight + $.systemInfo.navBarHeight}}rpx" />
