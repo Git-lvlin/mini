@@ -1,0 +1,160 @@
+
+
+.list {
+  padding: 0 24rpx;
+  box-sizing: border-box;
+}
+
+.title-box {
+  padding-top: 38rpx;
+  padding-bottom: 20rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.title {
+  height: 50rpx;
+  font-size: 36rpx;
+  color: #333333;
+  margin: 0 18rpx;
+}
+.after {
+  color: #999999;
+  font-size: 28rpx;
+}
+
+
+.list-item {
+  position: relative;
+  width: 100%;
+  border-radius: 16rpx;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20rpx;
+}
+.name {
+  padding: 38rpx 0rpx 10rpx 22rpx;
+  height: 44rpx;
+  font-size: 32rpx;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #333333;
+  line-height: 44rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.time-box {
+  padding-left: 24rpx;
+  padding-bottom: 24rpx;
+  opacity: .59;
+}
+.time {
+  display: inline-block;
+  height: 40rpx;
+  font-size: 28rpx;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #E7512D;
+  line-height: 40rpx;
+  text-align: center;
+}
+
+.num-box {
+  padding-right: 24rpx;
+  height: 32rpx;
+  font-size: 22rpx;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #999999;
+  line-height: 32rpx;
+}
+
+
+.progress-bar-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.left-box {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.hot-img {
+  position: relative;
+  top: 2rpx;
+  left: 14rpx;
+  margin-left: 10rpx;
+}
+.progress-bar {
+  width: 470rpx;
+  height: 30rpx;
+  background-color: #FEC7C7;
+  border-radius: 16rpx;
+  border: 2rpx solid #EA5634;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.progress-bar > view {
+  float: left;
+}
+.poor {
+  height: 100%;
+  text-align: center;
+  font-size: 24rpx;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #FFFFFF;
+  line-height: 30rpx;
+}
+.progress-now {
+  height: 100%;
+  background: linear-gradient(90deg, #EB6E39 0%, #EA3E34 100%);
+  border-radius: 16rpx;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  font-size: 24rpx;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #FFFFFF;
+  line-height: 30rpx;
+  text-align: center;
+}
+
+.last-li {
+  padding: 34rpx 24rpx 36rpx 24rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.price-after {
+  font-size: 24rpx;
+}
+.price {
+  font-size: 36rpx;
+  font-family: HelveticaNeue-Bold, HelveticaNeue;
+  font-weight: bold;
+  color: #D7291D;
+  line-height: 30rpx;
+  letter-spacing: 1rpx;
+}
+.btn {
+  width: 144rpx;
+  height: 60rpx;
+  background: #EA3327;
+  border-radius: 30rpx;
+  font-size: 24rpx;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #FFFFFF;
+  line-height: 60rpx;
+  text-align: center;
+}
+
+
+.van-count-down{
+  color: #E7512D !important;
+}

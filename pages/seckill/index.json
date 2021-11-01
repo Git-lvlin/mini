@@ -1,0 +1,11 @@
+{
+  "navigationBarTextStyle": "white",
+  "navigationStyle": "custom",
+  "onReachBottomDistance": 0,
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "van-count-down": "@vant/weapp/count-down/index",
+    "van-tab": "@vant/weapp/tab/index",
+    "van-tabs": "@vant/weapp/tabs/index"
+  }
+}

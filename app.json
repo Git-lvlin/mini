@@ -16,7 +16,8 @@
     "pages/locationSearch/index",
     "pages/test/index",
     "pages/maintain/index",
-    "pages/intensive/index"
+    "pages/intensive/index",
+    "pages/seckill/index"
   ],
   "subpackages": [
     {

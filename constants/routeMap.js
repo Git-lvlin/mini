@@ -47,6 +47,8 @@ export default {
   "/home/vip": "",
   // 集约页面
   "/home/intensive": "storeIntensive",
+  // 秒杀
+  "/seckill": "seckill",
   // 签到活动
   "/flutter/mine/sign_in/detail": "signin",
   
