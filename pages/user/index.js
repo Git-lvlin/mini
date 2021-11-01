@@ -5,6 +5,7 @@ import { orderList, otherSetting, USER_LEVEL } from '../../constants/user'
 import userApi from '../../apis/user'
 import { getStorageUserInfo, setStorageUserInfo, showToast } from '../../utils/tools'
 
+const app = getApp();
 create.Page(store, {
   use: [
     'systemInfo'
@@ -78,6 +79,7 @@ create.Page(store, {
       orderTypeList,
       userData,
     });
+    app.trackEvent('tab_user');
   },
 
   // 获取用户信息

@@ -9,6 +9,7 @@ import { checkSetting } from '../../utils/wxSetting';
 import { HTTP_TIMEOUT } from '../../constants/index'
 import { FLOOR_TYPE } from '../../constants/home'
 
+const app = getApp();
 create.Page(store, {
   floorTimer: null,
   touchTimer: null,
@@ -99,6 +100,7 @@ create.Page(store, {
     debounce(() => {
       this.getRecordScrollTop(0);
     }, 200)();
+    app.trackEvent('tab_home');
   },
 
   // 获取审核状态

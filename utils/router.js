@@ -174,6 +174,7 @@ const getUrlRoute = (url, opt) => {
     }
   }
   token = wx.getStorageSync("ACCESS_TOKEN") || '';
+  console.log("getUrlRoute ~ token", token);
   if(!url) {
     return null;
   }
@@ -222,7 +223,6 @@ const getUrlRoute = (url, opt) => {
         return ;
       }
     }
-    console.log("getUrlRoute ~ data", data);
 
     if(option.isJump) {
       if(!!data.isTabbar) {

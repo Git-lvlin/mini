@@ -65,6 +65,8 @@ create.Page(store, {
       wx.removeStorage({
         key: 'SEARCH_SPOT',
       });
+      that.location = spotData;
+      that.openLocation = true;
     } else if(this.location.latitude) {
       that.getNearbyStore(this.location);
     }
@@ -73,6 +75,7 @@ create.Page(store, {
         type: 'gps84',
         altitude: false,
         success(result) {
+          console.log("success ~ 1", 1111)
           that.fristLoad = false;
           let data = {
             latitude: result.latitude,
@@ -84,6 +87,7 @@ create.Page(store, {
           !spotData.latitude && that.getNearbyStore(data);
         },
         fail(err) {
+          console.log("success ~ 1", 2222)
           that.openLocation = false;
           that.openLocationTip();
           that.location = defLocation;
@@ -162,6 +166,7 @@ create.Page(store, {
         //   height: 28,
         //   selected: true,
         // }
+        this.location = currentSpot;
         this.setData({
           markers: list,
           listIsLoad: true,
