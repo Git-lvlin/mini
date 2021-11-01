@@ -18,7 +18,7 @@
 
 .area_box {
   margin-right: 20rpx;
-  border-right: 2rpx solid #ccc;
+  border-right: 2rpx solid #eee;
 }
 
 .area_name {
@@ -135,4 +135,40 @@
   margin: 0 auto;
   background-size: 100% auto;
   background-repeat: no-repeat;
+}
+
+/* 搜索地址 */
+.sreach_address {
+  width: 100%;
+  height: calc(100vh - 112rpx);
+  overflow-y: auto;
+  background-color: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+}
+
+.address_item {
+  position: relative ;
+  padding: 20rpx 64rpx 20rpx 32rpx;
+}
+
+.address_item:not(:last-child) {
+  border: 2rpx solid #f5f5f5;
+}
+
+.company_name {
+  font-weight: 500;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin-bottom: 4rpx;
+}
+
+.text_red {
+  color: #e5352f;
+}
+
+.company_address {
+  color: #999999;
+  font-size: 20rpx;
+  line-height: 28rpx;
 }
