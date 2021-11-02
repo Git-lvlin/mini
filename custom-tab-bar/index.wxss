@@ -42,3 +42,9 @@
   width: 192rpx;
   height: 142rpx;
 }
+
+
+.canvas {
+  width: 200rpx;
+  height: 200rpx;
+}

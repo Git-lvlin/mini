@@ -1,6 +1,7 @@
 import create from '../utils/create'
 import store from '../store/index'
 import { IMG_CDN } from '../constants/common';
+import lottie from 'lottie-miniapp'
 
 create.Component(store, {
   use: [
@@ -14,6 +15,7 @@ create.Component(store, {
   data: {
     pagePath: "",
     selectedIndex: 0,
+    animationPath: "https://uat-yeahgo-oss.yeahgo.com/miniprogram/home/intensiveIcon/yesgo.json",
     tabList: [
       {
         index: 0,
@@ -69,6 +71,63 @@ create.Component(store, {
     this.setData({
       selectedIndex: tabList[tabIndex].index
     })
+    
+    return
+    const animationPath = "https://uat-yeahgo-oss.yeahgo.com/miniprogram/home/intensiveIcon/yesgo.json"
+    // console.log(this);
+    const canvasContext = wx.createCanvasContext("canvasIcon"); 
+    console.log("🚀 ~ file: index.js ~ line 78 ~ ready ~ canvasContext", canvasContext)
+    //  请求到的lottie json数据
+    const animationData = {};
+    // 请求lottie的路径。注意开启downloadFile域名并且返回格式是json
+    
+    // 指定canvas大小
+    canvasContext.canvas = {
+      width: 100,
+      height: 100,
+    };
+    // 如果同时指定 animationData 和 path， 优先取 animationData
+    lottie.loadAnimation({
+      renderer: "canvas", // 只支持canvas
+      loop: true,
+      autoplay: true,
+      // animationData: animationData,
+      path: animationPath,
+      rendererSettings: {
+        context: canvasContext,
+        clearCanvas: true,
+      },
+    });
+
+    // const query = this.createSelectorQuery();
+    // query
+    //   .select("#canvasIcon")
+    //   .fields({ node: true, size: true })
+    //   .exec((res) => {
+    //     const canvas = res[0].node;
+    //     console.log("🚀 ~ file: index.js ~ line 106 ~ .exec ~ res[0]", res[0])
+    //     const ctx = canvas.getContext("2d");
+
+    //     const dpr = wx.getSystemInfoSync().pixelRatio;
+    //     canvas.width = res[0].width * dpr;
+    //     canvas.height = res[0].height * dpr;
+    //     ctx.scale(dpr, dpr);
+
+    //     lottie.loadAnimation({
+    //       that: this,
+    //       renderer: "canvas", // 只支持canvas
+    //       loop: true,
+    //       autoplay: true,
+    //       // animationData: animationData,
+    //       path: animationPath,
+    //       rendererSettings: {
+    //         // 这里需要填 canvas
+    //         canvas: canvas,
+    //         context: canvasContext,
+    //         clearCanvas: true,
+    //       },
+    //     });
+    //   });
   },
 
   methods: {

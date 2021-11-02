@@ -1,3 +1,5 @@
+import commonApi from "../apis/common";
+import { VERSION } from "../constants/index";
 import routeMap from "../constants/routeMap";
 import routes from "../constants/routes"
 import { getStorageUserInfo, objToParamStr, strToParamObj } from "./tools";
@@ -167,17 +169,6 @@ const getUrlRoute = (url, opt) => {
   }
   let userInfo = {};
   let token = "";
-  if(option.needLogin) {
-    userInfo = getStorageUserInfo(option.needLogin);
-    if(!userInfo) {
-      return null;
-    }
-  }
-  token = wx.getStorageSync("ACCESS_TOKEN") || '';
-  console.log("getUrlRoute ~ token", token);
-  if(!url) {
-    return null;
-  }
   const routeStr = url.match(/(http|https):\/\/([^/]+)(\S*)/)[3];
   const routeArr = routeStr.split("?");
   const data = {
@@ -189,31 +180,60 @@ const getUrlRoute = (url, opt) => {
     data.paramStr = routeArr[1];
     data.params = strToParamObj(data.paramStr);
   }
+  userInfo = getStorageUserInfo(option.needLogin);
+  if(!userInfo && option.needLogin) {
+    return null;
+  }
+  token = wx.getStorageSync("ACCESS_TOKEN") || '';
+  const routeData = routeMap[data.route];
+  const mapLogin = routeData && routeData.needLogin ? true : false;
+  if(!url) {
+    return null;
+  }
   if(data.route.indexOf("/web/") > -1) {
     // 自主开发WEB页面
     data.routeType = "web";
-    if(option.needLogin) {
+    if(mapLogin) {
+      if(!token) {
+        getStorageUserInfo(true);
+        return;
+      }
       url = `${url}${url.indexOf("?") > -1 ? "&" : "?"}memberId=${userInfo.id}`;
     }
-    if(!!token) {
-      url = `${url}${url.indexOf("?") > -1 ? "&" : "?"}token=${token}`;
+    // 新人专享
+    if(routeData.key == "newCoupon") {
+      option.data = {
+        ...option.data,
+        // isNew: userInfo.isNew,
+        isNew: true,
+        indexVersion: VERSION,
+      }
     }
     if(option.data) {
       let connector = url.indexOf("?") > -1 ? "&" : "?";
-      url = `${url}${option.needLogin ? "&" : connector}${objToParamStr(option.data)}`;
+      url = `${url}${mapLogin ? "&" : connector}${objToParamStr(option.data)}`;
     }
-    data.params.url = encodeURIComponent(url);
     if(option.isJump) {
-      push({
-        name: "webview",
-        data: data.params,
-      })
+      if(!!token) {
+        data.params.url = url;
+        getRefreshToken(data.params, token);
+      } else {
+        data.params.url = encodeURIComponent(url);
+        push({
+          name: "webview",
+          data: data.params,
+        })
+      }
     }
-  } else if(routeMap[data.route]) {
-    const appTabbar = routeMap.appTabbar;
+  } else if(routeData && routeData.path) {
     // 小程序页面
+    const appTabbar = routeMap.appTabbar;
+    if(mapLogin && !token) {
+      getStorageUserInfo(true);
+      return;
+    }
     data.routeType = "route";
-    data.route = routeMap[data.route];
+    data.route = routeData.path;
     if(data.route == 'home') {
       const tabData = appTabbar[+data.params.index];
       if(!!tabData.route) {
@@ -250,6 +270,22 @@ const getUrlRoute = (url, opt) => {
     }
   }
   return data;
+}
+
+const getRefreshToken = async (params, token) => {
+  const Symbol = params.url.indexOf('?') > -1 ? '&' : '?';
+  await commonApi.refreshToken().then(res => {
+    wx.setStorageSync("ACCESS_TOKEN", res.accessToken);
+    wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
+    params.url = `${params.url}${Symbol}token=${res.accessToken}`;
+  }).catch(() => {
+    params.url = `${params.url}${Symbol}token=${token}`
+  });
+  params.url = encodeURIComponent(params.url);
+  push({
+    name: "webview",
+    data: params,
+  })
 }
  
 const extract = options => JSON.parse(decodeURIComponent(options.encodedData));
