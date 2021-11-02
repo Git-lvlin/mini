@@ -23,6 +23,7 @@
       <image class="intensive_icon" src="{{item.iconPath}}" />
     </view>
   </block>
-  <!-- <canvas class="canvas" id="canvasIcon" canvas-id="canvasIcon" type="2d"></canvas> -->
-  <!-- <lottie id="lottie" path="{{animationPath}}" width="300" height="300"/> -->
+  <!-- <view class="intensive_canvas"> -->
+    <!-- <canvas class="canvas" id="canvasIcon" canvas-id="canvasIcon"></canvas> -->
+  <!-- </view> -->
 </view>
