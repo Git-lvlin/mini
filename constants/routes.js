@@ -96,6 +96,10 @@ export default {
   editAddress: {
     path: "/subpages/cart/editAddress/index"
   },
+  // 集约修改配送地址
+  storeAddress: {
+    path: "/subpages/cart/storeAddress/index"
+  },
   // 收银台
   cashier: {
     path: "/subpages/cart/cashier/index"

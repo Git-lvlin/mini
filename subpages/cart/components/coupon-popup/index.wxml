@@ -19,7 +19,7 @@
           <text wx:if="{{currCoupon.couponAmount}}">已选中推荐优惠，使用红包1张，共抵扣<text class="coupon_money">¥{{currCoupon.couponAmount}}</text></text>
           <text wx:if="{{!currCoupon.couponAmount && usefulCoupon.length}}">请选择优惠券</text>
         </block>
-        <text wx:if="{{active == 2}}">不可使用</text>
+        <text wx:if="{{active == 2 && unusefulCoupon.length}}">不可使用</text>
       </view>
     </view>
     <view class="coupon_list">

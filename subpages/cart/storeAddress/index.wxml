@@ -1,0 +1,54 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="container">
+  <view class="content_view">
+    <view class="form_item" >
+      <view class="form_name">提货人</view>
+      <input 
+        class="form_input"
+        value="{{storeAddress.setUser}}"
+        maxlength="10"
+        placeholder="输入提货人"
+        placeholder-class="form_placeholder"
+        data-field="setUser"
+        bindinput="handleInput"
+      />
+    </view>
+    <view class="form_item" >
+      <view class="form_name">手机号码</view>
+      <input
+        type="number"
+        class="form_input"
+        value="{{storeAddress.setPhone}}"
+        maxlength="11"
+        placeholder="输入手机号码"
+        placeholder-class="form_placeholder"
+        data-field="setPhone"
+        bindinput="handleInput"
+      />
+    </view>
+    <view class="form_item" >
+      <view class="form_name">配送地区</view>
+      <view class="form_input">{{storeAddress.setAllAddress}}</view>
+    </view>
+    <view class="form_item" >
+      <view class="form_name">详细地址</view>
+      <textarea
+        class="form_input form_textarea"
+        value="{{storeAddress.setAddress}}"
+        maxlength="30"
+        placeholder="输入详细地址"
+        placeholder-class="form_placeholder"
+        data-field="setAddress"
+        bindinput="handleInput"
+      />
+    </view>
+  </view>
+
+  <view class="flex_middle tips">
+    <image class="tip_icon" src="{{tools.getImgUrl('miniprogram/common/danger.png')}}" />
+    配送地区为距您最近的自提点地址，不可修改
+  </view>
+
+  <view class="save_btn" bindtap="onSave">保存</view>
+</view>

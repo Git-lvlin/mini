@@ -91,6 +91,7 @@ create.Page(store, {
   
   onShow() {
     this.getDefaultAddress();
+    this.getConfirmInfo();
   },
 
   // 获取默认地址
@@ -102,8 +103,6 @@ create.Page(store, {
     if(chooseAddress) {
       this.setData({
         addressInfo: chooseAddress
-      }, () => {
-        this.getConfirmInfo();
       })
       wx.removeStorage({
         key: "CHOOSE_ADDRESS"
@@ -115,12 +114,9 @@ create.Page(store, {
     }).then(res => {
       if(this.orderType == 15) {
         this.setStoreAddress(res);
-      }
-      if(!addressInfo.consignee) {
+      } else if(!addressInfo.consignee) {
         this.setData({
           addressInfo: res,
-        }, () => {
-          this.getConfirmInfo();
         })
       }
     }).catch(err => {
@@ -131,19 +127,35 @@ create.Page(store, {
   // 设置提货人
   setStoreAddress(address) {
     let data = wx.getStorageSync("CREATE_INTENSIVE");
-    let userData = wx.getStorageSync("STORE_SHIPPER_INFO");
+    // 集约提货人其他信息
     let {
       storeAdress,
+      selectAddressType,
     } = data;
-    if(userData) {
-      storeAdress.linkman = userData.user;
-      storeAdress.phone = userData.phone;
-    } else if (!!address.consignee) {
-      storeAdress.linkman = address.consignee;
-      storeAdress.phone = address.phone;
-    } else {
-      storeAdress.linkman = "请输入提货人信息";
-      storeAdress.phone = "";
+    if(selectAddressType.type == 2) {
+      let userData = wx.getStorageSync("STORE_SHIPPER_INFO");
+      if(userData) {
+        storeAdress.linkman = userData.user;
+        storeAdress.phone = userData.phone;
+      } else if (!!address.consignee) {
+        storeAdress.linkman = address.consignee;
+        storeAdress.phone = address.phone;
+      } else {
+        storeAdress.linkman = "请输入提货人信息";
+        storeAdress.phone = "";
+      }
+    } else if(selectAddressType.type == 3) {
+      const setStoreAddress = wx.getStorageSync('ORDER_STORE_LOCATION');
+      if(setStoreAddress && setStoreAddress.setUser) {
+        storeAdress.linkman = setStoreAddress.setUser;
+        storeAdress.setUser = setStoreAddress.setUser;
+        storeAdress.phone = setStoreAddress.setPhone;
+        storeAdress.setPhone = setStoreAddress.setPhone;
+        storeAdress.setAddress = setStoreAddress.setAddress;
+        storeAdress.setAllAddress = setStoreAddress.setAllAddress;
+      } else {
+        wx.setStorageSync('ORDER_STORE_LOCATION', storeAdress);
+      }
     }
     this.setData({
       storeAdress
@@ -295,6 +307,9 @@ create.Page(store, {
   // 组装提交的地址数据
   mapAddress(info) {
     if(!info.phone) return undefined;
+    const {
+      orderType,
+    } = this.data;
     let data = {
       consignee: info.consignee || info.linkman,
       phone: info.phone,
@@ -308,6 +323,20 @@ create.Page(store, {
       fullAddress: info.fullAddress,
       streetName: info.streetName || "",
     };
+    let storeData = wx.getStorageSync("CREATE_INTENSIVE");
+    let {
+      selectAddressType,
+    } = storeData;
+    // 集约商家配送
+    if(orderType == 15 && selectAddressType && selectAddressType.type == 3) {
+      let newStoreAddress = wx.getStorageSync('ORDER_STORE_LOCATION');
+      if(newStoreAddress && newStoreAddress.setUser) {
+        data.consignee = newStoreAddress.setUser;
+        data.phone = newStoreAddress.setPhone;
+        data.address = newStoreAddress.setAllAddress + newStoreAddress.setAddress;
+        data.fullAddress = newStoreAddress.setAllAddress + newStoreAddress.setAddress;
+      }
+    }
     return data;
   },
 
@@ -318,12 +347,23 @@ create.Page(store, {
   
   // 跳转选择地址
   onToAddress() {
-    router.push({
-      name: "address",
-      data: {
-        isChoose: true,
-      }
-    })
+    const {
+      selectAddressType,
+      orderType,
+    } = this.data;
+    if(orderType == 15 && selectAddressType.type == 3) {
+      router.push({
+        name: "storeAddress",
+        data: {}
+      })
+    } else {
+      router.push({
+        name: "address",
+        data: {
+          isChoose: true,
+        }
+      })
+    }
   },
 
   // 跳转修改提货人
@@ -599,8 +639,8 @@ create.Page(store, {
       selectAddressType,
       orderToken,
     } = this.data;
-    if(!addressInfo.consignee && selectAddressType.type == 3) {
-      showToast({ title: "请选择收货地址" });
+    if(!storeAdress.setUser && selectAddressType.type == 3) {
+      showToast({ title: "请添加商家配送地址" });
       return;
     }
     if(selectAddressType.type == 2 && (!storeAdress.linkman || !storeAdress.phone)) {
