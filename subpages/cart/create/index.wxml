@@ -133,6 +133,7 @@
     unusefulCoupon="{{orderInfo.unusefulCoupon || []}}"
     usefulCoupon="{{orderInfo.usefulCoupon || []}}"
     bind:close="handleCloseCoupon"
+    bind:confirm="handleChooseCoupon"
   />
   
   <set-sku-num

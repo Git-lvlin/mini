@@ -39,6 +39,8 @@ create.Page(store, {
   
   // 是否活动商品单独购买
   isActivityCome: false,
+  // 获取各类金额入参
+  getAmountData: {},
 
   data: {
     orderType: 1,
@@ -205,7 +207,6 @@ create.Page(store, {
     cartApi.getConfirmInfo(postData).then(res => {
       let orderInfo = res;
       let skuNum = 1;
-      let haveMinSkuNum = false;
       // let storeGood = orderInfo.storeGoodsInfos;
       orderInfo.reduceAmount = util.divide(orderInfo.reduceAmount, 100);
       orderInfo.shippingFeeAmount = util.divide(orderInfo.shippingFeeAmount, 100);
@@ -220,7 +221,6 @@ create.Page(store, {
           // 设置最小购买数
           skuNum  = postData.storeGoodsInfos[index].goodsInfos[idx].skuNum;
           if(skuNum < child.buyMinNum) {
-            haveMinSkuNum = true;
             postData.storeGoodsInfos[index].skuNum = child.buyMinNum;
           }
         });
@@ -236,13 +236,18 @@ create.Page(store, {
       if(orderInfo.unusefulCoupon) {
         orderInfo.unusefulCoupon = this.mapCoupon(orderInfo.unusefulCoupon);
       }
-      if(haveMinSkuNum) {
-        postData.deliveryInfo = deliveryInfo;
-        this.updateOrderAmount(postData);
-        // return;
+      postData.deliveryInfo = deliveryInfo;
+      if(orderInfo.currentCoupon) {
+        postData.couponAmount = util.multiply(orderInfo.currentCoupon.couponAmount, 100);
+        if(orderInfo.currentCoupon.memberCouponId) {
+          postData.couponId = orderInfo.currentCoupon.memberCouponId;
+        }
       }
+      this.getAmountData = postData;
       this.setData({
         orderInfo,
+      }, () => {
+        this.updateOrderAmount(postData);
       })
     })
   },
@@ -422,6 +427,7 @@ create.Page(store, {
       }
     }
     this.updateOrderAmount(postData);
+    this.getAmountData = postData;
   },
 
   // 更新订单数据
@@ -457,7 +463,7 @@ create.Page(store, {
         totalAmount: util.divide(totalAmount, 100),
         storeGoodsInfos: storeShippingFeeAmount
       }
-      if(changeStore.data && changeStore.data.storeNo) {
+      if(changeStore && changeStore.data && changeStore.data.storeNo) {
         orderInfo.storeGoodsInfos[changeStore.idx] = {
           ...orderInfo.storeGoodsInfos[changeStore.idx],
           goodsInfos: changeStore.data.goodsInfos,
@@ -487,6 +493,40 @@ create.Page(store, {
     this.setData({
       couponPopup: false
     })
+  },
+
+  // 处理选择优惠券
+  handleChooseCoupon({
+    detail
+  }) {
+    const {
+      orderInfo
+    } = this.data;
+    const getAmountData = this.getAmountData;
+    let currentCoupon = orderInfo.currentCoupon;
+    if(!!detail.memberCouponId) {
+      getAmountData.couponId = detail.memberCouponId;
+      getAmountData.couponAmount = util.multiply(detail.couponAmount, 100);
+      orderInfo.usefulCoupon.forEach(item => {
+        if(item.memberCouponId == detail.memberCouponId) {
+          item.isDefault = 1;
+          currentCoupon = item;
+        }
+      })
+    } else {
+      getAmountData.couponId = '';
+      getAmountData.couponAmount = '';
+      orderInfo.usefulCoupon.forEach(item => {
+        item.isDefault = 0;
+      });
+      currentCoupon = {};
+    }
+    this.setData({
+      orderInfo,
+      currentCoupon,
+    })
+    this.getAmountData = getAmountData;
+    this.updateOrderAmount(getAmountData);
   },
 
   // 输入留言

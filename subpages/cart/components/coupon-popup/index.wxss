@@ -4,6 +4,12 @@
   min-height: 20%;
 }
 
+.coupon_content {
+  display: flex;
+  flex-direction: column;
+  height: 1022rpx;
+}
+
 .coupon_head {
   padding-top: 32rpx;
 }
@@ -63,6 +69,7 @@
 }
 
 .coupon_list {
+  flex: 1;
   width: 100%;
   height: 700rpx;
   box-sizing: border-box;
@@ -88,4 +95,19 @@
   text-align: center;
   background-image: linear-gradient(270deg,#fb5f2a 0%,#e5352f 100%);
   border-radius: 76rpx;
+}
+
+.def_btn {
+  color: #aaa;
+  background: #eee;
+}
+
+.no_list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 28rpx;
+  color: #666;
 }
