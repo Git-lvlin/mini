@@ -20,7 +20,8 @@
       data-index="{{item.index}}"
       bindtap="onToPath"
     >
-      <image class="intensive_icon" src="{{item.iconPath}}" />
+      <image class="intensive_icon" wx:if="{{!canvasLoaded}}" src="{{item.iconPath}}" />
+      <canvas class="canvas" id="canvasIcon" canvas-id="canvasIcon"  wx:if="{{canvasLoaded}}" />
     </view>
   </block>
   <!-- <view class="intensive_canvas"> -->

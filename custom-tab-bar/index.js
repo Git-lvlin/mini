@@ -15,8 +15,8 @@ create.Component(store, {
   data: {
     pagePath: "",
     selectedIndex: 0,
-    // animationPath: `${IMG_CDN}miniprogram/home/intensive.zip`,
-    animationPath: `${IMG_CDN}miniprogram/home/test.json`,
+    animationPath: `${IMG_CDN}miniprogram/home/intensiveNew.zip`,
+    canvasLoaded: false,
     tabList: [
       {
         index: 0,
@@ -55,13 +55,9 @@ create.Component(store, {
     ]
   },
 
-  
-  // {
-  //   "pagePath": "pages/community/index",
-  //   "text": "社区",
-  //   "iconPath": "/images/tabbar/community@3x.png",
-  //   "selectedIconPath": "/images/tabbar/actCommunity@3x.png"
-  // },
+  attached() {
+    this.drawCanvas();
+  },
 
   ready() {
     const tabList = this.data.tabList;
@@ -72,34 +68,37 @@ create.Component(store, {
     this.setData({
       selectedIndex: tabList[tabIndex].index
     })
-    
-    return
-    const canvasContext = wx.createCanvasContext("canvasIcon", this); 
-    console.log("🚀 ~ file: index.js ~ line 78 ~ ready ~ canvasContext", canvasContext)
-    //  请求到的lottie json数据
-    const animationData = {};
-    // 请求lottie的路径。注意开启downloadFile域名并且返回格式是json
-    
-    // 指定canvas大小
-    canvasContext.canvas = {
-      width: 200,
-      height: 200,
-    };
-    // 如果同时指定 animationData 和 path， 优先取 animationData
-    lottie.loadAnimation({
-      renderer: "canvas", // 只支持canvas
-      loop: true,
-      autoplay: true,
-      // animationData: animationData,
-      path: this.data.animationPath,
-      rendererSettings: {
-        context: canvasContext,
-        clearCanvas: true,
-      },
-    });
   },
 
   methods: {
+    drawCanvas() {
+      const that = this;
+      // 集约动图
+      const canvasContext = wx.createCanvasContext("canvasIcon", this);
+      // 指定canvas大小
+      canvasContext.canvas = {
+        width: 90,
+        height: 90,
+      };
+      // 如果同时指定 animationData 和 path， 优先取 animationData
+      const ani = lottie.loadAnimation({
+        renderer: "canvas", // 只支持canvas
+        loop: true,
+        autoplay: true,
+        // animationData: animationData,
+        path: this.data.animationPath,
+        rendererSettings: {
+          context: canvasContext,
+          clearCanvas: true,
+        },
+      });
+      ani.addEventListener("DOMLoaded", (res) => {
+        that.setData({
+          canvasLoaded: true
+        })
+      });
+    },
+
     onToPath(event) {
       const url = event.currentTarget.dataset.path;
       const pages = getCurrentPages();

@@ -53,6 +53,6 @@
 .canvas {
   position: absolute;
   bottom: 0;
-  width: 400rpx;
-  height: 400rpx;
+  width: 180rpx;
+  height: 160rpx;
 }
