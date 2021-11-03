@@ -51,6 +51,7 @@ create.Page(store, {
     addMarkers: [],
     // 显示搜索地址
     showAddress: false,
+    mapScale: 13,
   },
 
   onShow() {
@@ -82,12 +83,12 @@ create.Page(store, {
           }
           that.openLocation = true;
           that.setData(data);
-          !spotData.latitude && that.getNearbyStore(data);
+          !takeSpot && that.getNearbyStore(data);
         },
         fail(err) {
           that.openLocation = false;
           that.openLocationTip();
-          !spotData.latitude && that.getNearbyStore(defLocation);
+          !takeSpot && that.getNearbyStore(defLocation);
         },
       });
     }
@@ -516,6 +517,7 @@ create.Page(store, {
     };
     this.getRegeo();
     this.setData({
+      mapScale: 13,
       latitude: data.latitude,
       longitude: data.longitude,
       showAddress: false

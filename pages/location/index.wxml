@@ -19,7 +19,7 @@
       id="map"
       longitude="{{longitude}}"
       latitude="{{latitude}}"
-      scale="13"
+      scale="{{mapScale}}"
       markers="{{markers}}"
       show-location="true"
       bindmarkertap="makertap"
