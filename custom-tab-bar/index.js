@@ -1,7 +1,7 @@
 import create from '../utils/create'
 import store from '../store/index'
 import { IMG_CDN } from '../constants/common';
-import lottie from 'lottie-miniapp'
+// import lottie from 'lottie-miniapp'
 
 create.Component(store, {
   use: [
@@ -56,7 +56,7 @@ create.Component(store, {
   },
 
   attached() {
-    this.drawCanvas();
+    // this.drawCanvas();
   },
 
   ready() {
@@ -93,6 +93,7 @@ create.Component(store, {
         },
       });
       ani.addEventListener("DOMLoaded", (res) => {
+        console.log(12341234123)
         that.setData({
           canvasLoaded: true
         })

@@ -93,7 +93,7 @@ create.Page(store, {
       });
     }
     // 更新tabbar显示
-    router.updateSelectTabbar(this, 0);
+    router.updateSelectTabbar(this, 2);
   },
 
   // 初始化

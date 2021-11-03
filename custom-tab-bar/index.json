@@ -1,7 +1,6 @@
 {
   "component": true,
   "usingComponents": {
-    "van-image": "/miniprogram_npm/@vant/weapp/image/index",
-    "lottie": "lottie-miniapp/component/lottie"
+    "van-image": "/miniprogram_npm/@vant/weapp/image/index"
   }
 }
