@@ -11,8 +11,17 @@ export const ossHost = {
   pro: "https://pro-yeahgo-oss.yeahgo.com/",
 };
 
+// H5 域名
+const webHost = {
+  dev: "https://publicmobile-dev.yeahgo.com",
+  uat: "https://publicmobile-uat.yeahgo.com",
+  fat: "https://publicmobile-fat.yeahgo.com",
+  pro: "https://publicmobile.yeahgo.com",
+}
+
 // 图片cdn
 export const IMG_CDN = ossHost[ENV] || ossHost['pro'];
+export const H5_HOST = webHost[ENV] || webHost['pro'];
 
 // 协议
 const agreementHost = {

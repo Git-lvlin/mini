@@ -1,7 +1,9 @@
+import { H5_HOST } from "../../../constants/common";
 import userApi from "../../../apis/user"
 import dayjs from "../../../miniprogram_npm/dayjs/index";
 import { getStorageUserInfo } from "../../../utils/tools";
 import util from "../../../utils/util";
+import router from "../../../utils/router";
 
 const topBarList = [
   {
@@ -22,6 +24,17 @@ const defPage = {
   page: 1,
   pageSize: 10,
   totalPage: 1,
+};
+// 去使用跳转链接
+const jupmRoute = {
+  1: {
+    path: 'classList',
+    type: 'mini',
+  },
+  2: {
+    path: '/web/exclusive-for-novices?_authorizationRequired=1',
+    type: 'h5'
+  }
 }
 
 Page({
@@ -38,7 +51,7 @@ Page({
     showSharePopup: false,
   },
 
-  onLoad(options) {
+  onShow(options) {
     this.getCouponList();
   },
 
@@ -149,10 +162,26 @@ Page({
     })
   },
 
-  onToUse() {
-    this.setData({
-      showSharePopup: true,
-    })
+  onToUse({
+    currentTarget,
+  }) {
+    const {
+      coupon,
+    } = currentTarget.dataset;
+    let routeData = jupmRoute[coupon.actionType];
+    if(routeData && routeData.path) {
+      if(routeData.type == 'mini') {
+        router.push({
+          name: routeData.path
+        })
+      } else if(routeData.type == 'h5') {
+        router.getUrlRoute(`${H5_HOST}${routeData.path}`);
+      }
+    } else {
+      this.setData({
+        showSharePopup: true,
+      })
+    }
   },
 
   onHideSharePopup() {
