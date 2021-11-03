@@ -17,7 +17,8 @@
     "pages/test/index",
     "pages/maintain/index",
     "pages/intensive/index",
-    "pages/seckill/index"
+    "pages/seckill/index",
+    "pages/weekSeckill/index"
   ],
   "subpackages": [
     {
