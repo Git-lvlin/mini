@@ -4,6 +4,7 @@ import activityApi from '../../../apis/activity'
 import util from '../../../utils/util';
 import router from '../../../utils/router';
 
+const app = getApp();
 create.Page(store, {
   use: [
     'systemInfo',
@@ -36,6 +37,7 @@ create.Page(store, {
   onShow() {
     this.getSignInfo();
     this.getQueryRecord(true);
+    app.trackEvent('mine_sign_in_detail');
   },
   
   // 获取签到信息

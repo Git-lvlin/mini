@@ -3,6 +3,7 @@ import router from '../../../utils/router';
 import { mapNum, showToast } from '../../../utils/tools';
 import util from '../../../utils/util';
 
+const app = getApp();
 Page({
   storeNo: "",
   id: "",
@@ -35,6 +36,7 @@ Page({
     this.id = options.storeNo.slice(8, options.storeNo.length);
     this.getStoreDetail();
     this.getStoreGood();
+    app.trackEvent('shopping_storeDetail');
   },
 
   onShareAppMessage() {

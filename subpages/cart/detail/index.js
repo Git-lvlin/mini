@@ -112,6 +112,7 @@ create.Page(store, {
     this.setData({
       userInfo,
     })
+    app.trackEvent('shopping_detail');
   },
 
   // 基础数据
@@ -211,6 +212,9 @@ create.Page(store, {
     } else {
       info.path = `${info.path}${pathParam}`;
     }
+    app.trackEvent('share_goods_detail', {
+      share_type: 'weixin'
+    });
     return info;
   },
 

@@ -2,6 +2,7 @@ import router from "../../../utils/router"
 import format from '../../../utils/format'
 import { showToast } from '../../../utils/tools'
 
+const app = getApp();
 Page({
   data: {
     storeAddress: {},
@@ -13,6 +14,9 @@ Page({
     this.setData({
       storeAddress,
     })
+    app.trackEvent('address_editAddress', {
+      type: 'store'
+    });
   },
 
   // 输入内容

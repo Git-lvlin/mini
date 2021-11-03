@@ -18,6 +18,7 @@ const defLocation = {
 };
 const deflocationIcon = `${IMG_CDN}miniprogram/location/def_location.png?V=465656`;
 
+const app = getApp();
 create.Page(store, {
   use: [
     "systemInfo",
@@ -267,6 +268,9 @@ create.Page(store, {
       showToast({ title: "请选择自提点" });
       return;
     }
+    app.trackEvent('goods_selected_pick_up_point', {
+      storeNo: marketSelect.storeNo
+    });
     wx.setStorageSync("TAKE_SPOT", marketSelect);
     router.go();
   },

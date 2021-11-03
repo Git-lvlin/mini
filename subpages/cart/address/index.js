@@ -1,6 +1,7 @@
 import router from '../../../utils/router'
 import cartApi from '../../../apis/order'
 
+const app =  getApp();
 Page({
   isChoose: false,
 
@@ -17,6 +18,7 @@ Page({
 
   onShow() {
     this.getAddressList();
+    app.trackEvent('address_myAddress');
   },
 
   

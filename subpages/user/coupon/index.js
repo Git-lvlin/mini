@@ -37,6 +37,7 @@ const jupmRoute = {
   }
 }
 
+const app = getApp();
 Page({
   pageData: {
     ...defPage
@@ -49,6 +50,10 @@ Page({
     selectType: 1,
     isNotData: false,
     showSharePopup: false,
+  },
+
+  onLoad() {
+    app.trackEvent('mine_coupon_list');
   },
 
   onShow(options) {

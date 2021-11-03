@@ -5,6 +5,7 @@ import drawQrcode from '../../../miniprogram_npm/weapp-qrcode/index'
 const url = "https://publicmobile-dev.yeahgo.com/web/share?inviteCode=ri2ez4lio16";
 const appCodeBack = "../../../images/downCode/appCodeBack.png"
 
+const app = getApp();
 Component({
   options: {
     addGlobalClass: true,
@@ -123,6 +124,10 @@ Component({
       wx.saveImageToPhotosAlbum({
         filePath: canvasImg,
         success(res) {
+          app.trackEvent('share_invite_download', {
+            share_content: 'poster',
+            share_type: 'picture'
+          })
           wx.showToast({
             title: '保存成功',
           });

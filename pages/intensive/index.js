@@ -8,6 +8,7 @@ import { showModal, showToast } from '../../utils/tools'
 import { checkSetting } from '../../utils/wxSetting';
 import { HTTP_TIMEOUT } from '../../constants/index'
 
+const app = getApp();
 create.Page(store, {
   floorTimer: null,
   touchTimer: null,
@@ -94,6 +95,7 @@ create.Page(store, {
     }
     // 更新tabbar显示
     router.updateSelectTabbar(this, 2);
+    app.trackEvent('tab_intensive');
   },
 
   // 初始化

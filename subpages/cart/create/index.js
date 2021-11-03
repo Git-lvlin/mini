@@ -24,7 +24,7 @@ const backDetail = {
   20808: "重复处理错误",
   20811: "当前状态不可做此操作",
 };
-
+const app = getApp();
 create.Page(store, {
   use: [
     "systemInfo"
@@ -92,6 +92,7 @@ create.Page(store, {
   onShow() {
     this.getDefaultAddress();
     this.getConfirmInfo();
+    app.trackEvent('shopping_confirmOrder');
   },
 
   // 获取默认地址
@@ -751,6 +752,9 @@ create.Page(store, {
           ...orderInfo,
         },
       })
+      app.trackEvent('goods_pay_success', {
+        pay_method_name: '微信支付'
+      });
     });
   },
 })

@@ -14,6 +14,7 @@ const defaultList = [
 
 ]
 
+const app = getApp();
 // create.Page(store, {
 Page({
 
@@ -96,6 +97,7 @@ Page({
     if(options.orderType == 3 && options.orderType == 4) {
       this.getHotGood();
     }
+    app.trackEvent('shopping_cashier');
   },
 
   /**
@@ -120,7 +122,10 @@ Page({
       this.setData({
         payData,
         orderCreateTime: dayjs(payData.orderCreateTime).format("YYYY-MM-DD HH:mm:ss"),
-      })
+      });
+      app.trackEvent('goods_pay_success', {
+        pay_method_name: isNotPayment ? '模拟支付' : '微信支付'
+      });
     });
   },
 
