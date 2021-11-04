@@ -1,5 +1,4 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
-<wxs module="utils" src="../../../wxs/homeFloor.wxs" />
 
 <view class="activity" wx:if="{{activityCube.length}}" >
   <view
