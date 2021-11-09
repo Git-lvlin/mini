@@ -196,6 +196,62 @@ create.Page(store, {
     that.setData({
       locationAuth,
     });
+    if(locationAuth) {
+      // 自动选择附近的一个店铺
+      const takeSpot = wx.getStorageSync("TAKE_SPOT");
+      !takeSpot && wx.getLocation({
+        type: 'gps84',
+        altitude: false,
+        success(result) {
+          let data = {
+            latitude: result.latitude,
+            longitude: result.longitude,
+          }
+          that.getNearbyStore(data);
+        },
+        fail(err) {
+          
+        },
+      });
+    }
+  },
+
+  // 附近店铺
+  getNearbyStore(data) {
+    goodApi.getNearbyStore({
+      radius: 50000,
+      unit: 'm',
+      limit: 200,
+      ...data,
+    }).then(res => {
+      let list = [];
+      let fullAddress = "";
+      let tempData = {};
+      if(res.length > 0) {
+        const MarkData = res[0];
+        fullAddress = "";
+        for(let str in MarkData.areaInfo) {
+          fullAddress += MarkData.areaInfo[str];
+        }
+        fullAddress += MarkData.address;
+        MarkData.fullAddress = fullAddress;
+        tempData = {
+          ...MarkData,
+          width: 23,
+          height: 32,
+          id: 10,
+          selected: true,
+          iconPath: deflocationIcon,
+        }
+        wx.setStorage({
+          key: "TAKE_SPOT",
+          data: tempData,
+        });
+        this.setData({
+          takeSpot: tempData,
+        });
+      }
+    })
   },
 
   // 跳转选择地址
