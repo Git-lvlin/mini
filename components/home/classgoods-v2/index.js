@@ -98,8 +98,10 @@ create.Component(store, {
             classList: list,
             actClassIdx,
           }, () => {
-            this.getGoodList();
-            this.getSecondClass();
+            if(list.length) {
+              this.getGoodList();
+              this.getSecondClass();
+            }
           });
           wx.setStorageSync("HOME_CACHE", homeCache);
         });
@@ -109,8 +111,10 @@ create.Component(store, {
           classList: list,
           actClassIdx,
         }, () => {
-          this.getGoodList();
-          this.getSecondClass();
+          if(list.length) {
+            this.getGoodList();
+            this.getSecondClass();
+          }
         });
         if(homeCache.classList) {
           delete homeCache.classList;
