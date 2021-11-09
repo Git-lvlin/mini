@@ -220,9 +220,10 @@ create.Page(store, {
 
   // 设置market
   setMarket(id) {
-    const {
+    let {
       markers,
       currentSpot,
+      selectSpot,
     } = this.data;
     const idx = id - 10;
     markers.forEach((item, index) => {
@@ -231,11 +232,7 @@ create.Page(store, {
         item.width = 28;
         item.height = 28;
         item.selected = true;
-        if(item.storeNo != currentSpot.storeNo) {
-          currentSpot.selected = false;
-        } else {
-          currentSpot.selected = true;
-        }
+        selectSpot = item;
       } else {
         item.iconPath = deflocationIcon;
         item.width = 23;
@@ -243,8 +240,10 @@ create.Page(store, {
         item.selected = false;
       }
     });
+    currentSpot.selected = false;
     this.setData({
       currentSpot,
+      selectSpot,
       markers,
     });
   },
@@ -252,18 +251,14 @@ create.Page(store, {
   // 确认自提点
   onConfirm() {
     const {
-      markers,
       currentSpot,
+      selectSpot,
     } = this.data;
     let marketSelect = {};
     if (currentSpot.selected) {
       marketSelect = currentSpot;
-    } else {
-      markers.forEach(item => {
-        if(item.selected) {
-          marketSelect = item;
-        }
-      });
+    } else if(selectSpot.selected) {
+      marketSelect = selectSpot;
     }
     if(!marketSelect.storeNo) {
       showToast({ title: "请选择自提点" });
