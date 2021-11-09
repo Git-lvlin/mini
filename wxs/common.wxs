@@ -83,6 +83,12 @@ var getLastTime = function(time) {
   return endTime
 }
 
+var priceToF2 = function(price) {
+  var p = (price/100).toFixed(3)
+  var res = p.substring(0, p.lastIndexOf('.')+3)
+  return res
+}
+
 module.exports = {
   floatAdd: floatAdd,
   floatReduce: floatReduce,
@@ -90,4 +96,5 @@ module.exports = {
   getPriceSplit: getPriceSplit,
   getQuantity: getQuantity,
   getLastTime: getLastTime,
+  priceToF2: priceToF2,
 }

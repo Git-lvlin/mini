@@ -1,4 +1,4 @@
-
+<wxs module="tools" src="../../../wxs/common.wxs" />
 <view class="list">
   <view class="title-box">
     <text class="after">—</text>
@@ -8,7 +8,7 @@
   
   <view class="tips-box">
     <text class="tips-after">!</text>
-    <text class="tips-text">优选商品当前店铺没有售卖，点击提醒店主去采购</text>
+    <text class="tips-text">以下商品当前店铺没有售卖，点击提醒店主去采购</text>
   </view>
 
   <block wx:for="{{listData.records}}" wx:key="id">
@@ -22,8 +22,8 @@
       <view class="right-box">
         <view class="name">{{item.goodsName}}</view>
         <view class="price-box">
-          <text class="price1"><text class="span">¥</text>{{item.goodsSalePrice/100}}</text>
-          <text class="price2">{{item.marketPrice/100}}</text>
+          <text class="price1"><text class="span">¥</text>{{tools.priceToF2(item.goodsSalePrice)}}</text>
+          <text class="price2">{{tools.priceToF2(item.marketPrice)}}</text>
         </view>
         <view class="btn {{item.isRemind?'ed':''}}" data-item="{{item}}" catchtap="remind">{{item.isRemind?'已提醒':'提醒店主采购'}}</view>
       </view>
