@@ -12,7 +12,7 @@
   </view>
 
   <block wx:for="{{listData.records}}" wx:key="id">
-    <view class="list-item" data-data="{{item}}" bindtap="onGood">
+    <view class="list-item">
       <van-image
         class="img"
         width="200rpx"
