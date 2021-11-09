@@ -90,25 +90,22 @@ create.Page(store, {
     }else{
       this.hanldeGoodsParams(options)
     }
+    let userInfo = getStorageUserInfo();
+    if(!!userInfo && !!options.orderType) {
+      this.getShareInfo();
+    }
   },
 
   onShow() {
     const {
       orderType,
     } = this.goodParams;
-    let userInfo = getStorageUserInfo();
-    if(!!userInfo) {
-      if(this.store.data.cartList.length <= 0 && !!orderType) {
-        // this.store.updateCart();
-        this.getShareInfo();
-      }
-      // this.getDetailRatio();
-    }
     debounce(() => {
       if(!this.data.good.imageList && !this.data.good.goodsName) {
         this.hanldeGoodsParams(this.goodParams);
       }
     }, 1000)();
+    let userInfo = getStorageUserInfo();
     this.setData({
       userInfo,
     })
@@ -157,7 +154,9 @@ create.Page(store, {
     const {
       orderType,
       spuId,
+      activityId,
     } = this.goodParams;
+    this.goodParams.activityId = !!activityId ? activityId : 0;
     const shareParams = {
       shareType: 1,
       contentType: 1,

@@ -169,13 +169,49 @@ const getUrlRoute = (url, opt) => {
   }
   let userInfo = {};
   let token = "";
-  const routeStr = url.match(/(http|https):\/\/([^/]+)(\S*)/)[3];
-  const routeArr = routeStr.split("?");
   const data = {
     routeStr,
-    route: routeArr[0],
+    route: '',
     params: {},
   };
+  if(/^\/pages\//g.test(url) || /^\/subpages\//g.test(url)) {
+    // 小程序页面路由
+    let tempRoute = {};
+    const urlArr = url.split('?');
+    const route = urlArr[0];
+    data.routeStr = url;
+    data.routeType = "route";
+    if(urlArr[1]) {
+      data.params = strToParamObj(urlArr[1]);
+    }
+    for(let key in routes) {
+      if(routes[key].path == route) {
+        data.route = key;
+        tempRoute = routes[key];
+        tempRoute.key = key;
+      }
+    }
+    if(tempRoute.type && tempRoute.type == 'tabbar') {
+      data.isTabbar = true;
+    }
+    if(option.isJump) {
+      if(!!data.isTabbar) {
+        goTabbar({
+          name: data.route,
+        })
+      } else {
+        push({
+          name: data.route,
+          data: data.params,
+        })
+      }
+    }
+    return data;
+  }
+  // 以下解析H5路由
+  const routeStr = url.match(/(http|https):\/\/([^/]+)(\S*)/)[3];
+  const routeArr = routeStr.split("?");
+  data.route = routeArr[0];
   if(!!routeArr[1]) {
     data.paramStr = routeArr[1];
     data.params = strToParamObj(data.paramStr);
