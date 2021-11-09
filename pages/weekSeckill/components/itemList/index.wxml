@@ -11,7 +11,7 @@
   };
 </wxs>
 <view class="today">
-  <van-sticky offset-top="{{ 22*systemInfo.rpxRatio + 10*systemInfo.rpxRatio+systemInfo.statusHeight }}" bind:scroll="onScroll">
+  <van-sticky offset-top="{{ 22*systemInfo.rpxRatio + 20*systemInfo.rpxRatio+systemInfo.statusBarHeight }}" bind:scroll="onScroll">
     <view class="top-box-wrap">
       <view class="top-box">
         <view class="top-number">

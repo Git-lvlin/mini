@@ -11,7 +11,7 @@
       <view class="nav_location">
         <image class="location_icon" src="{{tools.getImgUrl('miniprogram/home/location-black.png')}}" />
         <view class="flex_middle address" bindtap="onToLocation">
-          <view class="location_address text_one_line">{{takeSpot.address || '选择自提点' }}</view>
+          <view class="location_address text_one_line">{{takeSpot.storeName || '选择自提点' }}</view>
         </view>
         <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/triangle_bottom_black.png')}}" />
       </view>
