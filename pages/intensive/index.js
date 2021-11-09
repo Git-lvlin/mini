@@ -47,7 +47,7 @@ create.Page(store, {
     //是否固定顶部
     isFixedTop: false,
     bannerData: {},
-    intensiveData: {},
+    intensiveData: null,
     recommendData: [],
     remindData: [],
     recommendData: [],

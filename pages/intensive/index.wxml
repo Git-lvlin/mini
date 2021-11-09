@@ -44,7 +44,7 @@
     />
     <!-- 集约专享 -->
     <list
-      wx:if="{{intensiveData}}"
+      wx:if="{{intensiveData.length}}"
       intensiveList="{{intensiveData}}"
     />
     <!-- 优选推荐 -->
