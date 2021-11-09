@@ -68,9 +68,11 @@ export default {
   maintain: {
     path: "/pages/maintain/index"
   },
-  
-  
-  
+  // 周末秒杀
+  weekSeckill: {
+    path: "/pages/weekSeckill/index"
+  },
+
   
   // 分类列表
   classList: {

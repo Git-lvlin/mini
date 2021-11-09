@@ -165,6 +165,7 @@ create.Page(store, {
       paramId: 1,
       shareParams: this.goodParams,
       ext: this.goodParams,
+      sourceType: 1,
     }
     if(orderType == 3 || orderType == 4) {
       shareParams.paramId = 3;
