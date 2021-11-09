@@ -1,0 +1,89 @@
+page {
+  background-color: #f5f5f5;
+}
+
+.content_view {
+  padding-left: 32rpx;
+  margin-top: 32rpx;
+  background-color: #fff;
+  border-radius: 24rpx;
+  box-shadow: 0rpx 8rpx 16rpx #f5f5f5;
+}
+
+.form_item {
+  display: flex;
+  /* align-items: center; */
+  padding: 40rpx 32rpx 40rpx 0;
+}
+
+.form_name {
+  width: 130rpx;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin-right: 30rpx;
+}
+
+.form_input {
+  flex: 1;
+  font-weight: 500;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+
+.form_textarea {
+  height: 80rpx;
+}
+
+.form_placeholder {
+  font-weight: 400;
+  color: #cccccc;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+
+.location {
+  flex-grow: 0;
+  flex-shrink: 0;
+  font-weight: 500;
+  color: #999999;
+  font-size: 28rpx;
+  line-height: 40rpx;
+}
+
+.location_icon {
+  width: 24rpx;
+  height: 34rpx;
+  margin-right: 8rpx;
+}
+
+.save_btn {
+  width: 702rpx;
+  height: 96rpx;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 32rpx;
+  line-height: 96rpx;
+  text-align: center;
+  margin: 80rpx auto 0;
+  background-color: #e5352f;
+  border-radius: 16rpx;
+  box-shadow: 0rpx 6rpx 12rpx rgba(229, 53, 47, 0.4);
+}
+
+
+.tips {
+  font-size: 22rpx;
+  color: #E5352F;
+  line-height: 32rpx;
+  margin-top: 24rpx;
+  margin-left: 24rpx;
+}
+
+.tip_icon {
+  width: 28rpx;
+  height: 28rpx;
+  vertical-align: middle;
+  margin-right: 6rpx;
+}

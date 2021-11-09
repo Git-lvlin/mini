@@ -41,7 +41,7 @@
                 使用规则
                 <view class="show_rule {{item.ruleOpen ? 'show_rule_act' : ''}}" />
               </view>
-              <view class="coupon_btn" wx:if="{{selectType == 1}}" bindtap="onToUse">去使用</view>
+              <view class="coupon_btn" data-coupon="{{item}}" wx:if="{{selectType == 1}}" bindtap="onToUse">去使用</view>
             </view>
           </view>
           <image class="seal_img" wx:if="{{selectType == 4}}" src="{{tools.getImgUrl('miniprogram/user/coupon/invalid.png')}}" />

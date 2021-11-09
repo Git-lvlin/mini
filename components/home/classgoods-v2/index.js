@@ -98,8 +98,10 @@ create.Component(store, {
             classList: list,
             actClassIdx,
           }, () => {
-            this.getGoodList();
-            this.getSecondClass();
+            if(list.length) {
+              this.getGoodList();
+              this.getSecondClass();
+            }
           });
           wx.setStorageSync("HOME_CACHE", homeCache);
         });
@@ -109,8 +111,10 @@ create.Component(store, {
           classList: list,
           actClassIdx,
         }, () => {
-          this.getGoodList();
-          this.getSecondClass();
+          if(list.length) {
+            this.getGoodList();
+            this.getSecondClass();
+          }
         });
         if(homeCache.classList) {
           delete homeCache.classList;
@@ -133,6 +137,7 @@ create.Component(store, {
       if(!!actData.actionCGUrl) {
         let urlParam = actData.actionUrl.split('?')[1];
         urlParam = strToParamObj(urlParam);
+        urlParam = homeApi.getExamine(urlParam);
         Request.post(actData.actionCGUrl, urlParam, requestOption).then(res => {
           const list = res.records;
           classGoodV2.className = actData.gcName;
@@ -181,6 +186,8 @@ create.Component(store, {
       if(postData.gcId1) {
         postData.gcId1 = +postData.gcId1;
       }
+      postData = homeApi.getExamine(postData);
+      // 请求
       if(!!actData.actionCGUrl) {
         resData = Request.post(url, postData, requestOption);
       } else {

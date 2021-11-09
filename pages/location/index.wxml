@@ -2,14 +2,14 @@
 
 <view class="container">
   <view class="flex_middle search_box">
-    <view class="flex_middle area_box">
-      <view class="area_name">宝安区</view>
+    <view class="flex_middle area_box" bindtap="onOpenCity">
+      <view class="area_name">{{cityData.district}}</view>
       <image class="area_icon" src="{{tools.getImgUrl('miniprogram/common/back_gray%402x.png')}}" />
     </view>
 
     <view class="flex_middle search_text">
       <image class="search_icon" src="{{tools.getImgUrl('miniprogram/common/search%402x.png')}}" />
-      <input class="sreach_input" placeholder="请输入地址" />
+      <input class="sreach_input" value="{{inputText}}" placeholder="请输入地址" bindinput="handleInput" />
     </view>
   </view>
 
@@ -19,7 +19,7 @@
       id="map"
       longitude="{{longitude}}"
       latitude="{{latitude}}"
-      scale="13"
+      scale="{{mapScale}}"
       markers="{{markers}}"
       show-location="true"
       bindmarkertap="makertap"
@@ -57,6 +57,7 @@
           <take-spot
             wx:for="{{markers}}"
             wx:key="id"
+            wx:if="{{!item.storeNo != currentSpot.storeNo}}"
             data="{{item}}"
             bind:click="onTakeSpot"
           />
@@ -79,11 +80,32 @@
     bind:close="onCloseAddress"
   />
 
-  <!-- <van-popup
-    show="{{true}}"
+  <van-popup
+    show="{{showAddress}}"
     position="bottom"
-    custom-style=""
+    closeable
+    overlay="{{false}}"
+    custom-style="background-color: transparent;"
+    bind:close="handleCloseAddress"
   >
-    12341234
-  </van-popup> -->
+    <view class="sreach_address">
+      <view
+        class="address_item"
+        wx:for="{{addMarkers}}"
+        wx:key="index"
+        data-data="{{item}}"
+        bindtap="onSelectAddress"
+      >
+        <view class="company_name text_one_line">
+          <text
+            class="{{child.type === 2 ? 'text_red' : ''}}"
+            wx:for="{{item.nameArr}}"
+            wx:key="index"
+            wx:for-item="child"
+          >{{child.text}}</text>
+        </view>
+        <view class="company_address text_one_line">{{item.address}}</view>
+      </view>
+    </view>
+  </van-popup>
 </view>

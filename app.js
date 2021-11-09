@@ -140,7 +140,6 @@ App({
 
   // 埋点数据上报
   trackEvent(eventId, params = {}) {
-    console.log(wx.uma);
     if(!eventId) return;
     wx.uma.trackEvent(eventId, params);
   },

@@ -2,6 +2,7 @@ import goodApi from "../../../apis/good"
 import { debounce, getStorageUserInfo, showToast } from "../../../utils/tools";
 import util from "../../../utils/util";
 
+const app = getApp();
 Page({
   searchPage: {
     page: 1,
@@ -24,6 +25,10 @@ Page({
     // 是否已搜索 
     isSearch: false,
     scrollBottom: false,
+  },
+
+  onLoad() {
+    app.trackEvent('home_search');
   },
 
   onShow() {

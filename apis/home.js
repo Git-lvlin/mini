@@ -26,6 +26,9 @@ const getExamine = (params) => {
 }
 
 export default {
+  // 小程序版本状态
+  getExamine,
+
   // 首页楼层通用接口数据
   getFloorList(params, options) {
     // params.floorVersion = '1.0.2'

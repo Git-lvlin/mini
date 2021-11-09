@@ -28,15 +28,15 @@
         wx:if="{{(orderToken && orderType != 15) || (orderType == 15 && selectAddressType.type == 3)}}"
         bindtap="onToAddress"
       >
-        <view class="no_address" wx:if="{{!addressInfo.id}}">
+        <view class="no_address" wx:if="{{orderType != 15 && !addressInfo.id || orderType == 15 && selectAddressType.type == 3 && !storeAdress.setUser}}">
           <image class="add_address" src="{{tools.getImgUrl('miniprogram/cart/add_address.png')}}" />
-          <view class="no_address_title">添加收货地址</view>
+          <view class="no_address_title">{{selectAddressType.type == 3 ? '添加商家配送地址' : '添加收货地址'}}</view>
         </view>
         <view class="select_view" wx:else>
           <image class="location_icon" src="{{tools.getImgUrl('miniprogram/common/location_icon.png')}}" />
           <view class="address_info">
-            <view class="name">{{addressInfo.consignee}}<text class="phone">{{addressInfo.phone}}</text></view>
-            <view class="address_detail text_two_line">{{addressInfo.fullAddress}}</view>
+            <view class="name">{{addressInfo.consignee || storeAdress.setUser}}<text class="phone">{{addressInfo.phone || storeAdress.setPhone}}</text></view>
+            <view class="address_detail text_two_line">{{addressInfo.fullAddress || storeAdress.setAllAddress + storeAdress.setAddress}}</view>
           </view>
           <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
         </view>
@@ -133,6 +133,7 @@
     unusefulCoupon="{{orderInfo.unusefulCoupon || []}}"
     usefulCoupon="{{orderInfo.usefulCoupon || []}}"
     bind:close="handleCloseCoupon"
+    bind:confirm="handleChooseCoupon"
   />
   
   <set-sku-num
