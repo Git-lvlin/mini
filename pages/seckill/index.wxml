@@ -44,7 +44,7 @@
       </swiper>
       <view class="time-box">
         <text class="text">距{{active==0?'结束':'开始'}}</text>
-        <van-count-down use-slot time="{{ seckillData.deadlineTime-seckillData.currentTime }}" bind:change="onChange">
+        <van-count-down use-slot millisecond time="{{ seckillData.deadlineTime-seckillData.currentTime }}" bind:change="onChange">
           <text class="time">{{ u.time(timeData.hours) }}</text>
           <text class="time-symbol">:</text>
           <text class="time">{{ u.time(timeData.minutes) }}</text>
