@@ -54,7 +54,7 @@
       />
     </view>
   </view>
-  <view class="no_data">
-    <nodata wx:if="{{!goodList.length}}" top="{{200}}" type="content" title="暂无商品" />
+  <view class="no_data" wx:if="{{!goodList.length}}">
+    <nodata top="{{200}}" type="content" title="暂无商品" />
   </view>
 </view>
