@@ -80,5 +80,16 @@ Component({
         }
       });
     },
+
+    // 跳转秒杀爆款
+    onToPopularGood() {
+      if(!this.data.seckillList.length) {
+        return;
+      } 
+      router.push({
+        name: 'popularGood',
+        data: {}
+      })
+    },
   }
 })

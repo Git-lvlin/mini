@@ -12,6 +12,8 @@ const url = {
   shareInfo: "/share/option/shareParam/queryShareContent",
 
   advert: "/public/open/adimgs",
+
+  secondHotGoodsList: '/activity/open/secondHotGoodsList',
 }
 
 const getExamine = (params) => {
@@ -93,5 +95,10 @@ export default {
   // 获取首页广告
   getAdvert(params, option) {
     return Request.post(url.advert, params, option);
+  },
+
+  // 秒约爆品列表
+  getPopularList(params, option) {
+    return Request.post(url.secondHotGoodsList, params, option);
   },
 }
