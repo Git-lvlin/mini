@@ -2,6 +2,7 @@
 
 <view
   class="container"
+  style="{{pageBackCss}}"
   bindtouchmove="handleTouchMove"
   bindtouchend="handleTouchEnd"
 >
@@ -21,7 +22,7 @@
       </view>
       <view id="top_search" class="search_content" style="">
         <view class="search_body" bindtap="onToSearch">
-          <image class="search_icon" src="{{tools.getImgUrl('miniprogram/v2-home/search-icon.png')}}" />
+          <image class="search_icon" src="{{tools.getImgUrl('miniprogram/v2-home/search-icon.png?v=12')}}" />
           <view class="search_text">请输入商品名称</view>
           <view class="search_btn">搜索</view>
         </view>
