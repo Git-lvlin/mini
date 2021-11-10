@@ -25,7 +25,7 @@ Page({
       active: event.detail.name
     }, () => {
       let code = event.detail.name?'tomorrow':'today'
-      this.getUserIcon(code)
+      this.getUserIcon(code, 1)
     })
 
   },
@@ -34,16 +34,16 @@ Page({
       timeData: e.detail,
     });
   },
-  getUserIcon(code) {
+  getUserIcon(code, type) {
     const tomorrow = wx.getStorageSync("SECKILL_TOMORROW") || false;
     const today = wx.getStorageSync("SECKILL_TODAY") || false;
-    if (code === 'tomorrow' && tomorrow) {
+    if (code === 'tomorrow' && tomorrow && type) {
       this.setData({
         tomorrow: tomorrow
       })
       return
     }
-    if (code === 'today' && today) {
+    if (code === 'today' && today && type) {
       this.setData({
         seckillData: today
       })
@@ -110,10 +110,27 @@ Page({
       }
     });
   },
+  // 监听页面滚动
+  onPageScroll({scrollTop}) {
+    if (scrollTop > 10) {
+      this.setData({
+        showTop: true
+      })
+    } else {
+      this.setData({
+        showTop: false
+      })
+    }
+  },
+  // 回到顶部
+  backTop() {
+    wx.pageScrollTo({
+      scrollTop: 0
+    })
+  },
   onLoad: function (options) {
     this.getUserIcon('today')
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -160,7 +177,6 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
   },
 
   /**
