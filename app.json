@@ -53,7 +53,8 @@
         "teamDetail/index",
         "store/index",
         "priceDetail/index",
-        "signin/index"
+        "signin/index",
+        "storeAddress/index"
       ]
     },
     {

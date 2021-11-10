@@ -11,7 +11,7 @@ defaultIndex.forEach(item => {
     children: []
   });
 });
-
+const app = getApp();
 Page({
   data: {
     isDefault: false,
@@ -62,6 +62,9 @@ Page({
         isEdit
       });
     }
+    app.trackEvent('address_editAddress', {
+      type: 'address'
+    });
   },
 
   // 输入内容

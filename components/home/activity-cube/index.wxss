@@ -51,4 +51,5 @@
   font-size: 24rpx;
   line-height: 34rpx;
   text-align: center;
+  white-space: nowrap;
 }

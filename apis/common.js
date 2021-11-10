@@ -94,7 +94,9 @@ export default {
       refreshToken: wx.getStorageSync("REFRESH_TOKEN"),
       id: userInfo.id,
     }
-    return Request.post(url.refreshToken, postData).then(res => {
+    return Request.post(url.refreshToken, postData, {
+      showLoading: false
+    }).then(res => {
       wx.setStorageSync("ACCESS_TOKEN", res.accessToken);
       wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
       store.data.showLoginMobel = false;

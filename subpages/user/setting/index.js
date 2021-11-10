@@ -5,6 +5,7 @@ import router from "../../../utils/router";
 import { getStorageUserInfo, jumpToAgreement } from "../../../utils/tools";
 import loginApi from "../../../apis/login";
 
+const app = getApp();
 create.Page(store, {
 
   data: {
@@ -17,6 +18,7 @@ create.Page(store, {
     this.setData({
       userInfo
     });
+    app.trackEvent('mine_settting');
   },
 
   onClickService() {

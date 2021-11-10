@@ -1,5 +1,4 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
-<wxs module="utils" src="../../../wxs/homeFloor.wxs" />
 
 <view class="activity" wx:if="{{activityCube.length}}" >
   <view
@@ -20,7 +19,7 @@
             bindtap="onToClass"
           >
             <image class="activity_img" src="{{item.image}}" />
-            <view class="name text_one_line">{{item.title}}</view>
+            <view class="name">{{item.title}}</view>
           </view>
         </view>
       </view>

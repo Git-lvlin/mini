@@ -49,7 +49,7 @@
   <view
     style="background-image: url({{intensiveBack}})"
     class="flex_middle intensive_price"
-    wx:if="{{isActivityGood == 15}}"
+    wx:if="{{isActivityGood == 15 || isActivityGood == 16}}"
   >
     <view class="intensive_price_mobel">
       <price-mobel
@@ -99,7 +99,7 @@
       </view>
     </view>
     <!-- 集约进度 -->
-    <view class="flex_middle intensive_progress" wx:if="{{isActivityGood == 15}}">
+    <view class="flex_middle intensive_progress" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}">
       <view class="progress_box">
         <image class="fire_icon" src="{{tools.getImgUrl('miniprogram/home/appointment_fire.png')}}" />
         <view class="progress_line" style="width: {{good.percentage || 0}}%" />
@@ -108,7 +108,7 @@
       <view class="intensive_sale">{{good.goodsSaleNum}}</view>
     </view>
     <!-- 集约参与人 -->
-    <view class="intensive_join" wx:if="{{isActivityGood == 15 && intensiveUser.records.length}}">
+    <view class="intensive_join" wx:if="{{(isActivityGood == 15 || isActivityGood == 16) && intensiveUser.records.length}}">
       <view class="flex_center join_info">
         <view class="join_red">{{intensiveUser.buyerNum || 0}}</view>人已约
         <view class="join_red">{{intensiveUser.saleNum || 0}}</view>件
@@ -240,10 +240,10 @@
     bind:click="onToPriceDetail"
   />
 
-  <view class="space_20" wx:if="{{isActivityGood == 15}}" />
+  <view class="space_20" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" />
   
   <!-- 集约提货地址 -->
-  <view class="flex_middle pick_info" wx:if="{{isActivityGood == 15}}" >
+  <view class="flex_middle pick_info" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" >
     <view class="flex_fix pick_info_title">选择配送方式：</view>
     <view class="flex_middle pick_way">
       <view
@@ -260,17 +260,17 @@
     </view>
   </view>
 
-  <view class="space_20" wx:if="{{isActivityGood == 15}}" />
+  <view class="space_20" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" />
 
   <!-- 提示 -->
-  <view class="intensive_tip" wx:if="{{isActivityGood == 15}}">
+  <view class="intensive_tip" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}">
     <view class="intensive_tip_title">温馨提示：</view>
     <view class="intensive_tip_text">集约商品，如有商品质量问题，可以申请更换商品，暂不支持直接退货。</view>
   </view>
 
-  <view class="space_20" wx:if="{{isActivityGood == 15}}" />
+  <view class="space_20" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" />
   
-  <store-panel storeInfo="{{storeInfo}}" wx:if="{{isActivityGood == 15}}" />
+  <store-panel storeInfo="{{storeInfo}}" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" />
   
   <!-- 拼单列表 -->
   <block wx:if="{{(isActivityGood == 3 || isActivityGood == 4) && !!personalList.length}}">

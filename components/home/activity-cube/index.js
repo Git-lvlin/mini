@@ -35,7 +35,9 @@ Component({
             activityCube: homeCache.activityCube
           })
         }
-        homeApi.getFloorCustom(content.dataUrl).then(res => {
+        homeApi.getFloorCustom(content.dataUrl, {
+          useType: 2
+        }).then(res => {
           let list = res;
           homeCache.activityCube = list;
           this.setData({

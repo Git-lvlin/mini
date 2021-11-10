@@ -68,9 +68,11 @@ export default {
   maintain: {
     path: "/pages/maintain/index"
   },
-  
-  
-  
+  // 周末秒杀
+  weekSeckill: {
+    path: "/pages/weekSeckill/index"
+  },
+
   
   // 分类列表
   classList: {
@@ -95,6 +97,10 @@ export default {
   // 添加/编辑收货地址
   editAddress: {
     path: "/subpages/cart/editAddress/index"
+  },
+  // 集约修改配送地址
+  storeAddress: {
+    path: "/subpages/cart/storeAddress/index"
   },
   // 收银台
   cashier: {

@@ -6,7 +6,7 @@ import { getStorageUserInfo, setStorageUserInfo, showModal, showToast, getImgCdn
 import { getCofigData, getOssImgWH } from "../../../utils/uploadAliyun";
 
 const IMG_CDN = getImgCdn();
-
+const app = getApp();
 Page({
   fileConfig: {
     tempFilePath: "",
@@ -17,6 +17,10 @@ Page({
     userInfo: {},
     fileName: "",
     updateInfo: false,
+  },
+
+  onLoad() {
+    app.trackEvent('mine_user_info');
   },
 
   onShow() {

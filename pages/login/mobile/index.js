@@ -93,6 +93,7 @@ create.Page(store, {
         inviteCode: options.inviteCode,
       });
     }
+    app.trackEvent('login_index');
   },
 
   // 获取分享配置
@@ -153,6 +154,7 @@ create.Page(store, {
 
   // 获取用户openid 登录
   getCodeLogin(event) {
+    app.trackEvent('login_auth_wechat_button_click');
     const that = this;
     // 生命周期内登录过了
     if(!this.data.radio) {

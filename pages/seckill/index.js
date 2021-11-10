@@ -1,6 +1,7 @@
 import router from "../../utils/router";
 import seckillApi from '../../apis/seckill';
 
+const app =  getApp();
 Page({
   data: {
     timeData: {},
@@ -126,6 +127,7 @@ Page({
   onShow: function () {
     // 更新tabbar显示
     // router.updateSelectTabbar(this, 1);
+    app.trackEvent('tab_secKilling');
   },
 
   /**

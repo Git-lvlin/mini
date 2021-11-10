@@ -90,28 +90,26 @@ create.Page(store, {
     }else{
       this.hanldeGoodsParams(options)
     }
+    let userInfo = getStorageUserInfo();
+    if(!!userInfo && !!options.orderType) {
+      this.getShareInfo();
+    }
   },
 
   onShow() {
     const {
       orderType,
     } = this.goodParams;
-    let userInfo = getStorageUserInfo();
-    if(!!userInfo) {
-      if(this.store.data.cartList.length <= 0 && !!orderType) {
-        // this.store.updateCart();
-        this.getShareInfo();
-      }
-      // this.getDetailRatio();
-    }
     debounce(() => {
       if(!this.data.good.imageList && !this.data.good.goodsName) {
         this.hanldeGoodsParams(this.goodParams);
       }
     }, 1000)();
+    let userInfo = getStorageUserInfo();
     this.setData({
       userInfo,
     })
+    app.trackEvent('shopping_detail');
   },
 
   // 基础数据
@@ -156,7 +154,9 @@ create.Page(store, {
     const {
       orderType,
       spuId,
+      activityId,
     } = this.goodParams;
+    this.goodParams.activityId = !!activityId ? activityId : 0;
     const shareParams = {
       shareType: 1,
       contentType: 1,
@@ -164,6 +164,7 @@ create.Page(store, {
       paramId: 1,
       shareParams: this.goodParams,
       ext: this.goodParams,
+      sourceType: 1,
     }
     if(orderType == 3 || orderType == 4) {
       shareParams.paramId = 3;
@@ -211,6 +212,9 @@ create.Page(store, {
     } else {
       info.path = `${info.path}${pathParam}`;
     }
+    app.trackEvent('share_goods_detail', {
+      share_type: 'weixin'
+    });
     return info;
   },
 
@@ -375,7 +379,7 @@ create.Page(store, {
         }, () => {
           this.handleGoodStock();
         });
-        if(orderType == 15) {
+        if(orderType == 15 || orderType == 16) {
           // 集约用户列表
           this.getIntensiveUser(good.storeSaleSumNum || 100);
           // 获取商品详情
@@ -647,7 +651,7 @@ create.Page(store, {
         stockOverText = "库存不足"
       }
     }
-    if(orderType == 15 && nowTime >= good.deadlineTime) {
+    if((orderType == 15 || orderType == 16) && nowTime >= good.deadlineTime) {
       stockOver = 3;
       stockOverText = "活动已结束"
     }
@@ -780,7 +784,7 @@ create.Page(store, {
       data.objectId = currentSku.groupId;
       objectId = currentSku.groupId;
     }
-    if(orderType == 15) {
+    if(orderType == 15 || orderType == 16) {
       data.storeAdress = storeInfo.storeAddress;
       data.selectAddressType = selectAddressType;
       wx.setStorageSync("CREATE_INTENSIVE", data);
