@@ -8,6 +8,9 @@ page {
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+  background-position: left top;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
 }
 
 .nav_content {
@@ -80,7 +83,7 @@ page {
   padding: 0 2rpx 0 16rpx;
   background-color: #fff;
   box-sizing: border-box;
-  border: 4rpx solid #FF3333;
+  border: 4rpx solid #FE4F8F;
   border-radius: 56rpx;
 }
 
@@ -106,7 +109,7 @@ page {
   line-height: 56rpx;
   text-align: center;
   /* background: linear-gradient(90deg, #FF773A 0%, #FE2E1A 100%); */
-  background: #FF3333;
+  background: #FE4F8F;
   border-radius: 56rpx
 }
 

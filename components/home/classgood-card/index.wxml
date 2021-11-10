@@ -11,7 +11,7 @@
   <view class="good_info">
     <view class="good_title text_two_line">{{data.title}}</view>
     <view class="good_sku text_one_line" wx:if="{{data.goodsDesc || data.subTitle}}">{{data.goodsDesc || data.subTitle}}</view>
-    <view class="good_label">新人专享{{data.orderType == 15 ? "集约特惠" : ""}}{{data.orderType == 16 ? "新人尝鲜" : ""}}</view>
+    <view class="good_label" wx:if="{{data.orderType == 15 || data.orderType == 16}}">{{data.orderType == 15 ? "集约特惠" : ""}}{{data.orderType == 16 ? "新人尝鲜" : ""}}</view>
     <view class="good_price">
         <view class="flex_middle">
           <price-mobel

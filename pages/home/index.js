@@ -144,15 +144,18 @@ create.Page(store, {
   getFloorList(isReload) {
     let floor = wx.getStorageSync("HOME_FLOOR");
     let headBackCss = "";
+    let pageBackCss = "";
     let isShowFloor = {};
     // 2 代表小程序审核版本 3 代表小程序正试版本
     let verifyVersionId = this.isMiniExamine ? 2 : 3;
     if(!!floor) {
       this.floorTimer = setTimeout(() => {
         headBackCss = this.setHeadBack(floor.headData && floor.headData.style || "");
+        pageBackCss = this.setHeadBack(floor.backgroundData && floor.backgroundData.style || "");
         this.setData({
           floor: floor,
           headBackCss,
+          pageBackCss,
         });
       }, HTTP_TIMEOUT);
     }
@@ -170,6 +173,7 @@ create.Page(store, {
       clearTimeout(this.floorTimer);
       this.isFristLoad = true;
       headBackCss = this.setHeadBack(res.headData && res.headData.style || "");
+      pageBackCss = this.setHeadBack(res.backgroundData && res.backgroundData.style || "");
       if(res.floors && res.floors.length) {
         res.floors.forEach(item => {
           isShowFloor[item.floorType] = true;
@@ -179,6 +183,7 @@ create.Page(store, {
         floor: res,
         isShowFloor,
         headBackCss,
+        pageBackCss,
         refresherTriggered: false,
       });
       wx.setStorage({ key: "HOME_FLOOR", data: res });
@@ -230,13 +235,13 @@ create.Page(store, {
 
   // 设置首页头部背景
   setHeadBack(style) {
-    let headBackCss = '';
+    let backCss = '';
     if(style.backgroundImage) {
-      headBackCss = `background-image: url(${style.backgroundImage})`
+      backCss = `background-image: url(${style.backgroundImage})`
     } else if(style.backgroundColor) {
-      headBackCss = `background-color: ${style.backgroundColor}`
+      backCss = `background-color: ${style.backgroundColor}`
     }
-    return headBackCss;
+    return backCss;
   },
 
   // 点击悬浮图
