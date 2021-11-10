@@ -93,7 +93,6 @@ create.Component(store, {
         },
       });
       ani.addEventListener("DOMLoaded", (res) => {
-        console.log(12341234123)
         that.setData({
           canvasLoaded: true
         })
