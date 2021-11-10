@@ -113,7 +113,7 @@ create.Page(store, {
     cartApi.getDefaultAddress({}, {
       showLoading: false,
     }).then(res => {
-      if(this.orderType == 15) {
+      if(this.orderType == 15 || this.orderType == 16) {
         this.setStoreAddress(res);
       } else if(!addressInfo.consignee) {
         this.setData({
@@ -173,7 +173,7 @@ create.Page(store, {
     } = this.data;
     let deliveryInfo = this.mapAddress(addressInfo);
     // postData.deliveryInfo = deliveryInfo;
-    if(this.orderType == 15) {
+    if(this.orderType == 15 || this.orderType == 16) {
       // 集约
       let data = wx.getStorageSync("CREATE_INTENSIVE");
       let {
@@ -329,7 +329,7 @@ create.Page(store, {
       selectAddressType,
     } = storeData;
     // 集约商家配送
-    if(orderType == 15 && selectAddressType && selectAddressType.type == 3) {
+    if((orderType == 15 || orderType == 16) && selectAddressType && selectAddressType.type == 3) {
       let newStoreAddress = wx.getStorageSync('ORDER_STORE_LOCATION');
       if(newStoreAddress && newStoreAddress.setUser) {
         data.consignee = newStoreAddress.setUser;
@@ -352,7 +352,7 @@ create.Page(store, {
       selectAddressType,
       orderType,
     } = this.data;
-    if(orderType == 15 && selectAddressType.type == 3) {
+    if((orderType == 15 || orderType == 16) && selectAddressType.type == 3) {
       router.push({
         name: "storeAddress",
         data: {}
@@ -429,7 +429,7 @@ create.Page(store, {
       storeGoodsInfos.push(storeItem);
     })
     let postData = {};
-    if (this.orderType == 15 && selectAddressType.type == 2) {
+    if ((this.orderType == 15 || this.orderType == 16) && selectAddressType.type == 2) {
       postData = {
         changeStore: detail,
         note,
@@ -702,7 +702,7 @@ create.Page(store, {
       return;
     }
     let postData = {};
-    if (this.orderType != 15) {
+    if (this.orderType != 15 && this.orderType != 16) {
       postData = this.getSubmitGood();
     } else {
       postData = this.getStoreGood();

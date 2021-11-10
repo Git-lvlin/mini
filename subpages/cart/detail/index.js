@@ -379,7 +379,7 @@ create.Page(store, {
         }, () => {
           this.handleGoodStock();
         });
-        if(orderType == 15) {
+        if(orderType == 15 || orderType == 16) {
           // 集约用户列表
           this.getIntensiveUser(good.storeSaleSumNum || 100);
           // 获取商品详情
@@ -651,7 +651,7 @@ create.Page(store, {
         stockOverText = "库存不足"
       }
     }
-    if(orderType == 15 && nowTime >= good.deadlineTime) {
+    if((orderType == 15 || orderType == 16) && nowTime >= good.deadlineTime) {
       stockOver = 3;
       stockOverText = "活动已结束"
     }
@@ -784,7 +784,7 @@ create.Page(store, {
       data.objectId = currentSku.groupId;
       objectId = currentSku.groupId;
     }
-    if(orderType == 15) {
+    if(orderType == 15 || orderType == 16) {
       data.storeAdress = storeInfo.storeAddress;
       data.selectAddressType = selectAddressType;
       wx.setStorageSync("CREATE_INTENSIVE", data);

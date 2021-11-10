@@ -9,7 +9,7 @@
     <text>{{item.text}}</text>
     <image
       class="screen_img"
-      src="{{item.type === 'DESC' ? iconDesc : iconAsc}}"
+      src="{{item.type === 'DESC' ? iconAsc : iconDesc}}"
       wx:if="{{item.type}}"
     />
   </view>
