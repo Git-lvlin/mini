@@ -1,5 +1,5 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
-<view class="list" wx:if="{{listData}}">
+<view class="list" wx:if="{{listData.records.length}}">
   <view class="title-box">
     <text class="after">—</text>
     <text class="title">集约专享</text>

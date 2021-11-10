@@ -6,8 +6,23 @@
     }
     return a
   }
+  var num = function (a) {
+    if (a<=999) {
+      return a
+    }
+    if (999<a<10000) {
+      return '999+'
+    }
+    if (10000<=a<100000) {
+      return (a/10000).toFixed(2) + '万'
+    }
+    if (a>100000) {
+      return '10万+'
+    }
+  }
   module.exports = {
     time: time,
+    num: num,
   };
 </wxs>
 <view class="today">
@@ -57,7 +72,7 @@
               {{item.buyNumDisplay}}%
             </view>
           </view>
-          <view class="stock">库存{{item.stockNum}}件</view>
+          <view class="stock">库存{{u.num(item.stockNum)}}</view>
         </view>
         <!-- <view class="subtitle">{{item.subtitle}}</view> -->
         <view class="price-box">
