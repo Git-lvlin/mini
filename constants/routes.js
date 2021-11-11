@@ -44,7 +44,7 @@ export default {
   otherpay: {
     path: "/pages/otherpay/index"
   },
-  // 秒杀爆品
+  // 限时秒杀
   seckill: {
     path: "/pages/seckill/index"
   },
@@ -71,6 +71,10 @@ export default {
   // 周末秒杀
   weekSeckill: {
     path: "/pages/weekSeckill/index"
+  },
+  // 秒杀爆款
+  popularGood: {
+    path: "/subpages/cart/popularGood/index"
   },
 
   
@@ -122,6 +126,11 @@ export default {
   signin: {
     path: "/subpages/cart/signin/index"
   },
+  // 分类商品列表
+  classGood: {
+    path: "/subpages/cart/classGood/index"
+  },
+  
 
 
   // 用户中心

@@ -1,0 +1,14 @@
+
+page {
+  background-color: #f8f8f8;
+}
+
+.good_list {
+  columns: 320rpx 2;
+  column-gap: 20rpx;
+  padding: 24rpx;
+}
+
+.good_item {
+  page-break-inside: avoid;
+}

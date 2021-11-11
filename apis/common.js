@@ -12,6 +12,8 @@ const url = {
   ossConfig: "/public/open/uploadConfig/findByBizCode",
   shareParam: "/share/option/shareParam/getScene",
   coordinate: "/cms/open/location/getLocation",
+
+  banner: '/cms/open/banner/list'
 }
 
 let isShowLoginMobal = store.data.showLoginMobel;
@@ -166,5 +168,10 @@ export default {
   // 根据地址获取经纬度
   getCoordinate(params, option) {
     return Request.get(url.coordinate, params, option);
+  },
+
+  // 获取banner 
+  getBanner(params, option) {
+    return Request.get(url.banner, params, option);
   },
 }

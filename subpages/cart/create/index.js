@@ -98,7 +98,7 @@ create.Page(store, {
   // 获取默认地址
   getDefaultAddress() {
     const chooseAddress = wx.getStorageSync("CHOOSE_ADDRESS");
-    const {
+    let {
       addressInfo,
     } = this.data;
     if(chooseAddress) {
@@ -115,10 +115,23 @@ create.Page(store, {
     }).then(res => {
       if(this.orderType == 15 || this.orderType == 16) {
         this.setStoreAddress(res);
-      } else if(!addressInfo.consignee) {
-        this.setData({
-          addressInfo: res,
-        })
+      } else {
+        if(!addressInfo.consignee) {
+          // 首次加载，设置默认地址
+          if(res.consignee) {
+            // 有默认地址
+            addressInfo = res;
+          } else {
+            // 没有默认地址，读上一次下单地址
+            const orderAddress = wx.getStorageSync("ORDER_LAST_ADDRESS");
+            if(orderAddress.consignee) {
+              addressInfo = orderAddress;
+            }
+          }
+          this.setData({
+            addressInfo,
+          })
+        }
       }
     }).catch(err => {
       this.setStoreAddress(err);
@@ -134,10 +147,10 @@ create.Page(store, {
       selectAddressType,
     } = data;
     if(selectAddressType.type == 2) {
-      let userData = wx.getStorageSync("STORE_SHIPPER_INFO");
-      if(userData) {
-        storeAdress.linkman = userData.user;
-        storeAdress.phone = userData.phone;
+      let userData = wx.getStorageSync("ORDER_STORE_LOCATION");
+      if(userData && userData.setUser) {
+        storeAdress.linkman = userData.setUser;
+        storeAdress.phone = userData.setPhone;
       } else if (!!address.consignee) {
         storeAdress.linkman = address.consignee;
         storeAdress.phone = address.phone;
@@ -696,6 +709,7 @@ create.Page(store, {
     if(!userInfo) return;
     const {
       orderInfo,
+      addressInfo,
     } = this.data;
     if(!orderInfo.storeGoodsInfos || !orderInfo.storeGoodsInfos.length) {
       showToast({ title: "抱歉，爆品好货已售光，下次早点抢哦" });
@@ -730,6 +744,10 @@ create.Page(store, {
         // }, 1500);
       // }
     });
+    // 保存上次下单地址
+    if(this.orderType != 15 && this.orderType != 16) {
+      wx.setStorageSync('ORDER_LAST_ADDRESS', addressInfo);
+    }
   },
 
   // 生产环境直接调支付

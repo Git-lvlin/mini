@@ -192,23 +192,23 @@ Component({
         areaData,
       } = this.data;
       let type = currentTarget.dataset.type;
-      if(selectAddress.isAct === "province" && !selectAddress[selectAddress.isAct].name) {
-        showToast({ title: "请选择所在省份" });
-        return ;
+      if(areaData[type] && areaData[type].length) {
+        selectAddress.isAct = type;
+        this.setData({
+          selectAddress,
+          areaList: areaData[type],
+        })
+      } else {
+        if(selectAddress.isAct === "province" && !selectAddress[selectAddress.isAct].name) {
+          showToast({ title: "请选择所在省份" });
+        }
+        if(selectAddress.isAct === "city" && !selectAddress[selectAddress.isAct].name) {
+          showToast({ title: "请选择所在城市" });
+        }
+        if(selectAddress.isAct === "area" && !selectAddress[selectAddress.isAct].name) {
+          showToast({ title: "请选择所在市区" });
+        }
       }
-      if(selectAddress.isAct === "city" && !selectAddress[selectAddress.isAct].name) {
-        showToast({ title: "请选择所在城市" });
-        return ;
-      }
-      if(selectAddress.isAct === "area" && !selectAddress[selectAddress.isAct].name) {
-        showToast({ title: "请选择所在市区" });
-        return ;
-      }
-      selectAddress.isAct = type;
-      this.setData({
-        selectAddress,
-        areaList: areaData[type],
-      })
     },
 
     // 选择地区

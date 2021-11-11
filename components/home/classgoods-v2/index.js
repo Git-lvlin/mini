@@ -279,5 +279,22 @@ create.Component(store, {
         })
       }
     },
+
+    // 点击二级分类
+    onSecondClass({
+      currentTarget,
+    }) {
+      const {
+        data,
+      } = currentTarget.dataset;
+      router.push({
+        name: "classGood",
+        data: {
+          id: data.gcId,
+          pid: data.gcParentId,
+          name: data.gcName,
+        }
+      })
+    },
   }
 })

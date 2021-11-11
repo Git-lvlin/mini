@@ -57,7 +57,7 @@
           <take-spot
             wx:for="{{markers}}"
             wx:key="id"
-            wx:if="{{!item.storeNo != currentSpot.storeNo}}"
+            wx:if="{{item.storeNo != currentSpot.storeNo}}"
             data="{{item}}"
             bind:click="onTakeSpot"
           />
