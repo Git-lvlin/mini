@@ -63,6 +63,7 @@ Page({
       size: 99,
       dayCode: code
     }
+    
     seckillApi.getXsmsGoodsList(param).then(res => {
       if (code === 'tomorrow') {
         this.setData({
