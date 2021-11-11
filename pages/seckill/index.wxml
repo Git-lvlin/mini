@@ -101,7 +101,7 @@
                 <view class="price-box">
                   <text class="head">¥</text>
                   <text class="money">{{item.salePrice/100}}</text>
-                  <text class="maxnum">{{item.reducePriceDisplay}}</text>
+                  <text class="maxnum" wx:if="{{item.reducePriceDisplay}}">{{item.reducePriceDisplay}}</text>
                 </view>
                 <view class="t">{{item.nearDaysDisplay}}</view>
               </view>
@@ -126,7 +126,9 @@
                 <view class="price-box-t">
                   <text class="head">¥</text>
                   <text class="money">{{item.salePrice/100}}</text>
+                  <text class="maxnum">{{item.reducePriceDisplay}}</text>
                 </view>
+                <view class="t">{{item.nearDaysDisplay}}</view>
               </view>
               <view class="btn-t {{item.isNotice==2?'btn-t-ed':''}}" data-data="{{[tomorrow, item]}}" bindtap="onRemind">{{item.isNotice==2?'已提醒':'提醒我'}}</view>
             </view>

@@ -246,7 +246,7 @@
   line-height: 34rpx;
 }
 .price-box-t {
-  margin-top: 86rpx;
+  margin-top: 42rpx;
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
@@ -311,7 +311,7 @@
 .btn-t {
   position: absolute;
   right: 0;
-  bottom: 0;
+  bottom: 60rpx;
   width: 120rpx;
   height: 68rpx;
   line-height: 68rpx;
