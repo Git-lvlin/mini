@@ -17,7 +17,7 @@
     <van-image width="100%" height="360rpx" src="{{tools.getImgUrl('miniprogram/seckill/bg@2x.png')}}" />
   </view>
   <view class="tab-box">
-    <van-tabs custom-class="custom" nav-class="nav-class" tab-active-class="tab-active" lazy-render="{{false}}" swipeable animated sticky active="{{ active }}" bind:change="tabChange" offset-top="{{ $.systemInfo.statusBarHeight + 40 }}">
+    <van-tabs custom-class="custom" nav-class="nav-class" tab-active-class="tab-active" lazy-render="{{false}}" swipeable animated sticky active="{{ active }}" bind:change="tabChange" offset-top="{{ $.systemInfo.navTotalHeightPx }}">
       <van-tab title-style="font-size:32rpx" title="{{seckillData.cmsWeekTitle}}">
         <item-list data="{{seckillData}}" active="{{active}}" index="{{1}}" bind:onremind="onRemind" bind:setfixed="setFixed" />
       </van-tab>
