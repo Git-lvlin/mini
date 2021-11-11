@@ -14,6 +14,8 @@ const url = {
   advert: "/public/open/adimgs",
 
   secondHotGoodsList: '/activity/open/secondHotGoodsList',
+  
+  classGood: '/goods/open/getHomeCategoryList'
 }
 
 const getExamine = (params) => {
@@ -101,4 +103,11 @@ export default {
   getPopularList(params, option) {
     return Request.post(url.secondHotGoodsList, params, option);
   },
+
+  // 秒约爆品列表
+  getClassGood(params, option) {
+    return Request.post(url.classGood, params, option);
+  },
+
+  
 }

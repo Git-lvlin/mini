@@ -36,7 +36,7 @@ Page({
 		commonApi.getBanner(data, {
 			showLoading: false
 		}).then(res => {
-			let bannerData = res.data[0];
+			let bannerData = res[0];
 			if(bannerData) {
 				this.setData({
 					banner: bannerData.image,

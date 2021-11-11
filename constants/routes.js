@@ -126,6 +126,11 @@ export default {
   signin: {
     path: "/subpages/cart/signin/index"
   },
+  // 分类商品列表
+  classGood: {
+    path: "/subpages/cart/classGood/index"
+  },
+  
 
 
   // 用户中心

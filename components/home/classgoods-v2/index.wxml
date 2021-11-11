@@ -31,6 +31,8 @@
       <view
         class="second_class_item"
         wx:if="{{index < 9}}"
+        data-data="{{item}}"
+        bindtap="onSecondClass"
       >
         <image class="second_class_icon" src="{{item.gcIcon}}" />
         <view class="second_name">{{item.gcName}}</view>

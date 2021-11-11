@@ -55,7 +55,8 @@
                 "priceDetail/index",
                 "signin/index",
                 "storeAddress/index",
-                "popularGood/index"
+                "popularGood/index",
+                "classGood/index"
             ]
         },
         {

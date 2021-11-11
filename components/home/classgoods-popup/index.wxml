@@ -19,6 +19,8 @@
           class="second_class_item"
           wx:for="{{$.homeData.classGoodV2.secondClass}}"
           wx:key="id"
+          data-data="{{item}}"
+          bindtap="onSecondClass"
         >
           <image class="class_icon" src="{{item.gcIcon}}" />
           <view class="class_name">{{item.gcName}}</view>
