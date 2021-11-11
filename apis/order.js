@@ -20,7 +20,9 @@ const url = {
   bondPay: "/store/auth/memberShop/apply/pay",
   orderToken: "/order/auth/orderToken",
   cancelPay: "/payment/open/adaPay/payCancel",
+
   
+  faterRed: "/activity/auth/sendMemberEverydayCoupon",
 }
 
 export default {
@@ -96,4 +98,8 @@ export default {
     return Request.post(url.cancelPay, params, option);
   },
 
+  // 领取每日
+  getFaterRed(params, option) {
+    return Request.post(url.faterRed, params, option);
+  },
 }

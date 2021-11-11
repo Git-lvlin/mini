@@ -93,24 +93,28 @@
   />
 
   <van-popup
-    show="{{ false }}"
+    show="{{ !!redData.isShow }}"
     custom-style="background: transparent"
   >
     <view class="day_red">
       <image class="red_back" src="{{tools.getImgUrl('miniprogram/cart/day_red_back.png')}}" />
-      <image class="red_colse" src="{{tools.getImgUrl('miniprogram/common/close.png')}}" />
+      <view class="flex_center red_close_box" bindtap="onCloseRed">
+        <image class="red_colse" src="{{tools.getImgUrl('miniprogram/common/close.png')}}" />
+      </view>
       <view class="red_content">
         <view class="flex_center">
-          <view class="price_text">2</view>
+          <view class="price_text">{{redData.freeAmount}}</view>
           <view class="util_text">元</view>
         </view>
-        <view class="act_btn" />
+        <view class="act_btn" bindtap="onOpenSharePopup" />
         <view class="red_time">
-          <van-count-down use-slot time="{{ 1000000 }}" bind:change="handleRedTime">
+          <van-count-down use-slot time="{{ redData.deadlineTime - redData.currentTime }}" bind:change="handleRedTime">
             <text class="red_time_item">{{ redTime.hours }}:{{ redTime.minutes }}:{{ redTime.seconds }}后过期</text>
           </van-count-down>
         </view>
       </view>
     </view>
   </van-popup>
+
+  <down-app-code show="{{ showSharePopup }}" bind:close="onHideSharePopup" />
 </view>

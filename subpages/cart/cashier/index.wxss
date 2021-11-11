@@ -194,11 +194,18 @@
   vertical-align: middle;
 }
 
-.red_colse {
+.red_close_box {
   width: 70rpx;
   height: 70rpx;
+  margin: 50rpx auto 0;
+  border: 4rpx solid #777;
+  border-radius: 50%;
+}
+
+.red_colse {
+  width: 50rpx;
+  height: 50rpx;
   vertical-align: middle;
-  margin-top: 50rpx;
 }
 
 .red_content {

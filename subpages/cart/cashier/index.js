@@ -26,6 +26,7 @@ Page({
   },
   loading: false,
   payType: 7,
+  orderInfo: {},
 
   data: {
     isPay: false,
@@ -42,9 +43,15 @@ Page({
     teamPopup: false,
     hotGood: [],
     orderCreateTime: "",
+    redData: {
+      isShow: 0
+    },
+    showSharePopup: false,
   },
 
-  onLoad: function (options) {
+  onLoad(options) {
+    this.orderInfo = options;
+    console.log("🚀 ~ file: index.js ~ line 49 ~ onLoad ~ options", options)
     // id: 1390912161480564700
     // orderSn: "16204542762334404122"
     // payAmount: 1
@@ -119,6 +126,8 @@ Page({
         this.setData({
           isPay
         })
+        // 模拟支付
+        this.getFaterRed();
       }
       this.setData({
         payData,
@@ -161,6 +170,52 @@ Page({
       this.loading = false;
     }).catch(err => {
       this.loading = false;
+    })
+  },
+
+  // 获取每日红包
+  getFaterRed() {
+    const {
+      id,
+      orderSn,
+    } = this.orderInfo;
+    cartApi.getFaterRed({
+      orderSn,
+      orderId: id,
+    }).then(res => {
+      this.setData({
+        redData: res
+      })
+    })
+  },
+
+  // 关闭每日红包
+  onCloseRed() {
+    const {
+      redData,
+    } = this.data;
+    redData.isShow = 0;
+    this.setData({
+      redData,
+    });
+  },
+
+  // 打开下载APP
+  onOpenSharePopup() {
+    const {
+      redData,
+    } = this.data;
+    redData.isShow = 0;
+    this.setData({
+      redData,
+      showSharePopup: true,
+    })
+  },
+
+  // 关闭下载APP
+  onHideSharePopup() {
+    this.setData({
+      showSharePopup: false
     })
   },
 
@@ -226,6 +281,7 @@ Page({
       that.setData({
         isPay: true,
       })
+      that.getFaterRed();
     }).catch(err => {
 
     });
