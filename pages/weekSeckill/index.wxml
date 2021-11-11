@@ -14,15 +14,15 @@
 <image class="back" style="top:{{$.systemInfo.statusHeight + 24}}rpx" bindtap="onBack" src="{{tools.getImgUrl('miniprogram/common/back_white@2x.png')}}" />
 <view class="container">
   <view class="banner">
-    <van-image width="100%" height="360rpx" src="{{tools.getImgUrl('miniprogram/seckill/seckill-bg.png')}}" />
+    <van-image width="100%" height="360rpx" src="{{tools.getImgUrl('miniprogram/seckill/bg@2x.png')}}" />
   </view>
   <view class="tab-box">
-    <van-tabs custom-class="custom" nav-class="nav-class" tab-active-class="tab-active" lazy-render="{{false}}" swipeable animated sticky active="{{ active }}" bind:change="tabChange" offset-top="{{ $.systemInfo.statusBarHeight + 20 *  $.systemInfo.rpxRatio }}">
+    <van-tabs custom-class="custom" nav-class="nav-class" tab-active-class="tab-active" lazy-render="{{false}}" swipeable animated sticky active="{{ active }}" bind:change="tabChange" offset-top="{{ $.systemInfo.statusBarHeight + 40 }}">
       <van-tab title-style="font-size:32rpx" title="{{seckillData.cmsWeekTitle}}">
-        <item-list data="{{seckillData}}" index="{{1}}" bind:onremind="onRemind" bind:setfixed="setFixed" />
+        <item-list data="{{seckillData}}" active="{{active}}" index="{{1}}" bind:onremind="onRemind" bind:setfixed="setFixed" />
       </van-tab>
       <van-tab title-style="font-size:32rpx" title="{{tomorrow.cmsWeekTitle}}">
-        <item-list data="{{tomorrow}}" index="{{2}}" bind:onremind="onRemind" bind:setfixed="setFixed" />
+        <item-list data="{{tomorrow}}" active="{{active}}" index="{{2}}" bind:onremind="onRemind" bind:setfixed="setFixed" />
       </van-tab>
     </van-tabs>
   </view>

@@ -8,7 +8,7 @@
   
   <view class="tips-box">
     <text class="tips-after">!</text>
-    <text class="tips-text">以下商品当前店铺没有售卖，点击提醒店主去采购</text>
+    <text class="tips-text">以下商品当前店铺没有售卖，点击提醒店主去集约</text>
   </view>
 
   <block wx:for="{{listData.records}}" wx:key="id">

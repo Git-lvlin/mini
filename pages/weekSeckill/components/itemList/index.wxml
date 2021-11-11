@@ -26,7 +26,7 @@
   };
 </wxs>
 <view class="today">
-  <van-sticky offset-top="{{ 22*systemInfo.rpxRatio + 20*systemInfo.rpxRatio+systemInfo.statusBarHeight }}" bind:scroll="onScroll">
+  <van-sticky offset-top="{{ 22*systemInfo.rpxRatio + 40 + systemInfo.statusBarHeight }}" bind:scroll="onScroll" wx:if="{{active==index-1}}">
     <view class="top-box-wrap">
       <view class="top-box">
         <view class="top-number">
@@ -78,8 +78,9 @@
         <view class="price-box">
           <text class="head">¥</text>
           <text class="money">{{item.salePrice/100}}</text>
-          <text class="maxnum" wx:if="{{item.cmsWeekCode === 1}}">限购{{item.buyMaxNum}}件</text>
+          <text class="maxnum" wx:if="{{item.cmsWeekCode === 1}}">{{item.reducePriceDisplay}}</text>
         </view>
+        <view class="t">{{item.nearDaysDisplay}}</view>
         <view class="nearDays" wx:if="{{item.cmsWeekCode === 1}}">{{item.nearDaysDisplay}}</view>
       </view>
       <view class="btn" wx:if="{{data.cmsWeekCode===1}}">抢购</view>
