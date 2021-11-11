@@ -30,7 +30,7 @@
     <view class="top-box-wrap">
       <view class="top-box">
         <view class="top-number">
-          {{index===1?data.virtualNoticeNum:data.virtualBuyNum}}人{{data.cmsWeekCode===1?'疯抢中':'等待中'}}
+          {{index===1?data.virtualBuyNum:data.virtualNoticeNum}}人{{data.cmsWeekCode===1?'疯抢中':'等待中'}}
         </view>
         <!-- <view class="top-number" wx:else>{{tomorrow.virtualNoticeNum}}已设置提醒</view> -->
         <swiper class="swiper" autoplay display-multiple-items="3" circular easing-function="linear" current="0" next-margin="44rpx" bindchange="iconChange">
@@ -78,7 +78,9 @@
         <view class="price-box">
           <text class="head">¥</text>
           <text class="money">{{item.salePrice/100}}</text>
-          <text class="maxnum" wx:if="{{item.reducePriceDisplay}}">{{item.reducePriceDisplay}}</text>
+          <text class="maxnum" wx:if="{{item.reducePriceDisplay}}">
+            {{item.reducePriceDisplay}}
+          </text>
         </view>
         <view class="nearDays" wx:if="{{item.nearDaysDisplay}}">{{item.nearDaysDisplay}}</view>
       </view>
