@@ -67,6 +67,7 @@ create.Page(store, {
       type: code
     }
     seckillApi.getXsmsWeekGoodsList(param).then(res => {
+      console.log('res11111', res)
       if (code === 2) {
         this.setData({
           tomorrow: res
