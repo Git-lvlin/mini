@@ -182,3 +182,53 @@
 .info_text {
   color: #333;
 }
+
+.day_red {
+  position: relative;
+  text-align: center;
+}
+
+.red_back {
+  width: 666rpx;
+  height: 880rpx;
+  vertical-align: middle;
+}
+
+.red_colse {
+  width: 70rpx;
+  height: 70rpx;
+  vertical-align: middle;
+  margin-top: 50rpx;
+}
+
+.red_content {
+  position: absolute;
+  top: 360rpx;
+  right: 60rpx;
+  left: 80rpx;
+  bottom: 120rpx;
+}
+
+.price_text {
+  font-size: 176rpx;
+  /* font-weight: 600; */
+  color: #986E40;
+  line-height: 176rpx;
+}
+
+.util_text {
+  font-size: 81rpx;
+  /* font-weight: 600; */
+  color: #986E40;
+  line-height: 81rpx;
+  margin-left: 8rpx;
+}
+
+.act_btn {
+  position: absolute;
+  bottom: 98rpx;
+  left: 50%;
+  width: 144rpx;
+  height: 144rpx;
+  transform: translateX(-50%);
+}

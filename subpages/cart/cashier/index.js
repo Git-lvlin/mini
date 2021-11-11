@@ -37,6 +37,7 @@ Page({
     payAmount: 0,
     downTime: 0,
     timeData: {},
+    redTime: {},
     payData: {},
     teamPopup: false,
     hotGood: [],
@@ -176,6 +177,12 @@ Page({
   handleChangeTime(e) {
     this.setData({
       timeData: e.detail,
+    });
+  },
+
+  handleRedTime(e) {
+    this.setData({
+      redTime: e.detail,
     });
   },
 
