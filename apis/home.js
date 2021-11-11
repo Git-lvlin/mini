@@ -25,6 +25,11 @@ const getExamine = (params) => {
       verifyVersionId: 2,
       ...params
     };
+  } else {
+    params = {
+      verifyVersionId: 3,
+      ...params
+    };
   }
   return params;
 }

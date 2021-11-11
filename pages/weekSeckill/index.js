@@ -66,6 +66,8 @@ create.Page(store, {
       size: 99,
       type: code
     }
+    param = homeApi.getExamine(param);
+    console.log('param', param);
     seckillApi.getXsmsWeekGoodsList(param).then(res => {
       console.log('res11111', res)
       if (code === 2) {
