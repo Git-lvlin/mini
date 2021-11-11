@@ -49,9 +49,9 @@ Page({
     showModal({
       content: "您确定要修改提货人信息？",
       ok() {
-        wx.setStorageSync("STORE_SHIPPER_INFO", {
-          user,
-          phone,
+        wx.setStorageSync("ORDER_STORE_LOCATION", {
+          setUser,
+          setPhone,
         });
         router.go();
       },

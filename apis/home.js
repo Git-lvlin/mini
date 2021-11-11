@@ -12,6 +12,10 @@ const url = {
   shareInfo: "/share/option/shareParam/queryShareContent",
 
   advert: "/public/open/adimgs",
+
+  secondHotGoodsList: '/activity/open/secondHotGoodsList',
+  
+  classGood: '/goods/open/getHomeCategoryList'
 }
 
 const getExamine = (params) => {
@@ -94,4 +98,16 @@ export default {
   getAdvert(params, option) {
     return Request.post(url.advert, params, option);
   },
+
+  // 秒约爆品列表
+  getPopularList(params, option) {
+    return Request.post(url.secondHotGoodsList, params, option);
+  },
+
+  // 秒约爆品列表
+  getClassGood(params, option) {
+    return Request.post(url.classGood, params, option);
+  },
+
+  
 }

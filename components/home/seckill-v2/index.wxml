@@ -3,7 +3,7 @@
 <view class="seckill" wx:if="{{seckillList.length}}" >
   <view class="flex_middle seckill_content" >
     <view class="flex_fix flex_middle seckill_head">
-      <image class="seakill_pic" src="{{tools.getImgUrl('miniprogram/v2-home/seckill-icon.png')}}" />
+      <image class="seakill_pic" src="{{tools.getImgUrl('miniprogram/v2-home/seckill-icon.png')}}" bindtap="onToPopularGood" />
       <image class="seakill_shadow" src="{{tools.getImgUrl('miniprogram/v2-home/seckill-shadow.png')}}" />
     </view>
     <scroll-view

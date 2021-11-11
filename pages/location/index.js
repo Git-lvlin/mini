@@ -52,6 +52,7 @@ create.Page(store, {
     // 显示搜索地址
     showAddress: false,
     mapScale: 13,
+    inputText: '',
   },
 
   onShow() {
@@ -341,9 +342,9 @@ create.Page(store, {
   }) {
     const inputText = detail.value;
     debounce(() => {
-      // this.setData({
-      //   inputText
-      // });
+      this.setData({
+        inputText
+      });
       if(inputText == '') {
         this.setData({
           showAddress: false
@@ -485,7 +486,10 @@ create.Page(store, {
         address: `${cityData.province}${cityData.city}${cityData.district}`
       }).then(res => {
         this.selectLocation = res.geocodes[0].location;
-        console.log(this.selectLocation)
+        this.setData({
+          inputText: cityData.district,
+        });
+        this.getPoiAround(cityData.district);
       });
     }
     this.setData({

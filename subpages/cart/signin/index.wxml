@@ -18,7 +18,7 @@
         <text class="res_total_money">{{signInfo.signAmount || 0}}</text>
         元
       </view>
-      <view class="flex_fix flex_center red_total_btn" bindtap="onOpenRule">
+      <view class="flex_fix flex_center red_total_btn" bindtap="onOpenDetailRed">
         明细
         <image class="red_right" src="{{tools.getImgUrl('miniprogram/sign/red-total-right.png')}}" />
       </view>
@@ -96,9 +96,9 @@
             <view class="good_price_box">
               <view class="flex_middle sale_price">
                 到手价
-                <price-mobel money="{{item.goodsSalePrice}}" maxSize="{{40}}" />
+                <price-mobel money="{{item.finalPrice}}" maxSize="{{40}}" />
               </view>
-              <view class="market_price">销售价¥{{item.goodsMarketPrice}}</view>
+              <view class="market_price">销售价¥{{item.goodsSalePrice}}</view>
             </view>
             <view class="buy_btn">抢购</view>
           </view>
@@ -153,7 +153,7 @@
     position="bottom"
     closeable
     custom-style="background-color: transparent;"
-    bind:close="onCloseRule"
+    bind:close="onCloseDetailRed"
   >
     <view class="rule_content">
       <view class="rule_title">签到红包明细</view>

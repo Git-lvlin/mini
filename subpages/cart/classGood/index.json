@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "",
+  "usingComponents": {
+    "class-good": "/components/home/classgood-card/index",
+    "nodata": "/components/common/nodata/index"
+  }
+}

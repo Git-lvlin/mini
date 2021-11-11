@@ -212,14 +212,14 @@ create.Page(store, {
   },
 
   // 打开使用明细
-  onOpenRule() {
+  onOpenDetailRed() {
     this.setData({
       redDetailPopup: true
     })
   },
 
   // 关闭使用明细
-  onCloseRule() {
+  onCloseDetailRed() {
     this.setData({
       redDetailPopup: false
     })

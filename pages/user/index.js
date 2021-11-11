@@ -30,7 +30,7 @@ create.Page(store, {
         action: "coupon"
       },
       {
-        text: "积分",
+        text: "爱心值",
         value: 0,
       },
     ],

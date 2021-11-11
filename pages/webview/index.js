@@ -5,7 +5,7 @@ Page({
 
   data: {
     // link: "https://publicmobile-uat.yeahgo.com/web/user-appointment",
-    link: "https://baidu.com",
+    link: "",
   },
 
   onLoad(options) {
