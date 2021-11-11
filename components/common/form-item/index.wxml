@@ -5,6 +5,7 @@
   <view class="flex_middle cell_value">
     <input
       type="{{inputType}}"
+      value="{{value}}"
       class="cell_input {{textAlign}}"
       maxlength="{{maxLength}}"
       placeholder="{{placeholder}}"

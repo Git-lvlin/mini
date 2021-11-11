@@ -9,7 +9,8 @@ create.Component(store, {
   properties: {
     data: {
       type: Object,
-      value: {}
+      value: {},
+
     },
     idx: {
       type: Number,

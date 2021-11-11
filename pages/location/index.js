@@ -216,6 +216,10 @@ create.Page(store, {
   }) {
     if(!detail.isCurrent) {
       this.setMarket(detail.id);
+      this.setData({
+        latitude: detail.latitude,
+        longitude: detail.longitude,
+      });
     }
   },
 

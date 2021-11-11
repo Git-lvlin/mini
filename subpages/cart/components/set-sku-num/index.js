@@ -12,7 +12,7 @@ create.Component(store, {
   
   computed: {
     skuNum() {
-      return this.skuNumData.data && this.skuNumData.data.skuNum || 1;
+      return this.skuNumData.data && this.skuNumData.data.skuNum ? this.skuNumData.data.skuNum : 1;
     },
     batchNumber() {
       const {
@@ -70,6 +70,8 @@ create.Component(store, {
       if(skuNum > good.buyMaxNum) {
         skuNum = good.buyMaxNum;
       }
+      // good.skuNum = skuNum;
+      // this.store.data.skuNumData.data = good;
       this.setData({
         skuNum
       })
