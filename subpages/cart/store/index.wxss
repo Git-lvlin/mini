@@ -48,13 +48,15 @@ page {
 
 .store_good_content {
   position: relative;
-  margin-top: 24rpx;
+  margin-top: 16rpx;
 }
 
 .store_good_head {
   position: sticky;
   top: 0;
   z-index: 9;
+  padding-top: 12rpx;
+  background-color: #fff;
 }
 
 .good_class {

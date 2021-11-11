@@ -21,7 +21,7 @@
 
   <view class="store_good_content" wx:if="{{goodList.length}}">
     <view class="store_good_head">
-      <view class="good_class">全部商品</view>
+      <!-- <view class="good_class">全部商品</view> -->
       <screen-bar bind:click="onScreenItem" />
     </view>
     <view class="flex_middle store_good_list">
