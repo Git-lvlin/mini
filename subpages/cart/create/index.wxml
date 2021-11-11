@@ -63,6 +63,7 @@
           objectId="{{objectId}}"
           activityId="{{activityId}}"
           bind:changeNum="handleChangeNum"
+          bind:changeNot="handleChangeNot"
         />
       </view>
 
@@ -89,7 +90,7 @@
           <view class="cell_name">运费</view>
           <view class="cell_value">￥{{orderInfo.shippingFeeAmount || 0}}</view>
         </view>
-        <view class="cell_item" wx:if="{{orderType != 15}}">
+        <!-- <view class="cell_item" wx:if="{{orderType != 15}}">
           <view class="cell_name">给商家留言</view>
           <view class="cell_value">
             <input
@@ -100,10 +101,10 @@
               bindinput="handleMsgInput"
             />
           </view>
-        </view>
+        </view> -->
       </view>
 
-      <view class="store_msg" wx:if="{{orderType == 15}}">
+      <!-- <view class="store_msg" wx:if="{{orderType == 15}}">
         备注
         <input
           class="store_msg_input"
@@ -111,7 +112,7 @@
           placeholder="选填,如有特殊需求可以告诉我们"
           bindinput="handleMsgInput"
         />
-      </view>
+      </view> -->
     </view>
   </view>
 

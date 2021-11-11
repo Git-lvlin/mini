@@ -30,9 +30,6 @@
 }
 
 .item {
-  display: flex;
-  align-items: center;
-  padding-bottom: 47rpx;
 }
 
 .good_img {
@@ -120,6 +117,23 @@
   align-items: center;
   justify-content: flex-end;
   padding: 27rpx 32rpx 24rpx 0;
+}
+
+.note_box {
+  justify-content: space-between;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  padding: 32rpx 0;
+  margin-right: 32rpx;
+}
+
+.note_input {
+  flex: 1;
+  height: 40rpx;
+  padding: 0;
+  line-height: 40rpx;
+  text-align: right;
 }
 
 .txt {

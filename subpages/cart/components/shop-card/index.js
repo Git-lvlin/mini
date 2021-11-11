@@ -75,6 +75,17 @@ create.Component(store, {
         pidx: idx,
       }
       this.store.setSkuNumPopup(true)
-    }
+    },
+
+    handleInput({
+      detail,
+    }) {
+      let {
+        data,
+        idx
+      } = this.data;
+      data.note = detail.value;
+      this.triggerEvent("changeNot", { data, idx});
+    },
   }
 })

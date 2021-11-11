@@ -26,6 +26,7 @@
     </view>
     <view class="flex_middle store_good_list">
       <good-card
+        twoTitle="{{true}}"
         wx:for="{{goodList}}"
         wx:key="index"
         data="{{item}}"

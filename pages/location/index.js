@@ -156,12 +156,15 @@ create.Page(store, {
           markers: list,
           listIsLoad: true,
           currentSpot,
+        }, () => {
+          if(list.length) {
+            this.onCurrentSpot();
+          }
         });
       } else {
         this.setData({
           markers: [],
           listIsLoad: true,
-          currentSpot: {},
         });
       }
     })
@@ -194,19 +197,23 @@ create.Page(store, {
     markers.forEach(item => {
       if(item.storeNo == currentSpot.storeNo) {
         item.iconPath = item.storeLogo;
-        item.width = 28;
-        item.height = 28;
+        item.width = 36;
+        item.height = 36;
         item.selected = true;
+        item.zIndex = 5;
       } else {
         item.iconPath = deflocationIcon;
         item.width = 23;
         item.height = 32;
         item.selected = false;
+        item.zIndex = 0;
       }
     });
     this.setData({
       currentSpot,
       markers,
+      latitude: currentSpot.latitude,
+      longitude: currentSpot.longitude,
     });
   },
 
@@ -234,15 +241,17 @@ create.Page(store, {
     markers.forEach((item, index) => {
       if(idx === index) {
         item.iconPath = item.storeLogo;
-        item.width = 28;
-        item.height = 28;
+        item.width = 36;
+        item.height = 36;
         item.selected = true;
+        item.zIndex = 5;
         selectSpot = item;
       } else {
         item.iconPath = deflocationIcon;
         item.width = 23;
         item.height = 32;
         item.selected = false;
+        item.zIndex = 0;
       }
     });
     currentSpot.selected = false;

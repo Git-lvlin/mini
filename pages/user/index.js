@@ -31,7 +31,7 @@ create.Page(store, {
       },
       {
         text: "爱心值",
-        value: 0,
+        value: 600,
       },
     ],
     userInfo: "",
@@ -112,7 +112,7 @@ create.Page(store, {
       }
       userData[0].value = res.balance || 0;
       userData[1].value = res.couponNum || 0;
-      userData[2].value = res.integralValue || 0;
+      // userData[2].value = res.integralValue || 0;
       this.setData({
         userData,
       })

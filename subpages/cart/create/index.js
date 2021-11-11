@@ -49,7 +49,6 @@ create.Page(store, {
     orderInfo: {},
     useCoupon: true,
     couponPopup: false,
-    note: "",
     storeAdress: "",
     storeActivityGood: "",
     objectId: "",
@@ -412,6 +411,19 @@ create.Page(store, {
     });
   },
 
+  // 修改订单备注
+  handleChangeNot({
+    detail
+  }) {
+    let {
+      orderInfo,
+    } = this.data;
+    orderInfo.storeGoodsInfos[detail.idx] = detail.data;
+    this.setData({
+      orderInfo,
+    });
+  },
+
   // 监听修改下单数量
   handleChangeNum({
     detail
@@ -585,7 +597,6 @@ create.Page(store, {
     const {
       addressInfo,
       orderInfo,
-      note,
       storeActivityGood,
       orderToken,
     } = this.data;
@@ -612,7 +623,6 @@ create.Page(store, {
       totalAmount: util.multiply(orderInfo.totalAmount, 100),
       payAmount: util.multiply(orderInfo.payAmount, 100),
       deliveryMode: 1,
-      note: note,
       shippingFeeAmount: orderInfo.shippingFeeAmount || 0,
       deliveryInfo: this.mapAddress(addressInfo),
       storeGoodsInfos: [],
@@ -635,7 +645,6 @@ create.Page(store, {
   getStoreGood() {
     const {
       storeAdress,
-      note,
       orderInfo,
       addressInfo,
       selectAddressType,
@@ -660,7 +669,6 @@ create.Page(store, {
       totalAmount: util.multiply(orderInfo.totalAmount, 100),
       payAmount: util.multiply(orderInfo.payAmount, 100),
       deliveryMode: selectAddressType.type,
-      note,
       shippingFeeAmount: orderInfo.shippingFeeAmount || 0,
       deliveryInfo: this.mapAddress(storeAdress),
       storeGoodsInfos: this.getStoreGoodsInfos(orderInfo.storeGoodsInfos),
@@ -674,6 +682,7 @@ create.Page(store, {
     storeList.forEach(item => {
       let storeGood = {
         storeNo: item.storeNo,
+        note: item.note || "",
         goodsInfos: []
       };
       item.goodsInfos.forEach(child => {
