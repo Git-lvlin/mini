@@ -24,6 +24,7 @@ const REFRESH_TOKEN_INVALID = 10015;
  * mustLogin     boolean  是否必须登录
 */
 const Reqeust = (params) => {
+  console.log('params1111', params)
   const baseUrl = getBaseApiUrl();
   const token = wx.getStorageSync("ACCESS_TOKEN");
   const header = {
