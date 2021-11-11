@@ -38,7 +38,7 @@
           data-data="{{item}}"
           bindtap="onUserData"
         >
-          <view class="data_item_value">{{item.value}}</view>
+          <view class="data_item_value">{{index == 2 && !!userInfo ? 600 : item.value}}</view>
           <view>{{item.text}}</view>
         </view>
         <view class="flex_fix data_item_line" wx:if="{{index != 0 && index != userData.length - 1}}" />
