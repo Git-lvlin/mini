@@ -250,4 +250,5 @@ create.Page(store, {
       },
     });
   },
+  notmove() {},
 })
