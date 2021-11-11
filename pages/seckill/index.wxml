@@ -106,40 +106,6 @@
               </view>
               <view class="btn">抢购</view>
             </view>
-
-            <view class="tab-item" data-data="{{item}}" bindtap="onGood">
-              <van-image
-                class="left-img"
-                width="234rpx"
-                height="234rpx"
-                src="{{item.image}}"
-              />
-              <view class="right-box">
-                <view class="title">{{item.title}}</view>
-                <view class="progress-bar-box">
-                  <view class="progress-bar">
-                    <view class="progress-index" style="width:{{item.buyNumDisplay}}%">{{item.buyNumDisplay>=50?item.buyNumDisplay+'%':''}}</view>
-                    <!-- <van-image
-                      class="progress-img"
-                      width="40rpx"
-                      height="40rpx"
-                      src="{{tools.getImgUrl('miniprogram/seckill/index-icon.png')}}"
-                    /> -->
-                    <image mode="widthFix" class="progress-img" src="{{tools.getImgUrl('miniprogram/seckill/index-icon.png')}}" />
-                    <view wx:if="{{item.buyNumDisplay<50}}" style="width:{{100-item.buyNumDisplay}}%" class="poor">{{item.buyNumDisplay}}%</view>
-                  </view>
-                  <view class="stock">库存{{u.num(item.stockNum)}}</view>
-                </view>
-                <view class="subtitle">{{item.subtitle}}</view>
-                <view class="price-box">
-                  <text class="head">¥</text>
-                  <text class="money">{{item.salePrice/100}}</text>
-                </view>
-                <view class="t">{{item.nearDaysDisplay}}</view>
-              </view>
-              <view class="btn">抢购</view>
-            </view>
-
           </block>
         </view>
       </van-tab>
