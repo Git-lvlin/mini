@@ -113,7 +113,6 @@ create.Page(store, {
     let params = {
       useType: 5,
       location: 2,
-      verifyVersionId: this.isMiniExamine ? 2 : 3,
     }
     return new Promise((reject) => {
       homeApi.getBannerList(params).then((res) => {

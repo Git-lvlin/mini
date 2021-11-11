@@ -52,7 +52,6 @@ Page({
 
     let param = {
       indexVersion: 1,
-      verifyVersionId: 1,
       next: 0,
       size: 99,
       dayCode: code
