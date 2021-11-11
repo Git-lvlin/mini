@@ -19,10 +19,10 @@
       <view class="head_text" wx:if="{{!userInfo}}" catchtap="onToLogin">登录/注册</view>
       <view class="user_info" wx:else >
         <view class="head_text">{{userInfo.nickName}}</view>
-        <view class="user_level" >
+        <!-- <view class="user_level" >
           <image class="level_icon" src="{{userInfo.levelIcon}}" />
           <view class="level_name">{{userInfo.levelText || "普通会员"}}</view>
-        </view>
+        </view> -->
       </view>
       <view class="flex_fix right_arrow user_head_right" />
     </view>

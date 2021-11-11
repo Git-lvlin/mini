@@ -52,7 +52,7 @@
             bind:click="onCurrentSpot"
           />
         </view>
-        <view class="other_spot">
+        <view class="other_spot" wx:if="{{markers.length}}">
           <view class="current_spot_text">当前定位附近的自提点</view>
           <take-spot
             wx:for="{{markers}}"
@@ -62,7 +62,7 @@
             bind:click="onTakeSpot"
           />
         </view>
-        <nodata wx:if="{{listIsLoad && !markers.length}}" title="附近没有店铺呢" type="search" top="{{20}}" />
+        <!-- <nodata wx:if="{{listIsLoad && !markers.length}}" title="附近没有店铺呢" type="search" top="{{20}}" /> -->
       </view>
     </view>
 

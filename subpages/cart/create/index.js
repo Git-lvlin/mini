@@ -49,7 +49,6 @@ create.Page(store, {
     orderInfo: {},
     useCoupon: true,
     couponPopup: false,
-    note: "",
     storeAdress: "",
     storeActivityGood: "",
     objectId: "",
@@ -342,13 +341,15 @@ create.Page(store, {
       selectAddressType,
     } = storeData;
     // 集约商家配送
-    if((orderType == 15 || orderType == 16) && selectAddressType && selectAddressType.type == 3) {
+    if(orderType == 15 || orderType == 16) {
       let newStoreAddress = wx.getStorageSync('ORDER_STORE_LOCATION');
       if(newStoreAddress && newStoreAddress.setUser) {
         data.consignee = newStoreAddress.setUser;
         data.phone = newStoreAddress.setPhone;
-        data.address = newStoreAddress.setAllAddress + newStoreAddress.setAddress;
-        data.fullAddress = newStoreAddress.setAllAddress + newStoreAddress.setAddress;
+        if(selectAddressType && selectAddressType.type == 3) {
+          data.address = newStoreAddress.setAllAddress + newStoreAddress.setAddress;
+          data.fullAddress = newStoreAddress.setAllAddress + newStoreAddress.setAddress;
+        }
       }
     }
     return data;
@@ -410,6 +411,19 @@ create.Page(store, {
     });
   },
 
+  // 修改订单备注
+  handleChangeNot({
+    detail
+  }) {
+    let {
+      orderInfo,
+    } = this.data;
+    orderInfo.storeGoodsInfos[detail.idx] = detail.data;
+    this.setData({
+      orderInfo,
+    });
+  },
+
   // 监听修改下单数量
   handleChangeNum({
     detail
@@ -442,18 +456,11 @@ create.Page(store, {
       storeGoodsInfos.push(storeItem);
     })
     let postData = {};
-    if ((this.orderType == 15 || this.orderType == 16) && selectAddressType.type == 2) {
+    if (this.orderType == 15 || this.orderType == 16) {
       postData = {
         changeStore: detail,
         note,
         deliveryInfo: this.mapAddress(storeAdress),
-        // deliveryInfo: {
-        //   provinceId: storeAdress.provinceId,
-        //   cityId: storeAdress.cityId,
-        //   districtId: storeAdress.districtId,
-        //   districtName: storeAdress.districtName,
-        //   streetName: storeAdress.streetName || "",
-        // },
         storeGoodsInfos,
       }
     } else {
@@ -464,13 +471,6 @@ create.Page(store, {
       }
       if (addressInfo.provinceId) {
         postData.deliveryInfo = this.mapAddress(addressInfo);
-        // postData.deliveryInfo = {
-        //   provinceId: addressInfo.provinceId,
-        //   cityId: addressInfo.cityId,
-        //   districtId: addressInfo.districtId,
-        //   districtName: addressInfo.districtName,
-        //   streetName: addressInfo.streetName || "",
-        // }
       }
     }
     this.changeStoreData = postData.storeGoodsInfos;
@@ -515,7 +515,7 @@ create.Page(store, {
         reduceAmount: util.divide(reduceAmount, 100),
         shippingFeeAmount: util.divide(shippingFeeAmount, 100),
         totalAmount: util.divide(totalAmount, 100),
-        storeGoodsInfos: storeShippingFeeAmount
+        // storeGoodsInfos: storeShippingFeeAmount
       }
       if(changeStore && changeStore.data && changeStore.data.storeNo) {
         orderInfo.storeGoodsInfos[changeStore.idx] = {
@@ -597,7 +597,6 @@ create.Page(store, {
     const {
       addressInfo,
       orderInfo,
-      note,
       storeActivityGood,
       orderToken,
     } = this.data;
@@ -624,7 +623,6 @@ create.Page(store, {
       totalAmount: util.multiply(orderInfo.totalAmount, 100),
       payAmount: util.multiply(orderInfo.payAmount, 100),
       deliveryMode: 1,
-      note: note,
       shippingFeeAmount: orderInfo.shippingFeeAmount || 0,
       deliveryInfo: this.mapAddress(addressInfo),
       storeGoodsInfos: [],
@@ -647,7 +645,6 @@ create.Page(store, {
   getStoreGood() {
     const {
       storeAdress,
-      note,
       orderInfo,
       addressInfo,
       selectAddressType,
@@ -672,7 +669,6 @@ create.Page(store, {
       totalAmount: util.multiply(orderInfo.totalAmount, 100),
       payAmount: util.multiply(orderInfo.payAmount, 100),
       deliveryMode: selectAddressType.type,
-      note,
       shippingFeeAmount: orderInfo.shippingFeeAmount || 0,
       deliveryInfo: this.mapAddress(storeAdress),
       storeGoodsInfos: this.getStoreGoodsInfos(orderInfo.storeGoodsInfos),
@@ -686,6 +682,7 @@ create.Page(store, {
     storeList.forEach(item => {
       let storeGood = {
         storeNo: item.storeNo,
+        note: item.note || "",
         goodsInfos: []
       };
       item.goodsInfos.forEach(child => {

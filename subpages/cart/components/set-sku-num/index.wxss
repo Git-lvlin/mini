@@ -22,7 +22,6 @@
   width: 160rpx;
   height: 68rpx;
   text-align: center;
-  box-sizing: border-box;
   border: 2rpx solid #bbb;
 }
 

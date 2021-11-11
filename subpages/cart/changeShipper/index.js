@@ -9,16 +9,15 @@ Page({
     phone: "",
   },
 
-  onLoad: function (options) {
+  onLoad(options) {
     this.storeNo = options.storeNo;
-  },
-
-  onHide: function () {
-
-  },
-
-  onUnload: function () {
-
+    let data = wx.getStorageSync("ORDER_STORE_LOCATION");
+    if(data && data.setUser) {
+      this.setData({
+        user: data.setUser,
+        phone: data.setPhone,
+      });
+    }
   },
 
   handleInput({
@@ -49,10 +48,13 @@ Page({
     showModal({
       content: "您确定要修改提货人信息？",
       ok() {
-        wx.setStorageSync("ORDER_STORE_LOCATION", {
-          setUser,
-          setPhone,
-        });
+        let data = wx.getStorageSync("ORDER_STORE_LOCATION");
+        data = {
+          ...data,
+          setUser: user,
+          setPhone: phone
+        };
+        wx.setStorageSync("ORDER_STORE_LOCATION", data);
         router.go();
       },
     })

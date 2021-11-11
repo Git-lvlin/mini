@@ -3,14 +3,13 @@
 <image class="sign_back" bindtap="onBack" src="{{tools.getImgUrl('miniprogram/sign/sign-back.png')}}" />
 
 <view class="container">
-  <view class="flex_fix">
-    <view class="nav_content" style="padding-bottom: {{$.systemInfo.bottomBarHeight}}rpx;background-image: url({{tools.getImgUrl('miniprogram/sign/sign-back.png')}})">
-      <view class="flex_center nav_box" style="height: {{$.systemInfo.navBarHeight}}rpx;padding-top: {{$.systemInfo.statusHeight}}rpx;">
-        <image class="nav_back" src="{{tools.getImgUrl('miniprogram/common/back_black%402x.png')}}" bindtap="onBack"/>
-        <view class="nav_title">每日签到</view>
-      </view>
+  <view class="flex_fix nav_content" style="padding-bottom: {{$.systemInfo.bottomBarHeight}}rpx;background-image: url({{tools.getImgUrl('miniprogram/sign/sign-back.png')}})">
+    <view class="flex_center nav_box" style="height: {{$.systemInfo.navBarHeight}}rpx;padding-top: {{$.systemInfo.statusHeight}}rpx;">
+      <image class="nav_back" src="{{tools.getImgUrl('miniprogram/common/back_black%402x.png')}}" bindtap="onBack"/>
+      <view class="nav_title">每日签到</view>
     </view>
-
+  </view>
+  <view class="flex_fix">
     <view class="flex_middle red_total">
       <image class="flex_fix red_icon" src="{{tools.getImgUrl('miniprogram/sign/red-total-icon.png')}}" />
       <view class="red_total_title">
@@ -112,7 +111,7 @@
     custom-style="background-color: transparent;"
     bind:close="onCloseRed"
   >
-    <view class="red_popup">
+    <view class="red_popup" catchtouchmove="notmove">
       <image class="red_cover" src="{{tools.getImgUrl('miniprogram/sign/red_cover.png')}}" />
       <view class="red_popup_content">
         <view class="flex_center red_popup_head">
@@ -142,7 +141,7 @@
     custom-style="background-color: transparent;"
     bind:close="onCloseRule"
   >
-    <view class="rule_content">
+    <view class="rule_content" catchtouchmove="notmove">
       <view class="rule_title">活动规则</view>
       <view class="rule_text">{{signInfo.signRedRule.remark}}</view>
     </view>
@@ -155,7 +154,7 @@
     custom-style="background-color: transparent;"
     bind:close="onCloseDetailRed"
   >
-    <view class="rule_content">
+    <view class="rule_content" catchtouchmove="notmove">
       <view class="rule_title">签到红包明细</view>
       <view class="flex_middle red_use">
         <view

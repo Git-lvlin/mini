@@ -12,7 +12,7 @@ create.Component(store, {
   
   computed: {
     skuNum() {
-      return this.skuNumData.data && this.skuNumData.data.skuNum || 1;
+      return this.skuNumData.data && this.skuNumData.data.skuNum ? this.skuNumData.data.skuNum : 1;
     },
     batchNumber() {
       const {
@@ -70,6 +70,8 @@ create.Component(store, {
       if(skuNum > good.buyMaxNum) {
         skuNum = good.buyMaxNum;
       }
+      // good.skuNum = skuNum;
+      // this.store.data.skuNumData.data = good;
       this.setData({
         skuNum
       })
@@ -78,10 +80,16 @@ create.Component(store, {
     handleChangeInput({
       detail
     }) {
-      const {
+      let {
         skuNum,
       } = this.data;
       if(detail.value == '') {
+        const {
+          skuNumData,
+        } = this.store.data;
+        const good = skuNumData.data || {};
+        let buyMinNum = good.buyMinNum < 1 ? 1 : good.buyMinNum;
+        skuNum = skuNum < buyMinNum ? buyMinNum : skuNum;
         this.setData({
           skuNum,
         });
@@ -131,13 +139,16 @@ create.Component(store, {
       const {
         skuNumData,
       } = this.store.data;
-      const {
+      let {
         skuNum
       } = this.data;
       if(!dataFormat.checkVerifyCode(+skuNum)) {
         showToast({ title: "请输入数字"});
         return;
       }
+      const good = skuNumData.data || {};
+      let buyMinNum = good.buyMinNum < 1 ? 1 : good.buyMinNum;
+      skuNum = skuNum < buyMinNum ? buyMinNum : skuNum;
       skuNumData.data.skuNum = skuNum;
       this.store.setSkuNumPopup(false);
       this.triggerEvent("confirm", skuNumData);

@@ -21,6 +21,10 @@ Component({
     jump: {
       type: Boolean,
       value: true,
+    },
+    twoTitle: {
+      type: Boolean,
+      value: false,
     }
   },
 
