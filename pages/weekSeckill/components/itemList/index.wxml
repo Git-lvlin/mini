@@ -43,7 +43,7 @@
           </block>
         </swiper>
         <view class="time-box">
-          <text class="text">即将{{active==0?'结束':'开始'}}</text>
+          <text class="text">即将{{cmsWeekCode==1?'结束':'开始'}}</text>
           <van-count-down format="DD:HH:mm:ss" use-slot time="{{ data.deadlineTime-data.currentTime }}" bind:change="onChange">
             <text class="time" wx:if="{{timeData.days!=0}}">{{ timeData.days }}</text>
             <text class="days" wx:if="{{timeData.days!=0}}">天</text>
@@ -78,9 +78,9 @@
         <view class="price-box">
           <text class="head">¥</text>
           <text class="money">{{item.salePrice/100}}</text>
-          <text class="maxnum" wx:if="{{item.cmsWeekCode === 1}}">{{item.reducePriceDisplay}}</text>
+          <text class="maxnum" wx:if="{{item.cmsWeekCode === 1 && item.reducePriceDisplay}}">{{item.reducePriceDisplay}}</text>
         </view>
-        <view class="t">{{item.nearDaysDisplay}}</view>
+        <view class="t" wx:if="{{item.nearDaysDisplay}}">{{item.nearDaysDisplay}}</view>
         <view class="nearDays" wx:if="{{item.cmsWeekCode === 1}}">{{item.nearDaysDisplay}}</view>
       </view>
       <view class="btn" wx:if="{{data.cmsWeekCode===1}}">抢购</view>
