@@ -93,7 +93,7 @@
   />
 
   <van-popup
-    show="{{false}}"
+    show="{{ false }}"
     custom-style="background: transparent"
   >
     <view class="day_red">
@@ -107,9 +107,7 @@
         <view class="act_btn" />
         <view class="red_time">
           <van-count-down use-slot time="{{ 1000000 }}" bind:change="handleRedTime">
-            <text class="red_time_item">{{ redTime.hours }}</text>:
-            <text class="red_time_item">{{ redTime.minutes }}</text>:
-            <text class="red_time_item">{{ redTime.seconds }}</text>后过期
+            <text class="red_time_item">{{ redTime.hours }}:{{ redTime.minutes }}:{{ redTime.seconds }}后过期</text>
           </van-count-down>
         </view>
       </view>
