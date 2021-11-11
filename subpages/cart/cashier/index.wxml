@@ -91,4 +91,14 @@
     show="{{teamPopup}}"
     bind:close="handleCloseTeam"
   />
+
+  <van-popup
+    show="{{false}}"
+    custom-style="backgroud: transparent"
+  >
+    <view class="day_red">
+      <image class="red_back" src="{{tools.getImgUrl('miniprogram/cart/day_red_back.png')}}" />
+
+    </view>
+  </van-popup>
 </view>
