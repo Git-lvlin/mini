@@ -26,11 +26,11 @@
   };
 </wxs>
 <view class="today">
-  <van-sticky offset-top="{{ 22*systemInfo.rpxRatio + systemInfo.navTotalHeightPx }}" bind:scroll="onScroll" wx:if="{{active==index-1}}">
+  <van-sticky offset-top="{{ 20*systemInfo.rpxRatio + systemInfo.navTotalHeightPx }}" bind:scroll="onScroll" wx:if="{{active==index-1}}">
     <view class="top-box-wrap">
       <view class="top-box">
         <view class="top-number">
-          {{data.cmsWeekCode===1?data.virtualBuyNum:data.virtualNoticeNum}}人{{data.cmsWeekCode===1?'疯抢中':'等待中'}}
+          {{index===1?data.virtualBuyNum:data.virtualNoticeNum}}人{{data.cmsWeekCode===1?'疯抢中':'等待中'}}
         </view>
         <!-- <view class="top-number" wx:else>{{tomorrow.virtualNoticeNum}}已设置提醒</view> -->
         <swiper class="swiper" autoplay display-multiple-items="3" circular easing-function="linear" current="0" next-margin="44rpx" bindchange="iconChange">
@@ -43,7 +43,7 @@
           </block>
         </swiper>
         <view class="time-box">
-          <text class="text">即将{{cmsWeekCode==1?'结束':'开始'}}</text>
+          <text class="text">即将{{data.cmsWeekCode==1?'结束':'开始'}}</text>
           <van-count-down format="DD:HH:mm:ss" use-slot time="{{ data.deadlineTime-data.currentTime }}" bind:change="onChange">
             <text class="time" wx:if="{{timeData.days!=0}}">{{ timeData.days }}</text>
             <text class="days" wx:if="{{timeData.days!=0}}">天</text>
@@ -78,10 +78,9 @@
         <view class="price-box">
           <text class="head">¥</text>
           <text class="money">{{item.salePrice/100}}</text>
-          <text class="maxnum" wx:if="{{item.cmsWeekCode === 1 && item.reducePriceDisplay}}">{{item.reducePriceDisplay}}</text>
+          <text class="maxnum" wx:if="{{item.reducePriceDisplay}}">{{item.reducePriceDisplay}}</text>
         </view>
-        <view class="t" wx:if="{{item.nearDaysDisplay}}">{{item.nearDaysDisplay}}</view>
-        <view class="nearDays" wx:if="{{item.cmsWeekCode === 1}}">{{item.nearDaysDisplay}}</view>
+        <view class="nearDays" wx:if="{{item.nearDaysDisplay}}">{{item.nearDaysDisplay}}</view>
       </view>
       <view class="btn" wx:if="{{data.cmsWeekCode===1}}">抢购</view>
       <view class="btn {{item.isNotice===1?'remind':'reminded'}}" wx:else bind:tap="onRemind" data-data="{{item}}">

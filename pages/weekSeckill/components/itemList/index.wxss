@@ -165,23 +165,25 @@
 }
 
 .maxnum {
-  height: 18px;
-  line-height: 18px;
-  border-radius: 10px;
-  border: 1px solid #F41B3F;
-  font-size: 10px;
+  height: 18rpx;
+  line-height: 18rpx;
+  border-radius: 10rpx;
+  border: 1rpx solid #F41B3F;
+  font-size: 20rpx;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #F41B3F;
   text-align: center;
+  margin-left: 10rpx;
+  padding: 2rpx 3rpx;
 }
 .t {
-  height: 17px;
-  font-size: 12px;
+  height: 17rpx;
+  font-size: 12rpx;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #979797;
-  line-height: 17px;
+  line-height: 17rpx;
 }
 .btn {
   position: absolute;
@@ -191,8 +193,8 @@
   height: 68rpx;
   line-height: 68rpx;
   background: linear-gradient(270deg, #FF001F 0%, #FF4771 100%);
-  box-shadow: 1px 1px 4px 0px rgba(228, 45, 59, 0.3);
-  border-radius: 34px;
+  box-shadow: 1rpx 1rpx 4rpx 0rpx rgba(228, 45, 59, 0.3);
+  border-radius: 34rpx;
   text-align: center;
   font-size: 28rpx;
   font-family: PingFangSC-Regular, PingFang SC;
@@ -202,10 +204,10 @@
 
 .remind {
   background: #FF738F;
-  box-shadow: 1px 1px 4px 0px rgba(228, 45, 59, 0.3);
+  box-shadow: 1rpx 1rpx 4rpx 0rpx rgba(228, 45, 59, 0.3);
 }
 
 .reminded {
   background: #DDDDDD;
-  box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.3);
+  box-shadow: 1rpx 1rpx 4rpx 0rpx rgba(0, 0, 0, 0.3);
 }

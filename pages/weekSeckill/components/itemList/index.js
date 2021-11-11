@@ -1,7 +1,6 @@
 import router from "../../../../utils/router";
-import { getSystemInfo } from '../../../../utils/tools'
+import { getSystemInfo, debounce } from '../../../../utils/tools'
 import seckillApi from '../../../../apis/weekSeckill';
-
 
 Component({
   options: {
@@ -62,14 +61,15 @@ Component({
       if (isNotice === 2) {
         return;
       }
-
-      seckillApi.getXsmsWeekNotice({
-        cmsWeekCode,
-        cmsWeekId: this.data.data.cmsWeekId,
-        spuId,
-      }).then(res => {
-        this.triggerEvent('onremind', this.data.index)
-      })
+      debounce(() => {
+        seckillApi.getXsmsWeekNotice({
+          cmsWeekCode,
+          cmsWeekId: this.data.data.cmsWeekId,
+          spuId,
+        }).then(res => {
+          this.triggerEvent('onremind', this.data.index)
+        })
+      }, 300)()
     },
     // 跳转详情
     onGood({
