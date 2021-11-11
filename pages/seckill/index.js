@@ -1,6 +1,11 @@
 import router from "../../utils/router";
 import seckillApi from '../../apis/seckill';
 import { debounce } from '../../utils/tools';
+import homeApi from '../../apis/home'
+import { getStorageUserInfo } from '../../utils/tools'
+import routes from '../../constants/routes'
+
+
 const app =  getApp();
 Page({
   data: {
@@ -11,6 +16,7 @@ Page({
     tomorrow: {},
     showTop: false,
     flag: 0,
+    shareInfo: "",
   },
   iconChange(e) {
     this.setData({
@@ -134,6 +140,13 @@ Page({
   },
   onLoad: function (options) {
     this.getUserIcon('today')
+
+    let userInfo = getStorageUserInfo();
+    if (!!userInfo) {
+      this.getShareInfo();
+    }
+
+    app.trackEvent('tab_secKilling');
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -148,7 +161,7 @@ Page({
   onShow: function () {
     // 更新tabbar显示
     // router.updateSelectTabbar(this, 1);
-    app.trackEvent('tab_secKilling');
+    
   },
 
   /**
@@ -183,10 +196,49 @@ Page({
   onReachBottom: function () {
   },
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
+  // 获取分享参数
+  getShareInfo() {
+    
+    const shareParams = {
+      "contentType": 9,
+      "paramId": 11,
+      "shareType": 1,
+      "sourceType": 9
+    }
+    
+    homeApi.getShareInfo(shareParams, {
+      showLoading: false,
+    }, {
+      showLoading: false,
+    }).then(res => {
+      const shareInfo = {
+        title: res.title || "优选好货定时秒杀,每日零点准时开抢,明日疯抢可设提醒",
+        path: res.shareUrl,
+        imageUrl: res.thumbData,
+      };
+      this.setData({
+        shareInfo,
+      })
+    });
+  },
 
-  }
+  // 转发
+  onShareAppMessage() {
+    const {
+      shareInfo,
+    } = this.data;
+    
+    let info = {
+      title: "优选好货定时秒杀,每日零点准时开抢,明日疯抢可设提醒",
+      path: routes.seckill.path,
+    }
+    
+    if (shareInfo) {
+      info = {
+        ...info,
+        ...shareInfo
+      }
+    }
+    return info;
+  },
 })

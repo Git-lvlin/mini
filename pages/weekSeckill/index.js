@@ -2,6 +2,11 @@ import router from "../../utils/router";
 import seckillApi from '../../apis/weekSeckill';
 import create from '../../utils/create.js'
 import store from '../../store/index'
+import homeApi from '../../apis/home'
+import { getStorageUserInfo } from '../../utils/tools'
+import routes from '../../constants/routes'
+
+const app = getApp();
 
 create.Page(store, {
   use: [
@@ -15,6 +20,7 @@ create.Page(store, {
     tomorrow: {},
     showTop: false,
     isFixed: false,
+    shareInfo: "",
   },
   iconChange(e) {
     this.setData({
@@ -93,6 +99,13 @@ create.Page(store, {
     })
     this.getUserIcon(1)
     this.getUserIcon(2)
+
+    let userInfo = getStorageUserInfo();
+    if (!!userInfo) {
+      this.getShareInfo();
+    }
+
+    app.trackEvent('home_spikeWeek');
   },
 
   /**
@@ -142,13 +155,49 @@ create.Page(store, {
 
   },
 
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
+  // 获取分享参数
+  getShareInfo() {
 
+    const shareParams = {
+      "contentType": 6,
+      "paramId": 6,
+      "shareType": 1,
+      "sourceType": 6
+    }
+
+    homeApi.getShareInfo(shareParams, {
+      showLoading: false,
+    }, {
+      showLoading: false,
+    }).then(res => {
+      const shareInfo = {
+        title: res.title || "每周优选好货抢不停,周末大狂欢,每周有好货每周都上新",
+        path: res.shareUrl,
+        imageUrl: res.thumbData,
+      };
+      this.setData({
+        shareInfo,
+      })
+    });
   },
-  // onPageScroll(e){
-  //   console.log('e', e);
-  // }
+
+  // 转发
+  onShareAppMessage() {
+    const {
+      shareInfo,
+    } = this.data;
+
+    let info = {
+      title: "每周优选好货抢不停,周末大狂欢,每周有好货每周都上新",
+      path: routes.weekSeckill.path,
+    }
+
+    if (shareInfo) {
+      info = {
+        ...info,
+        ...shareInfo
+      }
+    }
+    return info;
+  },
 })
