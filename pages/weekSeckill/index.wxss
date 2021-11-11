@@ -215,7 +215,7 @@
   margin-right: 8rpx;
   width: 48rpx;
   height: 48rpx;
-  border: 1px solid #FFFFFF;
+  border: 1rpx solid #FFFFFF;
   border-radius: 50%;
   overflow: hidden;
 }
