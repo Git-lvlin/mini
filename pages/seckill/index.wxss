@@ -271,30 +271,31 @@
   line-height: 1;
 }
 .t {
-  height: 17px;
-  font-size: 12px;
+  margin-top: 2rpx;
+  height: 34rpx;
+  font-size: 24rpx;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #979797;
-  line-height: 17px;
+  line-height: 34rpx;
 }
 .maxnum {
   padding: 0 10rpx;
   margin-left: 14rpx;
-  height: 38rpx;
-  background: #FBE9E6;
-  border-radius: 22rpx 22rpx 22rpx 0rpx;
-  font-size: 24rpx;
+  height: 36rpx;
+  line-height: 36rpx;
+  border-radius: 20px;
+  border: 1px solid #F41B3F;
+  font-size: 20rpx;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
-  color: #EB4F3F;
-  line-height: 38rpx;
+  color: #F41B3F;
   text-align: center;
 }
 .btn {
   position: absolute;
   right: 0;
-  bottom: 4px;
+  bottom: 40rpx;
   width: 120rpx;
   height: 68rpx;
   line-height: 68rpx;
