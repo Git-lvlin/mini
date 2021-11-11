@@ -1,6 +1,6 @@
 import router from "../../utils/router";
 import seckillApi from '../../apis/seckill';
-
+import { debounce } from '../../utils/tools';
 const app =  getApp();
 Page({
   data: {
@@ -10,6 +10,7 @@ Page({
     active: 0,
     tomorrow: {},
     showTop: false,
+    flag: 0,
   },
   iconChange(e) {
     this.setData({
@@ -81,14 +82,15 @@ Page({
     if (currentTarget.dataset.data[1].isNotice == 2) {
       return
     }
-    let param = {
-      cmsId: currentTarget.dataset.data[0].cmsId,
-      spuId: currentTarget.dataset.data[1].spuId
-    }
-    seckillApi.getXsmsNotice(param).then(res => {
-      this.getUserIcon('tomorrow')
-    })
-
+    debounce(() => {
+      let param = {
+        cmsId: currentTarget.dataset.data[0].cmsId,
+        spuId: currentTarget.dataset.data[1].spuId
+      }
+      seckillApi.getXsmsNotice(param).then(res => {
+        this.getUserIcon('tomorrow')
+      })
+    }, 300)();
   },
   // 跳转详情
   onGood({
