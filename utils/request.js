@@ -44,7 +44,6 @@ const Reqeust = (params) => {
     });
   }
   return new Promise((resolve, reject) => {
-    console.log('debug', !!params.hasBase ? params.url : baseUrl + params.url)
     wx.request({
       url: !!params.hasBase ? params.url : baseUrl + params.url,
       method: params.method.toUpperCase() || 'GET',
