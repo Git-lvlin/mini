@@ -101,11 +101,13 @@ export default {
 
   // 秒约爆品列表
   getPopularList(params, option) {
+    params = getExamine(params);
     return Request.post(url.secondHotGoodsList, params, option);
   },
 
   // 秒约爆品列表
   getClassGood(params, option) {
+    params = getExamine(params);
     return Request.post(url.classGood, params, option);
   },
 

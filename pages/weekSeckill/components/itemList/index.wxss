@@ -4,7 +4,7 @@
 }
 
 .tab-item-wrap {
-  padding: 32rpx;
+  padding: 0 32rpx 32rpx 32rpx; 
 }
 
 .tab-item {

@@ -56,7 +56,6 @@ create.Page(store, {
   getUserIcon(code) {
     let param = {
       indexVersion: 1,
-      verifyVersionId: 2,
       next: 0,
       size: 99,
       type: code

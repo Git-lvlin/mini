@@ -68,7 +68,7 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
-  padding: 0 10rpx;
+  /* padding: 0 10rpx; */
 }
 
 .top-number {
@@ -113,7 +113,7 @@
 }
 
 .time-symbol {
-  color: #FFFFFF;
+  color: #000000;
   /* margin: 0 6rpx; */
   font-size: 20rpx;
 }
