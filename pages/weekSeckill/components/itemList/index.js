@@ -16,6 +16,9 @@ Component({
     index: {
       type: Number,
     },
+    active: {
+      type: Number,
+    }
   },
 
   lifetimes: {

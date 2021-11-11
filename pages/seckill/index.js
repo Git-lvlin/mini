@@ -79,6 +79,9 @@ Page({
     })
   },
   onRemind({currentTarget}) {
+    if (currentTarget.dataset.data[1].isNotice == 2) {
+      return
+    }
     let param = {
       cmsId: currentTarget.dataset.data[0].cmsId,
       spuId: currentTarget.dataset.data[1].spuId

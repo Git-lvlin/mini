@@ -96,6 +96,7 @@ create.Page(store, {
     // 更新tabbar显示
     router.updateSelectTabbar(this, 2);
     app.trackEvent('tab_intensive');
+    this.init()
   },
 
   // 初始化

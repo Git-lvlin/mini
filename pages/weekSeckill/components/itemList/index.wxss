@@ -165,22 +165,28 @@
 }
 
 .maxnum {
-  padding: 0 10rpx;
-  margin-left: 14rpx;
-  height: 38rpx;
-  font-size: 24rpx;
-  font-weight: 400;
-  color: #EB4F3F;
-  line-height: 38rpx;
-  text-align: center;
-  border-radius: 19px;
+  height: 18px;
+  line-height: 18px;
+  border-radius: 10px;
   border: 1px solid #F41B3F;
+  font-size: 10px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #F41B3F;
+  text-align: center;
 }
-
+.t {
+  height: 17px;
+  font-size: 12px;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #979797;
+  line-height: 17px;
+}
 .btn {
   position: absolute;
   right: 0;
-  bottom: 20rpx;
+  bottom: 40rpx;
   width: 120rpx;
   height: 68rpx;
   line-height: 68rpx;
