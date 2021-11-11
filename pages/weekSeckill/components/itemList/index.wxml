@@ -43,7 +43,7 @@
           </block>
         </swiper>
         <view class="time-box">
-          <text class="text">即将{{cmsWeekCode==1?'结束':'开始'}}</text>
+          <text class="text">即将{{data.cmsWeekCode==1?'结束':'开始'}}</text>
           <van-count-down format="DD:HH:mm:ss" use-slot time="{{ data.deadlineTime-data.currentTime }}" bind:change="onChange">
             <text class="time" wx:if="{{timeData.days!=0}}">{{ timeData.days }}</text>
             <text class="days" wx:if="{{timeData.days!=0}}">天</text>
