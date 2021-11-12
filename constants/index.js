@@ -7,7 +7,7 @@ import { IMG_CDN } from './common'
 export const SYS_ENV = 'pro';
 // DEVICE_CODE	1ae15f4549d3152281ca6c28e6ae6ad6
 // 是否显示选择环境按钮
-export const CHANGE_ENV = true;
+export const CHANGE_ENV = false;
 
 // 小程序版本号
 export const VERSION = "2.0.0";
