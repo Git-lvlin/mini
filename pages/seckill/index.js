@@ -1,3 +1,5 @@
+import create from "../../utils/create";
+import store from "../../store/index";
 import router from "../../utils/router";
 import seckillApi from '../../apis/seckill';
 import { debounce } from '../../utils/tools';
@@ -7,7 +9,10 @@ import routes from '../../constants/routes'
 
 
 const app =  getApp();
-Page({
+create.Page(store, {
+  use: [
+    'systemInfo'
+  ],
   data: {
     timeData: {},
     seckillData: {},

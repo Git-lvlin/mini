@@ -102,6 +102,9 @@ create.Page(store, {
     if(chooseAddress) {
       this.setData({
         addressInfo: chooseAddress
+      }, () => {
+        // 必须获取地址再请求商品信息
+        this.getConfirmInfo();
       })
       wx.removeStorage({
         key: "CHOOSE_ADDRESS"

@@ -1,7 +1,6 @@
 
 .back {
   position: fixed;
-  top: 108rpx;
   left: 46rpx;
   width: 48rpx;
   height: 48rpx;
