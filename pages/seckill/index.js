@@ -142,10 +142,7 @@ Page({
   onLoad: function (options) {
     this.getUserIcon('today')
 
-    let userInfo = getStorageUserInfo();
-    if (!!userInfo) {
-      this.getShareInfo();
-    }
+    
 
     app.trackEvent('tab_secKilling');
   },
@@ -153,7 +150,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+    
   },
 
   /**
@@ -162,7 +159,10 @@ Page({
   onShow: function () {
     // 更新tabbar显示
     // router.updateSelectTabbar(this, 1);
-    
+    let userInfo = getStorageUserInfo();
+    if (!!userInfo) {
+      this.getShareInfo();
+    }
   },
 
   /**

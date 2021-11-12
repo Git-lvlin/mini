@@ -101,10 +101,7 @@ create.Page(store, {
     this.getUserIcon(1)
     this.getUserIcon(2)
 
-    let userInfo = getStorageUserInfo();
-    if (!!userInfo) {
-      this.getShareInfo();
-    }
+    
 
     app.trackEvent('home_spikeWeek');
   },
@@ -122,6 +119,10 @@ create.Page(store, {
   onShow: function () {
     // 更新tabbar显示
     // router.updateSelectTabbar(this, 1);
+    let userInfo = getStorageUserInfo();
+    if (!!userInfo) {
+      this.getShareInfo();
+    }
   },
 
   /**
