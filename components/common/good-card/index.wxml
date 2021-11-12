@@ -9,8 +9,11 @@
     bindtap="onToDetail"
   />
   <view class="good_info">
-    <view class="good_title text_one_line">{{data.title}}</view>
-    <view class="good_sku text_one_line">{{data.goodsDesc}}</view>
+    <view
+      class="good_title {{twoTitle ? 'text_two_line' : 'text_one_line'}}"
+      style="height: {{twoTitle ? 80 : 40 }}rpx"
+    >{{data.title}}</view>
+    <view class="good_sku text_one_line" wx:if="{{!twoTitle}}">{{data.goodsDesc}}</view>
     <view class="good_price">
         <view class="flex_middle">
           <price-mobel money="{{data.salePrice}}" minSize="{{24}}" defaultColor="#ccc" marketMoney="{{data.marketPrice}}" />

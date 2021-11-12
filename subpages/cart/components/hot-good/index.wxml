@@ -1,0 +1,23 @@
+<wxs module="tools" src="../../../../wxs/common.wxs" />
+
+<view class="hot_sale">
+  <view class="hot_sale_head">
+    <view class="hot_head_line left_line" />
+    <image class="hot_icon" src="{{icon}}" />
+    {{title}}
+    <view class="hot_head_line right_line" />
+  </view>
+  <view class="hot_list">
+    <block
+      wx:for="{{list}}"
+      wx:key="skuId"
+    >
+      <good-card
+        jump="{{false}}"
+        data="{{item}}"
+        priceTitle="{{priceTitle}}"
+        bind:click="onToDetail"
+      />
+    </block>
+  </view>
+</view>

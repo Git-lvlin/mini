@@ -9,6 +9,7 @@ const defaultSecondCategory = [{
   gcIcon: ""
 }];
 
+const app = getApp();
 create.Page(store, {
   use: [
     "systemInfo",
@@ -49,6 +50,7 @@ create.Page(store, {
         gcParentId: 0
       }
     });
+    app.trackEvent('goods_category_level_three');
   },
 
   onUnload() {

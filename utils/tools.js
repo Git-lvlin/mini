@@ -315,24 +315,24 @@ export const debounce = (func, wait) => {
 
 // 节流
 let throttleTimeId = null;
+let throttleValid = true
 export const throttle = (func, wait) => {
   if (typeof func !== 'function') {
     throw new TypeError('need a function');
   }
   wait = +wait || 0;
-  let valid = true
   return function() {
     const self = this;
     const args = arguments;
-    if(!valid){
+    if(!throttleValid){
       //休息时间 暂不接客
       return false 
     }
     // 工作时间，执行函数并且在间隔期内把状态位设为无效
-    valid = false
+    throttleValid = false
     throttleTimeId = setTimeout(() => {
       func.apply(self, args);
-      valid = true;
+      throttleValid = true;
       clearTimeout(throttleTimeId);
     }, wait)
   }

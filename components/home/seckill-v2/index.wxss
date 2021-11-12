@@ -1,0 +1,70 @@
+
+.seckill {
+  padding: 24rpx 24rpx 0;
+}
+
+.seakill_pic {
+  width: 104rpx;
+  height: 148rpx;
+  vertical-align: middle;
+}
+
+.seakill_shadow {
+  width: 18rpx;
+  height: 148rpx;
+  vertical-align: middle;
+  margin-left: 14rpx;
+}
+
+.seckill_content {
+  position: relative;
+  max-width: 100%;
+  padding: 16rpx;
+  background: #FFFFFF;
+  box-shadow: 0 6rpx 12rpx 0 rgba(0, 0, 0, 0.02);
+  border-radius: 16rpx;
+}
+
+.seckill_scroll {
+  flex: 1;
+  width: 500rpx;
+}
+
+.seckill_body {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 100%;
+}
+
+.seckill_list {
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+  /* justify-content: space-between; */
+  /* flex-wrap: wrap; */
+  width: 100%;
+  height: 100%;
+}
+
+.seckill_item {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 112rpx;
+  padding: 0 12rpx;
+}
+
+.seckill_img {
+  width: 112rpx;
+  height: 112rpx;
+  margin-bottom: 12rpx;
+}
+
+.name {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #CA3730;
+  line-height: 32rpx;
+  text-align: center;
+}

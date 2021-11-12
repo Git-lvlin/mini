@@ -1,0 +1,82 @@
+
+.num_box {
+  padding: 64rpx;
+  background-color: #fff;
+  border-radius: 24rpx;
+}
+
+.box_title {
+  font-size: 32rpx;
+  text-align: center;
+  margin-bottom: 24rpx;
+}
+
+.controller_box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40rpx;
+}
+
+.controller_num {
+  width: 160rpx;
+  height: 68rpx;
+  text-align: center;
+  border: 2rpx solid #bbb;
+}
+
+.controller_item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 68rpx;
+  height: 68rpx;
+  border-top: 2rpx solid #bbb;
+  border-bottom: 2rpx solid #bbb;
+}
+
+.reduce_btn {
+  border-left: 2rpx solid #bbb;
+  border-radius: 16rpx 0 0 16rpx;
+}
+
+.add_btn {
+  border-right: 2rpx solid #bbb;
+  border-radius: 0 16rpx 16rpx 0;
+}
+
+.disable_icon {
+  opacity: 0.15;
+}
+
+.num_icon {
+  width: 28rpx;
+  height: 28rpx;
+  vertical-align: middle;
+}
+
+.btn_box {
+  display: flex;
+  align-items: center;
+}
+
+.btn_item {
+  width: 200rpx;
+  height: 68rpx;
+  font-size: 28rpx;
+  line-height: 64rpx;
+  text-align: center;
+  box-sizing: border-box;
+  border-radius: 72rpx;
+}
+
+.cancel_btn {
+  border: 2rpx solid #ccc;
+}
+
+.confirm_btn {
+  color: #fff;
+  margin-left: 24rpx;
+  background-color: #E4362F;
+  border: 2rpx solid #E4362F;
+}

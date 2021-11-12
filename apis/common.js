@@ -12,6 +12,8 @@ const url = {
   ossConfig: "/public/open/uploadConfig/findByBizCode",
   shareParam: "/share/option/shareParam/getScene",
   coordinate: "/cms/open/location/getLocation",
+
+  banner: '/cms/open/banner/list'
 }
 
 let isShowLoginMobal = store.data.showLoginMobel;
@@ -94,7 +96,9 @@ export default {
       refreshToken: wx.getStorageSync("REFRESH_TOKEN"),
       id: userInfo.id,
     }
-    return Request.post(url.refreshToken, postData).then(res => {
+    return Request.post(url.refreshToken, postData, {
+      showLoading: false
+    }).then(res => {
       wx.setStorageSync("ACCESS_TOKEN", res.accessToken);
       wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
       store.data.showLoginMobel = false;
@@ -164,5 +168,10 @@ export default {
   // 根据地址获取经纬度
   getCoordinate(params, option) {
     return Request.get(url.coordinate, params, option);
+  },
+
+  // 获取banner 
+  getBanner(params, option) {
+    return Request.get(url.banner, params, option);
   },
 }

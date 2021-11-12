@@ -2,12 +2,16 @@ import create from '../../utils/create'
 import store from '../../store/index'
 import router from '../../utils/router'
 import homeApi from '../../apis/home'
+import goodApi from '../../apis/good'
 import commonApi from '../../apis/common'
 import { IMG_CDN } from '../../constants/common'
-import { showModal, showToast } from '../../utils/tools'
+import { debounce, showModal, showToast } from '../../utils/tools'
 import { checkSetting } from '../../utils/wxSetting';
 import { HTTP_TIMEOUT } from '../../constants/index'
+import { FLOOR_TYPE } from '../../constants/home'
 
+const deflocationIcon = `${IMG_CDN}miniprogram/location/def_location.png?V=465656`;
+const app = getApp();
 create.Page(store, {
   floorTimer: null,
   touchTimer: null,
@@ -17,8 +21,6 @@ create.Page(store, {
   isFristLoad: true,
   floorTime: new Date().getTime(),
   isMiniExamine: false,
-  // 是否是点击设置滚动高度
-  isSetScroll: false,
 
   use: [
     "userInfo",
@@ -31,24 +33,25 @@ create.Page(store, {
     scrolling: false,
     scrollBottom: false,
     floor: {},
-    headBackCss: `background-image: url(${IMG_CDN}miniprogram/home/nav_back.png?v=2021)`, 
+    headBackCss: '', 
     activityAdvert: {},
     locationAuth: false,
     takeSpot: {},
     topSearchHeight: 0,
     showLoadImg: false,
     refresherTriggered: false,
-    scrollTop: 0,
-    leaveTop: 0,
-    scrollToTop: 0,
-    //导航栏初始化距顶部的距离
-    classGoodToTop: 0,
-    leaveTopL: 0,
-    //是否固定顶部
-    isFixedTop: false,
     // 邀请注册成功
     inviteRegister: false,
+    // 已滚动高度
+    scrolledDistance: 0,
+    scrollTop: 0,
+    scrollTopDistance: 0,
+    // 当前显示的楼层
+    isShowFloor: {},
+    // 当前显示的楼层距离顶部距离
+    floorTopDistance: {},
   },
+
   onLoad(options) {
     // 系统弹窗
     this.getMiniExamine();
@@ -96,23 +99,10 @@ create.Page(store, {
     // this.getMiniExamine();
     // 更新tabbar显示
     router.updateSelectTabbar(this, 0);
-
-    setTimeout(() => {
-      if(this.data.classGoodToTop) { return ;}
-      const query = wx.createSelectorQuery()
-      query.select('#home_scroll').boundingClientRect()
-      query.select('#classGoods').boundingClientRect().exec((res) => {
-        if (res && res.length > 1) {
-          let scrollToTop = res[0].top;
-          let classGoodToTop = res[1].top;
-          this.setData({
-            scrollToTop,
-            classGoodToTop,
-            leaveTopL: classGoodToTop - scrollToTop
-          });
-        }
-      })
-    }, 1000);
+    debounce(() => {
+      this.getRecordScrollTop(0);
+    }, 200)();
+    app.trackEvent('tab_home');
   },
 
   // 获取审核状态
@@ -154,14 +144,18 @@ create.Page(store, {
   getFloorList(isReload) {
     let floor = wx.getStorageSync("HOME_FLOOR");
     let headBackCss = "";
+    let pageBackCss = "";
+    let isShowFloor = {};
     // 2 代表小程序审核版本 3 代表小程序正试版本
     let verifyVersionId = this.isMiniExamine ? 2 : 3;
     if(!!floor) {
       this.floorTimer = setTimeout(() => {
         headBackCss = this.setHeadBack(floor.headData && floor.headData.style || "");
+        pageBackCss = this.setHeadBack(floor.backgroundData && floor.backgroundData.style || "");
         this.setData({
           floor: floor,
           headBackCss,
+          pageBackCss,
         });
       }, HTTP_TIMEOUT);
     }
@@ -179,9 +173,17 @@ create.Page(store, {
       clearTimeout(this.floorTimer);
       this.isFristLoad = true;
       headBackCss = this.setHeadBack(res.headData && res.headData.style || "");
+      pageBackCss = this.setHeadBack(res.backgroundData && res.backgroundData.style || "");
+      if(res.floors && res.floors.length) {
+        res.floors.forEach(item => {
+          isShowFloor[item.floorType] = true;
+        })
+      }
       this.setData({
         floor: res,
+        isShowFloor,
         headBackCss,
+        pageBackCss,
         refresherTriggered: false,
       });
       wx.setStorage({ key: "HOME_FLOOR", data: res });
@@ -233,14 +235,13 @@ create.Page(store, {
 
   // 设置首页头部背景
   setHeadBack(style) {
-    // let headBackCss = `background-color: #FC3B18`;
-    let headBackCss = `background-image: url('${IMG_CDN}miniprogram/home/nav_back.png?v=2022')`;
-    // if(style.backgroundImage) {
-    //   headBackCss = `background-image: url(${style.backgroundImage})`
-    // } else if(style.backgroundColor) {
-    //   headBackCss = `background-color: ${style.backgroundColor}`
-    // }
-    return headBackCss;
+    let backCss = '';
+    if(style.backgroundImage) {
+      backCss = `background-image: url(${style.backgroundImage})`
+    } else if(style.backgroundColor) {
+      backCss = `background-color: ${style.backgroundColor}`
+    }
+    return backCss;
   },
 
   // 点击悬浮图
@@ -261,12 +262,68 @@ create.Page(store, {
     // });
   },
   
-  // 获取为止权限
+  // 获取位置权限
   getLocationAuth: async (that) => {
     const locationAuth = await checkSetting('userLocation', true);
     that.setData({
       locationAuth,
     });
+    if(locationAuth) {
+      // 自动选择附近的一个店铺
+      const takeSpot = wx.getStorageSync("TAKE_SPOT");
+      !takeSpot && wx.getLocation({
+        type: 'gps84',
+        altitude: false,
+        success(result) {
+          let data = {
+            latitude: result.latitude,
+            longitude: result.longitude,
+          }
+          that.getNearbyStore(data);
+        },
+        fail(err) {
+          
+        },
+      });
+    }
+  },
+
+  // 附近店铺
+  getNearbyStore(data) {
+    goodApi.getNearbyStore({
+      radius: 50000,
+      unit: 'm',
+      limit: 200,
+      ...data,
+    }).then(res => {
+      let list = [];
+      let fullAddress = "";
+      let tempData = {};
+      if(res.length > 0) {
+        const MarkData = res[0];
+        fullAddress = "";
+        for(let str in MarkData.areaInfo) {
+          fullAddress += MarkData.areaInfo[str];
+        }
+        fullAddress += MarkData.address;
+        MarkData.fullAddress = fullAddress;
+        tempData = {
+          ...MarkData,
+          width: 23,
+          height: 32,
+          id: 10,
+          selected: true,
+          iconPath: deflocationIcon,
+        }
+        wx.setStorage({
+          key: "TAKE_SPOT",
+          data: tempData,
+        });
+        this.setData({
+          takeSpot: tempData,
+        });
+      }
+    })
   },
 
   // 跳转选择地址
@@ -351,85 +408,73 @@ create.Page(store, {
     detail
   }) {
     let {
-      fixationTop,
-      isOnGoods,
       scrollBottom,
-      scrollToTop,
-      classGoodToTop,
     } = this.data;
 
+    this.getRecordScrollTop(detail.scrollTop);
+    // 是否滚动到底部
     if(scrollBottom) {
       this.setData({
         scrollBottom: false,
       })
     }
-    //滚动条距离顶部高度
-    let scrollTop = detail.scrollTop;
-    if(!this.isSetScroll) {
-      // 判断'滚动条'滚动的距离 和 '元素在初始时'距顶部的距离进行判断
-      let isSatisfy = scrollTop >= (classGoodToTop - scrollToTop - 5) ? true : false;
-      // let isSatisfy = navbarInitTop < 138 ? true : false;
-      // 为了防止不停的setData, 这儿做了一个等式判断。 只有处于吸顶的临界值才会不相等
-      if (this.data.isFixedTop === isSatisfy) {
-        return false
-      }
-      this.setData({
-        isFixedTop: isSatisfy
-      })
-    } else {
-      this.isSetScroll = false;
-    }
+  },
 
-    // 判断是否在热销商品区域
-    // if(this.scrollLock) return;
-    // let goodTop = 1000;
-    // let query = wx.createSelectorQuery();
-    // query.select('#hotGoods').boundingClientRect((rect) => {
-    //   goodTop = rect.top;
-    //   isOnGoods = goodTop < fixationTop + 20 ? true : false;
-    //   this.setData({
-    //     isOnGoods,
-    //   });
-    // }).exec();
-    // this.onTimeTimer = setTimeout(() => {
-    //   this.scrollLock = false;
-    //   clearTimeout(this.onTimeTimer)
-    // }, 200);
+  // 获取楼层距离顶部距离
+  getRecordScrollTop(scrollTop) {
+    const {
+      isShowFloor,
+    } = this.data;
+    const that = this;
+    const query = wx.createSelectorQuery();
+    // ShowFloorDistance
+    // scrollview距离顶部距离
+    query.select('#home_scroll').boundingClientRect();
+    if(isShowFloor[FLOOR_TYPE.classGood]) {
+      // classGoods（分类商品列表）距离顶部距离
+      query.select('#classGoods').boundingClientRect();
+    }
+    query.exec((res) => {
+      const data = {
+        scrolledDistance: scrollTop,
+        floorTopDistance: {},
+      };
+      res.forEach(item => {
+        // 内容高度
+        if (item.id == 'home_scroll') {
+          data.scrollTopDistance = item.top;
+        }
+        // 商品分类高度
+        if (item.id == 'classGoods') {
+          data.floorTopDistance[FLOOR_TYPE.classGood] = item.top;
+        }
+      });
+      this.setData(data);
+    });
   },
 
   // 设置view 滚动高度
-  setScroll() {
+  setScroll({
+    detail
+  }) {
     const {
-      scrollToTop,
-      classGoodToTop,
+      floorType
+    } = detail;
+    const {
+      scrollTopDistance,
+      scrolledDistance,
+      floorTopDistance,
     } = this.data;
     const {
       systemInfo,
     } = this.store.data;
-    let scrollTop = classGoodToTop - scrollToTop;
-    // 滚动监听不准确
-    this.isSetScroll = true;
+    let scrollTop = scrolledDistance + floorTopDistance[floorType] - scrollTopDistance + 2;
     this.setData({
       scrollTop,
     })
   },
 
-  // 更新置顶状态
-  setIsFixedTop({
-    detail,
-  }) {
-    this.setData({
-      isFixedTop: detail
-    })
-  },
-
-  // 页面滚动到底部
-  // onReachBottom() {
-  //   this.setData({
-  //     scrollBottom: true,
-  //   })
-  // },
-
+  // scrollview 滚动触底
   handleScrollBottom() {
     this.setData({
       scrollBottom: true,

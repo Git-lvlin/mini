@@ -5,6 +5,7 @@ import { orderList, otherSetting, USER_LEVEL } from '../../constants/user'
 import userApi from '../../apis/user'
 import { getStorageUserInfo, setStorageUserInfo, showToast } from '../../utils/tools'
 
+const app = getApp();
 create.Page(store, {
   use: [
     'systemInfo'
@@ -29,8 +30,8 @@ create.Page(store, {
         action: "coupon"
       },
       {
-        text: "积分",
-        value: 0,
+        text: "爱心值",
+        value: 600,
       },
     ],
     userInfo: "",
@@ -78,6 +79,7 @@ create.Page(store, {
       orderTypeList,
       userData,
     });
+    app.trackEvent('tab_user');
   },
 
   // 获取用户信息
@@ -110,7 +112,7 @@ create.Page(store, {
       }
       userData[0].value = res.balance || 0;
       userData[1].value = res.couponNum || 0;
-      userData[2].value = res.integralValue || 0;
+      // userData[2].value = res.integralValue || 0;
       this.setData({
         userData,
       })

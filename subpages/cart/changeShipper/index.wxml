@@ -1,9 +1,11 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
 
 <view class="info_cell">
   <form-item
     name="提货人"
     label="user"
     roundTop
+    value="{{user}}"
     maxLength="10"
     placeholder="输入收件人"
     bind:input="handleInput"
@@ -12,11 +14,17 @@
     name="手机号码"
     label="phone"
     roundBottom
+    value="{{phone}}"
     inputType="number"
     maxLength="11"
     placeholder="输入手机号"
     bind:input="handleInput"
   />
+
+  <view class="flex_middle tips">
+    <image class="tip_icon" src="{{tools.getImgUrl('miniprogram/common/danger.png')}}" />
+    配送地区为距您最近的自提点地址，不可修改
+  </view>
 
   <view class="save_btn" bindtap="onSave">保存</view>
 </view>

@@ -2,6 +2,7 @@
 
 <view
   class="container"
+  style="{{pageBackCss}}"
   bindtouchmove="handleTouchMove"
   bindtouchend="handleTouchEnd"
 >
@@ -9,19 +10,19 @@
   <view class="flex_fix nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx;height:{{navigationBarHeight}}rpx">
     <view id="nav_body_id" class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx;{{headBackCss}};height:{{navigationBarHeight}}rpx">
       <view class="nav_location">
-        <image class="location_icon" src="{{tools.getImgUrl('miniprogram/home/location.png')}}" />
+        <image class="location_icon" src="{{tools.getImgUrl('miniprogram/v2-home/home-location.png')}}" />
         <view class="flex_middle address" bindtap="onToLocation">
-          <view class="location_address text_one_line">{{takeSpot.address || '选择自提点' }}</view>
-          <view
+          <view class="location_address text_one_line">{{takeSpot.storeName  || '选择自提点' }}</view>
+          <!-- <view
             class="flex_fix store_name"
             wx:if="{{takeSpot.address && takeSpot.storeName }}"
-          >{{takeSpot.storeName}}</view>
+          >{{takeSpot.storeName}}</view> -->
         </view>
-        <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/triangle_bottom.png')}}" />
+        <image class="right_icon" src="{{tools.getImgUrl('miniprogram/v2-home/home-tap-down.png')}}" />
       </view>
       <view id="top_search" class="search_content" style="">
         <view class="search_body" bindtap="onToSearch">
-          <image class="search_icon" src="{{tools.getImgUrl('miniprogram/home/search.png')}}" />
+          <image class="search_icon" src="{{tools.getImgUrl('miniprogram/v2-home/search-icon.png?v=12')}}" />
           <view class="search_text">请输入商品名称</view>
           <view class="search_btn">搜索</view>
         </view>
@@ -55,7 +56,7 @@
 
       <!-- 约购商品 -->
       <appointment
-        moreRouter="intensive"
+        moreRouter="storeIntensive"
         floor="{{item}}"
         wx:if="{{item.floorType === 1}}"
       />
@@ -113,17 +114,34 @@
       </view> -->
 
       <!-- 分类商品 -->
-      <view id="classGoods"
-        wx:if="{{item.floorType === 11}}"
-      >
+      <view id="classGoods" wx:if="{{item.floorType === 11}}">
         <classgoods
-          scrollBottom="{{scrollBottom}}"
           floor="{{item}}"
+          scrollBottom="{{scrollBottom}}"
           refreshering="{{refresherTriggered}}"
-          isFixedTop="{{isFixedTop}}"
+          isFixedTop="{{floorTopDistance[11] - scrollTopDistance < 0}}"
           bind:setScroll="setScroll"
         />
-          <!-- bind:setIsTop="setIsFixedTop" -->
+      </view>
+
+      <!-- 活动金刚区 -->
+      <view wx:if="{{item.floorType === 12}}">
+        <activity-cube floor="{{item}}" />
+      </view>
+
+      <!-- 秒杀第二版 -->
+      <view wx:if="{{item.floorType === 14}}">
+        <seckill-v2 floor="{{item}}" />
+      </view>
+
+      <!-- 分类商品列表第二版 -->
+      <view wx:if="{{item.floorType === 13}}">
+        <classgoods-v2
+          floor="{{item}}"
+          scrollBottom="{{scrollBottom}}"
+          refreshering="{{refresherTriggered}}"
+          isFixedTop="{{floorTopDistance[11] - scrollTopDistance < 0}}"
+        />
       </view>
     </block>
   </scroll-view>
@@ -148,6 +166,9 @@
 
   <!-- 下载app 二维码 -->
   <down-app-code show="{{inviteRegister}}" bind:close="onHideSharePopup" />
+
+  <!-- 二级分类弹窗 -->
+  <classgoods-popup />
 
   <!-- 底部占位 -->
   <view class="flex_fix bar_height" />

@@ -108,3 +108,7 @@
   width: 36rpx;
   height: 36rpx;
 }
+
+.un_use_text {
+  color: #ccc;
+}

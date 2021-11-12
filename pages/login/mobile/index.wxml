@@ -5,8 +5,9 @@
     <van-image width="72rpx" height="72rpx" src="{{tools.getImgUrl('miniprogram/common/logo.png')}}" />
     <view class="title">欢迎登录 约购</view>
   </view>
-  <view class="login_tips">
-    登陆/注册即表示您已阅读并同意
+  <view class="login_tips" bindtap="onChangeRadio">
+    <image class="radio_icon" src="{{radio ? selectedIcon : selectIcon}}" />
+    <text >登陆/注册即表示您已阅读并同意</text>
     <text class="red_text" data-type="privacy" catchtap="onClickTreaty">《用户服务协议及隐私政策》</text>
   </view>
   <view class="login">
@@ -18,9 +19,19 @@
       block
       loading-type="spinner"
       loading-text="登录中..."
-      wx:if="{{canUseProfile}}"
+      wx:if="{{canUseProfile && radio}}"
       bind:getphonenumber="getCodeLogin"
       bindtap="getCode"
+    >微信手机号登录</van-button>
+    <van-button
+      color="#E5352F"
+      custom-class="login_btn"
+      type="primary"
+      block
+      loading-type="spinner"
+      loading-text="登录中..."
+      wx:if="{{!radio}}"
+      bindtap="onTiplogin"
     >微信手机号登录</van-button>
     <view class="on_login" bindtap="onToHome">不登录，先看看</view>
     <radio-group class="env_list" wx:if="{{changeEnv}}" bindchange="handleChangeEnv">
@@ -30,7 +41,7 @@
     </radio-group>
   </view>
   <view class="other_login" />
-  <view class="treaty login_tips" wx:if="{{false}}">
+  <!-- <view class="treaty login_tips" wx:if="{{false}}">
     <van-radio-group value="{{ radio }}" bind:change="onChangeRadio">
       <van-radio
         name="{{true}}"
@@ -38,11 +49,10 @@
         icon-size="{{18}}"
       >
         登陆/注册即表示您已阅读并同意
-        <!-- <text class="red_text" data-type="service" catchtap="onClickTreaty">服务协议</text>和 -->
         <text class="red_text" data-type="privacy" catchtap="onClickTreaty">《用户服务协议及隐私政策》</text>
       </van-radio>
     </van-radio-group>
-  </view>
+  </view> -->
 
   <van-popup show="{{ showTreaty }}" custom-style="background-color: transparent;" bind:close="onCloseTreaty">
     <treaty-popup bind:close="onCloseTreaty"/>

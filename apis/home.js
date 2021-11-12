@@ -1,15 +1,21 @@
-import Request from '../utils/request.js'
+import Request from '../utils/request'
 
 const url = {
   floorList: "/cms/open/home/list",
   bannerList: "/cms/open/banner/list",
   intensiveGood: "/activity/open/wholesaleGoodsList",
+  getStoreNotInSkus: "/activity/option/getStoreNotInSkus",
+  remindStorekeeperBuy: "/activity/auth/remindStorekeeperBuy",
   hotGood: "/activity/open/tagGoodsList",
   hotGoodV2: "/activity/open/tagGoodsListV2",
 
   shareInfo: "/share/option/shareParam/queryShareContent",
 
   advert: "/public/open/adimgs",
+
+  secondHotGoodsList: '/activity/open/secondHotGoodsList',
+  
+  classGood: '/goods/open/getHomeCategoryList'
 }
 
 const getExamine = (params) => {
@@ -19,14 +25,23 @@ const getExamine = (params) => {
       verifyVersionId: 2,
       ...params
     };
+  } else {
+    params = {
+      verifyVersionId: 3,
+      ...params
+    };
   }
   return params;
 }
 
 export default {
+  // 小程序版本状态
+  getExamine,
+
   // 首页楼层通用接口数据
   getFloorList(params, options) {
-    params.floorVersion = '1.0.2'
+    // params.floorVersion = '1.0.2'
+    params.floorVersion = '2.0.0'
     return Request.get(url.floorList, params, options)
   },
 
@@ -39,6 +54,16 @@ export default {
   // 获取集约商品
   getIntensiveGood(params, option) {
     return Request.get(url.intensiveGood, params, option);
+  },
+
+  // 获取提醒店主商品列表
+  getStoreNotInSkus(params, option) {
+    return Request.post(url.getStoreNotInSkus, params, option);
+  },
+
+  // 提醒店主采购
+  remindStorekeeperBuy(params, option) {
+    return Request.post(url.remindStorekeeperBuy, params, option);
   },
 
   // 获取热销商品
@@ -78,4 +103,18 @@ export default {
   getAdvert(params, option) {
     return Request.post(url.advert, params, option);
   },
+
+  // 秒约爆品列表
+  getPopularList(params, option) {
+    params = getExamine(params);
+    return Request.post(url.secondHotGoodsList, params, option);
+  },
+
+  // 秒约爆品列表
+  getClassGood(params, option) {
+    params = getExamine(params);
+    return Request.post(url.classGood, params, option);
+  },
+
+  
 }

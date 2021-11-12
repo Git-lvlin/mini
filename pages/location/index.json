@@ -2,6 +2,8 @@
   "navigationBarTitleText": "选择自提点",
   "usingComponents": {
     "take-spot": "/components/other/take_spot/index",
-    "nodata": "/components/common/nodata/index"
+    "nodata": "/components/common/nodata/index",
+    "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
+    "address-popup": "/components/common/address-popup/index"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "navigationBarTextStyle": "white",
+  "navigationBarTextStyle": "black",
   "navigationStyle": "custom",
   "onReachBottomDistance": 0,
   "enablePullDownRefresh": false,
@@ -15,6 +15,10 @@
     "hotgoods": "/components/home/hotgoods/index",
     "classgoods": "/components/home/classgoods/index",
     "down-app-code": "/components/common/down-app-code/index",
-    "advert-popup": "/components/home/advert-popup/index"
+    "advert-popup": "/components/home/advert-popup/index",
+    "activity-cube": "/components/home/activity-cube/index",
+    "seckill-v2": "/components/home/seckill-v2/index",
+    "classgoods-v2": "/components/home/classgoods-v2/index",
+    "classgoods-popup": "/components/home/classgoods-popup/index"
   }
 }

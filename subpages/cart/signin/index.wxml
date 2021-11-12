@@ -1,0 +1,195 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<image class="sign_back" bindtap="onBack" src="{{tools.getImgUrl('miniprogram/sign/sign-back.png')}}" />
+
+<view class="container">
+  <view class="flex_fix nav_content" style="padding-bottom: {{$.systemInfo.bottomBarHeight}}rpx;background-image: url({{tools.getImgUrl('miniprogram/sign/sign-back.png')}})">
+    <view class="flex_center nav_box" style="height: {{$.systemInfo.navBarHeight}}rpx;padding-top: {{$.systemInfo.statusHeight}}rpx;">
+      <image class="nav_back" src="{{tools.getImgUrl('miniprogram/common/back_black%402x.png')}}" bindtap="onBack"/>
+      <view class="nav_title">每日签到</view>
+    </view>
+  </view>
+  <view class="flex_fix">
+    <view class="flex_middle red_total">
+      <image class="flex_fix red_icon" src="{{tools.getImgUrl('miniprogram/sign/red-total-icon.png')}}" />
+      <view class="red_total_title">
+        我的账户：
+        <text class="res_total_money">{{signInfo.signAmount || 0}}</text>
+        元
+      </view>
+      <view class="flex_fix flex_center red_total_btn" bindtap="onOpenDetailRed">
+        明细
+        <image class="red_right" src="{{tools.getImgUrl('miniprogram/sign/red-total-right.png')}}" />
+      </view>
+    </view>
+
+    <view class="sign_content" wx:if="{{signList.length}}">
+      <view class="flex_middle sign_head">
+        <view class="flex_center sign_label_back" style="background-image: url({{tools.getImgUrl('miniprogram/sign/red-title-label-back.png')}})">
+          <image class="sign_label_title" src="{{tools.getImgUrl('miniprogram/sign/red-label-text.png')}}" />
+        </view>
+        <view class="rule" bindtap="onOpenRule">
+          <image class="rule_icon" src="{{tools.getImgUrl('miniprogram/common/ask.png')}}" />
+          规则
+        </view>
+        <!-- <view class="flex_middle sign_remind">
+          <button class="remind_btn">
+            <van-switch
+              size="28rpx"
+              active-color="#FA0D1E"
+              inactive-color="#999999"
+              checked="{{true}}"
+            />
+          </button>
+          <text class="remind_text">签到提醒</text>
+        </view> -->
+      </view>
+      <view class="sign_box">
+        <view class="flex_middle sign_box_desc">
+          <view class="sign_desc_text">签到7天一个周期，断签重新开始</view>
+          <view class="sign_desc_day">已签到({{signInfo.signNumber}}/7)</view>
+        </view>
+        <view class="flex_middle sign_day_list">
+          <view
+            class="flex_center day_item {{item.isSign ? 'day_item_act' : ''}}"
+            wx:for="{{signList}}"
+            wx:key="index"
+          >
+            <view class="day_text">{{index + 1}}天</view>
+            <image class="day_icon gife_icon" wx:if="{{!item.isSign && item.hasGife}}" src="{{tools.getImgUrl('miniprogram/sign/sign-gife.png')}}" />
+            <image class="day_icon" wx:if="{{!item.isSign && !item.hasGife}}" src="{{tools.getImgUrl('miniprogram/sign/sign-coin.png')}}" />
+            <image class="day_icon" wx:if="{{item.isSign}}" src="{{tools.getImgUrl('miniprogram/sign/signed.png')}}" />
+            <view class="day_money">{{item.value}}</view>
+            <view class="signed_text">已签到</view>
+          </view>
+        </view>
+        <view class="sign_btn" wx:if="{{!signInfo.todaySigned && !!signInfo.signRedRule.status}}" bindtap="onSign">立即签到</view>
+        <view class="sign_btn sign_btn_def" wx:if="{{!!signInfo.todaySigned || !signInfo.signRedRule.status}}">
+          {{!signInfo.signRedRule.status ? '活动已结束' : '已签到'}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="good_content" wx:if="{{goodList.length}}">
+    <view class="good_content_back">
+      <image class="good_content_title" src="{{tools.getImgUrl('miniprogram/sign/red-good-title-label.png')}}" />
+      <view class="gradual_back" />
+    </view>
+    <view class="good_white_back" />
+    <view class="good_box">
+      <view class="good_head_height" />
+      <view class="good_list">
+        <view
+          class="flex_middle good_item"
+          wx:for="{{goodList}}"
+          wx:key="index"
+          data-good="{{item}}"
+          bindtap="onToDetail"
+        >
+          <image class="flex_fix good_cover" src="{{item.goodsImageUrl}}" />
+          <view class="good_info">
+            <view class="good_info_head">
+              <view class="good_name text_two_line">{{item.goodsName}}</view>
+              <view class="good_label">{{item.deductionDesc}}</view>
+            </view>
+            <view class="good_price_box">
+              <view class="flex_middle sale_price">
+                到手价
+                <price-mobel money="{{item.finalPrice}}" maxSize="{{40}}" />
+              </view>
+              <view class="market_price">销售价¥{{item.goodsSalePrice}}</view>
+            </view>
+            <view class="buy_btn">抢购</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <van-popup
+    show="{{redPopup}}"
+    custom-style="background-color: transparent;"
+    bind:close="onCloseRed"
+  >
+    <view class="red_popup" catchtouchmove="notmove">
+      <image class="red_cover" src="{{tools.getImgUrl('miniprogram/sign/red_cover.png')}}" />
+      <view class="red_popup_content">
+        <view class="flex_center red_popup_head">
+          <block wx:if="{{resPopupActType == 1}}">
+            <view class="revice_title">已经连续签到{{signInfo.signNumber}}天</view>
+            <view class="revice_title">{{signInfo.signNumber < 7 ? '恭喜您获得红包' : '获得额外红包奖励'}}</view>
+            <view class="revice_price">{{signList[signInfo.signNumber - 1].value}}<text class="popup_util">元</text></view>
+          </block>
+          <block  wx:if="{{resPopupActType == 2}}">
+            <view class="revice_title">活动已结束</view>
+            <view class="end_desc">给您带来的不便我们深感抱歉</view>
+          </block>
+        </view>
+        <view class="red_popup_btn" bindtap="onCloseRed">{{resPopupActType == 1 ? '太棒了！开心收下' : '知道了'}}</view>
+        <view
+          class="red_popup_tip"
+          wx:if="{{signInfo.signNumber < 7 && resPopupActType == 1 && signList[signInfo.signNumber].value > 0}}"
+        >明日签到可获得{{signList[signInfo.signNumber].value}}元红包</view>
+      </view>
+    </view>
+  </van-popup>
+
+  <van-popup
+    show="{{rulePopup}}"
+    position="bottom"
+    closeable
+    custom-style="background-color: transparent;"
+    bind:close="onCloseRule"
+  >
+    <view class="rule_content" catchtouchmove="notmove">
+      <view class="rule_title">活动规则</view>
+      <view class="rule_text">{{signInfo.signRedRule.remark}}</view>
+    </view>
+  </van-popup>
+
+  <van-popup
+    show="{{redDetailPopup}}"
+    position="bottom"
+    closeable
+    custom-style="background-color: transparent;"
+    bind:close="onCloseDetailRed"
+  >
+    <view class="rule_content" catchtouchmove="notmove">
+      <view class="rule_title">签到红包明细</view>
+      <view class="flex_middle red_use">
+        <view
+          class="red_btn_item {{redUseType == '' ? 'red_use_act' : ''}}"
+          data-type=""
+          bindtap="onChangeUseType"
+        >全部明细</view>
+        <view
+          class="red_btn_item {{redUseType == 1 ? 'red_use_act' : ''}}"
+          data-type="{{1}}"
+          bindtap="onChangeUseType"
+        >仅看获得</view>
+        <view
+          class="red_btn_item {{redUseType == 2 ? 'red_use_act' : ''}}"
+          data-type="{{2}}"
+          bindtap="onChangeUseType"
+        >仅看使用</view>
+      </view>
+      <scroll-view
+        class="red_use_scroll"
+        scroll-y
+        bindscrolltolower="handleScrollBottom"
+      >
+        <view class="red_use_list">
+          <view class="flex_middle use_item" wx:for="{{redUseList}}" wx:key="index">
+            <view class="use_info">
+              <view class="use_name">{{item.channelName}}</view>
+              <view class="use_time">{{item.createTime}}</view>
+            </view>
+            <view
+              class="flex_fix use_money {{item.recordType == 1 ? 'red_text' : 'green_text'}}"
+            >{{item.recordType == 1 ? '+' : ''}}{{item.changeValue}}</view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </van-popup>
+</view>

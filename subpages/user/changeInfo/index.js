@@ -2,6 +2,7 @@ import userApi from "../../../apis/user";
 import router from "../../../utils/router";
 import { getStorageUserInfo, showModal, showToast } from "../../../utils/tools";
 
+const app = getApp();
 Page({
 
   data: {
@@ -15,6 +16,7 @@ Page({
       userInfo,
       nickName: userInfo.nickName,
     });
+    app.trackEvent('mine_nickname_edit');
   },
 
   handleInput({

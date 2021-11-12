@@ -1,0 +1,24 @@
+<wxs module="tools" src="../../../../wxs/common.wxs" />
+
+<view class="flex_center user_content">
+  <view class="flex_middle user_list">
+    <view
+      class="user_item"
+      wx:for="{{list}}"
+      wx:key="joinMemberId"
+    >
+      <view class="user_label" wx:if="{{index === 0}}">{{title}}</view>
+      <van-image
+        width="112rpx"
+        height="112rpx"
+        round
+        src="{{item.icon}}"
+      />
+    </view>
+  </view>
+  <image
+    class="user_other"
+    src="{{tools.getImgUrl('miniprogram/common/team_user.png')}}"
+    wx:if="{{distanceNum != 0}}"
+  />
+</view>

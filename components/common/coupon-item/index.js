@@ -1,22 +1,37 @@
-// components/common/coupon-item/index.js
+
 Component({
   options: {
     addGlobalClass: true
   },
   
   properties: {
-
+    coupon: {
+      type: Object,
+      value: {},
+    },
+    canUse: {
+      type: Boolean,
+      value: true,
+    }
   },
 
   data: {
-    choose: false
+
   },
 
   methods: {
     onChoose() {
-      this.setData({
-        choose: !this.data.choose
-      })
+      const {
+        coupon,
+        canUse,
+      } = this.data;
+      if(canUse) {
+        coupon.isDefault = !coupon.isDefault;
+        this.setData({
+          coupon,
+        })
+        this.triggerEvent('choose', coupon);
+      }
     }
   }
 })

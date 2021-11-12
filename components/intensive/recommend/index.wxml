@@ -1,0 +1,33 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+<view class="list">
+  <view class="title-box">
+    <text class="after">—</text>
+    <text class="title">优选推荐</text>
+    <text class="after">—</text>
+  </view>
+  
+  <view class="tips-box">
+    <text class="tips-after">!</text>
+    <text class="tips-text">以下商品当前店铺没有售卖，点击提醒店主去集约</text>
+  </view>
+
+  <block wx:for="{{listData.records}}" wx:key="id">
+    <view class="list-item">
+      <van-image
+        class="img"
+        width="200rpx"
+        height="200rpx"
+        src="{{item.goodsImageUrl}}"
+      />
+      <view class="right-box">
+        <view class="name">{{item.goodsName}}</view>
+        <view class="price-box">
+          <text class="price1"><text class="span">¥</text>{{tools.priceToF2(item.goodsSalePrice)}}</text>
+          <text class="price2">{{tools.priceToF2(item.marketPrice)}}</text>
+        </view>
+        <view class="btn {{item.isRemind?'ed':''}}" data-item="{{item}}" catchtap="remind">{{item.isRemind?'已提醒':'提醒店主采购'}}</view>
+      </view>
+    </view>
+  </block>
+  
+</view>

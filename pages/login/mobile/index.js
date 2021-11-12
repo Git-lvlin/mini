@@ -7,6 +7,7 @@ import loginApis from '../../../apis/login'
 import userApis from '../../../apis/user'
 import commonApis from '../../../apis/common'
 import tools from '../utils/login'
+import { IMG_CDN } from '../../../constants/common'
 
 const envList = [
   {
@@ -55,10 +56,12 @@ create.Page(store, {
   data: {
     showTreaty: false,
     canUseProfile: false,
-    radio: true,
+    selectIcon: `${IMG_CDN}miniprogram/common/def_choose.png`,
+    selectedIcon: `${IMG_CDN}miniprogram/common/choose.png`,
+    radio: false,
     envList,
     changeEnv: app.globalData.changeEnv,
-    currentEnv: ''
+    currentEnv: '',
   },
 
   onLoad(options) {
@@ -93,6 +96,7 @@ create.Page(store, {
         inviteCode: options.inviteCode,
       });
     }
+    app.trackEvent('login_index');
   },
 
   // 获取分享配置
@@ -151,13 +155,26 @@ create.Page(store, {
     });
   },
 
+  // 提示勾选隐私政策
+  onTiplogin() {
+    if(!this.data.radio) {
+      wx.showToast({
+        title: '请先勾选用户服务协议与隐私政策',
+        icon: 'none',
+        mask: false,
+      });
+      return;
+    }
+  },
+
   // 获取用户openid 登录
   getCodeLogin(event) {
+    app.trackEvent('login_auth_wechat_button_click');
     const that = this;
     // 生命周期内登录过了
     if(!this.data.radio) {
       wx.showToast({
-        title: '请先勾选服务协议和隐私政策',
+        title: '请先勾选用户服务协议与隐私政策',
         icon: 'none',
         mask: false,
       });

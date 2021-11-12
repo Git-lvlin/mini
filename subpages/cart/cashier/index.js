@@ -14,6 +14,7 @@ const defaultList = [
 
 ]
 
+const app = getApp();
 // create.Page(store, {
 Page({
 
@@ -25,6 +26,7 @@ Page({
   },
   loading: false,
   payType: 7,
+  orderInfo: {},
 
   data: {
     isPay: false,
@@ -36,13 +38,20 @@ Page({
     payAmount: 0,
     downTime: 0,
     timeData: {},
+    redTime: {},
     payData: {},
     teamPopup: false,
     hotGood: [],
     orderCreateTime: "",
+    redData: {
+      isShow: 0
+    },
+    showSharePopup: false,
   },
 
-  onLoad: function (options) {
+  onLoad(options) {
+    this.orderInfo = options;
+    console.log("🚀 ~ file: index.js ~ line 49 ~ onLoad ~ options", options)
     // id: 1390912161480564700
     // orderSn: "16204542762334404122"
     // payAmount: 1
@@ -96,6 +105,7 @@ Page({
     if(options.orderType == 3 && options.orderType == 4) {
       this.getHotGood();
     }
+    app.trackEvent('shopping_cashier');
   },
 
   /**
@@ -116,11 +126,16 @@ Page({
         this.setData({
           isPay
         })
+        // 模拟支付
+        this.getFaterRed();
       }
       this.setData({
         payData,
         orderCreateTime: dayjs(payData.orderCreateTime).format("YYYY-MM-DD HH:mm:ss"),
-      })
+      });
+      app.trackEvent('goods_pay_success', {
+        pay_method_name: isNotPayment ? '模拟支付' : '微信支付'
+      });
     });
   },
 
@@ -158,6 +173,53 @@ Page({
     })
   },
 
+  // 获取每日红包
+  getFaterRed() {
+    const {
+      id,
+      orderSn,
+    } = this.orderInfo;
+    cartApi.getFaterRed({
+      orderSn,
+      orderId: id,
+    }).then(res => {
+      res.freeAmount = util.divide(res.freeAmount, 100);
+      this.setData({
+        redData: res
+      })
+    })
+  },
+
+  // 关闭每日红包
+  onCloseRed() {
+    const {
+      redData,
+    } = this.data;
+    redData.isShow = 0;
+    this.setData({
+      redData,
+    });
+  },
+
+  // 打开下载APP
+  onOpenSharePopup() {
+    const {
+      redData,
+    } = this.data;
+    redData.isShow = 0;
+    this.setData({
+      redData,
+      showSharePopup: true,
+    })
+  },
+
+  // 关闭下载APP
+  onHideSharePopup() {
+    this.setData({
+      showSharePopup: false
+    })
+  },
+
   // 处理金额
   handleListPrice(list = []) {
     list.forEach(item => {
@@ -171,6 +233,12 @@ Page({
   handleChangeTime(e) {
     this.setData({
       timeData: e.detail,
+    });
+  },
+
+  handleRedTime(e) {
+    this.setData({
+      redTime: e.detail,
     });
   },
 
@@ -214,6 +282,7 @@ Page({
       that.setData({
         isPay: true,
       })
+      that.getFaterRed();
     }).catch(err => {
 
     });

@@ -13,6 +13,10 @@ Component({
       type: String,
       value: ""
     },
+    value: {
+      type: String,
+      value: ""
+    },
     roundTop: {
       type: Boolean,
       value: false,

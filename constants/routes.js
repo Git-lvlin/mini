@@ -9,6 +9,11 @@ export default {
     type: "tabbar",
     path: "/pages/community/index",
   },
+  // 集约
+  intensive: {
+    type: "tabbar",
+    path: "/pages/intensive/index"
+  },
   // 购物车
   cart: {
     type: "tabbar",
@@ -32,12 +37,16 @@ export default {
     path: "/pages/login/bindPhone/index"
   },
   // 集约列表
-  intensive: {
-    path: "/pages/intensive/index"
+  storeIntensive: {
+    path: "/pages/storeIntensive/index"
   },
   // 集约列表
   otherpay: {
     path: "/pages/otherpay/index"
+  },
+  // 限时秒杀
+  seckill: {
+    path: "/pages/seckill/index"
   },
   // webview
   webview: {
@@ -59,9 +68,15 @@ export default {
   maintain: {
     path: "/pages/maintain/index"
   },
-  
-  
-  
+  // 周末秒杀
+  weekSeckill: {
+    path: "/pages/weekSeckill/index"
+  },
+  // 秒杀爆款
+  popularGood: {
+    path: "/subpages/cart/popularGood/index"
+  },
+
   
   // 分类列表
   classList: {
@@ -87,6 +102,10 @@ export default {
   editAddress: {
     path: "/subpages/cart/editAddress/index"
   },
+  // 集约修改配送地址
+  storeAddress: {
+    path: "/subpages/cart/storeAddress/index"
+  },
   // 收银台
   cashier: {
     path: "/subpages/cart/cashier/index"
@@ -103,6 +122,15 @@ export default {
   store: {
     path: "/subpages/cart/store/index"
   },
+  // 签到
+  signin: {
+    path: "/subpages/cart/signin/index"
+  },
+  // 分类商品列表
+  classGood: {
+    path: "/subpages/cart/classGood/index"
+  },
+  
 
 
   // 用户中心

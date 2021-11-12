@@ -7,6 +7,21 @@ page {
   padding-top: 32rpx;
 }
 
+.tips {
+  font-size: 22rpx;
+  color: #E5352F;
+  line-height: 32rpx;
+  margin-top: 24rpx;
+  margin-left: 24rpx;
+}
+
+.tip_icon {
+  width: 28rpx;
+  height: 28rpx;
+  vertical-align: middle;
+  margin-right: 6rpx;
+}
+
 .save_btn {
   width: 702rpx;
   height: 96rpx;

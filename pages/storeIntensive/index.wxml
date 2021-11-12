@@ -1,0 +1,77 @@
+<wxs module="tools" src="../../wxs/common.wxs" />
+
+<view class="container">
+  <swiper
+    class="swiper swiper_content"
+    indicator-dots
+    indicator-color="#ffffff"
+    indicator-active-color="#d7291d"
+    autoplay
+    interval="{{3000}}"
+    duration="{{800}}"
+    circular
+    wx:if="{{bannerList.length}}"
+  >
+    <swiper-item
+      class="swiper swiper_item"
+      wx:for="{{bannerList}}"
+      wx:key="id"
+      data-data="{{item}}"
+      bindtap="onBanner"
+    >
+      <van-image
+        width="750rpx"
+        height="336rpx"
+        fit="cover"
+        src="{{item.image}}"
+      />
+    </swiper-item>
+  </swiper>
+
+  <view class="intensive_content" wx:if="{{!$.userOtherInfo.isShopMaster && intensiveGood.length}}">
+  <!-- <view class="intensive_content" > -->
+    <van-image
+      custom-class="intensive_banner"
+      width="702rpx"
+      height="188rpx"
+      fit="cover"
+      src="{{intensiveBanner}}"
+    />
+    <scroll-view
+      scroll-x
+      class="intensive_scroll"
+      bindscrolltolower="handleIntensiveBottom"
+    >
+      <view class="intensive_list">
+        <view
+          class="intensive_item"
+          wx:for="{{intensiveGood}}"
+          wx:key="id"
+        >
+          <good-little-card
+            good="{{item}}"
+          />
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="today_buy" wx:if="{{hotGood.length}}">
+    <view class="today_buy_title">今日必约<text class="today_desc">NEW</text></view>
+    <view class="today_buy_list">
+      <view
+        class="buy_item"
+        wx:for="{{hotGood}}"
+        wx:key="id"
+      >
+        <join-card
+          width="642rpx"
+          good="{{item}}"
+          canJump="{{true}}"
+          control="{{false}}"
+        />
+        <!-- quantity="{{tools.getQuantity(item, $.cartList)}}" -->
+      </view>
+    </view>
+  </view>
+</view>

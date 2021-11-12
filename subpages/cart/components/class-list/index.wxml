@@ -1,0 +1,55 @@
+<wxs module="tools" src="../../../../wxs/common.wxs" />
+
+<view class="class_content">
+  <view class="class_list">
+    <scroll-view scroll-x class="class_scroll">
+      <view class="class_scroll_list">
+        <view 
+          class="class_item {{item.id === classId ? 'class_item_act' : ''}}"
+          wx:for="{{category}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="onSelectClass"
+        >
+          <view class="class_img">
+            <van-image width="80rpx" height="80rpx" round src="{{item.gcIcon}}" />
+          </view>
+          <view class="class_name text_one_line">{{item.gcName}}</view>
+          <view class="horn_top" wx:if="{{item.id === classId}}" />
+        </view>
+        <view class="class_item_other" />
+      </view>
+    </scroll-view>
+    <view class="open_all" bindtap="onOpenClass">
+      <view>全</view>
+      <view>部</view>
+      <van-image width="48rpx" height="48rpx" round src="{{tools.getImgUrl('miniprogram/common/list%402x.png')}}" />
+    </view>
+  </view>
+  <van-popup
+    round
+    show="{{ showClassPopup }}"
+    position="top"
+    closeable
+    custom-style="top: {{$.systemInfo.navTotalHeight}}rpx;min-height: 10%;"
+    bind:close="onCloseClass"
+  >
+    <view class="class_popup_content">
+      <view class="class_popup_title">全部分类</view>
+      <view class="class_popup_list">
+        <view
+          class="class_popup_item {{item.id === classId ? 'popup_item_act' : ''}}"
+          wx:for="{{category}}"
+          wx:key="id"
+          data-id="{{item.id}}"
+          bindtap="onSelectClass"
+        >
+          <view class="popup_item_img">
+            <van-image width="80rpx" height="80rpx" round src="{{item.gcIcon}}" />
+          </view>
+          <view class="popup_item_name text_one_line">{{item.gcName}}</view>
+        </view>
+      </view>
+    </view>
+  </van-popup>
+</view>

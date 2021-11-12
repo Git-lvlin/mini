@@ -1,7 +1,11 @@
 {
-  "navigationBarTitleText": "约着买更便宜",
+  "navigationBarTextStyle": "black",
+  "navigationStyle": "custom",
+  "onReachBottomDistance": 0,
+  "enablePullDownRefresh": false,
   "usingComponents": {
-    "good-little-card": "/components/common/good-little-card/index",
-    "join-card": "/components/cart/join-card/index"
+    "banners": "/components/intensive/banner/index",
+    "list": "/components/intensive/list/index",
+    "recommend": "/components/intensive/recommend/index"
   }
 }

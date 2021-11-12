@@ -626,7 +626,7 @@
 }
 
 .gray_buy_btn {
-  width: 686rpx;
+  flex: 1;
   height: 76rpx;
   font-weight: 600;
   color: #ffffff;

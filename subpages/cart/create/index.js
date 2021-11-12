@@ -24,7 +24,7 @@ const backDetail = {
   20808: "重复处理错误",
   20811: "当前状态不可做此操作",
 };
-
+const app = getApp();
 create.Page(store, {
   use: [
     "systemInfo"
@@ -39,6 +39,8 @@ create.Page(store, {
   
   // 是否活动商品单独购买
   isActivityCome: false,
+  // 获取各类金额入参
+  getAmountData: {},
 
   data: {
     orderType: 1,
@@ -47,13 +49,14 @@ create.Page(store, {
     orderInfo: {},
     useCoupon: true,
     couponPopup: false,
-    note: "",
     storeAdress: "",
     storeActivityGood: "",
     objectId: "",
     activityId: "",
     selectAddressType: "",
     orderToken: "",
+    // 是否允许选择红包
+    unOpenCoupon: false,
   },
 
   onLoad(options) {
@@ -62,6 +65,7 @@ create.Page(store, {
     let orderType = options.orderType || 1;
     // 团约商品
     let teamGoods = options.orderType == 4 ? options : {};
+    let unOpenCoupon = options.orderType == 17 || options.orderType == 18 ? false : true;
     if (teamGoods.storeGoodsInfos) {
       teamGoods.storeGoodsInfos =JSON.parse(options.storeGoodsInfos);
     }
@@ -69,6 +73,7 @@ create.Page(store, {
     // 活动页面 - 单独购买
     this.isActivityCome = !!options.isActivityCome;
     this.setData({
+      unOpenCoupon,
       backTopHeight,
       orderType,
       objectId: options.objectId ? options.objectId : "",
@@ -85,18 +90,20 @@ create.Page(store, {
   
   onShow() {
     this.getDefaultAddress();
+    app.trackEvent('shopping_confirmOrder');
   },
 
   // 获取默认地址
   getDefaultAddress() {
     const chooseAddress = wx.getStorageSync("CHOOSE_ADDRESS");
-    const {
+    let {
       addressInfo,
     } = this.data;
     if(chooseAddress) {
       this.setData({
         addressInfo: chooseAddress
       }, () => {
+        // 必须获取地址再请求商品信息
         this.getConfirmInfo();
       })
       wx.removeStorage({
@@ -107,15 +114,28 @@ create.Page(store, {
     cartApi.getDefaultAddress({}, {
       showLoading: false,
     }).then(res => {
-      if(this.orderType == 15) {
+      if(this.orderType == 15 || this.orderType == 16) {
         this.setStoreAddress(res);
-      }
-      if(!addressInfo.consignee) {
-        this.setData({
-          addressInfo: res,
-        }, () => {
-          this.getConfirmInfo();
-        })
+      } else {
+        if(!addressInfo.consignee) {
+          // 首次加载，设置默认地址
+          if(res.consignee) {
+            // 有默认地址
+            addressInfo = res;
+          } else {
+            // 没有默认地址，读上一次下单地址
+            const orderAddress = wx.getStorageSync("ORDER_LAST_ADDRESS");
+            if(orderAddress.consignee) {
+              addressInfo = orderAddress;
+            }
+          }
+          this.setData({
+            addressInfo,
+          }, () => {
+            // 必须获取地址再请求商品信息
+            this.getConfirmInfo();
+          })
+        }
       }
     }).catch(err => {
       this.setStoreAddress(err);
@@ -125,22 +145,41 @@ create.Page(store, {
   // 设置提货人
   setStoreAddress(address) {
     let data = wx.getStorageSync("CREATE_INTENSIVE");
-    let userData = wx.getStorageSync("STORE_SHIPPER_INFO");
+    // 集约提货人其他信息
     let {
       storeAdress,
+      selectAddressType,
     } = data;
-    if(userData) {
-      storeAdress.linkman = userData.user;
-      storeAdress.phone = userData.phone;
-    } else if (!!address.consignee) {
-      storeAdress.linkman = address.consignee;
-      storeAdress.phone = address.phone;
-    } else {
-      storeAdress.linkman = "请输入提货人信息";
-      storeAdress.phone = "";
+    if(selectAddressType.type == 2) {
+      let userData = wx.getStorageSync("ORDER_STORE_LOCATION");
+      if(userData && userData.setUser) {
+        storeAdress.linkman = userData.setUser;
+        storeAdress.phone = userData.setPhone;
+      } else if (!!address.consignee) {
+        storeAdress.linkman = address.consignee;
+        storeAdress.phone = address.phone;
+      } else {
+        storeAdress.linkman = "请输入提货人信息";
+        storeAdress.phone = "";
+      }
+    } else if(selectAddressType.type == 3) {
+      const setStoreAddress = wx.getStorageSync('ORDER_STORE_LOCATION');
+      if(setStoreAddress && setStoreAddress.setUser) {
+        storeAdress.linkman = setStoreAddress.setUser;
+        storeAdress.setUser = setStoreAddress.setUser;
+        storeAdress.phone = setStoreAddress.setPhone;
+        storeAdress.setPhone = setStoreAddress.setPhone;
+        storeAdress.setAddress = setStoreAddress.setAddress;
+        storeAdress.setAllAddress = setStoreAddress.setAllAddress;
+      } else {
+        wx.setStorageSync('ORDER_STORE_LOCATION', storeAdress);
+      }
     }
     this.setData({
       storeAdress
+    }, () => {
+      // 必须获取地址再请求商品信息
+      this.getConfirmInfo();
     });
   },
 
@@ -153,8 +192,8 @@ create.Page(store, {
       teamGoods,
     } = this.data;
     let deliveryInfo = this.mapAddress(addressInfo);
-    postData.deliveryInfo = deliveryInfo;
-    if(this.orderType == 15) {
+    // postData.deliveryInfo = deliveryInfo;
+    if(this.orderType == 15 || this.orderType == 16) {
       // 集约
       let data = wx.getStorageSync("CREATE_INTENSIVE");
       let {
@@ -163,13 +202,13 @@ create.Page(store, {
         ...other
       } = data;
       postData = other;
-      postData.deliveryInfo = this.mapAddress(storeAdress);
+      deliveryInfo = this.mapAddress(storeAdress);
       this.setData({
         selectAddressType,
         storeActivityGood: other,
       });
-    }  else if(this.orderType == 3 || this.isActivityCome || this.orderType == 11) {
-      // 单约 || 单独购买 || 1688
+    }  else if(this.orderType == 3) {
+      // 单约
       let data = wx.getStorageSync("CREATE_INTENSIVE");
       postData = {
         ...postData,
@@ -189,10 +228,10 @@ create.Page(store, {
       })
     } else {
       // 普通商品
-      goodList = wx.getStorageSync("GOOD_LIST");
+      goodList = wx.getStorageSync("GOOD_LIST") || [];
       postData = {
-        deliveryInfo,
-        storeGoodsInfos: goodList
+        // deliveryInfo,
+        storeGoodsInfos: goodList.storeGoodsInfos
       };
     }
     if(this.changeStoreData.length) {
@@ -201,7 +240,6 @@ create.Page(store, {
     cartApi.getConfirmInfo(postData).then(res => {
       let orderInfo = res;
       let skuNum = 1;
-      let haveMinSkuNum = false;
       // let storeGood = orderInfo.storeGoodsInfos;
       orderInfo.reduceAmount = util.divide(orderInfo.reduceAmount, 100);
       orderInfo.shippingFeeAmount = util.divide(orderInfo.shippingFeeAmount, 100);
@@ -216,19 +254,45 @@ create.Page(store, {
           // 设置最小购买数
           skuNum  = postData.storeGoodsInfos[index].goodsInfos[idx].skuNum;
           if(skuNum < child.buyMinNum) {
-            haveMinSkuNum = true;
             postData.storeGoodsInfos[index].skuNum = child.buyMinNum;
           }
         });
       })
-      if(haveMinSkuNum) {
-        this.updateOrderAmount(postData);
-        // return;
+      if(orderInfo.usefulCoupon) {
+        orderInfo.usefulCoupon = this.mapCoupon(orderInfo.usefulCoupon);
+        orderInfo.usefulCoupon.forEach(item => {
+          if(!!item.isDefault) {
+            orderInfo.currentCoupon = item;
+          }
+        });
       }
+      if(orderInfo.unusefulCoupon) {
+        orderInfo.unusefulCoupon = this.mapCoupon(orderInfo.unusefulCoupon);
+      }
+      postData.deliveryInfo = deliveryInfo;
+      if(orderInfo.currentCoupon) {
+        postData.couponAmount = util.multiply(orderInfo.currentCoupon.couponAmount, 100);
+        if(orderInfo.currentCoupon.memberCouponId) {
+          postData.couponId = orderInfo.currentCoupon.memberCouponId;
+        }
+      }
+      this.getAmountData = postData;
       this.setData({
         orderInfo,
+      }, () => {
+        this.updateOrderAmount(postData);
       })
     })
+  },
+
+  // 遍历优惠券数据
+  mapCoupon(list = []) {
+    list.forEach(item => {
+      item.usefulAmount = util.divide(item.usefulAmount, 100);
+      item.freeDiscount = util.divide(item.freeDiscount, 100);
+      item.couponAmount = util.divide(item.couponAmount, 100);
+    });
+    return list;
   },
 
   // 获取订单token
@@ -264,6 +328,9 @@ create.Page(store, {
   // 组装提交的地址数据
   mapAddress(info) {
     if(!info.phone) return undefined;
+    const {
+      orderType,
+    } = this.data;
     let data = {
       consignee: info.consignee || info.linkman,
       phone: info.phone,
@@ -277,6 +344,22 @@ create.Page(store, {
       fullAddress: info.fullAddress,
       streetName: info.streetName || "",
     };
+    let storeData = wx.getStorageSync("CREATE_INTENSIVE");
+    let {
+      selectAddressType,
+    } = storeData;
+    // 集约商家配送
+    if(orderType == 15 || orderType == 16) {
+      let newStoreAddress = wx.getStorageSync('ORDER_STORE_LOCATION');
+      if(newStoreAddress && newStoreAddress.setUser) {
+        data.consignee = newStoreAddress.setUser;
+        data.phone = newStoreAddress.setPhone;
+        if(selectAddressType && selectAddressType.type == 3) {
+          data.address = newStoreAddress.setAllAddress + newStoreAddress.setAddress;
+          data.fullAddress = newStoreAddress.setAllAddress + newStoreAddress.setAddress;
+        }
+      }
+    }
     return data;
   },
 
@@ -287,12 +370,23 @@ create.Page(store, {
   
   // 跳转选择地址
   onToAddress() {
-    router.push({
-      name: "address",
-      data: {
-        isChoose: true,
-      }
-    })
+    const {
+      selectAddressType,
+      orderType,
+    } = this.data;
+    if((orderType == 15 || orderType == 16) && selectAddressType.type == 3) {
+      router.push({
+        name: "storeAddress",
+        data: {}
+      })
+    } else {
+      router.push({
+        name: "address",
+        data: {
+          isChoose: true,
+        }
+      })
+    }
   },
 
   // 跳转修改提货人
@@ -308,13 +402,42 @@ create.Page(store, {
     })
   },
 
+  // 弹窗修改购买数
+  handleSetSkuNum({
+    detail
+  }) {
+    let {
+      orderInfo,
+    } = this.data;
+    let store = orderInfo.storeGoodsInfos[detail.pidx];
+    store.goodsInfos[detail.index] = detail.data;
+    this.handleChangeNum({
+      detail: {
+        idx: detail.pidx,
+        data: store,
+      }
+    });
+  },
+
+  // 修改订单备注
+  handleChangeNot({
+    detail
+  }) {
+    let {
+      orderInfo,
+    } = this.data;
+    orderInfo.storeGoodsInfos[detail.idx] = detail.data;
+    this.setData({
+      orderInfo,
+    });
+  },
+
   // 监听修改下单数量
   handleChangeNum({
     detail
   }) {
     let {
       orderInfo,
-      storeActivityGood,
       storeAdress,
       addressInfo,
       note,
@@ -341,18 +464,11 @@ create.Page(store, {
       storeGoodsInfos.push(storeItem);
     })
     let postData = {};
-    if (this.orderType == 15 && selectAddressType.type == 2) {
+    if (this.orderType == 15 || this.orderType == 16) {
       postData = {
         changeStore: detail,
         note,
         deliveryInfo: this.mapAddress(storeAdress),
-        // deliveryInfo: {
-        //   provinceId: storeAdress.provinceId,
-        //   cityId: storeAdress.cityId,
-        //   districtId: storeAdress.districtId,
-        //   districtName: storeAdress.districtName,
-        //   streetName: storeAdress.streetName || "",
-        // },
         storeGoodsInfos,
       }
     } else {
@@ -363,17 +479,17 @@ create.Page(store, {
       }
       if (addressInfo.provinceId) {
         postData.deliveryInfo = this.mapAddress(addressInfo);
-        // postData.deliveryInfo = {
-        //   provinceId: addressInfo.provinceId,
-        //   cityId: addressInfo.cityId,
-        //   districtId: addressInfo.districtId,
-        //   districtName: addressInfo.districtName,
-        //   streetName: addressInfo.streetName || "",
-        // }
       }
     }
     this.changeStoreData = postData.storeGoodsInfos;
+    if(orderInfo.currentCoupon) {
+      postData.couponAmount = util.multiply(orderInfo.currentCoupon.couponAmount, 100);
+      if(orderInfo.currentCoupon.memberCouponId) {
+        postData.couponId = orderInfo.currentCoupon.memberCouponId;
+      }
+    }
     this.updateOrderAmount(postData);
+    this.getAmountData = postData;
   },
 
   // 更新订单数据
@@ -407,9 +523,9 @@ create.Page(store, {
         reduceAmount: util.divide(reduceAmount, 100),
         shippingFeeAmount: util.divide(shippingFeeAmount, 100),
         totalAmount: util.divide(totalAmount, 100),
-        storeGoodsInfos: storeShippingFeeAmount
+        // storeGoodsInfos: storeShippingFeeAmount
       }
-      if(changeStore.data && changeStore.data.storeNo) {
+      if(changeStore && changeStore.data && changeStore.data.storeNo) {
         orderInfo.storeGoodsInfos[changeStore.idx] = {
           ...orderInfo.storeGoodsInfos[changeStore.idx],
           goodsInfos: changeStore.data.goodsInfos,
@@ -423,6 +539,12 @@ create.Page(store, {
 
   // 打开红包弹窗
   onOpenCoupon() {
+    const {
+      unOpenCoupon,
+    } = this.data;
+    if(!unOpenCoupon) {
+      return
+    }
     this.setData({
       couponPopup: true
     })
@@ -433,6 +555,40 @@ create.Page(store, {
     this.setData({
       couponPopup: false
     })
+  },
+
+  // 处理选择优惠券
+  handleChooseCoupon({
+    detail
+  }) {
+    const {
+      orderInfo
+    } = this.data;
+    const getAmountData = this.getAmountData;
+    let currentCoupon = orderInfo.currentCoupon;
+    if(!!detail.memberCouponId) {
+      getAmountData.couponId = detail.memberCouponId;
+      getAmountData.couponAmount = util.multiply(detail.couponAmount, 100);
+      orderInfo.usefulCoupon.forEach(item => {
+        if(item.memberCouponId == detail.memberCouponId) {
+          item.isDefault = 1;
+          currentCoupon = item;
+        }
+      })
+    } else {
+      getAmountData.couponId = '';
+      getAmountData.couponAmount = '';
+      orderInfo.usefulCoupon.forEach(item => {
+        item.isDefault = 0;
+      });
+      currentCoupon = {};
+    }
+    this.setData({
+      orderInfo,
+      currentCoupon,
+    })
+    this.getAmountData = getAmountData;
+    this.updateOrderAmount(getAmountData);
   },
 
   // 输入留言
@@ -449,7 +605,6 @@ create.Page(store, {
     const {
       addressInfo,
       orderInfo,
-      note,
       storeActivityGood,
       orderToken,
     } = this.data;
@@ -476,11 +631,16 @@ create.Page(store, {
       totalAmount: util.multiply(orderInfo.totalAmount, 100),
       payAmount: util.multiply(orderInfo.payAmount, 100),
       deliveryMode: 1,
-      note: note,
       shippingFeeAmount: orderInfo.shippingFeeAmount || 0,
       deliveryInfo: this.mapAddress(addressInfo),
       storeGoodsInfos: [],
     };
+    if(orderInfo.currentCoupon) {
+      postData.couponAmount = util.multiply(orderInfo.currentCoupon.couponAmount, 100);
+      if(orderInfo.currentCoupon.memberCouponId) {
+        postData.couponId = orderInfo.currentCoupon.memberCouponId;
+      }
+    }
     if(orderType == 3 || orderType == 4 || orderType == 11) {
       if(!!activityId) postData.activityId = activityId;
       if(!!objectId) postData.objectId = objectId;
@@ -493,14 +653,13 @@ create.Page(store, {
   getStoreGood() {
     const {
       storeAdress,
-      note,
       orderInfo,
       addressInfo,
       selectAddressType,
       orderToken,
     } = this.data;
-    if(!addressInfo.consignee && selectAddressType.type == 3) {
-      showToast({ title: "请选择收货地址" });
+    if(!storeAdress.setUser && selectAddressType.type == 3) {
+      showToast({ title: "请添加商家配送地址" });
       return;
     }
     if(selectAddressType.type == 2 && (!storeAdress.linkman || !storeAdress.phone)) {
@@ -518,7 +677,6 @@ create.Page(store, {
       totalAmount: util.multiply(orderInfo.totalAmount, 100),
       payAmount: util.multiply(orderInfo.payAmount, 100),
       deliveryMode: selectAddressType.type,
-      note,
       shippingFeeAmount: orderInfo.shippingFeeAmount || 0,
       deliveryInfo: this.mapAddress(storeAdress),
       storeGoodsInfos: this.getStoreGoodsInfos(orderInfo.storeGoodsInfos),
@@ -532,6 +690,7 @@ create.Page(store, {
     storeList.forEach(item => {
       let storeGood = {
         storeNo: item.storeNo,
+        note: item.note || "",
         goodsInfos: []
       };
       item.goodsInfos.forEach(child => {
@@ -555,13 +714,14 @@ create.Page(store, {
     if(!userInfo) return;
     const {
       orderInfo,
+      addressInfo,
     } = this.data;
     if(!orderInfo.storeGoodsInfos || !orderInfo.storeGoodsInfos.length) {
       showToast({ title: "抱歉，爆品好货已售光，下次早点抢哦" });
       return;
     }
     let postData = {};
-    if (this.orderType != 15) {
+    if (this.orderType != 15 && this.orderType != 16) {
       postData = this.getSubmitGood();
     } else {
       postData = this.getStoreGood();
@@ -589,6 +749,10 @@ create.Page(store, {
         // }, 1500);
       // }
     });
+    // 保存上次下单地址
+    if(this.orderType != 15 && this.orderType != 16) {
+      wx.setStorageSync('ORDER_LAST_ADDRESS', addressInfo);
+    }
   },
 
   // 生产环境直接调支付
@@ -611,6 +775,9 @@ create.Page(store, {
           ...orderInfo,
         },
       })
+      app.trackEvent('goods_pay_success', {
+        pay_method_name: '微信支付'
+      });
     });
   },
 })

@@ -8,7 +8,7 @@
   position: absolute;
   top: 24rpx;
   left: 24rpx;
-  z-index: 10;
+  z-index: 110;
   width: 686rpx;
   height: 64rpx;
   padding-left: 16rpx;
@@ -16,16 +16,37 @@
   border-radius: 32rpx;
 }
 
+.area_box {
+  margin-right: 20rpx;
+  border-right: 2rpx solid #eee;
+}
+
+.area_name {
+  color: #000;
+  font-size: 28rpx;
+  line-height: 32rpx;
+  padding: 0 16rpx 0 8rpx;
+}
+
+.area_icon {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: 16rpx;
+  transform: rotate(-90deg);
+}
+
 .search_icon {
   width: 40rpx;
   height: 40rpx;
-  margin-right: 8rpx;
+  margin-right: 16rpx;
 }
 
-.search_text {
-  color: #cccccc;
+.sreach_input {
+  height: 36rpx;
+  color: #333;
   font-size: 28rpx;
-  line-height: 40rpx;
+  line-height: 36rpx;
+  padding: 0;
 }
 
 /* 地图 */
@@ -114,4 +135,40 @@
   margin: 0 auto;
   background-size: 100% auto;
   background-repeat: no-repeat;
+}
+
+/* 搜索地址 */
+.sreach_address {
+  width: 100%;
+  height: calc(100vh - 112rpx);
+  overflow-y: auto;
+  background-color: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+}
+
+.address_item {
+  position: relative ;
+  padding: 20rpx 64rpx 20rpx 32rpx;
+}
+
+.address_item:not(:last-child) {
+  border: 2rpx solid #f5f5f5;
+}
+
+.company_name {
+  font-weight: 500;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin-bottom: 4rpx;
+}
+
+.text_red {
+  color: #e5352f;
+}
+
+.company_address {
+  color: #999999;
+  font-size: 20rpx;
+  line-height: 28rpx;
 }

@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
+    "together-user": "../together-user/index",
+    "count-down": "/components/common/count-down/index"
+  }
+}
