@@ -49,6 +49,7 @@
     />
     <!-- 优选推荐 -->
     <recommend
+      wx:if="{{recommendData.records.length}}"
       remindList="{{recommendData}}"
     />
   </scroll-view>
