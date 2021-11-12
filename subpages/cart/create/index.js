@@ -90,7 +90,6 @@ create.Page(store, {
   
   onShow() {
     this.getDefaultAddress();
-    this.getConfirmInfo();
     app.trackEvent('shopping_confirmOrder');
   },
 
@@ -129,6 +128,9 @@ create.Page(store, {
           }
           this.setData({
             addressInfo,
+          }, () => {
+            // 必须获取地址再请求商品信息
+            this.getConfirmInfo();
           })
         }
       }
@@ -172,6 +174,9 @@ create.Page(store, {
     }
     this.setData({
       storeAdress
+    }, () => {
+      // 必须获取地址再请求商品信息
+      this.getConfirmInfo();
     });
   },
 
