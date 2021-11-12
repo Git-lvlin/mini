@@ -1,6 +1,6 @@
 // 定义常用常量
 
-const ENV = wx.getStorageSync("SYS_ENV");
+const ENV = wx.getStorageSync("SYS_ENV") || 'pro';
 
 // oss 上传域名
 // ***【 如有变动 common.wxs 需更换域名 】***
@@ -32,9 +32,9 @@ const agreementHost = {
 };
 export const agreementUrl = {
   // 服务协议
-  service: `${agreementHost[ENV]}?reg=user&index=1`,
+  service: `${agreementHost[ENV || 'pro']}?reg=user&index=1`,
   // 隐私政策
-  privacy: `${agreementHost[ENV]}?reg=user&index=0`,
+  privacy: `${agreementHost[ENV || 'pro']}?reg=user&index=0`,
 }
 
 // 字符类型资源位id
