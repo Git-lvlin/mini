@@ -183,6 +183,7 @@ Page({
       orderSn,
       orderId: id,
     }).then(res => {
+      res.freeAmount = util.divide(res.freeAmount, 100);
       this.setData({
         redData: res
       })

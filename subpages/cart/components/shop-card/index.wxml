@@ -43,7 +43,7 @@
       </view>
       <view class="flex_middle note_box">
         <view class="flex_fix note_title">订单备注</view>
-        <input class="note_input" bindinput="handleInput" placeholder="输入10字以内留言信息" />
+        <input class="note_input" maxlength="10" bindinput="handleInput" placeholder="输入10字以内留言信息" />
       </view>
     </view>
   </view>
