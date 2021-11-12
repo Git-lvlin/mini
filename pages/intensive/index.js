@@ -128,6 +128,10 @@ create.Page(store, {
 
   // 获取集约列表
   getIntensiveData() {
+    const f = wx.getStorageSync('EXAMINE') || false;
+    if (f) {
+      return
+    }
     let spot = wx.getStorageSync("TAKE_SPOT") || {};
     let params = {
       storeNo: spot.storeNo || '',
