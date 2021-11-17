@@ -33,7 +33,11 @@
         <view class="num-box">库存{{item.stockNum}}件</view>
       </view>
       <view class="last-li">
-        <view class="price"><span class="price-after">¥</span> {{item.goodsSalePrice/100}}</view>
+        <price-mobel
+          money="{{item.goodsSalePrice/100}}"
+          max-size="{{36}}"
+        />
+        <!-- <view class="price"><span class="price-after">¥</span> {{item.goodsSalePrice/100}}</view> -->
         <view class="btn">立即抢购</view>
       </view>
     </view>

@@ -28,21 +28,6 @@ var getPriceSplit = function (price, type) {
   }
 }
 
-// 数字补零
-// type 是否数小数位
-var getPriceToZero = function (price) {
-  var str = price !== undefined ? price.toString() : "0";
-  var strArr = str.split(".");
-  var floatStr = ''; 
-  if(!!strArr[1]) {
-    var zero = strArr[1].length < 2 ? '0' : '';
-    floatStr = '.' + strArr[1] + zero;
-  } else {
-    floatStr = '.00'
-  }
-  return strArr[0] + floatStr;
-}
-
 // 浮点数相加
 var floatAdd = function(arg1, arg2) {
   arg1 = !arg1 ? 0 : arg1
@@ -106,8 +91,9 @@ var getLastTime = function(time) {
   return endTime
 }
 
-var priceToF2 = function(price) {
-  var p = (price/100).toFixed(3)
+// 数字补零
+var priceToF2 = function(price, miniUtil = true) {
+  var p = (miniUtil ? price/100 : price).toFixed(3)
   var res = p.substring(0, p.lastIndexOf('.')+3)
   return res
 }
@@ -117,7 +103,6 @@ module.exports = {
   floatReduce: floatReduce,
   getImgUrl: getImgUrl,
   getPriceSplit: getPriceSplit,
-  getPriceToZero: getPriceToZero,
   getQuantity: getQuantity,
   getLastTime: getLastTime,
   priceToF2: priceToF2,

@@ -38,7 +38,7 @@ Component({
         }
         homeApi.getFloorCustom(content.dataUrl).then(res => {
           let list = res.records;
-          list = mapNum(list);
+          // list = mapNum(list);
           homeCache.seckillList = list;
           this.setData({
             seckillList: list
@@ -47,7 +47,7 @@ Component({
         });
       } else {
         let list = content.data;
-        list = mapNum(list);
+        // list = mapNum(list);
         this.setData({
           seckillList: list
         })
