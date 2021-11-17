@@ -20,7 +20,7 @@
             bindtap="onGood"
           >
             <image class="seckill_img" src="{{item.image}}" />
-            <view class="name">¥{{item.salePrice}}</view>
+            <view class="name">¥{{tools.getPriceToZero(item.salePrice)}}</view>
           </view>
         </view>
       </view>
