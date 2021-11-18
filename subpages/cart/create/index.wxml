@@ -70,13 +70,13 @@
       <view class="order_price" wx:if="{{orderToken && orderInfo.storeGoodsInfos.length}}">
         <view class="cell_item">
           <view class="cell_name">商品金额</view>
-          <view class="cell_value">￥{{orderInfo.totalAmount}}</view>
+          <view class="cell_value">￥{{tools.priceToF2(orderInfo.totalAmount, false)}}</view>
         </view>
         <view class="cell_item">
           <view class="cell_name">红包</view>
           <view class="coupon" bindtap="onOpenCoupon">
             <text class="signin_text" wx:if="{{orderType == 17 || orderType == 18}}">（签到红包）</text>
-            <text class="coupon_money">￥{{orderInfo.reduceAmount}}</text>
+            <text class="coupon_money">￥{{tools.priceToF2(orderInfo.reduceAmount, false)}}</text>
             <!-- <text class="coupon_text" wx:if="{{!useCoupon}}">红包不可用</text>
             <text class="coupon_money {{!!orderInfo.reduceAmount ? 'coupon_money_more' : ''}}" wx:else>{{!!orderInfo.reduceAmount ? '-' : ''}}￥{{orderInfo.reduceAmount}}</text> -->
             <image
@@ -88,7 +88,7 @@
         </view>
         <view class="cell_item">
           <view class="cell_name">运费</view>
-          <view class="cell_value">￥{{orderInfo.shippingFeeAmount || 0}}</view>
+          <view class="cell_value">￥{{tools.priceToF2(orderInfo.shippingFeeAmount, false)}}</view>
         </view>
         <!-- <view class="cell_item" wx:if="{{orderType != 15}}">
           <view class="cell_name">给商家留言</view>

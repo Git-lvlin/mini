@@ -14,7 +14,7 @@
           <view class="title text_one_line">{{item.goodsName}}</view>
           <view class="sku_name">{{item.skuName}}</view>
           <view class="price">
-            <text>￥{{item.skuSalePrice}}</text>
+            <text>￥{{tools.priceToF2(item.skuSalePrice, false)}}</text>
             <view class="num_controller">
               <view
                 class="controller reduce_num"
@@ -50,7 +50,13 @@
 
   <view class="total_price">
     <view class="txt">小计：</view>
-    <view class="text">￥{{tools.getPriceSplit(data.totalAmount)}}<text class="min_price">{{tools.getPriceSplit(data.totalAmount, 1)}}</text></view>
+    <price-mobel
+      money="{{data.totalAmount}}"
+      min-size="{{20}}"
+      max-size="{{28}}"
+      bold="{{600}}"
+    />
+    <!-- <view class="text">￥{{tools.getPriceSplit(data.totalAmount)}}<text class="min_price">{{tools.getPriceSplit(data.totalAmount, 1)}}</text></view> -->
     <!-- <view class="freight">(运费：￥{{data.shippingFeeAmount}})</view> -->
   </view>
 

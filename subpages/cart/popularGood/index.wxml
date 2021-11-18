@@ -1,3 +1,5 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
 <view class="container">
   <image
     class="banner"
@@ -25,7 +27,7 @@
       <view class="good_info">
         <view class="good_title text_two_line">{{item.title}}</view>
         <view class="flex_middle price_box">
-          <view class="price_text"><text class="mini_util">¥</text>{{item.salePrice}}</view>
+          <view class="price_text"><text class="mini_util">¥</text>{{tools.priceToF2(item.salePrice, false)}}</view>
           <view class="buy_btn">立即抢购</view>
         </view>
       </view>

@@ -14,12 +14,12 @@
         <view class="tab_item" data-type="{{2}}" bindtap="onClickTab">不可用红包({{unusefulCoupon.length}})</view>
         <view class="active_line {{active === 2 ? 'active_line_right' : ''}}" />
       </view>
-      <view class="choose_coupon" wx:if="{{active == 2 || active == 1 && usefulCoupon.length}}">
+      <view class="choose_coupon" wx:if="{{active == 2 && unusefulCoupon.length || active == 1 && usefulCoupon.length}}">
         <block wx:if="{{active == 1}}">
           <text wx:if="{{currCoupon.couponAmount}}">已选中推荐优惠，使用红包1张，共抵扣<text class="coupon_money">¥{{currCoupon.couponAmount}}</text></text>
           <text wx:if="{{!currCoupon.couponAmount && usefulCoupon.length}}">请选择优惠券</text>
         </block>
-        <text wx:if="{{active == 2 && unusefulCoupon.length}}">不可使用</text>
+        <text wx:if="{{active == 2}}">不可使用</text>
       </view>
     </view>
     <view class="coupon_list">

@@ -80,7 +80,7 @@
     <view class="good_price" wx:if="{{isActivityGood == 1}}">
       <view class="price">
         ￥<text class="max_text">{{tools.getPriceSplit(good.goodsSaleMinPrice)}}</text>{{tools.getPriceSplit(good.goodsSaleMinPrice, 1)}}
-        <view class="market_price ">￥{{good.goodsMarketPrice}}</view>
+        <view class="market_price ">￥{{tools.priceToF2(good.goodsMarketPrice, false)}}</view>
       </view>
       <!-- <view class="sales">月售188件</view> -->
       <view class="sales">{{good.goodsSaleNum}}</view>
@@ -162,7 +162,7 @@
         />
         <block wx:if="{{isActivityGood == 2}}">
           <view class="sec_label">秒约特惠</view>
-          <view class="sec_market_price">市场价￥{{good.goodsMarketPrice}}</view>
+          <view class="sec_market_price">市场价￥{{tools.priceToF2(good.goodsMarketPrice, false)}}</view>
         </block>
       </view>
       <!-- 加入购物车 -->

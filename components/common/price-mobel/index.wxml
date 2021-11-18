@@ -7,5 +7,5 @@
     <text class="max_price" style="font-size: {{!!maxSize ? maxSize : 40}}rpx;line-height: {{!!maxSize ? maxSize : 40}}rpx;">{{tools.getPriceSplit(money)}}</text>
     <text class="min_price">{{tools.getPriceSplit(money, 1)}}</text>
   </view>
-  <view class="market_money" wx:if="{{!!marketMoney && showMarket}}">{{!!desc ? desc : ""}}¥{{marketMoney}}</view>
+  <view class="market_money" wx:if="{{!!marketMoney && showMarket}}">{{!!desc ? desc : ""}}¥{{tools.priceToF2(marketMoney, false)}}</view>
 </view>
