@@ -396,7 +396,7 @@
         data-type="alone"
         bindtap="onToCreate"
       >
-        <view class="mar_price">￥{{good.goodsSaleMinPrice}}</view>
+        <view class="mar_price">￥{{tools.priceToF2(good.goodsSaleMinPrice)}}</view>
         <view class="mar_price">单独购买</view>
       </view>
       <view
@@ -404,7 +404,7 @@
         data-data="{{personalList[0]}}"
         bindtap="onPushTogether"
       >
-        <view class="mar_price">￥{{good.activityPrice}}</view>
+        <view class="mar_price">￥{{tools.priceToF2(good.activityPrice)}}</view>
         <view class="mar_price" >发起拼单</view>
       </view>
     </view>
