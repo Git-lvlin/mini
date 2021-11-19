@@ -123,7 +123,7 @@ page {
 
 .pul_icon {
   position: absolute;
-  top: -160rpx;
+  top: -110rpx;
   left: 50%;
   z-index: 0;
   width: 160rpx;

@@ -12,11 +12,11 @@ export default {
       route: 'home',
     },
     1: {
-      isTabbar: false,
+      isTabbar: true,
       route: 'seckill',
     },
     2: {
-      isTabbar: true,
+      isTabbar: false,
       route: 'intensive',
     },
     3: {
