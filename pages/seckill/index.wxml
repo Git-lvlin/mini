@@ -25,7 +25,7 @@
     num: num,
   };
 </wxs>
-<image class="back" style="top: {{$.systemInfo.statusHeight + 12 * $.systemInfo.rpxRatio}}rpx" bindtap="onBack" src="{{tools.getImgUrl('miniprogram/common/back_white@2x.png')}}" />
+<!-- <image class="back" style="top: {{$.systemInfo.statusHeight + 12 * $.systemInfo.rpxRatio}}rpx" bindtap="onBack" src="{{tools.getImgUrl('miniprogram/common/back_white@2x.png')}}" /> -->
 <view class="container">
   <view class="banner">
     <van-image

@@ -179,6 +179,7 @@ export const getSystemInfo = () => {
   const { top, height } = menuButtonObject;
   let rpxRatio = 750/data.windowWidth;
   systemInfo = {
+    ...data,
     // 像素比
     pixelRatio: data.pixelRatio,
     // 宽度像素比

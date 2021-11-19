@@ -38,7 +38,7 @@ create.Page(store, {
       navTotalHeight,
       bottomBarHeight,
     } = this.data.$.systemInfo;
-    let classScrollHeight = screenHeight * rpxRatio - navTotalHeight - bottomBarHeight - 172 - 16 - 104;
+    let classScrollHeight = screenHeight * rpxRatio - navTotalHeight - bottomBarHeight - 172 - 16;
     if(!!options.category_id) {
       this.categoryId = options.category_id;
     }

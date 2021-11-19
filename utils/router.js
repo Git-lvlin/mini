@@ -196,9 +196,7 @@ const getUrlRoute = (url, opt) => {
     }
     if(option.isJump) {
       if(!!data.isTabbar) {
-        goTabbar({
-          name: data.route,
-        })
+        goTabbar(data.route)
       } else {
         push({
           name: data.route,
@@ -282,9 +280,7 @@ const getUrlRoute = (url, opt) => {
 
     if(option.isJump) {
       if(!!data.isTabbar) {
-        goTabbar({
-          name: data.route,
-        })
+        goTabbar(data.route);
       } else {
         push({
           name: data.route,

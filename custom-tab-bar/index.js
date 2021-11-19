@@ -27,6 +27,12 @@ create.Component(store, {
         iconPath: `../images/tabbar/home@3x.png`,
         selectedIconPath: `../images/tabbar/actHome@3x.png`,
       },{
+        index: 1,
+        pagePath: "/pages/seckill/index",
+        name: "秒杀",
+        iconPath: `../images/tabbar/seckill.png`,
+        selectedIconPath: `../images/tabbar/actSeckill.png`
+      },{
       //   index: 1,
       //   pagePath: "/pages/community/index",
       //   name: "社区",
@@ -39,13 +45,13 @@ create.Component(store, {
       //   iconPath: `${IMG_CDN}common/barIcon/cart@3x.png`,
       //   selectedIconPath: `${IMG_CDN}common/barIcon/actCart@3x.png`
       // },{
-        index: 2,
-        pagePath: "/pages/intensive/index",
-        name: "",
-        special: "intensive",
-        iconPath: `../images/tabbar/intensive.png`,
-        selectedIconPath: `../images/tabbar/intensive.png`
-      },{
+      //   index: 2,
+      //   pagePath: "/pages/intensive/index",
+      //   name: "",
+      //   special: "intensive",
+      //   iconPath: `../images/tabbar/intensive.png`,
+      //   selectedIconPath: `../images/tabbar/intensive.png`
+      // },{
         index: 3,
         pagePath: "/pages/user/index",
         name: "我的",
