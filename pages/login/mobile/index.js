@@ -50,8 +50,23 @@ const codeScene = {
 
 const app = getApp();
 create.Page(store, {
+  use: ['systemInfo'],
   loginCode: "",
   getShareConut: 1,
+
+  computed: {
+    supportLogin() {
+      const systemInfo = this.systemInfo;
+      const state = systemInfo.platform == 'ios' && systemInfo.environment == 'wxwork' ? false : true;
+      if(!state) {
+        showModal({
+          content: "非常抱歉，苹果手机的企业微信用户暂不支持登录小程序，请前往微信内登录",
+          showCancel: false,
+        })
+      }
+      return state;
+    }
+  },
 
   data: {
     showTreaty: false,
@@ -65,6 +80,7 @@ create.Page(store, {
   },
 
   onLoad(options) {
+    console.log('supportLogin', wx.canIUse('button.open-type.getPhoneNumber'));
     const sysEnv = wx.getStorageSync("SYS_ENV");
     const {
       changeEnv,

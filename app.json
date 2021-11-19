@@ -116,10 +116,10 @@
                 "selectedIconPath": "/images/tabbar/actHome@3x.png"
             },
             {
-                "pagePath": "pages/intensive/index",
-                "text": " ",
-                "iconPath": "/images/tabbar/intensive.png",
-                "selectedIconPath": "/images/tabbar/intensive.png"
+                "pagePath": "pages/seckill/index",
+                "text": "秒杀",
+                "iconPath": "/images/tabbar/seckill.png",
+                "selectedIconPath": "/images/tabbar/actSeckill.png"
             },
             {
                 "pagePath": "pages/user/index",

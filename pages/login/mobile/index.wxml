@@ -5,7 +5,7 @@
     <van-image width="72rpx" height="72rpx" src="{{tools.getImgUrl('miniprogram/common/logo.png')}}" />
     <view class="title">欢迎登录 约购</view>
   </view>
-  <view class="login_tips" bindtap="onChangeRadio">
+  <view class="login_tips" bindtap="onChangeRadio" wx:if="{{!state}}">
     <image class="radio_icon" src="{{radio ? selectedIcon : selectIcon}}" />
     <text >登陆/注册即表示您已阅读并同意</text>
     <text class="red_text" data-type="privacy" catchtap="onClickTreaty">《用户服务协议及隐私政策》</text>
@@ -19,7 +19,7 @@
       block
       loading-type="spinner"
       loading-text="登录中..."
-      wx:if="{{canUseProfile && radio}}"
+      wx:if="{{canUseProfile && radio && supportLogin}}"
       bind:getphonenumber="getCodeLogin"
       bindtap="getCode"
     >微信手机号登录</van-button>
@@ -30,7 +30,7 @@
       block
       loading-type="spinner"
       loading-text="登录中..."
-      wx:if="{{!radio}}"
+      wx:if="{{!radio && supportLogin}}"
       bindtap="onTiplogin"
     >微信手机号登录</van-button>
     <view class="on_login" bindtap="onToHome">不登录，先看看</view>

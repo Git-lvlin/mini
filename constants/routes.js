@@ -24,6 +24,11 @@ export default {
     type: "tabbar",
     path: "/pages/user/index",
   },
+  // 限时秒杀
+  seckill: {
+    type: "tabbar",
+    path: "/pages/seckill/index"
+  },
   // 登录
   login: {
     path: "/pages/login/main/index"
@@ -43,10 +48,6 @@ export default {
   // 集约列表
   otherpay: {
     path: "/pages/otherpay/index"
-  },
-  // 限时秒杀
-  seckill: {
-    path: "/pages/seckill/index"
   },
   // webview
   webview: {

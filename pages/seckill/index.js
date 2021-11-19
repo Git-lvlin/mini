@@ -163,7 +163,7 @@ create.Page(store, {
    */
   onShow: function () {
     // 更新tabbar显示
-    // router.updateSelectTabbar(this, 1);
+    router.updateSelectTabbar(this, 1);
     let userInfo = getStorageUserInfo();
     if (!!userInfo) {
       this.getShareInfo();
@@ -188,8 +188,8 @@ create.Page(store, {
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-    wx.removeStorage('SECKILL_TOMORROW')
-    wx.removeStorage('SECKILL_TODAY')
+    wx.removeStorage({key: 'SECKILL_TOMORROW'});
+    wx.removeStorage({key: 'SECKILL_TODAY'})
     this.getUserIcon('today')
     setTimeout(() => {
       wx.stopPullDownRefresh()
