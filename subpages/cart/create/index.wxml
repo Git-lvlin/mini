@@ -23,6 +23,13 @@
     </view>
     
     <view class="content">
+      <view class="push_tips" wx:if="{{!!lateDeliveryDesc}}">
+        <view class="flex_fix push_tips_icon">
+          <van-icon size="24rpx" name="volume" />
+        </view>
+        <view class="push_text">{{lateDeliveryDesc}}</view>
+      </view>
+
       <view
         class="address"
         wx:if="{{(orderToken && orderType != 15) || (orderType == 15 && selectAddressType.type == 3)}}"

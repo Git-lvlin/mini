@@ -57,6 +57,7 @@ create.Page(store, {
     orderToken: "",
     // 是否允许选择红包
     unOpenCoupon: false,
+    lateDeliveryDesc: "",
   },
 
   onLoad(options) {
@@ -281,6 +282,7 @@ create.Page(store, {
         orderInfo,
       }, () => {
         this.updateOrderAmount(postData);
+        this.getDeliveryDesc(postData);
       })
     })
   },
@@ -533,6 +535,27 @@ create.Page(store, {
       }
       this.setData({
         orderInfo
+      })
+    });
+  },
+
+  // 查询配送信息
+  getDeliveryDesc(data) {
+    // return;
+    const postData = {
+      address: data.deliveryInfo,
+      goodsInfos: [],
+    };
+    data.storeGoodsInfos.forEach(store => {
+      store.goodsInfos.forEach(good => {
+        postData.goodsInfos.push(good);
+      });
+    });
+    cartApi.getDeliveryDesc(postData, {
+      showLoading: false
+    }).then(res => {
+      this.setData({
+        lateDeliveryDesc: res.lateDeliveryDesc,
       })
     });
   },

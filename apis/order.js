@@ -20,6 +20,7 @@ const url = {
   bondPay: "/store/auth/memberShop/apply/pay",
   orderToken: "/order/auth/orderToken",
   cancelPay: "/payment/open/adaPay/payCancel",
+  deliveryDesc: "/goods/auth/getLateDeliveryDesc",
 
   
   faterRed: "/activity/auth/sendMemberEverydayCoupon",
@@ -71,6 +72,10 @@ export default {
   // 获取订单详情
   getOrderDetail(params, option) {
     return Request.get(url.orderDetail, params, option);
+  },
+  // 获取物流提醒
+  getDeliveryDesc(params, option) {
+    return Request.post(url.deliveryDesc, params, option);
   },
   
   // 获取支付信息

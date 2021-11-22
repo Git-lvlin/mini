@@ -120,10 +120,11 @@
 }
 
 .search_btn {
-  width: 56rpx;
+  width: 62rpx;
   height: 40rpx;
   color: #333;
   font-size: 28rpx;
+  white-space: nowrap;
   line-height: 40rpx;
   margin-left: 12rpx;
 }
