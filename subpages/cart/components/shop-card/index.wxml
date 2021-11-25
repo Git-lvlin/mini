@@ -12,7 +12,10 @@
         <van-image width="180rpx" height="180rpx" class="good_img" src="{{item.skuImageUrl}}" />
         <view class="info">
           <view class="title text_one_line">{{item.goodsName}}</view>
-          <view class="sku_name">{{item.skuName}}</view>
+          <view class="sku_name">{{item.skuName}}12341</view>
+          <view class="market_price">
+            <text wx:if="{{!!item.marketPrice}}">市场价 ¥{{tools.priceToF2(item.marketPrice)}}</text>
+          </view>
           <view class="price">
             <text>￥{{tools.priceToF2(item.skuSalePrice, false)}}</text>
             <view class="num_controller">

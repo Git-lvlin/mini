@@ -46,7 +46,7 @@
   </view>
 
   <!-- 商品标题模块 -->
-  <view
+  <!-- <view
     style="background-image: url({{intensiveBack}})"
     class="flex_middle intensive_price"
     wx:if="{{isActivityGood == 15 || isActivityGood == 16}}"
@@ -74,7 +74,7 @@
         </view>
       </view>
     </view>
-  </view>
+  </view> -->
   <view class="good_head">
     <!-- 普通商品价格 -->
     <view class="good_price" wx:if="{{isActivityGood == 1}}">
@@ -93,20 +93,20 @@
           <view class="desc_text text_one_line">{{good.goodsDesc}}</view>
           <view
             class="store_show_sale"
-            wx:if="{{isActivityGood == 2 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11 || isActivityGood == 17 || isActivityGood == 18}}"
+            wx:if="{{isActivityGood != 1 && isActivityGood != 5 && isActivityGood != 6}}"
           >{{good.goodsSaleNum}}</view>
         </view>
       </view>
     </view>
     <!-- 集约进度 -->
-    <view class="flex_middle intensive_progress" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}">
+    <!-- <view class="flex_middle intensive_progress" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}">
       <view class="progress_box">
         <image class="fire_icon" src="{{tools.getImgUrl('miniprogram/home/appointment_fire.png')}}" />
         <view class="progress_line" style="width: {{good.percentage || 0}}%" />
         <view class="progress_text">已售{{good.percentage || 0}}%</view>
       </view>
       <view class="intensive_sale">{{good.goodsSaleNum}}</view>
-    </view>
+    </view> -->
     <!-- 集约参与人 -->
     <view class="intensive_join" wx:if="{{(isActivityGood == 15 || isActivityGood == 16) && intensiveUser.records.length}}">
       <view class="flex_center join_info">
@@ -149,7 +149,8 @@
       </view>
     </view>
     <!-- 单约团约价格显示 -->
-    <view class="store_price" wx:if="{{isActivityGood == 2 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11 || isActivityGood == 17 || isActivityGood == 18}}">
+    <!-- <view class="store_price" wx:if="{{isActivityGood == 2 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11 || isActivityGood == 17 || isActivityGood == 18}}"> -->
+    <view class="store_price" wx:if="{{isActivityGood != 1 && isActivityGood != 5 && isActivityGood != 6}}">
       <view class="flex_middle" style="flex: 1;">
         <view class="store_price_title">{{ utils.getPriceTitle(isActivityGood) }}</view>
         <price-mobel
@@ -159,11 +160,9 @@
           minSize="{{28}}"
           maxSize="{{48}}"
           defaultColor="#B2B2B2"
+          bold="{{600}}"
         />
-        <block wx:if="{{isActivityGood == 2}}">
-          <view class="sec_label">秒约特惠</view>
-          <view class="sec_market_price">市场价￥{{tools.priceToF2(good.goodsMarketPrice || 0, false)}}</view>
-        </block>
+        <view class="sec_label" wx:if="{{isActivityGood == 2}}">秒约特惠</view>
       </view>
       <!-- 加入购物车 -->
       <!-- <view class="add_cart" wx:if="{{isActivityGood == 1 || isActivityGood == 2}}">
@@ -186,6 +185,9 @@
           />
         </view>
       </view> -->
+    </view>
+    <view class="sec_market_price" wx:if="{{isActivityGood == 2}}">
+      市场价￥{{tools.priceToF2(good.goodsMarketPrice || 0, false)}}
     </view>
   </view>
 

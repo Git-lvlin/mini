@@ -381,7 +381,7 @@ create.Page(store, {
         });
         if(orderType == 15 || orderType == 16) {
           // 集约用户列表
-          this.getIntensiveUser(good.storeSaleSumNum || 100);
+          // this.getIntensiveUser(good.storeSaleSumNum || 100);
           // 获取商品详情
           const isStore = haveStore(good.storeNo);
           if(isStore) {
