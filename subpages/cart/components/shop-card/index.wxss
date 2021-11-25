@@ -62,6 +62,7 @@
 }
 
 .market_price {
+  height: 40rpx;
   font-size: 28rpx;
   color: #666666;
   line-height: 40rpx;
