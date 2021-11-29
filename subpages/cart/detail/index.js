@@ -678,8 +678,9 @@ create.Page(store, {
       stockOverText = "活动已结束"
     }
     if(good.goodsState != 1) {
+      // 商品已下架 改为 已售罄
       stockOver = 4;
-      stockOverText = "商品已下架"
+      stockOverText = "已售罄"
     }
     let result = {
       stockOver,
@@ -731,7 +732,8 @@ create.Page(store, {
       good,
     } = this.data;
     if(good.goodsState != 1) {
-      showToast({ title: "商品已下架" });
+      // 商品已下架 改为 已售罄
+      showToast({ title: "已售罄" });
       return;
     }
     if(good.isMultiSpec) {
