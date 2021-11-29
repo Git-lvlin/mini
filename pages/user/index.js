@@ -204,13 +204,6 @@ create.Page(store, {
     })
   },
 
-  // 点击头部
-  onClickHead() {
-    wx.navigateTo({
-      url: '/dokit/index/index',
-    })
-  },
-
   // 点击用户数据
   onUserData({
     currentTarget

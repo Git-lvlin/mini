@@ -42,6 +42,8 @@ const url = {
   storeDetail: "/store/option/storeShop/show",
   storeGood: "/store/option/storeShop/salePage",
 
+  businessDetail: "/store/option/v2/wholesale/productDetail",
+
   nearbyStore: "/store/option/memberShop/nearby",
 }
 
@@ -193,6 +195,12 @@ export default {
   getStoreGood(params, option) {
     return Request.get(url.storeGood, params, option);
   },
+
+  // B端集约详情
+  getBusinessDetail(params, option) {
+    return Request.get(url.businessDetail, params, option);
+  },
+
   // 获取一定范围内的店铺数
   getNearbyStore(params, option) {
     return Request.get(url.nearbyStore, params, option);

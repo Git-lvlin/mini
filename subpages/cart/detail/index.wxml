@@ -16,7 +16,7 @@
       top="{{backTopHeight + 96}}"
     />
     <user-together-banner
-      wx:if="{{isActivityGood == 2 || isActivityGood == 11}}"
+      wx:if="{{isActivityGood == 2 || isActivityGood == 11 || isActivityGood == 5 || isActivityGood == 6}}"
       orderType="{{isActivityGood}}"
       list="{{secJoinUser}}"
       top="{{backTopHeight + 610}}"
@@ -49,9 +49,9 @@
   <!-- <view
     style="background-image: url({{intensiveBack}})"
     class="flex_middle intensive_price"
-    wx:if="{{isActivityGood == 15 || isActivityGood == 16}}"
+    wx:if="{{isActivityGood == 15 || isActivityGood == 16 || isActivityGood == 5 || isActivityGood == 6}}"
   >
-    <view class="intensive_price_mobel">
+    <view class="intensive_price_mobel" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}">
       <price-mobel
         money="{{good.activityPrice != undefined ? good.activityPrice : good.goodsSaleMinPrice}}"
         marketMoney="{{good.goodsMarketPrice}}"
@@ -60,6 +60,16 @@
         color="#fff"
         defaultColor="#fff"
       />
+    </view>
+    <view class="b_intensive" wx:if="{{isActivityGood == 5 || isActivityGood == 6}}">
+      <view class="flex_middle b_price">
+        <view class="b_price_text"><text class="b_price_min">¥</text>{{tools.priceToF2(good.salePrice)}}</view>
+        <view class="sec_label">集约价</view>
+      </view>
+      <view class="flex_middle">
+        <view class="b_market_price">市场价<text class="b_m_p">¥{{tools.priceToF2(good.marketPrice)}}</text></view>
+        <view class="b_min_buy">{{good.buyMinNum}}起订</view>
+      </view>
     </view>
     <view class="intensive_time">
       <image class="intensive_time_back" src="{{tools.getImgUrl('miniprogram/cart/jiyue_time.png?v=2021')}}" />
@@ -217,6 +227,10 @@
       </view>
       <view class="flex_fix right_spot right_arrow_gray" />
     </view>
+    <view class="flex_middle info_bar" wx:if="{{(isActivityGood == 5 || isActivityGood == 6) && good.extend && good.extend.stockText}}">
+      <view class="flex_fix info_bar_name">库存</view>
+      <view class="info_bar_value">{{good.extend.stockText}}</view>
+    </view>
     <view class="flex_middle info_bar">
       <view class="flex_fix info_bar_name">服务</view>
       <view class="info_bar_value">
@@ -335,24 +349,27 @@
       <image class="bar_item_icon" src="{{tools.getImgUrl('miniprogram/common/mini_cart.png')}}" />
       <view class="bar_item_name">购物车</view>
     </view> -->
-    <view
-      class="flex_fix buy_bar_item"
-      wx:if="{{isActivityGood == 11}}"
-      bindtap="onToStore"
-    >
-      <image class="bar_item_icon" src="{{tools.getImgUrl('miniprogram/common/mini_store.png')}}" />
-      <view class="bar_item_name">店铺</view>
-    </view>
-    <view class="flex_fix buy_bar_space" wx:if="{{isActivityGood == 11}}" />
-    <view
-      class="gray_buy_btn"
-      wx:if="{{stockOver > 0}}"
-    >{{stockOverText}}</view>
-    <view
-      class="to_buy_btn"
-      bindtap="openSpecPopup"
-      wx:else
-    >立即购买</view>
+    <block wx:if="{{isActivityGood != 5 && isActivityGood != 6}}">
+      <view
+        class="flex_fix buy_bar_item"
+        wx:if="{{isActivityGood == 11}}"
+        bindtap="onToStore"
+      >
+        <image class="bar_item_icon" src="{{tools.getImgUrl('miniprogram/common/mini_store.png')}}" />
+        <view class="bar_item_name">店铺</view>
+      </view>
+      <view class="flex_fix buy_bar_space" wx:if="{{isActivityGood == 11}}" />
+      <view
+        class="gray_buy_btn"
+        wx:if="{{stockOver > 0}}"
+      >{{stockOverText}}</view>
+      <view
+        class="to_buy_btn"
+        bindtap="openSpecPopup"
+        wx:else
+      >{{isActivityGood == 15 || isActivityGood == 16 ? '立即抢购' : '立即购买'}}</view>
+    </block>
+    <view class="b_buy_btn" bindtap="onBIntensive" wx:if="{{isActivityGood == 5 || isActivityGood == 6}}">立即采购</view>
   </view>
 
   <!-- 集约商品 -->

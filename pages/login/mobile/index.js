@@ -80,7 +80,6 @@ create.Page(store, {
   },
 
   onLoad(options) {
-    console.log('supportLogin', wx.canIUse('button.open-type.getPhoneNumber'));
     const sysEnv = wx.getStorageSync("SYS_ENV");
     const {
       changeEnv,

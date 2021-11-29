@@ -22,18 +22,6 @@
     ],
     "subpackages": [
         {
-            "root": "dokit",
-            "pages": [
-                "appInformation/appInformation",
-                "h5door/h5door",
-                "logs/logs",
-                "positionSimulation/positionSimulation",
-                "storage/storage",
-                "index/index",
-                "debug/debug"
-            ]
-        },
-        {
             "root": "subpages/community",
             "pages": [
                 "main/index"
@@ -62,7 +50,6 @@
         {
             "root": "subpages/user",
             "pages": [
-                "main/index",
                 "setting/index",
                 "changeInfo/index",
                 "changePhone/index",
@@ -75,25 +62,26 @@
         "pages/home/index": {
             "network": "all",
             "packages": [
-                "subpages/cart",
-                "subpages/user",
-                "subpages/community"
+                "subpages/cart"
+            ]
+        },
+        "pages/seckill/index": {
+            "network": "all",
+            "packages": [
+                "subpages/cart"
             ]
         },
         "pages/cart/index": {
             "network": "all",
             "packages": [
-                "subpages/cart",
-                "subpages/user",
-                "subpages/community"
+                "subpages/cart"
             ]
         },
         "pages/user/index": {
             "network": "all",
             "packages": [
                 "subpages/user",
-                "subpages/cart",
-                "dokit"
+                "subpages/cart"
             ]
         }
     },
