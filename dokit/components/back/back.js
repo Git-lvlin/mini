@@ -1,1 +1,0 @@
-"use strict";Component({properties:{top:{type:String,value:"0"}},methods:{onbackDokitEntry:function(){this.triggerEvent("return")}}});

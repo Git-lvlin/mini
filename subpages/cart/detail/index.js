@@ -15,6 +15,7 @@ create.Page(store, {
   goodParams: {},
   // 规格加载完毕
   specLoaded: false,
+  fristLoad: false,
 
   use: [
     "systemInfo",
@@ -63,7 +64,7 @@ create.Page(store, {
     serviceList: DETAIL_SERVICE_LIST,
     wayIcon: `${IMG_CDN}miniprogram/common/def_choose.png`,
     wayIconSelect: `${IMG_CDN}miniprogram/common/choose.png`,
-    intensiveBack: `${IMG_CDN}miniprogram/cart/jiyue_back.png`,
+    intensiveBack: `${IMG_CDN}miniprogram/cart/jiyue_back.png?v=20211126`,
     // buy 立即购买  add 添加到购物车
     specType: "buy",
     refuseText: "",
@@ -104,7 +105,7 @@ create.Page(store, {
       if(!this.data.good.imageList && !this.data.good.goodsName) {
         this.hanldeGoodsParams(this.goodParams);
       }
-    }, 1000)();
+    }, 3000)();
     let userInfo = getStorageUserInfo();
     this.setData({
       userInfo,
@@ -141,7 +142,9 @@ create.Page(store, {
       return;
     }
     this.getGoodDetail();
-    this.getDetailImg();
+    if(options.orderType != 5 && options.orderType != 6) {
+      this.getDetailImg();
+    }
     if(options.orderType == 3) {
       // this.getTogetherList();
       // 拼成用户列表
@@ -337,6 +340,9 @@ create.Page(store, {
           this.handleGoodStock();
         });
       });
+    // B端集约
+    } else if(orderType == 5 || orderType == 6) {
+      this.getBusinessDetail(params);
     // 其他详情
     } else {
       goodApi.getGoodDetailNew(params).then(res => {
@@ -398,6 +404,22 @@ create.Page(store, {
     }
   },
 
+  // B端详情
+  getBusinessDetail(params) {
+    goodApi.getBusinessDetail(params).then(res => {
+      let good = res;
+      good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
+      good.goodsMarketPrice = util.divide(good.marketPrice, 100);
+      good.lastTime = good.deadlineTime - good.currentTime;
+      this.setData({
+        good,
+        detailImg: good.contentImageList
+      })
+      // 下单用户轮播
+      this.getSecUser(15);
+    })
+  },
+
   // 集约获取店铺信息
   getStoreInfo({
     orderType,
@@ -435,7 +457,7 @@ create.Page(store, {
   },
 
   // 秒约参与用户
-  getSecUser() {
+  getSecUser(value) {
     let {
       orderType,
     } = this.goodParams
@@ -444,7 +466,7 @@ create.Page(store, {
     } = this.data;
     goodApi.getIntensiveUser({
       orderType,
-      saleNum: good.goodsSaleNumVal,
+      saleNum: value || good.goodsSaleNumVal,
     }, {
       showLoading: false,
     }).then(res => {
@@ -799,6 +821,14 @@ create.Page(store, {
         objectId: !!objectId ? objectId : "",
       }
     });
+  },
+
+  // 点击立即采购
+  onBIntensive() {
+    showModal({
+      content: "请下载约购APP完成采购",
+      showCancel: false,
+    })
   },
 
   // 监听拼团剩余时间
