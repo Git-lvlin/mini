@@ -23,6 +23,7 @@ Component({
 
   data: {
     scrollListWidth: 0,
+    tagLogo: "",
     seckillList: [],
   },
 
@@ -33,14 +34,20 @@ Component({
       if(content.dataType === 1) {
         if(homeCache.seckillList && !!homeCache.seckillList.length) {
           this.setData({
+            tagLogo: homeCache.tagLogo,
+            logoActionUrl: homeCache.logoActionUrl,
             seckillList: homeCache.seckillList
           })
         }
         homeApi.getFloorCustom(content.dataUrl).then(res => {
           let list = res.records;
           list = mapNum(list);
+          homeCache.tagLogo = res.tagLogo;
+          homeCache.logoActionUrl = res.logoActionUrl;
           homeCache.seckillList = list;
           this.setData({
+            tagLogo: res.tagLogo,
+            logoActionUrl: res.logoActionUrl,
             seckillList: list
           });
           wx.setStorageSync("HOME_CACHE", homeCache);
@@ -49,6 +56,8 @@ Component({
         let list = content.data;
         list = mapNum(list);
         this.setData({
+          tagLogo: content.tagLogo,
+          logoActionUrl: content.logoActionUrl,
           seckillList: list
         })
         if(homeCache.seckillList) {
@@ -85,11 +94,17 @@ Component({
     onToPopularGood() {
       if(!this.data.seckillList.length) {
         return;
-      } 
-      router.push({
-        name: 'popularGood',
-        data: {}
-      })
+      }
+      const {
+        logoActionUrl
+      } = this.data;
+      if(!!logoActionUrl) {
+        router.getUrlRoute(logoActionUrl);
+      }
+      // router.push({
+      //   name: 'popularGood',
+      //   data: {}
+      // })
     },
   }
 })
