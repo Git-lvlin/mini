@@ -78,6 +78,11 @@ export default {
     path: "signin",
     needLogin: true,
   },
+  // 帮扶爆品
+  "/home/spikeGoods": {
+    path: "popularGood",
+  },
+  
   
   // 商品详情
   "/shopping/detail": {

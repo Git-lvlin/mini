@@ -16,6 +16,8 @@ create.Page(store, {
   // 规格加载完毕
   specLoaded: false,
   fristLoad: false,
+  // 商品异常
+  goodOver: false,
 
   use: [
     "systemInfo",
@@ -102,10 +104,10 @@ create.Page(store, {
       orderType,
     } = this.goodParams;
     debounce(() => {
-      if(!this.data.good.imageList && !this.data.good.goodsName) {
+      if(!this.data.good.imageList && !this.data.good.goodsName && !this.goodOver) {
         this.hanldeGoodsParams(this.goodParams);
       }
-    }, 3000)();
+    }, 3500)();
     let userInfo = getStorageUserInfo();
     this.setData({
       userInfo,
@@ -251,7 +253,7 @@ create.Page(store, {
     });
   },
 
-  // 商品详情
+  // 商品详情  30199 商品不存在
   getGoodDetail() {
     let {
       activityId,
@@ -301,8 +303,10 @@ create.Page(store, {
         }, () => {
           this.handleGoodStock();
         })
+      }).catch(err => {
+        this.handleGoodError();
       })
-    // 秒约，C端集约，1688详情
+    // orderType == 1 详情
     } else if(orderType == 1) {
       goodApi.getGoodDetail(params).then(res => {
         let good = res;
@@ -339,6 +343,8 @@ create.Page(store, {
         }, () => {
           this.handleGoodStock();
         });
+      }).catch(err => {
+        this.handleGoodError();
       });
     // B端集约
     } else if(orderType == 5 || orderType == 6) {
@@ -400,6 +406,10 @@ create.Page(store, {
         if(orderType == 2 || orderType == 11) {
           this.getSecUser();
         }
+      }).catch(err => {
+        this.handleGoodError({
+          isOver: !!err.code == 30199
+        });
       });
     }
   },
@@ -417,7 +427,25 @@ create.Page(store, {
       })
       // 下单用户轮播
       this.getSecUser(15);
+    }).catch(err => {
+      this.handleGoodError();
     })
+  },
+  
+  // 商详报错处理
+  handleGoodError({
+    isOver
+  }) {
+    if(isOver) {
+      this.setData({
+        stockOverText: "商品已售罄"
+      })
+    }
+    this.goodOver = true;
+    let timer = setTimeout(() => {
+      clearTimeout(timer);
+      router.go();
+    }, 1500);
   },
 
   // 集约获取店铺信息
@@ -680,7 +708,7 @@ create.Page(store, {
     if(good.goodsState != 1) {
       // 商品已下架 改为 已售罄
       stockOver = 4;
-      stockOverText = "已售罄"
+      stockOverText = "商品已售罄"
     }
     let result = {
       stockOver,
@@ -733,7 +761,7 @@ create.Page(store, {
     } = this.data;
     if(good.goodsState != 1) {
       // 商品已下架 改为 已售罄
-      showToast({ title: "已售罄" });
+      showToast({ title: "商品已售罄" });
       return;
     }
     if(good.isMultiSpec) {
