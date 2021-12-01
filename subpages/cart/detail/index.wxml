@@ -93,7 +93,7 @@
         <view class="market_price ">￥{{tools.priceToF2(good.goodsMarketPrice, false)}}</view>
       </view>
       <!-- <view class="sales">月售188件</view> -->
-      <view class="sales">{{good.goodsSaleNum}}</view>
+      <view class="sales">{{good.spuSaleNumStr}}</view>
     </view>
     <view class="good_info">
       <!-- 商品标题 -->
@@ -104,7 +104,7 @@
           <view
             class="store_show_sale"
             wx:if="{{isActivityGood != 1 && isActivityGood != 5 && isActivityGood != 6}}"
-          >{{good.goodsSaleNum}}</view>
+          >{{good.spuSaleNumStr}}</view>
         </view>
       </view>
     </view>
@@ -115,8 +115,8 @@
         <view class="progress_line" style="width: {{good.percentage || 0}}%" />
         <view class="progress_text">已售{{good.percentage || 0}}%</view>
       </view>
-      <view class="intensive_sale">{{good.goodsSaleNum}}</view>
-    </view> -->
+      <view class="intensive_sale">{{good.spuSaleNumStr}}</view>
+    </view>
     <!-- 集约参与人 -->
     <view class="intensive_join" wx:if="{{(isActivityGood == 15 || isActivityGood == 16) && intensiveUser.records.length}}">
       <view class="flex_center join_info">
@@ -201,7 +201,7 @@
     </view>
   </view>
 
-  <view class="space_20" />
+  <view class="space_20" wx:if="{{good.isMultiSpec == 1 || refuseText || ((isActivityGood == 5 || isActivityGood == 6) && good.extend && good.extend.stockText) || (isActivityGood != 15 && isActivityGood != 16)}}" />
 
   <!-- 选择规格 -->
   <view class="spec_conetnt">
@@ -231,7 +231,7 @@
       <view class="flex_fix info_bar_name">库存</view>
       <view class="info_bar_value">{{good.extend.stockText}}</view>
     </view>
-    <view class="flex_middle info_bar">
+    <view class="flex_middle info_bar" wx:if="{{isActivityGood != 15 && isActivityGood != 16}}">
       <view class="flex_fix info_bar_name">服务</view>
       <view class="info_bar_value">
         <view class="flex_middle service_list">

@@ -99,6 +99,7 @@
   flex-flow: column wrap; */
   /* flex-direction: column; */
   page-break-inside: avoid;
+  -webkit-page-break-inside: avoid;
 }
 
 .no_data {
