@@ -55,7 +55,7 @@
     <view class="txt">小计：</view>
     <price-mobel
       money="{{data.totalAmount}}"
-      min-size="{{20}}"
+      min-size="{{28}}"
       max-size="{{28}}"
       bold="{{600}}"
     />

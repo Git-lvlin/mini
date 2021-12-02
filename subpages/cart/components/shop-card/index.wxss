@@ -66,14 +66,15 @@
   font-size: 28rpx;
   color: #666666;
   line-height: 40rpx;
+  text-decoration: line-through;
 }
 
 .price {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-weight: 500;
-  color: #333333;
+  font-weight: 600;
+  color: #E5352F;
   font-size: 28rpx;
   line-height: 40rpx;
   padding-right: 32rpx;
