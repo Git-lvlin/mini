@@ -23,6 +23,7 @@
     />
     <swiper
       class="banner"
+      wx:if="{{false}}"
       indicator-dots="{{true}}"
       circular
       indicator-dots="{{false}}"
@@ -308,6 +309,9 @@
       </block>
     </view>
   </block>
+
+  <!-- 商品评价 -->
+  <good-evaluate />
 
   <view class="space_20" />
 

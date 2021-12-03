@@ -1,130 +1,131 @@
 {
-    "pages": [
-        "pages/home/index",
-        "pages/community/index",
-        "pages/cart/index",
-        "pages/user/index",
-        "pages/login/main/index",
-        "pages/login/mobile/index",
-        "pages/login/bindPhone/index",
-        "pages/list/index",
-        "pages/location/index",
-        "pages/storeIntensive/index",
-        "pages/otherpay/index",
-        "pages/webview/index",
-        "pages/invitation/index",
-        "pages/locationSearch/index",
-        "pages/test/index",
-        "pages/maintain/index",
-        "pages/intensive/index",
-        "pages/seckill/index",
-        "pages/weekSeckill/index"
-    ],
-    "subpackages": [
-        {
-            "root": "subpages/community",
-            "pages": [
-                "main/index"
-            ]
-        },
-        {
-            "root": "subpages/cart",
-            "pages": [
-                "create/index",
-                "detail/index",
-                "class/index",
-                "address/index",
-                "search/index",
-                "cashier/index",
-                "editAddress/index",
-                "changeShipper/index",
-                "teamDetail/index",
-                "store/index",
-                "priceDetail/index",
-                "signin/index",
-                "storeAddress/index",
-                "popularGood/index",
-                "classGood/index"
-            ]
-        },
-        {
-            "root": "subpages/user",
-            "pages": [
-                "setting/index",
-                "changeInfo/index",
-                "changePhone/index",
-                "information/index",
-                "coupon/index"
-            ]
-        }
-    ],
-    "preloadRule": {
-        "pages/home/index": {
-            "network": "all",
-            "packages": [
-                "subpages/cart"
-            ]
-        },
-        "pages/seckill/index": {
-            "network": "all",
-            "packages": [
-                "subpages/cart"
-            ]
-        },
-        "pages/cart/index": {
-            "network": "all",
-            "packages": [
-                "subpages/cart"
-            ]
-        },
-        "pages/user/index": {
-            "network": "all",
-            "packages": [
-                "subpages/user",
-                "subpages/cart"
-            ]
-        }
+  "pages": [
+    "pages/home/index",
+    "pages/community/index",
+    "pages/cart/index",
+    "pages/user/index",
+    "pages/login/main/index",
+    "pages/login/mobile/index",
+    "pages/login/bindPhone/index",
+    "pages/list/index",
+    "pages/location/index",
+    "pages/storeIntensive/index",
+    "pages/otherpay/index",
+    "pages/webview/index",
+    "pages/invitation/index",
+    "pages/locationSearch/index",
+    "pages/test/index",
+    "pages/maintain/index",
+    "pages/intensive/index",
+    "pages/seckill/index",
+    "pages/weekSeckill/index"
+  ],
+  "subpackages": [
+    {
+      "root": "subpages/community",
+      "pages": [
+        "main/index"
+      ]
     },
-    "window": {
-        "backgroundTextStyle": "light",
-        "navigationBarBackgroundColor": "#fff",
-        "navigationBarTitleText": "约购",
-        "navigationBarTextStyle": "black"
+    {
+      "root": "subpages/cart",
+      "pages": [
+        "create/index",
+        "detail/index",
+        "class/index",
+        "address/index",
+        "search/index",
+        "cashier/index",
+        "editAddress/index",
+        "changeShipper/index",
+        "teamDetail/index",
+        "store/index",
+        "priceDetail/index",
+        "signin/index",
+        "storeAddress/index",
+        "popularGood/index",
+        "classGood/index",
+        "evaluate/index"
+      ]
     },
-    "tabBar": {
-        "custom": true,
-        "color": "#000000",
-        "selectedColor": "#000000",
-        "backgroundColor": "#000000",
-        "list": [
-            {
-                "pagePath": "pages/home/index",
-                "text": "首页",
-                "iconPath": "/images/tabbar/home@3x.png",
-                "selectedIconPath": "/images/tabbar/actHome@3x.png"
-            },
-            {
-                "pagePath": "pages/seckill/index",
-                "text": "秒杀",
-                "iconPath": "/images/tabbar/seckill.png",
-                "selectedIconPath": "/images/tabbar/actSeckill.png"
-            },
-            {
-                "pagePath": "pages/user/index",
-                "text": "我的",
-                "iconPath": "/images/tabbar/me@3x.png",
-                "selectedIconPath": "/images/tabbar/actMe@3x.png"
-            }
-        ]
+    {
+      "root": "subpages/user",
+      "pages": [
+        "setting/index",
+        "changeInfo/index",
+        "changePhone/index",
+        "information/index",
+        "coupon/index"
+      ]
+    }
+  ],
+  "preloadRule": {
+    "pages/home/index": {
+      "network": "all",
+      "packages": [
+        "subpages/cart"
+      ]
     },
-    "usingComponents": {
-        "van-image": "/miniprogram_npm/@vant/weapp/image/index"
+    "pages/seckill/index": {
+      "network": "all",
+      "packages": [
+        "subpages/cart"
+      ]
     },
-    "permission": {
-        "scope.userLocation": {
-            "desc": "方便确定您当前位置"
-        }
+    "pages/cart/index": {
+      "network": "all",
+      "packages": [
+        "subpages/cart"
+      ]
     },
-    "style": "v2",
-    "sitemapLocation": "sitemap.json"
+    "pages/user/index": {
+      "network": "all",
+      "packages": [
+        "subpages/user",
+        "subpages/cart"
+      ]
+    }
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "约购",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#000000",
+    "selectedColor": "#000000",
+    "backgroundColor": "#000000",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "/images/tabbar/home@3x.png",
+        "selectedIconPath": "/images/tabbar/actHome@3x.png"
+      },
+      {
+        "pagePath": "pages/seckill/index",
+        "text": "秒杀",
+        "iconPath": "/images/tabbar/seckill.png",
+        "selectedIconPath": "/images/tabbar/actSeckill.png"
+      },
+      {
+        "pagePath": "pages/user/index",
+        "text": "我的",
+        "iconPath": "/images/tabbar/me@3x.png",
+        "selectedIconPath": "/images/tabbar/actMe@3x.png"
+      }
+    ]
+  },
+  "usingComponents": {
+    "van-image": "/miniprogram_npm/@vant/weapp/image/index"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "方便确定您当前位置"
+    }
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
 }

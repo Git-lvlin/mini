@@ -12,6 +12,7 @@
     "together-popup": "../components/together-popup/index",
     "team-popup": "../components/team-popup/index",
     "price-ratio-bar": "../components/price-ratio-bar/index",
-    "user-together-banner": "../components/user-together-banner/index"
+    "user-together-banner": "../components/user-together-banner/index",
+    "good-evaluate": "../components/good-evaluate/index"
   }
 }

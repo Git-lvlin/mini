@@ -1,0 +1,16 @@
+<view class="evaluate_content">
+  <view class="space_20" />
+  <view class="evaluate_box">
+    <view class="flex_middle head">
+      <view class="head_title">商品评价(10万+)</view>
+      <view class="flex_middle more">查看更多<view class="more_right" /></view>
+    </view>
+    <view class="eveluate_item">
+      <view class="flex_middle evaluate_user">
+        <image class="user_avtar" src="{{}}" />
+        <view class="user_name">左手右星</view>
+      </view>
+      <view class="evaluate_info text_two_line">整体评价：实惠便宜好用 实用效果：\n舒适方便包装 与外观：好看漂亮</view>
+    </view>
+  </view>
+</view>
