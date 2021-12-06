@@ -1,4 +1,4 @@
-
+import router from '../../../../utils/router'
 
 Component({
   options: {
@@ -9,17 +9,16 @@ Component({
 
   },
 
-  /**
-   * 组件的初始数据
-   */
   data: {
 
   },
 
-  /**
-   * 组件的方法列表
-   */
   methods: {
-
+    onToEvaluate() {
+      router.push({
+        name: 'evaluate',
+        data: {},
+      });
+    },
   }
 })

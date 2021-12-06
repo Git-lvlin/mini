@@ -1,2 +1,34 @@
-<!--subpages/cart/evaluate/index.wxml-->
-<text>subpages/cart/evaluate/index.wxml</text>
+<view class="evaluate_container">
+  <view class="flex_middle label_box">
+    <view class="label_item">全部</view>
+    <view class="label_item">好评(1201)</view>
+    <view class="label_item">中/差评(1201)</view>
+    <view class="label_item">有图(1201)</view>
+  </view>
+
+  <view class="evaluate_list">
+    <view class="evaluate_item">
+      <view class="flex_middle evaluate_head">
+        <image class="flex_fix user_avatar" src="https://uat-yeahgo-oss.yeahgo.com/miniprogram/cart/fabulous.png" />
+        <view class="user_info">
+          <view class="user_name">程日易指撤奇</view>
+          <view class="evaluate_time">2021-04-30</view>
+        </view>
+        <view class="flex_fix flex_middle user_star">
+          <image class="fabulous_img" src="https://uat-yeahgo-oss.yeahgo.com/miniprogram/cart/fabulous.png" /> 110
+        </view>
+      </view>
+      <view class="evaluate_text">整体评价：实惠便宜好用 \n实用效果：舒适方便包装 与外观：好看漂亮</view>
+      <view class="flex_middle img_list">
+        <image class="img_item" src="https://uat-yeahgo-oss.yeahgo.com/miniprogram/cart/fabulous.png" />
+        <image class="img_item" src="https://uat-yeahgo-oss.yeahgo.com/miniprogram/cart/fabulous.png" />
+        <image class="img_item" src="https://uat-yeahgo-oss.yeahgo.com/miniprogram/cart/fabulous.png" />
+        <image class="img_item" src="https://uat-yeahgo-oss.yeahgo.com/miniprogram/cart/fabulous.png" />
+      </view>
+      <view class="evaluate_good">购买【疯狂榨汁机，XL，白色】</view>
+      <view class="store_msg">
+        <text class="store_msg_label">商家</text><text class="store_name">雨后春笋般的便意 回复：</text>耶稣都留不住你，我说的！有种出来只抽
+      </view>
+    </view>
+  </view>
+</view>
