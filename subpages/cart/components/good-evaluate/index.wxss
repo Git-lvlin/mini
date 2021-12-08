@@ -63,3 +63,7 @@
   line-height: 36rpx;
   white-space: pre-wrap;
 }
+
+.nodata {
+  padding: 40rpx 0;
+}

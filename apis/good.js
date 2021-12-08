@@ -45,6 +45,11 @@ const url = {
   businessDetail: "/store/option/v2/wholesale/productDetail",
 
   nearbyStore: "/store/option/memberShop/nearby",
+
+  commentTotal: "/cms/option/comment/findAllCount",
+  detailComment: "/cms/option/comment/getTwoComment",
+  commentList: "/cms/option/comment/getComment",
+  commentListTotal: "/cms/option/comment/findCount",
 }
 
 export default {
@@ -206,4 +211,20 @@ export default {
     return Request.get(url.nearbyStore, params, option);
   },
 
+  // 获取商品详情评价总数
+  getCommentTotal(params, option) {
+    return Request.post(url.commentTotal, params, option);
+  },
+  // 获取商品详情评价
+  getDetailComment(params, option) {
+    return Request.post(url.detailComment, params, option);
+  },
+  // 获取评价列表评价各类型总数
+  getCommentListTotal(params, option) {
+    return Request.post(url.commentListTotal, params, option);
+  },
+  // 获取评价列表评价
+  getCommentList(params, option) {
+    return Request.post(url.commentList, params, option);
+  },
 }

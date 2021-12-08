@@ -131,6 +131,10 @@ export default {
   classGood: {
     path: "/subpages/cart/classGood/index"
   },
+  // 商品评价列表
+  evaluate: {
+    path: "/subpages/cart/evaluate/index"
+  },
   
 
 

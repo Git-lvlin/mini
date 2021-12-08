@@ -311,7 +311,7 @@
   </block>
 
   <!-- 商品评价 -->
-  <good-evaluate />
+  <good-evaluate good="{{good}}" />
 
   <view class="space_20" />
 
