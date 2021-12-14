@@ -135,6 +135,10 @@ export default {
   evaluate: {
     path: "/subpages/cart/evaluate/index"
   },
+  // 商品评价详情
+  evaluateDetail: {
+    path: "/subpages/cart/evaluateDetail/index"
+  },
   
 
 

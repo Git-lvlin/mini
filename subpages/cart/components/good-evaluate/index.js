@@ -14,6 +14,7 @@ Component({
       value: {},
       observer(nV, oV) {
         if(!!nV.storeNo && !fristLoad) {
+          nV.commentType = nV.orderType != 5 && nV.orderType != 6 ? 1 : 2;
           this.getCommentTotal(nV);
           this.getDetailComment(nV);
         }
@@ -33,7 +34,7 @@ Component({
       goodApi.getCommentTotal({
         storeNo: good.storeNo,
         spuId: good.spuId,
-        orderType: good.orderType,
+        orderType: good.commentType,
       }).then(res => {
         this.setData({
           commentNum: res.allCount,
@@ -45,7 +46,7 @@ Component({
       goodApi.getDetailComment({
         storeNo: good.storeNo,
         spuId: good.spuId,
-        orderType: good.orderType,
+        orderType: good.commentType,
       }).then(res => {
         this.setData({
           commentList: res,

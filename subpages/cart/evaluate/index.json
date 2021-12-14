@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "商品评价",
-  "usingComponents": {}
+  "usingComponents": {
+    "nodata": "/components/common/nodata/index"
+  }
 }

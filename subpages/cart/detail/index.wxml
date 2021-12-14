@@ -23,8 +23,6 @@
     />
     <swiper
       class="banner"
-      wx:if="{{false}}"
-      indicator-dots="{{true}}"
       circular
       indicator-dots="{{false}}"
       autoplay="{{true}}"

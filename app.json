@@ -45,7 +45,8 @@
         "storeAddress/index",
         "popularGood/index",
         "classGood/index",
-        "evaluate/index"
+        "evaluate/index",
+        "evaluateDetail/index"
       ]
     },
     {

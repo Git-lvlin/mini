@@ -55,6 +55,14 @@
   font-weight: 600;
   color: #333333;
   line-height: 44rpx;
+  margin-left: 16rpx;
+}
+
+.comment_time {
+  font-size: 24rpx;
+  color: #999999;
+  line-height: 34rpx;
+  margin-top: 4rpx;
 }
 
 .evaluate_info {

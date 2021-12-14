@@ -12,7 +12,7 @@
       wx:if="{{commentList.length}}"
     >
       <view class="flex_middle evaluate_user">
-        <image class="user_avtar" src="{{item.userImg}}" />
+        <image class="flex_fix user_avtar" src="{{item.userImg}}" />
         <view class="user_name">{{item.nickName}}</view>
       </view>
       <view class="evaluate_info text_two_line">{{item.content}}</view>

@@ -50,6 +50,8 @@ const url = {
   detailComment: "/cms/option/comment/getTwoComment",
   commentList: "/cms/option/comment/getComment",
   commentListTotal: "/cms/option/comment/findCount",
+  commentDetail: "/cms/option/comment/findCommentDetail",
+  fabulous: "/cms/auth/comment/point",
 }
 
 export default {
@@ -227,4 +229,14 @@ export default {
   getCommentList(params, option) {
     return Request.post(url.commentList, params, option);
   },
+  // 获取评价列表评价
+  setFabulous(params, option) {
+    return Request.post(url.fabulous, params, option);
+  },
+  // 获取评价详情
+  getCommentDetail(params, option) {
+    return Request.post(url.commentDetail, params, option);
+  },
+
+  
 }
