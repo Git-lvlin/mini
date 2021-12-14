@@ -78,6 +78,7 @@ create.Page(store, {
         })
       }
     }).exec();
+    // 检查定位权限 获取当前定位
     this.getLocationAuth(this);
     query.select('#top_search').boundingClientRect((rect) => {
       if(rect) {
