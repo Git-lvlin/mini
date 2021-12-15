@@ -180,7 +180,7 @@ create.Page(store, {
       showLoading: false,
     }).then(res => {
       const shareInfo = {
-        title: res.title || "约购超值集约！快来体验吧～",
+        title: res.title || "约购超值集约！约着买 更便宜~",
         path: res.shareUrl,
         imageUrl: res.thumbData,
       };
@@ -201,7 +201,7 @@ create.Page(store, {
     } = this.goodParams;
     const pathParam = objToParamStr(this.goodParams);
     let info = {
-      title: "约购超值集约！快来体验吧～",
+      title: "约购超值集约！约着买 更便宜~",
       path: "/subpages/cart/detail/index?",
       imageUrl: good.goodsImageUrl,
     }

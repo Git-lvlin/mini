@@ -35,9 +35,14 @@ Component({
             activityCube: homeCache.activityCube
           })
         }
-        homeApi.getFloorCustom(content.dataUrl, {
-          useType: 2
-        }).then(res => {
+        const takeSpot = wx.getStorageSync("TAKE_SPOT");
+        const data = {
+          useType: 2,
+        }
+        if(takeSpot && takeSpot.storeNo) {
+          data.storeNo = takeSpot.storeNo
+        }
+        homeApi.getFloorCustom(content.dataUrl, data).then(res => {
           let list = res;
           homeCache.activityCube = list;
           this.setData({
