@@ -115,28 +115,6 @@ create.Page(store, {
     }
   },
 
-  getNavTapHeight() {
-    const {
-      barTap
-    } = this.data;
-    let query = wx.createSelectorQuery();
-    query.select('#detailTop').boundingClientRect()
-    query.select('#detailEvaluate').boundingClientRect()
-    query.select('#detailInfo').boundingClientRect()
-    query.select('#detailRecommend').boundingClientRect()
-    debounce(() => {
-      query.selectViewport().scrollOffset().exec(res => {
-        barTap.top = res[0].top;
-        barTap.evaluate = res[1].top;
-        barTap.info = res[2].top;
-        barTap.recommend = res[3].top;
-        this.setData({
-          barTap,
-        });
-      });
-    }, 1000)();
-  },
-
   onShow() {
     const {
       orderType,
@@ -558,8 +536,30 @@ create.Page(store, {
       // 获取nav个点高度
       debounce(() => {
         this.getNavTapHeight();
-      }, 1000)();
+      }, 700)();
     });
+  },
+
+  getNavTapHeight() {
+    const {
+      barTap
+    } = this.data;
+    let query = wx.createSelectorQuery();
+    query.select('#detailTop').boundingClientRect()
+    query.select('#detailEvaluate').boundingClientRect()
+    query.select('#detailInfo').boundingClientRect()
+    query.select('#detailRecommend').boundingClientRect()
+    // debounce(() => {
+      query.selectViewport().scrollOffset().exec(res => {
+        barTap.top = res[0].top;
+        barTap.evaluate = res[1].top;
+        barTap.info = res[2].top;
+        barTap.recommend = res[3].top;
+        this.setData({
+          barTap,
+        });
+      });
+    // }, 1000)();
   },
   
   // 商详报错处理

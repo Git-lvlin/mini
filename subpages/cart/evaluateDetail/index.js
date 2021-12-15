@@ -1,5 +1,6 @@
 import goodApi from '../../../apis/good'
 import { IMG_CDN } from '../../../constants/common';
+import router from '../../../utils/router';
 import { getStorageUserInfo } from '../../../utils/tools';
 
 Page({
@@ -55,6 +56,7 @@ Page({
   },
 
   onToDetail() {
+    router.go(2);
     // const {
     //   comment
     // } = this.data;

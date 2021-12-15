@@ -56,6 +56,12 @@ Component({
     },
 
     onToEvaluate() {
+      const {
+        commentList
+      } = this.data;
+      if(!commentList.length) {
+        return
+      }
       router.push({
         name: 'evaluate',
         data: {},
