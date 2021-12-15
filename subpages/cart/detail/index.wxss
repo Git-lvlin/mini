@@ -1,3 +1,7 @@
+.scroll_view {
+  width: 100vw;
+  height: 100vh;
+}
 
 .space_20 {
   height: 20rpx;
@@ -811,4 +815,49 @@
 
 .no_sale_item:first-child{
   padding-top: 32rpx;
+}
+
+
+.good_recommend {
+  padding: 24rpx;
+  background-color: #F5F5F5;
+}
+
+.recommend_head {
+  flex-direction: column;
+}
+
+.recommend_title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #333333;
+  line-height: 48rpx;
+  margin-bottom: 8rpx;
+}
+
+.recommend_line {
+  width: 52rpx;
+  height: 6rpx;
+  background: linear-gradient(90deg, #F20825 0%, #FF8088 100%);
+  box-shadow: 0 4rpx 8rpx 0 #FFB3B3;
+  border-radius: 4rpx;
+}
+
+.recommend_box {
+  margin-top: 24rpx;
+}
+
+.good_list {
+  width: 100%;
+  columns: 320rpx 2;
+  column-gap: 20rpx;
+}
+
+.good_item {
+  page-break-inside: avoid;
+  -webkit-page-break-inside: avoid;
+}
+
+.no_data {
+  padding-bottom: 280rpx;
 }

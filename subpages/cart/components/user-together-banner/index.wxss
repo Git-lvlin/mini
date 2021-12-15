@@ -39,5 +39,8 @@
 .order_text {
   color: #ffffff;
   font-size: 28rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   line-height: 40rpx;
 }

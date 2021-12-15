@@ -18,6 +18,11 @@ create.Page(store, {
   fristLoad: false,
   // 商品异常
   goodOver: false,
+  recommendPage: {
+    hasNext: false,
+    next: "",
+    size: 20,
+  },
 
   use: [
     "systemInfo",
@@ -76,6 +81,17 @@ create.Page(store, {
     shareInfo: "",
     stockOver: 1,
     stockOverText: "",
+    barTap: {
+      top: 0,
+      evaluate: 0,
+      info: 0,
+      recommend: 0,
+    },
+    // 当前滚动高度
+    pageScrollTop: 0,
+    // 滚动到指定高度
+    scrollToTop: 0,
+    recommendList: [],
   },
 
   onLoad(options) {
@@ -97,6 +113,28 @@ create.Page(store, {
     if(!!userInfo && !!options.orderType) {
       this.getShareInfo();
     }
+  },
+
+  getNavTapHeight() {
+    const {
+      barTap
+    } = this.data;
+    let query = wx.createSelectorQuery();
+    query.select('#detailTop').boundingClientRect()
+    query.select('#detailEvaluate').boundingClientRect()
+    query.select('#detailInfo').boundingClientRect()
+    query.select('#detailRecommend').boundingClientRect()
+    debounce(() => {
+      query.selectViewport().scrollOffset().exec(res => {
+        barTap.top = res[0].top;
+        barTap.evaluate = res[1].top;
+        barTap.info = res[2].top;
+        barTap.recommend = res[3].top;
+        this.setData({
+          barTap,
+        });
+      });
+    }, 1000)();
   },
 
   onShow() {
@@ -237,6 +275,53 @@ create.Page(store, {
     });
   },
 
+  // 监听页面滚动
+  handleScrollView({
+    detail
+  }) {
+    // debounce(() => {
+      this.setData({
+        pageScrollTop: detail.scrollTop
+      })
+    // }, 200)();
+  },
+
+  // 滚动到底部
+  handleScrollBottom() {
+    const {
+      hasNext
+    } = this.recommendPage
+    if(hasNext) {
+      this.getGoodRecommend(true)
+    }
+  },
+
+  // 监听点击Bar
+  handleBarChange({
+    detail
+  }) {
+    const {
+      barTap,
+    } = this.data;
+    const {
+      systemInfo
+    } = this.store.data;
+    let scrollToTop = 0;
+    let topHeight = systemInfo.navTotalHeightPx + 36;
+    if(detail == 1) {
+      scrollToTop = barTap.top;
+    } else if(detail == 2) {
+      scrollToTop = barTap.evaluate - topHeight;
+    } else if(detail == 3) {
+      scrollToTop = barTap.info - topHeight;
+    } else if(detail == 4) {
+      scrollToTop = barTap.recommend - topHeight;
+    }
+    this.setData({
+      scrollToTop,
+    })
+  },
+
   // 商品详情图片
   getDetailImg() {
     let {
@@ -303,6 +388,8 @@ create.Page(store, {
         }, () => {
           this.handleGoodStock();
         })
+        // 推荐商品
+        this.getGoodRecommend();
       }).catch(err => {
         this.handleGoodError();
       })
@@ -343,6 +430,8 @@ create.Page(store, {
         }, () => {
           this.handleGoodStock();
         });
+        // 推荐商品
+        this.getGoodRecommend();
       }).catch(err => {
         this.handleGoodError();
       });
@@ -403,9 +492,11 @@ create.Page(store, {
             });
           }
         }
-        if(orderType == 2 || orderType == 11) {
+        // if(orderType == 2 || orderType == 11) {
           this.getSecUser();
-        }
+        // }
+        // 推荐商品
+        this.getGoodRecommend();
       }).catch(err => {
         this.handleGoodError({
           isOver: !!err.code == 30199
@@ -425,11 +516,50 @@ create.Page(store, {
         good,
         detailImg: good.contentImageList
       })
+      // 推荐商品
+      this.getGoodRecommend();
       // 下单用户轮播
       this.getSecUser(15);
     }).catch(err => {
       this.handleGoodError();
     })
+  },
+
+  // 获取商品推荐
+  getGoodRecommend(isNext) {
+    const {
+      next,
+      size,
+    } = this.recommendPage;
+    let {
+      recommendList
+    } = this.data;
+    goodApi.getUserLike({
+      next,
+      size,
+    }).then(res => {
+      this.recommendPage.hasNext = res.hasNext;
+      this.recommendPage.next = res.next;
+      const list = res.records;
+      list.forEach(item => {
+        item.title = item.goodsName;
+        item.salePrice = item.goodsSaleMinPrice;
+        item.marketPrice = item.goodsMarketPrice;
+        item.image = item.goodsImageUrl;
+      })
+      if(isNext) {
+        recommendList = recommendList.concat(list);
+      } else {
+        recommendList = list
+      }
+      this.setData({
+        recommendList: res.records
+      });
+      // 获取nav个点高度
+      debounce(() => {
+        this.getNavTapHeight();
+      }, 1000)();
+    });
   },
   
   // 商详报错处理
@@ -488,6 +618,10 @@ create.Page(store, {
   getSecUser(value) {
     let {
       orderType,
+      spuId,
+      objectId,
+      activityId,
+      skuId,
     } = this.goodParams
     const {
       good,
@@ -495,6 +629,10 @@ create.Page(store, {
     goodApi.getIntensiveUser({
       orderType,
       saleNum: value || good.goodsSaleNumVal,
+      spuId,
+      objectId,
+      activityId,
+      skuId,
     }, {
       showLoading: false,
     }).then(res => {
@@ -547,6 +685,10 @@ create.Page(store, {
   getIntensiveUser(num) {
     let {
       orderType,
+      spuId,
+      objectId,
+      activityId,
+      skuId,
     } = this.goodParams
     const {
       good,
@@ -554,6 +696,10 @@ create.Page(store, {
     goodApi.getIntensiveUser({
       orderType,
       saleNum: good.goodsSaleNumVal,
+      spuId,
+      objectId,
+      activityId,
+      skuId,
     }, {
       showLoading: false
     }).then(res => {

@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "user-together-banner": "../user-together-banner/index"
+  }
+}

@@ -1,0 +1,51 @@
+.detail_nav {
+  position: fixed;
+  top: 0;
+  z-index: 9;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.users {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.users_box {
+  width: 400rpx;
+  height: 56rpx;
+}
+
+.bar_box {
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+}
+
+.bar_item {
+  width: 25%;
+  font-size: 28rpx;
+  color: #333333;
+  line-height: 40rpx;
+  text-align: center;
+}
+
+.bar_item_act {
+  position: relative;
+  color: #FF3333
+}
+
+.bar_item_act::before {
+  content: "";
+  position: absolute;
+  bottom: -4rpx;
+  left: 50%;
+  width: 32rpx;
+  height: 4rpx;
+  background: #FF3333;
+  border-radius: 2rpx;
+  transform: translateX(-50%);
+}

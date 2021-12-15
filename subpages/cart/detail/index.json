@@ -7,12 +7,15 @@
     "price-mobel": "/components/common/price-mobel/index",
     "count-down": "/components/common/count-down/index",
     "store-panel": "/components/common/store-panel/index",
+    "home-good-card": "/components/home/classgood-card/index",
+    "nodata": "/components/common/nodata/index",
     "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
     "together-item": "../components/together-item/index",
     "together-popup": "../components/together-popup/index",
     "team-popup": "../components/team-popup/index",
     "price-ratio-bar": "../components/price-ratio-bar/index",
     "user-together-banner": "../components/user-together-banner/index",
-    "good-evaluate": "../components/good-evaluate/index"
+    "good-evaluate": "../components/good-evaluate/index",
+    "detail-nav": "../components/detail-nav/index"
   }
 }
