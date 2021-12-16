@@ -204,6 +204,15 @@ create.Page(store, {
         shareInfo,
       })
     });
+    this.drawShareImg();
+  },
+
+  // 绘制分享图片
+  drawShareImg() {
+    const ctx = wx.createCanvasContext('shareCanvas');
+    ctx.setFillStyle('#f5f5f5')
+    ctx.fillRect(0, 0, 250, 200)
+    ctx.draw()
   },
 
   // 转发

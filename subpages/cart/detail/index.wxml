@@ -1,5 +1,13 @@
-<wxs module="tools" src="../../../wxs/common.wxs" />
+<wxs module="tools" src="/wxs/common.wxs" />
 <wxs module="utils" src="./index.wxs" />
+
+<canvas
+  wx:if="{{false}}"
+  class="share_canvas"
+  id="shareCanvas"
+  canvas-id="shareCanvas"
+  style="width: 500rpx;height: 400rpx;"
+/>
 
 <view class="container" wx:if="{{!!isActivityGood}}">
   <scroll-view

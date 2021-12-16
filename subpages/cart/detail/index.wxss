@@ -1,3 +1,13 @@
+.share_canvas {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  z-index: 9;
+  width: 500rpx;
+  height: 400rpx;
+  transform: translate(-50%, -50%);
+}
+
 .scroll_view {
   width: 100vw;
   height: 100vh;

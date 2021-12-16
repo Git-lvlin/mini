@@ -76,7 +76,7 @@ Page({
     goodApi.getCommentListTotal({
       storeNo,
       spuId,
-      orderType: commentType,
+      commentType,
     }).then(res => {
       this.setData({
         greatCount: res.greatCount,
@@ -103,7 +103,7 @@ Page({
     goodApi.getCommentList({
       storeNo,
       spuId,
-      orderType: commentType,
+      commentType,
       next,
       type,
     }).then(res => {

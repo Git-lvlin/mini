@@ -238,9 +238,9 @@ create.Page(store, {
   setHeadBack(style) {
     let backCss = '';
     if(style.backgroundImage) {
-      backCss = `background-image: url(${style.backgroundImage})`
+      backCss = `background-image: url(${style.backgroundImage});`
     } else if(style.backgroundColor) {
-      backCss = `background-color: ${style.backgroundColor}`
+      backCss = `background-color: ${style.backgroundColor};`
     }
     return backCss;
   },
