@@ -1,14 +1,6 @@
 <wxs module="tools" src="/wxs/common.wxs" />
 <wxs module="utils" src="./index.wxs" />
 
-<canvas
-  wx:if="{{false}}"
-  class="share_canvas"
-  id="shareCanvas"
-  canvas-id="shareCanvas"
-  style="width: 500rpx;height: 400rpx;"
-/>
-
 <view class="container" wx:if="{{!!isActivityGood}}">
   <scroll-view
     class="scroll_view"
@@ -369,7 +361,7 @@
             <home-good-card
               data="{{item}}"
               showMarket="{{false}}"
-              descText="{{item.goodsSaleNumDis}}"
+              descText="{{item.goodsSaleNumStr}}"
             />
           </view>
         </view>
@@ -485,6 +477,16 @@
     </view>
 
   </scroll-view>
+
+  <!-- 分享图片 -->
+  <view class="canvas_box">
+    <canvas
+      class="share_canvas"
+      id="shareCanvas"
+      canvas-id="shareCanvas"
+      style="width: 436rpx;height: 348rpx;"
+    />
+  </view>
 
   <!-- 可拼团列表 -->
   <team-popup

@@ -52,7 +52,7 @@
       <good-card
         data="{{item}}"
         showMarket="{{false}}"
-        descText="{{item.saleNumDisplay}}"
+        descText="{{item.goodsSaleNumStr || item.saleNumDisplay}}"
       />
     </view>
   </view>

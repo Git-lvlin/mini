@@ -10,6 +10,9 @@ import util from '../../../utils/util'
 import router from '../../../utils/router'
 import commonApis from '../../../apis/common'
 
+const shareBack = '../../../images/good/good_share_back.png'
+const shareBtn = '../../../images/good/good_share_btn.png'
+
 const app = getApp();
 create.Page(store, {
   goodParams: {},
@@ -23,6 +26,7 @@ create.Page(store, {
     next: "",
     size: 20,
   },
+  canvasImg: '',
 
   use: [
     "systemInfo",
@@ -109,10 +113,6 @@ create.Page(store, {
     }else{
       this.hanldeGoodsParams(options)
     }
-    let userInfo = getStorageUserInfo();
-    if(!!userInfo && !!options.orderType) {
-      this.getShareInfo();
-    }
   },
 
   onShow() {
@@ -170,51 +170,6 @@ create.Page(store, {
     }
   },
 
-  // 获取分享参数
-  getShareInfo() {
-    const {
-      orderType,
-      spuId,
-      activityId,
-    } = this.goodParams;
-    this.goodParams.activityId = !!activityId ? activityId : 0;
-    const shareParams = {
-      shareType: 1,
-      contentType: 1,
-      shareObjectNo: spuId,
-      paramId: 1,
-      shareParams: this.goodParams,
-      ext: this.goodParams,
-      sourceType: 1,
-    }
-    if(orderType == 3 || orderType == 4) {
-      shareParams.paramId = 3;
-    }
-    homeApi.getShareInfo(shareParams, {
-      showLoading: false,
-    }, {
-      showLoading: false,
-    }).then(res => {
-      const shareInfo = {
-        title: res.title || "约购超值集约！约着买 更便宜~",
-        path: res.shareUrl,
-        imageUrl: res.thumbData,
-      };
-      this.setData({
-        shareInfo,
-      })
-    });
-    this.drawShareImg();
-  },
-
-  // 绘制分享图片
-  drawShareImg() {
-    const ctx = wx.createCanvasContext('shareCanvas');
-    ctx.setFillStyle('#f5f5f5')
-    ctx.fillRect(0, 0, 250, 200)
-    ctx.draw()
-  },
-
   // 转发
   onShareAppMessage() {
     const {
@@ -241,6 +196,10 @@ create.Page(store, {
       info.imageUrl = info.imageUrl ? info.imageUrl : good.goodsImageUrl;
     } else {
       info.path = `${info.path}${pathParam}`;
+    }
+    console.log("🚀 ~ file: index.js ~ line 201 ~ onShareAppMessage ~ this.canvasImg", this.canvasImg)
+    if(!!this.canvasImg) {
+      info.imageUrl = this.canvasImg;
     }
     app.trackEvent('share_goods_detail', {
       share_type: 'weixin'
@@ -374,9 +333,8 @@ create.Page(store, {
           detailImg,
         }, () => {
           this.handleGoodStock();
+          this.getDetailAfter();
         })
-        // 推荐商品
-        this.getGoodRecommend();
       }).catch(err => {
         this.handleGoodError();
       })
@@ -416,9 +374,8 @@ create.Page(store, {
           selectAddressType,
         }, () => {
           this.handleGoodStock();
+          this.getDetailAfter();
         });
-        // 推荐商品
-        this.getGoodRecommend();
       }).catch(err => {
         this.handleGoodError();
       });
@@ -466,6 +423,7 @@ create.Page(store, {
           selectAddressType,
         }, () => {
           this.handleGoodStock();
+          this.getDetailAfter();
         });
         if(orderType == 15 || orderType == 16) {
           // 集约用户列表
@@ -482,8 +440,6 @@ create.Page(store, {
         // if(orderType == 2 || orderType == 11) {
           this.getSecUser();
         // }
-        // 推荐商品
-        this.getGoodRecommend();
       }).catch(err => {
         this.handleGoodError({
           isOver: !!err.code == 30199
@@ -502,14 +458,164 @@ create.Page(store, {
       this.setData({
         good,
         detailImg: good.contentImageList
+      }, () => {
+        this.getDetailAfter();
       })
-      // 推荐商品
-      this.getGoodRecommend();
       // 下单用户轮播
       this.getSecUser(15);
     }).catch(err => {
       this.handleGoodError();
     })
+  },
+
+  // 获取商品详情回调
+  getDetailAfter() {
+    const {
+      shareInfo,
+    } = this.data;
+    // 推荐商品
+    this.getGoodRecommend();
+    if(!shareInfo || !shareInfo.path) {
+      this.getShareInfo();
+    }
+  },
+  
+  // 获取分享参数
+  getShareInfo() {
+    let userInfo = getStorageUserInfo();
+    if(!userInfo) {
+      this.downShareImg();
+      return;
+    }
+    const {
+      orderType,
+      spuId,
+      activityId,
+    } = this.goodParams;
+    this.goodParams.activityId = !!activityId ? activityId : 0;
+    const shareParams = {
+      shareType: 1,
+      contentType: 1,
+      shareObjectNo: spuId,
+      paramId: 1,
+      shareParams: this.goodParams,
+      ext: this.goodParams,
+      sourceType: 1,
+    }
+    if(orderType == 3 || orderType == 4) {
+      shareParams.paramId = 3;
+    }
+    homeApi.getShareInfo(shareParams, {
+      showLoading: false,
+    }, {
+      showLoading: false,
+    }).then(res => {
+      const shareInfo = {
+        title: res.title || "约购超值集约！约着买 更便宜~",
+        path: res.shareUrl,
+        imageUrl: res.thumbData,
+      };
+      this.setData({
+        shareInfo,
+      }, () => {
+        this.downShareImg();
+      })
+    }).catch(err => {
+      this.downShareImg();
+    });
+  },
+
+  // 绘制分享图片
+  downShareImg() {
+    const {
+      good,
+      shareInfo,
+    } = this.data;
+    const that = this;
+    let img = shareInfo.imageUrl ? shareInfo.imageUrl : good.goodsImageUrl;
+    img = img.replace(/^http:\/\//i,'https://');
+    let tmpImg = '../../../images/good/logo.png';
+    wx.downloadFile({
+      url: img,
+      success(result) {
+        console.log("download img", result.tempFilePath)
+        that.drawShareImg(result.tempFilePath)
+      },
+      fail(err) {
+        that.drawShareImg(tmpImg);
+      },
+    });
+  },
+
+  // 绘制分享图片
+  drawShareImg(tmpImg) {
+    const {
+      good,
+    } = this.data;
+    const that = this;
+    const salePrice = '¥' + parseFloat(good.goodsSaleMinPrice).toFixed(2);
+    const marketPrice = '¥' + parseFloat(good.goodsMarketPrice).toFixed(2);
+    const marketlength = marketPrice.length;
+    const textWidth = marketlength * 8;
+    const ctx = wx.createCanvasContext('shareCanvas');
+    // ctx.setFillStyle('#f5f5f5')
+    // ctx.fillRect(0, 0, 250, 200)
+    ctx.drawImage(shareBack, 0, 0, 218, 174);
+    ctx.drawImage(shareBtn,  150, 104, 48, 48);
+    this.handleBorderRect(ctx, 10, 43, 120, 120, 8, tmpImg);
+    ctx.setTextAlign('center')
+    ctx.setFillStyle('#DC2D23')
+    ctx.setFontSize(17)
+    ctx.fillText(salePrice, 171, 70)
+    ctx.setFillStyle('#999999')
+    ctx.setFontSize(14)
+    ctx.fillText(marketPrice, 171, 92)
+    ctx.setStrokeStyle('#999999')
+    ctx.beginPath();
+    ctx.moveTo(172-textWidth/2, 87)
+    ctx.lineTo(170+textWidth/2, 87)
+    ctx.closePath();
+    ctx.stroke()
+    // ctx.strokeRect(171-(textWidth/2), 87, textWidth, 0)
+    ctx.draw(true, () => {
+      wx.canvasToTempFilePath({
+        // destWidth: 436,
+        // destHeight: 348,
+        canvasId: 'shareCanvas',
+        success(res) {
+          that.canvasImg = res.tempFilePath;
+        }
+      })
+    });
+  },
+
+  handleBorderRect(ctx, x, y, w, h, r, img, color) {
+    ctx.save();
+    ctx.beginPath();
+    // 左上角
+    ctx.arc(x + r, y + r, r, Math.PI, 1.5 * Math.PI);
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.lineTo(x + w, y + r);
+    // 右上角
+    ctx.arc(x + w - r, y + r, r, 1.5 * Math.PI, 2 * Math.PI);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.lineTo(x + w - r, y + h);
+    // 右下角
+    ctx.arc(x + w - r, y + h - r, r, 0, 0.5 * Math.PI);
+    ctx.lineTo(x + r, y + h);
+    ctx.lineTo(x, y + h - r);
+    // 左下角
+    ctx.arc(x + r, y + h - r, r, 0.5 * Math.PI, Math.PI);
+    ctx.lineTo(x, y + r);
+    ctx.lineTo(x + r, y);
+
+    // ctx.setFillStyle(color);
+    // ctx.fill();
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(img, x, y, w, h);
+    ctx.restore()
   },
 
   // 获取商品推荐
@@ -540,7 +646,7 @@ create.Page(store, {
         recommendList = list
       }
       this.setData({
-        recommendList: res.records
+        recommendList
       });
       // 获取nav个点高度
       debounce(() => {

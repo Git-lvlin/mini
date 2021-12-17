@@ -1,11 +1,14 @@
+.canvas_box {
+  position: relative;
+}
+
 .share_canvas {
   position: fixed;
-  left: 50%;
-  top: 50%;
-  z-index: 9;
-  width: 500rpx;
-  height: 400rpx;
-  transform: translate(-50%, -50%);
+  /* left: 50%; */
+  left: -200%;
+  /* top: -50%; */
+  /* z-index: 9; */
+  /* transform: translate(-50%, -50%); */
 }
 
 .scroll_view {

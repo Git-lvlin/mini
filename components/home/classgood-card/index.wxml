@@ -24,7 +24,7 @@
           />
         </view>
         <view class="flex_fix cart" wx:if="{{!descText}}">
-          <view class="cart_num">{{data.goodsSaleNumDesc}}</view>
+          <view class="cart_num">{{data.goodsSaleNumStr || data.goodsSaleNumDesc}}</view>
         </view>
         <view class="desc_view" wx:if="{{!!descText}}">{{descText}}</view>
     </view>

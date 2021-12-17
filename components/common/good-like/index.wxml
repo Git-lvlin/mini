@@ -15,7 +15,7 @@
           <price-mobel money="{{data.goodsSaleMinPrice}}" defaultColor="#ccc" marketMoney="{{data.goodsMarketPrice}}" />
         </view>
         <view class="user_cart">
-          <view class="user_cart_num">{{data.goodsSaleNumDis}}</view>
+          <view class="user_cart_num">{{data.goodsSaleNumStr}}</view>
         </view>
       </view>
     </view>
