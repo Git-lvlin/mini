@@ -68,7 +68,7 @@
       </view>
       <view class="flex_middle">
         <view class="b_market_price">市场价<text class="b_m_p">¥{{tools.priceToF2(good.marketPrice)}}</text></view>
-        <view class="b_min_buy">{{good.buyMinNum}}起订</view>
+        <view class="b_min_buy">{{good.buyMinNum}}件起订</view>
       </view>
     </view>
     <view class="intensive_time">
