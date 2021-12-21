@@ -13,7 +13,8 @@ const url = {
   shareParam: "/share/option/shareParam/getScene",
   coordinate: "/cms/open/location/getLocation",
 
-  banner: '/cms/open/banner/list'
+  // banner: '/cms/open/banner/list',
+  banner: '/cms/option/banner/list',
 }
 
 let isShowLoginMobal = store.data.showLoginMobel;

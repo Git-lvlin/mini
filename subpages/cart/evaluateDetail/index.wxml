@@ -22,10 +22,13 @@
       <view class="flex_middle img_list">
         <image
           class="img_item"
+          mode="aspectFill"
           wx:for="{{comment.imgs}}"
           wx:key="id"
           wx:for-item="img"
           src="{{img}}"
+          data-idx="{{index}}"
+          bindtap="onOpenImg"
         />
       </view>
       <view class="evaluate_sku" wx:if="{{!!comment.spec}}">购买【{{comment.spec}}】</view>

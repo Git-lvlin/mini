@@ -65,4 +65,20 @@ Page({
     // }
   },
 
+  onOpenImg({
+    currentTarget,
+  }) {
+    const {
+      idx,
+    } = this.data;
+    const {
+      comment,
+    } = this.data;
+    if(comment.imgs && comment.imgs.length) {
+      wx.previewImage({
+        current: comment.imgs[idx],
+        urls: comment.imgs,
+      });
+    }
+  }
 })

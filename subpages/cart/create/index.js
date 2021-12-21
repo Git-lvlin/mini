@@ -357,7 +357,8 @@ create.Page(store, {
         data.consignee = newStoreAddress.setUser;
         data.phone = newStoreAddress.setPhone;
         if(selectAddressType && selectAddressType.type == 3) {
-          data.address = newStoreAddress.setAllAddress + newStoreAddress.setAddress;
+          // data.address = newStoreAddress.setAllAddress + newStoreAddress.setAddress;
+          data.address = newStoreAddress.address + newStoreAddress.setAddress;
           data.fullAddress = newStoreAddress.setAllAddress + newStoreAddress.setAddress;
         }
       }

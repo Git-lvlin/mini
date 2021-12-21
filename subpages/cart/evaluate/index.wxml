@@ -48,6 +48,7 @@
       <view class="flex_middle img_list">
         <image
           class="img_item"
+          mode="aspectFill"
           wx:for="{{item.imgs}}"
           wx:key="id"
           wx:for-item="img"

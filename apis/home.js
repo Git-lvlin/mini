@@ -2,7 +2,8 @@ import Request from '../utils/request'
 
 const url = {
   floorList: "/cms/open/home/list",
-  bannerList: "/cms/open/banner/list",
+  // bannerList: "/cms/open/banner/list",
+  bannerList: "/cms/option/banner/list",
   intensiveGood: "/activity/open/wholesaleGoodsList",
   getStoreNotInSkus: "/activity/option/getStoreNotInSkus",
   remindStorekeeperBuy: "/activity/auth/remindStorekeeperBuy",

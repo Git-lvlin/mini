@@ -59,14 +59,19 @@ Component({
 
     onToEvaluate() {
       const {
-        commentList
+        commentList,
+        good,
       } = this.data;
       if(!commentList.length) {
         return
       }
       router.push({
         name: 'evaluate',
-        data: {},
+        data: {
+          storeNo: good.storeNo,
+          spuId: good.spuId,
+          orderType: good.orderType,
+        },
       });
     },
   }

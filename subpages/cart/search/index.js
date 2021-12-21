@@ -157,7 +157,7 @@ Page({
     }, {
       showLoading: false
     }).then(res => {
-      const list = res;
+      const list = res || [];
       let tempList = [];
       const keyList = [];
       list.forEach((item, index) => {
@@ -188,7 +188,7 @@ Page({
         })
         keyList.push(item);
       });
-      if(res.length) {
+      if(res && res.length) {
         if(!showAssociation) {
           this.setData({
             showAssociation: true,

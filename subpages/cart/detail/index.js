@@ -12,6 +12,7 @@ import commonApis from '../../../apis/common'
 
 const shareBack = '../../../images/good/good_share_back.png'
 const shareBtn = '../../../images/good/good_share_btn.png'
+const defShareText = '约购超值集约！约着买 更便宜~'
 
 const app = getApp();
 create.Page(store, {
@@ -181,7 +182,8 @@ create.Page(store, {
     } = this.goodParams;
     const pathParam = objToParamStr(this.goodParams);
     let info = {
-      title: "约购超值集约！约着买 更便宜~",
+      // title: '',
+      title: good && good.goodsName ? good.goodsName : defShareText,
       path: "/subpages/cart/detail/index?",
       imageUrl: good.goodsImageUrl,
     }
@@ -193,11 +195,11 @@ create.Page(store, {
         ...info,
         ...shareInfo
       }
+      info.title = info.title == defShareText && good && good.goodsName ? good.goodsName : info.title;
       info.imageUrl = info.imageUrl ? info.imageUrl : good.goodsImageUrl;
     } else {
       info.path = `${info.path}${pathParam}`;
     }
-    console.log("🚀 ~ file: index.js ~ line 201 ~ onShareAppMessage ~ this.canvasImg", this.canvasImg)
     if(!!this.canvasImg) {
       info.imageUrl = this.canvasImg;
     }
@@ -511,7 +513,7 @@ create.Page(store, {
       showLoading: false,
     }).then(res => {
       const shareInfo = {
-        title: res.title || "约购超值集约！约着买 更便宜~",
+      title: res.title || defShareText,
         path: res.shareUrl,
         imageUrl: res.thumbData,
       };
@@ -751,7 +753,8 @@ create.Page(store, {
     }, {
       showLoading: false,
     }).then(res => {
-      const list = res.records.slice(0, 5);
+      let list = res.records;
+      list = list && list.length ? list.slice(0, 5) : [];
       this.setData({
         secJoinUser: list
       })
