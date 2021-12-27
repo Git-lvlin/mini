@@ -77,7 +77,7 @@ export default {
     const userInfo = getStorageUserInfo();
     const refreshToken = wx.getStorageSync("REFRESH_TOKEN");
     if(!refreshToken) return;
-    if(!userInfo && !isShowLoginMobal) {
+    if(!userInfo && !store.data.showLoginMobel) {
       clearLoginInfo();
       showLogin();
       store.data.showLoginMobel = true;
@@ -109,7 +109,7 @@ export default {
     }).catch(err => {
       // if(err.code == 405 || err.code == 200109 || err.code == 10018 || err.code == 200104) {
         clearLoginInfo();
-        if(!isShowLoginMobal) {
+        if(!store.data.showLoginMobel) {
           showLogin(true);
           store.data.showLoginMobel = true;
         }
