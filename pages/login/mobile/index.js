@@ -182,7 +182,7 @@ create.Page(store, {
     }
   },
 
-  // 获取用户openid 登录
+  // 获取用户mobile 登录
   getCodeLogin(event) {
     app.trackEvent('login_auth_wechat_button_click');
     const that = this;
@@ -195,15 +195,16 @@ create.Page(store, {
       });
       return;
     }
+    const eventData = event.detail || {};
+    const agreenLogin = eventData.errMsg == "getPhoneNumber:ok" ? true : false;
     const scene = wx.getStorageSync("SHARE_SCENE") || "";
-    if(!!scene) {
+    if(!!scene && agreenLogin) {
       this.handleGetShareScene({
         scene
       });
       return;
     }
-    const eventData = event.detail || {};
-    if (eventData.errMsg == "getPhoneNumber:ok") {
+    if (agreenLogin) {
       // wx.login({
       //   success: (result)=>{
           loginApis.userLogin({
