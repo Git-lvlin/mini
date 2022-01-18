@@ -105,7 +105,7 @@ Component({
       } = this.data;
       if(!!logoActionUrl) {
         const mark = logoActionUrl.toString().indexOf('?') > -1 ? true : false;
-        logoActionUrl = `${logoActionUrl}${mark ? '&' : '?'}navTitle=${logoTitle}`
+        logoActionUrl = `${logoActionUrl}${mark ? '&' : '?'}navTitle=${logoTitle || ''}`
         router.getUrlRoute(logoActionUrl);
       }
       // router.push({

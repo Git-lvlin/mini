@@ -641,9 +641,11 @@ create.Page(store, {
       const list = res.records;
       list.forEach(item => {
         item.title = item.goodsName;
-        item.salePrice = item.goodsSaleMinPrice;
-        item.marketPrice = item.goodsMarketPrice;
+        item.salePrice = util.divide(item.goodsSaleMinPrice, 100);
+        item.marketPrice = util.divide(item.goodsMarketPrice, 100);
         item.image = item.goodsImageUrl;
+        item.spuId = item.id;
+        item.skuId = item.defaultSkuId;
       })
       if(isNext) {
         recommendList = recommendList.concat(list);
