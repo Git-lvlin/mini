@@ -364,8 +364,12 @@
   font-size: 28rpx;
   color: #B2B2B2;
   line-height: 36rpx;
-  text-decoration: line-through;
+  /* text-decoration: line-through; */
   margin-top: 12rpx;
+}
+
+.line_text {
+  text-decoration: line-through;
 }
 
 .b_intensive {

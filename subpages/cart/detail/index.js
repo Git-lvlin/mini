@@ -186,6 +186,9 @@ create.Page(store, {
       title: good && good.goodsName ? good.goodsName : defShareText,
       path: "/subpages/cart/detail/index?",
       imageUrl: good.goodsImageUrl,
+      success(res) {
+        console.log(res);
+      },
     }
     if(orderType == 3 || orderType == 4) {
       info.path = "/subpages/cart/teamDetail/index?";

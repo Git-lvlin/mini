@@ -19,4 +19,6 @@ export const FLOOR_TYPE = {
   priceRatio: 9,
   // 分类商品列表
   classGood: 11,
+  // 分类商品列表 v2
+  classGood2: 13,
 };

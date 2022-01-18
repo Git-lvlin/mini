@@ -55,8 +55,9 @@
 }
 
 .sku_name {
+  height: 30rpx;
   color: #999999;
-  font-size: 22rpx;
+  font-size: 22rpx; 
   line-height: 30rpx;
   margin-bottom: 24rpx;
 }
@@ -64,8 +65,12 @@
 .market_price {
   height: 40rpx;
   font-size: 28rpx;
-  color: #666666;
+  color: #868686;
   line-height: 40rpx;
+  /* text-decoration: line-through;*/
+}
+
+.line_text {
   text-decoration: line-through;
 }
 
@@ -142,6 +147,10 @@
   padding: 0;
   line-height: 40rpx;
   text-align: right;
+}
+
+.ipunt_desc {
+  color: #bdbdbd;
 }
 
 .txt {

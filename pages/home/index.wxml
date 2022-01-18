@@ -147,12 +147,12 @@
         </view>
 
         <!-- 分类商品列表第二版 -->
-        <view wx:if="{{item.floorType === 13}}">
+        <view id="classGoods2" wx:if="{{item.floorType === 13}}">
           <classgoods-v2
             floor="{{item}}"
             scrollBottom="{{scrollBottom}}"
             refreshering="{{refresherTriggered}}"
-            isFixedTop="{{floorTopDistance[11] - scrollTopDistance < 0}}"
+            isFixedTop="{{floorTopDistance[13] - scrollTopDistance < 0}}"
           />
         </view>
       </block>

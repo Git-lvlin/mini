@@ -435,6 +435,10 @@ create.Page(store, {
       // classGoods（分类商品列表）距离顶部距离
       query.select('#classGoods').boundingClientRect();
     }
+    if(isShowFloor[FLOOR_TYPE.classGood2]) {
+      // classGoods（分类商品列表）距离顶部距离
+      query.select('#classGoods2').boundingClientRect();
+    }
     query.exec((res) => {
       const data = {
         scrolledDistance: scrollTop,
@@ -448,6 +452,10 @@ create.Page(store, {
         // 商品分类高度
         if (item.id == 'classGoods') {
           data.floorTopDistance[FLOOR_TYPE.classGood] = item.top;
+        }
+        // 商品分类高度 v2
+        if (item.id == 'classGoods2') {
+          data.floorTopDistance[FLOOR_TYPE.classGood2] = item.top;
         }
       });
       this.setData(data);

@@ -58,7 +58,7 @@ App({
     this.globalData.appScene = scene;
     
     // 生成设备码校验是否填写邀请码
-    this.getInputCode();
+    // this.getInputCode();
   },
 
   globalData: {

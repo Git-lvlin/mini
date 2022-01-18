@@ -40,6 +40,18 @@ page {
   padding-top: 16rpx;
 }
 
+.margket_price {
+  font-size: 28rpx;
+  color: #868686;
+  line-height: 36rpx;
+  /* text-decoration: line-through; */
+  margin-top: 72rpx;
+}
+
+.line_text {
+  text-decoration: line-through;
+}
+
 .price_box {
   position: absolute;
   right: 20rpx;

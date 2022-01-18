@@ -6,10 +6,10 @@ export const orderList = [
     icon: `${IMG_CDN}miniprogram/user/wait_pay.png`,
     name: "待付款",
     subNum: 0,
-  },{
-    icon: `${IMG_CDN}miniprogram/user/wait_share.png`,
-    name: "待分享",
-    subNum: 0,
+  // },{
+  //   icon: `${IMG_CDN}miniprogram/user/wait_share.png`,
+  //   name: "待分享",
+  //   subNum: 0,
   },{
     icon: `${IMG_CDN}miniprogram/user/wait_push.png`,
     name: "待发货",

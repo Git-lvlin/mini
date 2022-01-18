@@ -9,7 +9,7 @@
       bindinput="handleInput"
     />
   </view>
-  <view class="explain">4-26个字符，仅支持汉字，字母，数字或下划线</view>
+  <view class="explain">2-26个字符，仅支持汉字，字母，数字或下划线</view>
 
   <view class="save_btn" bindtap="onSave">保存</view>
 </view>

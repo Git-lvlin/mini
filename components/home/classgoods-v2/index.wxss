@@ -1,6 +1,6 @@
 
 .classgood {
-  padding: 24rpx 24rpx 0;
+  padding: 24rpx 0 0;
 }
 
 .classgood_content {
@@ -8,7 +8,11 @@
   z-index: 5;
   top: 0;
   width: 100%;
+  padding: 0 24rpx;
   box-sizing: border-box;
+}
+
+.classgood_back {
   background-color: #f5f5f5;
 }
 
@@ -54,6 +58,10 @@
   transform: translateX(-50%);
 }
 
+
+.good_box {
+  padding: 0 24rpx;
+}
 
 .second_class {
   flex-wrap: wrap;
