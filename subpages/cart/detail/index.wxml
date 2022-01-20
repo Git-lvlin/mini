@@ -5,11 +5,11 @@
   <scroll-view
     class="scroll_view"
     scroll-y
-    scroll-top="{{scrollToTop}}"
+    scroll-into-view="{{scrollToId}}"
     bindscroll="handleScrollView"
     bindscrolltolower="handleScrollBottom"
   >
-    <view class="banner_content" id="detailTop">
+    <view class="position banner_content" id="detailTop">
       <image
         class="back_icon"
         style="top: {{backTopHeight}}rpx"
@@ -325,13 +325,15 @@
     </block>
 
     <!-- 商品评价 -->
-    <view id="detailEvaluate">
+    <view class="position ">
+      <view class="scrollId_mark" style="top: -{{$.systemInfo.navTotalHeight + 72}}rpx" id="detailEvaluate" />
       <good-evaluate good="{{good}}" />
     </view>
 
     <view class="space_20" />
 
-    <view class="info_card" id="detailInfo">
+    <view class="position info_card">
+      <view class="scrollId_mark" style="top: -{{$.systemInfo.navTotalHeight + 72}}rpx" id="detailInfo" />
       <view class="info_title">商品详情</view>
       <view class="detail">
         <van-image
@@ -346,7 +348,8 @@
     </view>
 
     <!-- 推荐商品 -->
-    <view class="good_recommend" id="detailRecommend">
+    <view class="position good_recommend">
+      <view class="scrollId_mark" style="top: -{{$.systemInfo.navTotalHeight + 72}}rpx" id="detailRecommend" />
       <view class="flex_middle recommend_head">
         <view class="recommend_title">精选推荐</view>
         <view class="recommend_line" />

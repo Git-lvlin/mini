@@ -237,7 +237,9 @@ create.Page(store, {
   // 设置首页头部背景
   setHeadBack(style) {
     let backCss = '';
-    if(style.backgroundImage) {
+    if(style.appletBackgroundImage) {
+      backCss = `background-image: url(${style.appletBackgroundImage});`
+    }else if(style.backgroundImage) {
       backCss = `background-image: url(${style.backgroundImage});`
     } else if(style.backgroundColor) {
       backCss = `background-color: ${style.backgroundColor};`

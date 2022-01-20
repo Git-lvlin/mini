@@ -9,23 +9,26 @@
   <view class="flex_fix nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx;height:{{navigationBarHeight}}rpx;{{pageBackCss}}">
     <view id="nav_body_id" class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx;{{headBackCss}};height:{{navigationBarHeight}}rpx">
       <view class="nav_location">
+        <!-- 位置图标 floor.headData.style.searchTopLeftIcon -->
         <image
           class="location_icon"
-          src="{{floor.headData.style.searchTopLeftIcon ? floor.headData.style.searchTopLeftIcon : tools.getImgUrl('miniprogram/v2-home/home-location.png')}}"
+          src="{{tools.getImgUrl('miniprogram/v2-home/home-location.png')}}"
         />
         <view class="flex_middle address" bindtap="onToLocation">
+          <!-- 文字颜色 floor.headData.style.searchTopFontColor -->
           <view
             class="location_address text_one_line"
-            style="{{floor.headData.style.searchTopFontColor ? 'color: ' + floor.headData.style.searchTopFontColor : ''}}"
+            style="color: #333"
           >{{takeSpot.storeName  || '选择自提点' }}</view>
           <!-- <view
             class="flex_fix store_name"
             wx:if="{{takeSpot.address && takeSpot.storeName }}"
           >{{takeSpot.storeName}}</view> -->
         </view>
+        <!-- 箭头图标 floor.headData.style.searchTopSiteIcon -->
         <image
           class="right_icon"
-          src="{{floor.headData.style.searchTopSiteIcon ? floor.headData.style.searchTopSiteIcon : tools.getImgUrl('miniprogram/v2-home/home-tap-down.png')}}"
+          src="{{tools.getImgUrl('miniprogram/v2-home/home-tap-down.png')}}"
         />
       </view>
       <view id="top_search" class="search_content" style="">

@@ -96,6 +96,8 @@ create.Page(store, {
     pageScrollTop: 0,
     // 滚动到指定高度
     scrollToTop: 0,
+    // 滚动到某个ID
+    scrollToId: '',
     recommendList: [],
   },
 
@@ -251,25 +253,31 @@ create.Page(store, {
   handleBarChange({
     detail
   }) {
-    const {
-      barTap,
-    } = this.data;
-    const {
-      systemInfo
-    } = this.store.data;
-    let scrollToTop = 0;
-    let topHeight = systemInfo.navTotalHeightPx + 36;
+    // const {
+    //   barTap,
+    // } = this.data;
+    // const {
+    //   systemInfo
+    // } = this.store.data;
+    // let scrollToTop = 0;
+    let scrollToId = '';
+    // let topHeight = systemInfo.navTotalHeightPx + 36;
     if(detail == 1) {
-      scrollToTop = barTap.top;
+      // scrollToTop = barTap.top;
+      scrollToId = 'detailTop';
     } else if(detail == 2) {
-      scrollToTop = barTap.evaluate - topHeight;
+      // scrollToTop = barTap.evaluate - topHeight;
+      scrollToId = 'detailEvaluate';
     } else if(detail == 3) {
-      scrollToTop = barTap.info - topHeight;
+      // scrollToTop = barTap.info - topHeight;
+      scrollToId = 'detailInfo';
     } else if(detail == 4) {
-      scrollToTop = barTap.recommend - topHeight;
+      // scrollToTop = barTap.recommend - topHeight;
+      scrollToId = 'detailRecommend';
     }
     this.setData({
-      scrollToTop,
+      // scrollToTop,
+      scrollToId,
     })
   },
 

@@ -15,6 +15,11 @@ Component({
       observer(now, old) {
         if(now && now.content) {
           this.setClassList(now.content);
+          if(now.header.style.fontColor || now.header.style.appletFontColor) {
+            this.setData({
+              fontColor: now.header.style.appletFontColor || now.header.style.fontColor
+            })
+          }
         }
       }
     },
@@ -23,6 +28,7 @@ Component({
   data: {
     scrollListWidth: 0,
     activityCube: [],
+    fontColor: '',
   },
 
   methods: {

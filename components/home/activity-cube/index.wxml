@@ -21,7 +21,7 @@
             <image class="activity_img" src="{{item.image}}" />
             <view
               class="name"
-              style="{{floor.header.style.fontColor ? 'color: ' + floor.header.style.fontColor : ''}}"
+              style="{{fontColor ? 'color: ' + fontColor : ''}}"
             >{{item.title}}</view>
           </view>
         </view>
