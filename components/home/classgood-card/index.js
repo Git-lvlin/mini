@@ -50,6 +50,8 @@ Component({
         params.activityId = data.activityId || 0;
         params.objectId = data.objectId || 0;
         if(!!data.orderType) params.orderType = data.orderType;
+        console.log("🚀 ~ file: index.js ~ line 49 ~ onToDetail ~ data", data)
+        console.log("🚀 ~ file: index.js ~ line 49 ~ onToDetail ~ data", params)
         router.push({
           name: "detail",
           data: params

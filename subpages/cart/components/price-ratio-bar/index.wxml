@@ -3,7 +3,7 @@
 <view class="flex_middle price_ratio">
   <view class="flex_middle price_box">
     <view class="price_title">市场均价</view>
-    <view class="price_text">¥{{data.AveragePrice}}</view>
+    <view class="price_text">¥{{tools.priceToF2(data.AveragePrice)}}</view>
   </view>
   <view class="flex_middle right" bindtap="noToPriceDetail">
     <image class="line_icon" src="{{tools.getImgUrl('/miniprogram/cart/ratio_icon.png')}}" />

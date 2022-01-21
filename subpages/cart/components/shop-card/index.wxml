@@ -13,8 +13,11 @@
         <view class="info">
           <view class="title text_one_line">{{item.goodsName}}</view>
           <view class="sku_name">{{item.skuName}}</view>
+          <view class="market_price">
+            <view wx:if="{{!!item.marketPrice}}">市场价 <text class="line_text">¥{{tools.priceToF2(item.marketPrice)}}</text></view>
+          </view>
           <view class="price">
-            <text>￥{{item.skuSalePrice}}</text>
+            <text>￥{{tools.priceToF2(item.skuSalePrice, false)}}</text>
             <view class="num_controller">
               <view
                 class="controller reduce_num"
@@ -43,14 +46,26 @@
       </view>
       <view class="flex_middle note_box">
         <view class="flex_fix note_title">订单备注</view>
-        <input class="note_input" maxlength="10" bindinput="handleInput" placeholder="输入10字以内留言信息" />
+        <input
+          class="note_input"
+          maxlength="10"
+          bindinput="handleInput"
+          placeholder="输入10字以内留言信息"
+          placeholder-class="ipunt_desc"
+        />
       </view>
     </view>
   </view>
 
   <view class="total_price">
     <view class="txt">小计：</view>
-    <view class="text">￥{{tools.getPriceSplit(data.totalAmount)}}<text class="min_price">{{tools.getPriceSplit(data.totalAmount, 1)}}</text></view>
+    <price-mobel
+      money="{{data.totalAmount}}"
+      min-size="{{28}}"
+      max-size="{{28}}"
+      bold="{{600}}"
+    />
+    <!-- <view class="text">￥{{tools.getPriceSplit(data.totalAmount)}}<text class="min_price">{{tools.getPriceSplit(data.totalAmount, 1)}}</text></view> -->
     <!-- <view class="freight">(运费：￥{{data.shippingFeeAmount}})</view> -->
   </view>
 

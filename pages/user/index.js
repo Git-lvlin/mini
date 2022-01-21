@@ -128,10 +128,10 @@ create.Page(store, {
       showLoading: false,
     }).then(res => {
       orderTypeList[0].subNum = res.paid;
-      orderTypeList[1].subNum = res.share;
-      orderTypeList[2].subNum = res.deliver;
+      // orderTypeList[1].subNum = res.share;
+      orderTypeList[1].subNum = res.deliver;
       // orderTypeList[3].subNum = res.receive;
-      orderTypeList[4].subNum = res.afterSales;
+      orderTypeList[3].subNum = res.afterSales;
       this.setData({
         orderTypeList,
       })

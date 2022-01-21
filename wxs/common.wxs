@@ -9,14 +9,22 @@ var getImgUrl = function (url) {
   return IMG_CDN + url;
 }
 
-// 拆解价格
+// 拆解价格补零
+// type 是否数小数位
 var getPriceSplit = function (price, type) {
   var str = price !== undefined ? price.toString() : "0";
   var strArr = str.split(".");
   if(!type) {
     return strArr[0];
   } else {
-    return !!strArr[1] ? "." + strArr[1] : "";
+    var floatStr = ''; 
+    if(!!strArr[1]) {
+      var zero = strArr[1].length < 2 ? '0' : '';
+      floatStr = '.' + strArr[1] + zero;
+    } else {
+      floatStr = '.00'
+    }
+    return floatStr;
   }
 }
 
@@ -83,8 +91,9 @@ var getLastTime = function(time) {
   return endTime
 }
 
-var priceToF2 = function(price) {
-  var p = (price/100).toFixed(3)
+// 数字补零
+var priceToF2 = function(price, miniUtil = true) {
+  var p = (miniUtil ? price/100 : price).toFixed(3)
   var res = p.substring(0, p.lastIndexOf('.')+3)
   return res
 }

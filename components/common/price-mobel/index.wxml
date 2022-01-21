@@ -2,10 +2,10 @@
 
 <view class="price_mobel" style="color: {{defaultColor}};font-size: {{!!minSize ? minSize : 28}}rpx;line-height: {{!!maxSize ? maxSize : 28}}rpx;">
   <view class="title" wx:if="{{!!title}}">{{title}}</view>
-  <view class="price" style="color: {{color}};{{!bold ? 'font-weight: 600' : 'font-weight: ' + bold}}">
+  <view class="price" style="color: {{color}};{{!bold ? '' : 'font-weight: ' + bold}}">
     <text class="unit">¥</text>
     <text class="max_price" style="font-size: {{!!maxSize ? maxSize : 40}}rpx;line-height: {{!!maxSize ? maxSize : 40}}rpx;">{{tools.getPriceSplit(money)}}</text>
     <text class="min_price">{{tools.getPriceSplit(money, 1)}}</text>
   </view>
-  <view class="market_money" wx:if="{{!!marketMoney && showMarket}}">{{!!desc ? desc : ""}}¥{{marketMoney}}</view>
+  <view class="market_money" wx:if="{{!!marketMoney && showMarket}}">{{!!desc ? desc : ""}}¥{{tools.priceToF2(marketMoney, false)}}</view>
 </view>

@@ -78,6 +78,7 @@ create.Page(store, {
         })
       }
     }).exec();
+    // 检查定位权限 获取当前定位
     this.getLocationAuth(this);
     query.select('#top_search').boundingClientRect((rect) => {
       if(rect) {
@@ -236,10 +237,12 @@ create.Page(store, {
   // 设置首页头部背景
   setHeadBack(style) {
     let backCss = '';
-    if(style.backgroundImage) {
-      backCss = `background-image: url(${style.backgroundImage})`
+    if(style.appletBackgroundImage) {
+      backCss = `background-image: url(${style.appletBackgroundImage});`
+    }else if(style.backgroundImage) {
+      backCss = `background-image: url(${style.backgroundImage});`
     } else if(style.backgroundColor) {
-      backCss = `background-color: ${style.backgroundColor}`
+      backCss = `background-color: ${style.backgroundColor};`
     }
     return backCss;
   },
@@ -434,6 +437,10 @@ create.Page(store, {
       // classGoods（分类商品列表）距离顶部距离
       query.select('#classGoods').boundingClientRect();
     }
+    if(isShowFloor[FLOOR_TYPE.classGood2]) {
+      // classGoods（分类商品列表）距离顶部距离
+      query.select('#classGoods2').boundingClientRect();
+    }
     query.exec((res) => {
       const data = {
         scrolledDistance: scrollTop,
@@ -447,6 +454,10 @@ create.Page(store, {
         // 商品分类高度
         if (item.id == 'classGoods') {
           data.floorTopDistance[FLOOR_TYPE.classGood] = item.top;
+        }
+        // 商品分类高度 v2
+        if (item.id == 'classGoods2') {
+          data.floorTopDistance[FLOOR_TYPE.classGood2] = item.top;
         }
       });
       this.setData(data);

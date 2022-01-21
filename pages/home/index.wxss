@@ -15,7 +15,7 @@ page {
 
 .nav_content {
   width: 100%;
-  background-position: left bottom;
+  background-position: left top;
   background-size: 100% auto;
 }
 
@@ -120,10 +120,16 @@ page {
   height: 1000rpx;
 }
 
+.scroll_box {
+  background-position-x: left;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+}
+
 
 .pul_icon {
   position: absolute;
-  top: -110rpx;
+  top: -130rpx;
   left: 50%;
   z-index: 0;
   width: 160rpx;

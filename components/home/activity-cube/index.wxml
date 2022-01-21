@@ -19,7 +19,10 @@
             bindtap="onToClass"
           >
             <image class="activity_img" src="{{item.image}}" />
-            <view class="name">{{item.title}}</view>
+            <view
+              class="name"
+              style="{{fontColor ? 'color: ' + fontColor : ''}}"
+            >{{item.title}}</view>
           </view>
         </view>
       </view>

@@ -100,7 +100,7 @@
                 <view class="subtitle">{{item.subtitle}}</view>
                 <view class="price-box">
                   <text class="head">¥</text>
-                  <text class="money">{{item.salePrice/100}}</text>
+                  <text class="money">{{tools.priceToF2(item.salePrice)}}</text>
                   <text class="maxnum" wx:if="{{item.reducePriceDisplay}}">{{item.reducePriceDisplay}}</text>
                 </view>
                 <view class="t">{{item.nearDaysDisplay}}</view>
@@ -125,7 +125,7 @@
                 <view class="subtitle-t">{{item.subtitle}}</view>
                 <view class="price-box-t">
                   <text class="head">¥</text>
-                  <text class="money">{{item.salePrice/100}}</text>
+                  <text class="money">{{tools.priceToF2(item.salePrice)}}</text>
                   <text class="maxnum" wx:if="{{item.reducePriceDisplay}}">{{item.reducePriceDisplay}}</text>
                 </view>
                 <view class="t" wx:if="{{item.nearDaysDisplay}}">{{item.nearDaysDisplay}}</view>

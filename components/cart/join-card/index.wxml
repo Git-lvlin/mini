@@ -18,7 +18,14 @@
     <!-- <view class="sale">月销 {{good.goodsSaleNum}}件</view> -->
     <view class="sale">{{!!good.goodsSaleNum ? good.goodsSaleNum : "" }}</view>
     <view class="price">
-      <view class="text"><text class="unit">￥</text>{{good.salePrice}}<view class="market_price">¥{{good.marketPrice}} </view></view>
+      <price-mobel
+        money="{{good.salePrice}}"
+        marketMoney="{{good.marketPrice}}"
+      />
+      <!-- <view class="text">
+        <text class="unit">￥</text>{{good.salePrice}}
+        <view class="market_price">¥{{good.marketPrice}} </view>
+      </view> -->
       <!-- <view class="num_controller" wx:if="{{control}}">
         <image
           class="icon"

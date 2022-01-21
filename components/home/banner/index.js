@@ -35,7 +35,14 @@ Component({
             bannerList: homeCache.bannerList
           })
         }
-        homeApi.getFloorCustom(content.dataUrl).then(res => {
+        const takeSpot = wx.getStorageSync("TAKE_SPOT");
+        const data = {
+          useType: 5,
+        }
+        if(takeSpot && takeSpot.storeNo) {
+          data.storeNo = takeSpot.storeNo
+        }
+        homeApi.getFloorCustom(content.dataUrl, data).then(res => {
           this.setData({
             bannerList: res
           });

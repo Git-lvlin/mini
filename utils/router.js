@@ -208,6 +208,7 @@ const getUrlRoute = (url, opt) => {
   }
   // 以下解析H5路由
   const routeStr = url.match(/(http|https):\/\/([^/]+)(\S*)/)[3];
+  console.log("🚀 ~ file: router.js ~ line 211 ~ getUrlRoute ~ routeStr", routeStr)
   const routeArr = routeStr.split("?");
   data.route = routeArr[0];
   if(!!routeArr[1]) {
@@ -235,7 +236,7 @@ const getUrlRoute = (url, opt) => {
       url = `${url}${url.indexOf("?") > -1 ? "&" : "?"}memberId=${userInfo.id}`;
     }
     // 新人专享
-    if(routeData.key == "newCoupon") {
+    if(routeData && routeData.key == "newCoupon") {
       option.data = {
         ...option.data,
         // isNew: userInfo.isNew,

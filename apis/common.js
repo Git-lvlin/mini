@@ -13,7 +13,8 @@ const url = {
   shareParam: "/share/option/shareParam/getScene",
   coordinate: "/cms/open/location/getLocation",
 
-  banner: '/cms/open/banner/list'
+  // banner: '/cms/open/banner/list',
+  banner: '/cms/option/banner/list',
 }
 
 let isShowLoginMobal = store.data.showLoginMobel;
@@ -76,7 +77,7 @@ export default {
     const userInfo = getStorageUserInfo();
     const refreshToken = wx.getStorageSync("REFRESH_TOKEN");
     if(!refreshToken) return;
-    if(!userInfo && !isShowLoginMobal) {
+    if(!userInfo && !store.data.showLoginMobel) {
       clearLoginInfo();
       showLogin();
       store.data.showLoginMobel = true;
@@ -108,7 +109,7 @@ export default {
     }).catch(err => {
       // if(err.code == 405 || err.code == 200109 || err.code == 10018 || err.code == 200104) {
         clearLoginInfo();
-        if(!isShowLoginMobal) {
+        if(!store.data.showLoginMobel) {
           showLogin(true);
           store.data.showLoginMobel = true;
         }

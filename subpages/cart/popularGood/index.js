@@ -17,6 +17,11 @@ Page({
 	},
 
 	onLoad(options) {
+		if(!!options.navTitle) {
+			wx.setNavigationBarTitle({
+				title: options.navTitle || '',
+			});
+		}
 		this.getBanner();
 		this.getPopularList();
 	},

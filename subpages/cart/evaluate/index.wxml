@@ -1,0 +1,81 @@
+<view class="evaluate_container">
+  <view class="flex_middle label_box">
+    <view 
+      class="label_item {{type == 1 ? 'label_item_act' : ''}}"
+      data-val="1"
+      bindtap="onChangeType"
+    >全部</view>
+    <view 
+      class="label_item {{type == 2 ? 'label_item_act' : ''}}"
+      data-val="2"
+      bindtap="onChangeType"
+    >好评{{!!greatCount ? '(' + greatCount + ')' : ''}}</view>
+    <view 
+      class="label_item {{type == 3 ? 'label_item_act' : ''}}"
+      data-val="3"
+      bindtap="onChangeType"
+    >中/差评{{!!middleCount ? '(' + middleCount + ')' : ''}}</view>
+    <view 
+      class="label_item {{type == 4 ? 'label_item_act' : ''}}"
+      data-val="4"
+      bindtap="onChangeType"
+    >有图{{!!imgCount ? '(' + imgCount + ')' : ''}}</view>
+  </view>
+
+  <view class="evaluate_list">
+    <view
+      class="evaluate_item"
+      wx:for="{{commentList}}"
+      wx:key="id"
+      data-id="{{item.id}}"
+      bindtap="onToEvaluateDetail"
+    >
+      <view class="flex_middle evaluate_head">
+        <image class="flex_fix user_avatar" src="{{item.userImg}}" />
+        <view class="user_info">
+          <view class="user_name">{{item.nickName}}</view>
+          <view class="evaluate_time">{{item.commentTime}}</view>
+        </view>
+        <view
+          class="flex_fix flex_middle user_star {{item.isPoint ? 'user_star_act' : ''}}"
+          data-idx="{{index}}"
+          catchtap="onSetFabulous"
+        >
+          <image class="fabulous_img" src="{{item.isPoint ? fabulousAct : fabulous}}" /> {{item.pointNum}}
+        </view>
+      </view>
+      <view class="evaluate_text">{{item.content}}</view>
+      <view class="flex_middle img_list">
+        <image
+          class="img_item"
+          mode="aspectFill"
+          wx:for="{{item.imgs}}"
+          wx:key="id"
+          wx:for-item="img"
+          src="{{img}}"
+        />
+      </view>
+      <view class="evaluate_good" wx:if="{{!!item.spec}}">购买【{{item.spec}}】</view>
+      <view class="store_msg" wx:if="{{item.applyList && item.applyList.length}}">
+        <view
+          class="store_msg_item text_two_line"
+          wx:for="{{item.applyList}}"
+          wx:key="id"
+          wx:for-item="child"
+        >
+          <text class="store_msg_label">商家</text><text class="store_name">{{item.storeName}} 回复：</text>{{child.replyContent}}
+        </view>
+      </view>
+    </view>
+
+    <nodata type="msg" title="暂无评价" wx:if="{{!commentList.length}}" />
+  </view>
+
+  <view class="bottom_text" wx:if="{{!pageData.hasNext}}">已经到底啦</view>
+
+  <!-- <view class="button_back">
+    <view class="flex_center btn_box">
+      <view class="btn_buy" bindtap="onToBuy">立即购买</view>
+    </view>
+  </view> -->
+</view>

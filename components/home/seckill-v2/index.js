@@ -24,6 +24,7 @@ Component({
   data: {
     scrollListWidth: 0,
     tagLogo: "",
+    logoTitle: "",
     seckillList: [],
   },
 
@@ -41,12 +42,14 @@ Component({
         }
         homeApi.getFloorCustom(content.dataUrl).then(res => {
           let list = res.records;
-          list = mapNum(list);
+          // list = mapNum(list);
           homeCache.tagLogo = res.tagLogo;
+          homeCache.logoTitle = res.logoTitle;
           homeCache.logoActionUrl = res.logoActionUrl;
           homeCache.seckillList = list;
           this.setData({
             tagLogo: res.tagLogo,
+            logoTitle: res.logoTitle,
             logoActionUrl: res.logoActionUrl,
             seckillList: list
           });
@@ -54,9 +57,10 @@ Component({
         });
       } else {
         let list = content.data;
-        list = mapNum(list);
+        // list = mapNum(list);
         this.setData({
           tagLogo: content.tagLogo,
+          logoTitle: content.logoTitle,
           logoActionUrl: content.logoActionUrl,
           seckillList: list
         })
@@ -95,10 +99,13 @@ Component({
       if(!this.data.seckillList.length) {
         return;
       }
-      const {
-        logoActionUrl
+      let {
+        logoActionUrl,
+        logoTitle,
       } = this.data;
       if(!!logoActionUrl) {
+        const mark = logoActionUrl.toString().indexOf('?') > -1 ? true : false;
+        logoActionUrl = `${logoActionUrl}${mark ? '&' : '?'}navTitle=${logoTitle || ''}`
         router.getUrlRoute(logoActionUrl);
       }
       // router.push({

@@ -15,6 +15,11 @@ Component({
       observer(now, old) {
         if(now && now.content) {
           this.setClassList(now.content);
+          if(now.header.style.fontColor || now.header.style.appletFontColor) {
+            this.setData({
+              fontColor: now.header.style.appletFontColor || now.header.style.fontColor
+            })
+          }
         }
       }
     },
@@ -23,6 +28,7 @@ Component({
   data: {
     scrollListWidth: 0,
     activityCube: [],
+    fontColor: '',
   },
 
   methods: {
@@ -35,9 +41,14 @@ Component({
             activityCube: homeCache.activityCube
           })
         }
-        homeApi.getFloorCustom(content.dataUrl, {
-          useType: 2
-        }).then(res => {
+        const takeSpot = wx.getStorageSync("TAKE_SPOT");
+        const data = {
+          useType: 2,
+        }
+        if(takeSpot && takeSpot.storeNo) {
+          data.storeNo = takeSpot.storeNo
+        }
+        homeApi.getFloorCustom(content.dataUrl, data).then(res => {
           let list = res;
           homeCache.activityCube = list;
           this.setData({

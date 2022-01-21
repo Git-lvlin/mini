@@ -2,7 +2,8 @@ import Request from '../utils/request'
 
 const url = {
   floorList: "/cms/open/home/list",
-  bannerList: "/cms/open/banner/list",
+  // bannerList: "/cms/open/banner/list",
+  bannerList: "/cms/option/banner/list",
   intensiveGood: "/activity/open/wholesaleGoodsList",
   getStoreNotInSkus: "/activity/option/getStoreNotInSkus",
   remindStorekeeperBuy: "/activity/auth/remindStorekeeperBuy",
@@ -41,7 +42,7 @@ export default {
   // 首页楼层通用接口数据
   getFloorList(params, options) {
     // params.floorVersion = '1.0.2'
-    params.floorVersion = '2.0.0'
+    params.floorVersion = '2.0.3'
     return Request.get(url.floorList, params, options)
   },
 

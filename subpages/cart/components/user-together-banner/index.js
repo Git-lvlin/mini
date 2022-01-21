@@ -19,6 +19,22 @@ Component({
         }
       },
     },
+    style: {
+      type: String,
+      value: "",
+    },
+    back: {
+      type: String,
+      value: "rgba(0, 0, 0, 0.6)",
+    },
+    width: {
+      type: String,
+      value: '100%',
+    },
+    color: {
+      type: String,
+      value: '#ffffff',
+    },
     top: {
       type: Number,
       value: 136,

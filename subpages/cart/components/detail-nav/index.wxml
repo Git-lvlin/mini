@@ -1,0 +1,31 @@
+<wxs module="tools" src="/wxs/common.wxs" />
+
+<view
+  class="detail_nav"
+  style="min-height: {{systemInfo.navTotalHeight}}rpx;padding-top:{{systemInfo.statusHeight}}rpx;opacity:{{opacity}}"
+  wx:if="{{scrollTop > 70 && good.goodsName}}"
+>
+  <view class="content">
+    <view class="users" style="height: {{systemInfo.navBarHeight}}rpx">
+      <view class="users_box" wx:if="{{opacity == 1}}">
+        <user-together-banner
+          style="position: relative;"
+          width="400rpx"
+          back="transparent"
+          color="#333"
+          list="{{list}}"
+          top="{{0}}"
+        />
+      </view>
+    </view>
+    <view class="bar_box">
+      <view
+        class="bar_item {{actType == item.type ? 'bar_item_act' : ''}}"
+        wx:for="{{barList}}"
+        wx:key="index"
+        data-type="{{item.type}}"
+        bindtap="onBarChange"
+      >{{item.name}}</view>
+    </view>
+  </view>
+</view>

@@ -61,6 +61,7 @@ const Reqeust = (params) => {
         } else {
           if (res.data.code == REFRESH_TOKEN_INVALID) {
             // refreshToken过期退出登录
+            clearLoginInfo();
             if(!store.data.showLoginMobel) {
               store.setShowLoginMobel(true);
               showModal({
@@ -81,7 +82,6 @@ const Reqeust = (params) => {
             }
             opions.showLoading && wx.hideLoading();
             reject(res.data);
-            clearLoginInfo();
             return null;
           }
           // token 过期刷新token

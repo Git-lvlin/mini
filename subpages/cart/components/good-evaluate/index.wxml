@@ -1,0 +1,24 @@
+<view class="evaluate_content">
+  <view class="space_20" />
+  <view class="evaluate_box">
+    <view class="flex_middle head">
+      <view class="head_title">商品评价{{commentNum > 0 ? '(' + commentNum + ')' : ''}}</view>
+      <view class="flex_middle more" bindtap="onToEvaluate">查看更多<view class="more_right" /></view>
+    </view>
+    <view
+      class="eveluate_item"
+      wx:for="{{commentList}}"
+      wx:key="index"
+      wx:if="{{commentList.length}}"
+    >
+      <view class="flex_middle evaluate_user">
+        <image class="flex_fix user_avtar" src="{{item.userImg}}" />
+        <view class="user_name">{{item.nickName}}</view>
+      </view>
+      <view class="evaluate_info text_two_line">{{item.content}}</view>
+    </view>
+    <view class="nodata" wx:if="{{!commentList.length}}">
+      <nodata top="0" title="暂无评价" />
+    </view>
+  </view>
+</view>

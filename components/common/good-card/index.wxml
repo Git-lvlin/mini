@@ -19,7 +19,7 @@
           <price-mobel money="{{data.salePrice}}" minSize="{{24}}" defaultColor="#ccc" marketMoney="{{data.marketPrice}}" />
         </view>
         <view class="flex_fix cart">
-          <view class="cart_num">{{data.goodsSaleNumDesc}}</view>
+          <view class="cart_num">{{data.saleNumStr || data.goodsSaleNumDesc}}</view>
         </view>
     </view>
     <view class="good_store" wx:if="{{data.storeName?true:false}}">

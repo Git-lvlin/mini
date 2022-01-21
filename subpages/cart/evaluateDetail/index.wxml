@@ -1,0 +1,61 @@
+<wxs module="tools" src="/wxs/common.wxs" />
+
+<view class="evaluate_list">
+    <view
+      class="evaluate_item"
+    >
+      <view class="flex_middle evaluate_head">
+        <image class="flex_fix user_avatar" src="{{comment.userImg}}" />
+        <view class="user_info">
+          <view class="user_name">{{comment.nickName}}</view>
+          <view class="evaluate_time">{{comment.commentTime}}</view>
+        </view>
+        <view
+          class="flex_fix flex_middle user_star {{comment.isPoint ? 'user_star_act' : ''}}"
+          data-idx="{{index}}"
+          bindtap="onSetFabulous"
+        >
+          <image class="fabulous_img" src="{{comment.isPoint ? fabulousAct : fabulous}}" /> {{comment.pointNum}}
+        </view>
+      </view>
+      <view class="evaluate_text">{{comment.content}}</view>
+      <view class="flex_middle img_list">
+        <image
+          class="img_item"
+          mode="aspectFill"
+          wx:for="{{comment.imgs}}"
+          wx:key="id"
+          wx:for-item="img"
+          src="{{img}}"
+          data-idx="{{index}}"
+          bindtap="onOpenImg"
+        />
+      </view>
+      <view class="evaluate_sku" wx:if="{{!!comment.spec}}">购买【{{comment.spec}}】</view>
+      <view class="flex_middle good_box">
+        <image class="good_img" src="{{comment.goodsImg}}" />
+        <view class="good_info">
+          <view class="good_name text_one_line">{{comment.goodsName}}</view>
+          <!-- <view class="good_price">¥{{tools.priceToF2(comment.price || 0)}}</view> -->
+        </view>
+      </view>
+    </view>
+
+    <view class="store_msg">
+      <view class="store_msg_head">商家回复 {{comment.applyList && comment.applyList.length || 0}}</view>
+      <view class="msg_list" wx:if="{{comment.applyList && comment.applyList.length}}">
+        <view
+          class="msg_item"
+          wx:for="{{comment.applyList}}"
+          wx:key="index"
+        >
+          <image class="store_avater" src="{{comment.storeImg}}" />
+          <view class="msg_box">
+            <view class="store_name">{{comment.storeName}}</view>
+            <view class="msg_time">{{item.replyTime}}</view>
+            <view class="msg_text">{{item.replyContent}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>

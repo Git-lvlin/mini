@@ -66,6 +66,24 @@ page {
 }
 
 
+.push_tips {
+  display: flex;
+  align-items: flex-start;
+  color: #E4352E; 
+  font-size: 24rpx;
+  line-height: 34rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+  background-color: #FEEAEA;
+  border-radius: 24rpx;
+}
+
+.push_text {
+  flex: 1;
+  margin-left: 16rpx;
+}
+
+
 /* 选择地址 */
 .address {
   display: flex;

@@ -20,7 +20,7 @@
             catchtap="onGood"
           >
             <image class="seckill_img" src="{{item.image}}" />
-            <view class="name">¥{{item.salePrice}}</view>
+            <view class="name">¥{{tools.priceToF2(item.salePrice)}}</view>
           </view>
         </view>
       </view>
