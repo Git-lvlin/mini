@@ -3,11 +3,12 @@
   position: relative;
   width: 100%;
   overflow: hidden;
+  padding-top: 60rpx;
 }
 
 .close_img {
   position: absolute;
-  top: 20rpx;
+  top: 0;
   right: 20rpx;
   z-index: 9;
   width: 46rpx;
