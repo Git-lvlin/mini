@@ -47,7 +47,7 @@ export const otherSetting = [
   },
   {
     icon: `${IMG_CDN}miniprogram/user/share-app/share.png?v=202106170`,
-    name: "分享APP",
+    name: "下载APP",
     type: 3,
     path: "share",
   },
