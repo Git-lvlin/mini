@@ -1,0 +1,52 @@
+
+.code_content {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 60rpx;
+}
+
+.close_img {
+  position: absolute;
+  top: 0;
+  right: 20rpx;
+  z-index: 9;
+  width: 46rpx;
+  height: 46rpx;
+  opacity: 0.8;
+}
+
+/* 分享弹窗 */
+.share_poster{
+}
+
+.canvas_code {
+  position: relative;
+  left: 50%;
+  width: 500rpx;
+  height: 832rpx;
+  transform: translateX(-50%);
+}
+
+.qrcode {
+  position: absolute;
+  left: -500rpx;
+  /* visibility: hidden; */
+}
+
+.save_picture{
+  flex-direction: column;
+  padding-top: 32rpx;
+}
+
+.pic1 {
+  width: 103rpx;
+  height: 103rpx;
+}
+
+.word2 {
+  padding-top: 12rpx;
+  font-size: 30rpx;
+  color: #FFFFFF;
+  line-height: 42rpx;
+}
