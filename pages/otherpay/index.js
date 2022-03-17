@@ -40,6 +40,9 @@ Page({
     } else if(this.params.scene == 4) {
       // 获取保证金支付信息
       this.getBondPay(this.params);
+    } else if(this.params.scene == 5) {
+      // 获取生鲜支付信息
+      this.getFreshPay(this.params);
     }
   },
 
@@ -144,7 +147,41 @@ Page({
       })
     });
   },
-
+  getFreshPay(data) {
+    const {
+      payInfo,
+    } = this.data;
+    cartApi.getInFreshPay({
+      orderId: data.id,
+      storeNo: data.storeNo,
+      memberId: data.memberId,
+      // type: data.type,
+      payType: data.payType || 7,
+      openId: data.openId,
+    }, {
+      notErrorMsg: true,
+    }).then(res => {
+      payInfo.state = 0;
+      this.setData({
+        payInfo,
+        payData: res,
+      }, () => {
+        this.openPay();
+        wx.hideLoading();
+      })
+    }).catch(err => {
+      if(err.code == 30202) {
+        payInfo.state = 4;
+        wx.hideLoading();
+      } else {
+        payInfo.state = 3;
+        this.handleErrorInfo(err);
+      }
+      this.setData({
+        payInfo
+      })
+    });
+  },
   // 获取集约B端支付信息
   getIntensivePay(data) {
     const {
