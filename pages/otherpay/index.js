@@ -154,8 +154,7 @@ Page({
     cartApi.getInFreshPay({
       orderId: data.id,
       storeNo: data.storeNo,
-      memberId: data.memberId,
-      // type: data.type,
+      type: data.type,
       payType: data.payType || 7,
       openId: data.openId,
     }, {

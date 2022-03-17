@@ -25,7 +25,7 @@ const url = {
   
   faterRed: "/activity/auth/sendMemberEverydayCoupon",
 
-  freshPay: "/transService/order/pay",
+  freshPay: "/store/auth/order/pay",
 }
 
 export default {
