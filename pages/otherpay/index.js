@@ -28,6 +28,7 @@ Page({
     if(!openId) return;
     wx.showLoading();
     this.params.openId = openId;
+    console.log('this.p', this.params)
     if(this.params.scene == 1) {
       // 获取商品下单支付信息
       this.getPayInfo(this.params);
@@ -42,6 +43,7 @@ Page({
       this.getBondPay(this.params);
     } else if(this.params.scene == 5) {
       // 获取生鲜支付信息
+      console.log('111')
       this.getFreshPay(this.params);
     }
   },
@@ -148,6 +150,7 @@ Page({
     });
   },
   getFreshPay(data) {
+    console.log('data', data)
     const {
       payInfo,
     } = this.data;
@@ -160,6 +163,7 @@ Page({
     }, {
       notErrorMsg: true,
     }).then(res => {
+      console.log('res',res)
       payInfo.state = 0;
       this.setData({
         payInfo,

@@ -89,7 +89,7 @@ export default {
     return Request.post(url.rechargePay, params, option);
   },
   // 生鲜订单
-  getInFreshPay() {
+  getInFreshPay(params, option) {
     return Request.post(url.freshPay, params, option);
   },
   // 集约支付信息
