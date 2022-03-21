@@ -249,3 +249,36 @@
   height: 144rpx;
   transform: translateX(-50%);
 }
+
+.btn_list {
+  justify-content: space-between;
+  padding: 48rpx 48rpx 0 ;
+}
+
+.btn_item {
+  width: 312rpx;
+  height: 80rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333333;
+  line-height: 80rpx;
+  text-align: center;
+  border-radius: 80rpx;
+}
+
+.item_finish {
+  border: 2rpx solid #CCCCCC;
+}
+
+.item_download {
+  color: #fff;
+  background: #FA0D1E;
+}
+
+.finish_desc {
+  font-size: 22rpx;
+  color: #999999;
+  line-height: 32rpx;
+  text-align: center;
+  margin-top: 24rpx;
+}

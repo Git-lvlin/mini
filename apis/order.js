@@ -24,6 +24,8 @@ const url = {
 
   
   faterRed: "/activity/auth/sendMemberEverydayCoupon",
+
+  freshPay: "/store/auth/order/pay",
 }
 
 export default {
@@ -85,6 +87,10 @@ export default {
   // 约卡充值
   getRechargePay(params, option) {
     return Request.post(url.rechargePay, params, option);
+  },
+  // 生鲜订单
+  getInFreshPay(params, option) {
+    return Request.post(url.freshPay, params, option);
   },
   // 集约支付信息
   getIntensivePay(params, option) {

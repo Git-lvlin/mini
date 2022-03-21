@@ -228,7 +228,10 @@ create.Page(store, {
                 wx.setStorageSync("OPENID", memberInfo.openId);
                 eventData.openId = memberInfo.openId;
                 eventData.uId = memberInfo.uId;
-                this.handleGetPhone(eventData);
+                // 旧绑定流程 - 2022-02-17
+                // this.handleGetPhone(eventData);
+                // 新绑定流程 - 2022-02-17
+                this.notCodeBindMobileLogin(eventData);
               }
             } else {
               handleErrorCode({
@@ -240,6 +243,42 @@ create.Page(store, {
       //   },
       // });
     }
+  },
+
+  // 无验证码解密手机号直接绑定登录
+  notCodeBindMobileLogin(uInfo) {
+    const inviteInfo = wx.getStorageSync("INVITE_INFO");
+    const betaInfo = wx.getStorageSync("BETA_INFO");
+    const isInvite = inviteInfo && inviteInfo.inviteCode ? true : false;
+    const isBeta = betaInfo && betaInfo.betaCode ? true : false;
+    const data = {
+      sourceType: 4,
+      encryptedData: uInfo.encryptedData,
+      iv: uInfo.iv,
+      openId: uInfo.openId,
+    };
+    if(isInvite) {
+      data.inviteCode = inviteInfo.inviteCode;
+    }
+    if(isBeta) {
+      data.testCode = betaInfo.betaCode;
+    }
+    loginApis.notCodeBindMobileLogin(data, {
+      showLoading: false,
+    }).then(res => {
+      console.log("🚀 ~ file: index.js ~ line 269 ~ notCodeBindMobileLogin ~ res", res)
+      const result = res;
+      wx.setStorageSync("ACCESS_TOKEN", result.accessToken);
+      wx.setStorageSync("REFRESH_TOKEN", result.refreshToken);
+      tools.setUserInfo(result);
+      if(isInvite) {
+        wx.setStorageSync("INVITE_REGISTER", true);
+        wx.removeStorage({
+          key: 'INVITE_INFO',
+        });
+      }
+      this.getUserInfo(result.memberInfo);
+    });
   },
   
   // 获取手机号
