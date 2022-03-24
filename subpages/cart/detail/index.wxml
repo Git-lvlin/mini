@@ -302,7 +302,7 @@
 
     <view class="space_20" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" />
     
-    <store-panel storeInfo="{{storeInfo}}" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" />
+    <!-- <store-panel storeInfo="{{storeInfo}}" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" /> -->
     
     <!-- 拼单列表 -->
     <block wx:if="{{(isActivityGood == 3 || isActivityGood == 4) && !!personalList.length}}">

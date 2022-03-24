@@ -1,7 +1,6 @@
 import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
-import commonApi from '../../../apis/common'
 import homeApi from '../../../apis/home'
 import { IMG_CDN, DETAIL_SERVICE_LIST } from '../../../constants/common'
 import { CODE_SCENE } from '../../../constants/index'
