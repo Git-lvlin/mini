@@ -48,7 +48,13 @@
 
   <view class="content" wx:if="{{isPay}}">
     <view class="def_head_back" />
-    
+    <view class="popup" wx:if="{{groupInfo.groupState != 0}}">
+      <together-user
+        title="团长"
+        list="{{groupInfo.joinMemberArr}}"
+        distanceNum="{{groupInfo.distanceNum}}"
+      />
+    </view>
     <view class="success_head" style="background-image: url({{tools.getImgUrl('miniprogram/cart/order/success_back.png')}})">
       <view class="success_tip">
         <image class="success_img" src="{{tools.getImgUrl('miniprogram/cart/order/pay_success.png')}}" />

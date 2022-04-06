@@ -9,9 +9,17 @@ var getLastTime = function(time) {
 }
 
 var getPriceTitle = function (orderType) {
+  // var titleType = {
+  //   "2": "",
+  //   "3": "单约价：",
+  //   "4": "团约价：",
+  //   "11": "",
+  //   "15": "集约价：",
+  //   "16": "集约价：",
+  // };
   var titleType = {
     "2": "",
-    "3": "单约价：",
+    "3": "",
     "4": "团约价：",
     "11": "",
     "15": "集约价：",

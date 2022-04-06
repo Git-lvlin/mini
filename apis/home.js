@@ -42,10 +42,15 @@ export default {
   // 首页楼层通用接口数据
   getFloorList(params, options) {
     // params.floorVersion = '1.0.2'
-    params.floorVersion = '2.0.3'
+    params.floorVersion = '2.0.5'
     return Request.get(url.floorList, params, options)
   },
-
+  // 获取1分钱&特价
+  getAcarea(url, params, option) {
+    console.log('url', url)
+    console.log('params', params)
+    return Request.get(url, params, option);
+  },
   // 获取banner列表
   getBannerList(params, options) {
     params = getExamine(params);

@@ -2,13 +2,12 @@ import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
 import homeApi from '../../../apis/home'
-import { IMG_CDN, DETAIL_SERVICE_LIST } from '../../../constants/common'
+import { IMG_CDN, DETAIL_SERVICE_LIST, H5_HOST } from '../../../constants/common'
 import { CODE_SCENE } from '../../../constants/index'
 import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj, haveStore, debounce } from '../../../utils/tools'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
 import commonApis from '../../../apis/common'
-
 const shareBack = '../../../images/good/good_share_back.png'
 const shareBtn = '../../../images/good/good_share_btn.png'
 const defShareText = '约购超值集约！约着买 更便宜~'
@@ -286,7 +285,7 @@ create.Page(store, {
       orderType,
       spuId
     } = this.goodParams;
-    if(orderType == 3) return; 
+    if(orderType == 3) return;
     goodApi.getDetailImg({
       spuId,
     }).then(res => {
@@ -324,18 +323,18 @@ create.Page(store, {
     if(orderType == 3) {
       params.spuId = spuId;
       goodApi.getPersonalDetail(params).then(res => {
-        const good = res.curGoods;
+        const good = res;
         const personalList = res.personalList;
-        const detailImg = good && good.images || [];
+        const detailImg = good && good.contentImageList || [];
         if(!good.isMultiSpec) {
           this.specLoaded = true;
         }
         good.activityPrice = util.divide(good.activityPrice, 100);
         good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
         good.goodsMarketPrice = util.divide(good.marketPrice, 100);
+        console.log('good', good)
         // good.goodsSaleNum = good.saleNum;
         good.goodsSaleNum = `月售${good.activitySaleNum}件`;
-        good.imageList = good.imageUrlList;
         personalList.forEach(item => {
           item.distancetime = item.distancetime * 1000;
         })
@@ -545,7 +544,7 @@ create.Page(store, {
     } = this.data;
     const that = this;
     let img = shareInfo.imageUrl ? shareInfo.imageUrl : good.goodsImageUrl;
-    img = img.replace(/^http:\/\//i,'https://');
+    img = img?.replace(/^http:\/\//i,'https://');
     let tmpImg = '../../../images/good/logo.png';
     wx.downloadFile({
       url: img,
@@ -1060,6 +1059,8 @@ create.Page(store, {
 
   // 跳转确认订单
   onToCreate() {
+    console.log('this.data.userInfo', this.data.userInfo)
+    console.log('this.goodParams', this.goodParams)
     if(!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
@@ -1077,15 +1078,16 @@ create.Page(store, {
       currentSku,
       storeInfo,
     } = this.data;
-    let stockOverData = this.handleGoodStock(currentSku.stockNum);
+    console.log('this.specLoaded', this.specLoaded)
+    // let stockOverData = this.handleGoodStock(currentSku.stockNum);
     // 多规格商品，规格时候已加载
     if(!this.specLoaded) {
       return;
     }
-    if(stockOverData.stockOver != 0) {
-      // this.onStockOver(stockOverData.stockOver);
-      return;
-    }
+    // if(stockOverData.stockOver != 0) {
+    //   // this.onStockOver(stockOverData.stockOver);
+    //   return;
+    // }
     let skuNum = good.buyMinNum > 0 ? good.buyMinNum : 1;
     // 选择规格回来下单
     if(good.isMultiSpec) {
@@ -1109,8 +1111,9 @@ create.Page(store, {
     };
     // 活动购买
     if(orderType == 3) {
-      data.objectId = currentSku.groupId;
-      objectId = currentSku.groupId;
+      // data.objectId = currentSku.groupId;
+      // objectId = currentSku.groupId;
+      wx.setStorageSync("CREATE_INTENSIVE", data);
     }
     if(orderType == 15 || orderType == 16) {
       data.storeAdress = storeInfo.storeAddress;
@@ -1119,13 +1122,15 @@ create.Page(store, {
     } else {
       wx.setStorageSync("GOOD_LIST", data);
     }
+    let p = {
+      orderType,
+      activityId: !!activityId ? activityId : "",
+      objectId: !!objectId ? objectId : this.goodParams.objectId,
+    }
+    console.log('111', p )
     router.push({
       name: "createOrder",
-      data: {
-        orderType,
-        activityId: !!activityId ? activityId : "",
-        objectId: !!objectId ? objectId : "",
-      }
+      data: p
     });
   },
 
@@ -1149,6 +1154,21 @@ create.Page(store, {
     this.setData({
       showTeamPopup: true
     })
+  },
+
+  // 跳转拼团规则
+  onOpenRule() {
+    const {activityId, spuId, skuId} = this.data.good;
+    const str = `/web/group-rule?activityId=${activityId}&spuId=${spuId}&skuId=${skuId}`;
+    const url = H5_HOST + str;
+    console.log('url', url)
+    router.getUrlRoute(url);
+    // router.push({
+    //   name: "webview",
+    //   data: {
+    //     url: encodeURIComponent(url),
+    //   },
+    // })
   },
 
   // 监听关闭拼单弹窗
@@ -1180,6 +1200,7 @@ create.Page(store, {
 
   // 发起拼单
   onPushTogether() {
+    console.log('2222')
     const {
       activityId,
       spuId,

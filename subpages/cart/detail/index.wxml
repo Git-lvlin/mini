@@ -111,7 +111,7 @@
         <!-- <view class="sales">月售188{{good.unit}}</view> -->
         <view class="sales">{{good.spuSaleNumStr}}</view>
       </view>
-      <view class="good_info">
+      <view class="good_info" wx:if="{{isActivityGood != 3}}">
         <!-- 商品标题 -->
         <view class="good_title">
           <view class="text">{{good.goodsName}}</view>
@@ -124,6 +124,35 @@
           </view>
         </view>
       </view>
+      <view class="good_info" wx:else>
+        <!-- 商品标题 -->
+        <view class="good_p">
+          <view class="good_p_title">
+            <van-image
+              wx:if="{{good.memberType}}"
+              class="good_p_name_head_icon"
+              width="80rpx"
+              height="32rpx"
+              src="{{tools.getImgUrl('miniprogram/common/icon/new.png')}}"
+            />
+            <view class="text">{{good.goodsName}}</view>
+          </view>
+          <view class="good_p_two">
+            <view class="good_p_two_l">
+              <view class="good_p_red_bag">
+                <van-image
+                  width="100%"
+                  height="100%"
+                  src="{{tools.getImgUrl('miniprogram/common/icon/redbag.png')}}"
+                />
+              </view>
+              <view>{{good.groupNum}}人团</view>
+            </view>
+            <view class="good_p_two_r">{{good.goodsSaleNumStr+'件'}}</view>
+          </view>
+        </view>
+      </view>
+
       <!-- 集约进度 -->
       <!-- <view class="flex_middle intensive_progress" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}">
         <view class="progress_box">
@@ -212,8 +241,19 @@
           </view>
         </view> -->
       </view>
+
       <view class="sec_market_price" wx:if="{{isActivityGood == 2}}">
         市场价<text class="line_text">￥{{tools.priceToF2(good.goodsMarketPrice || 0, false)}}</text>
+      </view>
+      <view class="new_p_tips" wx:if="{{isActivityGood == 3 && good.memberTypeStr}}">
+        <view class="new_p_tips_icon">
+          <van-image
+            width="100%"
+            height="100%"
+            src="{{tools.getImgUrl('miniprogram/common/icon/new_tips.png')}}"
+          />
+        </view>
+        <view class="new_p_tips_text">{{good.memberTypeStr}}</view>
       </view>
     </view>
 
@@ -304,12 +344,25 @@
     
     <!-- <store-panel storeInfo="{{storeInfo}}" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" /> -->
     
+    <!-- 拼团须知 -->
+    <block wx:if="{{isActivityGood == 3}}">
+      <view class="space_20" />
+      <view class="buy_together" bindtap="onOpenRule">
+        <view class="together_head">
+          <view class="rule-head">拼团须知</view>
+          <view class="rule-title">开团或参团，人满发货，人不满退款</view>
+          <view class="together_more"><image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" /></view>
+        </view>
+      </view>
+    </block>
+
     <!-- 拼单列表 -->
     <block wx:if="{{(isActivityGood == 3 || isActivityGood == 4) && !!personalList.length}}">
       <view class="space_20" />
       <view class="buy_together">
         <view class="together_head">
-          <view class="together_title">{{personalList.length}}人正在拼单，立即参与</view>
+          <image class="together_icon" src="{{tools.getImgUrl('miniprogram/common/icon/together-icon.png')}}" />
+          <view class="together_title">{{personalList.length}}人正在拼团，可直接参与</view>
           <view class="together_more" bindtap="onOpenTeam">查看全部<image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" /></view>
         </view>
         <block
@@ -448,7 +501,7 @@
             src="{{personalList[0].icon}}"
           />
         </view>
-        <view class="together_num">还差{{personalList[0].distanceNum}}人拼成</view>
+        <view class="together_num">还差{{personalList[0].distanceNum}}人成团</view>
         <count-down
           time="{{ personalList[0].distancetime }}"
           isFull
@@ -457,7 +510,7 @@
           data-data="{{personalList[0]}}"
           class="together_btn"
           bindtap="onOpenTogether"
-        >去拼单<view class="right_arrow"/></view>
+        >{{personalList[0].groupJoined?'去邀请':'去参团'}}<view class="right_arrow"/></view>
       </view>
       <view class="flex_middle together_order_btn">
         <view
@@ -465,7 +518,7 @@
           data-type="alone"
           bindtap="onToCreate"
         >
-          <view class="mar_price">￥{{tools.priceToF2(good.goodsSaleMinPrice)}}</view>
+          <view class="mar_price">￥{{tools.priceToF2(good.goodsSaleMinPrice || 0, false)}}</view>
           <view class="mar_price">单独购买</view>
         </view>
         <view
@@ -473,8 +526,8 @@
           data-data="{{personalList[0]}}"
           bindtap="onPushTogether"
         >
-          <view class="mar_price">￥{{tools.priceToF2(good.activityPrice)}}</view>
-          <view class="mar_price" >发起拼单</view>
+          <view class="mar_price">￥{{tools.priceToF2(good.activityPrice || 0, false)}}</view>
+          <view class="mar_price" >我要开团</view>
         </view>
       </view>
     </view>

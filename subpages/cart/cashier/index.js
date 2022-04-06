@@ -47,6 +47,7 @@ Page({
       isShow: 0
     },
     showSharePopup: false,
+    groupInfo: null,
   },
 
   onLoad(options) {
@@ -104,10 +105,30 @@ Page({
     });
     if(options.orderType == 3 && options.orderType == 4) {
       this.getHotGood();
+      this.getPosterDetail()
     }
     app.trackEvent('shopping_cashier');
   },
-
+  // 获取单约详情
+  getPosterDetail() {
+    const {
+      objectId,
+      groupId,
+      spuId,
+      skuId,
+    } = this.orderInfo;
+    goodApi.getPosterDetail({
+      activityType: 3,
+      groupId:objectId,
+      objectId,
+    }).then(res => {
+      const groupInfo = res;
+      groupInfo.distancetime *= 1000;
+      this.setData({
+        groupInfo,
+      });
+    });
+  },
   /**
    * 获取支付信息
    * isNotPayment boolean 是否是模拟支付

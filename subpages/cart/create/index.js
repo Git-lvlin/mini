@@ -61,6 +61,7 @@ create.Page(store, {
   },
 
   onLoad(options) {
+    console.log('确认订单-options', options)
     let { systemInfo } = this.data.$;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
     let orderType = options.orderType || 1;
@@ -211,10 +212,12 @@ create.Page(store, {
     }  else if(this.orderType == 3) {
       // 单约
       let data = wx.getStorageSync("CREATE_INTENSIVE");
+      console.log('data', data)
       postData = {
         ...postData,
         ...data,
       };
+
       this.setData({
         storeActivityGood: data
       })
@@ -238,6 +241,8 @@ create.Page(store, {
     if(this.changeStoreData.length) {
       postData.storeGoodsInfos = this.changeStoreData;
     }
+    console.log('postData', postData)
+
     cartApi.getConfirmInfo(postData).then(res => {
       let orderInfo = res;
       let skuNum = 1;

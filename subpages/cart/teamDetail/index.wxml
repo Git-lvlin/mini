@@ -9,14 +9,14 @@
           height="240rpx"
           fit="cover"
           custom-class="cover"
-          src="{{good.imageUrlList[0]}}"
+          src="{{good.imageUrl}}"
         />
       </view>
       <view class="good_info">
         <view class="text_two_line title">{{good.goodsName}}</view>
         <view class="desc">{{good.goodsDesc}}</view>
         <view class="flex_middle">
-          <view class="price_text">单约价</view>
+          <view class="price_text">拼团价</view>
           <price-mobel
             money="{{good.activityPrice}}"
             marketMoney="{{good.marketPrice}}"
@@ -33,7 +33,7 @@
         isFull
       />
     </view>
-    <view class="time_text text_center" wx:if="{{groupInfo.groupState == 1}}">该单约已成功，您可重新发起！</view>
+    <view class="time_text text_center" wx:if="{{groupInfo.groupState == 1}}">该商品已拼团成功，您可重新发起！</view>
     <view class="time_end" wx:if="{{groupInfo.groupState == 3}}">该单约未能按时凑齐人数，或已过单约有效期，单约失败。您可以发起单约或者查看更多单约商品。</view>
     <view class="user_list" wx:if="{{groupInfo.groupState != 0}}">
       <together-user
@@ -42,9 +42,12 @@
         distanceNum="{{groupInfo.distanceNum}}"
       />
     </view>
-    <view class="btn" wx:if="{{groupInfo.groupState == 2}}" bindtap="onToCreate">立即参团</view>
-    <view class="btn" wx:if="{{groupInfo.groupState == 1}}" bindtap="onPushTogether">我也要单约</view>
-    <view class="btn" wx:if="{{groupInfo.groupState == 3}}" bindtap="onPushTogether">发起单约</view>
+    <view class="btn" wx:if="{{groupInfo.grouJoined == 1 && groupInfo.groupState == 2}}" bindtap="onShareAppMessage">去邀请</view>
+    <block wx:else>
+      <view class="btn" wx:if="{{groupInfo.groupState == 2}}" bindtap="onToCreate">立即参团</view>
+      <view class="btn" wx:if="{{groupInfo.groupState == 1}}" bindtap="onPushTogether">我也要开团</view>
+      <view class="btn" wx:if="{{groupInfo.groupState == 3}}" bindtap="onPushTogether">发起单约</view>
+    </block>
   </view>
 
   <hot-good
@@ -53,4 +56,13 @@
     priceTitle="单约价"
     list="{{hotGood}}"
   />
+  <!-- 分享图片 -->
+  <view class="canvas_box">
+    <canvas
+      class="share_canvas"
+      id="shareCanvas"
+      canvas-id="shareCanvas"
+      style="width: 436rpx;height: 348rpx;"
+    />
+  </view>
 </view>

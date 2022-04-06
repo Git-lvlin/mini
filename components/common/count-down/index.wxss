@@ -7,12 +7,12 @@
   font-size: 28rpx;
   line-height: 48rpx;
   text-align: center;
-  background-color: #d7291d;
+  background-color: #FF0000;
   border-radius: 8rpx;
 }
 
 .timer_util {
   font-weight: bolder;
-  color: #d7291d;
+  color: #FF0000;
   padding: 0 4rpx;
 }

@@ -4,7 +4,7 @@ Page({
   optionsInfo: {},
 
   data: {
-    // link: "https://publicmobile-uat.yeahgo.com/web/user-appointment",
+    // link: "https://publicmobile-dev.yeahgo.com/web/user-appointment",
     link: "",
   },
 
@@ -13,7 +13,7 @@ Page({
       router.go();
       return;
     }
-    const link = decodeURIComponent(options.url);
+    const link = options.url.includes('%')?decodeURIComponent(options.url):options.url;
     this.setData({
       link,
     });

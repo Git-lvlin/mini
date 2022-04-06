@@ -132,6 +132,7 @@ const Reqeust = (params) => {
         reject(error);
       },
       complete(res) {
+        console.log('complete', !!params.hasBase ? params.url : baseUrl + params.url, res)
       },
     })
   })

@@ -52,7 +52,7 @@
 }
 
 .red {
-  color: #EB0000;
+  color: #FF0000;
 }
 
 .last_time {
@@ -75,7 +75,7 @@
   color: #fff;
   font-size: 28rpx;
   margin-left: auto;
-  background-color: #d7291d;
+  background-color: #FF0000;
   border-radius: 8rpx;
 }
 

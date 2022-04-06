@@ -1,7 +1,17 @@
 page {
   background-color: #f5f5f5;
 }
-
+.canvas_box {
+  position: relative;
+}
+.share_canvas {
+  position: fixed;
+  /* left: 50%; */
+  left: -200%;
+  /* top: -50%; */
+  /* z-index: 9; */
+  /* transform: translate(-50%, -50%); */
+}
 .team_detail {
   padding: 42rpx 24rpx 48rpx 24rpx;
   margin-bottom: 72rpx;
@@ -85,6 +95,6 @@ page {
   line-height: 96rpx;
   text-align: center;
   margin: 0 auto;
-  background-color: #d7291d;
+  background-color: #FF0000;
   border-radius: 48rpx;
 }

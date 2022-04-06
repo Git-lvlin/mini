@@ -18,5 +18,5 @@
       <count-down time="{{ data.distancetime }}" />
     </view>
   </view> 
-  <view class="btn" bindtap="onToTogether">去拼单<view class="right_arrow"/></view>
+  <view class="btn" bindtap="onToTogether">{{data.groupJoined?'去邀请':'去参团'}}<view class="right_arrow"/></view>
 </view>
