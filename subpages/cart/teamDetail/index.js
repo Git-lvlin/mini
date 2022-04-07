@@ -228,6 +228,7 @@ create.Page(store, {
   onToCreate() {
     const {
       groupInfo,
+      good,
     } = this.data;
     const {
       spuId,
@@ -272,6 +273,7 @@ create.Page(store, {
   onToCreateNew(gId) {
     console.log('gId', gId)
     const {
+      good,
       groupInfo,
     } = this.data;
     const { objectId } = this.goodParams;
