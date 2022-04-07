@@ -271,6 +271,7 @@ Page({
   onToCreateNew(gId) {
     console.log('gId', gId)
     const {
+      good,
       groupInfo,
     } = this.data;
     const { objectId } = this.goodParams;
@@ -288,7 +289,7 @@ Page({
     let data = {
       orderType,
       storeGoodsInfos: [{
-        storeNo: curGoods.storeNo,
+        storeNo: good.storeNo,
         goodsInfos: [{
           spuId,
           skuId,
