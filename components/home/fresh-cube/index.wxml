@@ -1,7 +1,7 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
 <view class="fresh">
-  <view class="fresh_one" wx:if="{{cent}}">
+  <view class="fresh_one" wx:if="{{cent.fresh&&cent.fresh.list.length}}">
     <view class="title">
       <view class="title_text">
         <view class="title_big">1分钱领生鲜</view>
@@ -26,7 +26,7 @@
       <view class="one_btn">立即抢购</view>
     </view>
   </view>
-  <view class="fresh_two" wx:if="{{spec}}">
+  <view class="fresh_two" wx:if="{{spec.fresh&&spec.fresh.list.length}}">
     <view class="title">
       <view class="title_text offer_color">
         <view class="title_big">今日特价生鲜</view>

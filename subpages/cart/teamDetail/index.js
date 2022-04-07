@@ -1,12 +1,14 @@
 import commonApi from '../../../apis/common';
+import create from '../../../utils/create'
 import goodApi from '../../../apis/good';
+import store from '../../../store/good'
 import homeApi from '../../../apis/home';
 import router from '../../../utils/router';
 import util from '../../../utils/util';
 import { objToParamStr, getStorageUserInfo } from '../../../utils/tools';
 const shareBack = '../../../images/good/good_share_back.png'
 const shareBtn = '../../../images/good/good_share_btn.png'
-Page({
+create.Page(store, {
   goodParams: {},
   hotGoodPage: {
     hasNext: false,
@@ -231,7 +233,7 @@ Page({
       spuId,
       skuId,
       groupId,
-      curGoods,
+      storeNo,
     } = groupInfo;
     const {
       activityId,
@@ -241,7 +243,7 @@ Page({
     let data = {
       orderType,
       storeGoodsInfos: [{
-        storeNo: curGoods.storeNo,
+        storeNo: storeNo,
         goodsInfos: [{
           spuId,
           skuId,
@@ -277,7 +279,7 @@ Page({
       spuId,
       skuId,
       groupId,
-      curGoods,
+      storeNo,
     } = groupInfo;
     const {
       activityId,
@@ -287,7 +289,7 @@ Page({
     let data = {
       orderType,
       storeGoodsInfos: [{
-        storeNo: curGoods.storeNo,
+        storeNo: storeNo,
         goodsInfos: [{
           spuId,
           skuId,
