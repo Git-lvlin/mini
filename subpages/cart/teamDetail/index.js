@@ -226,6 +226,7 @@ Page({
   onToCreate() {
     const {
       groupInfo,
+      good,
     } = this.data;
     const {
       spuId,
@@ -241,7 +242,7 @@ Page({
     let data = {
       orderType,
       storeGoodsInfos: [{
-        storeNo: curGoods.storeNo,
+        storeNo: good.storeNo,
         goodsInfos: [{
           spuId,
           skuId,
