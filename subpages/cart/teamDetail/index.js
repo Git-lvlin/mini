@@ -6,8 +6,11 @@ import homeApi from '../../../apis/home';
 import router from '../../../utils/router';
 import util from '../../../utils/util';
 import { objToParamStr, getStorageUserInfo } from '../../../utils/tools';
+import { H5_HOST } from '../../../constants/common'
+import { CODE_SCENE } from '../../../constants/index'
 const shareBack = '../../../images/good/good_share_back.png'
-const shareBtn = '../../../images/good/good_share_btn.png'
+const shareBtn = '../../../images/good/good_share_btn_new.png'
+const app = getApp();
 create.Page(store, {
   goodParams: {},
   hotGoodPage: {
@@ -21,24 +24,36 @@ create.Page(store, {
     good: {},
     hotGood: [],
     groupInfo: {},
+    isNull: false,
   },
 
   onLoad(options) {
-    this.goodParams = options;
     console.log('options', options)
+    this.goodParams = options;
     this.getPersonalDetail();
     this.getTeamDetail();
     this.getHotGood();
-    const a = objToParamStr(options);
+    // const a = objToParamStr(options);
   },
 
   onReachBottom() {
-    const {
-      hasNext
-    } = this.hotGoodPage;
-    if(!this.loading && hasNext) {
-      this.getHotGood();
-    }
+    // const {
+    //   hasNext
+    // } = this.hotGoodPage;
+    // if(!this.loading && hasNext) {
+    //   this.getHotGood();
+    // }
+  },
+
+  // 解析分享配置
+  getShareParam(data) {
+    commonApis.getShareParam({
+      scene: data.scene,
+    }).then(res => {
+      console.log('解析分享配置res', res)
+      // const param = res;
+      // this.setData(param)
+    })
   },
 
   getTeamDetail() {
@@ -60,13 +75,21 @@ create.Page(store, {
       good,
     } = this.data;
     const pathParam = objToParamStr(this.goodParams);
+    console.log('pathParam', pathParam)
     return {
       title: good.goodsName,
       path: `/subpages/cart/teamDetail/index?${pathParam}`,
       imageUrl: this.canvasImg || '',
     };
   },
-
+  // 跳转拼团规则
+  onOpenRule() {
+    const {activityId, spuId, skuId} = this.goodParams;
+    const str = `/web/group-rule?activityId=${activityId}&spuId=${spuId}&skuId=${skuId}`;
+    const url = H5_HOST + str;
+    console.log('url', url)
+    router.getUrlRoute(url);
+  },
 
   // 绘制分享图片
   downShareImg() {
@@ -105,21 +128,21 @@ create.Page(store, {
     // ctx.setFillStyle('#f5f5f5')
     // ctx.fillRect(0, 0, 250, 200)
     ctx.drawImage(shareBack, 0, 0, 218, 174);
-    ctx.drawImage(shareBtn,  131, 132, 11, 23);
+    // ctx.drawImage(shareBtn,  131, 132, 11, 23);
     this.handleBorderRect(ctx, 10, 43, 120, 120, 8, tmpImg);
     ctx.setTextAlign('center')
     ctx.setFillStyle('#FF0000')
 
     ctx.setFontSize(17)
-    ctx.fillText(salePrice, 171, 50)
+    ctx.fillText(salePrice, 171, 70)
     ctx.setFillStyle('#999999')
 
     ctx.setFontSize(14)
-    ctx.fillText(marketPrice, 171, 72)
+    ctx.fillText(marketPrice, 171, 92)
     ctx.setStrokeStyle('#999999')
 
     ctx.setFontSize(14)
-    ctx.fillText(text, 171, 98)
+    ctx.fillText(text, 171, 118)
     ctx.setStrokeStyle('#666666')
 
     ctx.beginPath();
@@ -128,9 +151,7 @@ create.Page(store, {
     ctx.closePath();
     ctx.stroke()
     // ctx.strokeRect(171-(textWidth/2), 87, textWidth, 0)
-    console.log('draw')
     ctx.draw(true, () => {
-      console.log('draw2')
       wx.canvasToTempFilePath({
         // destWidth: 436,
         // destHeight: 348,
@@ -187,6 +208,10 @@ create.Page(store, {
       good.activityPrice = util.divide(good.activityPrice, 100);
       this.setData({
         good,
+      }, () => {
+        if (this.data.good&&!this.data.good.imageUrl) {
+          this.setData({isNull: true})
+        }
       });
     });
   },
@@ -194,36 +219,32 @@ create.Page(store, {
   // 获取热销商品
   getHotGood() {
     if(this.loading) return;
-    const {
-      next,
-      size,
-    } = this.hotGoodPage;
-    let {
-      hotGood,
-    } = this.data;
     this.loading = true;
-    const postData = {
-      size,
-    };
-    if(!!next) {
-      postData.next = next;
-    }
-    homeApi.getHotGood(postData).then(res => {
-      this.hotGoodPage.hasNext = res.hasNext;
-      this.hotGoodPage.next = res.next;
-      const list = res.records;
-      if(next > 1) {
-        hotGood = hotGood.concat(list);
-      } else {
-        hotGood = list;
-      }
+    homeApi.getMoreList({page:1,size:100}).then(res => {
+      console.log('getMoreListres',res)
       this.setData({
-        hotGood,
+        hotGood: res.records,
       });
       this.loading = false;
     });
   },
-
+  onToDetail(e) {
+    const {spuId, skuId, activityId, objectId, orderType} = e.currentTarget.dataset.data
+    let params = {
+      spuId: spuId,
+      skuId: skuId,
+      activityId: activityId || 0,
+      objectId: objectId || 0,
+    };
+    if(!!orderType) params.orderType = orderType;
+    router.push({
+      name: "detail",
+      data: params
+    })
+  },
+  onHome() {
+    router.goTabbar();
+  },
   // 跳转下单
   onToCreate() {
     const {
@@ -234,7 +255,6 @@ create.Page(store, {
       spuId,
       skuId,
       groupId,
-      storeNo,
     } = groupInfo;
     const {
       activityId,
@@ -244,11 +264,11 @@ create.Page(store, {
     let data = {
       orderType,
       storeGoodsInfos: [{
-        storeNo: storeNo,
+        storeNo: good.storeNo,
         goodsInfos: [{
           spuId,
           skuId,
-          skuNum: 1,
+          skuNum: good.buyMinNum,
           orderType,
           activityId,
           objectId,
@@ -259,6 +279,13 @@ create.Page(store, {
     data.objectId = objectId;
     data.groupId = groupId;
     wx.setStorageSync("CREATE_INTENSIVE", data);
+    const token = wx.getStorageSync("ACCESS_TOKEN") || '';
+    if (!token) {
+      router.push({
+        name: "mobile"
+      })
+      return
+    }
     router.push({
       name: "createOrder",
       data: {
@@ -272,30 +299,28 @@ create.Page(store, {
   // 跳转下单
   onToCreateNew(gId) {
     console.log('gId', gId)
+    let objectIdNew = gId;
     const {
       good,
       groupInfo,
     } = this.data;
-    const { objectId } = this.goodParams;
     const {
       spuId,
       skuId,
       groupId,
-      storeNo,
     } = groupInfo;
     const {
       activityId,
       orderType,
     } = this.goodParams;
-    let objectIdNew = !!gId ? gId : objectId;
     let data = {
       orderType,
       storeGoodsInfos: [{
-        storeNo: storeNo,
+        storeNo: good.storeNo,
         goodsInfos: [{
           spuId,
           skuId,
-          skuNum: 1,
+          skuNum: good.buyMinNum,
           orderType,
           activityId,
           objectId: objectIdNew,
@@ -306,6 +331,13 @@ create.Page(store, {
     data.objectId = objectIdNew;
     data.groupId = !!gId ? gId : groupId;
     wx.setStorageSync("CREATE_INTENSIVE", data);
+    const token = wx.getStorageSync("ACCESS_TOKEN") || '';
+    if (!token) {
+      router.push({
+        name: "mobile"
+      })
+      return
+    }
     router.push({
       name: "createOrder",
       data: {
@@ -314,6 +346,21 @@ create.Page(store, {
         objectId: objectIdNew,
       }
     });
+  },
+
+  toGoodsDetail() {
+    const {spuId, skuId, activityId, objectId} = this.goodParams
+    let params = {
+      spuId: spuId,
+      skuId: skuId,
+      activityId: activityId || 0,
+      objectId: objectId || 0,
+      orderType: 3
+    };
+    router.push({
+      name: "detail",
+      data: params
+    })
   },
 
   // 发起拼单

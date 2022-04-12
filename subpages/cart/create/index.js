@@ -212,12 +212,10 @@ create.Page(store, {
     }  else if(this.orderType == 3) {
       // 单约
       let data = wx.getStorageSync("CREATE_INTENSIVE");
-      console.log('data', data)
       postData = {
         ...postData,
         ...data,
       };
-
       this.setData({
         storeActivityGood: data
       })
@@ -756,6 +754,7 @@ create.Page(store, {
       postData = this.getStoreGood();
     }
     if(!postData || !postData.deliveryInfo) return;
+    console.log('确认订单前传参', postData)
     cartApi.createOrder(postData).then(res => {
       res.orderType = this.orderType;
       this.orderId = res.id;

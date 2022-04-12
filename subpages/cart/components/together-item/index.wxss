@@ -57,6 +57,7 @@
 
 .last_time {
   display: flex;
+  justify-content: center;
   align-items: center;
   color: #666666;
   width: 176rpx;

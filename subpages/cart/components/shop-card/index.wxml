@@ -57,7 +57,7 @@
     </view>
   </view>
 
-  <view class="total_price">
+  <!-- <view class="total_price">
     <view class="txt">小计：</view>
     <price-mobel
       money="{{data.totalAmount}}"
@@ -65,9 +65,9 @@
       max-size="{{28}}"
       bold="{{600}}"
     />
-    <!-- <view class="text">￥{{tools.getPriceSplit(data.totalAmount)}}<text class="min_price">{{tools.getPriceSplit(data.totalAmount, 1)}}</text></view> -->
-    <!-- <view class="freight">(运费：￥{{data.shippingFeeAmount}})</view> -->
-  </view>
+    <view class="text">￥{{tools.getPriceSplit(data.totalAmount)}}<text class="min_price">{{tools.getPriceSplit(data.totalAmount, 1)}}</text></view>
+    <view class="freight">(运费：￥{{data.shippingFeeAmount}})</view>
+  </view> -->
 
   <van-toast id="van-toast" />
 </view>

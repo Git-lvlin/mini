@@ -41,6 +41,7 @@ export const CODE_SCENE = {
   1048: true,
   // 扫描手机相册中选取的小程序码
   1049: true,
+  1007: true,
 }
 
 

@@ -4,7 +4,17 @@
   flex-direction: column;
   min-height: 100vh;
 }
-
+.canvas_box {
+  position: relative;
+}
+.share_canvas {
+  position: fixed;
+  /* left: 50%; */
+  left: -200%;
+  /* top: -50%; */
+  /* z-index: 9; */
+  /* transform: translate(-50%, -50%); */
+}
 .nav_back {
   flex-grow: 0;
   flex-shrink: 0;
@@ -282,3 +292,57 @@
   text-align: center;
   margin-top: 24rpx;
 }
+
+
+
+.collage_popup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 654rpx;
+  height: 558rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+}
+.collage_text {
+  /* margin-top: 24rpx; */
+  margin-bottom: 24rpx;
+  width: 280rpx;
+  height: 100rpx;
+  font-size: 36rpx;
+  color: #000000;
+  line-height: 50rpx;
+}
+
+.red {
+  color: #FF0000;
+}
+.collage_share_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 42rpx;
+  width: 486rpx;
+  height: 82rpx;
+  border-radius: 32rpx;
+  background-color: #FF0000;
+  text-align: center;
+  line-height: 82rpx;
+  color: #ffffff;
+  font-size: 32rpx;
+}
+.collage_time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.time_left {
+  margin-right: 6rpx;
+  color: #666666;
+  font-size: 36rpx;
+}
+
+
+
+

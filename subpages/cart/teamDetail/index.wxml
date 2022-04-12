@@ -1,8 +1,13 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
 <view class="container">
-  <view class="team_detail">
-    <view class="flex_middle good_content">
+  <view class="null-box" wx:if="{{isNull}}">
+    <image class="null-img" src="{{tools.getImgUrl('miniprogram/common/icon/null.png')}}" />
+    <view class="null-text">该商品已下架，去看看其它商品吧~</view>
+    <view class="null-btn" bindtap="onHome">去逛逛吧</view>
+  </view>
+  <view class="team_detail" wx:else>
+    <view class="flex_middle good_content" bindtap="toGoodsDetail">
       <view class="cover">
         <van-image
           width="240rpx"
@@ -11,10 +16,23 @@
           custom-class="cover"
           src="{{good.imageUrl}}"
         />
+        <van-image
+          wx:if="{{good.memberType && good.memberType == 1}}"
+          class="new_team"
+          width="48rpx"
+          height="86rpx"
+          fit="cover"
+          custom-class="cover"
+          src="{{tools.getImgUrl('miniprogram/common/icon/new-team.png')}}"
+        />
       </view>
       <view class="good_info">
         <view class="text_two_line title">{{good.goodsName}}</view>
         <view class="desc">{{good.goodsDesc}}</view>
+        <view class="goods_tag" wx:if="{{good.memberTypeStr}}">
+          <image class="goods_tag_icon" src="{{tools.getImgUrl('miniprogram/common/icon/goods-tag-hot.png')}}" />
+          <view class="goods_tag_test">{{good.memberTypeStr}}</view>
+        </view>
         <view class="flex_middle">
           <view class="price_text">拼团价</view>
           <price-mobel
@@ -34,7 +52,7 @@
       />
     </view>
     <view class="time_text text_center" wx:if="{{groupInfo.groupState == 1}}">该商品已拼团成功，您可重新发起！</view>
-    <view class="time_end" wx:if="{{groupInfo.groupState == 3}}">该单约未能按时凑齐人数，或已过单约有效期，单约失败。您可以发起单约或者查看更多单约商品。</view>
+    <view class="time_end" wx:if="{{groupInfo.groupState == 3}}">该团未能按时凑齐人数，或已过拼团有效期，拼团失败。您可以发起拼团或者查看更多拼团商品。</view>
     <view class="user_list" wx:if="{{groupInfo.groupState != 0}}">
       <together-user
         title="团长"
@@ -46,16 +64,39 @@
     <block wx:else>
       <view class="btn" wx:if="{{groupInfo.groupState == 2}}" bindtap="onToCreate">立即参团</view>
       <view class="btn" wx:if="{{groupInfo.groupState == 1}}" bindtap="onPushTogether">我也要开团</view>
-      <view class="btn" wx:if="{{groupInfo.groupState == 3}}" bindtap="onPushTogether">发起单约</view>
+      <view class="btn" wx:if="{{groupInfo.groupState == 3}}" bindtap="onPushTogether">发起拼团</view>
     </block>
+    <view class="rule" bindtap="onOpenRule">
+      <view class="one">
+        <view class="t1">拼团规则</view>
+        <view class="t2">开团或参团，人满发货，人不满退款</view>
+      </view>
+      <image class="rule_icon" src="{{tools.getImgUrl('miniprogram/common/back_gray%402x.png')}}" />
+    </view>
   </view>
-
-  <hot-good
-    icon="{{tools.getImgUrl('miniprogram/common/bag.png')}}"
-    title="更多单约"
-    priceTitle="单约价"
-    list="{{hotGood}}"
-  />
+  <view>
+    <view class="list-title">
+      <view class="hot_head_line left_line" />
+      <image class="title-icon" src="{{tools.getImgUrl('miniprogram/common/bag.png')}}" />
+      <view class="title-text">更多拼团</view>
+      <view class="hot_head_line right_line" />
+    </view>
+    <view class="list-box">
+      <block wx:for="{{hotGood}}" wx:key="index">
+        <view class="list-item" data-data="{{item}}" bindtap="onToDetail">
+          <image class="list-img" src="{{item.imageUrl}}" />
+          <view class="list-item-name text_one_line">{{item.goodsName}}</view>
+          <view class="list-item-ed">{{item.goodsSaleNumStr}}{{item.unit}}</view>
+          <view class="list-item-price">
+            <view class="p-text">拼团价</view>
+            <view class="price1">¥</view>
+            <view class="price2">{{item.activityPrice/100}}</view>
+            <view class="price3">¥{{item.salePrice/100}}</view>
+          </view>
+        </view>
+      </block>
+    </view>
+  </view>
   <!-- 分享图片 -->
   <view class="canvas_box">
     <canvas

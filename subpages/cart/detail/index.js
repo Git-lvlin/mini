@@ -1058,9 +1058,11 @@ create.Page(store, {
   },
 
   // 跳转确认订单
-  onToCreate() {
-    console.log('this.data.userInfo', this.data.userInfo)
-    console.log('this.goodParams', this.goodParams)
+  onToCreate(e) {
+    let outData = {}
+    if (e && e.detail) {
+      outData = e.detail
+    }
     if(!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
@@ -1110,10 +1112,23 @@ create.Page(store, {
       }]
     };
     // 活动购买
-    if(orderType == 3) {
-      // data.objectId = currentSku.groupId;
-      // objectId = currentSku.groupId;
-      wx.setStorageSync("CREATE_INTENSIVE", data);
+    if(orderType == 3 && outData.groupId) {
+      let params = {
+        storeGoodsInfos: [{
+          storeNo: good.storeNo,
+          goodsInfos: [{
+            spuId: spuId ? spuId : good.id,
+            skuId: skuId ? skuId : currentSku.skuId,
+            activityId: activityId || good.activityId || '',
+            objectId: outData.groupId,
+            orderType,
+            skuNum,
+            groupId: outData.groupId,
+            goodsFromType: good.goodsFromType,
+          }]
+        }]
+      };
+      wx.setStorageSync("CREATE_INTENSIVE", params);
     }
     if(orderType == 15 || orderType == 16) {
       data.storeAdress = storeInfo.storeAddress;
@@ -1127,7 +1142,6 @@ create.Page(store, {
       activityId: !!activityId ? activityId : "",
       objectId: !!objectId ? objectId : this.goodParams.objectId,
     }
-    console.log('111', p )
     router.push({
       name: "createOrder",
       data: p
@@ -1213,9 +1227,10 @@ create.Page(store, {
     }).then(res => {
       this.onToCreate({
         detail: {
-          groupId: res.groupId,
-        },
+          groupId:res.groupId
+        }
       });
+      
     });
   },
 

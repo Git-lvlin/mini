@@ -14,7 +14,7 @@
       还差<text class="red">{{data.distanceNum}}人</text>{{type === 'def' ? '成团' : ''}}
     </view>
     <view class="last_time">
-      剩余
+      <view>剩余</view>
       <count-down time="{{ data.distancetime }}" />
     </view>
   </view> 
