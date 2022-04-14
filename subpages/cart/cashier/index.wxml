@@ -106,8 +106,9 @@
   />
 
   <van-popup
-    show="{{ showPopupIsPT }}"
+    show="{{showPopupIsPT}}"
     closeable
+    bind:close="closePopup"
     custom-style="background: transparent"
   >
     <view class="collage_popup">
@@ -118,9 +119,13 @@
           distanceNum="{{groupInfo.distanceNum}}"
         />
       </view>
-      <view class="collage_text">还差<text class="red">{{groupInfo.distanceNum}}</text>人拼团成功 邀请好友参团吧</view>
+      <view class="collage_text" wx:if="{{groupInfo.groupState == 2}}">还差<text class="red">{{groupInfo.distanceNum}}</text>人拼团成功 邀请好友参团吧</view>
+      <view class="collage_text" wx:else>
+        <view class="p1">恭喜你拼团成功</view>
+        <view class="p2">邀请好友体验拼团吧!</view>
+      </view>
       <button class="collage_share_btn" open-type="share"><view>邀请好友</view></button>
-      <view class="collage_time">
+      <view class="collage_time" wx:if="{{groupInfo.groupState == 2}}">
         <view class="time_left">时间仅剩</view>
         <count-down
           time="{{groupInfo.distancetime}}"
@@ -159,8 +164,8 @@
   <view class="canvas_box">
     <canvas
       class="share_canvas"
-      id="shareCanvas"
-      canvas-id="shareCanvas"
+      id="shareCanvasc"
+      canvas-id="shareCanvasc"
       style="width: 436rpx;height: 348rpx;"
     />
   </view>

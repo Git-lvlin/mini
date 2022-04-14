@@ -308,8 +308,6 @@
 .collage_text {
   /* margin-top: 24rpx; */
   margin-bottom: 24rpx;
-  width: 280rpx;
-  height: 100rpx;
   font-size: 36rpx;
   color: #000000;
   line-height: 50rpx;
@@ -342,7 +340,9 @@
   color: #666666;
   font-size: 36rpx;
 }
-
-
-
+.p1 {
+  margin: 0 auto;
+  text-align: center;
+  color: #FF0000;
+}
 

@@ -60,9 +60,9 @@
   justify-content: center;
   align-items: center;
   color: #666666;
-  width: 176rpx;
+  /* width: 176rpx; */
   font-size: 28rpx;
-  letter-spacing: 1.17rpx;
+  /* letter-spacing: 1.17rpx; */
   line-height: 40rpx;
   padding-right: 12rpx;
 }

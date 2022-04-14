@@ -1063,6 +1063,10 @@ create.Page(store, {
     if (e && e.detail) {
       outData = e.detail
     }
+    let isActivityCome = false;
+    if (e?.currentTarget?.dataset?.type === 'alone') {
+      isActivityCome = true
+    }
     if(!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
@@ -1096,7 +1100,8 @@ create.Page(store, {
       skuId = currentSku.skuId;
       skuNum = currentSku.skuNum;
     }
-    let isActivityCome = false;
+
+
     let data = {
       storeGoodsInfos: [{
         storeNo: good.storeNo,
@@ -1105,14 +1110,15 @@ create.Page(store, {
           skuId: skuId ? skuId : currentSku.skuId,
           activityId: activityId || good.activityId || '',
           objectId: objectId || good.objectId || '',
-          orderType,
+          orderType: isActivityCome?2:orderType,
           skuNum,
           goodsFromType: good.goodsFromType,
+          isActivityCome: isActivityCome
         }]
       }]
     };
     // 活动购买
-    if(orderType == 3 && outData.groupId) {
+    if(orderType == 3 && outData.groupId && !isActivityCome) {
       let params = {
         storeGoodsInfos: [{
           storeNo: good.storeNo,
@@ -1125,6 +1131,7 @@ create.Page(store, {
             skuNum,
             groupId: outData.groupId,
             goodsFromType: good.goodsFromType,
+            isActivityCome: isActivityCome
           }]
         }]
       };
@@ -1138,9 +1145,10 @@ create.Page(store, {
       wx.setStorageSync("GOOD_LIST", data);
     }
     let p = {
-      orderType,
+      orderType: isActivityCome?2:orderType,
       activityId: !!activityId ? activityId : "",
       objectId: !!objectId ? objectId : this.goodParams.objectId,
+      isActivityCome: isActivityCome,
     }
     router.push({
       name: "createOrder",

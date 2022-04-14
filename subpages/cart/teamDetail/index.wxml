@@ -29,9 +29,9 @@
       <view class="good_info">
         <view class="text_two_line title">{{good.goodsName}}</view>
         <view class="desc">{{good.goodsDesc}}</view>
-        <view class="goods_tag" wx:if="{{good.memberTypeStr}}">
+        <view class="goods_tag" wx:if="{{good.goodsSaleNumStr}}">
           <image class="goods_tag_icon" src="{{tools.getImgUrl('miniprogram/common/icon/goods-tag-hot.png')}}" />
-          <view class="goods_tag_test">{{good.memberTypeStr}}</view>
+          <view class="goods_tag_test">{{good.goodsSaleNumStr}}</view>
         </view>
         <view class="flex_middle">
           <view class="price_text">拼团价</view>

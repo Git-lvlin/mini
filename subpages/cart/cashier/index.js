@@ -3,22 +3,22 @@ import store from '../../../store/index'
 import router from '../../../utils/router'
 import util from '../../../utils/util'
 import goodApi from '../../../apis/good';
-import { getStorageUserInfo, showToast, objToParamStr } from '../../../utils/tools'
+import { objToParamStr } from '../../../utils/tools'
 import { getPayInfo, onOrderPay } from '../../../utils/orderPay'
 import dayjs from '../../../miniprogram_npm/dayjs/index'
 import { IMG_CDN, PAY_TYPE_KEY } from '../../../constants/common'
 import commonApi from '../../../apis/common'
 import cartApi from '../../../apis/order'
 import homeApi from '../../../apis/home'
-const shareBack = '../../../images/good/good_share_back.png'
-const shareBtn = '../../../images/good/good_share_btn.png'
+const shareBack = '../../../images/good/share_bg.png'
+const shareBtn = '../../../images/good/btn.png'
 const defaultList = [
 
 ]
 
 const app = getApp();
-// create.Page(store, {
-Page({
+create.Page(store, {
+// Page({
   canvasImg: '',
   id: "",
   goodPage: {
@@ -115,6 +115,9 @@ Page({
   },
   // 获取海报信息
   getPoster() {
+    const {
+      id,
+    } = this.orderInfo;
     let data = wx.getStorageSync("CREATE_INTENSIVE");
     const goodsInfo = data.storeGoodsInfos[0].goodsInfos[0]
     const {
@@ -127,22 +130,22 @@ Page({
       ...this.orderInfo,
       ...goodsInfo
     }
-    param.orderId = param.orderSn
+    param.orderId = id
     goodApi.getPosterDetail(param).then((res) => {
-      console.log('————————————————————————————', res)
       const groupInfo = res;
       groupInfo.distancetime *= 1000;
       this.setData({
         groupInfo,
       }, () => {
-        console.log('this.....', this.data.groupInfo)
         if (groupInfo.groupState) {
           this.setData({showPopupIsPT: true})
         }
       });
     })
   },
-
+  closePopup() {
+    this.setData({showPopupIsPT: !this.data.showPopupIsPT})
+  },
   // 获取单约详情
   getPosterDetail() {
     let data = wx.getStorageSync("CREATE_INTENSIVE");
@@ -238,7 +241,6 @@ Page({
     if(this.loading) return;
     this.loading = true;
     homeApi.getMoreList({page:1,size:99}).then(res => {
-      console.log('getMoreListres',res)
       this.setData({
         hotGood: res.records,
       });
@@ -350,7 +352,7 @@ Page({
           this.getPoster()
           // this.getPosterDetail()
           this.getPersonalDetail()
-        }, 500)
+        }, 1000)
       }
       return ;
     }
@@ -371,7 +373,7 @@ Page({
           that.getPoster()
           // that.getPosterDetail()
           that.getPersonalDetail()
-        }, 500)
+        }, 1000)
       }
     }).catch(err => {
 
@@ -409,14 +411,22 @@ Page({
   // 分享
   onShareAppMessage() {
     const {
-      good,
-    } = this.data;
-    const pathParam = objToParamStr(this.goodParams);
-    console.log('pathParam', pathParam)
+      id,
+      objectId
+    } = this.orderInfo;
+    let data = wx.getStorageSync("CREATE_INTENSIVE");
+    const goodsInfo = data.storeGoodsInfos[0].goodsInfos[0]
+    let param = {
+      activityType: 3,
+      groupId:objectId,
+      ...this.orderInfo,
+      ...goodsInfo
+    }
+    param.orderId = id
+    const pathParam = objToParamStr(param);
     let pathUrl = `/subpages/cart/teamDetail/index?${pathParam}`
-    console.log('pathUrl', pathUrl)
     return {
-      title: good.goodsName,
+      title: goodsInfo?.goodsName || '',
       path: pathUrl,
       imageUrl: this.canvasImg || '',
     };
@@ -465,7 +475,6 @@ Page({
   },
   // 绘制分享图片
   drawShareImg(tmpImg) {
-    console.log('tmpImg', tmpImg)
     const {
       good,
       groupInfo,
@@ -476,25 +485,27 @@ Page({
     const marketlength = marketPrice.length;
     const textWidth = marketlength * 8;
     const text = `差${groupInfo.distanceNum}人成团`;
-    const ctx = wx.createCanvasContext('shareCanvas');
+    const ctx = wx.createCanvasContext('shareCanvasc');
     // ctx.setFillStyle('#f5f5f5')
     // ctx.fillRect(0, 0, 250, 200)
-    ctx.drawImage(shareBack, 0, 0, 218, 174);
-    ctx.drawImage(shareBtn,  131, 132, 11, 23);
-    this.handleBorderRect(ctx, 10, 43, 120, 120, 8, tmpImg);
+
+    // ctx.drawImage(shareBack, 0, 0, 218, 174);
+    ctx.drawImage(shareBack, 0, 0, 208, 183);
+    ctx.drawImage(shareBtn,  128, 132, 66, 28);
+    this.handleBorderRect(ctx, 10, 50, 110, 110, 8, tmpImg);
     ctx.setTextAlign('center')
     ctx.setFillStyle('#FF0000')
 
     ctx.setFontSize(17)
-    ctx.fillText(salePrice, 171, 50)
+    ctx.fillText(salePrice, 161, 70)
     ctx.setFillStyle('#999999')
 
     ctx.setFontSize(14)
-    ctx.fillText(marketPrice, 171, 72)
+    ctx.fillText(marketPrice, 161, 92)
     ctx.setStrokeStyle('#999999')
 
     ctx.setFontSize(14)
-    ctx.fillText(text, 171, 98)
+    ctx.fillText(text, 161, 118)
     ctx.setStrokeStyle('#666666')
 
     ctx.beginPath();
@@ -503,13 +514,11 @@ Page({
     ctx.closePath();
     ctx.stroke()
     // ctx.strokeRect(171-(textWidth/2), 87, textWidth, 0)
-    console.log('draw')
     ctx.draw(true, () => {
-      console.log('draw2')
       wx.canvasToTempFilePath({
         // destWidth: 436,
         // destHeight: 348,
-        canvasId: 'shareCanvas',
+        canvasId: 'shareCanvasc',
         success(res) {
           console.log('res.tempFilePath', res.tempFilePath)
           that.canvasImg = res.tempFilePath;

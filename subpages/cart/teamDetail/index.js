@@ -1,16 +1,13 @@
-import commonApi from '../../../apis/common';
 import create from '../../../utils/create'
 import goodApi from '../../../apis/good';
 import store from '../../../store/good'
 import homeApi from '../../../apis/home';
 import router from '../../../utils/router';
 import util from '../../../utils/util';
-import { objToParamStr, getStorageUserInfo } from '../../../utils/tools';
+import { objToParamStr } from '../../../utils/tools';
 import { H5_HOST } from '../../../constants/common'
-import { CODE_SCENE } from '../../../constants/index'
-const shareBack = '../../../images/good/good_share_back.png'
-const shareBtn = '../../../images/good/good_share_btn_new.png'
-const app = getApp();
+const shareBack = '../../../images/good/share_bg.png'
+const shareBtn = '../../../images/good/btn.png'
 create.Page(store, {
   goodParams: {},
   hotGoodPage: {
@@ -30,6 +27,8 @@ create.Page(store, {
   onLoad(options) {
     console.log('options', options)
     this.goodParams = options;
+    const {objectId} = options;
+    this.goodParams.groupId = objectId
     this.getPersonalDetail();
     this.getTeamDetail();
     this.getHotGood();
@@ -45,20 +44,8 @@ create.Page(store, {
     // }
   },
 
-  // 解析分享配置
-  getShareParam(data) {
-    commonApis.getShareParam({
-      scene: data.scene,
-    }).then(res => {
-      console.log('解析分享配置res', res)
-      // const param = res;
-      // this.setData(param)
-    })
-  },
-
   getTeamDetail() {
-    goodApi.getTeamDetail({groupId:this.goodParams.objectId,...this.goodParams}).then(res => {
-      console.log('res', res)
+    goodApi.getTeamDetail({...this.goodParams}).then(res => {
       const groupInfo = res;
       groupInfo.distancetime *= 1000;
       this.setData({
@@ -87,7 +74,6 @@ create.Page(store, {
     const {activityId, spuId, skuId} = this.goodParams;
     const str = `/web/group-rule?activityId=${activityId}&spuId=${spuId}&skuId=${skuId}`;
     const url = H5_HOST + str;
-    console.log('url', url)
     router.getUrlRoute(url);
   },
 
@@ -103,7 +89,6 @@ create.Page(store, {
     wx.downloadFile({
       url: img,
       success(result) {
-        console.log("download img", result.tempFilePath)
         that.drawShareImg(result.tempFilePath)
       },
       fail(err) {
@@ -113,7 +98,6 @@ create.Page(store, {
   },
   // 绘制分享图片
   drawShareImg(tmpImg) {
-    console.log('tmpImg', tmpImg)
     const {
       good,
       groupInfo,
@@ -127,22 +111,22 @@ create.Page(store, {
     const ctx = wx.createCanvasContext('shareCanvas');
     // ctx.setFillStyle('#f5f5f5')
     // ctx.fillRect(0, 0, 250, 200)
-    ctx.drawImage(shareBack, 0, 0, 218, 174);
-    // ctx.drawImage(shareBtn,  131, 132, 11, 23);
-    this.handleBorderRect(ctx, 10, 43, 120, 120, 8, tmpImg);
+    ctx.drawImage(shareBack, 0, 0, 208, 183);
+    ctx.drawImage(shareBtn,  128, 132, 66, 28);
+    this.handleBorderRect(ctx, 10, 50, 110, 110, 8, tmpImg);
     ctx.setTextAlign('center')
     ctx.setFillStyle('#FF0000')
 
     ctx.setFontSize(17)
-    ctx.fillText(salePrice, 171, 70)
+    ctx.fillText(salePrice, 161, 70)
     ctx.setFillStyle('#999999')
 
     ctx.setFontSize(14)
-    ctx.fillText(marketPrice, 171, 92)
+    ctx.fillText(marketPrice, 161, 92)
     ctx.setStrokeStyle('#999999')
 
     ctx.setFontSize(14)
-    ctx.fillText(text, 171, 118)
+    ctx.fillText(text, 161, 118)
     ctx.setStrokeStyle('#666666')
 
     ctx.beginPath();
@@ -221,7 +205,6 @@ create.Page(store, {
     if(this.loading) return;
     this.loading = true;
     homeApi.getMoreList({page:1,size:100}).then(res => {
-      console.log('getMoreListres',res)
       this.setData({
         hotGood: res.records,
       });
@@ -229,6 +212,13 @@ create.Page(store, {
     });
   },
   onToDetail(e) {
+    const token = wx.getStorageSync("ACCESS_TOKEN") || '';
+    if (!token) {
+      router.push({
+        name: "mobile"
+      })
+      return
+    }
     const {spuId, skuId, activityId, objectId, orderType} = e.currentTarget.dataset.data
     let params = {
       spuId: spuId,
@@ -237,6 +227,7 @@ create.Page(store, {
       objectId: objectId || 0,
     };
     if(!!orderType) params.orderType = orderType;
+    console.log('更多商品列表跳转前参数', params)
     router.push({
       name: "detail",
       data: params
@@ -298,7 +289,6 @@ create.Page(store, {
 
   // 跳转下单
   onToCreateNew(gId) {
-    console.log('gId', gId)
     let objectIdNew = gId;
     const {
       good,
@@ -349,6 +339,13 @@ create.Page(store, {
   },
 
   toGoodsDetail() {
+    const token = wx.getStorageSync("ACCESS_TOKEN") || '';
+    if (!token) {
+      router.push({
+        name: "mobile"
+      })
+      return
+    }
     const {spuId, skuId, activityId, objectId} = this.goodParams
     let params = {
       spuId: spuId,
@@ -357,6 +354,7 @@ create.Page(store, {
       objectId: objectId || 0,
       orderType: 3
     };
+    console.log('params', params)
     router.push({
       name: "detail",
       data: params
