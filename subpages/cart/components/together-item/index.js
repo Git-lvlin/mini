@@ -29,7 +29,7 @@ Component({
     type: {
       type: String,
       value: "def"
-    }
+    },
   },
 
   data: {
@@ -41,5 +41,9 @@ Component({
       let data = this.data.data;
       this.triggerEvent("toBuy", data);
     },
+    clickShare() {
+      let data = this.data.data;
+      this.triggerEvent("toShare", data);
+    }
   }
 })

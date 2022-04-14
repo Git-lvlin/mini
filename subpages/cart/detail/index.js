@@ -11,7 +11,7 @@ import commonApis from '../../../apis/common'
 const shareBack = '../../../images/good/good_share_back.png'
 const shareBtn = '../../../images/good/good_share_btn.png'
 const defShareText = '约购超值集约！约着买 更便宜~'
-
+const shareBtn_pt = '../../../images/good/btn.png'
 const app = getApp();
 create.Page(store, {
   goodParams: {},
@@ -97,6 +97,8 @@ create.Page(store, {
     // 滚动到某个ID
     scrollToId: '',
     recommendList: [],
+    paramId: 1,
+    indexObjectId: null,
   },
 
   onLoad(options) {
@@ -137,6 +139,7 @@ create.Page(store, {
     let { systemInfo } = this.store.data;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
     this.goodParams = options;
+    console.log('hanldeGoodsParams', this.goodParams)
     let isActivityGood = 1;
     if(!!options.orderType) isActivityGood = options.orderType;
     this.setData({
@@ -170,7 +173,24 @@ create.Page(store, {
       this.getTogetherUser();
     }
   },
-
+  clickShare(e) {
+    console.log('e', e)
+    if (e&&e.detail) {
+      console.log('e.detail',e.detail, e.detail.groupId)
+      this.setData({
+        indexObjectId: e.detail.groupId
+      })
+    }
+  },
+  bottomClickShare(e) {
+    console.log('e', e)
+    if (e&&e.currentTarget) {
+      console.log('indexObjectId',e.currentTarget.dataset.id)
+      this.setData({
+        indexObjectId: e.currentTarget.dataset.id
+      })
+    }
+  },
   // 转发
   onShareAppMessage() {
     const {
@@ -194,10 +214,12 @@ create.Page(store, {
       info.path = "/subpages/cart/teamDetail/index?";
     }
     if(shareInfo && shareInfo.path) {
+      shareInfo.path = shareInfo.path.includes('objectId=0')?shareInfo.path.replace('objectId=0', `objectId=${this.data.indexObjectId}`):shareInfo.path
       info = {
         ...info,
         ...shareInfo
       }
+      console.log('...........s', shareInfo)
       info.title = info.title == defShareText && good && good.goodsName ? good.goodsName : info.title;
       info.imageUrl = info.imageUrl ? info.imageUrl : good.goodsImageUrl;
     } else {
@@ -508,7 +530,7 @@ create.Page(store, {
       shareType: 1,
       contentType: 1,
       shareObjectNo: spuId,
-      paramId: 1,
+      paramId: this.data.paramId,
       shareParams: this.goodParams,
       ext: this.goodParams,
       sourceType: 1,
@@ -531,7 +553,13 @@ create.Page(store, {
       }, () => {
         this.downShareImg();
       })
+      this.setData({
+        paramId: 1
+      })
     }).catch(err => {
+      this.setData({
+        paramId: 1
+      })
       this.downShareImg();
     });
   },
@@ -558,11 +586,60 @@ create.Page(store, {
     });
   },
 
+  // 拼团绘制分享图片
+  drawShareImg_pt(tmpImg) {
+    const {
+      good,
+    } = this.data;
+    const that = this;
+    const salePrice = '¥' + parseFloat(good.goodsSaleMinPrice).toFixed(2);
+    const marketPrice = '¥' + parseFloat(good.goodsMarketPrice).toFixed(2);
+    const marketlength = marketPrice.length;
+    const textWidth = marketlength * 8;
+    const ctx = wx.createCanvasContext('shareCanvas');
+    // ctx.setFillStyle('#f5f5f5')
+    // ctx.fillRect(0, 0, 250, 200)
+    ctx.drawImage(shareBack, 0, 0, 218, 174);
+    ctx.drawImage(shareBtn_pt,  140, 104, 66, 28);
+    this.handleBorderRect(ctx, 10, 43, 120, 120, 8, tmpImg);
+    ctx.setTextAlign('center')
+    ctx.setFillStyle('#DC2D23')
+    ctx.setFontSize(17)
+    ctx.fillText(salePrice, 171, 70)
+    ctx.setFillStyle('#999999')
+    ctx.setFontSize(14)
+    ctx.fillText(marketPrice, 171, 92)
+    ctx.setStrokeStyle('#999999')
+    ctx.beginPath();
+    ctx.moveTo(172-textWidth/2, 87)
+    ctx.lineTo(170+textWidth/2, 87)
+    ctx.closePath();
+    ctx.stroke()
+    // ctx.strokeRect(171-(textWidth/2), 87, textWidth, 0)
+    ctx.draw(true, () => {
+      wx.canvasToTempFilePath({
+        // destWidth: 436,
+        // destHeight: 348,
+        canvasId: 'shareCanvas',
+        success(res) {
+          that.canvasImg = res.tempFilePath;
+        }
+      })
+    });
+  },
+
   // 绘制分享图片
   drawShareImg(tmpImg) {
     const {
       good,
     } = this.data;
+    const {
+      orderType,
+    } = this.goodParams;
+    if (orderType === 3) {
+      this.drawShareImg_pt(tmpImg)
+      return 
+    }
     const that = this;
     const salePrice = '¥' + parseFloat(good.goodsSaleMinPrice).toFixed(2);
     const marketPrice = '¥' + parseFloat(good.goodsMarketPrice).toFixed(2);
