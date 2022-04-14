@@ -51,11 +51,9 @@ create.Component(store, {
       observer(now, old) {
         if(now.isMultiSpec == 1) {
           const skuId = this.data.skuId;
-          debounce(() => {
-            this.getCheckSku({
-              skuId,
-            });
-          }, 200)();
+          this.getCheckSku({
+            skuId,
+          });
         }
       }
     },

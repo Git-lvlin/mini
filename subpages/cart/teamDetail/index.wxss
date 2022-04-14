@@ -296,3 +296,19 @@ page {
   font-size: 28rpx;
   color: #FF0000;
 }
+
+
+.share_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 702rpx;
+  height: 96rpx;
+  color: #ffffff;
+  font-size: 32rpx;
+  line-height: 96rpx;
+  text-align: center;
+  margin: 0 auto;
+  background-color: #FF0000;
+  border-radius: 48rpx;
+}

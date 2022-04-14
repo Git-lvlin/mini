@@ -76,7 +76,7 @@
     </view>
 
     <view class="order_info">
-      <view class="info_item">订单编号：<text class="info_text">{{payData.orderSn}}</text></view>
+      <!-- <view class="info_item">订单编号：<text class="info_text">{{payData.orderSn}}</text></view> -->
       <view class="info_item">下单时间：<text class="info_text">{{orderCreateTime}}</text></view>
       <view class="info_item">支付方式：<text class="info_text">{{'微信支付'}}</text></view>
     </view>

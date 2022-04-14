@@ -60,7 +60,9 @@
         distanceNum="{{groupInfo.distanceNum}}"
       />
     </view>
-    <view class="btn" wx:if="{{groupInfo.grouJoined == 1 && groupInfo.groupState == 2}}" bindtap="onShareAppMessage">去邀请</view>
+    <button class="share_btn" wx:if="{{groupInfo.groupJoined == 1 && groupInfo.groupState == 2}}" open-type="share">
+      <view>邀请好友</view>
+    </button>
     <block wx:else>
       <view class="btn" wx:if="{{groupInfo.groupState == 2}}" bindtap="onToCreate">立即参团</view>
       <view class="btn" wx:if="{{groupInfo.groupState == 1}}" bindtap="onPushTogether">我也要开团</view>

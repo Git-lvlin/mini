@@ -560,6 +560,37 @@
     bind:jump="onToCreate"
   />
 
+  <!-- <van-popup
+    show="{{orderShow}}"
+    position="bottom"
+    closeable
+    bind:close="closeOrderPopup"
+  >
+    <view class="order-popup">
+      <view class="top-box">
+        <view class="title">你有订单占用购买名额</view>
+        <view class="subtitle">请先支付或取消以下订单</view>
+      </view>
+      <view class="content-box">
+        <view class="goods-pic">
+          <image src="{{tools.getImgUrl('miniprogram/common/mini_store.png')}}" />
+        </view>
+        <view class="goods-detail">
+          <view class="goods-name"></view>
+          <view class="goods-spe"></view>
+          <view class="pay-time">
+            <text class="">待支付：¥{{28.80}}</text>
+            <text>剩余</text>
+            <count-down
+              time="{{ personalList[0].distancetime }}"
+              isFull
+            />
+          </view>
+        </view>
+      </view>
+    </view>
+  </van-popup> -->
+
   <!-- 不销售区域 -->
   <van-popup
     show="{{ showAreaPopup }}"

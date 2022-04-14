@@ -25,16 +25,57 @@ create.Page(store, {
   },
 
   onLoad(options) {
-    console.log('options', options)
+    console.log('onLoad-options', options)
+    // if (options) {
+    //   wx.setStorageSync("TEAMDETAIL_OPTIONS", options)
+    // }
+    // this.goodParams = options;
+    // const {objectId} = options;
+    // this.goodParams.groupId = objectId
+    // this.getPersonalDetail();
+    // this.getTeamDetail();
+    // this.getHotGood();
+  },
+  onShow() {
+    let currentPages = getCurrentPages()
+    let indexPage = currentPages[currentPages.length - 1]
+    let options = indexPage.options
+    console.log('onShow-options', options)
+    this.init(options)
+    // // const options = wx.getStorageSync("TEAMDETAIL_OPTIONS") || '';
+    // const token = wx.getStorageSync("ACCESS_TOKEN") || '';
+    // if (!token) {
+    //   this.init(options)
+    // } else {
+    //   const flag = wx.getStorageSync("TEAMDETAIL_FLAG") || ''
+    //   if (!flag) {
+    //     wx.setStorageSync("TEAMDETAIL_FLAG", 1)
+    //     this.reloadThisPage(options)
+    //   } else {
+    //     this.init(options)
+    //   }
+    // }
+  },
+  init(options) {
     this.goodParams = options;
     const {objectId} = options;
     this.goodParams.groupId = objectId
     this.getPersonalDetail();
     this.getTeamDetail();
     this.getHotGood();
-    // const a = objToParamStr(options);
   },
-
+  // reloadThisPage() {
+  //   let currentPages = getCurrentPages()
+  //   let lastRoute = currentPages[currentPages.length - 1].route
+  //   let options = currentPages[currentPages.length - 1].options
+  //   let optionsStr = ""
+  //   for (let key in options) {
+  //     optionsStr += '?' + key + '=' + options[key]
+  //   }
+  //   wx.redirectTo({
+  //     url: '/' + lastRoute + optionsStr,
+  //   })
+  // },
   onReachBottom() {
     // const {
     //   hasNext
