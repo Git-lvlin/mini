@@ -98,7 +98,8 @@ create.Page(store, {
     scrollToId: '',
     recommendList: [],
     paramId: 1,
-    indexObjectId: null,
+    indexObjectId: 0,
+    shareInfo_pt: '',
   },
 
   onLoad(options) {
@@ -192,10 +193,12 @@ create.Page(store, {
     }
   },
   // 转发
-  onShareAppMessage() {
+  onShareAppMessage({from}) {
+    console.log('from', from)
     const {
       good,
       shareInfo,
+      shareInfo_pt
     } = this.data;
     const {
       orderType,
@@ -210,16 +213,24 @@ create.Page(store, {
         console.log(res);
       },
     }
-    if(orderType == 3 || orderType == 4) {
+    if(orderType == 3 && from == 'button') {
       info.path = "/subpages/cart/teamDetail/index?";
     }
-    if(shareInfo && shareInfo.path) {
-      shareInfo.path = shareInfo.path.includes('objectId=0')?shareInfo.path.replace('objectId=0', `objectId=${this.data.indexObjectId}`):shareInfo.path
-      info = {
+    if(shareInfo && shareInfo.path && shareInfo_pt) {
+      console.log('path', shareInfo.path)
+      console.log('indexObjectId', this.data.indexObjectId)
+      if (from == 'button') {
+        shareInfo_pt.path = shareInfo_pt.path.includes('objectId=0') && from == 'button'?shareInfo_pt.path.replace('objectId=0', `objectId=${this.data.indexObjectId}`):shareInfo_pt.path
+      }
+      info = from == 'button'?{
+        ...info,
+        ...shareInfo_pt
+
+      }:{
         ...info,
         ...shareInfo
       }
-      console.log('...........s', shareInfo)
+      console.log('...........shareInfo', shareInfo)
       info.title = info.title == defShareText && good && good.goodsName ? good.goodsName : info.title;
       info.imageUrl = info.imageUrl ? info.imageUrl : good.goodsImageUrl;
     } else {
@@ -231,6 +242,7 @@ create.Page(store, {
     app.trackEvent('share_goods_detail', {
       share_type: 'weixin'
     });
+    console.log('info', info)
     return info;
   },
 
@@ -510,6 +522,7 @@ create.Page(store, {
     this.getGoodRecommend();
     if(!shareInfo || !shareInfo.path) {
       this.getShareInfo();
+      this.getShareInfo_pt()
     }
   },
   
@@ -517,7 +530,7 @@ create.Page(store, {
   getShareInfo() {
     let userInfo = getStorageUserInfo();
     if(!userInfo) {
-      this.downShareImg();
+      this.downShareImg(1);
       return;
     }
     const {
@@ -530,13 +543,10 @@ create.Page(store, {
       shareType: 1,
       contentType: 1,
       shareObjectNo: spuId,
-      paramId: this.data.paramId,
+      paramId: 1,
       shareParams: this.goodParams,
       ext: this.goodParams,
       sourceType: 1,
-    }
-    if(orderType == 3 || orderType == 4) {
-      shareParams.paramId = 3;
     }
     homeApi.getShareInfo(shareParams, {
       showLoading: false,
@@ -551,21 +561,57 @@ create.Page(store, {
       this.setData({
         shareInfo,
       }, () => {
-        this.downShareImg();
-      })
-      this.setData({
-        paramId: 1
+        this.downShareImg(1);
       })
     }).catch(err => {
+      this.downShareImg(1);
+    });
+  },
+
+  // 获取分享参数
+  getShareInfo_pt() {
+    let userInfo = getStorageUserInfo();
+    if(!userInfo) {
+      this.downShareImg(2);
+      return;
+    }
+    const {
+      orderType,
+      spuId,
+      activityId,
+    } = this.goodParams;
+    this.goodParams.activityId = !!activityId ? activityId : 0;
+    const shareParams = {
+      shareType: 1,
+      contentType: 1,
+      shareObjectNo: spuId,
+      paramId: 3,
+      shareParams: this.goodParams,
+      ext: this.goodParams,
+      sourceType: 1,
+    }
+    homeApi.getShareInfo(shareParams, {
+      showLoading: false,
+    }, {
+      showLoading: false,
+    }).then(res => {
+      const shareInfo_pt = {
+      title: res.title || defShareText,
+        path: res.shareUrl,
+        imageUrl: res.thumbData,
+      };
       this.setData({
-        paramId: 1
+        shareInfo_pt,
+      }, () => {
+        this.downShareImg(2);
       })
-      this.downShareImg();
+    }).catch(err => {
+      this.downShareImg(2);
     });
   },
 
   // 绘制分享图片
-  downShareImg() {
+  downShareImg(type) {
     const {
       good,
       shareInfo,
@@ -578,10 +624,10 @@ create.Page(store, {
       url: img,
       success(result) {
         console.log("download img", result.tempFilePath)
-        that.drawShareImg(result.tempFilePath)
+        that.drawShareImg(result.tempFilePath, type)
       },
       fail(err) {
-        that.drawShareImg(tmpImg);
+        that.drawShareImg(tmpImg, type);
       },
     });
   },
@@ -629,14 +675,11 @@ create.Page(store, {
   },
 
   // 绘制分享图片
-  drawShareImg(tmpImg) {
+  drawShareImg(tmpImg, type) {
     const {
       good,
     } = this.data;
-    const {
-      orderType,
-    } = this.goodParams;
-    if (orderType === 3) {
+    if (type === 2) {
       this.drawShareImg_pt(tmpImg)
       return 
     }
