@@ -1,5 +1,4 @@
 // 定义常用常量
-
 const ENV = wx.getStorageSync("SYS_ENV") || 'pro';
 
 // oss 上传域名
@@ -12,7 +11,7 @@ export const ossHost = {
 };
 
 // H5 域名
-const webHost = {
+export const webHost = {
   dev: "https://publicmobile-dev.yeahgo.com",
   uat: "https://publicmobile-uat.yeahgo.com",
   fat: "https://publicmobile-fat.yeahgo.com",
@@ -21,7 +20,9 @@ const webHost = {
 
 // 图片cdn
 export const IMG_CDN = ossHost[ENV] || ossHost['pro'];
-export const H5_HOST = webHost[ENV] || webHost['pro'];
+// export const H5_HOST = webHost[ENV] || webHost['pro'];
+
+export const H5_HOST = webHost[ENV] || webHost['uat'];
 
 // 协议
 const agreementHost = {

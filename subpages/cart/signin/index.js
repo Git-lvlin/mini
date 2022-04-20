@@ -39,7 +39,13 @@ create.Page(store, {
     this.getQueryRecord(true);
     app.trackEvent('mine_sign_in_detail');
   },
-  
+  handleScrollTop() {
+    wx.pageScrollTo({
+      scrollTop: 350,
+      // selector: '.good_content_back',
+      // offsetTop: -200
+    })
+  },
   // 获取签到信息
   getSignInfo(isRevice) {
     let resPopupActType = 1;
@@ -52,7 +58,8 @@ create.Page(store, {
         index < 7 && signList.push({
           value: util.divide(+item + (+extraList[index]), 100),
           hasGife: !!(+extraList[index]),
-          isSign: index < signInfo.signNumber
+          isSign: index < signInfo.signNumber,
+          isToday: signInfo.signNumber + 1 > index && signInfo.signNumber -1 !== index,
         })
       })
       signInfo.signAmount = util.divide(signInfo.signAmount, 100);

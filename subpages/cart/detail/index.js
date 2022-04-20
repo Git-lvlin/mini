@@ -2,7 +2,7 @@ import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
 import homeApi from '../../../apis/home'
-import { IMG_CDN, DETAIL_SERVICE_LIST, H5_HOST } from '../../../constants/common'
+import { IMG_CDN, DETAIL_SERVICE_LIST, H5_HOST, webHost } from '../../../constants/common'
 import { CODE_SCENE } from '../../../constants/index'
 import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj, haveStore, debounce } from '../../../utils/tools'
 import util from '../../../utils/util'
@@ -100,6 +100,7 @@ create.Page(store, {
     paramId: 1,
     indexObjectId: 0,
     shareInfo_pt: '',
+    fiveList: [],
   },
 
   onLoad(options) {
@@ -117,6 +118,7 @@ create.Page(store, {
     }else{
       this.hanldeGoodsParams(options)
     }
+
   },
 
   onShow() {
@@ -372,8 +374,10 @@ create.Page(store, {
         personalList.forEach(item => {
           item.distancetime = item.distancetime * 1000;
         })
+        let list = personalList.filter((item, index) => index<5)
         this.setData({
           personalList,
+          fiveList: list,
           good,
           detailImg,
         }, () => {
@@ -1300,9 +1304,14 @@ create.Page(store, {
 
   // 跳转拼团规则
   onOpenRule() {
+    let ENV = wx.getStorageSync("SYS_ENV");
+    console.log('ENV', ENV)
+    console.log('H5_HOST', H5_HOST)
+    console.log('src', webHost[ENV])
+    let src = webHost[ENV]
     const {activityId, spuId, skuId} = this.data.good;
     const str = `/web/group-rule?activityId=${activityId}&spuId=${spuId}&skuId=${skuId}`;
-    const url = H5_HOST + str;
+    const url = src + str;
     console.log('url', url)
     router.getUrlRoute(url);
     // router.push({
