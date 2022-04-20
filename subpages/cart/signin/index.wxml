@@ -3,14 +3,15 @@
 <image class="sign_back" bindtap="onBack" src="{{tools.getImgUrl('miniprogram/sign/sign-back.png')}}" />
 
 <view class="container">
-  <view class="flex_fix nav_content" style="padding-bottom: {{$.systemInfo.bottomBarHeight}}rpx;background-image: url({{tools.getImgUrl('miniprogram/sign/sign-back.png')}})">
+  <!-- <view class="flex_fix nav_content" style="padding-bottom: {{$.systemInfo.bottomBarHeight}}rpx;background-image: url({{tools.getImgUrl('miniprogram/sign/sign-back.png')}})"> -->
+  <view class="flex_fix nav_content" style="background-image: url({{tools.getImgUrl('miniprogram/sign/sign-back.png')}})">
     <view class="flex_center nav_box" style="height: {{$.systemInfo.navBarHeight}}rpx;padding-top: {{$.systemInfo.statusHeight}}rpx;">
       <image class="nav_back" src="{{tools.getImgUrl('miniprogram/common/back_black%402x.png')}}" bindtap="onBack"/>
       <view class="nav_title">每日签到</view>
     </view>
   </view>
   <view class="flex_fix">
-    <view class="flex_middle red_total">
+    <!-- <view class="flex_middle red_total">
       <image class="flex_fix red_icon" src="{{tools.getImgUrl('miniprogram/sign/red-total-icon.png')}}" />
       <view class="red_total_title">
         我的账户：
@@ -21,7 +22,7 @@
         明细
         <image class="red_right" src="{{tools.getImgUrl('miniprogram/sign/red-total-right.png')}}" />
       </view>
-    </view>
+    </view> -->
 
     <view class="sign_content" wx:if="{{signList.length}}">
       <view class="flex_middle sign_head">
@@ -29,8 +30,9 @@
           <image class="sign_label_title" src="{{tools.getImgUrl('miniprogram/sign/red-label-text.png')}}" />
         </view>
         <view class="rule" bindtap="onOpenRule">
-          <image class="rule_icon" src="{{tools.getImgUrl('miniprogram/common/ask.png')}}" />
-          规则
+          <view class="rule-left" catchtap="onOpenDetailRed">明细</view>
+          <view class="rule-border">｜</view>
+          <view class="rule-right" catchtap="onOpenRule">规则</view>
         </view>
         <!-- <view class="flex_middle sign_remind">
           <button class="remind_btn">
@@ -44,40 +46,59 @@
           <text class="remind_text">签到提醒</text>
         </view> -->
       </view>
+      <view class="money_box">
+        <view class="money_index">{{signInfo.signAmount || 0}}</view>
+        <view class="money_text">元</view>
+        <image class="money_btn" bindtap="handleScrollTop" src="{{tools.getImgUrl('miniprogram/sign/money-btn.png')}}" />
+        <image class="hand_icon" wx:if="{{!!signInfo.todaySigned || !signInfo.signRedRule.status}}" src="{{tools.getImgUrl('miniprogram/sign/hand.png')}}" />
+      </view>
       <view class="sign_box">
-        <view class="flex_middle sign_box_desc">
-          <view class="sign_desc_text">签到7天一个周期，断签重新开始</view>
-          <view class="sign_desc_day">已签到({{signInfo.signNumber}}/7)</view>
-        </view>
+
         <view class="flex_middle sign_day_list">
-          <view
-            class="flex_center day_item {{item.isSign ? 'day_item_act' : ''}}"
-            wx:for="{{signList}}"
-            wx:key="index"
-          >
-            <view class="day_text">{{index + 1}}天</view>
-            <image class="day_icon gife_icon" wx:if="{{!item.isSign && item.hasGife}}" src="{{tools.getImgUrl('miniprogram/sign/sign-gife.png')}}" />
-            <image class="day_icon" wx:if="{{!item.isSign && !item.hasGife}}" src="{{tools.getImgUrl('miniprogram/sign/sign-coin.png')}}" />
-            <image class="day_icon" wx:if="{{item.isSign}}" src="{{tools.getImgUrl('miniprogram/sign/signed.png')}}" />
-            <view class="day_money">{{item.value}}</view>
-            <view class="signed_text">已签到</view>
+          <view class="swiper_box">
+            <view
+              class="flex_center day_item {{item.isSign ? 'day_item_act' : ''}}"
+              wx:for="{{signList}}"
+              wx:key="index"
+            >
+              <view class="day_item_bg">
+                <image class="day_item_bg_img" src="{{item.isSign?tools.getImgUrl('miniprogram/sign/signed-new.png'):tools.getImgUrl('miniprogram/sign/sign-new.png')}}" />
+              </view>
+              <view class="day_num" wx:if="{{!item.isToday && !item.isSign}}">第{{index + 1}}天</view>
+              <view class="day_today" wx:if="{{item.isToday && !item.isSign}}">
+                <image class="day_today_img" src="{{tools.getImgUrl('miniprogram/sign/today.png')}}" />
+                <view class="day_today_text">{{!signInfo.todaySigned && !!signInfo.signRedRule.status?'今日可领':'明日可领'}}</view>>
+              </view>
+              <view class="day_text">{{item.value}}元</view>
+              <image class="day_icon gife_icon" wx:if="{{!item.isSign && item.hasGife}}" src="{{tools.getImgUrl('miniprogram/sign/sign-gife.png')}}" />
+              <image class="day_icon" wx:if="{{!item.isSign && !item.hasGife}}" src="{{tools.getImgUrl('miniprogram/sign/sign-coin.png')}}" />
+              <!-- <image class="day_icon" wx:if="{{item.isSign}}" src="{{tools.getImgUrl('miniprogram/sign/signed.png')}}" /> -->
+              <view clas="day_ed_text" wx:if="{{item.isSign}}">已开</view>
+              <view class="day_money">待领取</view>
+              <view class="signed_text">{{item.value}}元</view>
+            </view>
           </view>
         </view>
-        <view class="sign_btn" wx:if="{{!signInfo.todaySigned && !!signInfo.signRedRule.status}}" bindtap="onSign">立即签到</view>
+        <view class="flex_middle sign_box_desc">
+          <view class="sign_desc_text">签到7天一个周期，断签重新开始。已连续签 <text class="sign_desc_num">{{signInfo.signNumber}}</text> 天</view>
+        </view>
+        <view class="sign_btn gife_icon" wx:if="{{!signInfo.todaySigned && !!signInfo.signRedRule.status}}" bindtap="onSign">立即签到</view>
+        <image class="hand_icon_btn" wx:if="{{!signInfo.todaySigned && !!signInfo.signRedRule.status}}" src="{{tools.getImgUrl('miniprogram/sign/hand.png')}}" />
         <view class="sign_btn sign_btn_def" wx:if="{{!!signInfo.todaySigned || !signInfo.signRedRule.status}}">
-          {{!signInfo.signRedRule.status ? '活动已结束' : '已签到'}}</view>
+          {{!signInfo.signRedRule.status ? '活动已结束' : '今日已签到'}}</view>
       </view>
     </view>
   </view>
 
+  <image class="red_list_title" src="{{tools.getImgUrl('miniprogram/sign/red-title.png')}}" />
   <view class="good_content" wx:if="{{goodList.length}}">
-    <view class="good_content_back">
+    <!-- <view class="good_content_back">
       <image class="good_content_title" src="{{tools.getImgUrl('miniprogram/sign/red-good-title-label.png')}}" />
       <view class="gradual_back" />
-    </view>
-    <view class="good_white_back" />
+    </view> -->
+    <!-- <view class="good_white_back" /> -->
     <view class="good_box">
-      <view class="good_head_height" />
+      <!-- <view class="good_head_height" /> -->
       <view class="good_list">
         <view
           class="flex_middle good_item"
@@ -99,13 +120,13 @@
               </view>
               <view class="market_price">销售价¥{{item.goodsSalePrice}}</view>
             </view>
-            <view class="buy_btn">抢购</view>
           </view>
+          <view class="buy_btn">抢购</view>
         </view>
       </view>
     </view>
   </view>
-
+  <view class="footer_text">没有更多了！</view>
   <van-popup
     show="{{redPopup}}"
     custom-style="background-color: transparent;"

@@ -453,7 +453,7 @@
         <image class="bar_item_icon" src="{{tools.getImgUrl('miniprogram/common/mini_cart.png')}}" />
         <view class="bar_item_name">购物车</view>
       </view> -->
-      <block wx:if="{{isActivityGood != 5 && isActivityGood != 6}}">
+      <block wx:if="{{isActivityGood != 5 && isActivityGood != 6 && isActivityGood != 3}}">
         <view
           class="flex_fix buy_bar_item"
           wx:if="{{isActivityGood == 11}}"
@@ -565,7 +565,7 @@
 
   <!-- 可拼团列表 -->
   <team-popup
-    list="{{personalList}}"
+    list="{{fiveList}}"
     show="{{showTeamPopup}}"
     bind:close="handleCloseTeamPopup"
     bind:toBuy="onOpenTogether"
