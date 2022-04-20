@@ -514,6 +514,7 @@ create.Page(store, {
         shippingFeeAmount,
         totalAmount,
         storeShippingFeeAmount,
+        shipping,
       } = res;
       storeShippingFeeAmount.forEach(item => {
         item.totalAmount = util.divide(item.totalAmount, 100);
@@ -529,6 +530,7 @@ create.Page(store, {
         reduceAmount: util.divide(reduceAmount, 100),
         shippingFeeAmount: util.divide(shippingFeeAmount, 100),
         totalAmount: util.divide(totalAmount, 100),
+        shipping,
         // storeGoodsInfos: storeShippingFeeAmount
       }
       if(changeStore && changeStore.data && changeStore.data.storeNo) {
