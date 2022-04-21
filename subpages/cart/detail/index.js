@@ -5,6 +5,7 @@ import homeApi from '../../../apis/home'
 import { IMG_CDN, DETAIL_SERVICE_LIST, H5_HOST, webHost } from '../../../constants/common'
 import { CODE_SCENE } from '../../../constants/index'
 import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj, haveStore, debounce } from '../../../utils/tools'
+import { getPayInfo } from '../../../utils/orderPay'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
 import commonApis from '../../../apis/common'
@@ -101,6 +102,8 @@ create.Page(store, {
     indexObjectId: 0,
     shareInfo_pt: '',
     fiveList: [],
+    showHasOrderPopup: false,
+    hasOrderData: {},
   },
 
   onLoad(options) {
@@ -135,6 +138,7 @@ create.Page(store, {
       userInfo,
     })
     app.trackEvent('shopping_detail');
+
   },
 
   // 基础数据
@@ -1329,8 +1333,51 @@ create.Page(store, {
     })
   },
 
+  cancel() {
+    goodApi.cancelOrder({sumId: this.data.hasOrderData.orderId})
+    this.onCloseHasOrder()
+  },
+
+  hasOrderPay() {
+    const {orderId} = this.data.hasOrderData
+    this.onCloseHasOrder()
+    const params = {
+      id: orderId,
+      ...this.data.hasOrderData
+    } 
+    router.replace({
+      name: "cashier",
+      data: params,
+    })
+  },
+
+  getHasOrder(type) {
+    const {
+      spuId,
+      skuId,
+    } = this.goodParams;
+    return new Promise((resolve) => {
+      const params = {
+        checkType: type,
+        spuId,
+        skuId,
+      }
+      goodApi.getHasOrderInfo(params).then((res) => {
+        console.log('getHasOrderInfo-res', res)
+        if (!res.orderId) {
+          resolve(true)
+        } else {
+          this.setData({
+            hasOrderData: res
+          }, () => {
+            this.openHasOrder()
+          })
+        }
+      })
+    })
+  },
   // 打开拼单用户弹窗
-  onOpenTogether(event) {
+  async onOpenTogether(event) {
     let data = {};
     const {
       currentTarget,
@@ -1342,6 +1389,7 @@ create.Page(store, {
     } else if(type === "toBuy") {
       data = detail;
     }
+    await this.getHasOrder(2)
     this.getTeamDetail(data);
     this.setData({
       showTeamPopup: false,
@@ -1350,13 +1398,13 @@ create.Page(store, {
   },
 
   // 发起拼单
-  onPushTogether() {
-    console.log('2222')
+  async onPushTogether() {
     const {
       activityId,
       spuId,
       skuId,
     } = this.goodParams;
+    await this.getHasOrder(1)
     goodApi.pushTogether({
       activityId,
       spuId,
@@ -1410,6 +1458,20 @@ create.Page(store, {
   onCloseArea() {
     this.setData({
       showAreaPopup: false,
+    });
+  },
+
+  // 关闭待支付拼团弹窗
+  onCloseHasOrder() {
+    this.setData({
+      showHasOrderPopup: false,
+    });
+  },
+
+  // 打开待支付拼团弹窗
+  openHasOrder() {
+    this.setData({
+      showHasOrderPopup: true,
     });
   },
 

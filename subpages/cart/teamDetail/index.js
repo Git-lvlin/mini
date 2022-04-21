@@ -6,6 +6,7 @@ import router from '../../../utils/router';
 import util from '../../../utils/util';
 import { objToParamStr } from '../../../utils/tools';
 import { H5_HOST } from '../../../constants/common'
+import commonApis from '../../../apis/common'
 const shareBack = '../../../images/good/share_bg.png'
 const shareBtn = '../../../images/good/btn.png'
 create.Page(store, {
@@ -41,7 +42,7 @@ create.Page(store, {
     let indexPage = currentPages[currentPages.length - 1]
     let options = indexPage.options
     console.log('onShow-options', options)
-    this.init(options)
+    this.getShareParam(options)
     // // const options = wx.getStorageSync("TEAMDETAIL_OPTIONS") || '';
     // const token = wx.getStorageSync("ACCESS_TOKEN") || '';
     // if (!token) {
@@ -55,6 +56,18 @@ create.Page(store, {
     //     this.init(options)
     //   }
     // }
+  },
+  // 解析分享配置
+  getShareParam(data) {
+    commonApis.getShareParam({
+      scene: data.scene,
+    }).then(res => {
+      // const param = strToParamObj(res);
+      const param = res;
+      this.init(param)
+    }).catch(err => {
+      this.init(data)
+    });
   },
   init(options) {
     this.goodParams = options;

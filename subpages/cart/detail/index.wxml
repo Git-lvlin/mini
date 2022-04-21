@@ -113,7 +113,7 @@
       </view>
       <view class="good_info" wx:if="{{isActivityGood != 3}}">
         <!-- 商品标题 -->
-        <view class="good_title">
+        <view class="good__">
           <view class="text">{{good.goodsName}}</view>
           <view class="flex_middle good_desc_box">
             <view class="desc_text text_one_line">{{good.goodsDesc}}</view>
@@ -127,7 +127,7 @@
       <view class="good_info" wx:else>
         <!-- 商品标题 -->
         <view class="good_p">
-          <view class="good_p_title">
+          <view class="good_p__">
             <van-image
               wx:if="{{good.memberType}}"
               class="good_p_name_head_icon"
@@ -207,7 +207,7 @@
       <!-- <view class="store_price" wx:if="{{isActivityGood == 2 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11 || isActivityGood == 17 || isActivityGood == 18}}"> -->
       <view class="store_price" wx:if="{{isActivityGood != 1 && isActivityGood != 5 && isActivityGood != 6 && isActivityGood != 15 && isActivityGood != 16}}">
         <view class="flex_middle" style="flex: 1;">
-          <view class="store_price_title">{{ utils.getPriceTitle(isActivityGood) }}</view>
+          <view class="store_price__">{{ utils.getPrice_(isActivityGood) }}</view>
           <price-mobel
             money="{{good.activityPrice != undefined ? good.activityPrice : good.goodsSaleMinPrice}}"
             marketMoney="{{isActivityGood == 2 ? 0 : good.goodsMarketPrice}}"
@@ -316,7 +316,7 @@
     
     <!-- 集约提货地址 -->
     <view class="flex_middle pick_info" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" >
-      <view class="flex_fix pick_info_title">选择配送方式：</view>
+      <view class="flex_fix pick_info__">选择配送方式：</view>
       <view class="flex_middle pick_way">
         <view
           class="flex_middle pick_way_item {{!item.status ? '' : 'way_item_act'}}"
@@ -628,6 +628,40 @@
           wx:key="index"
         >{{item.areaName}}；</view>
       </view>
+    </view>
+  </van-popup>
+  <!-- 有未支付拼团订单 -->
+  <van-popup
+    show="{{ showHasOrderPopup }}"
+    position="bottom"
+    round
+    closeable
+    safe-area-inset-bottom
+    bind:close="onCloseHasOrder"
+  >
+    <view class="has_order_popup">
+      <view class="title-box">
+        <view class="has_order_popup_title">你有订单占用购买名额</view>
+        <view class="has_order_popup_subtitle">请先支付或取消以下订单</view>
+      </view>
+      <view class="has_order_popup_item" wx:if="{{hasOrderData.curGoods}}">
+        <image class="has_order_popup_img" src="{{hasOrderData.curGoods.imageUrl}}" />
+        <view class="has_order_popup_item_right">
+          <view class="has_order_popup_goods_name">{{hasOrderData.curGoods.goodsName}}</view>
+          <view class="has_order_popup_goods_detail">{{hasOrderData.curGoods.goodsDesc}}</view>
+          <view class="has_order_popup_price">
+            <text>待支付：</text>
+            <text class="has_order_popup_money">{{hasOrderData.curGoods.activityPrice/100}}</text>
+            <text>剩余</text>
+            <count-down
+              time="{{hasOrderData.distancetime*1000 || 0}}"
+              isFull
+            />
+          </view>
+        </view>
+      </view>
+      <view class="has_order_popup_btn_y" bindtap="hasOrderGo">去支付</view>
+      <view class="has_order_popup_btn_n" bindtap="clearOrder">取消订单</view>
     </view>
   </van-popup>
 </view>
