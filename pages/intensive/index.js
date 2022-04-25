@@ -2,6 +2,7 @@ import create from '../../utils/create'
 import store from '../../store/index'
 import router from '../../utils/router'
 import homeApi from '../../apis/home'
+import intensiveApi from '../../apis/intensive'
 import commonApi from '../../apis/common'
 import { IMG_CDN } from '../../constants/common'
 import { showModal, showToast } from '../../utils/tools'
@@ -105,6 +106,37 @@ create.Page(store, {
       this.setData({
         refresherTriggered: false,
       })
+    })
+  },
+
+  // 商品列表
+  getAllGoodsList() {
+    const params = {
+      storeNo: 'store_m_124356',
+      page: 1,
+      size: 99,
+      gcid1: 0,
+    }
+    intensiveApi.getGoodsList(params).then((res) => {
+      console.log('getGoodsList-res', res);
+    })
+  },
+  // 查询商品分类
+  getGoodsCategory() {
+    const params = {
+      storeNo: 'store_m_124356'
+    }
+    intensiveApi.getGoodsCategory(params).then((res) => {
+      console.log('getGoodsCategory-res', res);
+    })
+  },
+  // 推荐商品列表
+  getRecGoods() {
+    const params = {
+      storeNo: 'store_m_124356'
+    }
+    intensiveApi.getRecGoods(params).then((res) => {
+      console.log('getRecGoods-res', res);
     })
   },
 

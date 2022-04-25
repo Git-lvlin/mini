@@ -180,6 +180,7 @@ create.Page(store, {
    * isNotPayment boolean 是否是模拟支付
    * */ 
   getPayInfo(isNotPayment = false) {
+    console.log()
     getPayInfo({
       id: this.id,
       payType: this.payType,

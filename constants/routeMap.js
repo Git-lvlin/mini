@@ -16,7 +16,7 @@ export default {
       route: 'seckill',
     },
     2: {
-      isTabbar: false,
+      isTabbar: true,
       route: 'intensive',
     },
     3: {

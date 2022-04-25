@@ -1060,7 +1060,7 @@ button {
 <view class="has_order_popup_btn_n">取消</view>
 </view> */
 .has_order_popup {
-
+  height: 630rpx;
 }
 .title-box {
   display: flex;
@@ -1106,8 +1106,6 @@ button {
 }
 .has_order_popup_goods_name {
   width: 100%;
-  height: 36rpx;
-  line-height: 36rpx;
   margin-bottom: 8rpx;
   font-size: 26rpx;
   color: #333333;
@@ -1116,10 +1114,7 @@ button {
   overflow: hidden;
 }
 .has_order_popup_goods_detail {
-  margin-bottom: 66rpx;
   width: 100%;
-  height: 30rpx;
-  line-height: 30rpx;
   font-size: 11px;
   color: #999999;
   white-space: nowrap;
@@ -1127,6 +1122,10 @@ button {
   overflow: hidden;
 }
 .has_order_popup_price {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 12rpx;
   font-size: 28rpx;
   color: #FF3333;
 }

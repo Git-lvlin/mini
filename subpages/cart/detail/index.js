@@ -1334,15 +1334,32 @@ create.Page(store, {
   },
 
   cancel() {
-    goodApi.cancelOrder({sumId: this.data.hasOrderData.orderId})
+    let that = this
+    wx.showModal({
+      title: '提示',
+      content: '确定取消订单吗?',
+      success (res) {
+        if (res.confirm) {
+          console.log('用户点击确定', that)
+          that.cancelOrder()
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
+  },
+  cancelOrder() {
+    const {hasOrderData} = this.data;
+    let params = {
+      sumId: hasOrderData.id
+    }
+    console.log('确认取消订单-params', params)
+    goodApi.cancelOrder(params)
     this.onCloseHasOrder()
   },
-
   hasOrderPay() {
-    const {orderId} = this.data.hasOrderData
     this.onCloseHasOrder()
     const params = {
-      id: orderId,
       ...this.data.hasOrderData
     } 
     router.replace({
@@ -1364,7 +1381,7 @@ create.Page(store, {
       }
       goodApi.getHasOrderInfo(params).then((res) => {
         console.log('getHasOrderInfo-res', res)
-        if (!res.orderId) {
+        if (!res.id) {
           resolve(true)
         } else {
           this.setData({

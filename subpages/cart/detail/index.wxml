@@ -651,17 +651,15 @@
           <view class="has_order_popup_goods_detail">{{hasOrderData.curGoods.goodsDesc}}</view>
           <view class="has_order_popup_price">
             <text>待支付：</text>
-            <text class="has_order_popup_money">{{hasOrderData.curGoods.activityPrice/100}}</text>
-            <text>剩余</text>
-            <count-down
-              time="{{hasOrderData.distancetime*1000 || 0}}"
-              isFull
-            />
+            <text class="has_order_popup_money">¥{{hasOrderData.curGoods.activityPrice/100}}</text>
+          </view>
+          <view class="has_order_popup_price">
+            <text>剩余</text><count-down time="{{(hasOrderData.distancetime*1000) || 0}}" isFull />
           </view>
         </view>
       </view>
-      <view class="has_order_popup_btn_y" bindtap="hasOrderGo">去支付</view>
-      <view class="has_order_popup_btn_n" bindtap="clearOrder">取消订单</view>
+      <view class="has_order_popup_btn_y" bindtap="hasOrderPay">去支付</view>
+      <view class="has_order_popup_btn_n" bindtap="cancel">取消订单</view>
     </view>
   </van-popup>
 </view>

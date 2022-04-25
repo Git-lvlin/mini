@@ -28,7 +28,7 @@ Page({
     if(!openId) return;
     wx.showLoading();
     this.params.openId = openId;
-    console.log('this.p', this.params)
+    console.log('this.params', this.params)
     if(this.params.scene == 1) {
       // 获取商品下单支付信息
       this.getPayInfo(this.params);
@@ -43,8 +43,10 @@ Page({
       this.getBondPay(this.params);
     } else if(this.params.scene == 5) {
       // 获取生鲜支付信息
-      console.log('111')
       this.getFreshPay(this.params);
+    } else if(this.params.scene == 6) {
+      // 获取氢原子支付信息
+      this.getPayInfoAtom(this.params);
     }
   },
 
@@ -115,7 +117,37 @@ Page({
       })
     });
   },
-
+  // 获取氢原子支付信息
+  getPayInfoAtom(data) {
+    console.log("氢原子支付")
+    const {
+      payInfo,
+    } = this.data;
+    cartApi.getPayInfoAtom({
+      orderId: data.id,
+      openId: data.openId,
+    }).then(res => {
+      payInfo.state = 0;
+      this.setData({
+        payInfo,
+        payData: res,
+      }, () => {
+        this.openPay();
+        wx.hideLoading();
+      })
+    }).catch(err => {
+      // if(err.code == 10110) {
+      //   payInfo.state = 4;
+      // } else {
+        payInfo.state = 3;
+      // }
+      this.setData({
+        payInfo
+      }, () => {
+        wx.hideLoading();
+      })
+    });
+  },
   // 获取约卡支付信息
   getRechargePay(data) {
     console.log("约卡支付")
