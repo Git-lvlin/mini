@@ -8,7 +8,7 @@ import { IMG_CDN } from '../../constants/common'
 import { showModal, showToast } from '../../utils/tools'
 import { checkSetting } from '../../utils/wxSetting';
 import { HTTP_TIMEOUT } from '../../constants/index'
-
+import goodApi from "../../apis/good";
 const app = getApp();
 create.Page(store, {
   floorTimer: null,
@@ -52,6 +52,7 @@ create.Page(store, {
     recommendData: [],
     remindData: [],
     recommendData: [],
+    storeNo: 'store_m_123942', // 测试用店铺号
   },
 
   onLoad(options) {
@@ -102,7 +103,7 @@ create.Page(store, {
 
   // 初始化
   init() {
-    Promise.all([this.getBannerData(),this.getIntensiveData(), this.getRecommendData()]).then((res) => {
+    Promise.all([this.getBannerData(),this.getAllGoodsList(), this.getGoodsCategory()]).then((res) => {
       this.setData({
         refresherTriggered: false,
       })
@@ -111,8 +112,9 @@ create.Page(store, {
 
   // 商品列表
   getAllGoodsList() {
+    const {storeNo} = this.data
     const params = {
-      storeNo: 'store_m_124356',
+      storeNo,
       page: 1,
       size: 99,
       gcid1: 0,
@@ -123,8 +125,9 @@ create.Page(store, {
   },
   // 查询商品分类
   getGoodsCategory() {
+    const {storeNo} = this.data
     const params = {
-      storeNo: 'store_m_124356'
+      storeNo
     }
     intensiveApi.getGoodsCategory(params).then((res) => {
       console.log('getGoodsCategory-res', res);
@@ -132,8 +135,9 @@ create.Page(store, {
   },
   // 推荐商品列表
   getRecGoods() {
+    const {storeNo} = this.data
     const params = {
-      storeNo: 'store_m_124356'
+      storeNo
     }
     intensiveApi.getRecGoods(params).then((res) => {
       console.log('getRecGoods-res', res);

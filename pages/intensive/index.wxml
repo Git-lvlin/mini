@@ -8,12 +8,21 @@
   <!-- 导航栏地址 -->
   <view class="flex_fix nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx;height:{{$.systemInfo.navBarHeight}}rpx">
     <view id="nav_body_id" class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx;background: #fff;height:{{$.systemInfo.navBarHeight}}rpx">
+      <!-- 店铺定位栏 -->
       <view class="nav_location">
         <image class="location_icon" src="{{tools.getImgUrl('miniprogram/home/location-black.png')}}" />
         <view class="flex_middle address" bindtap="onToLocation">
           <view class="location_address text_one_line">{{takeSpot.storeName || '选择自提点' }}</view>
         </view>
         <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/triangle_bottom_black.png')}}" />
+      </view>
+      <!-- 搜索栏 -->
+      <view id="top_search" class="search_content" style="">
+        <view class="search_body" bindtap="onToSearch">
+          <image class="search_icon" src="{{tools.getImgUrl('miniprogram/v2-home/search-icon.png?v=12')}}" />
+          <view class="search_text">请输入商品名称</view>
+          <view class="search_btn">搜索</view>
+        </view>
       </view>
     </view>
   </view>
