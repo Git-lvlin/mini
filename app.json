@@ -112,12 +112,6 @@
         "selectedIconPath": "/images/tabbar/actSeckill.png"
       },
       {
-        "pagePath": "pages/intensive/index",
-        "text": "集约",
-        "iconPath": "/images/tabbar/intensive.png",
-        "selectedIconPath": "/images/tabbar/intensive.png"
-      },
-      {
         "pagePath": "pages/user/index",
         "text": "我的",
         "iconPath": "/images/tabbar/me@3x.png",
