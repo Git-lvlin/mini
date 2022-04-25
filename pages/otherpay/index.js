@@ -46,7 +46,7 @@ Page({
       this.getFreshPay(this.params);
     } else if(this.params.scene == 6) {
       // 获取氢原子支付信息
-      this.getPayInfoAtom(this.params);
+      this.getAtomPay(this.params);
     }
   },
 
@@ -118,7 +118,7 @@ Page({
     });
   },
   // 获取氢原子支付信息
-  getPayInfoAtom(data) {
+  getAtomPay(data) {
     console.log("氢原子支付")
     const {
       payInfo,
