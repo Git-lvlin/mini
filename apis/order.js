@@ -26,6 +26,8 @@ const url = {
   faterRed: "/activity/auth/sendMemberEverydayCoupon",
 
   freshPay: "/store/auth/order/pay",
+
+  newPayInfo: '/iot/auth/leaseOrder/prepayOrder'
 }
 
 export default {
@@ -83,6 +85,10 @@ export default {
   // 获取支付信息
   getPayInfo(params, option) {
     return Request.post(url.payInfo, params, option);
+  },
+  // 获取氢原子支付信息
+  getPayInfoAtom(params, option) {
+    return Request.post(url.newPayInfo, params, option);
   },
   // 约卡充值
   getRechargePay(params, option) {
