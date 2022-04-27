@@ -7,7 +7,7 @@
 >
   <!-- 导航栏地址 -->
   <view class="flex_fix nav_content" style="padding-top: {{$.systemInfo.statusHeight}}rpx;height:{{$.systemInfo.navBarHeight}}rpx">
-    <view id="nav_body_id" class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx;background: #fff;height:{{$.systemInfo.navBarHeight}}rpx">
+    <view id="nav_body_id" class="nav_body" style="padding-top: {{$.systemInfo.statusHeight}}rpx;background: #FFFFFF;height:{{$.systemInfo.navBarHeight}}rpx">
       <!-- 店铺定位栏 -->
       <view class="nav_location">
         <image class="location_icon" src="{{tools.getImgUrl('miniprogram/home/location-black.png')}}" />
@@ -19,8 +19,8 @@
       <!-- 搜索栏 -->
       <view id="top_search" class="search_content" style="">
         <view class="search_body" bindtap="onToSearch">
-          <image class="search_icon" src="{{tools.getImgUrl('miniprogram/v2-home/search-icon.png?v=12')}}" />
-          <view class="search_text">请输入商品名称</view>
+          <image class="search_icon" src="{{tools.getImgUrl('miniprogram/intensive/search-icon.png')}}" />
+          <view class="search_text">店内搜索</view>
           <view class="search_btn">搜索</view>
         </view>
       </view>
@@ -51,18 +51,78 @@
       wx:if="{{bannerData}}"
       images="{{bannerData}}"
     />
+    <view class="block"></view>
+    <!-- <view class="tips" wx:if="{{takeSpot.storeName}}">
+      <image class="tips_img" src="{{tools.getImgUrl('miniprogram/intensive/tips-icon.png')}}" />
+      <view class="tips_text">当前社区店商品已抢光了，赶快提醒店主去集约吧~</view>
+    </view>
+    <view class="null" wx:if="{{!takeSpot.storeName}}">
+      <image class="null_img" src="{{tools.getImgUrl('miniprogram/intensive/null.png')}}" />
+      <view class="null_text">请选择自提点</view>
+    </view> -->
+    <!-- 集约多种分类合并超版本购物车 -->
+    <view class="cart_box">
+      <view class="cart_left_box">
+        <block wx:for="{{classData}}" wx:key="index">
+          <view class="class_item_box {{item.gcId1==tabIndexId?'left_act':''}}" data-class="{{item}}" bindtap="checkTab">{{item.gcName1}}</view>
+        </block>
+      </view>
+      <view class="cart_right_box">
+        <block wx:for="{{goodsData}}" wx:key="index">
+          <view class="goods_item_box">
+            <view class="goods_img_box">
+              <image class="goods_img_index" src="{{item.imageUrl}}" />
+            </view>
+            <view class="goods_right_box">
+              <view class="goods_name">{{item.goodsName}}</view>
+              <view class="goods_nums">{{item.saleNumStr}}</view>
+              <view class="goods_price_box">
+                <view class="price_index">
+                  <text class="price_head">¥</text>
+                  <text class="a_price">{{item.aPrice}}</text>
+                  <text class="z_price" wx:if="{{item.zPrice}}">{{'.' + item.zPrice}}</text>
+                </view>
+                <view class="price_old">¥{{item.marketPrice/100}}</view>
+              </view>
+              <view class="step_box" wx:if="{{item.isCartShow}}" >
+                <image class="step_delete_icon" data-item="{{item}}" data-index="{{index}}" data-type="detele" bindtap="onStepChange" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
+                <view class="step_index_num">{{item.value}}</view>
+                <image class="step_add_icon" data-item="{{item}}" data-index="{{index}}" data-type="add" bindtap="onStepChange" src="{{tools.getImgUrl('miniprogram/intensive/a-icon.png')}}" />
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+
     <!-- 集约专享 -->
-    <list
+    <!-- <list
       wx:if="{{intensiveData}}"
       intensiveList="{{intensiveData}}"
-    />
+    /> -->
     <!-- 优选推荐 -->
-    <recommend
+    <!-- <recommend
       wx:if="{{recommendData.records.length}}"
       remindList="{{recommendData}}"
-    />
+    /> -->
   </scroll-view>
-
+  <!-- 购物车常驻栏 -->
+  <view class="cart_fixed">
+    <view class="cart_icon_box">
+      <image class="cart_icon" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon.png')}}"/>
+      <view class="cart_num_box" wx:if="{{goodsNum && goodsNum<10}}">{{goodsNum}}</view>
+      <view class="cart_num_two" wx:elif="{{goodsNum>=10}}">{{goodsNum}}</view>
+      <view class="cart_num_more" wx:elif="{{goodsNum>=20}}">...</view>
+    </view>
+    <view class="cart_text">合计：</view>
+    <view class="price_index">
+      <text class="price_head">¥</text>
+      <text class="a_price">{{2189}}</text>
+      <text class="z_price">{{'.' + 88}}</text>
+    </view>
+    <view class="order_btn">去下单</view>
+  </view>
+  <van-toast id="van-toast" />
   <!-- 底部占位 -->
   <view class="flex_fix bar_height" />
 </view>

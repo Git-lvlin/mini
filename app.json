@@ -114,8 +114,8 @@
       {
         "pagePath": "pages/intensive/index",
         "text": "集约",
-        "iconPath": "/images/tabbar/intensive.png",
-        "selectedIconPath": "/images/tabbar/intensive.png"
+        "iconPath": "/images/tabbar/intensive-new.png",
+        "selectedIconPath": "/images/tabbar/intensive-new-act.png"
       },
       {
         "pagePath": "pages/user/index",

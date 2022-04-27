@@ -9,6 +9,7 @@ import { showModal, showToast } from '../../utils/tools'
 import { checkSetting } from '../../utils/wxSetting';
 import { HTTP_TIMEOUT } from '../../constants/index'
 import goodApi from "../../apis/good";
+import Toast from '../../miniprogram_npm/@vant/weapp/toast/toast';
 const app = getApp();
 create.Page(store, {
   floorTimer: null,
@@ -53,6 +54,11 @@ create.Page(store, {
     remindData: [],
     recommendData: [],
     storeNo: 'store_m_123942', // 测试用店铺号
+    classData: null,
+    goodsData: null,
+    tabIndexId: 0,
+    goodsNum: 0,
+    value: 0,
   },
 
   onLoad(options) {
@@ -103,11 +109,16 @@ create.Page(store, {
 
   // 初始化
   init() {
-    Promise.all([this.getBannerData(),this.getAllGoodsList(), this.getGoodsCategory()]).then((res) => {
+    Promise.all([this.getAllGoodsList(),this.getGoodsCategory()]).then((res) => {
       this.setData({
         refresherTriggered: false,
       })
     })
+    // Promise.all([this.getBannerData(),this.getAllGoodsList(),this.getGoodsCategory()]).then((res) => {
+    //   this.setData({
+    //     refresherTriggered: false,
+    //   })
+    // })
   },
 
   // 商品列表
@@ -119,8 +130,32 @@ create.Page(store, {
       size: 99,
       gcid1: 0,
     }
-    intensiveApi.getGoodsList(params).then((res) => {
-      console.log('getGoodsList-res', res);
+    return new Promise((resolve) => {
+      intensiveApi.getGoodsList(params).then((res) => {
+        console.log('getGoodsList-res', res);
+        let list = res.records.map((item, index) => {
+          let p = (item.salePrice/100).toString();
+          let a = '';
+          let z = '';
+          if (p.includes('.')) {
+            a = p.split('.')[0]
+            z = p.split('.')[1]
+          } else {
+            a = p
+          }
+          return {
+            ...item,
+            aPrice: a,
+            zPrice: z,
+            value: 0,
+          }
+        })
+        this.setData({
+          goodsData: list
+        }, () => {
+          resolve(true)
+        })
+      })
     })
   },
   // 查询商品分类
@@ -129,8 +164,15 @@ create.Page(store, {
     const params = {
       storeNo
     }
-    intensiveApi.getGoodsCategory(params).then((res) => {
-      console.log('getGoodsCategory-res', res);
+    return new Promise((resolve) => {
+      intensiveApi.getGoodsCategory(params).then((res) => {
+        console.log('getGoodsCategory-res', res);
+        this.setData({
+          classData: res.records
+        }, () => {
+          resolve(true)
+        })
+      })
     })
   },
   // 推荐商品列表
@@ -160,6 +202,52 @@ create.Page(store, {
       });
     }) 
 
+  },
+
+  onStepChange(e) {
+    Toast.loading({ forbidClick: true });
+    console.log('e', e)
+    let {index, item, type} = e.currentTarget.dataset;
+    let {buyMinNum, buyMaxNum, value, unit} = item;
+    let {goodsData} = this.data;
+    if (type === 'delete') {
+      if (value == 0) {
+        return
+      }
+      let num = value - 1;
+      goodsData[index].value = num;
+      if ((buyMinNum>1) && (value - 1 < buyMinNum)) {
+        Toast(`该商品${buyMinNum}${unit}起购`);
+      }
+      setTimeout(() => {
+        Toast.clear();
+        this.setData({
+          goodsData: goodsData
+        });
+      }, 300);
+    }
+    if (type === 'add') {
+      if (value + 1 > buyMaxNum) {
+        Toast(`该商品最多购买${buyMaxNum}${unit}`);
+        return
+      }
+      goodsData[index].value = value + 1
+      setTimeout(() => {
+        Toast.clear();
+        this.setData({
+          goodsData: goodsData
+        });
+      }, 300);
+    }
+  },
+
+  checkTab(e) {
+    const {
+      gcId1,
+    } = e.currentTarget.dataset.class;
+    this.setData({
+      tabIndexId: gcId1
+    })
   },
 
   // 获取集约列表

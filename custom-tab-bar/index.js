@@ -47,10 +47,10 @@ create.Component(store, {
       // },{
         index: 2,
         pagePath: "/pages/intensive/index",
-        name: "",
+        name: "集约",
         special: "intensive",
-        iconPath: `../images/tabbar/intensive.png`,
-        selectedIconPath: `../images/tabbar/intensive.png`
+        iconPath: `../images/tabbar/intensive-new.png`,
+        selectedIconPath: `../images/tabbar/intensive-new-act.png`
       },{
         index: 3,
         pagePath: "/pages/user/index",
@@ -77,33 +77,33 @@ create.Component(store, {
   },
 
   methods: {
-    drawCanvas() {
-      const that = this;
-      // 集约动图
-      const canvasContext = wx.createCanvasContext("canvasIcon", this);
-      // 指定canvas大小
-      canvasContext.canvas = {
-        width: 90,
-        height: 90,
-      };
-      // 如果同时指定 animationData 和 path， 优先取 animationData
-      const ani = lottie.loadAnimation({
-        renderer: "canvas", // 只支持canvas
-        loop: true,
-        autoplay: true,
-        // animationData: animationData,
-        path: this.data.animationPath,
-        rendererSettings: {
-          context: canvasContext,
-          clearCanvas: true,
-        },
-      });
-      ani.addEventListener("DOMLoaded", (res) => {
-        that.setData({
-          canvasLoaded: true
-        })
-      });
-    },
+    // drawCanvas() {
+    //   const that = this;
+    //   // 集约动图
+    //   const canvasContext = wx.createCanvasContext("canvasIcon", this);
+    //   // 指定canvas大小
+    //   canvasContext.canvas = {
+    //     width: 90,
+    //     height: 90,
+    //   };
+    //   // 如果同时指定 animationData 和 path， 优先取 animationData
+    //   const ani = lottie.loadAnimation({
+    //     renderer: "canvas", // 只支持canvas
+    //     loop: true,
+    //     autoplay: true,
+    //     // animationData: animationData,
+    //     path: this.data.animationPath,
+    //     rendererSettings: {
+    //       context: canvasContext,
+    //       clearCanvas: true,
+    //     },
+    //   });
+    //   ani.addEventListener("DOMLoaded", (res) => {
+    //     that.setData({
+    //       canvasLoaded: true
+    //     })
+    //   });
+    // },
 
     onToPath(event) {
       const url = event.currentTarget.dataset.path;
@@ -111,7 +111,7 @@ create.Component(store, {
       const currPage = pages[pages.length - 1].route
       console.log('currpage', currPage)
       console.log('url', url)
-      const index = event.currentTarget.dataset.index;
+      // const index = event.currentTarget.dataset.index;
       if(url === `/${currPage}`) return;
       if (url === '/pages/intensive/index') {
         wx.switchTab({url})
