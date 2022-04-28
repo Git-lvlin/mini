@@ -7,8 +7,9 @@ import commonApi from '../../apis/common'
 import { IMG_CDN } from '../../constants/common'
 import { showModal, showToast } from '../../utils/tools'
 import { checkSetting } from '../../utils/wxSetting';
-import { HTTP_TIMEOUT } from '../../constants/index'
+import { HTTP_TIMEOUT } from '../../constants/index';
 import goodApi from "../../apis/good";
+import cartApi from "../../apis/cart";
 import Toast from '../../miniprogram_npm/@vant/weapp/toast/toast';
 const app = getApp();
 create.Page(store, {
@@ -59,16 +60,45 @@ create.Page(store, {
     tabIndexId: 0,
     goodsNum: 0,
     value: 0,
+    showCartPopup: false,
+    invalidList: [
+      {
+        name: 'dasdasdasd',
+        price: 11111,
+        value: 0,
+      },
+      {
+        name: 'dasdasdasd',
+        price: 11111,
+        value: 0,
+      },
+    ],
+    cartList: [
+      {
+        name: 'dasdasdasd',
+        price: 11111,
+        value: 0,
+      },
+      {
+        name: 'dasdasdasd',
+        price: 11111,
+        value: 0,
+      },
+      {
+        name: 'dasdasdasd',
+        price: 11111,
+        value: 0,
+      },
+      {
+        name: 'dasdasdasd',
+        price: 11111,
+        value: 0,
+      },
+    ]
   },
 
   onLoad(options) {
-    this.getMiniExamine();
-    const timer = setTimeout(() => {
-      clearTimeout(timer);
-      this.setData({
-        showLoadImg: true
-      });
-    });
+
   },
 
   onReady() {
@@ -104,12 +134,20 @@ create.Page(store, {
     // 更新tabbar显示
     router.updateSelectTabbar(this, 2);
     app.trackEvent('tab_intensive');
+    // this.getMiniExamine();
+    const timer = setTimeout(() => {
+      clearTimeout(timer);
+      this.setData({
+        showLoadImg: true
+      });
+    });
     this.init()
   },
 
   // 初始化
   init() {
-    Promise.all([this.getAllGoodsList(),this.getGoodsCategory()]).then((res) => {
+    
+    Promise.all([this.getAllGoodsList(),this.getGoodsCategory(),this.getSummaryByCartData()]).then((res) => {
       this.setData({
         refresherTriggered: false,
       })
@@ -121,14 +159,114 @@ create.Page(store, {
     // })
   },
 
+  onCloseCartPopup() {
+    this.setData({showCartPopup:false})
+  },
+  openCartPopup() {
+    this.setData({showCartPopup:true})
+  },
+  // 设置购物车明细
+  addCart() {
+    const {storeNo, } = this.data
+    const params = {
+      quantity, // 数量，负数表示减数量
+      skuId,
+      orderType,
+      objectId,
+      activityId,
+      skuStoreNo: storeNo
+    }
+    cartApi.addCartInfo(params)
+  },
+  // 移除购物车明细
+  removeCart() {
+    const {storeNo, } = this.data
+    const params = {
+      objectIds, // 业务id数组
+      skuIds, // 商品skuid数组
+      skuStoreNo: storeNo
+    }
+    cartApi.removeCart(params)
+  },
+  // 设置购物车数量
+  setCartNum() {
+    const {storeNo, } = this.data
+    const params = {
+      quantity,
+      skuId,
+      objectId,
+      skuStoreNo: storeNo
+    }
+    cartApi.setCartNum(params)
+  },
+  // 选中购物车明细
+  checkedCart() {
+    const {storeNo, } = this.data
+    const params = {
+      skuId,
+      skuStoreNo: storeNo,
+      objectId,
+    }
+    cartApi.checkedCart(params)
+  },
+  // 全选购物车明细
+  checkedAllCart() {
+    const {storeNo, } = this.data
+    const params = {
+      isChecked,
+      skuStoreNo: storeNo,
+    }
+    cartApi.checkedAllCart(params)
+  },
+  // 购物车商品列表
+  getCartList() {
+    const {storeNo, } = this.data
+    const params = {
+      skuStoreNo: storeNo,
+    }
+    cartApi.cartList(params)
+  },
+  // 购物车商品列表汇总
+  getSummaryByCartData() {
+    const {storeNo} = this.data
+    const params = {
+      skuStoreNo: storeNo,
+    }
+    return new Promise((resolve) => {
+      cartApi.summaryByCartData(params).then((res) => {
+        resolve(true)
+      })
+    })
+  },
+  // 清空购物车
+  clearCart() {
+    const {storeNo} = this.data
+    const params = {
+      skuStoreNo: storeNo,
+    }
+    cartApi.clearCart(params)
+  },
+  // 清空失效商品
+  clearExpired() {
+    const {storeNo} = this.data
+    const params = {
+      skuStoreNo: storeNo,
+    }
+    cartApi.clearExpired(params)
+  },
+
+
+
+
+
   // 商品列表
-  getAllGoodsList() {
+  getAllGoodsList(gcId1) {
     const {storeNo} = this.data
     const params = {
       storeNo,
       page: 1,
-      size: 99,
-      gcid1: 0,
+      size: 10,
+      gcId1: gcId1 || 0,
     }
     return new Promise((resolve) => {
       intensiveApi.getGoodsList(params).then((res) => {
@@ -204,47 +342,48 @@ create.Page(store, {
 
   },
 
-  onStepChange(e) {
+  onStepChangeAdd(e) {
     Toast.loading({ forbidClick: true });
-    console.log('e', e)
-    let {index, item, type} = e.currentTarget.dataset;
-    let {buyMinNum, buyMaxNum, value, unit} = item;
+    let {index, item} = e.currentTarget.dataset;
+    let {buyMaxNum, value, unit} = item;
     let {goodsData} = this.data;
-    if (type === 'delete') {
-      if (value == 0) {
-        return
-      }
-      let num = value - 1;
-      goodsData[index].value = num;
-      if ((buyMinNum>1) && (value - 1 < buyMinNum)) {
-        Toast(`该商品${buyMinNum}${unit}起购`);
-      }
-      setTimeout(() => {
-        Toast.clear();
-        this.setData({
-          goodsData: goodsData
-        });
-      }, 300);
+    if (value + 1 > buyMaxNum) {
+      Toast(`该商品最多购买${buyMaxNum}${unit}`);
+      return
     }
-    if (type === 'add') {
-      if (value + 1 > buyMaxNum) {
-        Toast(`该商品最多购买${buyMaxNum}${unit}`);
-        return
-      }
-      goodsData[index].value = value + 1
-      setTimeout(() => {
-        Toast.clear();
-        this.setData({
-          goodsData: goodsData
-        });
-      }, 300);
-    }
+    goodsData[index].value = value + 1
+    setTimeout(() => {
+      Toast.clear();
+      this.setData({
+        goodsData: goodsData
+      });
+    }, 300);
   },
-
+  onStepChangeDelete(e) {
+    Toast.loading({ forbidClick: true });
+    let {index, item} = e.currentTarget.dataset;
+    let {buyMinNum, value, unit} = item;
+    let {goodsData} = this.data;
+    if (value == 0) {
+      return
+    }
+    let num = value - 1;
+    goodsData[index].value = num;
+    if ((buyMinNum>1) && (value - 1 < buyMinNum)) {
+      Toast(`该商品${buyMinNum}${unit}起购`);
+    }
+    setTimeout(() => {
+      Toast.clear();
+      this.setData({
+        goodsData: goodsData
+      });
+    }, 300);
+  },
   checkTab(e) {
     const {
       gcId1,
     } = e.currentTarget.dataset.class;
+    this.getAllGoodsList(gcId1)
     this.setData({
       tabIndexId: gcId1
     })
@@ -434,7 +573,7 @@ create.Page(store, {
   // 跳转搜索
   onToSearch() {
     router.push({
-      name: 'search',
+      name: 'storeSearch',
     });
   },
 

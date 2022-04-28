@@ -57,6 +57,10 @@ export default {
   "/home/search": {
     path: "search",
   },
+  // 店内搜索页面
+  "/home/storeSearch": {
+    path: "storeSearch",
+  },
   // 会员专享
   "/home/members": {
     path: "",

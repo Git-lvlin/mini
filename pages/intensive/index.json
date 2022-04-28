@@ -10,6 +10,7 @@
     "recommend": "/components/intensive/recommend/index",
     "van-stepper": "@vant/weapp/stepper/index",
     "van-loading": "@vant/weapp/loading/index",
-    "van-toast": "@vant/weapp/toast/index"
+    "van-toast": "@vant/weapp/toast/index",
+    "van-popup": "@vant/weapp/popup/index"
   }
 }
