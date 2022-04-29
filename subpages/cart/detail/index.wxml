@@ -433,6 +433,7 @@
 
     <!-- 选择规格 bind:specAdd="specUpdateCart" -->
     <spec-panel
+      wx:if="{{good.id}}"
       good="{{good}}"
       skuId="{{skuId}}"
       specType="{{specType}}"
