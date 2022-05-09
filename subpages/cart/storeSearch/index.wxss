@@ -272,7 +272,10 @@
   width: 320rpx;
   height: 320rpx;
 }
-
+.null-text {
+  font-size: 32rpx;
+  color: #888888;
+}
 .recommend-list {
   margin-top: 96rpx;
   display: flex;
@@ -285,8 +288,100 @@
   margin-bottom: 24rpx;
 }
 .recommend-list-box {
+  display: flex;
+  flex-direction: column;
   width: 702rpx;
-  height: 810rpx;
+  min-height: 810rpx;
   background: #FFFFFF;
   border-radius: 24rpx;
+  padding-bottom: 140rpx;
+}
+.long-box {
+  min-height: 0;
+}
+.short {
+  padding-bottom: 0;
+}
+.recommend-item {
+  position: relative;
+  padding: 24rpx;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 202rpx;
+}
+.rec-img-box {
+  width: 200rpx;
+  height: 202rpx;
+  overflow: hidden;
+}
+.rec-img {
+  width: 100%;
+  height: 100%;
+}
+.rec-right-box {
+  margin-left: 24rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+.rec-name {
+  margin-bottom: 8rpx;
+  width: 400rpx;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: #222222;
+  font-size: 32rpx;
+}
+.rec-num {
+  margin-bottom: 32rpx;
+  font-size: 24rpx;
+  color: #999999;
+}
+.rec-price-box {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  color: #FF0000;
+}
+.head {
+  font-size: 24rpx;
+}
+.price-one {
+  position: relative;
+  top: 4rpx;
+  font-size: 40rpx;
+}
+.price-two {
+  font-size: 24rpx;
+}
+.mark-price {
+  margin-left: 16rpx;
+  font-size: 24rpx;
+  color: #B2B2B2;
+  text-decoration: line-through;
+}
+.add-btn-box {
+  position: absolute;
+  right: 24rpx;
+  bottom: 46rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.step_delete_icon,.step_add_icon {
+  width: 48rpx;
+  height: 48rpx;
+}
+.step_index_num {
+  margin: 0 8rpx;
+  font-size: 36rpx;
+  color: #333333;
+}
+
+.margin0 {
+  margin-top: 0;
 }

@@ -1,0 +1,103 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+<view>
+  <van-popup
+    show="{{show}}"
+    position="bottom"
+    round
+    closeable
+    bind:close="onClose"
+    custom-style="height: 80%;"
+  >
+    <view class="cart_popup">
+      <view class="cart_popup_title">购物车</view>
+      <view class="top" wx:if="{{cartGoodsOne.length || cartGoodsTwo.length}}">
+        <view class="top_left" bindtap="onCheckoutAll">
+          <image class="checkout_icon" wx:if="{{checkoutAll}}" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon.png')}}" />
+          <image class="checkout_icon" wx:else src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-no.png')}}" />
+          <view class="top_left_text">全选</view>
+        </view>
+        <view class="top_right" bindtap="checkSelf">
+          <view class="btn_left">配送</view>
+          <view class="btn_right">自提</view>
+          <view class="btn_checkouted {{isSelf?'':'self'}}"></view>
+        </view>
+      </view>
+      <view wx:if="{{!cartGoodsOne.length && !cartGoodsTwo.length}}" class="cart_null_box">
+        <image class="cart_null_icon" src="{{tools.getImgUrl('miniprogram/intensive/cart-null.png')}}" />
+        <view class="cart_null_text">购物车还是空的哦，快去选购商品吧～</view>
+        <view class="cart_null_btn" bindtap="onClose">去选购</view>
+      </view>
+      <view class="list_box" wx:if="{{cartGoodsOne.length || cartGoodsTwo.length}}">
+        <view class="list_one" wx:if="{{cartGoodsOne.length}}" wx:for="{{cartGoodsOne}}" wx:key="index">
+          <view class="one_item">
+            <view class="one_item_left" data-item="{{item}}" data-index="{{index}}" bindtap="checkedItem">
+              <image class="checkout_icon" wx:if="{{item.isChecked}}" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon.png')}}" />
+              <image class="checkout_icon" wx:else src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-no.png')}}" />
+              <image class="goods_img" src="{{item.thumbnail}}"/>
+              <view class="goods_detail">
+                <view class="goods_name">{{item.goodsName}}</view>
+                <view class="goods_price">
+                  <text class="price_head">¥</text>
+                  <text class="sale_price">{{item.salePrice/100}}</text>
+                  <text class="mark_price">¥{{item.marketPrice/100}}</text>
+                </view>
+              </view>
+            </view>
+            <view class="add-btn-box">
+              <image class="step_delete_icon" wx:if="{{item.quantity}}" data-item="{{item}}" data-index="{{index}}" bindtap="onStepChangeDelete" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
+              <view class="step_index_num" wx:if="{{item.quantity}}">{{item.quantity}}</view>
+              <image class="step_add_icon" wx:if="{{item.stockNum>item.quantity}}" data-item="{{item}}" data-index="{{index}}" bindtap="onStepChangeAdd" src="{{tools.getImgUrl('miniprogram/intensive/a-icon.png')}}" />
+              <image class="step_add_icon" wx:else src="{{tools.getImgUrl('miniprogram/intensive/add-disable.png')}}" />
+            </view>
+          </view>
+        </view>
+        <view class="list_two" wx:if="{{cartGoodsTwo.length}}">
+          <view class="border" wx:if="{{cartGoodsOne.length}}"></view>
+          <view class="list_two_top">
+            <view class="list_two_top_text">失效商品</view>
+            <view class="clear_btn">
+              <image class="clear_icon" src="{{tools.getImgUrl('miniprogram/intensive/clear.png')}}" />
+              <view class="clear_text">清空</view>
+            </view>
+          </view>
+          <block wx:if="{{cartGoodsTwo.length}}" wx:for="{{cartGoodsTwo}}" wx:key="index">
+            <view class="two_item">
+              <view class="check_box">
+                <!-- <image class="checkout_icon" wx:if="{{item.isChecked}}" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon.png')}}" /> -->
+                <image class="checkout_icon" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-no.png')}}" />
+              </view>
+              <view class="two_img_box">
+                <image class="two_goods_img" src="{{item.thumbnail}}"/>
+                <image class="invalid_icon" src="{{tools.getImgUrl('miniprogram/intensive/invalid-icon.png')}}" />
+              </view>
+              <view class="goods_detail">
+                <view class="goods_name">{{item.goodsName}}</view>
+                <view class="goods_price">
+                  <text class="price_head op">¥</text>
+                  <text class="sale_price op">{{item.salePrice/100}}</text>
+                  <text class="mark_price">¥{{item.marketPrice/100}}</text>
+                </view>
+              </view>
+              <view class="two_delete_btn" data-item="{{item}}" data-index="{{index}}" bindtap="invalidGoodDelete">删除</view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+  </van-popup>
+  <van-popup
+    show="{{deletePopupShow}}"
+    round
+    closeable
+    bindtap="onCloseCartsPopup"
+  >
+    <view class="popup_in_cart">
+      <view class="in_title">{{inTitle}}</view>
+      <view class="in_content">{{inContent}}</view>
+      <view class="in_btn_box">
+        <view class="cancel" bindtap="onCloseCartsPopup">取消</view>
+        <view class="confirm" bindtap="confirDelete">{{confirmText}}</view>
+      </view>
+    </view>
+  </van-popup>
+</view>

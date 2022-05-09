@@ -8,6 +8,7 @@
     "banners": "/components/intensive/banner/index",
     "list": "/components/intensive/list/index",
     "recommend": "/components/intensive/recommend/index",
+    "cart-bottom": "/components/cart/cart-bottom/index",
     "van-stepper": "@vant/weapp/stepper/index",
     "van-loading": "@vant/weapp/loading/index",
     "van-toast": "@vant/weapp/toast/index",

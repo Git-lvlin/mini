@@ -35,7 +35,7 @@
       
     </view>
     <view class="screen_box" wx:if="{{goodList.length && searchText}}" >
-      <screen-bar bind:click="onScreenItem" />
+      <screen-bar-new bind:click="onScreenItem" />
     </view>
     <view class="search_association" wx:if="{{showAssociation}}">
       <view
@@ -99,35 +99,91 @@
     wx:if="{{goodList.length && isSearch}}"
     bindscrolltolower="handleListBottom"
   >
-    <view class="good_list">
-      <!-- <good-card
+    <!-- <view class="good_list">
+      <good-card
         wx:for="{{goodList}}"
         wx:key="index"
         data="{{item}}"
-      /> -->
-      <block wx:for="{{goodList}}" wx:key="index">
-        <view class="good_card">
-          
-        </view>
-      </block>
+      />
+    </view> -->
+    <view class="recommend-list margin0">
+      <view class="recommend-list-box long-box {{(goodList.length&&goodList.length<4)?'short':''}}">
+        <block wx:for="{{goodList}}" wx:key="index">
+          <view class="recommend-item">
+            <view class="rec-img-box">
+              <image class="rec-img" src="{{item.goodsImageUrl}}"/>
+            </view>
+
+            <view class="rec-right-box">
+              <view class="rec-name">{{item.goodsName}}</view>
+              <view class="rec-num">{{item.goodsSaleNumDesc}}</view>
+
+              <view class="rec-price-box">
+                <text class="head">¥</text>
+                <text class="price-one">{{item.aPrice}}</text>
+                <text class="price-two" wx:if="{{item.zPrice}}">.{{item.zPrice}}</text>
+                <text class="mark-price">¥{{item.skuMarketPrice/100}}</text>
+              </view>
+            </view>
+
+            <view class="add-btn-box" wx:if="{{item.isCartShow}}">
+              <image class="step_delete_icon" wx:if="{{item.value}}" data-item="{{item}}" data-search="{{1}}" data-index="{{index}}" bindtap="onStepChangeDelete" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
+              <view class="step_index_num" wx:if="{{item.value}}">{{item.value}}</view>
+              <image class="step_add_icon" data-item="{{item}}" data-index="{{index}}" data-search="{{1}}" bindtap="onStepChangeAdd" src="{{tools.getImgUrl('miniprogram/intensive/a-icon.png')}}" />
+            </view>
+          </view>
+        </block>
+      </view>
     </view>
   </scroll-view>
 
   <!-- <notdata type="search" wx:if="{{isSearch && !goodList.length}}" /> -->
-
   <view class="null" wx:if="{{isSearch && !goodList.length}}">
     <image class="null-icon" src="{{tools.getImgUrl('miniprogram/store-search/no-search-data.png')}}" />
     <view class="null-text">抱歉!没有找到您搜索的商品，为您推荐其他</view>
+  </view>
+  <view class="null" wx:if="{{!goodList.length && recommendList.length}}">
     <view class="recommend-list">
-      <image class="recommend-title" src="{{tools.getImgUrl('miniprogram/store-search/no-search-data.png')}}" />
+      <image class="recommend-title" src="{{tools.getImgUrl('miniprogram/store-search/title.png')}}" />
       <view class="recommend-list-box">
-        <block wx:for="{{goodList}}" wx:key="index">
-          <view class="recommend-item"></view>
+        <block wx:for="{{recommendList}}" wx:key="index">
+          <view class="recommend-item">
+
+            <view class="rec-img-box">
+              <image class="rec-img" src="{{item.skuImageUrl}}"/>
+            </view>
+
+            <view class="rec-right-box">
+              <view class="rec-name">{{item.goodsName}}</view>
+              <view class="rec-num">{{item.saleNumStr}}{{item.unit}}</view>
+
+              <view class="rec-price-box">
+                <text class="head">¥</text>
+                <text class="price-one">{{item.aPrice}}</text>
+                <text class="price-two" wx:if="{{item.zPrice}}">.{{item.zPrice}}</text>
+                <text class="mark-price">¥{{item.skuMarketPrice/100}}</text>
+              </view>
+            </view>
+
+            <view class="add-btn-box" wx:if="{{item.isCartShow}}">
+              <image class="step_delete_icon" wx:if="{{item.value}}" data-item="{{item}}" data-index="{{index}}" bindtap="onStepChangeDelete" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
+              <view class="step_index_num" wx:if="{{item.value}}">{{item.value}}</view>
+              <image class="step_add_icon" data-item="{{item}}" data-index="{{index}}" bindtap="onStepChangeAdd" src="{{tools.getImgUrl('miniprogram/intensive/a-icon.png')}}" />
+            </view>
+          </view>
         </block>
       </view>
     </view>
   </view>
 
+  <view wx:if="{{goodList.length || recommendList.length}}">
+    <cart-bottom
+      info="{{cartAllData}}"
+      bind:popup="handleUpdate"
+    />
+  </view>
+
+  <van-toast id="van-toast" />
   <show-mobal
     show="{{ showDeleteSearch }}"
     content="您确定要删除商品吗？"

@@ -44,6 +44,18 @@ const getExamine = (params) => {
   return params;
 }
 
+const getStoreNo = (p) => {
+  let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
+  if(takeSpot.storeNo) {
+    p = {
+      ...p,
+      storeNo: takeSpot.storeNo,
+    }
+  }
+  return p
+}
+
+
 export default {
   // 小程序版本状态
   getExamine,
@@ -56,8 +68,6 @@ export default {
   },
   // 获取1分钱&特价
   getAcarea(url, params, option) {
-    console.log('url', url)
-    console.log('params', params)
     return Request.get(url, params, option);
   },
   // 获取banner列表
@@ -140,25 +150,30 @@ export default {
   // 2.5.2生鲜店商品列表
   getGoodsList(params, option) {
     // params = getExamine(params);
+    params = getStoreNo(params)
     return Request.get(url.goodsList, params, option);
   }, 
   // 2.5.2生鲜店分类列表
   getGoodsCategory(params, option) {
     // params = getExamine(params);
+    params = getStoreNo(params)
     return Request.get(url.category, params, option);
   },
   // 2.5.2生鲜店为你推荐
   getRecGoods(params, option) {
     // params = getExamine(params);
+    params = getStoreNo(params)
     return Request.get(url.rec, params, option);
   },
   // 2.5.2店铺猜你喜欢
   getYouLike(params, option) {
     // params = getExamine(params);
+    params = getStoreNo(params)
     return Request.get(url.love, params, option);
   },
   // 2.5.2店内商品搜索
   searchInStore(params, option) {
+    params = getStoreNo(params)
     return Request.get(url.search, params, option);
   },
   

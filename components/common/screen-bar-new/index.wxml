@@ -1,0 +1,16 @@
+<view class="flex_middle screen_bar">
+  <view
+    class="flex_center screen_item {{item.selected ? 'screen_item_act' : ''}}"
+    wx:for="{{screenList}}"
+    wx:key="index"
+    data-index="{{index}}"
+    bindtap="onScreen"
+  >
+    <text>{{item.text}}</text>
+    <image
+      class="screen_img"
+      src="{{item.type === 'DESC' ? iconAsc : iconDesc}}"
+      wx:if="{{item.type}}"
+    />
+  </view>
+</view>
