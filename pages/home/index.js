@@ -275,8 +275,8 @@ create.Page(store, {
       // 自动选择附近的一个店铺
       const takeSpot = wx.getStorageSync("TAKE_SPOT");
       !takeSpot && wx.getLocation({
-        type: 'gps84',
-        altitude: false,
+        type: 'gcj02',
+        isHighAccuracy: true,
         success(result) {
           let data = {
             latitude: result.latitude,

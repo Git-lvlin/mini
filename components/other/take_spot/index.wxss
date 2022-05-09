@@ -33,7 +33,7 @@
 }
 
 .recommend_label {
-  width: 80rpx;
+  width: 68rpx;
   height: 32rpx;
   margin-left: 16rpx;
 }
@@ -56,4 +56,8 @@
   width: 40rpx;
   height: 40rpx;
   margin-left: 48rpx;
+}
+
+.store_avatar {
+  align-self: flex-start;
 }

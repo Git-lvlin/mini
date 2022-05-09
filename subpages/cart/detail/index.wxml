@@ -10,10 +10,11 @@
     bindscrolltolower="handleScrollBottom"
   >
     <view class="position banner_content" id="detailTop">
+
       <image
         class="back_icon"
         style="top: {{backTopHeight}}rpx"
-        src="{{tools.getImgUrl('miniprogram/cart/good_back.png')}}"
+        src="{{currentPages>1?tools.getImgUrl('miniprogram/cart/good_back.png'):tools.getImgUrl('miniprogram/cart/good_home.png')}}"
         bindtap="onToBack"
       />
       <user-together-banner

@@ -104,6 +104,7 @@ create.Page(store, {
     fiveList: [],
     showHasOrderPopup: false,
     hasOrderData: {},
+    currentPages: []
   },
 
   onLoad(options) {
@@ -121,6 +122,10 @@ create.Page(store, {
     }else{
       this.hanldeGoodsParams(options)
     }
+
+    this.setData({
+      currentPages: getCurrentPages().length
+    })
 
   },
 
