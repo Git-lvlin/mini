@@ -2,11 +2,10 @@
   "navigationBarTitleText": "搜索",
   "navigationBarBackgroundColor": "#F5F5F5",
   "usingComponents": {
-    "van-search": "/miniprogram_npm/@vant/weapp/search/index",
-    "notdata": "/components/common/nodata/index",
-    "good-card": "/components/common/good-card/index",
-    "screen-bar": "/components/common/screen-bar/index",
+    "screen-bar-new": "/components/common/screen-bar-new/index",
     "show-mobal": "/components/common/show-modal/index",
-    "user-like": "/components/home/user-like/index"
+    "user-like": "/components/home/user-like/index",
+    "cart-bottom": "/components/cart/cart-bottom/index",
+    "van-toast": "@vant/weapp/toast/index"
   }
 }

@@ -30,6 +30,7 @@ create.Page(store, {
   ],
   
   data: {
+    cartAllData: null,
     fixationTop: 600,
     isOnGoods: false,
     scrolling: false,
@@ -51,7 +52,6 @@ create.Page(store, {
     isFixedTop: false,
     bannerData: {},
     intensiveData: null,
-    recommendData: [],
     remindData: [],
     recommendData: [],
     storeNo: 'store_m_123942', // 测试用店铺号
@@ -73,28 +73,7 @@ create.Page(store, {
         value: 0,
       },
     ],
-    cartList: [
-      {
-        name: 'dasdasdasd',
-        price: 11111,
-        value: 0,
-      },
-      {
-        name: 'dasdasdasd',
-        price: 11111,
-        value: 0,
-      },
-      {
-        name: 'dasdasdasd',
-        price: 11111,
-        value: 0,
-      },
-      {
-        name: 'dasdasdasd',
-        price: 11111,
-        value: 0,
-      },
-    ]
+    cartList: []
   },
 
   onLoad(options) {
@@ -126,6 +105,7 @@ create.Page(store, {
 
   onShow() {
     const takeSpot = wx.getStorageSync("TAKE_SPOT");
+    console.log('takeSpot', takeSpot)
     if(takeSpot) {
       this.setData({
         takeSpot,
@@ -146,17 +126,11 @@ create.Page(store, {
 
   // 初始化
   init() {
-    
     Promise.all([this.getAllGoodsList(),this.getGoodsCategory(),this.getSummaryByCartData()]).then((res) => {
       this.setData({
         refresherTriggered: false,
       })
     })
-    // Promise.all([this.getBannerData(),this.getAllGoodsList(),this.getGoodsCategory()]).then((res) => {
-    //   this.setData({
-    //     refresherTriggered: false,
-    //   })
-    // })
   },
 
   onCloseCartPopup() {
@@ -188,16 +162,20 @@ create.Page(store, {
     }
     cartApi.removeCart(params)
   },
-  // 设置购物车数量
-  setCartNum() {
-    const {storeNo, } = this.data
+  // 设置购物车商品数量
+  setCartNum(itemInfo) {
+    const { value, skuId, objectId } = itemInfo;
     const params = {
-      quantity,
-      skuId,
-      objectId,
-      skuStoreNo: storeNo
+      skuId: skuId,
+      objectId: objectId,
+      quantity: value,
     }
-    cartApi.setCartNum(params)
+    cartApi.setCartNum(params).then((res) => {
+      console.log('设置购物车商品数量', res)
+      if (res.value) {
+        this.getSummaryByCartData()
+      }
+    })
   },
   // 选中购物车明细
   checkedCart() {
@@ -218,23 +196,14 @@ create.Page(store, {
     }
     cartApi.checkedAllCart(params)
   },
-  // 购物车商品列表
-  getCartList() {
-    const {storeNo, } = this.data
-    const params = {
-      skuStoreNo: storeNo,
-    }
-    cartApi.cartList(params)
-  },
   // 购物车商品列表汇总
   getSummaryByCartData() {
-    const {storeNo} = this.data
-    const params = {
-      skuStoreNo: storeNo,
-    }
     return new Promise((resolve) => {
-      cartApi.summaryByCartData(params).then((res) => {
+      cartApi.summaryByCartData().then((res) => {
         resolve(true)
+        this.setData({
+          cartAllData: res
+        })
       })
     })
   },
@@ -256,36 +225,63 @@ create.Page(store, {
   },
 
 
+  handleUpdate() {
+    this.init()
+  },
 
-
-
+  // 购物车商品列表
+  getCartList() {
+    return new Promise((resolve) => {
+      cartApi.cartList().then((res) => {
+        console.log('购物车商品列表', res)
+        this.setData({
+          cartList: res
+        })
+        resolve(res)
+      })
+    })
+  },
   // 商品列表
-  getAllGoodsList(gcId1) {
-    const {storeNo} = this.data
+  async getAllGoodsList(gcId1) {
     const params = {
-      storeNo,
       page: 1,
       size: 10,
       gcId1: gcId1 || 0,
     }
+    const resolveData = await this.getCartList();
     return new Promise((resolve) => {
       intensiveApi.getGoodsList(params).then((res) => {
-        console.log('getGoodsList-res', res);
-        let list = res.records.map((item, index) => {
+        if (!res.records.length) {
+          this.getRecommendData()
+          this.setData({
+            goodsData: []
+          }, () => {
+            resolve(true)
+          })
+          return
+        }
+        let list = res.records.map((item) => {
           let p = (item.salePrice/100).toString();
           let a = '';
           let z = '';
+          let v = 0;
           if (p.includes('.')) {
             a = p.split('.')[0]
             z = p.split('.')[1]
           } else {
             a = p
           }
+
+          resolveData.map(cartItem => {
+            if (cartItem.objectId == item.objectId) {
+              v = cartItem.quantity
+            }
+          })
           return {
             ...item,
             aPrice: a,
             zPrice: z,
-            value: 0,
+            value: v,
           }
         })
         this.setData({
@@ -352,6 +348,7 @@ create.Page(store, {
       return
     }
     goodsData[index].value = value + 1
+    this.setCartNum(goodsData[index]);
     setTimeout(() => {
       Toast.clear();
       this.setData({
@@ -372,6 +369,7 @@ create.Page(store, {
     if ((buyMinNum>1) && (value - 1 < buyMinNum)) {
       Toast(`该商品${buyMinNum}${unit}起购`);
     }
+    this.setCartNum(goodsData[index]);
     setTimeout(() => {
       Toast.clear();
       this.setData({
@@ -410,25 +408,23 @@ create.Page(store, {
 
   // 提醒采购商品列表
   getRecommendData() {
-    const f = wx.getStorageSync('EXAMINE') || false;
-    if (f) {
-      return
-    }
+    // const f = wx.getStorageSync('EXAMINE') || false;
+    // console.log('提醒采购商品f', f)
+    // if (f) {
+    //   return
+    // }
     let spot = wx.getStorageSync("TAKE_SPOT") || {};
     let params = {
       page: 1,
       size: 99,
       storeNo: spot.storeNo || '',
     }
-    return new Promise((reject) => {
-      homeApi.getStoreNotInSkus(params).then(res => {
-        this.setData({
-          recommendData: res
-        }, () => {
-          reject()
-        })
-      });
-    })
+    homeApi.getStoreNotInSkus(params).then(res => {
+      console.log('提醒采购商品列表', res)
+      this.setData({
+        recommendData: res
+      })
+    });
   },
 
   // 获取审核状态
