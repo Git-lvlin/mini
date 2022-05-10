@@ -369,6 +369,8 @@
   font-size: 24rpx;
 }
 .a_price {
+  position: relative;
+  top: 2rpx;
   font-size: 32rpx;
 }
 .price_old {

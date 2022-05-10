@@ -99,17 +99,17 @@ Page({
   onStepChangeAdd(e) {
     // Toast.loading({ forbidClick: true });
     let {index, item, search} = e.currentTarget.dataset;
-    let {buyMaxNum, value, unit, stockNum} = item;
-    if (buyMaxNum > stockNum) {
-      buyMaxNum = stockNum
+    let {skuBuyMaxNum, value, unit, stockNum} = item;
+    if (skuBuyMaxNum > stockNum) {
+      skuBuyMaxNum = stockNum
     }
     let {recommendList, goodList, cartAllData} = this.data;
     if (cartAllData.checkedSkuQuantity > 20) {
       Toast(`购物车已满`);
       return
     }
-    if (value + 1 > buyMaxNum) {
-      Toast(`该商品最多购买${buyMaxNum}${unit}`);
+    if (value + 1 > skuBuyMaxNum) {
+      Toast(`该商品最多购买${skuBuyMaxNum}${unit}`);
       return
     }
     if (search) {

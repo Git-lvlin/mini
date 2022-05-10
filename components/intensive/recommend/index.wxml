@@ -15,6 +15,10 @@
       />
       <view class="right-box">
         <view class="name">{{item.goodsName}}</view>
+        <view class="tab_icon_box">
+          <image class="tab_icon" src="{{tools.getImgUrl('miniprogram/intensive/tab-icon.png')}}"/>
+          <view class="tab_icon_text">{{item.goodsSaleNumStr}}</view>
+        </view>
         <view class="price2">{{tools.priceToF2(item.marketPrice)}}</view>
         <view class="price-box">
           <text class="price1"><text class="span">¥</text>{{tools.priceToF2(item.goodsSalePrice)}}</text>

@@ -130,6 +130,9 @@ create.Component(store, {
         let z = '';
         let n = 0;
         n = data.quantity;
+        if (n > 99) {
+          n = '...'
+        }
         if (price.includes('.')) {
           a = price.split('.')[0];
           z = price.split('.')[1];

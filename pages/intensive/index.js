@@ -339,10 +339,13 @@ create.Page(store, {
   },
 
   onStepChangeAdd(e) {
-    Toast.loading({ forbidClick: true });
+    // Toast.loading({ forbidClick: true });
     let {index, item} = e.currentTarget.dataset;
-    let {buyMaxNum, value, unit} = item;
+    let {buyMaxNum, value, unit, stockNum} = item;
     let {goodsData} = this.data;
+    if (buyMaxNum > stockNum) {
+      buyMaxNum = stockNum
+    }
     if (value + 1 > buyMaxNum) {
       Toast(`该商品最多购买${buyMaxNum}${unit}`);
       return
@@ -357,7 +360,7 @@ create.Page(store, {
     }, 300);
   },
   onStepChangeDelete(e) {
-    Toast.loading({ forbidClick: true });
+    // Toast.loading({ forbidClick: true });
     let {index, item} = e.currentTarget.dataset;
     let {buyMinNum, value, unit} = item;
     let {goodsData} = this.data;

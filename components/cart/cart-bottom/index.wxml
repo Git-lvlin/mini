@@ -9,7 +9,7 @@
     <view class="cart_text_box">
       <text class="cart_text_head">合计：</text>
       <text class="price_head">¥</text>
-      <text class="price">{{aPrice}}</text>
+      <text class="price_aPrice">{{aPrice}}</text>
       <text class="zprice">.{{zPrice}}</text>
     </view>
   </view>

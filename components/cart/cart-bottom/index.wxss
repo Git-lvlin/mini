@@ -54,12 +54,16 @@
   background-color: #FFFFFF;
   font-size: 22rpx;
   color: #FF0000;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .cart_text_box {
   margin-left: 18rpx;
   display: flex;
   justify-content: flex-start;
   align-items: flex-end;
+  vertical-align: bottom;
 }
 .cart_text_head {
   color: #333333;
@@ -69,11 +73,12 @@
   font-size: 24rpx;
   color: #FF0000;
 }
-.price {
+.price_aPrice {
   position: relative;
   top: 4rpx;
   font-size: 40rpx;
   color: #FF0000;
+  vertical-align: bottom;
 }
 .zprice {
   font-size: 24rpx;
