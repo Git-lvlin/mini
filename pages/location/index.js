@@ -2,6 +2,7 @@ import { IMG_CDN } from '../../constants/common';
 import create from '../../utils/create';
 import store from '../../store/index';
 import { debounce, showModal, showToast, throttle } from '../../utils/tools';
+import util from '../../utils/util';
 import goodApi from '../../apis/good';
 import commonApi from '../../apis/common';
 import router from '../../utils/router';
@@ -53,46 +54,54 @@ create.Page(store, {
     showAddress: false,
     mapScale: 13,
     inputText: '',
+    stores: [],
+    locationName: '',
   },
 
   onShow() {
     const that = this;
     const takeSpot = wx.getStorageSync("TAKE_SPOT") || "";
-    if(takeSpot && takeSpot.latitude) {
-      that.setData({
-        currentSpot: takeSpot,
-        latitude: takeSpot.latitude,
-        longitude: takeSpot.longitude,
-      }, () => {
-        that.getNearbyStore({
-          latitude: takeSpot.latitude,
-          longitude: takeSpot.longitude,
-        });
-      });
-      that.location = takeSpot;
-      this.getRegeo();
-      that.openLocation = true;
-    } else {
-      wx.getLocation({
-        type: 'gps84',
-        altitude: false,
-        success(result) {
-          that.fristLoad = false;
-          let data = {
-            latitude: result.latitude,
-            longitude: result.longitude,
-          }
-          that.openLocation = true;
-          that.setData(data);
-          !takeSpot && that.getNearbyStore(data);
-        },
-        fail(err) {
-          that.openLocation = false;
-          that.openLocationTip();
-          !takeSpot && that.getNearbyStore(defLocation);
-        },
-      });
-    }
+    this.setData({
+      currentSpot: takeSpot
+    })
+    // if(!takeSpot && takeSpot.latitude) {
+    //   that.setData({
+    //     currentSpot: takeSpot,
+    //     latitude: takeSpot.latitude,
+    //     longitude: takeSpot.longitude,
+    //   }, () => {
+    //     that.getNearbyStore({
+    //       latitude: takeSpot.latitude,
+    //       longitude: takeSpot.longitude,
+    //     });
+    //   });
+    //   that.location = takeSpot;
+    //   this.getRegeo();
+    //   that.openLocation = true;
+    // } else {
+      
+    // }
+
+    wx.getLocation({
+      type: 'gcj02',
+      isHighAccuracy: true,
+      success(result) {
+        that.fristLoad = false;
+        let data = {
+          latitude: result.latitude,
+          longitude: result.longitude,
+        }
+        that.openLocation = true;
+        that.location = data;
+        that.setData(data);
+        that.getNearbyStore(data);
+      },
+      fail(err) {
+        that.openLocation = false;
+        that.openLocationTip();
+        !takeSpot && that.getNearbyStore(defLocation);
+      },
+    });
   },
 
   // 定位提示
@@ -230,6 +239,21 @@ create.Page(store, {
     }
   },
 
+  onTakeSpot2({
+    detail
+  }) {
+    this.setData({
+      stores: this.data.stores.map(item =>{
+        return {
+          ...item,
+          selected: item.sn === detail.sn
+        }
+      })
+    })
+    wx.setStorageSync("TAKE_SPOT", detail);
+    router.go();
+  },
+
   // 设置market
   setMarket(id) {
     let {
@@ -365,7 +389,29 @@ create.Page(store, {
         return;
       }
       this.getPoiAround(inputText);
+      this.getNearbyWords(inputText)
     }, 500)();
+  },
+
+  cleanInput() {
+    this.setData({
+      inputText: '',
+      showAddress: false
+    })
+  },
+
+  getNearbyWords(keywords) {
+    goodApi.getNearbyWords({
+      radius: 50000,
+      unit: 'm',
+      limit: 200,
+      ...this.location,
+      keywords,
+    }).then(res => {
+      this.setData({
+        stores: res.map(item => ({ ...item, selected:false})),
+      })
+    })
   },
 
   // 根据经纬度获取地址信息
@@ -383,6 +429,11 @@ create.Page(store, {
             addressComponent,
           } = data[0].regeocodeData;
           this.selectLocation = addressComponent.streetNumber.location;
+          if (!that.data.locationName) {
+            that.setData({
+              locationName: data[0].name
+            });
+          }
           that.setData({
             cityData: addressComponent,
           });
@@ -412,9 +463,12 @@ create.Page(store, {
       querykeywords,
       location: this.selectLocation,
       success(data) {
-        const addMarkers = data.markers;
+        const addMarkers = data.poisData;
         addMarkers.length && addMarkers.forEach(item => {
           item.nameArr = that.getTextKey(item.name, querykeywords);
+          item.distanceDisplay = +item.distance < 1000 ? `${item.distance}m` : `${util.divide(item.distance, 1000).toFixed(2)}km`
+          item.longitude = item.location.split(',')[0]
+          item.latitude = item.location.split(',')[1]
         });
         const sdata = {
           addMarkers,
@@ -532,7 +586,8 @@ create.Page(store, {
       mapScale: 13,
       latitude: data.latitude,
       longitude: data.longitude,
-      showAddress: false
+      showAddress: false,
+      locationName: data.name
     })
   },
 

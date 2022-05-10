@@ -4,15 +4,20 @@
 }
 
 /* 搜索框 */
-.search_box {
+.search_box_wrap {
   position: absolute;
-  top: 24rpx;
-  left: 24rpx;
   z-index: 110;
+  width: 100%;
+  height: 64rpx;
+  padding: 16rpx 0;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+}
+.search_box {
   width: 686rpx;
   height: 64rpx;
-  padding-left: 16rpx;
-  background-color: #ffffff;
+  background-color: #f5f5f5;
   border-radius: 32rpx;
 }
 
@@ -39,6 +44,13 @@
   width: 40rpx;
   height: 40rpx;
   margin-right: 16rpx;
+}
+
+.close_icon {
+  width: 40rpx;
+  height: 40rpx;
+  position: absolute;
+  right: 60rpx;
 }
 
 .sreach_input {
@@ -140,7 +152,7 @@
 /* 搜索地址 */
 .sreach_address {
   width: 100%;
-  height: calc(100vh - 112rpx);
+  height: calc(100vh - 200rpx);
   overflow-y: auto;
   background-color: #fff;
   border-radius: 24rpx 24rpx 0 0;
@@ -148,11 +160,30 @@
 
 .address_item {
   position: relative ;
-  padding: 20rpx 64rpx 20rpx 32rpx;
+  padding: 20rpx 114rpx 20rpx 52rpx;
 }
 
 .address_item:not(:last-child) {
   border: 2rpx solid #f5f5f5;
+}
+
+.distanceDisplay {
+  position: absolute;
+  right: 30rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 28rpx;
+  color: #999;
+}
+
+.location_icon {
+  position: absolute;
+  width: 24rpx;
+  height: 34rpx;
+  margin-right: 8rpx;
+  left: 15rpx;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .company_name {
@@ -172,3 +203,52 @@
   font-size: 20rpx;
   line-height: 28rpx;
 }
+
+.address_wrap {
+  position: fixed;
+  width: 100%;
+  top: 80rpx;
+  bottom: 0;
+  background: #fff;
+  z-index: 999;
+}
+
+.store_list {
+  width: 100%;
+  height: calc(100vh - 200rpx);
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.store_flag_wrap {
+  display: flex;
+  margin-top: 10rpx;
+}
+
+.store_flag {
+  border: 1rpx solid #00D769;
+  color: #00D769;
+  border-radius: 20rpx;
+  padding: 5rpx;
+  font-size: 24rpx;
+  margin-right: 10rpx;
+}
+
+.location_name_wrap {
+  width: 100%;
+  height: 72rpx;
+  background: #FCF6F5;
+  position: fixed;
+  top: 95rpx;
+  z-index: 110;
+  padding-left: 24rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+}
+
+.location_name_label {
+  color: #666;
+}
+

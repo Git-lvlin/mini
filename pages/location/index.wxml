@@ -1,16 +1,23 @@
 <wxs module="tools" src="../../wxs/common.wxs" />
 
 <view class="container">
-  <view class="flex_middle search_box">
-    <view class="flex_middle area_box" bindtap="onOpenCity">
-      <view class="area_name">{{cityData.district}}</view>
-      <image class="area_icon" src="{{tools.getImgUrl('miniprogram/common/back_gray%402x.png')}}" />
+  <view class="search_box_wrap">
+    <view class="flex_middle search_box">
+      <view class="flex_middle area_box" bindtap="onOpenCity">
+        <view class="area_name">{{cityData.district}}</view>
+        <image class="area_icon" src="{{tools.getImgUrl('miniprogram/common/back_gray%402x.png')}}" />
+      </view>
+      <view class="flex_middle search_text">
+        <image class="search_icon" src="{{tools.getImgUrl('miniprogram/common/search%402x.png')}}" />
+        <input class="sreach_input" value="{{inputText}}" placeholder="请输入地址" bindinput="handleInput" />
+        <image wx:if="{{inputText!==''}}" class="close_icon" src="{{tools.getImgUrl('miniprogram/location/close.png')}}"  bindtap="cleanInput" />
+      </view>
     </view>
+  </view>
 
-    <view class="flex_middle search_text">
-      <image class="search_icon" src="{{tools.getImgUrl('miniprogram/common/search%402x.png')}}" />
-      <input class="sreach_input" value="{{inputText}}" placeholder="请输入地址" bindinput="handleInput" />
-    </view>
+  <view wx:if="{{locationName}}" class="location_name_wrap">
+    <view class="location_name_label">定位地址：</view>
+    <text>{{locationName}}</text>
   </view>
 
   <view class="map_container">
@@ -46,14 +53,14 @@
       </view>
       <view class="store_spot_list">
         <view class="current_spot" wx:if="{{currentSpot.storeNo}}">
-          <view class="current_spot_text">当前自提点</view>
+          <view class="current_spot_text">当前已选择的社区店</view>
           <take-spot
             data="{{currentSpot}}"
             bind:click="onCurrentSpot"
           />
         </view>
         <view class="other_spot" wx:if="{{markers.length}}">
-          <view class="current_spot_text">当前定位附近的自提点</view>
+          <view class="current_spot_text">当前定位附近的社区店</view>
           <take-spot
             wx:for="{{markers}}"
             wx:key="id"
@@ -80,7 +87,29 @@
     bind:close="onCloseAddress"
   />
 
-  <van-popup
+  <view class="address_wrap" wx:if="{{showAddress}}">
+    <van-tabs>
+      <van-tab title="地址">
+        <view class="sreach_address">
+          <view class="address_item" wx:for="{{addMarkers}}" wx:key="index" data-data="{{item}}" bindtap="onSelectAddress">
+            <view class="company_name text_one_line">
+              <text class="{{child.type === 2 ? 'text_red' : ''}}" wx:for="{{item.nameArr}}" wx:key="index" wx:for-item="child">{{child.text}}</text>
+            </view>
+            <view class="company_address text_one_line">{{item.address}}</view>
+            <image class="location_icon" src="{{tools.getImgUrl('miniprogram/common/location.png')}}" />
+            <view class="distanceDisplay">{{item.distanceDisplay}}</view>
+          </view>
+        </view>
+      </van-tab>
+      <van-tab title="社区店">
+        <view class="store_list" wx:if="{{stores.length}}">
+          <take-spot wx:for="{{stores}}" wx:key="sn" data="{{item}}" bind:click="onTakeSpot2" />
+        </view>
+      </van-tab>
+    </van-tabs>
+  </view>
+
+  <!-- <van-popup
     show="{{showAddress}}"
     position="bottom"
     closeable
@@ -107,5 +136,5 @@
         <view class="company_address text_one_line">{{item.address}}</view>
       </view>
     </view>
-  </van-popup>
+  </van-popup> -->
 </view>

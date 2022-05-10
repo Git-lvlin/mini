@@ -46,6 +46,7 @@ const url = {
   businessDetail: "/store/option/v2/wholesale/productDetail",
 
   nearbyStore: "/store/option/memberShop/nearby",
+  nearbyWords: "/store/option/memberShop/nearbywords",
 
   commentTotal: "/cms/option/comment/findAllCount",
   detailComment: "/cms/option/comment/getTwoComment",
@@ -222,6 +223,10 @@ export default {
   // 获取一定范围内的店铺数
   getNearbyStore(params, option) {
     return Request.get(url.nearbyStore, params, option);
+  },
+  // 获取一定范围内的店铺数
+  getNearbyWords(params, option) {
+    return Request.get(url.nearbyWords, params, option);
   },
 
   // 获取商品详情评价总数
