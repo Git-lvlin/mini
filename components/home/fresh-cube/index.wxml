@@ -23,7 +23,7 @@
           <view class="last-price">¥{{cent.fresh.list[0].marketPrice/100}}</view>
         </view>
       </view>
-      <view class="one_btn">立即抢购</view>
+      <view class="one_btn" data-data="{{cent.fresh.list[0]}}" bindtap="onToDetail">立即抢购</view>
     </view>
   </view>
   <view class="fresh_two" wx:if="{{spec.fresh&&spec.fresh.list.length}}">
@@ -48,7 +48,7 @@
           <view class="last-price">¥{{spec.fresh.list[0].marketPrice/100}}</view>
         </view>
       </view>
-      <view class="one_btn">立即抢购</view>
+      <view class="one_btn" bindtap="onToDetail">立即抢购</view>
     </view>
   </view>
   <view class="fresh_tab"></view>
