@@ -70,11 +70,43 @@
       wx:if="{{intensiveData}}"
       intensiveList="{{intensiveData}}"
     /> -->
+
+    <view class="cart_box2" wx:if="{{goodsData.length && goodsData.length <= 10}}">
+      <view class="cart_right_box2">
+        <block wx:for="{{goodsData}}" wx:key="index">
+          <view class="goods_item_box2">
+            <view class="goods_img_box2">
+              <image class="goods_img_index" src="{{item.imageUrl}}" />
+            </view>
+            <view class="goods_right_box2">
+              <view class="goods_name2">{{item.goodsName}}</view>
+              <view class="goods_nums2">{{item.saleNumStr}}</view>
+              <view class="goods_price_box">
+                <view class="price_index">
+                  <text class="price_head">¥</text>
+                  <text class="a_price">{{item.aPrice}}</text>
+                  <text class="z_price" wx:if="{{item.zPrice}}">{{'.' + item.zPrice}}</text>
+                </view>
+                <view class="price_old">¥{{item.marketPrice/100}}</view>
+              </view>
+              <view class="step_box2" wx:if="{{item.isCartShow}}" >
+                <image class="step_delete_icon" wx:if="{{item.value}}" data-item="{{item}}" data-index="{{index}}" bindtap="onStepChangeDelete" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
+                <view class="step_index_num" wx:if="{{item.value}}">{{item.value}}</view>
+                <image class="step_add_icon" data-item="{{item}}" data-index="{{index}}" bindtap="onStepChangeAdd" src="{{tools.getImgUrl('miniprogram/intensive/a-icon.png')}}" />
+              </view>
+            </view>
+          </view>
+        </block>
+      </view>
+    </view>
+    <view class="box2_mark" wx:if="{{goodsData.length && goodsData.length <= 10}}"></view>
+
     <!-- 优选推荐 -->
     <recommend
       wx:if="{{recommendData.records.length && !goodsData.length}}"
       remindList="{{recommendData}}"
     />
+
   </scroll-view>
   <!-- 集约多种分类合并超版本购物车 -->
   <view class="cart_box" wx:if="{{goodsData.length && goodsData.length > 10}}">
@@ -110,34 +142,7 @@
       </block>
     </view>
   </view>
-  <view class="cart_box2" wx:if="{{goodsData.length && goodsData.length <= 10}}">
-    <view class="cart_right_box2">
-      <block wx:for="{{goodsData}}" wx:key="index">
-        <view class="goods_item_box2">
-          <view class="goods_img_box2">
-            <image class="goods_img_index" src="{{item.imageUrl}}" />
-          </view>
-          <view class="goods_right_box2">
-            <view class="goods_name2">{{item.goodsName}}</view>
-            <view class="goods_nums2">{{item.saleNumStr}}</view>
-            <view class="goods_price_box">
-              <view class="price_index">
-                <text class="price_head">¥</text>
-                <text class="a_price">{{item.aPrice}}</text>
-                <text class="z_price" wx:if="{{item.zPrice}}">{{'.' + item.zPrice}}</text>
-              </view>
-              <view class="price_old">¥{{item.marketPrice/100}}</view>
-            </view>
-            <view class="step_box2" wx:if="{{item.isCartShow}}" >
-              <image class="step_delete_icon" wx:if="{{item.value}}" data-item="{{item}}" data-index="{{index}}" bindtap="onStepChangeDelete" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
-              <view class="step_index_num" wx:if="{{item.value}}">{{item.value}}</view>
-              <image class="step_add_icon" data-item="{{item}}" data-index="{{index}}" bindtap="onStepChangeAdd" src="{{tools.getImgUrl('miniprogram/intensive/a-icon.png')}}" />
-            </view>
-          </view>
-        </view>
-      </block>
-    </view>
-  </view>
+
   <!-- 购物车常驻栏 -->
   <cart-bottom
     wx:if="{{goodsData.length}}"

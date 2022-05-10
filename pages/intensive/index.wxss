@@ -56,7 +56,7 @@
   top: 100rpx;
   position: relative;
   flex: 1;
-  /* height: 1000rpx; */
+  height: 1000rpx;
 }
 
 .pul_icon {
@@ -208,9 +208,10 @@
   align-items: center;
   background-color: #ffffff;
   width: 100%;
-  height: 1000rpx;
-  overflow: hidden;
-  overflow-y: auto;
+}
+.box2_mark {
+  width: 100%;
+  height: 300rpx;
 }
 .class_item_box {
   position: relative;
@@ -253,9 +254,6 @@
   width: 100%;
   height: 202rpx;
   margin-bottom: 24rpx;
-}
-.goods_item_box2:nth-last-child(1) {
-  padding-bottom: 160rpx;
 }
 .goods_item_box:nth-last-child(1) {
   padding-bottom: 160rpx;

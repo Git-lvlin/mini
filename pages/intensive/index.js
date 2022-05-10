@@ -680,6 +680,7 @@ create.Page(store, {
   },
 
   handleScrollBottom() {
+    console.log('111')
     this.setData({
       scrollBottom: true,
     })
