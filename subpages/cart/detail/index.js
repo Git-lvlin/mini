@@ -104,6 +104,7 @@ create.Page(store, {
     fiveList: [],
     showHasOrderPopup: false,
     hasOrderData: {},
+    inviteCode: '',
   },
 
   onLoad(options) {
@@ -154,6 +155,9 @@ create.Page(store, {
       isActivityGood,
       skuId: options.skuId,
     })
+    if (options && options.shareStoreNo) {
+      this.shareStoreNo = options.shareStoreNo
+    }
     if(options && options.inviteCode) {
       wx.setStorageSync("INVITE_INFO", {
         inviteCode: options.inviteCode,
@@ -1277,6 +1281,9 @@ create.Page(store, {
       activityId: !!activityId ? activityId : "",
       objectId: !!objectId ? objectId : this.goodParams.objectId,
       isActivityCome: isActivityCome,
+    }
+    if (this.shareStoreNo) {
+      p.shareStoreNo = this.shareStoreNo
     }
     router.push({
       name: "createOrder",

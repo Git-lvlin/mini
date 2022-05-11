@@ -71,6 +71,7 @@ create.Page(store, {
     if (teamGoods.storeGoodsInfos) {
       teamGoods.storeGoodsInfos =JSON.parse(options.storeGoodsInfos);
     }
+    this.shareStoreNo = options.shareStoreNo || ''
     this.orderType = orderType;
     // 活动页面 - 单独购买
     this.isActivityCome = !!options.isActivityCome;
@@ -756,6 +757,9 @@ create.Page(store, {
       postData = this.getStoreGood();
     }
     if(!postData || !postData.deliveryInfo) return;
+    if(this.shareStoreNo) {
+      postData.shareStoreNo = this.shareStoreNo
+    }
     console.log('确认订单前传参', postData)
     cartApi.createOrder(postData).then(res => {
       res.orderType = this.orderType;

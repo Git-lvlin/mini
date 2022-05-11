@@ -81,12 +81,12 @@
       <view class="info_item">支付方式：<text class="info_text">{{'微信支付'}}</text></view>
     </view>
 
-    <!-- <hot-good
+    <hot-good
       wx:if="{{hotGood.length}}"
       list="{{hotGood}}"
       autoJump="{{false}}"
       bind:click="handleToDetail"
-    /> -->
+    />
 
     <!-- <view  class="bottom_confirm" wx:if="{{isPay && (orderType != 3 && orderType != 4)}}">
       <view class="comfirm_btn" bindtap="onSuccess">完成</view>
