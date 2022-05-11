@@ -31,9 +31,18 @@ Component({
       value: false,
     }
   },
-
+  lifetimes: {
+    ready() {
+      console.log('ready', this.data.type)
+      if (this.data.type) {
+        this.setData({
+          type: this.data.type
+        })
+      }
+    }
+  },
   data: {
-  
+    type: ''
   },
 
   methods: {
