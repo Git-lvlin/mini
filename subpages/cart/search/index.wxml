@@ -103,7 +103,6 @@
         wx:for="{{goodList}}"
         wx:key="index"
         data="{{item}}"
-        type="search"
       />
     </view>
   </scroll-view>

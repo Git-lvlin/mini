@@ -6,10 +6,6 @@ Component({
   },
 
   properties: {
-    type: {
-      type: String,
-      value: '',
-    },
     size: {
       type: String,
       value: "344rpx"
@@ -29,16 +25,6 @@ Component({
     twoTitle: {
       type: Boolean,
       value: false,
-    }
-  },
-  lifetimes: {
-    ready() {
-      console.log('ready', this.data.type)
-      if (this.data.type) {
-        this.setData({
-          type: this.data.type
-        })
-      }
     }
   },
   data: {

@@ -1,10 +1,6 @@
 
 Component({
   properties: {
-    type: {
-      type: String,
-      value: '',
-    },
     title: {
       type: String,
       value: ""
