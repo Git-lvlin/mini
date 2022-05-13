@@ -355,7 +355,7 @@ create.Page(store, {
   },
 
   onSuccess() {
-    router.goTabbar("user");
+    router.goTabbar();
   },
 
   handleCloseTeam() {
