@@ -35,6 +35,7 @@ create.Page(store, {
     // "goodListTotal",
   ],
 
+  shareStoreNo: '',
   computed: {
     // quantity: ({
     //   options,

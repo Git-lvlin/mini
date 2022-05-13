@@ -241,7 +241,6 @@ create.Page(store, {
       postData.storeGoodsInfos = this.changeStoreData;
     }
     console.log('postData', postData)
-
     cartApi.getConfirmInfo(postData).then(res => {
       let orderInfo = res;
       let skuNum = 1;
@@ -757,8 +756,8 @@ create.Page(store, {
       postData = this.getStoreGood();
     }
     if(!postData || !postData.deliveryInfo) return;
-    if(this.shareStoreNo) {
-      postData.shareStoreNo = this.shareStoreNo
+    if (postData.storeGoodsInfos.length == 1 && this.shareStoreNo) {
+      postData.storeGoodsInfos[0].goodsInfos[0].shareStoreNo = this.shareStoreNo
     }
     console.log('确认订单前传参', postData)
     cartApi.createOrder(postData).then(res => {

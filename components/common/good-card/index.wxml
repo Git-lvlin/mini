@@ -13,12 +13,13 @@
       class="good_title {{twoTitle ? 'text_two_line' : 'text_one_line'}}"
       style="height: {{twoTitle ? 80 : 40 }}rpx"
     >{{data.title}}</view>
-    <view class="good_sku text_one_line" wx:if="{{!twoTitle}}">{{data.goodsDesc}}</view>
+    <view class="good_sku text_one_line" wx:if="{{!twoTitle && data.goodsDesc}}">{{data.goodsDesc}}</view>
+    <view class="good_str text_one_line" wx:if="{{data.goodsSaleNumStr}}">{{data.goodsSaleNumStr}}</view>
     <view class="good_price">
         <view class="flex_middle">
           <price-mobel money="{{data.salePrice}}" minSize="{{24}}" defaultColor="#ccc" marketMoney="{{data.marketPrice}}" />
         </view>
-        <view class="flex_fix cart" wx:if="{{!type}}">
+        <view class="flex_fix cart">
           <view class="cart_num">{{data.saleNumStr || data.goodsSaleNumDesc}}</view>
         </view>
     </view>

@@ -10,11 +10,11 @@ Component({
     },
     icon: {
       type: String,
-      value: `${IMG_CDN}miniprogram/cart/hot.png`
+      value: `${IMG_CDN}miniprogram/cart/hot-new.png`
     },
     title: {
       type: String,
-      value: "热销好货"
+      value: "精选推荐"
     },
     autoJump: {
       type: Boolean,

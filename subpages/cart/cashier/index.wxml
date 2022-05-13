@@ -81,24 +81,27 @@
       <view class="info_item">支付方式：<text class="info_text">{{'微信支付'}}</text></view>
     </view>
 
-    <hot-good
-      wx:if="{{hotGood.length}}"
-      list="{{hotGood}}"
-      autoJump="{{false}}"
-      bind:click="handleToDetail"
-    />
+
 
     <!-- <view  class="bottom_confirm" wx:if="{{isPay && (orderType != 3 && orderType != 4)}}">
       <view class="comfirm_btn" bindtap="onSuccess">完成</view>
     </view> -->
     <block wx:if="{{isPay && orderType != 4}}">
+      <view class="finish_desc">请到约购APP查看订单详情和领取商品确认收货</view>
       <view class="flex_middle btn_list">
-        <view class="btn_item item_finish" bindtap="onSuccess">完成</view>
+        <view class="btn_item item_finish" bindtap="onSuccess">继续购物</view>
         <view class="btn_item item_download" bindtap="onOpenSharePopup">下载约购APP</view>
       </view>
-      <view class="finish_desc">请到约购APP查看订单详情和领取商品确认收货</view>
     </block>
+
   </view>
+
+  <hot-good
+    wx:if="{{isPay && hotGood.length}}"
+    list="{{hotGood}}"
+    autoJump="{{false}}"
+    bind:click="handleToDetail"
+  />
 
   <team-success
     show="{{teamPopup}}"
