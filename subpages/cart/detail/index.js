@@ -266,6 +266,7 @@ create.Page(store, {
       scene: data.scene,
     }).then(res => {
       // const param = strToParamObj(res);
+      console.log('解析分享配置', res)
       const param = res;
       this.setData(param)
       this.hanldeGoodsParams(param)
@@ -534,11 +535,17 @@ create.Page(store, {
     const {
       shareInfo,
     } = this.data;
+    let {
+      orderType,
+    } = this.goodParams
     // 推荐商品
     this.getGoodRecommend();
     if(!shareInfo || !shareInfo.path) {
-      this.getShareInfo();
-      this.getShareInfo_pt()
+      if (orderType == 3) {
+        this.getShareInfo_pt()
+      } else {
+        this.getShareInfo();
+      }
     }
   },
   
