@@ -158,6 +158,9 @@ create.Page(store, {
     })
     if (options && options.shareStoreNo) {
       this.shareStoreNo = options.shareStoreNo
+      app.trackEvent('shopping_detail_share', {
+        shareStoreNo: options.shareStoreNo
+      });
     }
     if(options && options.inviteCode) {
       wx.setStorageSync("INVITE_INFO", {
