@@ -2,6 +2,7 @@ import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
 import homeApi from '../../../apis/home'
+import intensiveApi from '../../../apis/intensive'
 import { IMG_CDN, DETAIL_SERVICE_LIST, H5_HOST, webHost } from '../../../constants/common'
 import { CODE_SCENE } from '../../../constants/index'
 import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj, haveStore, debounce } from '../../../utils/tools'
@@ -27,7 +28,7 @@ create.Page(store, {
     size: 20,
   },
   canvasImg: '',
-
+  indexStoreNo: '',
   use: [
     "systemInfo",
     // "cartList",
@@ -206,9 +207,46 @@ create.Page(store, {
       })
     }
   },
+  getStoreNo () {
+    console.log('getStoreNo', this.data.userInfo)
+    if(!this.data.userInfo) {
+      getStorageUserInfo(true);
+      return;
+    }
+    return new Promise((resolve) => {
+      intensiveApi.getStoreNo({userType: 1}, {notErrorMsg: true}).then((res) => {
+        console.log('getStoreNo-res', res)
+        resolve(res[0])
+      }).catch(() => {
+        resolve({storeNo: null})
+      })
+    })
+
+  },
+
   // 转发
-  onShareAppMessage({from}) {
+  async onShareAppMessage({from}) {
     console.log('from', from)
+    console.log('点击分享后this.goodParams', this.goodParams)
+    let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
+    let {shareStoreNo, ...rest} = this.goodParams
+    let all = {};
+    if(takeSpot.storeNo) {
+      all = {
+        ...rest,
+        shareStoreNo: takeSpot.storeNo
+      }
+    } else {
+      let {storeNo} = await this.getStoreNo()
+      all = {
+        ...rest
+      }
+      if (storeNo) {
+        all.shareStoreNo = storeNo
+      }
+    }
+    console.log('all', all)
+    this.goodParams = all
     const {
       good,
       shareInfo,

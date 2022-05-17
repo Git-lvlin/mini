@@ -13,7 +13,7 @@
       <image
         class="back_icon"
         style="top: {{backTopHeight}}rpx"
-        src="{{tools.getImgUrl('miniprogram/cart/good_back.png')}}"
+        src="{{tools.getImgUrl('miniprogram/cart/good_back_home.png')}}"
         bindtap="onToBack"
       />
       <user-together-banner
