@@ -223,7 +223,28 @@ create.Page(store, {
     }
     cartApi.clearExpired(params)
   },
-
+  // 跳转详情
+  onGood({
+    currentTarget
+  }) {
+    let {
+      spuId,
+      skuId,
+      activityId,
+      objectId,
+      orderType,
+    } = currentTarget.dataset.data;
+    router.push({
+      name: 'detail',
+      data: {
+        spuId,
+        skuId,
+        activityId,
+        objectId,
+        orderType,
+      }
+    });
+  },
 
   handleUpdate() {
     this.init()
@@ -245,7 +266,7 @@ create.Page(store, {
   async getAllGoodsList(gcId1) {
     const params = {
       page: 1,
-      size: 10,
+      size: 99,
       gcId1: gcId1 || 0,
     }
     const resolveData = await this.getCartList();
@@ -284,6 +305,7 @@ create.Page(store, {
             value: v,
           }
         })
+        console.log('集约商品列表返回', list)
         this.setData({
           goodsData: list
         }, () => {

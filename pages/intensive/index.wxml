@@ -74,7 +74,7 @@
     <view class="cart_box2" wx:if="{{goodsData.length && goodsData.length <= 10}}">
       <view class="cart_right_box2">
         <block wx:for="{{goodsData}}" wx:key="index">
-          <view class="goods_item_box2">
+          <view class="goods_item_box2" data-data="{{item}}" bindtap="onGood">
             <view class="goods_img_box2">
               <image class="goods_img_index" src="{{item.imageUrl}}" />
             </view>
@@ -90,9 +90,9 @@
                 <view class="price_old">¥{{item.marketPrice/100}}</view>
               </view>
               <view class="step_box2" wx:if="{{item.isCartShow}}" >
-                <image class="step_delete_icon" wx:if="{{item.value}}" data-item="{{item}}" data-index="{{index}}" bindtap="onStepChangeDelete" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
+                <image class="step_delete_icon" wx:if="{{item.value}}" data-item="{{item}}" data-index="{{index}}" catchtap="onStepChangeDelete" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
                 <view class="step_index_num" wx:if="{{item.value}}">{{item.value}}</view>
-                <image class="step_add_icon" data-item="{{item}}" data-index="{{index}}" bindtap="onStepChangeAdd" src="{{tools.getImgUrl('miniprogram/intensive/a-icon.png')}}" />
+                <image class="step_add_icon" data-item="{{item}}" data-index="{{index}}" catchtap="onStepChangeAdd" src="{{tools.getImgUrl('miniprogram/intensive/a-icon.png')}}" />
               </view>
             </view>
           </view>
