@@ -27,9 +27,8 @@ Component({
       value: false,
     }
   },
-
   data: {
-  
+    type: ''
   },
 
   methods: {

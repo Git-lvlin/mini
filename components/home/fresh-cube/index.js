@@ -79,5 +79,19 @@ Component({
         router.getUrlRoute(param);
       }
     },
+    onToDetail({currentTarget}) {
+      let data = currentTarget.dataset.data;
+      let params = {
+        spuId: data.spuId,
+        skuId: data.skuId,
+      };
+      params.activityId = data.activityId || 0;
+      params.objectId = data.objectId || 0;
+      if(!!data.orderType) params.orderType = data.orderType;
+      router.push({
+        name: "detail",
+        data: params
+      })
+    }
   }
 })

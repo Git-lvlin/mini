@@ -100,3 +100,9 @@
   width: 96rpx;
   line-height: 34rpx;
 }
+
+.good_str {
+  margin-bottom: 20rpx;
+  font-size: 24rpx;
+  color: #999999;
+}

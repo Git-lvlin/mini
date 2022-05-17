@@ -262,7 +262,7 @@
 
 .btn_list {
   justify-content: space-between;
-  padding: 48rpx 48rpx 0 ;
+  padding: 24rpx 48rpx;
 }
 
 .btn_item {
@@ -278,6 +278,7 @@
 
 .item_finish {
   border: 2rpx solid #CCCCCC;
+  background-color: #ffffff;
 }
 
 .item_download {
@@ -290,7 +291,7 @@
   color: #999999;
   line-height: 32rpx;
   text-align: center;
-  margin-top: 24rpx;
+  margin-top: 48rpx;
 }
 
 

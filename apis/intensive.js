@@ -26,6 +26,8 @@ const url = {
   love: '/store/option/FreshMemberShop/shopGuessFavourite',
 
   search: '/search/option/opensearch/shopGoodsSearch',
+
+  storeNo: '/store/auth/memberShop/storeData'
 }
 
 const getExamine = (params) => {
@@ -176,5 +178,8 @@ export default {
     params = getStoreNo(params)
     return Request.get(url.search, params, option);
   },
-  
+
+  getStoreNo(params, option) {
+    return Request.get(url.storeNo, params, option);
+  },
 }

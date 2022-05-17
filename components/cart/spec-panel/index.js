@@ -43,7 +43,7 @@ create.Component(store, {
     //   return quantity
     // },
   },
-  
+
   properties: {
     good: {
       type: Object,
@@ -75,7 +75,16 @@ create.Component(store, {
     curSku: {},
     // currentCart: [],
   },
-
+  lifetimes: {
+    ready() {
+      console.log('ready')
+      if (this.data.good.isMultiSpec === 1) {
+        this.getCheckSku({
+          skuId: this.data.good.skuId,
+        });
+      }
+    }
+  },
   methods: {
     // 获取sku列表
     getCheckSku(data, fristLoad = true) {

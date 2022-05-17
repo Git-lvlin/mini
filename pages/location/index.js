@@ -459,6 +459,7 @@ create.Page(store, {
     //   tempCity = `${province}${city}${inputText}`
     // }
     let querykeywords = inputText;
+    console.log('querykeywords', querykeywords)
     myAmapFun.getPoiAround({
       querykeywords,
       location: this.selectLocation,

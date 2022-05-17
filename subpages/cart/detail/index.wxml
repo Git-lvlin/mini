@@ -14,7 +14,7 @@
       <image
         class="back_icon"
         style="top: {{backTopHeight}}rpx"
-        src="{{currentPages>1?tools.getImgUrl('miniprogram/cart/good_back.png'):tools.getImgUrl('miniprogram/cart/good_home.png')}}"
+        src="{{currentPages>1?tools.getImgUrl('miniprogram/cart/good_back.png'):tools.getImgUrl('miniprogram/cart/good_back_home.png')}}"
         bindtap="onToBack"
       />
       <user-together-banner
@@ -434,6 +434,7 @@
 
     <!-- 选择规格 bind:specAdd="specUpdateCart" -->
     <spec-panel
+      wx:if="{{good.id}}"
       good="{{good}}"
       skuId="{{skuId}}"
       specType="{{specType}}"

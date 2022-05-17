@@ -107,10 +107,9 @@ create.Page(store, {
       }
     });
     // if(options.orderType == 3 && options.orderType == 4) {
-    if(options.orderType == 3) {
-      this.getHotGood();
-
-    }
+    // if(options.orderType == 3) {
+    this.getHotGood();
+    // }
     app.trackEvent('shopping_cashier');
   },
   // 获取海报信息
@@ -209,39 +208,9 @@ create.Page(store, {
 
   // 获取热销商品
   getHotGood() {
-    // let {
-    //   next,
-    //   size,
-    // } = this.goodPage;
-    // if(this.loading) return;
-    // this.loading = true;
-    // const postData = {
-    //   size,
-    // };
-    // if(!!next) {
-    //   postData.next = next;
-    // }
-    // homeApi.getHotGood({size:99,page:1}, {
-    //   showLoading: false,
-    // }).then(res => {
-    //   this.goodPage.hasNext = res.hasNext;
-    //   this.goodPage.next = next;
-    //   let hotGood = this.data.hotGood;
-    //   if(page != 1) {
-    //     hotGood = hotGood.concat(this.handleListPrice(res.records));
-    //   } else {
-    //     hotGood = this.handleListPrice(res.records)
-    //   }
-    //   this.setData({
-    //     hotGood,
-    //   });
-    //   this.loading = false;
-    // }).catch(err => {
-    //   this.loading = false;
-    // })
     if(this.loading) return;
     this.loading = true;
-    homeApi.getMoreList({page:1,size:99}).then(res => {
+    homeApi.getHotGood({next:0, size: 99}).then(res => {
       this.setData({
         hotGood: res.records,
       });
@@ -386,7 +355,7 @@ create.Page(store, {
   },
 
   onSuccess() {
-    router.goTabbar("user");
+    router.goTabbar();
   },
 
   handleCloseTeam() {
@@ -563,12 +532,12 @@ create.Page(store, {
     ctx.restore()
   },
 
-  onReachBottom() {
-    // const {
-    //   hasNext
-    // } = this.goodPage;
-    // if(!this.loading && hasNext) {
-    //   this.getHotGood();
-    // }
-  },
+  // onReachBottom() {
+  //   const {
+  //     hasNext
+  //   } = this.goodPage;
+  //   if(!this.loading && hasNext) {
+  //     this.getHotGood();
+  //   }
+  // },
 })
