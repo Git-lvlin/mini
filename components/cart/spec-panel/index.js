@@ -48,14 +48,14 @@ create.Component(store, {
     good: {
       type: Object,
       value: {},
-      observer(now, old) {
-        if(now.isMultiSpec == 1) {
-          const skuId = this.data.skuId;
-          this.getCheckSku({
-            skuId,
-          });
-        }
-      }
+      // observer(now, old) {
+      //   if(now.isMultiSpec == 1) {
+      //     const skuId = this.data.skuId;
+      //     this.getCheckSku({
+      //       skuId,
+      //     });
+      //   }
+      // }
     },
     skuId: {
       type: String,

@@ -58,7 +58,9 @@
   flex: 1;
   height: 1000rpx;
 }
-
+.no_search {
+  top: 0;
+}
 .pul_icon {
   position: absolute;
   top: -120rpx;

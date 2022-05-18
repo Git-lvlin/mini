@@ -126,7 +126,7 @@ create.Page(store, {
 
   // 初始化
   init() {
-    Promise.all([this.getAllGoodsList(),this.getGoodsCategory(),this.getSummaryByCartData()]).then((res) => {
+    Promise.all([this.getAllGoodsList(),this.getGoodsCategory(),this.getSummaryByCartData(),this.getBannerData()]).then((res) => {
       this.setData({
         refresherTriggered: false,
       })

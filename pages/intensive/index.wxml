@@ -30,7 +30,7 @@
 
   <scroll-view
     id="home_scroll"
-    class="home_content"
+    class="home_content {{(!goodsData.length || (goodsData.length < 11))?'no_search':''}}"
     scroll-y
     scroll-top="{{scrollTop}}"
     refresher-enabled
