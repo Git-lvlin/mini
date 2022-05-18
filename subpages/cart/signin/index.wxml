@@ -29,7 +29,7 @@
         <view class="flex_center sign_label_back" style="background-image: url({{tools.getImgUrl('miniprogram/sign/red-title-label-back.png')}})">
           <image class="sign_label_title" src="{{tools.getImgUrl('miniprogram/sign/red-label-text.png')}}" />
         </view>
-        <view class="rule" bindtap="onOpenRule">
+        <view class="rule">
           <view class="rule-left" catchtap="onOpenDetailRed">明细</view>
           <view class="rule-border">｜</view>
           <view class="rule-right" catchtap="onOpenRule">规则</view>
@@ -180,7 +180,7 @@
       <view class="flex_middle red_use">
         <view
           class="red_btn_item {{redUseType == '' ? 'red_use_act' : ''}}"
-          data-type=""
+          data-type="{{0}}"
           bindtap="onChangeUseType"
         >全部明细</view>
         <view

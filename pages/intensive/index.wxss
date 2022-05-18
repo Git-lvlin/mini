@@ -56,10 +56,12 @@
   top: 100rpx;
   position: relative;
   flex: 1;
-  height: 1000rpx;
+  /* height: 1000rpx; */
+  max-height: 2000rpx;
 }
 .no_search {
   top: 0;
+  padding-bottom: 100rpx;
 }
 .pul_icon {
   position: absolute;
@@ -163,6 +165,8 @@
 }
 
 .cart_box {
+  position: relative;
+  top: 24rpx;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
