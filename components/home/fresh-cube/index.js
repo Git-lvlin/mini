@@ -74,6 +74,7 @@ Component({
       currentTarget
     }) {
       let data = currentTarget.dataset.data;
+      console.log('跳转列表data', data)
       if(!!data.actionUrl) {
         const param = data.actionUrl + `&storeNo=${this.data.storeNo}`
         router.getUrlRoute(param);

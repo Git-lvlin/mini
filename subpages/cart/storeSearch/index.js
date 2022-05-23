@@ -4,6 +4,7 @@ import util from "../../../utils/util";
 import intensiveApi from '../../../apis/intensive'
 import Toast from '../../miniprogram_npm/@vant/weapp/toast/toast';
 import cartApi from "../../../apis/cart";
+import router from '../../../utils/router'
 const app = getApp();
 Page({
   searchPage: {
@@ -224,6 +225,7 @@ Page({
     if(!userInfo.id) return;
     goodApi.clearSearchHistory({
       requestMemberId: userInfo.id,
+      searchType: 1,
     }, {
       showLoading: false
     }).then(res => {
@@ -510,7 +512,28 @@ Page({
       this.onSearch();
     }
   },
-
+  // 跳转详情
+  onGood({
+    currentTarget
+  }) {
+    let {
+      spuId,
+      skuId,
+      activityId,
+      objectId,
+      orderType,
+    } = currentTarget.dataset.data;
+    router.push({
+      name: 'detail',
+      data: {
+        spuId,
+        skuId,
+        activityId,
+        objectId,
+        orderType,
+      }
+    });
+  },
   // onPageScroll(e) {
   //   let {
   //     scrollBottom,

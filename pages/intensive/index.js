@@ -73,7 +73,8 @@ create.Page(store, {
         value: 0,
       },
     ],
-    cartList: []
+    cartList: [],
+    hasClass: false,
   },
 
   onLoad(options) {
@@ -125,8 +126,8 @@ create.Page(store, {
   },
 
   // 初始化
-  init() {
-    Promise.all([this.getAllGoodsList(),this.getGoodsCategory(),this.getSummaryByCartData(),this.getBannerData()]).then((res) => {
+  init(id='') {
+    Promise.all([this.getAllGoodsList(id),this.getGoodsCategory(),this.getSummaryByCartData(),this.getBannerData()]).then((res) => {
       this.setData({
         refresherTriggered: false,
       })
@@ -247,7 +248,7 @@ create.Page(store, {
   },
 
   handleUpdate() {
-    this.init()
+    this.init(this.data.tabIndexId)
   },
 
   // 购物车商品列表
@@ -306,8 +307,13 @@ create.Page(store, {
           }
         })
         console.log('集约商品列表返回', list)
+        if (!this.data.hasClass) {
+          if (list.length > 10) {
+            this.setData({hasClass:1})
+          }
+        }
         this.setData({
-          goodsData: list
+          goodsData: list,
         }, () => {
           resolve(true)
         })

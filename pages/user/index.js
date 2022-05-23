@@ -13,7 +13,7 @@ create.Page(store, {
 
   data: {
     orderTypeList: orderList,
-    otherSetting,
+    otherSetting: otherSetting,
     userAuth: true,
     canUseUserProfile: true,
     banner: "",

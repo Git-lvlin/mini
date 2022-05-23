@@ -12,7 +12,7 @@
       <view class="cart_popup_title">购物车</view>
       <view class="top" wx:if="{{cartGoodsOne.length || cartGoodsTwo.length}}">
         <view class="top_left" bindtap="onCheckoutAll">
-          <image class="checkout_icon" wx:if="{{checkoutAll}}" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon.png')}}" />
+          <image class="checkout_icon" wx:if="{{checkoutAll}}" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-yes.png')}}" />
           <image class="checkout_icon" wx:else src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-no.png')}}" />
           <view class="top_left_text">全选</view>
         </view>
@@ -31,7 +31,7 @@
         <view class="list_one" wx:if="{{cartGoodsOne.length}}" wx:for="{{cartGoodsOne}}" wx:key="index">
           <view class="one_item">
             <view class="one_item_left" data-item="{{item}}" data-index="{{index}}" bindtap="checkedItem">
-              <image class="checkout_icon" wx:if="{{item.isChecked}}" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon.png')}}" />
+              <image class="checkout_icon" wx:if="{{item.isChecked}}" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-yes.png')}}" />
               <image class="checkout_icon" wx:else src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-no.png')}}" />
               <image class="goods_img" src="{{item.thumbnail}}"/>
               <view class="goods_detail">

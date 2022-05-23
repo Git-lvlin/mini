@@ -167,6 +167,7 @@ create.Page(store, {
       }
     } else if(selectAddressType.type == 3) {
       const setStoreAddress = wx.getStorageSync('ORDER_STORE_LOCATION');
+      console.log('111111111111setStoreAddress', setStoreAddress)
       if(setStoreAddress && setStoreAddress.setUser) {
         storeAdress.linkman = setStoreAddress.setUser;
         storeAdress.setUser = setStoreAddress.setUser;
@@ -181,6 +182,7 @@ create.Page(store, {
     this.setData({
       storeAdress
     }, () => {
+      console.log('storeAdress', storeAdress)
       // 必须获取地址再请求商品信息
       this.getConfirmInfo();
     });

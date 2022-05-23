@@ -34,4 +34,6 @@
   show="{{popupType}}"
   bind:close="handleCloseToCartPopup"
   bind:change="dataChange"
+  bind:check="checkChange"
+
 />

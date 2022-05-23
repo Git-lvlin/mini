@@ -109,7 +109,7 @@
     <view class="recommend-list margin0">
       <view class="recommend-list-box long-box {{(goodList.length&&goodList.length<4)?'short':''}}">
         <block wx:for="{{goodList}}" wx:key="index">
-          <view class="recommend-item">
+          <view class="recommend-item" data-data="{{item}}" bindtap="onGood">
             <view class="rec-img-box">
               <image class="rec-img" src="{{item.goodsImageUrl}}"/>
             </view>
@@ -127,9 +127,9 @@
             </view>
 
             <view class="add-btn-box" wx:if="{{item.isCartShow}}">
-              <image class="step_delete_icon" wx:if="{{item.value}}" data-item="{{item}}" data-search="{{1}}" data-index="{{index}}" bindtap="onStepChangeDelete" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
+              <image class="step_delete_icon" wx:if="{{item.value}}" data-item="{{item}}" data-search="{{1}}" data-index="{{index}}" catchtap="onStepChangeDelete" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
               <view class="step_index_num" wx:if="{{item.value}}">{{item.value}}</view>
-              <image class="step_add_icon" data-item="{{item}}" data-index="{{index}}" data-search="{{1}}" bindtap="onStepChangeAdd" src="{{tools.getImgUrl('miniprogram/intensive/a-icon.png')}}" />
+              <image class="step_add_icon" data-item="{{item}}" data-index="{{index}}" data-search="{{1}}" catchtap="onStepChangeAdd" src="{{tools.getImgUrl('miniprogram/intensive/a-icon.png')}}" />
             </view>
           </view>
         </block>

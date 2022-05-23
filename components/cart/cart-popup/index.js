@@ -85,6 +85,7 @@ create.Component(store, {
   methods: {
     //  切换配送、自提状态
     checkSelf() {
+      this.triggerEvent("check", !this.data.isSelf);
       this.setData({
         isSelf: !this.data.isSelf
       })
@@ -103,6 +104,8 @@ create.Component(store, {
         this.setData({
           cartGoodsOne: one
         })
+        // 设置完还需要更新购物车汇总数据
+        this.toUpdateCartAll()
       })
     },
     // 删除失效商品

@@ -27,5 +27,5 @@
       </view>
     </view>
   </block>
-  
+  <view class="mark"></view>
 </view>

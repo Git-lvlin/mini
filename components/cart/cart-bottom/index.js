@@ -72,11 +72,19 @@ create.Component(store, {
     quantity: '',
     userInfo: '',
     storeInfo: '',
-    selectAddressType: 2, // 2自提，3配送
+    selectAddressType: {
+      type: 2
+    }, // 2自提，3配送
     storeNo: '',
   },
 
   methods: {
+    checkChange({detail}) {
+      console.log('type', detail)
+      this.setData({
+        selectAddressType: {type: detail?2:3}
+      })
+    },
     // 购物车商品列表汇总
     getSummaryByCartData() {
       cartApi.summaryByCartData().then((res) => {
@@ -105,9 +113,9 @@ create.Component(store, {
     },
     getSubmitData() {
       return new Promise((resolve) => {
-        cartApi.cartList(params).then((res) => {
+        cartApi.cartList({},{showLoading: false}).then((res) => {
           console.log('购物车商品列表', res)
-          let one = res.filter(item => item.goodsState)
+          let one = res.filter(item => item.goodsState && item.isChecked)
           resolve(one)
         })
       })
@@ -152,9 +160,9 @@ create.Component(store, {
     },
     
     handleSubmitData(submitData) {
-      const len = submitData.length;
       return new Promise((resolve) => {
         let goodsInfos = [];
+        let len = submitData.length;
         for(let i=0;i<len;i++) {
           let {spuId, skuId, buyMinNum, activityId, objectId, orderType, goodsFromType} = submitData[i];
           let num = buyMinNum > 0 ? buyMinNum : 1;
@@ -175,11 +183,19 @@ create.Component(store, {
     },
 
     async createOrder() {
+      const {aPrice, zPrice} = this.data
       if(!this.data.userInfo) {
         getStorageUserInfo(true);
         return;
       }
-      const submitData = await this.getSubmitData();
+      if (aPrice + zPrice == 0) {
+        return;
+      }
+      let submitData = await this.getSubmitData();
+      console.log('submitData', submitData)
+      if (!submitData.length) {
+        return
+      }
       let goodsInfos = await this.handleSubmitData(submitData);
       const {
         selectAddressType,
@@ -201,6 +217,7 @@ create.Component(store, {
         objectId: '',
         isActivityCome: false,
       }
+      this.handleCloseToCartPopup()
       router.push({
         name: "createOrder",
         data: p

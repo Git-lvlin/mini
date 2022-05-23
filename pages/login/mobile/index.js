@@ -196,6 +196,7 @@ create.Page(store, {
       return;
     }
     const eventData = event.detail || {};
+    console.log('eventData', eventData)
     const agreenLogin = eventData.errMsg == "getPhoneNumber:ok" ? true : false;
     const scene = wx.getStorageSync("SHARE_SCENE") || "";
     if(!!scene && agreenLogin) {

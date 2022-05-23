@@ -10,7 +10,6 @@
   overflow: hidden;
 }
 
-
 .title-box {
   padding-top: 38rpx;
   padding-bottom: 20rpx;
@@ -167,4 +166,9 @@
   font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
   color: #FFFFFF;
+}
+
+.mark {
+  width: 100%;
+  height: 88rpx;
 }

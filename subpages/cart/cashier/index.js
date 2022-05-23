@@ -211,8 +211,17 @@ create.Page(store, {
     if(this.loading) return;
     this.loading = true;
     homeApi.getHotGood({next:0, size: 99}).then(res => {
+      let list = res.records.map((item) => {
+        if(!!item.salePrice) {
+          item.salePrice = util.divide(item.salePrice, 100);
+        }
+        if(!!item.marketPrice) {
+          item.marketPrice = util.divide(item.marketPrice, 100);
+        }
+        return item
+      })
       this.setData({
-        hotGood: res.records,
+        hotGood: list,
       });
       this.loading = false;
     }).catch(err => {
