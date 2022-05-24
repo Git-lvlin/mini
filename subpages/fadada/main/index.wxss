@@ -1,0 +1,19 @@
+page {
+  background-color: #F5F5F5;
+  padding-top: 12rpx;
+}
+
+.block {
+  margin-bottom: 12rpx;
+}
+
+.btn {
+  position: absolute;
+  left: 16rpx;
+  right: 16rpx;
+  bottom: 60rpx;
+}
+
+button:not([size='mini']){
+  width: 100% !important;
+}
