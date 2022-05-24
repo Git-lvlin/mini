@@ -48,9 +48,9 @@
         <view class="flex_fix note_title">订单备注</view>
         <input
           class="note_input"
-          maxlength="10"
+          maxlength="40"
           bindinput="handleInput"
-          placeholder="输入10字以内留言信息"
+          placeholder="输入40字以内留言信息"
           placeholder-class="ipunt_desc"
         />
       </view>

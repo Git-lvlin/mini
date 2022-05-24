@@ -157,10 +157,13 @@ create.Page(store, {
     console.log('hanldeGoodsParams', this.goodParams)
     let isActivityGood = 1;
     if(!!options.orderType) isActivityGood = options.orderType;
+    console.log('isActivityGood', isActivityGood)
     this.setData({
       backTopHeight,
       isActivityGood,
       skuId: options.skuId,
+    }, () => {
+      console.log('isActivityGood', isActivityGood)
     })
     if (options && options.shareStoreNo) {
       this.shareStoreNo = options.shareStoreNo
@@ -414,6 +417,7 @@ create.Page(store, {
     // 单约详情
     if(orderType == 3) {
       params.spuId = spuId;
+      console.log('商品详情请求前传参orderType3', params)
       goodApi.getPersonalDetail(params).then(res => {
         const good = res;
         const personalList = res.personalList;
@@ -445,6 +449,7 @@ create.Page(store, {
       })
     // orderType == 1 详情
     } else if(orderType == 1) {
+      console.log('商品详情请求前传参orderType1', params)
       goodApi.getGoodDetail(params).then(res => {
         let good = res;
         let selectAddressType = "";
@@ -489,6 +494,7 @@ create.Page(store, {
       this.getBusinessDetail(params);
     // 其他详情
     } else {
+      console.log('商品详情请求前传参-其它详情', params)
       goodApi.getGoodDetailNew(params).then(res => {
         let good = res;
         let selectAddressType = "";
@@ -555,6 +561,7 @@ create.Page(store, {
 
   // B端详情
   getBusinessDetail(params) {
+    console.log('b端详情请求参数', params)
     goodApi.getBusinessDetail(params).then(res => {
       let good = res;
       good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
@@ -1212,7 +1219,7 @@ create.Page(store, {
   },
 
   // 打开选规格弹窗
-  openSpecPopup(event) {
+  openSpecPopup(e) {
     if(!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
@@ -1228,6 +1235,7 @@ create.Page(store, {
     if(good.isMultiSpec) {
       this.setData({
         specType: "buy",
+        isActivityCome: this.goodParams.orderType == 3?true:false,
       }, () => {
         // 打开选择规格弹窗
         store.onChangeSpecState(true);
@@ -1245,17 +1253,14 @@ create.Page(store, {
 
   // 跳转确认订单
   onToCreate(e) {
-    let outData = {}
-    if (e && e.detail) {
-      outData = e.detail
-    }
+    console.log('eeeeeeeeeeeeeeeeeeeee', e)
+    // let outData = {}
+    // if (e && e.detail) {
+    //   outData = e.detail
+    // }
     let isActivityCome = false;
     if (e?.currentTarget?.dataset?.type === 'alone') {
       isActivityCome = true
-    }
-    if(!this.data.userInfo) {
-      getStorageUserInfo(true);
-      return;
     }
     let {
       activityId,
@@ -1269,6 +1274,7 @@ create.Page(store, {
       good,
       currentSku,
       storeInfo,
+      personalList,
     } = this.data;
     console.log('this.specLoaded', this.specLoaded)
     // let stockOverData = this.handleGoodStock(currentSku.stockNum);
@@ -1303,8 +1309,11 @@ create.Page(store, {
         }]
       }]
     };
+    console.log('活动购买前')
     // 活动购买
-    if(orderType == 3 && outData.groupId && !isActivityCome) {
+    // if(orderType == 3 && outData.groupId && !isActivityCome) {
+
+    if(orderType == 3 && personalList[0].groupId) {
       let params = {
         storeGoodsInfos: [{
           storeNo: good.storeNo,
@@ -1312,15 +1321,16 @@ create.Page(store, {
             spuId: spuId ? spuId : good.id,
             skuId: skuId ? skuId : currentSku.skuId,
             activityId: activityId || good.activityId || '',
-            objectId: outData.groupId,
+            objectId: personalList[0].groupId,
             orderType,
             skuNum,
-            groupId: outData.groupId,
+            groupId: personalList[0].groupId,
             goodsFromType: good.goodsFromType,
             isActivityCome: isActivityCome
           }]
         }]
       };
+      console.log('活动购买', params)
       wx.setStorageSync("CREATE_INTENSIVE", params);
     }
     if(orderType == 15 || orderType == 16) {

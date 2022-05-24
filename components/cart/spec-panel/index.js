@@ -94,6 +94,7 @@ create.Component(store, {
       } = this.data;
       const postData = {
         id: good.id,
+        spuId: good.spuId,
         orderType: good.orderType,
         objectId: good.objectId,
         activityId: good.activityId,

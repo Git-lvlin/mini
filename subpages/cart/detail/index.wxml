@@ -264,7 +264,7 @@
     <view class="spec_conetnt" wx:if="{{good.isMultiSpec == 1 || refuseText || ((isActivityGood == 5 || isActivityGood == 6) && good.extend && good.extend.stockText) || (isActivityGood != 15 && isActivityGood != 16)}}">
       <view
         class="flex_middle info_bar"
-        wx:if="{{good.isMultiSpec == 1}}"
+        wx:if="{{good.isMultiSpec == 1 && isActivityGood != 3}}"
         bindtap="openSpecPopup"
       >
         <view class="flex_fix info_bar_name">已选</view>
@@ -542,10 +542,15 @@
           <view class="mar_price">￥{{tools.priceToF2(good.goodsSaleMinPrice || 0, false)}}</view>
           <view class="mar_price">单独购买</view>
         </view>
-        <view
+        <!-- <view
           class="flex_center order_btn_item together_buy_btn"
           data-data="{{personalList[0]}}"
           bindtap="onPushTogether"
+        > -->
+        <view
+          class="flex_center order_btn_item together_buy_btn"
+          data-data="{{personalList[0]}}"
+          bindtap="openSpecPopup"
         >
           <view class="mar_price">￥{{tools.priceToF2(good.activityPrice || 0, false)}}</view>
           <view class="mar_price" >我要开团</view>

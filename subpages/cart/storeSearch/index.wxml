@@ -16,6 +16,8 @@
         <view class="flex_middle search">
           <image class="flex_fix search_icon" src="{{tools.getImgUrl('miniprogram/intensive/search-icon.png')}}" />
           <input
+            type="text"
+            confirm-type="search"
             class="search_input"
             value="{{ searchText }}"
             placeholder="店内搜索"
