@@ -184,7 +184,10 @@ create.Page(store, {
        });
       return;
     }
-    this.getGoodDetail();
+    this.getGoodDetail({
+      shareId: options.shareMemberId,
+      shareStoreNo: options.shareStoreNo,
+    });
     if(options.orderType != 5 && options.orderType != 6) {
       this.getDetailImg();
     }
@@ -388,7 +391,7 @@ create.Page(store, {
   },
 
   // 商品详情  30199 商品不存在
-  getGoodDetail() {
+  getGoodDetail(options = {}) {
     let {
       activityId,
       objectId,
@@ -398,6 +401,7 @@ create.Page(store, {
     } = this.goodParams
     let params = {
       spuId,
+      ...options,
     };
     if(!!skuId) {
       params.skuId = skuId;
