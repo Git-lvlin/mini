@@ -108,6 +108,7 @@ create.Page(store, {
     hasOrderData: {},
     currentPages: [],
     inviteCode: '',
+    isCart: '',
   },
 
   onLoad(options) {
@@ -162,6 +163,7 @@ create.Page(store, {
       backTopHeight,
       isActivityGood,
       skuId: options.skuId,
+      isCart: options.isCart || '',
     }, () => {
       console.log('isActivityGood', isActivityGood)
     })

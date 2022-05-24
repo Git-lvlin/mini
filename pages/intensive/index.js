@@ -243,6 +243,7 @@ create.Page(store, {
         activityId,
         objectId,
         orderType,
+        isCart: 1,
       }
     });
   },

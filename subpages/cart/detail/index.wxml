@@ -88,7 +88,7 @@
           <view class="b_min_buy">{{good.buyMinNum}}{{good.unit}}起订</view>
         </view>
       </view>
-      <view class="intensive_time">
+      <view class="intensive_time" wx:if="{{!isCart}}">
         <image class="intensive_time_back" src="{{tools.getImgUrl('miniprogram/cart/jiyue_time.png?v=2021')}}" />
         <view class="flex_center intensive_time_box ">
           <view class="intensive_time_text">距活动结束仅剩</view>
