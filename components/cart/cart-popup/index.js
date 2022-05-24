@@ -110,21 +110,32 @@ create.Component(store, {
     },
     // 删除失效商品
     invalidGoodDelete(e) {
-      const {skuId, objectId} = e.currentTarget.dataset.item;
-      const clickIndex = e.currentTarget.dataset.index;
-      const params = {
-        skuId,
-        objectId,
-      }
-      cartApi.clearExpired(params).then((res) => {
-        console.log('删除失效商品', res)
-        this.getCartList()
-        // let one = this.data.cartGoodsOne;
-        // one[clickIndex].isChecked = res.value;
-        // this.setData({
-        //   cartGoodsOne: one
-        // })
+      let {index, item} = e.currentTarget.dataset;
+      let {cartGoodsTwo} = this.data;
+      cartGoodsTwo[index].quantity = 0;
+      this.setData({
+        deleteData: cartGoodsTwo[index]
+      }, () => {
+        this.showCartsPopup()
       })
+      // return new Promise((resolve) => {
+      //   const {skuId, objectId} = e.currentTarget.dataset.item;
+      //   // const clickIndex = e.currentTarget.dataset.index;
+      //   const params = {
+      //     skuId,
+      //     objectId,
+      //   }
+      //   cartApi.clearExpired(params).then((res) => {
+      //     console.log('删除失效商品', res)
+      //     this.getCartList()
+      //     resolve()
+      //     // let one = this.data.cartGoodsOne;
+      //     // one[clickIndex].isChecked = res.value;
+      //     // this.setData({
+      //     //   cartGoodsOne: one
+      //     // })
+      //   })
+      // })
     },
     // 购物车商品列表详情
     getCartList() {
