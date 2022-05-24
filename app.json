@@ -58,6 +58,12 @@
         "information/index",
         "coupon/index"
       ]
+    },
+    {
+      "root": "subpages/fadada",
+      "pages": [
+        "main/index"
+      ]
     }
   ],
   "preloadRule": {

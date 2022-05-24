@@ -1,0 +1,7 @@
+<van-cell title="签写流程说明" label="请先确认供应商名称和手机号，然后预览入驻合作协议具体内容，确认无误后支付签写入驻电子合同的费用，支付成功后进入法大大平台进行企业认证和具体的合同签写。" border="{{ false }}" />
+<view class="block"></view>
+<van-cell title="供应商名称" value="深圳市百威饮品有限公司" />
+<van-cell title="供应商手机" value="深圳市百威饮品有限公司" />
+<van-cell title="入驻编号" value="深圳市百威饮品有限公司" />
+<van-cell title="合同签订状态" value="深圳市百威饮品有限公司" />
+<van-button class="btn" type="danger" size="large" round>立即签订</van-button>
