@@ -1,10 +1,17 @@
 import { IMG_CDN } from '../../constants/common';
 import create from '../../utils/create';
 import store from '../../store/index';
-import { showModal, showToast, throttle } from '../../utils/tools';
+import { debounce, showModal, showToast, throttle } from '../../utils/tools';
+import util from '../../utils/util';
 import goodApi from '../../apis/good';
+import commonApi from '../../apis/common';
 import router from '../../utils/router';
+import amapFile from '../../libs/amap-wx';
+import { MAP_KEY } from '../../constants/index';
 
+const myAmapFun = new amapFile.AMapWX({
+  key: MAP_KEY,
+});
 let markersData = [];
 const defLocation = {
   longitude: 116.39731407,
@@ -12,6 +19,7 @@ const defLocation = {
 };
 const deflocationIcon = `${IMG_CDN}miniprogram/location/def_location.png?V=465656`;
 
+const app = getApp();
 create.Page(store, {
   use: [
     "systemInfo",
@@ -20,6 +28,7 @@ create.Page(store, {
   // 当前位置经纬度
   location: {},
   openLocation: false,
+  fristLoad: true,
 
   // 值单位 px
   touchMove: {
@@ -34,64 +43,65 @@ create.Page(store, {
     textData: {},
     showPopup: false,
     spotBottom: 0,
-    barState: false,
+    barState: true,
     currentSpot: {},
+    listIsLoad: false,
+    // 当前定位城市
+    cityData: {},
+    // 搜索地址列表
+    addMarkers: [],
+    // 显示搜索地址
+    showAddress: false,
+    mapScale: 13,
+    inputText: '',
+    stores: [],
+    locationName: '',
   },
 
   onShow() {
     const that = this;
-    // this.getPoiAround();
-    const takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
-    const searchSpot = wx.getStorageSync("SEARCH_SPOT");
-    let spotData = "";
-    if(takeSpot && !searchSpot) {
-      spotData = takeSpot;
-    }
-    if(searchSpot) {
-      spotData = searchSpot;
-    }
-    if(spotData && spotData.latitude) {
-      that.setData({
-        currentSpot: takeSpot,
-        latitude: spotData.latitude,
-        longitude: spotData.longitude,
-      }, () => {
-        that.getNearbyStore({
-          latitude: spotData.latitude,
-          longitude: spotData.longitude,
-        });
-      });
-      wx.removeStorage({
-        key: 'SEARCH_SPOT',
-      });
-      return;
-    }
-    if(this.location.latitude) {
-      that.getNearbyStore(this.location);
-    } else {
-      wx.getLocation({
-        type: 'gps84',
-        altitude: false,
-        success(result) {
-          console.log("result", result);
-          let data = {
-            latitude: result.latitude,
-            longitude: result.longitude,
-          }
-          that.location = data;
-          that.openLocation = true;
-          that.setData(data);
-          that.getNearbyStore(data);
-        },
-        fail(err) {
-          console.log("err", err);
-          that.openLocation = false;
-          that.openLocationTip();
-          that.location = defLocation;
-          that.getNearbyStore(defLocation);
-        },
-      });
-    }
+    const takeSpot = wx.getStorageSync("TAKE_SPOT") || "";
+    this.setData({
+      currentSpot: takeSpot
+    })
+    // if(!takeSpot && takeSpot.latitude) {
+    //   that.setData({
+    //     currentSpot: takeSpot,
+    //     latitude: takeSpot.latitude,
+    //     longitude: takeSpot.longitude,
+    //   }, () => {
+    //     that.getNearbyStore({
+    //       latitude: takeSpot.latitude,
+    //       longitude: takeSpot.longitude,
+    //     });
+    //   });
+    //   that.location = takeSpot;
+    //   this.getRegeo();
+    //   that.openLocation = true;
+    // } else {
+      
+    // }
+
+    wx.getLocation({
+      type: 'gcj02',
+      isHighAccuracy: true,
+      success(result) {
+        that.fristLoad = false;
+        let data = {
+          latitude: result.latitude,
+          longitude: result.longitude,
+        }
+        that.openLocation = true;
+        that.location = data;
+        that.setData(data);
+        that.getNearbyStore(data);
+      },
+      fail(err) {
+        that.openLocation = false;
+        that.openLocationTip();
+        !takeSpot && that.getNearbyStore(defLocation);
+      },
+    });
   },
 
   // 定位提示
@@ -107,7 +117,7 @@ create.Page(store, {
 
   // 附近店铺
   getNearbyStore(data) {
-    const {
+    let {
       currentSpot,
     } = this.data;
     goodApi.getNearbyStore({
@@ -119,6 +129,7 @@ create.Page(store, {
       let list = [];
       let fullAddress = "";
       let selected = false;
+      let tempData = {};
       if(res.length > 0) {
         res.forEach((item, index) => {
           // 遍历地址
@@ -129,36 +140,40 @@ create.Page(store, {
           }
           fullAddress += item.address;
           item.fullAddress = fullAddress;
-          // 计算距离
-          item.distance = +item.distance;
-          if(item.distance > 1000) {
-            item.distanceText = `${(item.distance / 1000).toFixed(1)}KM`;
-          } else {
-            item.distanceText = `${item.distance.toFixed(0)}M`;
-          }
-          if(currentSpot.storeNo == item.storeNo) {
-            selected = true;
-          }
-          list.push({
+          tempData = {
             ...item,
             width: 23,
             height: 32,
             id: 10 + index,
             selected,
             iconPath: deflocationIcon,
-          })
+          }
+          if(currentSpot.storeNo == item.storeNo) {
+            tempData.selected = true;
+            currentSpot = tempData;
+            wx.setStorage({
+              key: "TAKE_SPOT",
+              data: tempData,
+            });
+          }
+
+          list.push(tempData)
         })
-        // list[0] = {
-        //   ...list[0],
-        //   iconPath: list[0].storeLogo,
-        //   width: 28,
-        //   height: 28,
-        //   selected: true,
-        // }
+        this.location = data;
+        this.getRegeo();
         this.setData({
           markers: list,
-          latitude: list[0].latitude,
-          longitude: list[0].longitude,
+          listIsLoad: true,
+          currentSpot,
+        }, () => {
+          if(list.length) {
+            this.onCurrentSpot();
+          }
+        });
+      } else {
+        this.setData({
+          markers: [],
+          listIsLoad: true,
         });
       }
     })
@@ -191,19 +206,23 @@ create.Page(store, {
     markers.forEach(item => {
       if(item.storeNo == currentSpot.storeNo) {
         item.iconPath = item.storeLogo;
-        item.width = 28;
-        item.height = 28;
+        item.width = 36;
+        item.height = 36;
         item.selected = true;
+        item.zIndex = 5;
       } else {
         item.iconPath = deflocationIcon;
         item.width = 23;
         item.height = 32;
         item.selected = false;
+        item.zIndex = 0;
       }
     });
     this.setData({
       currentSpot,
       markers,
+      latitude: currentSpot.latitude,
+      longitude: currentSpot.longitude,
     });
   },
 
@@ -213,36 +232,56 @@ create.Page(store, {
   }) {
     if(!detail.isCurrent) {
       this.setMarket(detail.id);
+      this.setData({
+        latitude: detail.latitude,
+        longitude: detail.longitude,
+      });
     }
+  },
+
+  onTakeSpot2({
+    detail
+  }) {
+    this.setData({
+      stores: this.data.stores.map(item =>{
+        return {
+          ...item,
+          selected: item.sn === detail.sn
+        }
+      })
+    })
+    wx.setStorageSync("TAKE_SPOT", detail);
+    router.go();
   },
 
   // 设置market
   setMarket(id) {
-    const {
+    let {
       markers,
       currentSpot,
+      selectSpot,
     } = this.data;
     const idx = id - 10;
     markers.forEach((item, index) => {
       if(idx === index) {
         item.iconPath = item.storeLogo;
-        item.width = 28;
-        item.height = 28;
+        item.width = 36;
+        item.height = 36;
         item.selected = true;
-        if(item.storeNo != currentSpot.storeNo) {
-          currentSpot.selected = false;
-        } else {
-          currentSpot.selected = true;
-        }
+        item.zIndex = 5;
+        selectSpot = item;
       } else {
         item.iconPath = deflocationIcon;
         item.width = 23;
         item.height = 32;
         item.selected = false;
+        item.zIndex = 0;
       }
     });
+    currentSpot.selected = false;
     this.setData({
       currentSpot,
+      selectSpot,
       markers,
     });
   },
@@ -250,23 +289,22 @@ create.Page(store, {
   // 确认自提点
   onConfirm() {
     const {
-      markers,
       currentSpot,
+      selectSpot,
     } = this.data;
     let marketSelect = {};
     if (currentSpot.selected) {
       marketSelect = currentSpot;
-    } else {
-      markers.forEach(item => {
-        if(item.selected) {
-          marketSelect = item;
-        }
-      });
+    } else if(selectSpot.selected) {
+      marketSelect = selectSpot;
     }
     if(!marketSelect.storeNo) {
       showToast({ title: "请选择自提点" });
       return;
     }
+    app.trackEvent('goods_selected_pick_up_point', {
+      storeNo: marketSelect.storeNo
+    });
     wx.setStorageSync("TAKE_SPOT", marketSelect);
     router.go();
   },
@@ -283,14 +321,12 @@ create.Page(store, {
 
   // 监听移动bar
   handleTouchStart({ changedTouches }) {
-    console.log("start", changedTouches[0]);
     let data = changedTouches[0];
     this.touchMove.start = data.pageY;
   },
 
   // 监听移动bar
   handleTouchMove({ changedTouches }) {
-    console.log("move", changedTouches[0]);
     const data = changedTouches[0];
     let spotBottom = 0;
     const move = data.pageY;
@@ -315,7 +351,6 @@ create.Page(store, {
 
   // 监听移动bar
   handleTouchEnd({ changedTouches }) {
-    console.log("end", changedTouches[0]);
     let data = changedTouches[0];
     let spotBottom = 0;
     const end = data.pageY;
@@ -335,6 +370,225 @@ create.Page(store, {
     }
     this.setData({
       spotBottom
+    })
+  },
+
+  // =============================  搜索地址
+  handleInput({
+    detail
+  }) {
+    const inputText = detail.value;
+    debounce(() => {
+      this.setData({
+        inputText
+      });
+      if(inputText == '') {
+        this.setData({
+          showAddress: false
+        })
+        return;
+      }
+      this.getPoiAround(inputText);
+      this.getNearbyWords(inputText)
+    }, 500)();
+  },
+
+  cleanInput() {
+    this.setData({
+      inputText: '',
+      showAddress: false
+    })
+  },
+
+  getNearbyWords(keywords) {
+    goodApi.getNearbyWords({
+      radius: 50000,
+      unit: 'm',
+      limit: 200,
+      ...this.location,
+      keywords,
+    }).then(res => {
+      this.setData({
+        stores: res.map(item => ({ ...item, selected:false})),
+      })
+    })
+  },
+
+  // 根据经纬度获取地址信息
+  getRegeo() {
+    const that = this;
+    const {
+      longitude,
+      latitude,
+    } = this.location;
+    myAmapFun.getRegeo({
+      location: `${longitude},${latitude}`,
+      success(data){
+        if(data.length > 0) {
+          const {
+            addressComponent,
+          } = data[0].regeocodeData;
+          this.selectLocation = addressComponent.streetNumber.location;
+          if (!that.data.locationName) {
+            that.setData({
+              locationName: data[0].name
+            });
+          }
+          that.setData({
+            cityData: addressComponent,
+          });
+        }
+      },
+    })
+  },
+
+  // 获取附近的点
+  getPoiAround(inputText) {
+    let that = this;
+    let tempCity = "";
+    const {
+      cityData,
+    } = this.data;
+    const {
+      city,
+      province,
+    } = cityData;
+    // if(province == city || province != city && city != "县") {
+    //   tempCity = province;
+    // } else {
+    //   tempCity = `${province}${city}${inputText}`
+    // }
+    let querykeywords = inputText;
+    console.log('querykeywords', querykeywords)
+    myAmapFun.getPoiAround({
+      querykeywords,
+      location: this.selectLocation,
+      success(data) {
+        const addMarkers = data.poisData;
+        addMarkers.length && addMarkers.forEach(item => {
+          item.nameArr = that.getTextKey(item.name, querykeywords);
+          item.distanceDisplay = +item.distance < 1000 ? `${item.distance}m` : `${util.divide(item.distance, 1000).toFixed(2)}km`
+          item.longitude = item.location.split(',')[0]
+          item.latitude = item.location.split(',')[1]
+        });
+        const sdata = {
+          addMarkers,
+        };
+        if(addMarkers.length) {
+          sdata.showAddress = true
+        }
+        that.setData(sdata, () => {
+          if(!addMarkers.length) {
+            showToast({ title: "没有结果呢" });
+          }
+        });
+      },
+      fail(info) {
+        showToast({ title: info.errMsg });
+      }
+    })
+  },
+
+  handleCloseAddress() {
+    this.setData({
+      showAddress: false
+    })
+  },
+
+  // 获取高亮文字
+  getTextKey(str) {
+    const {
+      inputText,
+    } = this.data;
+    const arr = [];
+    if(str.indexOf(inputText) > -1) {
+      const textArr = str.split(inputText);
+      const len = textArr.length - 1;
+      textArr.forEach((item, index) => {
+        if(!!item) {
+          arr.push({
+            text: item,
+            // 1 默认文字  2 高亮文字
+            type: 1,
+          })
+        }
+        if(index == 0 && !item || index != len) {
+          arr.push({
+            text: inputText,
+            type: 2,
+          })
+        }
+      });
+    } else {
+      arr.push({
+        text: str,
+        type: 1,
+      })
+    }
+    return arr;
+  },
+
+  // 打开选择城市
+  onOpenCity() {
+    this.setData({
+      showAddress: false,
+      showPopup: true,
+    })
+  },
+
+  // 关闭地址弹窗
+  onCloseAddress({
+    detail
+  }) {
+    let {
+      cityData,
+    } = this.data;
+    if(detail && detail.selectAddress) {
+      cityData = {
+        district: detail.selectAddress.area.name,
+        city: detail.selectAddress.city.name,
+        province: detail.selectAddress.province.name,
+      };
+      // 获取地址经纬度
+      commonApi.getCoordinate({
+        address: `${cityData.province}${cityData.city}${cityData.district}`
+      }).then(res => {
+        this.selectLocation = res.geocodes[0].location;
+        this.setData({
+          inputText: cityData.district,
+        });
+        this.getPoiAround(cityData.district);
+      });
+    }
+    this.setData({
+      cityData,
+      inputText: "",
+      showPopup: false,
+    })
+  },
+
+  // 选择地址
+  onSelectAddress({
+    currentTarget,
+  }) {
+    const {
+      data,
+    } = currentTarget.dataset;
+    this.getNearbyStore({
+      latitude: data.latitude,
+      longitude: data.longitude,
+    });
+    this.location = {
+      latitude: data.latitude,
+      longitude: data.longitude,
+    };
+    this.getRegeo();
+    this.setData({
+      mapScale: 13,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      showAddress: false,
+      locationName: data.name
     })
   },
 

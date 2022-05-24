@@ -1,0 +1,248 @@
+.back {
+  position: fixed;
+  top: 108rpx;
+  left: 46rpx;
+  width: 48rpx;
+  height: 48rpx;
+  z-index: 2;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  /* overflow: hidden; */
+}
+
+.banner {
+  width: 100%;
+  height: 360rpx;
+}
+
+.swiper {
+  width: 124rpx;
+  height: 100%;
+  box-sizing: border-box;
+  margin-right: 33rpx;
+}
+
+.swiper-item {
+  display: flex;
+  align-items: center;
+  transform: 1s;
+}
+
+.visible {
+  overflow: visible;
+}
+
+.op {
+  opacity: 0;
+}
+
+.userIcon {
+  width: 42rpx;
+  height: 42rpx;
+  border: 1px solid #FFFFFF;
+  border-radius: 50%;
+}
+
+.top-box-wrap {
+  padding: 20rpx 24rpx 10rpx;
+  background: #fff;
+  margin-bottom: 20rpx;
+}
+
+.top-box {
+  /* position: absolute;
+  top: 240rpx;
+  left: 50%; */
+  /* transform: translate(-50%); */
+  width: 100%;
+  height: 58rpx;
+  background-color: #FFECF3;
+  border-radius: 28rpx;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  /* padding: 0 10rpx; */
+}
+
+.top-number {
+  font-size: 28rpx;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #FF315F;
+  margin-right: 12rpx;
+}
+
+.time {
+  display: inline-block;
+  width: 36rpx;
+  height: 36rpx;
+  background: #FFFFFF;
+  border-radius: 6rpx;
+  line-height: 36rpx;
+  font-size: 22rpx;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #FF315F;
+  text-align: center;
+}
+
+.time-box {
+  display: flex;
+  align-items: center;
+}
+
+.text {
+  margin-right: 12rpx;
+  font-size: 26rpx;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  color: #FF315F;
+}
+
+.time-box .days {
+  color: #FF315F;
+  font-size: 20rpx;
+  margin: 0 6rpx;
+}
+
+.time-symbol {
+  color: #000000;
+  /* margin: 0 6rpx; */
+  font-size: 20rpx;
+}
+
+.tab-box {
+  position: relative;
+  top: -46rpx;
+  width: 100%;
+  height: 100rpx;
+}
+
+.van-tabs__scroll {
+  border-radius: 24rpx 24rpx 0 0 !important;
+  background-color: none !important;
+  overflow: hidden !important;
+}
+
+.nav-class {
+  background-color: #FFECEC !important;
+  border-radius: 24rpx 24rpx 0 0 !important;
+}
+
+.van-tab--active {
+  border-radius: 24rpx 24rpx 0 0 !important;
+  /* box-shadow: 0px 0px 20rpx rgba(255,51,51, .6) !important; */
+}
+
+.van-ellipsis {
+  color: #A11241;
+}
+
+.tab-active .van-ellipsis {
+  transform: scale(1.2) !important;
+  color: #FF3333 !important;
+  background: #FFFFFF !important;
+  border-radius: 24rpx 24rpx 0 0 !important;
+}
+
+.custom .van-tabs__line {
+  height: 6rpx;
+  background: linear-gradient(90deg, #F20825 0%, #FEB900 100%) !important;
+  border-radius: 2rpx !important;
+  display: none;
+}
+
+
+
+.btn-t {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 120rpx;
+  height: 68rpx;
+  line-height: 68rpx;
+  background: linear-gradient(270deg, #E67B31 0%, #EBB33F 100%);
+  box-shadow: 1rpx 1rpx 2rpx 0rpx rgba(228, 45, 59, 0.3);
+  border-radius: 12rpx;
+  font-size: 28rpx;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.btn-t-ed {
+  background: #CCCCCC;
+  box-shadow: none;
+}
+
+.bottom-swiper-box {
+  padding-right: 4rpx;
+  position: fixed;
+  left: 28rpx;
+  bottom: 200rpx;
+  width: 200rpx;
+  height: 56rpx;
+  /* background: rgba(0, 0, 0, 0.6);
+  border-radius: 28rpx; */
+  overflow: hidden;
+  z-index: 9;
+}
+
+.bottom-swiper {}
+
+.bottom-swiper-item {
+  width: 200rpx;
+  height: 56rpx;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 28rpx;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.bottom-swiper-img {
+  position: relative;
+  top: -1rpx;
+  margin-left: 4rpx;
+  margin-right: 8rpx;
+  width: 48rpx;
+  height: 48rpx;
+  border: 1rpx solid #FFFFFF;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.bottom-swiper-text {
+  width: 152rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  font-size: 28rpx;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #FFFFFF;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.go-top {
+  position: fixed;
+  right: 4rpx;
+  bottom: 182rpx;
+  width: 120rpx;
+  height: 120rpx;
+  z-index: 9;
+}
+
+.go-top-img {
+  width: 100%;
+  height: 100%;
+}

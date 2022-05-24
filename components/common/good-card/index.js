@@ -21,11 +21,14 @@ Component({
     jump: {
       type: Boolean,
       value: true,
+    },
+    twoTitle: {
+      type: Boolean,
+      value: false,
     }
   },
-
   data: {
-
+    type: ''
   },
 
   methods: {
@@ -42,7 +45,6 @@ Component({
         params.activityId = data.activityId || 0;
         params.objectId = data.objectId || 0;
         if(!!data.orderType) params.orderType = data.orderType;
-        console.log(params);
         router.push({
           name: "detail",
           data: params
@@ -50,6 +52,21 @@ Component({
       } else {
         this.triggerEvent("click", data);
       }
+    },
+    // 点击跳转店铺
+    onToStore() {
+      const {
+        data
+      } = this.data;
+      let id = data.storeNo.slice(8, data.storeNo.length);
+      id = +id;
+      if(id < 123580) return;
+      router.push({
+        name: "store",
+        data: {
+          storeNo: data.storeNo,
+        },
+      })
     }
   }
 })

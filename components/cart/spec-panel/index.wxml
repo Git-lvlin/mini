@@ -12,7 +12,7 @@
   <view class="spec_content" style="padding-bottom: {{$.systemInfo.bottomBarHeight}}rpx">
     <view class="spec_head">
       <van-image width="236rpx" height="236rpx" class="spec_img" src="{{curSku.imageUrl}}" />
-      <view class="price">￥<text class="text">{{curSku.salePrice}}</text></view>
+      <view class="price">￥<text class="text">{{tools.priceToF2(curSku.salePrice || 0, false)}}</text></view>
     </view>
     <view class="spec_box">
       <view
@@ -39,12 +39,21 @@
           <text>数量</text>
           <view class="num">
             <view class="controller" bindtap="onReduceNum">
-              <image class="controller_img" wx:if="{{stock > 1}}" src="{{tools.getImgUrl('miniprogram/cart/reduce.png')}}" />
+              <image class="controller_img" wx:if="{{skuNum > curSku.buyMinNum}}" src="{{tools.getImgUrl('miniprogram/cart/reduce.png')}}" />
               <image class="controller_img" wx:else src="{{tools.getImgUrl('miniprogram/cart/reduce_gray.png')}}" />
             </view>
-            <view class="value">{{specType === "buy" ? stock : stock + quantity}}</view>
+            <view class="value">{{skuNum}}</view>
             <view class="controller" bindtap="onAddNum">
-              <image class="controller_img" src="{{tools.getImgUrl('miniprogram/cart/add.png')}}" />
+              <image
+                class="controller_img gray_add"
+                wx:if="{{skuNum + (curSku.batchNumber || 1) > curSku.buyMaxNum || skuNum + (curSku.batchNumber || 1) > curSku.stockNum}}"
+                src="{{tools.getImgUrl('miniprogram/cart/add.png')}}"
+              />
+              <image
+                class="controller_img"
+                wx:else
+                src="{{tools.getImgUrl('miniprogram/cart/add.png')}}"
+              />
             </view>
           </view>
         </view>
@@ -52,9 +61,9 @@
     </view>
     <view class="btn_content">
       <view
-        class="btn {{curSku.stockOver ? 'def_btn' : ''}}"
-        bindtap="{{curSku.stockOver ? '': 'onConfirm'}}"
-      >{{curSku.stockOver ? '已售罄': '确定'}}</view>
+        class="btn {{curSku.stockOver == 1 || curSku.stockOver == 2 ? 'def_btn' : ''}}"
+        bindtap="{{curSku.stockOver == 1 || curSku.stockOver == 2 ? '': 'onConfirm'}}"
+      >{{curSku.stockOver == 1 || curSku.stockOver == 2 ? curSku.stockOverText : '确定'}}</view>
     </view>
   </view>
 </van-popup>

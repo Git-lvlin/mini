@@ -1,0 +1,73 @@
+<wxs module="tools" src="../../../../wxs/common.wxs"/>
+
+<view class="shop">
+  <view class="shop_info">
+    <van-image width="48rpx" height="48rpx" class="shop_icon" round src="{{data.storeLogo}}" />
+    <view class="shop_name">{{data.storeName}}</view>
+  </view>
+
+  <view class="goods_list">
+    <view class="item" wx:for="{{data.goodsInfos}}" wx:key="id">
+      <view class="flex_middle">
+        <van-image width="180rpx" height="180rpx" class="good_img" src="{{item.skuImageUrl}}" />
+        <view class="info">
+          <view class="title text_one_line">{{item.goodsName}}</view>
+          <view class="sku_name">{{item.skuName}}</view>
+          <view class="market_price">
+            <view wx:if="{{!!item.marketPrice}}">市场价 <text class="line_text">¥{{tools.priceToF2(item.marketPrice)}}</text></view>
+          </view>
+          <view class="price">
+            <text>￥{{tools.priceToF2(item.skuSalePrice, false)}}</text>
+            <view class="num_controller">
+              <view
+                class="controller reduce_num"
+                data-index="{{index}}"
+                catchtap="onReduceNum"
+              >
+                <image
+                  mode="widthFix"
+                  class="num_icon"
+                  wx:if="{{item.skuNum > item.buyMinNum}}"
+                  src="{{tools.getImgUrl('miniprogram/cart/reduce.png')}}"
+                />
+                <image mode="widthFix" class="num_icon" wx:else src="{{tools.getImgUrl('miniprogram/cart/reduce_gray.png')}}" />
+              </view>
+              <view class="number" data-index="{{index}}" bindtap="onOpenSetSku">{{item.skuNum}}</view>
+              <view class="controller add_num" data-index="{{index}}" catchtap="onAddNum">
+                <image
+                  mode="widthFix"
+                  class="num_icon"
+                  src="{{tools.getImgUrl('miniprogram/cart/add.png')}}"
+                />
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="flex_middle note_box">
+        <view class="flex_fix note_title">订单备注</view>
+        <input
+          class="note_input"
+          maxlength="10"
+          bindinput="handleInput"
+          placeholder="输入10字以内留言信息"
+          placeholder-class="ipunt_desc"
+        />
+      </view>
+    </view>
+  </view>
+
+  <!-- <view class="total_price">
+    <view class="txt">小计：</view>
+    <price-mobel
+      money="{{data.totalAmount}}"
+      min-size="{{28}}"
+      max-size="{{28}}"
+      bold="{{600}}"
+    />
+    <view class="text">￥{{tools.getPriceSplit(data.totalAmount)}}<text class="min_price">{{tools.getPriceSplit(data.totalAmount, 1)}}</text></view>
+    <view class="freight">(运费：￥{{data.shippingFeeAmount}})</view>
+  </view> -->
+
+  <van-toast id="van-toast" />
+</view>

@@ -28,6 +28,7 @@ Page({
     if(!openId) return;
     wx.showLoading();
     this.params.openId = openId;
+    console.log('this.params', this.params)
     if(this.params.scene == 1) {
       // 获取商品下单支付信息
       this.getPayInfo(this.params);
@@ -40,6 +41,12 @@ Page({
     } else if(this.params.scene == 4) {
       // 获取保证金支付信息
       this.getBondPay(this.params);
+    } else if(this.params.scene == 5) {
+      // 获取生鲜支付信息
+      this.getFreshPay(this.params);
+    } else if(this.params.scene == 6) {
+      // 获取氢原子支付信息
+      this.getAtomPay(this.params);
     }
   },
 
@@ -89,7 +96,6 @@ Page({
       showLoading: false,
       notErrorMsg: true,
     }).then(res => {
-      console.log("普通商品支付", true)
       payInfo.state = 0;
       this.setData({
         payInfo,
@@ -99,9 +105,9 @@ Page({
         wx.hideLoading();
       })
     }).catch(err => {
-      console.log("普通商品支付", err)
       if(err.code == 20806) {
         payInfo.state = 4;
+        wx.hideLoading();
       } else {
         payInfo.state = 3;
         this.handleErrorInfo(err);
@@ -111,7 +117,37 @@ Page({
       })
     });
   },
-
+  // 获取氢原子支付信息
+  getAtomPay(data) {
+    console.log("氢原子支付")
+    const {
+      payInfo,
+    } = this.data;
+    cartApi.getPayInfoAtom({
+      orderId: data.id,
+      openId: data.openId,
+    }).then(res => {
+      payInfo.state = 0;
+      this.setData({
+        payInfo,
+        payData: res,
+      }, () => {
+        this.openPay();
+        wx.hideLoading();
+      })
+    }).catch(err => {
+      // if(err.code == 10110) {
+      //   payInfo.state = 4;
+      // } else {
+        payInfo.state = 3;
+      // }
+      this.setData({
+        payInfo
+      }, () => {
+        wx.hideLoading();
+      })
+    });
+  },
   // 获取约卡支付信息
   getRechargePay(data) {
     console.log("约卡支付")
@@ -123,7 +159,6 @@ Page({
       payType: data.payType || 7,
       openId: data.openId,
     }).then(res => {
-      console.log("获取约卡 res", res)
       res.prepayData = res.paymentParam;
       payInfo.state = 0;
       this.setData({
@@ -141,10 +176,47 @@ Page({
       // }
       this.setData({
         payInfo
+      }, () => {
+        wx.hideLoading();
       })
     });
   },
-
+  getFreshPay(data) {
+    console.log('data', data)
+    const {
+      payInfo,
+    } = this.data;
+    cartApi.getInFreshPay({
+      orderId: data.id,
+      storeNo: data.storeNo,
+      type: data.type,
+      payType: data.payType || 7,
+      openId: data.openId,
+    }, {
+      notErrorMsg: true,
+    }).then(res => {
+      console.log('res',res)
+      payInfo.state = 0;
+      this.setData({
+        payInfo,
+        payData: res,
+      }, () => {
+        this.openPay();
+        wx.hideLoading();
+      })
+    }).catch(err => {
+      if(err.code == 30202) {
+        payInfo.state = 4;
+        wx.hideLoading();
+      } else {
+        payInfo.state = 3;
+        this.handleErrorInfo(err);
+      }
+      this.setData({
+        payInfo
+      })
+    });
+  },
   // 获取集约B端支付信息
   getIntensivePay(data) {
     const {
@@ -159,18 +231,18 @@ Page({
     }, {
       notErrorMsg: true,
     }).then(res => {
-      console.log("获取集约 res", res)
       payInfo.state = 0;
       this.setData({
         payInfo,
         payData: res,
       }, () => {
         this.openPay();
-        // wx.hideLoading();
+        wx.hideLoading();
       })
     }).catch(err => {
       if(err.code == 30202) {
         payInfo.state = 4;
+        wx.hideLoading();
       } else {
         payInfo.state = 3;
         this.handleErrorInfo(err);
@@ -194,17 +266,18 @@ Page({
     }, {
       notErrorMsg: true,
     }).then(res => {
-      console.log("保证金 res", res);
       payInfo.state = 0;
       this.setData({
         payInfo,
         payData: res,
       }, () => {
         this.openPay();
+        wx.hideLoading();
       })
     }).catch(err => {
       if(err.code == 10110) {
         payInfo.state = 4;
+        wx.hideLoading();
       } else {
         payInfo.state = 3;
         this.handleErrorInfo(err);
@@ -258,8 +331,26 @@ Page({
           payInfo
         })
         showToast({ title: "支付失败"});
+        that.cancelPay();
         // router.goTabbar("user");
       }
     })
+  },
+
+  // 取消支付/支付失败
+  cancelPay() {
+    const {
+      id,
+    } = this.params;
+    cartApi.cancelPay({
+      outTradeNo: id
+    }).then(res => {
+      console.log("取消支付回调", res);
+    });
+  },
+
+  // 返回首页
+  onToHome() {
+    router.goTabbar();
   },
 })

@@ -6,6 +6,7 @@ const url = {
   checkBind: "/member/open/checkNumPhoneBlind",
   bindPhone: "/member/open/wxBlind",
   notCodeBind: "/member/open/wxCodeBlind",
+  notCodeBindMobile: "/member/open/memberInfo/deMinProgramDecrypt",
   changeBindPhone: "/member/auth/wxBlindAuth",
   getPhone: "/member/open/memberInfo/minProgramDecrypt",
   loginOut: "/member/open/loginOut",
@@ -31,9 +32,14 @@ export default {
     return Request.post(url.bindPhone, params, option);
   },
 
-  // 无验证码绑定小程序用户
+  // 无验证码绑定小程序用户 - 将作废（2022-02-17）
   notCodeBind(params, option) {
     return Request.post(url.notCodeBind, params, option);
+  },
+
+  // 无验证解密手机直接绑定登录小程序 - 2022-02-17 更新
+  notCodeBindMobileLogin(params, option) {
+    return Request.post(url.notCodeBindMobile, params, option);
   },
 
   // 解绑或更换绑定手机号

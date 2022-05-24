@@ -1,0 +1,24 @@
+<van-popup
+  show="{{show}}"
+  round
+  closeable
+  bind:close="onClose"
+>
+  <view class="together_content">
+    <view class="together_title">参与{{data.name}}的拼团</view>
+    <view class="flex_center info">
+      仅差<text class="red">{{data.distanceNum}}</text>人拼成，
+      <count-down
+        time="{{ data.distancetime }}"
+        fontSize="{{32}}"
+        color="#666666"
+      />
+      后结束
+    </view>
+    <together-user
+      list="{{data.joinMemberArr}}"
+      distanceNum="{{data.distanceNum}}"
+    />
+    <view class="btn" bindtap="onToOrder">参与拼团</view>
+  </view>
+</van-popup>

@@ -1,0 +1,29 @@
+<wxs module="tools" src="../../../../wxs/common.wxs" />
+
+<view class="together_item {{border ? 'border' : ''}}">
+  <van-image
+    width="72rpx"
+    height="72rpx"
+    custom-class="cover"
+    src="{{data.icon}}"
+  />
+  <view class="user_name text_one_line" wx:if="{{type === 'def'}}">{{data.nickName}}</view>
+  <view class="timer">
+    <view class="flex_middle user_num {{type === 'small' ? 'text_left' : ''}}">
+      <view class="user_name max_width text_one_line" wx:if="{{type === 'small'}}">{{data.nickName}}</view>
+      还差<text class="red">{{data.distanceNum}}人</text>{{type === 'def' ? '成团' : ''}}
+    </view>
+    <view class="last_time">
+      <view>剩余</view>
+      <count-down time="{{ data.distancetime }}" />
+    </view>
+  </view>
+  <view class="button_box" bindtap="clickShare" wx:if="{{data.groupJoined}}">
+    <button class="button_index" open-type="share">
+      <view class="share_sm_btn">
+        去邀请<view class="right_arrow"/>
+      </view>
+    </button>
+  </view>
+  <view wx:else class="btn" bindtap="onToTogether">去参团<view class="right_arrow"/></view>
+</view>

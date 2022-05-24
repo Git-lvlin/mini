@@ -1,0 +1,46 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+<view class="list" wx:if="{{listData.records.length}}">
+  <view class="title-box">
+    <text class="after">—</text>
+    <text class="title">集约专享</text>
+    <text class="after">—</text>
+  </view>
+  
+  <block wx:for="{{listData.records}}" wx:key="id">
+    <view class="list-item" data-data="{{item}}" bindtap="onGood">
+      <van-image
+        width="100%"
+        height="700rpx"
+        src="{{item.goodsImageUrl}}"
+      />
+      <view class="name">{{item.goodsName}}</view>
+      <view class="time-box">
+        <van-count-down type="primary" time="{{ item.time }}" format="DD天HH:mm:ss 后结束" />
+      </view>
+      <view class="progress-bar-box">
+        <view class="left-box">
+          <van-image
+            class="hot-img"
+            width="38rpx"
+            height="44rpx"
+            src="{{tools.getImgUrl('miniprogram/intensive/hot.png')}}"
+          />
+          <view class="progress-bar">
+            <view class="progress-now" wx:if="{{item.saleNumDisplay>0}}" style="width:{{item.saleNumDisplay}}%">{{item.saleNumDisplay>=50?'已售'+item.saleNumDisplay+'%':''}}</view>
+            <view wx:if="{{item.saleNumDisplay<50}}" style="width:{{100-item.saleNumDisplay}}%" class="poor">已售{{item.saleNumDisplay}}%</view>
+          </view>
+        </view>
+        <view class="num-box">库存{{item.stockNum}}件</view>
+      </view>
+      <view class="last-li">
+        <price-mobel
+          money="{{item.goodsSalePrice/100}}"
+          max-size="{{36}}"
+        />
+        <!-- <view class="price"><span class="price-after">¥</span> {{item.goodsSalePrice/100}}</view> -->
+        <view class="btn">立即抢购</view>
+      </view>
+    </view>
+  </block>
+  
+</view>

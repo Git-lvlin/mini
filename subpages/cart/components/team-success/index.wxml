@@ -1,0 +1,39 @@
+<wxs module="tools" src="../../../../wxs/common.wxs" />
+
+<van-popup
+  show="{{show}}" 
+  round
+  closeable
+  bind:close="onClose"
+>
+  <view class="team_success"> 
+    <together-user />
+    <view class="text">还差<text class="red">1</text>人拼团成功</view>
+    <view class="text">邀请好友参团吧</view>
+    <view class="share">
+      <division-title
+        title="分享至"
+        width="{{256}}"
+        color="#999999"
+      />
+      <view class="flex_center share_list">
+        <view class="share_item">
+          <image class="share_icon" src="{{tools.getImgUrl('miniprogram/common/new_wechat.png')}}"/>
+          <view class="share_name">微信</view>
+        </view>
+        <view class="share_item">
+          <image class="share_icon" src="{{tools.getImgUrl('miniprogram/common/poster.png')}}"/>
+          <view class="share_name">海报</view>
+        </view>
+      </view>
+    </view>
+    <view class="flex_center time_down">
+      时间仅剩
+      <count-down
+        time="{{1000000000}}"
+        color="#d7291d"
+        fontSize="{{36}}"
+      />
+    </view>
+  </view>
+</van-popup>

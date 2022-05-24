@@ -1,11 +1,12 @@
 import commonApi from "../../../apis/common";
 import userApi from "../../../apis/user";
-import { IMG_CDN } from "../../../constants/common";
 import { USER_LEVEL } from "../../../constants/user";
 import router from "../../../utils/router";
-import { getStorageUserInfo, setStorageUserInfo, showModal, showToast } from "../../../utils/tools";
+import { getStorageUserInfo, setStorageUserInfo, showModal, showToast, getImgCdn } from "../../../utils/tools";
 import { getCofigData, getOssImgWH } from "../../../utils/uploadAliyun";
 
+const IMG_CDN = getImgCdn();
+const app = getApp();
 Page({
   fileConfig: {
     tempFilePath: "",
@@ -16,6 +17,10 @@ Page({
     userInfo: {},
     fileName: "",
     updateInfo: false,
+  },
+
+  onLoad() {
+    app.trackEvent('mine_user_info');
   },
 
   onShow() {
@@ -58,7 +63,6 @@ Page({
     }, {
       showLoading: false,
     }).then(res => {
-      console.log(res)
       this.fileConfig.ossConfig = res;
       this.uploadImg();
     });
@@ -88,7 +92,6 @@ Page({
       success(res) {
         if (res.statusCode == "200") {
           const avatarUrl = getOssImgWH(IMG_CDN + path, 200, 200);
-          console.log("🚀 ~ file: index.js ~ line 89 ~ success ~ avatarUrl", avatarUrl)
           that.updateUserAvatar(avatarUrl);
           console.log("阿里云OSS上传图片成功" + avatarUrl );
         } else {
@@ -96,7 +99,6 @@ Page({
         }
       },
       fail(err) {
-        console.log("uploadImg ~ err", err)
         wx.showToast({
           title: "上传失败",
           icon: 'none',

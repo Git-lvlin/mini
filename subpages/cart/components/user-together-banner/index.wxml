@@ -1,0 +1,31 @@
+<swiper
+  class="banner"
+  style="top: {{top}}rpx;width: {{width}};{{style}}"
+  indicator-dots="{{true}}"
+  circular
+  vertical
+  indicator-dots="{{false}}"
+  autoplay="{{true}}"
+  interval="{{3000}}"
+  duration="{{600}}"
+>
+  <swiper-item
+    class="banner_item"
+    style="width: {{width}};"
+    wx:for="{{userList}}"
+    wx:key="index"
+  >
+    <view class="user_banner" style="background-color: {{back}}">
+      <view class="user_avater">
+        <van-image
+          width="44rpx"
+          height="44rpx"
+          src="{{item.icon}}"
+          round
+        />
+      </view>
+      <view class="order_text" style="color :{{color}}">{{item.nickName}}{{orderType != 3 ? item.desc : item.leaveStr + '发起了拼单！'}}</view>
+    </view>
+  </swiper-item>
+</swiper>
+

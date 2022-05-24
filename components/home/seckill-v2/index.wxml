@@ -1,0 +1,29 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="seckill" wx:if="{{seckillList.length}}" >
+  <view class="flex_middle seckill_content" >
+    <view class="flex_fix flex_middle seckill_head">
+      <image class="seakill_pic" src="{{tagLogo}}" bindtap="onToPopularGood" />
+      <image class="seakill_shadow" src="{{tools.getImgUrl('miniprogram/v2-home/seckill-shadow.png')}}" />
+    </view>
+    <scroll-view
+      scroll-x
+      class="seckill_scroll"
+    >
+      <view class="seckill_body">
+        <view class="seckill_list">
+          <view
+            class="seckill_item"
+            wx:for="{{seckillList}}"
+            wx:key="index"
+            data-data="{{item}}"
+            catchtap="onGood"
+          >
+            <image class="seckill_img" src="{{item.image}}" />
+            <view class="name">¥{{tools.priceToF2(item.salePrice)}}</view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

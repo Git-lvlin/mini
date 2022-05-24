@@ -1,0 +1,46 @@
+
+.banner {
+  position: absolute;
+  top: 100rpx;
+  z-index: 5;
+}
+
+.banner,
+.banner_item {
+  width: 100%;
+  height: 56rpx;
+}
+
+.banner_item {
+  padding-left: 24rpx;
+}
+
+.user_banner {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  min-width: 280rpx;
+  height: 56rpx;
+  padding-left: 4rpx;
+  padding-right: 24rpx;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 28rpx;
+}
+
+.user_avater {
+  width: 44rpx;
+  height: 44rpx;
+  overflow: hidden;
+  margin-right: 8rpx;
+  border: 2rpx solid #fff;
+  border-radius: 50%;
+}
+
+.order_text {
+  color: #ffffff;
+  font-size: 28rpx;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 40rpx;
+}

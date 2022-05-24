@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "我的红包",
+  "usingComponents": {
+    "nodata": "/components/common/nodata/index",
+    "down-app-code": "/components/common/default-down-app-code/index"
+  }
+}

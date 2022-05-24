@@ -20,6 +20,10 @@ Component({
     fontSize: {
       type: Number,
       value: 28,
+    },
+    needDay: {
+      type: Boolean,
+      value: false
     }
   },
 

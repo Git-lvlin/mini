@@ -15,11 +15,14 @@ const url = {
   subtotal: "/cart/auth/cart/subtotal",
 
   detail: "/goods/option/info",
+  detailNew: "/goods/option/goodsInfo",
   detailImg: "/goods/open/detailImages",
   skuList: "/goods/open/skus",
   checkSku: "/goods/option/goodsSpecList",
+  intensiveUser: "/goods/option/goodsRandomVirtual",
   personalDetail: "/activity/option/group/personal/goodsInfo",
   pushTogether: "/activity/auth/group/createSingle",
+  checkout: "/activity/auth/group/personal/checkMemberOrder",
   memberList: "/activity/option/group/personal/memberList",
   teamDetail: "/activity/option/group/personal/info",
   posterDetail: "/activity/option/group/poster",
@@ -34,14 +37,32 @@ const url = {
   hotSearch: "/search/open/HotKeyword/index",
   searchList: "/search/option/opensearch/index",
   associationList: "/search/open/opensearch/getSuggest",
+  userLike:"/goods/option/userLike",
 
+  storeInfo: "/goods/option/goodsDetailStoreInfo",
   storeDetail: "/store/option/storeShop/show",
   storeGood: "/store/option/storeShop/salePage",
 
+  businessDetail: "/store/option/v2/wholesale/productDetail",
+
   nearbyStore: "/store/option/memberShop/nearby",
+  nearbyWords: "/store/option/memberShop/nearbywords",
+
+  commentTotal: "/cms/option/comment/findAllCount",
+  detailComment: "/cms/option/comment/getTwoComment",
+  commentList: "/cms/option/comment/getComment",
+  commentListTotal: "/cms/option/comment/findCount",
+  commentDetail: "/cms/option/comment/findCommentDetail",
+  fabulous: "/cms/auth/comment/point",
+
+  cancel: "/order/auth/cancelOrder",
 }
 
 export default {
+  // 取消订单
+  cancelOrder(params, option) {
+    return Request.post(url.cancel, params, option);
+  },
   // 获取一级二级分类
   getCategory(params, option) {
     return Request.get(url.category, params, option);
@@ -93,9 +114,13 @@ export default {
   getDetailImg(params, option) {
     return Request.get(url.detailImg, params, option);
   },
-  // 获取商品详情
+  // 获取商品详情 - 旧
   getGoodDetail(params, option) {
     return Request.get(url.detail, params, option);
+  },
+  // 获取商品详情（秒约、c端集约、1688） - 新
+  getGoodDetailNew(params, option) {
+    return Request.post(url.detailNew, params, option);
   },
   // 获取sku列表
   getSkuList(params, option) {
@@ -113,6 +138,10 @@ export default {
   pushTogether(params, option) {
     return Request.post(url.pushTogether, params, option);
   },
+  // 检查待支付订单
+  getHasOrderInfo(params, option) {
+    return Request.post(url.checkout, params, option);
+  },
   // 获取单约列表
   getTogetherList(params, option) {
     return Request.post(url.memberList, params, option);
@@ -129,6 +158,11 @@ export default {
   getTogetherUser(params, option) {
     return Request.post(url.togetherUser, params, option);
   },
+  // 获取参与集约用户
+  getIntensiveUser(params, option) {
+    return Request.post(url.intensiveUser, params, option);
+  },
+  
 
   // 获取详情比价信息
   getDetailRatio(params, option) {
@@ -163,8 +197,16 @@ export default {
   getAssociationList(params, option) {
     return Request.post(url.associationList, params, option);
   },
+  //获取猜你喜欢商品列表
+  getUserLike(params, option) {
+    return Request.get(url.userLike, params, option);
+  },
 
-  // 获取店铺详情
+  // 获取店铺详情 - 商品详情页面
+  getStoreInfo(params, option) {
+    return Request.post(url.storeInfo, params, option);
+  },
+  // 获取店铺详情 - 店铺详情页面
   getStoreDetail(params, option) {
     return Request.get(url.storeDetail, params, option);
   },
@@ -172,9 +214,45 @@ export default {
   getStoreGood(params, option) {
     return Request.get(url.storeGood, params, option);
   },
+
+  // B端集约详情
+  getBusinessDetail(params, option) {
+    return Request.get(url.businessDetail, params, option);
+  },
+
   // 获取一定范围内的店铺数
   getNearbyStore(params, option) {
     return Request.get(url.nearbyStore, params, option);
   },
+  // 获取一定范围内的店铺数
+  getNearbyWords(params, option) {
+    return Request.get(url.nearbyWords, params, option);
+  },
 
+  // 获取商品详情评价总数
+  getCommentTotal(params, option) {
+    return Request.post(url.commentTotal, params, option);
+  },
+  // 获取商品详情评价
+  getDetailComment(params, option) {
+    return Request.post(url.detailComment, params, option);
+  },
+  // 获取评价列表评价各类型总数
+  getCommentListTotal(params, option) {
+    return Request.post(url.commentListTotal, params, option);
+  },
+  // 获取评价列表评价
+  getCommentList(params, option) {
+    return Request.post(url.commentList, params, option);
+  },
+  // 获取评价列表评价
+  setFabulous(params, option) {
+    return Request.post(url.fabulous, params, option);
+  },
+  // 获取评价详情
+  getCommentDetail(params, option) {
+    return Request.post(url.commentDetail, params, option);
+  },
+
+  
 }

@@ -1,0 +1,40 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<van-popup
+  show="{{ show }}"
+  custom-style="background: transparent"
+  round
+  z-index="{{999}}"
+  bind:close="onHideSharePopup"
+>
+  <view class="code_content">
+    <image
+      class="close_img"
+      src="{{tools.getImgUrl('miniprogram/common/clear_input.png')}}"
+      bindtap="onHideSharePopup"
+    />
+    <view class="flex_center share_poster">
+      <!-- <image class="share_photo" src="{{downLoadImg.backGroundImg}}"/> -->
+      <canvas
+        class="canvas_code"
+        id="myQrcode"
+        canvas-id="myQrcode"
+        style="width: 370px;height: 416px;"
+      />
+    </view>
+    <canvas
+      class="qrcode"
+      id="qrcode"
+      canvas-id="qrcode"
+      style="width: 100px;100px;"
+    />
+    <view class="flex_middle save_picture">
+      <image
+        src="{{tools.getImgUrl('miniprogram/user/share-app/save_photograph.png')}}"
+        class="pic1"
+        bindtap="onSave"
+      />
+      <text lines="1" class="word2">保存图片</text>
+    </view>
+  </view>
+</van-popup>

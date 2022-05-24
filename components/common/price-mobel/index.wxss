@@ -1,14 +1,14 @@
 
 .price_mobel {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   color: #333333;
   font-size: 28rpx;
   line-height: 40rpx;
 }
 
 .price {
-  color: #e5352f;
+  color: #FF0000;
   font-weight: 600;
 }
 
@@ -17,8 +17,6 @@
 }
 
 .market_money {
-  color: #b2b2b2;
   text-decoration: line-through;
-  line-height: 28rpx;
   margin-left: 12rpx;
 }

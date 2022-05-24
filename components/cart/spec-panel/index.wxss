@@ -98,6 +98,10 @@
   vertical-align: middle;
 }
 
+.gray_add {
+  opacity: 0.15;
+}
+
 .value {
   min-width: 32rpx;
   height: 40rpx;
@@ -129,6 +133,6 @@
 }
 
 .def_btn {
-  color: #333;
+  color: #777;
   background: #f0f0f0;
 }

@@ -2,6 +2,10 @@ import homeApi from "../../../apis/home";
 import router from "../../../utils/router";
 
 Component({
+  options: {
+    addGlobalClass: true,
+  },
+
   properties: {
     floor: {
       type: Object,
@@ -9,7 +13,7 @@ Component({
       observer(now, old) {
         const nowStr = JSON.stringify(now);
         const oldStr = JSON.stringify(old);
-        if(nowStr != oldStr) {
+        if(now && now.content) {
           this.setBannerList(now.content);
         }
       }
@@ -18,6 +22,7 @@ Component({
 
   data: {
     bannerList: [],
+    actIndex: 0,
   },
 
   methods: {
@@ -30,15 +35,19 @@ Component({
             bannerList: homeCache.bannerList
           })
         }
-        homeApi.getFloorCustom(content.dataUrl).then(res => {
+        const takeSpot = wx.getStorageSync("TAKE_SPOT");
+        const data = {
+          useType: 5,
+        }
+        if(takeSpot && takeSpot.storeNo) {
+          data.storeNo = takeSpot.storeNo
+        }
+        homeApi.getFloorCustom(content.dataUrl, data).then(res => {
           this.setData({
             bannerList: res
           });
           homeCache.bannerList = res;
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          })
+          wx.setStorageSync("HOME_CACHE", homeCache);
         });
       } else {
         this.setData({
@@ -46,10 +55,7 @@ Component({
         })
         if(homeCache.bannerList) {
           delete homeCache.bannerList;
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          })
+          wx.setStorageSync("HOME_CACHE", homeCache);
         }
       }
     },
@@ -58,8 +64,16 @@ Component({
       currentTarget
     }) {
       let data = currentTarget.dataset.data;
-      console.log("banner跳转", data.actionUrl)
       router.getUrlRoute(data.actionUrl);
     },
+    // 监听banner切换
+    handleSwiperChange({ detail }) {
+      const {
+        current,
+      } = detail;
+      this.setData({
+        actIndex: current
+      })
+    }
   }
 })

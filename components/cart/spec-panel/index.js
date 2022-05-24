@@ -8,63 +8,60 @@ create.Component(store, {
   use: [
     "systemInfo",
     "showSpecPopup",
-    "cartList",
   ],
 
   computed: {
     // 购物车商品用
-    quantity(scope) {
-      const {
-        data,
-        store,
-      } = scope;
-      let quantity = 0;
-      const {
-        specType,
-        good,
-      } = data;
-      if(specType === "add") {
-        const cartList = store.data.cartList;
-        // console.log("🚀  ~ cartList", cartList)
-        // const currentCart = [];
-        // cartList.forEach(item => {
-        //   if(item.spuId == good.id) {
-        //     currentCart.push({
-        //       skuId: item.skuId,
-        //       quantity: item.quantity,
-        //       stockNum: item.stockNum,
-        //       buyMinNum: item.buyMinNum,
-        //       buyMaxNum: item.buyMaxNum,
-        //     })
-        //   }
-        // });
-        // scope.setData({
-        //   currentCart,
-        // });
-      }
-      return quantity
-    },
+    // quantity(scope) {
+    //   const {
+    //     data,
+    //     store,
+    //   } = scope;
+    //   let quantity = 0;
+    //   const {
+    //     specType,
+    //     good,
+    //   } = data;
+    //   if(specType === "add") {
+    //     const cartList = store.data.cartList;
+    //     // const currentCart = [];
+    //     // cartList.forEach(item => {
+    //     //   if(item.spuId == good.id) {
+    //     //     currentCart.push({
+    //     //       skuId: item.skuId,
+    //     //       quantity: item.quantity,
+    //     //       stockNum: item.stockNum,
+    //     //       buyMinNum: item.buyMinNum,
+    //     //       buyMaxNum: item.buyMaxNum,
+    //     //     })
+    //     //   }
+    //     // });
+    //     // scope.setData({
+    //     //   currentCart,
+    //     // });
+    //   }
+    //   return quantity
+    // },
   },
-  
+
   properties: {
     good: {
       type: Object,
       value: {},
-      observer(now, old) {
-        if(now.isMultiSpec == 1) {
-          const skuId = this.data.skuId;
-          debounce(() => {
-            this.getCheckSku({
-              skuId,
-            });
-          }, 1000)();
-        }
-      }
+      // observer(now, old) {
+      //   if(now.isMultiSpec == 1) {
+      //     const skuId = this.data.skuId;
+      //     this.getCheckSku({
+      //       skuId,
+      //     });
+      //   }
+      // }
     },
     skuId: {
       type: String,
       value: "",
     },
+    // add 加入购物车 || buy 立即购买
     specType: {
       type: String,
       value: "",
@@ -72,13 +69,22 @@ create.Component(store, {
   },
 
   data: {
-    stock: 1,
+    skuNum: 1,
     skuList: [],
     checkSpec: [],
     curSku: {},
     // currentCart: [],
   },
-
+  lifetimes: {
+    ready() {
+      console.log('ready')
+      if (this.data.good.isMultiSpec === 1) {
+        this.getCheckSku({
+          skuId: this.data.good.skuId,
+        });
+      }
+    }
+  },
   methods: {
     // 获取sku列表
     getCheckSku(data, fristLoad = true) {
@@ -96,7 +102,16 @@ create.Component(store, {
       goodApi.getCheckSku(postData).then(res => {
         const curSku = res.curSku;
         curSku.salePrice = util.divide(curSku.salePrice, 100);
-        curSku.stockOver = curSku.stockNum <= 0 ? true : false;
+        curSku.stockOver = 0;
+        if(curSku.stockNum <= 0) {
+          curSku.stockOver = 1;
+          curSku.stockOverText = "已售罄";
+        } else {
+          if(curSku.stockNum < curSku.buyMinNum) {
+            curSku.stockOver = 2;
+            curSku.stockOverText = "库存不足";
+          }
+        }
         if(fristLoad) {
           res.specList.forEach((item, index) => {
             item.specValue.forEach(child => {
@@ -106,11 +121,20 @@ create.Component(store, {
             });
           });
         }
+        if(fristLoad) {
+          this.triggerEvent("setSku", {
+            skuId: curSku.id,
+            skuName: curSku.skuName,
+            stockNum: good.stockNum,
+            buyMaxNum: curSku.buyMaxNum,
+            skuNum: curSku.buyMinNum > 0 ? curSku.buyMinNum : 1,
+          });
+        }
         this.setData({
           skuData: res,
           skuList: res.specList,
           curSku,
-          stock: curSku.buyMinNum,
+          skuNum: curSku.buyMinNum > 0 ? curSku.buyMinNum : 1,
           checkSpec,
         })
       })
@@ -143,52 +167,42 @@ create.Component(store, {
     onClose() {
       store.onChangeSpecState(false)
       this.setData({
-        stock: 1,
+        skuNum: 1,
       })
     },
 
     onReduceNum() {
-      const {
+      let {
         curSku,
-        stock,
-        quantity,
-        specType
+        skuNum,
       } = this.data;
       let {
         buyMinNum,
       } = curSku;
+      const batchNumber = curSku.batchNumber > 0 ? curSku.batchNumber : 1;
       buyMinNum = buyMinNum < 1 ? 1 : buyMinNum;
-      let totalNum = specType === "buy" ? stock : stock + quantity;
-      if(totalNum > buyMinNum) {
+      skuNum = skuNum - batchNumber;
+      if(skuNum >= buyMinNum) {
         this.setData({
-          stock: stock - 1
+          skuNum
         })
-      } else {
-        showToast({ title: `至少购买${buyMinNum}件` });
       }
     },
 
     onAddNum() {
-      const {
+      let {
         curSku,
-        stock,
-        quantity,
-        specType,
+        skuNum,
       } = this.data;
+      const batchNumber = curSku.batchNumber > 0 ? curSku.batchNumber : 1;
       const {
         buyMaxNum,
       } = curSku;
-      if(stock >= buyMaxNum) {
-        showToast({ title: "没有足够库存啦" });
-        return ;
-      }
-      let totalNum = specType === "buy" ? stock : stock + quantity;
-      if(totalNum < buyMaxNum) {
+      skuNum = skuNum + batchNumber;
+      if(skuNum <= buyMaxNum && skuNum <= curSku.stockNum) {
         this.setData({
-          stock: stock + 1
+          skuNum
         })
-      } else {
-        showToast({ title: `最多购买${buyMaxNum}件` });
       }
     },
 
@@ -197,19 +211,30 @@ create.Component(store, {
         good,
         specType,
         curSku,
-        stock,
-        quantity,
+        skuNum,
       } = this.data;
-      console.log(quantity, stock)
       if(specType === "buy") {
+        this.triggerEvent("setSku", {
+          skuId: curSku.id,
+          skuName: curSku.skuName,
+          skuNum,
+          stockNum: curSku.stockNum,
+          buyMaxNum: curSku.buyMaxNum,
+          buyMinNum: curSku.buyMinNum,
+        });
         this.triggerEvent("specBuy", {
           skuId: curSku.id,
-          skuNum: stock,
+          skuNum,
         });
       } else if(specType === "add") {
+        this.triggerEvent("setSku", {
+          skuId: curSku.id,
+          skuName: curSku.skuName,
+          skuNum,
+        });
         this.triggerEvent("specAdd", {
           skuId: curSku.id,
-          quantity: stock + quantity,
+          quantity,
         });
       }
       this.onClose();

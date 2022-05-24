@@ -1,0 +1,64 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="classgood" wx:if="{{classList.length}}" >
+  <view class="classgood_content {{isFixedTop ? 'classgood_back' : ''}}">
+    <scroll-view
+      scroll-x
+      class="classgood_scroll"
+      enhanced
+      show-scrollbar="{{false}}"
+    >
+      <view class="classgood_list">
+        <view
+          class="classgood_item"
+          wx:for="{{classList}}"
+          wx:key="index"
+          data-data="{{item}}"
+          data-idx="{{index}}"
+          bindtap="onClass"
+        >
+          <view class="name {{index == actClassIdx ? 'name_act' : ''}}">{{item.gcName}}</view>
+          <view class="act_line" wx:if="{{index == actClassIdx ? 'name_act' : ''}}" />
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+  <view class="good_box">
+    <view class="flex_middle second_class" wx:if="{{secondClass.length}}">
+      <block
+        wx:for="{{secondClass}}"
+        wx:key="id"
+      >
+        <view
+          class="second_class_item"
+          wx:if="{{index < 9}}"
+          data-data="{{item}}"
+          bindtap="onSecondClass"
+        >
+          <image class="second_class_icon" src="{{item.gcIcon}}" />
+          <view class="second_name">{{item.gcName}}</view>
+        </view>
+        <view class="second_class_item" wx:if="{{index == 9}}" bindtap="onOpenClass">
+          <image class="second_class_icon" src="{{tools.getImgUrl('miniprogram/v2-home/class-more.png')}}" />
+          <view class="second_name">更多分类</view>
+        </view>
+      </block>
+    </view>
+    <view class="good_list">
+      <view
+        class="good_item"
+        wx:for="{{goodList}}"
+        wx:key="index"
+      >
+        <good-card
+          data="{{item}}"
+          showMarket="{{false}}"
+          descText="{{item.goodsSaleNumStr || item.saleNumDisplay}}"
+        />
+      </view>
+    </view>
+    <view class="no_data" wx:if="{{!goodList.length}}">
+      <nodata top="{{200}}" type="content" title="暂无商品" />
+    </view>
+  </view>
+</view>

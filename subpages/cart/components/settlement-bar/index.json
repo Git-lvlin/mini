@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "join-cart": "/components/cart/join-card/index",
+    "van-popup": "/miniprogram_npm/@vant/weapp/popup/index"
+  }
+}

@@ -9,16 +9,39 @@ var getLastTime = function(time) {
 }
 
 var getPriceTitle = function (orderType) {
+  // var titleType = {
+  //   "2": "",
+  //   "3": "单约价：",
+  //   "4": "团约价：",
+  //   "11": "",
+  //   "15": "集约价：",
+  //   "16": "集约价：",
+  // };
   var titleType = {
-    "3": "单约价",
-    "4": "团约价",
-    "11": "约购价",
-    "15": "集约价",
+    "2": "",
+    "3": "",
+    "4": "团约价：",
+    "11": "",
+    "15": "集约价：",
+    "16": "集约价：",
   };
   return titleType[orderType];
+};
+
+var getPriceDesc = function (orderType) {
+  var descType = {
+    "2": "",
+    "3": "市场价",
+    "4": "市场价",
+    "11": "",
+    "15": "原价",
+    "16": "原价",
+  };
+  return descType[orderType];
 };
 
 module.exports = {
   getLastTime: getLastTime,
   getPriceTitle: getPriceTitle,
+  getPriceDesc: getPriceDesc,
 }

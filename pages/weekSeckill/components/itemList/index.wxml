@@ -1,0 +1,91 @@
+<wxs module="tools" src="../../../../wxs/common.wxs" />
+<wxs module="u">
+  var time = function (a) {
+    if (a<10) {
+      return '0' + a.toString()
+    }
+    return a
+  }
+  var num = function (a) {
+    if (a<=999) {
+      return a
+    }
+    if (999<a<10000) {
+      return '999+'
+    }
+    if (10000<=a<100000) {
+      return (a/10000).toFixed(2) + '万'
+    }
+    if (a>100000) {
+      return '10万+'
+    }
+  }
+  module.exports = {
+    time: time,
+    num: num,
+  };
+</wxs>
+<view class="today">
+  <van-sticky offset-top="{{ 20*systemInfo.rpxRatio + systemInfo.navTotalHeightPx }}" bind:scroll="onScroll" wx:if="{{active==index-1}}">
+    <view class="top-box-wrap">
+      <view class="top-box">
+        <view class="top-number">
+          {{index===1?data.virtualBuyNum:data.virtualNoticeNum}}人{{data.cmsWeekCode===1?'疯抢中':'等待中'}}
+        </view>
+        <!-- <view class="top-number" wx:else>{{tomorrow.virtualNoticeNum}}已设置提醒</view> -->
+        <swiper class="swiper" autoplay display-multiple-items="3" circular easing-function="linear" current="0" next-margin="44rpx" bindchange="iconChange">
+          <block wx:for="{{data.avatorList}}" wx:key="id">
+            <swiper-item skip-hidden-item-layout class="swiper-item {{itemIndex <= index&&index<(itemIndex+3)?'visible':'op'}}">
+              <view class="img-box">
+                <image class="userIcon" src="{{item.icon}}" />
+              </view>
+            </swiper-item>
+          </block>
+        </swiper>
+        <view class="time-box">
+          <text class="text">即将{{data.cmsWeekCode==1?'结束':'开始'}}</text>
+          <van-count-down format="DD:HH:mm:ss" use-slot time="{{ data.deadlineTime-data.currentTime }}" bind:change="onChange">
+            <text class="time" wx:if="{{timeData.days!=0}}">{{ timeData.days }}</text>
+            <text class="days" wx:if="{{timeData.days!=0}}">天</text>
+            <text class="time">{{ u.time(timeData.hours) }}</text>
+            <text class="time-symbol">:</text>
+            <text class="time">{{ u.time(timeData.minutes) }}</text>
+            <text class="time-symbol">:</text>
+            <text class="time">{{ u.time(timeData.seconds) }}</text>
+          </van-count-down>
+        </view>
+      </view>
+    </view>
+  </van-sticky>
+  <view class="tab-item-wrap" wx:for="{{data.records}}" wx:key="id">
+    <view class="tab-item" data-data="{{item}}" bindtap="onGood">
+      <van-image class="left-img" width="234rpx" height="234rpx" src="{{item.image}}" />
+      <view class="right-box">
+        <view class="title">{{item.title}}</view>
+        <view class="progress-bar-box" wx:if="{{data.cmsWeekCode===1}}">
+          <view class="progress-bar">
+            <view class="progress-index" style="width:{{item.buyNumDisplay}}%">
+              {{item.buyNumDisplay>=50?item.buyNumDisplay+'%':''}}
+            </view>
+            <image mode="widthFix" class="progress-img" src="{{tools.getImgUrl('miniprogram/seckill/index-icon.png')}}" />
+            <view wx:if="{{item.buyNumDisplay<50}}" style="width:{{100-item.buyNumDisplay}}%" class="poor">
+              {{item.buyNumDisplay}}%
+            </view>
+          </view>
+          <view class="stock">库存{{u.num(item.stockNum)}}</view>
+        </view>
+        <!-- <view class="subtitle">{{item.subtitle}}</view> -->
+        <view class="price-box">
+          <text class="head">¥</text>
+          <text class="money">{{tools.priceToF2(item.salePrice)}}</text>
+          <text class="maxnum" wx:if="{{item.reducePriceDisplay}}">{{item.reducePriceDisplay}}</text>
+        </view>
+        <view class="nearDays" wx:if="{{item.nearDaysDisplay}}">{{item.nearDaysDisplay}}</view>
+      </view>
+      <view class="btn" wx:if="{{data.cmsWeekCode===1}}">抢购</view>
+      <view class="btn {{item.isNotice===1?'remind':'reminded'}}" wx:else bind:tap="onRemind" data-data="{{item}}">
+        {{item.isNotice===1?'提醒我':'已提醒'}}
+      </view>
+    </view>
+  </view>
+</view>

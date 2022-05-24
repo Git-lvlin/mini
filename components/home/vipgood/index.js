@@ -2,6 +2,10 @@ import homeApi from '../../../apis/home';
 import router from '../../../utils/router';
 
 Component({
+  options: {
+    addGlobalClass: true,
+  },
+
   properties: {
     floor: {
       type: Object,
@@ -9,7 +13,7 @@ Component({
       observer(now, old) {
         const nowStr = JSON.stringify(now);
         const oldStr = JSON.stringify(old);
-        if(nowStr != oldStr) {
+        if(now && now.content) {
           let vipGood = {
             shopTagList: {},
             userTagList: {},
@@ -29,10 +33,7 @@ Component({
             })
             if(homeCache.vipGood) {
               delete homeCache.vipGood;
-              wx.setStorage({
-                key: "HOME_CACHE",
-                data: homeCache,
-              })
+              wx.setStorageSync("HOME_CACHE", homeCache);
             }
           }
         }
@@ -59,10 +60,7 @@ Component({
           vipGood: res
         });
         homeCache.vipGood = res;
-        wx.setStorage({
-          key: "HOME_CACHE",
-          data: homeCache,
-        })
+        wx.setStorageSync("HOME_CACHE", homeCache);
       });
     },
     // 跳转详情

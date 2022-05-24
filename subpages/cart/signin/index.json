@@ -1,0 +1,8 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "van-switch": "/miniprogram_npm/@vant/weapp/switch/index",
+    "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
+    "price-mobel": "/components/common/price-mobel"
+  }
+}

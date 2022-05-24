@@ -1,0 +1,31 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="activity" wx:if="{{activityCube.length}}" >
+  <view
+    class="activity_content"
+    wx:if="{{activityCube.length}}"
+  >
+    <scroll-view
+      scroll-x
+      class="activity_scroll"
+    >
+      <view class="activity_body">
+        <view class="activity_list">
+          <view
+            class="activity_item"
+            wx:for="{{activityCube}}"
+            wx:key="index"
+            data-data="{{item}}"
+            bindtap="onToClass"
+          >
+            <image class="activity_img" src="{{item.image}}" />
+            <view
+              class="name"
+              style="{{fontColor ? 'color: ' + fontColor : ''}}"
+            >{{item.title}}</view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+</view>

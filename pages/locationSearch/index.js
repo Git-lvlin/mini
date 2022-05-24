@@ -2,6 +2,7 @@ import { MAP_KEY } from '../../constants/index';
 import amapFile from '../../libs/amap-wx';
 import { debounce, showToast } from '../../utils/tools'
 import create from '../../utils/create'
+import commonApi from '../../apis/common'
 import store from '../../store/index'
 import router from '../../utils/router';
 
@@ -13,6 +14,8 @@ create.Page(store, {
   use: [
     "systemInfo",
   ],
+
+  selectLocation: "",
 
   data: {
     showPopup: false,
@@ -30,12 +33,9 @@ create.Page(store, {
     detail
   }) {
     const inputText = detail.value;
-    const {
-      cityData,
-    } = this.data;
     debounce(() => {
-      this.getPoiAround(`${cityData.province}${cityData.city}${inputText}`);
-    }, 300)();
+      this.getPoiAround(inputText);
+    }, 500)();
     this.setData({
       inputText,
     })
@@ -55,6 +55,7 @@ create.Page(store, {
           const {
             addressComponent,
           } = data[0].regeocodeData;
+          this.selectLocation = addressComponent.streetNumber.location;
           that.setData({
             cityData: addressComponent,
           });
@@ -64,17 +65,36 @@ create.Page(store, {
   },
 
   // 获取附近的点
-  getPoiAround(querykeywords) {
+  getPoiAround(inputText) {
     let that = this;
+    let tempCity = "";
+    const {
+      cityData,
+    } = this.data;
+    const {
+      city,
+      province,
+    } = cityData;
+    // if(province == city || province != city && city != "县") {
+    //   tempCity = province;
+    // } else {
+    //   tempCity = `${province}${city}${inputText}`
+    // }
+    let querykeywords = inputText;
     myAmapFun.getPoiAround({
       querykeywords,
+      location: this.selectLocation,
       success(data) {
         const markers = data.markers;
-        markers.forEach(item => {
+        markers.length && markers.forEach(item => {
           item.nameArr = that.getTextKey(item.name, querykeywords);
         });
         that.setData({
           markers,
+        }, () => {
+          if(!markers.length) {
+            showToast({ title: "没有结果呢" });
+          }
         });
       },
       fail(info) {
@@ -132,9 +152,17 @@ create.Page(store, {
     } = this.data;
     if(detail && detail.selectAddress) {
       cityData = {
+        district: detail.selectAddress.area.name,
         city: detail.selectAddress.city.name,
         province: detail.selectAddress.province.name,
       };
+      // 获取地址经纬度
+      commonApi.getCoordinate({
+        address: `${cityData.province}${cityData.city}${cityData.district}`
+      }).then(res => {
+        this.selectLocation = res.geocodes[0].location;
+        console.log(this.selectLocation)
+      });
     }
     this.setData({
       cityData,

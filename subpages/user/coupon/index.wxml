@@ -1,0 +1,69 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="container">
+  <view class="flex_fix flex_middle top_bar">
+    <view
+      class="bar_item {{item.selected ? 'bar_item_act' : ''}}"
+      wx:for="{{barList}}"
+      wx:key="index"
+      data-data="{{item}}"
+      bindtap="onBar"
+    >
+      {{item.name}}
+    </view>
+  </view>
+  <scroll-view scroll-y class="coupon_scroll">
+    <view class="coupon_list" wx:if="{{conponList.length}}">
+      <view
+        class="coupon_item"
+        wx:for="{{conponList}}"
+        wx:key="index"
+      >
+        <view class="flex_middle coupon_box">
+          <view class="coupon_img">
+            <image class="coupon_back" wx:if="{{selectType == 1}}" src="{{tools.getImgUrl('miniprogram/user/coupon/back_not.png')}}" />
+            <image class="coupon_back" wx:if="{{selectType == 2}}" src="{{tools.getImgUrl('miniprogram/user/coupon/back_used.png')}}" />
+            <image class="coupon_back" wx:if="{{selectType == 4}}" src="{{tools.getImgUrl('miniprogram/user/coupon/back_invalid.png')}}" />
+            <view class="flex_center coupon_price {{selectType != 1 ? 'white_color' : ''}}">
+              <view class="price_text"><text class="price_text_min">￥</text>{{item.freeAmount}}</view>
+              <view class="price_desc">{{item.couponMsg}}</view>
+            </view>
+          </view>
+          <view class="coupon_info">
+            <view class="flex_middle coupon_title">
+              <view class="title_text text_one_line">{{item.couponName}}</view>
+              <!-- <view class="title_label">快过期</view> -->
+            </view>
+            <view class="coupon_time">有效期：{{item.activityStartTime}}-{{item.activityEndTime}}</view>
+            <view class="info_line" />
+            <view class="flex_middle coupon_btn_box">
+              <view class="coupon_rule_btn" data-idx="{{index}}" catchtap="onOpenRule">
+                使用规则
+                <view class="show_rule {{item.ruleOpen ? 'show_rule_act' : ''}}" />
+              </view>
+              <view class="coupon_btn" data-coupon="{{item}}" wx:if="{{selectType == 1}}" bindtap="onToUse">去使用</view>
+            </view>
+          </view>
+          <image class="seal_img" wx:if="{{selectType == 4}}" src="{{tools.getImgUrl('miniprogram/user/coupon/invalid.png')}}" />
+          <image class="seal_img" wx:if="{{selectType == 2}}" src="{{toold.getImgUrl('miniprogram/user/coupon/used.png')}}" />
+        </view>
+        <view class="coupon_rule" wx:if="{{item.ruleOpen}}">
+          <view class="flex_fix coupon_rule_space" />
+          <view class="rule_box">{{item.couponRule}}</view>
+        </view>
+      </view>
+      <view class="not_more">没有更多了~</view>
+    </view>
+    <view class="no_data" wx:if="{{isLoad && !conponList.length}}">
+      <nodata type="coupon" title="居然一张票也没有~" />
+      <view class="no_data_text">“你有没有考虑过票的感受”</view>
+    </view>
+  </scroll-view>
+
+  <down-app-code show="{{ showSharePopup }}" bind:close="onHideSharePopup" /> 
+
+  <!-- <view class="flex_fix coupon_center">
+    <image class="to_center" src="{{tools.getImgUrl('miniprogram/user/coupon/to_center.png')}}" />
+  </view> -->
+
+</view>

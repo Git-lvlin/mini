@@ -7,6 +7,7 @@
     "van-panel": "/miniprogram_npm/@vant/weapp/panel/index",
     "van-cell": "/miniprogram_npm/@vant/weapp/cell/index",
     "van-cell-group": "/miniprogram_npm/@vant/weapp/cell-group/index",
-    "van-image": "/miniprogram_npm/@vant/weapp/image/index"
+    "van-image": "/miniprogram_npm/@vant/weapp/image/index",
+    "down-app-code": "/components/common/default-down-app-code/index"
   }
 }

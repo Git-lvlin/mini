@@ -1,0 +1,49 @@
+
+<view class="store_panel" wx:if="{{storeInfo && storeInfo.storeName}}">
+  <view class="flex_middle store_box">
+    <view class="store_img">
+      <van-image
+        width="88rpx"
+        height="88rpx"
+        round
+        src="{{storeInfo.storeLogo}}"
+      />
+    </view>
+    <view class="store_info">
+      <view class="store_name">{{storeInfo.storeName}}</view>
+      <view class="store_data">商品数量: {{storeInfo.storeSkuSumNum || 0}}<text class="store_info_text">{{good.storeSaleSumNum}}</text></view>
+    </view>
+    <view class="flex_center store_btn" bindtap="onStore">
+      进店逛逛
+      <view class="right_arrow_red" />
+    </view>
+  </view>
+  <view class="flex_middle store_good">
+    <view
+      class="store_good_item"
+      wx:for="{{storeGood}}"
+      wx:key="index"
+      data-good="{{item}}"
+      bindtap="onToDetail"
+    >
+      <view class="good_cover">
+        <van-image
+          width="224rpx"
+          height="224rpx"
+          src="{{item.skuImageUrl}}"
+        />
+      </view>
+      <view class="good_name text_one_line">{{item.goodsName}}</view>
+      <view class="flex_middle price_box">
+        <price-mobel
+          custom-class="flex_fix"
+          money="{{item.price}}"
+          minSize="{{20}}"
+          maxSize="{{24}}"
+          src="{{item.skuImageUrl}}"
+        />
+        <view class="sale_text">{{item.saleNum}}</view>
+      </view>
+    </view>
+  </view>
+</view>

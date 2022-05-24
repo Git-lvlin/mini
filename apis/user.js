@@ -6,6 +6,9 @@ const url = {
   userData: "/member/auth/memberInfo/getMemberAmountInfo",
   orderCount: "/order/auth/order/userOrderCount",
   updateUserInfo: "/member/auth/memberInfo/modifyMemberInfo",
+  getDownLoadImg:"/share/option/shareParam/getDownLoadImg",
+
+  couponList: "/activity/open/myCouponList",
 }
 
 export default {
@@ -28,6 +31,15 @@ export default {
   // 获取订单数量
   getOrderCount(params, option) {
     return Request.post(url.orderCount, params, option);
+  },
+  //获取app海报和二维码
+  getDownLoadImg(params, option){
+    return Request.post(url.getDownLoadImg, params, option);
+  },
+
+  // 获取红包列表
+  getCouponList(params, option){
+    return Request.post(url.couponList, params, option);
   },
 
 }

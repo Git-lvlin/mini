@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "panel-title": "/components/home/panel-title/index",
+    "good-card": "/components/common/good-card/index",
+    "nodata": "/components/common/nodata/index"
+  }
+}

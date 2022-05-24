@@ -1,0 +1,39 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="cart_button {{jump?'top_cart':''}}">
+  <view class="cart_popup_click_box" bindtap="onShowPopup">
+    <view class="cart_icon_box">
+      <image class="cart_icon" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon.png')}}" />
+      <view class="cart_num" wx:if="{{quantity}}">{{quantity}}</view>
+    </view>
+    <view class="cart_text_box">
+      <text class="cart_text_head">合计：</text>
+      <text class="price_head">¥</text>
+      <text class="price_aPrice">{{aPrice}}</text>
+      <text class="zprice">.{{zPrice}}</text>
+    </view>
+  </view>
+  <view class="btn" bindtap="createOrder">去下单</view>
+</view>
+<!-- <view class="cart_button" wx:else>
+  <view class="cart_popup_click_box" bindtap="onShowPopup">
+    <view class="cart_icon_box">
+      <image class="cart_icon" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon.png')}}" />
+      <view class="cart_num" wx:if="{{quantity}}">{{quantity}}</view>
+    </view>
+    <view class="cart_text_box">
+      <text class="cart_text_head">合计：</text>
+      <text class="price_head">¥</text>
+      <text class="price">{{aPrice}}</text>
+      <text class="zprice">.{{zPrice}}</text>
+    </view>
+  </view>
+  <view class="btn" bindtap="createOrder">去下单</view>
+</view> -->
+<cart-popup
+  show="{{popupType}}"
+  bind:close="handleCloseToCartPopup"
+  bind:change="dataChange"
+  bind:check="checkChange"
+
+/>

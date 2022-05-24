@@ -66,6 +66,24 @@ page {
 }
 
 
+.push_tips {
+  display: flex;
+  align-items: flex-start;
+  color: #E4352E; 
+  font-size: 24rpx;
+  line-height: 34rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+  background-color: #FEEAEA;
+  border-radius: 24rpx;
+}
+
+.push_text {
+  flex: 1;
+  margin-left: 16rpx;
+}
+
+
 /* 选择地址 */
 .address {
   display: flex;
@@ -144,8 +162,8 @@ page {
 .right_icon {
   flex-grow: 0;
   flex-shrink: 0;
-  width: 16rpx;
-  height: 28rpx;
+  width: 12rpx;
+  height: 22rpx;
 }
 
 .store_address {
@@ -170,7 +188,9 @@ page {
   margin-bottom: 32rpx;
   border-bottom: 2rpx solid rgba(0, 0, 0, 0.05);
 }
-
+.store_address_info {
+  padding-right: 32rpx;
+}
 .position_icon {
   flex-shrink: 0;
   flex-grow: 0;
@@ -235,11 +255,9 @@ page {
 }
 
 .cell_value {
-  font-weight: 600;
   color: #333333;
   font-size: 28rpx;
   line-height: 40rpx;
-  padding-right: 34rpx;
 }
 
 .coupon {
@@ -250,16 +268,24 @@ page {
   margin-right: 16rpx;
 }
 
+.signin_text {
+  color: #777;
+  font-size: 24rpx;
+  line-height: 40rpx;
+}
+
 .coupon_money {
-  font-weight: 600;
-  color: #333333;
+  color: #e5352f;
   font-size: 28rpx;
   line-height: 40rpx;
-  padding-right: 16rpx;
 }
 
 .coupon_money_more {
   color: #e5352f;
+}
+
+.coupon_jump {
+  margin-left: 16rpx;
 }
 
 .input_msg {
@@ -332,4 +358,8 @@ page {
   margin-left: 32rpx;
   background-image: linear-gradient(270deg,#fb5f2a 0%,#e5352f 100%);
   border-radius: 34rpx;
+}
+
+.btn_gray {
+  background: #ccc;
 }

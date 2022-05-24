@@ -9,6 +9,7 @@ const defaultSecondCategory = [{
   gcIcon: ""
 }];
 
+const app = getApp();
 create.Page(store, {
   use: [
     "systemInfo",
@@ -37,7 +38,7 @@ create.Page(store, {
       navTotalHeight,
       bottomBarHeight,
     } = this.data.$.systemInfo;
-    let classScrollHeight = screenHeight * rpxRatio - navTotalHeight - bottomBarHeight - 172 - 16 - 104;
+    let classScrollHeight = screenHeight * rpxRatio - navTotalHeight - bottomBarHeight - 172 - 16;
     if(!!options.category_id) {
       this.categoryId = options.category_id;
     }
@@ -49,10 +50,15 @@ create.Page(store, {
         gcParentId: 0
       }
     });
+    app.trackEvent('goods_category_level_three');
   },
 
-  onShow() {
-    
+  onUnload() {
+    this.setData({
+      fristCategory: [],
+      secondCategory: [],
+      goodsList: [],
+    })
   },
 
   // 获取一级二级分类
@@ -93,6 +99,7 @@ create.Page(store, {
     const params = {
       gcId1: selectFristClass,
       size: 10,
+      next: ""
     }
     if(!!next) params.next = next;
     goodApi.getRecommends(params).then(res => {

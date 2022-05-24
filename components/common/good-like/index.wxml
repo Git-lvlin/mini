@@ -1,0 +1,22 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="user_good_card" bindtap="onToDetail">
+    <van-image
+      width="{{size}}"
+      height="{{size}}"
+      custom-class="user_good_cover"
+      src="{{data.goodsImageUrl}}"
+    />
+    <view class="user_good_info">
+      <view class="user_good_title">{{data.goodsName}}</view>
+      <view class="user_good_sku">{{data.goodsDesc}}</view>
+      <view class="user_good_price">
+        <view class="flex_middle">
+          <price-mobel money="{{data.goodsSaleMinPrice}}" defaultColor="#ccc" marketMoney="{{data.goodsMarketPrice}}" />
+        </view>
+        <view class="user_cart">
+          <view class="user_cart_num">{{data.goodsSaleNumStr}}</view>
+        </view>
+      </view>
+    </view>
+</view>

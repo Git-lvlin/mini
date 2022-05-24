@@ -1,0 +1,37 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="container">
+  <image
+    class="banner"
+    wx:if="{{banner}}"
+    src="{{banner}}"
+  />
+  
+  <view class="good_content">
+    <view
+      class="flex_middle good_item"
+      wx:for="{{goodList}}"
+      wx:key="index"
+      data-good="{{item}}"
+      bindtap="onToDetail"
+    >
+      <view class="flex_fix">
+        <van-image
+          width="264rpx"
+          height="264rpx"
+          radius="16rpx"
+          src="{{item.image}}"
+        />
+      </view>
+
+      <view class="good_info">
+        <view class="good_title text_two_line">{{item.title}}</view>
+        <view class="margket_price">市场价 <text class="line_text">￥{{tools.priceToF2(item.marketPrice, false)}}</text></view>
+        <view class="flex_middle price_box">
+          <view class="price_text"><text class="mini_util">¥</text>{{tools.priceToF2(item.salePrice, false)}}</view>
+          <view class="buy_btn">立即抢购</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

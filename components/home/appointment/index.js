@@ -1,7 +1,6 @@
 import homeApi from '../../../apis/home';
 import router from '../../../utils/router';
-import { mapNum } from '../../../utils/homeFloor';
-import { showToast } from '../../../utils/tools';
+import { showToast, mapNum } from '../../../utils/tools';
 
 let tempSpot = {};
 
@@ -15,16 +14,13 @@ Component({
       type: Object,
       value: {},
       observer(now, old) {
-        old = old ? old : {};
         let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
-        const oldData = JSON.stringify(old.content);
-        const nowData = JSON.stringify(now.content);
-        if(now.content && now.content.dataType) {
-          takeSpot = takeSpot && takeSpot.storeNo ? takeSpot : {};
-          if(takeSpot.storeNo != tempSpot.storeNo || oldData != nowData) {
-            tempSpot = takeSpot;
-            this.setGoodList(now.content, takeSpot);
-          }
+        takeSpot = takeSpot && takeSpot.storeNo ? takeSpot : {};
+        if(takeSpot.storeNo != tempSpot.storeNo) {
+          tempSpot = takeSpot;
+        }
+        if(now && now.content) {
+          this.setGoodList(now.content, takeSpot);
         }
       }
     },
@@ -39,9 +35,18 @@ Component({
   },
 
   pageLifetimes: {
-    // show() {
+    show() {
       // 页面被展示
-    // },
+      const {
+        floor,
+      } = this.data;
+      let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
+      takeSpot = takeSpot && takeSpot.storeNo ? takeSpot : {};
+      if(takeSpot.storeNo != tempSpot.storeNo) {
+        tempSpot = takeSpot;
+        this.setGoodList(floor.content, takeSpot);
+      }
+    },
   },
 
   methods: {
@@ -58,14 +63,12 @@ Component({
           storeNo: spot.storeNo || ""
         }).then(res => {
           let goodList = mapNum(res.goodsInfo)
+          goodList = goodList.slice(0, goodList.length > 2 ? 2 : goodList.length);
           this.setData({
             goodList
           });
           homeCache.goodList = goodList;
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          })
+          wx.setStorageSync("HOME_CACHE", homeCache);
         });
       } else {
         this.setData({
@@ -73,10 +76,7 @@ Component({
         })
         if(homeCache.goodList) {
           delete homeCache.goodList;
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          })
+          wx.setStorageSync("HOME_CACHE", homeCache);
         }
       }
     },

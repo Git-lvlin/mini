@@ -4,8 +4,8 @@ Page({
   optionsInfo: {},
 
   data: {
-    // link: "https://publicmobile-uat.yeahgo.com/web/user-appointment",
-    link: "https://baidu.com",
+    // link: "https://publicmobile-dev.yeahgo.com/web/user-appointment",
+    link: "",
   },
 
   onLoad(options) {
@@ -13,8 +13,7 @@ Page({
       router.go();
       return;
     }
-    const link = decodeURIComponent(options.url);
-    console.log("webview ~ link", link)
+    const link = options.url.includes('%')?decodeURIComponent(options.url):options.url;
     this.setData({
       link,
     });

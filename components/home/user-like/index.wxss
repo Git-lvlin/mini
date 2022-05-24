@@ -1,0 +1,56 @@
+.usergoods {
+  margin: 24rpx 24rpx 0;
+  box-shadow: 0rpx 2rpx 8rpx rgba(0, 0, 0, 0.03);
+}
+
+.user_like_card{
+  padding: 0 20rpx;
+  background-color: #fff;
+}
+.head {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  /* padding: 0 16rpx; */
+  background-size: 100% auto;
+  /* background-position: 0 0; */
+  height: 128rpx;
+}
+
+.user_title {
+  display: flex;
+  margin-left: 12rpx;
+  color: #83573c;
+  align-items: center;
+}
+.user_title .like_title{
+  font-size: 32rpx;
+  font-weight: 600;
+  letter-spacing: 1.6rpx;
+  line-height: 44rpx;
+  margin-bottom: 30rpx;
+}
+.user_title .like_introduce{
+  font-size: 24rpx;
+  line-height: 40rpx;
+  margin:0 0 10rpx 12rpx;
+}
+
+.user_icon {
+  width: 38rpx;
+  height: 38rpx;
+  margin:0 0 30rpx 20rpx;
+}
+
+.good_list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.good_item {
+  flex-grow: 0;
+  flex-shrink: 0;
+}

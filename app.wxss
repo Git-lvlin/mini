@@ -10,6 +10,10 @@ image {
   vertical-align: middle;
 }
 
+.position {
+  position: relative;
+}
+
 .flex_middle {
   display: flex;
   align-items: center;
@@ -59,12 +63,36 @@ image {
   transform: rotate(45deg);
 }
 
+.right_arrow_simple {
+  width: 12rpx;
+  height: 12rpx;
+  border-top: 2rpx solid #FFF;
+  border-right: 2rpx solid #FFF;
+  transform: rotate(45deg);
+}
+
 .right_arrow_gray {
   width: 12rpx;
   height: 12rpx;
   border-top: 4rpx solid #ccc;
   border-right: 4rpx solid #ccc;
   transform: rotate(45deg);
+}
+
+.right_arrow_black {
+  width: 12rpx;
+  height: 12rpx;
+  border-top: 4rpx solid #333;
+  border-right: 4rpx solid #333;
+  transform: rotate(45deg);
+}
+
+.right_arrow_red {
+  width: 12rpx;
+  height: 12rpx;
+  border-top: 4rpx solid #d7291d;
+  border-right: 4rpx solid #d7291d;
+  transform: rotate(45deg) translateX(-4rpx);
 }
 
 .safe_bottom {

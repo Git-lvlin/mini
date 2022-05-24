@@ -5,6 +5,7 @@ import { orderList, otherSetting, USER_LEVEL } from '../../constants/user'
 import userApi from '../../apis/user'
 import { getStorageUserInfo, setStorageUserInfo, showToast } from '../../utils/tools'
 
+const app = getApp();
 create.Page(store, {
   use: [
     'systemInfo'
@@ -12,10 +13,11 @@ create.Page(store, {
 
   data: {
     orderTypeList: orderList,
-    otherSetting,
+    otherSetting: otherSetting,
     userAuth: true,
     canUseUserProfile: true,
     banner: "",
+    showSharePopup: false,
     showPopup: false,
     userData: [
       {
@@ -23,15 +25,17 @@ create.Page(store, {
         value: 0,
       },
       {
-        text: "优惠券",
+        text: "红包",
         value: 0,
+        action: "coupon"
       },
       {
-        text: "积分",
-        value: 0,
+        text: "爱心值",
+        value: 600,
       },
     ],
     userInfo: "",
+    downLoadImg:{}
   },
 
   onLoad: function (options) {
@@ -75,6 +79,7 @@ create.Page(store, {
       orderTypeList,
       userData,
     });
+    app.trackEvent('tab_user');
   },
 
   // 获取用户信息
@@ -107,7 +112,7 @@ create.Page(store, {
       }
       userData[0].value = res.balance || 0;
       userData[1].value = res.couponNum || 0;
-      userData[2].value = res.integralValue || 0;
+      // userData[2].value = res.integralValue || 0;
       this.setData({
         userData,
       })
@@ -161,6 +166,20 @@ create.Page(store, {
       const userInfo = getStorageUserInfo(true);
       if(!userInfo) return;
     }
+    if(path == "share") {
+      const userInfo = getStorageUserInfo(true);
+      if(!userInfo) return;
+      this.showSharePopup()
+      return;
+    }
+    if (path == "coupon") {
+      const userInfo = getStorageUserInfo(true);
+      if (!userInfo) return;
+      router.push({
+        name: 'coupon',
+      });
+      return;
+    }
     if(type === 1) {
       router.push({
         name: path
@@ -175,6 +194,17 @@ create.Page(store, {
       showPopup: true,
     })
   },
+  showSharePopup() {
+    this.setData({
+      showSharePopup: true,
+    })
+  },
+
+  onHideSharePopup() {
+    this.setData({
+      showSharePopup: false,
+    })
+  },
 
   onHidePopup() {
     this.setData({
@@ -182,10 +212,21 @@ create.Page(store, {
     })
   },
 
-  // 点击头部
-  onClickHead() {
-    wx.navigateTo({
-      url: '/dokit/index/index',
-    })
-  },
+  // 点击用户数据
+  onUserData({
+    currentTarget
+  }) {
+    const {
+      data,
+    } = currentTarget.dataset;
+    if(!!data.action) {
+      const userInfo = getStorageUserInfo(true);
+      if(data.action == "coupon" && !userInfo) {
+        return;
+      }
+      router.push({
+        name: data.action,
+      });
+    }
+  }
 })

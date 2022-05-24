@@ -23,7 +23,7 @@ Component({
     },
     color: {
       type: String,
-      value: "#e5352f"
+      value: "#FF0000"
     },
     minSize: {
       type: Number,
@@ -35,7 +35,11 @@ Component({
     },
     bold: {
       type: Number,
-      value: 0
+      value: 400
+    },
+    showMarket: {
+      type: Boolean,
+      value: true,
     }
   },
 

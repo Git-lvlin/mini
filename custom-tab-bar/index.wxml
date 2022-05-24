@@ -1,13 +1,29 @@
 <view class="bar_container">
-  <view
-    class="bar_item"
+  <block
     wx:for="{{tabList}}"
     wx:key="index"
-    data-path="{{item.pagePath}}"
-    data-index="{{item.index}}"
-    bindtap="onToPath"
   >
-    <image class="bar_icon" src="{{selectedIndex === item.index ? item.selectedIconPath : item.iconPath}}" />
-    <view class="bar_title {{selectedIndex === item.index ? 'bar_title_act' : ''}}">{{item.name}}</view>
-  </view>
+    <view
+      class="bar_item"
+      data-path="{{item.pagePath}}"
+      data-index="{{item.index}}"
+      bindtap="onToPath"
+    >
+      <image class="bar_icon" src="{{selectedIndex === item.index ? item.selectedIconPath : item.iconPath}}" />
+      <view class="bar_title {{selectedIndex === item.index ? 'bar_title_act' : ''}}">{{item.name}}</view>
+    </view>
+    <!-- <view 
+      class="bar_item"
+      wx:if="{{item.special}}"
+      data-path="{{item.pagePath}}"
+      data-index="{{item.index}}"
+      bindtap="onToPath"
+    >
+      <image class="bar_icon" src="{{item.iconPath}}" />
+      <view class="bar_title {{selectedIndex === item.index ? 'bar_title_act' : ''}}">{{item.name}}</view>
+    </view> -->
+  </block>
+  <!-- <view class="intensive_canvas"> -->
+    <!-- <canvas class="canvas" id="canvasIcon" canvas-id="canvasIcon"></canvas> -->
+  <!-- </view> -->
 </view>

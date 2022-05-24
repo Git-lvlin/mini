@@ -48,7 +48,13 @@
 
   <view class="content" wx:if="{{isPay}}">
     <view class="def_head_back" />
-    
+    <!-- <view class="popup" wx:if="{{groupInfo.groupState != 0}}">
+      <together-user
+        title="团长"
+        list="{{groupInfo.joinMemberArr}}"
+        distanceNum="{{groupInfo.distanceNum}}"
+      />
+    </view> -->
     <view class="success_head" style="background-image: url({{tools.getImgUrl('miniprogram/cart/order/success_back.png')}})">
       <view class="success_tip">
         <image class="success_img" src="{{tools.getImgUrl('miniprogram/cart/order/pay_success.png')}}" />
@@ -70,25 +76,100 @@
     </view>
 
     <view class="order_info">
-      <view class="info_item">订单编号：<text class="info_text">{{payData.orderSn}}</text></view>
+      <!-- <view class="info_item">订单编号：<text class="info_text">{{payData.orderSn}}</text></view> -->
       <view class="info_item">下单时间：<text class="info_text">{{orderCreateTime}}</text></view>
       <view class="info_item">支付方式：<text class="info_text">{{'微信支付'}}</text></view>
     </view>
 
-    <hot-good
-      wx:if="{{hotGood.length}}"
-      list="{{hotGood}}"
-      autoJump="{{false}}"
-      bind:click="handleToDetail"
-    />
 
-    <view class="bottom_confirm" wx:if="{{isPay && (orderType != 3 && orderType != 4)}}">
+
+    <!-- <view  class="bottom_confirm" wx:if="{{isPay && (orderType != 3 && orderType != 4)}}">
       <view class="comfirm_btn" bindtap="onSuccess">完成</view>
-    </view>
+    </view> -->
+    <block wx:if="{{isPay && orderType != 4}}">
+      <view class="finish_desc">请下载约购APP查看订单</view>
+      <view class="flex_middle btn_list">
+        <view class="btn_item item_finish" bindtap="onSuccess">继续购物</view>
+        <view class="btn_item item_download" bindtap="onOpenSharePopup">下载约购APP</view>
+      </view>
+    </block>
+
   </view>
+
+  <hot-good
+    wx:if="{{isPay && hotGood.length}}"
+    list="{{hotGood}}"
+    autoJump="{{false}}"
+    bind:click="handleToDetail"
+  />
 
   <team-success
     show="{{teamPopup}}"
     bind:close="handleCloseTeam"
   />
+
+  <van-popup
+    show="{{showPopupIsPT}}"
+    closeable
+    bind:close="closePopup"
+    custom-style="background: transparent"
+  >
+    <view class="collage_popup">
+      <view class="user_list" wx:if="{{groupInfo.groupState != 0}}">
+        <together-user
+          title="团长"
+          list="{{groupInfo.joinMemberArr}}"
+          distanceNum="{{groupInfo.distanceNum}}"
+        />
+      </view>
+      <view class="collage_text" wx:if="{{groupInfo.groupState == 2}}">还差<text class="red">{{groupInfo.distanceNum}}</text>人拼团成功 邀请好友参团吧</view>
+      <view class="collage_text" wx:else>
+        <view class="p1">恭喜你拼团成功</view>
+        <view class="p2">邀请好友体验拼团吧!</view>
+      </view>
+      <button class="collage_share_btn" open-type="share"><view>邀请好友</view></button>
+      <view class="collage_time" wx:if="{{groupInfo.groupState == 2}}">
+        <view class="time_left">时间仅剩</view>
+        <count-down
+          time="{{groupInfo.distancetime}}"
+          isFull
+        />
+      </view>
+    </view>
+  </van-popup>
+
+  <van-popup
+    show="{{ !!redData.isShow }}"
+    custom-style="background: transparent"
+  >
+    <view class="day_red">
+      <image class="red_back" src="{{tools.getImgUrl('miniprogram/cart/day_red_back.png')}}" />
+      <view class="flex_center red_close_box" bindtap="onCloseRed">
+        <image class="red_colse" src="{{tools.getImgUrl('miniprogram/common/close.png')}}" />
+      </view>
+      <view class="red_content">
+        <view class="flex_center">
+          <view class="price_text">{{redData.freeAmount}}</view>
+          <view class="util_text">元</view>
+        </view>
+        <view class="act_btn" bindtap="onOpenSharePopup" />
+        <view class="red_time">
+          <van-count-down use-slot time="{{ redData.deadlineTime - redData.currentTime }}" bind:change="handleRedTime">
+            <text class="red_time_item">{{ redTime.hours }}:{{ redTime.minutes }}:{{ redTime.seconds }}后过期</text>
+          </van-count-down>
+        </view>
+      </view>
+    </view>
+  </van-popup>
+
+  <down-app-code show="{{ showSharePopup }}" bind:close="onHideSharePopup" />
+  <!-- 分享图片 -->
+  <view class="canvas_box">
+    <canvas
+      class="share_canvas"
+      id="shareCanvasc"
+      canvas-id="shareCanvasc"
+      style="width: 436rpx;height: 348rpx;"
+    />
+  </view>
 </view>

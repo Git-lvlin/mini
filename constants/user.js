@@ -7,18 +7,18 @@ export const orderList = [
     name: "待付款",
     subNum: 0,
   },{
-    icon: `${IMG_CDN}miniprogram/user/wait_share.png`,
-    name: "待分享",
-    subNum: 0,
-  },{
+      icon: `${IMG_CDN}miniprogram/user/wait_share.png`,
+      name: "待分享",
+      subNum: 0,
+  }, {
     icon: `${IMG_CDN}miniprogram/user/wait_push.png`,
     name: "待发货",
     subNum: 0,
-  },{
+  }, {
     icon: `${IMG_CDN}miniprogram/user/finish.png`,
     name: "已完成",
     subNum: 0,
-  },{
+  }, {
     icon: `${IMG_CDN}miniprogram/user/service.png?v=20210617`,
     name: "售后/退款",
     subNum: 0,
@@ -34,6 +34,12 @@ export const orderList = [
 */
 export const otherSetting = [
   {
+    icon: `${IMG_CDN}miniprogram/user/coupon.png?v=202106170`,
+    name: "我的红包",
+    type: 1,
+    path: "coupon",
+  },
+  {
     icon: `${IMG_CDN}miniprogram/user/address.png?v=202106170`,
     name: "收货地址",
     type: 1,
@@ -44,6 +50,12 @@ export const otherSetting = [
     name: "在线客服",
     type: 2,
     path: "",
+  },
+  {
+    icon: `${IMG_CDN}miniprogram/user/share-app/share.png?v=202106170`,
+    name: "下载APP",
+    type: 3,
+    path: "share",
   },
   {
     icon: `${IMG_CDN}miniprogram/user/setting.png?v=202106170`,

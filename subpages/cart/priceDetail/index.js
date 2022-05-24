@@ -132,7 +132,6 @@ Page({
 
 	// 点击图表展示数据
   touchHandler(e) {
-    console.log(lineChart.getCurrentDataIndex(e));
     lineChart.showToolTip(e, {
         // background: '#7cb5ec',
         format: function (item, category) {

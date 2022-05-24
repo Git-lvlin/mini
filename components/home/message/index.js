@@ -1,4 +1,5 @@
 import homeApi from "../../../apis/home";
+import router from "../../../utils/router";
 
 Component({
   options: {
@@ -12,7 +13,7 @@ Component({
       observer(now, old) {
         const nowStr = JSON.stringify(now);
         const oldStr = JSON.stringify(old);
-        if(nowStr != oldStr) {
+        if(now && now.content) {
           this.setMsgList(now.content);
         }
       }
@@ -61,11 +62,9 @@ Component({
       currentTarget
     }) {
       let data = currentTarget.dataset.data;
-      console.log("msg跳转", data.actionUrl);
-      // router.push({
-      //   name: 'detail',
-      //   data
-      // });
+      if(data.actionUrl) {
+        router.getUrlRoute(data.actionUrl);
+      }
     },
   }
 })

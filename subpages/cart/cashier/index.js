@@ -2,31 +2,36 @@ import create from '../../../utils/create'
 import store from '../../../store/index'
 import router from '../../../utils/router'
 import util from '../../../utils/util'
-import { getStorageUserInfo, showToast } from '../../../utils/tools'
+import goodApi from '../../../apis/good';
+import { objToParamStr } from '../../../utils/tools'
 import { getPayInfo, onOrderPay } from '../../../utils/orderPay'
 import dayjs from '../../../miniprogram_npm/dayjs/index'
 import { IMG_CDN, PAY_TYPE_KEY } from '../../../constants/common'
 import commonApi from '../../../apis/common'
 import cartApi from '../../../apis/order'
 import homeApi from '../../../apis/home'
-
+const shareBack = '../../../images/good/share_bg.png'
+const shareBtn = '../../../images/good/btn.png'
 const defaultList = [
 
 ]
 
-// create.Page(store, {
-Page({
-
+const app = getApp();
+create.Page(store, {
+// Page({
+  canvasImg: '',
   id: "",
   goodPage: {
-    page: 1,
-    pageSize: 3,
-    totalPage: 1,
+    hasNext: false,
+    next: "",
+    size: 20,
   },
   loading: false,
   payType: 7,
+  orderInfo: {},
 
   data: {
+    showPopupIsPT: false,
     isPay: false,
     chooseIcon: `${IMG_CDN}miniprogram/common/choose.png`,
     defChooseIcon: `${IMG_CDN}miniprogram/common/def_choose.png`,
@@ -36,13 +41,21 @@ Page({
     payAmount: 0,
     downTime: 0,
     timeData: {},
+    redTime: {},
     payData: {},
     teamPopup: false,
     hotGood: [],
     orderCreateTime: "",
+    redData: {
+      isShow: 0
+    },
+    showSharePopup: false,
+    groupInfo: null,
   },
 
-  onLoad: function (options) {
+  onLoad(options) {
+    this.orderInfo = options;
+    console.log("🚀 ~ file: index.js ~ line 49 ~ onLoad ~ options", options)
     // id: 1390912161480564700
     // orderSn: "16204542762334404122"
     // payAmount: 1
@@ -68,7 +81,7 @@ Page({
       orderType: options.orderType,
     })
     // 获取支付类型
-    commonApi.getResourceDetail({
+    !options.loadedPay && commonApi.getResourceDetail({
       resourceKey: PAY_TYPE_KEY,
     }, {
       showLoading: false,
@@ -93,16 +106,80 @@ Page({
         this.getPayInfo();
       }
     });
-    if(options.orderType == 3 && options.orderType == 4) {
-      this.getHotGood();
-    }
+    // if(options.orderType == 3 && options.orderType == 4) {
+    // if(options.orderType == 3) {
+    this.getHotGood();
+    // }
+    app.trackEvent('shopping_cashier');
   },
-
+  // 获取海报信息
+  getPoster() {
+    const {
+      id,
+    } = this.orderInfo;
+    let data = wx.getStorageSync("CREATE_INTENSIVE");
+    const goodsInfo = data.storeGoodsInfos[0].goodsInfos[0]
+    const {
+      objectId,
+    } = this.orderInfo;
+    const param = {
+      activityType: 3,
+      groupId:objectId,
+      objectId,
+      ...this.orderInfo,
+      ...goodsInfo
+    }
+    param.orderId = id
+    goodApi.getPosterDetail(param).then((res) => {
+      const groupInfo = res;
+      groupInfo.distancetime *= 1000;
+      this.setData({
+        groupInfo,
+      }, () => {
+        if (groupInfo.groupState) {
+          this.setData({showPopupIsPT: true})
+        }
+      });
+    })
+  },
+  closePopup() {
+    this.setData({showPopupIsPT: !this.data.showPopupIsPT})
+  },
+  // 获取单约详情
+  getPosterDetail() {
+    let data = wx.getStorageSync("CREATE_INTENSIVE");
+    const goodsInfo = data.storeGoodsInfos[0].goodsInfos[0]
+    const {
+      objectId,
+      groupId,
+      spuId,
+      skuId,
+    } = this.orderInfo;
+    goodApi.getTeamDetail({
+      activityType: 3,
+      groupId:objectId,
+      objectId,
+      ...this.orderInfo,
+      ...goodsInfo
+    }).then(res => {
+      const groupInfo = res;
+      groupInfo.distancetime *= 1000;
+      this.setData({
+        groupInfo,
+      }, () => {
+        console.log('this.....', this.data.groupInfo)
+        if (groupInfo.groupState) {
+          this.setData({showPopupIsPT: true})
+        }
+      });
+    });
+  },
   /**
    * 获取支付信息
    * isNotPayment boolean 是否是模拟支付
    * */ 
   getPayInfo(isNotPayment = false) {
+    console.log()
     getPayInfo({
       id: this.id,
       payType: this.payType,
@@ -116,43 +193,86 @@ Page({
         this.setData({
           isPay
         })
+        // 模拟支付
+        this.getFaterRed();
       }
       this.setData({
         payData,
         orderCreateTime: dayjs(payData.orderCreateTime).format("YYYY-MM-DD HH:mm:ss"),
-      })
+      });
+      app.trackEvent('goods_pay_success', {
+        pay_method_name: isNotPayment ? '模拟支付' : '微信支付'
+      });
     });
   },
 
   // 获取热销商品
-  getHotGood(nowPage) {
-    let {
-      page,
-      pageSize,
-    } = this.goodPage;
+  getHotGood() {
     if(this.loading) return;
-    page = !!nowPage ? nowPage : page;
     this.loading = true;
-    homeApi.getHotGood({
-      page,
-      pageSize,
-    }, {
-      showLoading: false,
-    }).then(res => {
-      this.goodPage.totalPage = res.totalPage;
-      this.goodPage.page = page;
-      let hotGood = this.data.hotGood;
-      if(page != 1) {
-        hotGood = hotGood.concat(this.handleListPrice(res.records));
-      } else {
-        hotGood = this.handleListPrice(res.records)
-      }
+    homeApi.getHotGood({next:0, size: 99}).then(res => {
+      let list = res.records.map((item) => {
+        if(!!item.salePrice) {
+          item.salePrice = util.divide(item.salePrice, 100);
+        }
+        if(!!item.marketPrice) {
+          item.marketPrice = util.divide(item.marketPrice, 100);
+        }
+        return item
+      })
       this.setData({
-        hotGood,
+        hotGood: list,
       });
       this.loading = false;
     }).catch(err => {
       this.loading = false;
+    });
+  },
+
+  // 获取每日红包
+  getFaterRed() {
+    const {
+      id,
+      orderSn,
+    } = this.orderInfo;
+    cartApi.getFaterRed({
+      orderSn,
+      orderId: id,
+    }).then(res => {
+      res.freeAmount = util.divide(res.freeAmount, 100);
+      this.setData({
+        redData: res
+      })
+    })
+  },
+
+  // 关闭每日红包
+  onCloseRed() {
+    const {
+      redData,
+    } = this.data;
+    redData.isShow = 0;
+    this.setData({
+      redData,
+    });
+  },
+
+  // 打开下载APP
+  onOpenSharePopup() {
+    const {
+      redData,
+    } = this.data;
+    redData.isShow = 0;
+    this.setData({
+      redData,
+      showSharePopup: true,
+    })
+  },
+
+  // 关闭下载APP
+  onHideSharePopup() {
+    this.setData({
+      showSharePopup: false
     })
   },
 
@@ -169,6 +289,12 @@ Page({
   handleChangeTime(e) {
     this.setData({
       timeData: e.detail,
+    });
+  },
+
+  handleRedTime(e) {
+    this.setData({
+      redTime: e.detail,
     });
   },
 
@@ -197,8 +323,16 @@ Page({
   // 点击确定支付
   onPay() {
     const that = this;
+    const { orderType } = this.orderInfo
     if(this.payType === 0) {
       this.getPayInfo(true)
+      if (orderType == 3) {
+        setTimeout(() => {
+          this.getPoster()
+          // this.getPosterDetail()
+          this.getPersonalDetail()
+        }, 1000)
+      }
       return ;
     }
     const payData = this.data.payData;
@@ -212,6 +346,14 @@ Page({
       that.setData({
         isPay: true,
       })
+      that.getFaterRed();
+      if (orderType == 3) {
+        setTimeout(() => {
+          that.getPoster()
+          // that.getPosterDetail()
+          that.getPersonalDetail()
+        }, 1000)
+      }
     }).catch(err => {
 
     });
@@ -222,7 +364,7 @@ Page({
   },
 
   onSuccess() {
-    router.goTabbar("user");
+    router.goTabbar();
   },
 
   handleCloseTeam() {
@@ -245,13 +387,166 @@ Page({
     });
   },
 
-  onReachBottom() {
+  // 分享
+  onShareAppMessage() {
     const {
-      page,
-      totalPage
-    } = this.goodPage;
-    if(!this.loading && page < totalPage) {
-      this.getHotGood(page + 1);
+      id,
+      objectId
+    } = this.orderInfo;
+    let data = wx.getStorageSync("CREATE_INTENSIVE");
+    const goodsInfo = data.storeGoodsInfos[0].goodsInfos[0]
+    let param = {
+      activityType: 3,
+      groupId:objectId,
+      ...this.orderInfo,
+      ...goodsInfo
     }
+    param.orderId = id
+    const pathParam = objToParamStr(param);
+    let pathUrl = `/subpages/cart/teamDetail/index?${pathParam}`
+    return {
+      title: goodsInfo?.goodsName || '',
+      path: pathUrl,
+      imageUrl: this.canvasImg || '',
+    };
   },
+
+  // 获取单约详情
+  getPersonalDetail() {
+    let data = wx.getStorageSync("CREATE_INTENSIVE");
+    const goodsInfo = data.storeGoodsInfos[0].goodsInfos[0]
+    const param = {
+      ...this.orderInfo,
+      ...goodsInfo,
+    }
+    goodApi.getPersonalDetail(param).then(res => {
+      const good = res;
+      good.salePrice = util.divide(good.salePrice, 100);
+      good.marketPrice = util.divide(good.marketPrice, 100);
+      good.activityPrice = util.divide(good.activityPrice, 100);
+      this.setData({
+        good,
+      }, () => {
+        this.downShareImg()
+      });
+    });
+  },
+
+  // 绘制分享图片
+  downShareImg() {
+    const {
+      good,
+    } = this.data;
+    const that = this;
+    let img = good.imageUrl;
+    img = img?.replace(/^http:\/\//i,'https://');
+    let tmpImg = '../../../images/good/logo.png';
+    wx.downloadFile({
+      url: img,
+      success(result) {
+        console.log("download img", result.tempFilePath)
+        that.drawShareImg(result.tempFilePath)
+      },
+      fail(err) {
+        that.drawShareImg(tmpImg);
+      },
+    });
+  },
+  // 绘制分享图片
+  drawShareImg(tmpImg) {
+    const {
+      good,
+      groupInfo,
+    } = this.data;
+    const that = this;
+    const salePrice = '¥' + parseFloat(good.activityPrice).toFixed(2);
+    const marketPrice = '¥' + parseFloat(good.marketPrice).toFixed(2);
+    const marketlength = marketPrice.length;
+    const textWidth = marketlength * 8;
+    const text = `差${groupInfo.distanceNum}人成团`;
+    const ctx = wx.createCanvasContext('shareCanvasc');
+    // ctx.setFillStyle('#f5f5f5')
+    // ctx.fillRect(0, 0, 250, 200)
+
+    // ctx.drawImage(shareBack, 0, 0, 218, 174);
+    ctx.drawImage(shareBack, 0, 0, 208, 183);
+    ctx.drawImage(shareBtn,  128, 132, 66, 28);
+    this.handleBorderRect(ctx, 10, 50, 110, 110, 8, tmpImg);
+    ctx.setTextAlign('center')
+    ctx.setFillStyle('#FF0000')
+
+    ctx.setFontSize(17)
+    ctx.fillText(salePrice, 161, 70)
+    ctx.setFillStyle('#999999')
+
+    ctx.setFontSize(14)
+    ctx.fillText(marketPrice, 161, 92)
+    ctx.setStrokeStyle('#999999')
+
+    ctx.setFontSize(14)
+    ctx.fillText(text, 161, 118)
+    ctx.setStrokeStyle('#666666')
+
+    ctx.beginPath();
+    ctx.moveTo(172-textWidth/2, 87)
+    ctx.lineTo(170+textWidth/2, 87)
+    ctx.closePath();
+    ctx.stroke()
+    // ctx.strokeRect(171-(textWidth/2), 87, textWidth, 0)
+    ctx.draw(true, () => {
+      wx.canvasToTempFilePath({
+        // destWidth: 436,
+        // destHeight: 348,
+        canvasId: 'shareCanvasc',
+        success(res) {
+          console.log('res.tempFilePath', res.tempFilePath)
+          that.canvasImg = res.tempFilePath;
+        },
+        fail(err) {
+          console.log('err', err)
+        },
+        complete(res) {
+          console.log('complete', res)
+        }
+      })
+    });
+  },
+
+  handleBorderRect(ctx, x, y, w, h, r, img, color) {
+    ctx.save();
+    ctx.beginPath();
+    // 左上角
+    ctx.arc(x + r, y + r, r, Math.PI, 1.5 * Math.PI);
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.lineTo(x + w, y + r);
+    // 右上角
+    ctx.arc(x + w - r, y + r, r, 1.5 * Math.PI, 2 * Math.PI);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.lineTo(x + w - r, y + h);
+    // 右下角
+    ctx.arc(x + w - r, y + h - r, r, 0, 0.5 * Math.PI);
+    ctx.lineTo(x + r, y + h);
+    ctx.lineTo(x, y + h - r);
+    // 左下角
+    ctx.arc(x + r, y + h - r, r, 0.5 * Math.PI, Math.PI);
+    ctx.lineTo(x, y + r);
+    ctx.lineTo(x + r, y);
+
+    // ctx.setFillStyle(color);
+    // ctx.fill();
+    ctx.closePath();
+    ctx.clip();
+    ctx.drawImage(img, x, y, w, h);
+    ctx.restore()
+  },
+
+  // onReachBottom() {
+  //   const {
+  //     hasNext
+  //   } = this.goodPage;
+  //   if(!this.loading && hasNext) {
+  //     this.getHotGood();
+  //   }
+  // },
 })

@@ -1,0 +1,44 @@
+<wxs module="tools" src="../../wxs/common.wxs" />
+<wxs module="u">
+  var time = function (a) {
+    if (a<10) {
+      return '0' + a.toString()
+    }
+    return a
+  }
+  module.exports = {
+    time: time,
+  };
+</wxs>
+<nav-bar title="周末大狂欢" background="#fff" fontColor="#000" wx:if="{{isFixed}}" />
+<image class="back" style="top:{{$.systemInfo.statusHeight + 24}}rpx" bindtap="onBack" src="{{tools.getImgUrl('miniprogram/common/back_white@2x.png')}}" />
+<view class="container">
+  <view class="banner">
+    <van-image width="100%" height="360rpx" src="{{tools.getImgUrl('miniprogram/seckill/bg@2x.png')}}" />
+  </view>
+  <view class="tab-box">
+    <van-tabs custom-class="custom" nav-class="nav-class" tab-active-class="tab-active" lazy-render="{{false}}" swipeable animated sticky active="{{ active }}" bind:change="tabChange" offset-top="{{ $.systemInfo.navTotalHeightPx }}">
+      <van-tab title-style="font-size:32rpx" title="{{seckillData.cmsWeekTitle}}">
+        <item-list data="{{seckillData}}" active="{{active}}" index="{{1}}" bind:onremind="onRemind" bind:setfixed="setFixed" />
+      </van-tab>
+      <van-tab title-style="font-size:32rpx" title="{{tomorrow.cmsWeekTitle}}">
+        <item-list data="{{tomorrow}}" active="{{active}}" index="{{2}}" bind:onremind="onRemind" bind:setfixed="setFixed" />
+      </van-tab>
+    </van-tabs>
+  </view>
+  <view class="bottom-swiper-box">
+    <swiper vertical circular autoplay display-multiple-items="3" class="bottom-swiper">
+      <block wx:for="{{seckillData.avatorList}}" wx:key="id">
+        <swiper-item>
+          <view class="bottom-swiper-item">
+            <image class="bottom-swiper-img" src="{{item.icon}}" />
+            <text class="bottom-swiper-text">刚刚下单了</text>
+          </view>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+  <view class="go-top" wx:if="{{isFixed}}" bind:tap="goTop">
+    <image class="go-top-img" mode="widthFix" src="{{tools.getImgUrl('miniprogram/seckill/go-top.png')}}" />
+  </view>
+</view>

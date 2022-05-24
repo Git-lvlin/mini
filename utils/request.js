@@ -26,7 +26,6 @@ const REFRESH_TOKEN_INVALID = 10015;
 const Reqeust = (params) => {
   const baseUrl = getBaseApiUrl();
   const token = wx.getStorageSync("ACCESS_TOKEN");
-  const showLoginMobel = store.data.showLoginMobel;
   const header = {
     'Content-Type': !params.contentType ? 'application/json' : params.contentType,
     v: VERSION,
@@ -54,33 +53,35 @@ const Reqeust = (params) => {
       success: async function(res) {
         // 判断是否返回数据包
         const data = !!params.dataPackage ? res.data : res.data.data;
-        // console.log(params.url, res.data)
         //数据请求成功判断
         if (res.statusCode === 200 && res.data.code === 0 && res.data.success) {
           // resolve(data);
+          opions.showLoading && wx.hideLoading();
           resolve(data)
         } else {
           if (res.data.code == REFRESH_TOKEN_INVALID) {
             // refreshToken过期退出登录
-            if(!showLoginMobel) {
-              console.log("asdfasfasdfasdf");
+            clearLoginInfo();
+            if(!store.data.showLoginMobel) {
+              store.setShowLoginMobel(true);
               showModal({
                 content: "您的登录已过期，请登录",
                 confirmText: "去登录",
                 ok() {
-                  store.data.showLoginMobel = false;
+                  store.setShowLoginMobel(false);
                   setLoginRouter();
                   router.push({
                     name: "mobile"
                   })
                 },
                 cancel() {
-                  store.data.showLoginMobel = false;
+                  store.setShowLoginMobel(false);
+                  router.goTabbar();
                 }
               })
             }
+            opions.showLoading && wx.hideLoading();
             reject(res.data);
-            clearLoginInfo();
             return null;
           }
           // token 过期刷新token
@@ -109,6 +110,8 @@ const Reqeust = (params) => {
               msg: res.data.msg,
               mustLogin: params.mustLogin,
             });
+          } else {
+            opions.showLoading && wx.hideLoading();
           }
           if(res.data.code !== ACCESS_TOKEN_INVALID) {
             reject(res.data);
@@ -123,12 +126,13 @@ const Reqeust = (params) => {
             msg: !!error && !!error.data ? error.data.msg : "",
             mustLogin: params.mustLogin,
           });
+        } else {
+          opions.showLoading && wx.hideLoading();
         }
         reject(error);
       },
       complete(res) {
-        opions.showLoading && wx.hideLoading();
-        // console.log("request ~ ", params.url, res.data);
+        console.log('complete', !!params.hasBase ? params.url : baseUrl + params.url, res)
       },
     })
   })

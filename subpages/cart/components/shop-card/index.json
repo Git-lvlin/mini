@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "van-toast": "/miniprogram_npm/@vant/weapp/toast/index",
+    "price-mobel": "/components/common/price-mobel/index"
+  }
+}

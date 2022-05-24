@@ -86,6 +86,10 @@
         </view>
       </view>
     </view>
+    <!-- 猜你喜欢 -->
+    <!-- <view id="user_like">
+      <user-like/>
+    </view> -->
   </view>
 
   <scroll-view
@@ -103,7 +107,7 @@
     </view>
   </scroll-view>
 
-  <notdata wx:if="{{isSearch && !goodList.length}}" />
+  <notdata type="search" wx:if="{{isSearch && !goodList.length}}" />
 
   <show-mobal
     show="{{ showDeleteSearch }}"

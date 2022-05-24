@@ -60,12 +60,6 @@
           </view>
         </scroll-view>
       </view>
-      <!-- 结算 -->
-      <view class="settlement">
-        <settlement-bar
-          barIndex="{{!classPopupState ? 999 : 9}}"
-        />
-      </view>
     </view>
   </view>
 </view>

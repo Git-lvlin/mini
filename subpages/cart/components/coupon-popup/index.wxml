@@ -1,0 +1,41 @@
+<van-popup
+  show="{{show}}"
+  round
+  closeable
+  position="bottom"
+  custom-class="popup"
+  bind:close="onClose"
+>
+  <view class="coupon_content" catchtouchmove='true'>
+    <view class="coupon_head">
+      <view class="title">红包</view>
+      <view class="tab_list">
+        <view class="tab_item" data-type="{{1}}" bindtap="onClickTab">可用红包({{usefulCoupon.length}})</view>
+        <view class="tab_item" data-type="{{2}}" bindtap="onClickTab">不可用红包({{unusefulCoupon.length}})</view>
+        <view class="active_line {{active === 2 ? 'active_line_right' : ''}}" />
+      </view>
+      <view class="choose_coupon" wx:if="{{active == 2 && unusefulCoupon.length || active == 1 && usefulCoupon.length}}">
+        <block wx:if="{{active == 1}}">
+          <text wx:if="{{currCoupon.couponAmount}}">已选中推荐优惠，使用红包1张，共抵扣<text class="coupon_money">¥{{currCoupon.couponAmount}}</text></text>
+          <text wx:if="{{!currCoupon.couponAmount && usefulCoupon.length}}">请选择优惠券</text>
+        </block>
+        <text wx:if="{{active == 2}}">不可使用</text>
+      </view>
+    </view>
+    <view class="coupon_list">
+      <coupon-item
+        wx:for="{{active == 1 ? usefulCoupon : unusefulCoupon}}"
+        wx:key="index"
+        coupon="{{item}}"
+        canUse="{{active == 1 ? true : false}}"
+        bind:choose="handleChooseCoupon"
+      />
+      <view class="no_list" wx:if="{{active == 1 && !usefulCoupon.length || active == 2 && !unusefulCoupon.length}}">
+        您暂无{{active == 1 ? '可用' : ''}}红包
+      </view>
+    </view>
+    <view class="comfirm_btn" wx:if="{{active == 1 && usefulCoupon.length}}">
+      <view class="btn {{active == 2 ? 'def_btn' : ''}}" bindtap="onConfirm">确定</view>
+    </view>
+  </view>
+</van-popup> 

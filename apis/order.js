@@ -19,7 +19,15 @@ const url = {
   orderAmount: "/order/auth/orderAmount",
   bondPay: "/store/auth/memberShop/apply/pay",
   orderToken: "/order/auth/orderToken",
+  cancelPay: "/payment/open/adaPay/payCancel",
+  deliveryDesc: "/goods/auth/getLateDeliveryDesc",
+
   
+  faterRed: "/activity/auth/sendMemberEverydayCoupon",
+
+  freshPay: "/store/auth/order/pay",
+
+  newPayInfo: '/iot/auth/leaseOrder/prepayOrder'
 }
 
 export default {
@@ -69,14 +77,26 @@ export default {
   getOrderDetail(params, option) {
     return Request.get(url.orderDetail, params, option);
   },
+  // 获取物流提醒
+  getDeliveryDesc(params, option) {
+    return Request.post(url.deliveryDesc, params, option);
+  },
   
   // 获取支付信息
   getPayInfo(params, option) {
     return Request.post(url.payInfo, params, option);
   },
+  // 获取氢原子支付信息
+  getPayInfoAtom(params, option) {
+    return Request.post(url.newPayInfo, params, option);
+  },
   // 约卡充值
   getRechargePay(params, option) {
     return Request.post(url.rechargePay, params, option);
+  },
+  // 生鲜订单
+  getInFreshPay(params, option) {
+    return Request.post(url.freshPay, params, option);
   },
   // 集约支付信息
   getIntensivePay(params, option) {
@@ -90,5 +110,13 @@ export default {
   getOrderToken(params, option) {
     return Request.post(url.orderToken, params, option);
   },
+  // 用户支付失败 - APP拉起微信支付时，用户没有支付成功
+  cancelPay(params, option) {
+    return Request.post(url.cancelPay, params, option);
+  },
 
+  // 领取每日
+  getFaterRed(params, option) {
+    return Request.post(url.faterRed, params, option);
+  },
 }

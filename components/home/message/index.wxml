@@ -1,9 +1,8 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
 <view class="message" wx:if="{{msgList.length}}">
-  <view class="message_content">
-    <image class="massage_icon" src="{{tools.getImgUrl('miniprogram/home/message_icon.png')}}" />
-    <view class="line" />
+  <view class="flex_middle message_content">
+    <view class="msg_label">约报</view>
     <view class="message_body">
       <swiper 
         class="message_list"
@@ -24,5 +23,6 @@
         </swiper-item>
       </swiper>
     </view>
+    <view class="right_arrow_black" />
   </view>
 </view>

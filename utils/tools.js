@@ -6,15 +6,21 @@ import router from "../utils/router"
 import dayjs from '../miniprogram_npm/dayjs/index.js'
 import relativeTime from './dayjsplugin/relativeTime'
 import util from "./util"
-import { agreementUrl } from "../constants/common"
+import { agreementUrl, ossHost } from "../constants/common"
 
 dayjs.extend(relativeTime);
 
 // 获取当前环境接口域名
 export const getBaseApiUrl = () => {
-  const env = wx.getStorageSync("SYS_ENV") || 'prod';
+  const env = wx.getStorageSync("SYS_ENV") || 'pro';
   return baseApi[env];
 }
+
+// 获取图片最新cdn地址
+export const getImgCdn = () => {
+  const env = wx.getStorageSync("SYS_ENV");
+  return ossHost[env];
+};
 
 // 提示信息
 const showErrorMsg = (msg, icon) => {
@@ -40,7 +46,7 @@ export const handleErrorCode = ({
       // } else {
         // showErrorMsg("您还未登录，请登录");
         if(!store.data.showLoginMobel) {
-          console.log(store);
+          clearLoginInfo();
           store.data.showLoginMobel = true;
           showModal({
             content: "您还未登录，请登录",
@@ -60,11 +66,11 @@ export const handleErrorCode = ({
       break;
     case 10011:
       // 服务不可用
-      showErrorMsg("服务暂不可用，请稍后重试");
+      showErrorMsg(msg || "服务暂不可用，请稍后重试");
       break;
     case 10012:
       // 限流
-      showErrorMsg("当前访问人数较多，请稍后重试");
+      showErrorMsg(msg || "当前访问人数较多，请稍后重试");
       // router
       break;
     case 10013:
@@ -73,7 +79,7 @@ export const handleErrorCode = ({
       if(!pages.length) { return }
       const curUrl = `/${pages[pages.length - 1].route}`;
       if(routes["maintain"].path == curUrl) {
-        showErrorMsg("系统维护中，请稍后重试");
+        showErrorMsg(msg || "系统维护中，请稍后重试");
       } else {
         router.replace({
           name: "maintain",
@@ -97,15 +103,15 @@ export const handleErrorCode = ({
       break;
     case 10016:
       // 请求地址不存在
-      showErrorMsg("服务暂不可用，请稍后重试");
+      showErrorMsg(msg || "服务暂不可用，请稍后重试");
       break;
     case 10017:
       // 黑名单用户
-      showErrorMsg("暂不可用，请联系客服");
+      showErrorMsg(msg || "暂不可用，请联系客服");
       break;
     case 10018:
       // 系统异常
-      showErrorMsg("系统异常");
+      showErrorMsg(msg || "系统异常");
       break;
     case 10110:
       // 业务错误
@@ -173,6 +179,7 @@ export const getSystemInfo = () => {
   const { top, height } = menuButtonObject;
   let rpxRatio = 750/data.windowWidth;
   systemInfo = {
+    ...data,
     // 像素比
     pixelRatio: data.pixelRatio,
     // 宽度像素比
@@ -202,8 +209,10 @@ export const getSystemInfo = () => {
   // 此高度基于右上角菜单在导航栏位置垂直居中计算得到 单位rpx
   // systemInfo.menuToNavHeight = (top - systemInfo.statusBarHeight) * rpxRatio;
   systemInfo.menuToNavHeight = (top - systemInfo.statusBarHeight) * data.pixelRatio;
+  systemInfo.navHeight = (height + (top - systemInfo.statusBarHeight) * 2);
   systemInfo.navBarHeight = (height + (top - systemInfo.statusBarHeight) * 2) * rpxRatio;
   systemInfo.statusHeight = systemInfo.statusBarHeight * rpxRatio;
+  systemInfo.navTotalHeightPx = systemInfo.navHeight + systemInfo.statusBarHeight;
   systemInfo.navTotalHeight = systemInfo.statusHeight + systemInfo.navBarHeight;
   systemInfo.bottomBarHeight = (data.screenHeight - data.safeArea.bottom) * rpxRatio
   if(data.system.indexOf("iOS")) {
@@ -307,24 +316,24 @@ export const debounce = (func, wait) => {
 
 // 节流
 let throttleTimeId = null;
+let throttleValid = true
 export const throttle = (func, wait) => {
   if (typeof func !== 'function') {
     throw new TypeError('need a function');
   }
   wait = +wait || 0;
-  let valid = true
   return function() {
     const self = this;
     const args = arguments;
-    if(!valid){
+    if(!throttleValid){
       //休息时间 暂不接客
       return false 
     }
     // 工作时间，执行函数并且在间隔期内把状态位设为无效
-    valid = false
+    throttleValid = false
     throttleTimeId = setTimeout(() => {
       func.apply(self, args);
-      valid = true;
+      throttleValid = true;
       clearTimeout(throttleTimeId);
     }, wait)
   }
@@ -368,7 +377,6 @@ export const setLoginRouter = (path) => {
 }
 
 
-
 export const getRelativeTime = (time) => {
   const timeStr = dayjs().from(dayjs(time));
   let str = '';
@@ -404,8 +412,21 @@ export const getRelativeTime = (time) => {
   return str;
 };
 
+
+// 格式化销量
+export const mapSales = (sale, text = "万") => {
+  sale = +sale || 0;
+  if(sale < 9999) {
+    return sale;
+  } else {
+    sale = parseInt(sale / 10000);
+    return `${sale}${text}+`
+  }
+};
+
 // 转为浮点数
 export const mapNum = (list = []) => {
+  list = !!list ? list : [];
   list.forEach(item => {
     if(item.marketPrice) {
       item.marketPrice = util.divide(item.marketPrice, 100);
@@ -435,3 +456,10 @@ export const jumpToAgreement = (type) => {
     })
   }
 }
+
+// 店铺是否为会员店
+export const haveStore = (storeNo) => {
+  let id = storeNo.slice(8, storeNo.length) || 1;
+  id = +id;
+  return id < 123580 ? false : true;
+};

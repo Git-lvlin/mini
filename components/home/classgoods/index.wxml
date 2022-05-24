@@ -1,0 +1,49 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="hotgoods" wx:if="{{classTabList && classTabList.length}}">
+  <scroll-view
+    scroll-x
+    class="tab_scroll"
+    enhanced="{{true}}"
+    show-scrollbar="{{false}}"
+  >
+    <view id="class-head" class="head">
+      <view class="tab_item"
+        wx:for="{{classTabList}}"
+        wx:key="index"
+        data-index="{{index}}"
+        bindtap="tabHandle"
+      >
+        <block wx:if="{{index===classIndex}}">
+          <view class="act_title">{{item.name}}</view>
+          <view wx:if="{{!isFixedTop}}" class="act_sub_title">{{item.showTip}}</view>
+          <view wx:else class="sub_title_sticky_box">
+            <image class="sub_title_sticky" src="{{tools.getImgUrl('miniprogram/home/class_tab_is_sticky.png')}}" />
+          </view>
+        </block>
+        <block wx:else>
+          <view class="title">{{item.name}}</view>
+          <block wx:if="{{!isFixedTop}}">
+            <view class="sub_title">{{item.showTip}}</view>
+          </block>
+          <view wx:else class="sub_title" style="opacity: 0">{{item.showTip}}</view>
+        </block>
+      </view>
+    </view>
+  </scroll-view>
+  <view class="good_list" wx:if="{{hotGoodList.length}}">
+    <view
+      class="good_item"
+      wx:for="{{hotGoodList}}"
+      wx:key="index"
+    >
+      <good-card
+        data="{{item}}"
+        size="344rpx"
+      />
+    </view>
+  </view>
+  <view class="no_data" wx:if="{{!hotGoodList.length}}">
+    <nodata type="content" title="哎呀，没有找到商品" />
+  </view>
+</view>

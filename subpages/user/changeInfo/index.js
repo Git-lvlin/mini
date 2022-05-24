@@ -2,6 +2,7 @@ import userApi from "../../../apis/user";
 import router from "../../../utils/router";
 import { getStorageUserInfo, showModal, showToast } from "../../../utils/tools";
 
+const app = getApp();
 Page({
 
   data: {
@@ -15,6 +16,7 @@ Page({
       userInfo,
       nickName: userInfo.nickName,
     });
+    app.trackEvent('mine_nickname_edit');
   },
 
   handleInput({
@@ -35,7 +37,7 @@ Page({
       showToast({ title: "请输入昵称" })
       return;
     }
-    if(!nickName.match( /^[\u4E00-\u9FA5a-zA-Z0-9_]{4,26}$/)) {
+    if(!nickName.match( /^[\u4E00-\u9FA5a-zA-Z0-9_]{2,26}$/)) {
       showToast({ title: "请确认昵称格式是否正确" })
       return;
     }

@@ -1,0 +1,45 @@
+/* 热销好货 */
+.hot_sale {
+  padding: 0 24rpx;
+}
+
+.hot_sale_head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  padding: 24rpx 0;
+}
+
+.hot_icon {
+  width: 38rpx;
+  height: 38rpx;
+  margin-right: 8rpx;
+}
+
+.hot_head_line {
+  width: 96rpx;
+  height: 2rpx;
+}
+
+.left_line {
+  margin-right: 8rpx;
+  background: linear-gradient(-90deg, #ccc 0%, rgba(204, 204, 204, 0) 100%);
+}
+
+.right_line {
+  margin-left: 8rpx;
+  background: linear-gradient(90deg, #ccc 0%, rgba(204, 204, 204, 0) 100%);
+}
+
+.hot_list {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  /* padding: 32rpx 16rpx; */
+  /* background-color: #ffffff; */
+  border-radius: 16rpx 16rpx 0 0;
+  box-shadow: 0rpx 2rpx 8rpx rgba(0, 0, 0, 0.02);
+}

@@ -1,0 +1,19 @@
+
+<view class="container">
+
+  <view class="good_list">
+    <view
+      class="good_item"
+      wx:for="{{goodList}}"
+      wx:key="index"
+    >
+      <class-good
+        data="{{item}}"
+        showMarket="{{false}}"
+        descText="{{item.saleNumDisplay}}"
+      />
+    </view>
+  </view>
+
+  <nodata wx:if="{{isLoad && !goodList.length}}" title="暂无商品" />
+</view>

@@ -1,7 +1,8 @@
 import Request from '../utils/request'
-import { showModal, setLoginRouter, getStorageUserInfo } from '../utils/tools'
+import { showModal, setLoginRouter, getStorageUserInfo, strToParamObj, clearLoginInfo } from '../utils/tools'
 import router from '../utils/router'
 import store from '../store/index'
+import { CODE_SCENE } from '../constants/index'
 import homeApi from './home'
 
 const url = {
@@ -10,6 +11,10 @@ const url = {
   inviteCode: "/public/option/invationcode/check/internaltest/app",
   ossConfig: "/public/open/uploadConfig/findByBizCode",
   shareParam: "/share/option/shareParam/getScene",
+  coordinate: "/cms/open/location/getLocation",
+
+  // banner: '/cms/open/banner/list',
+  banner: '/cms/option/banner/list',
 }
 
 let isShowLoginMobal = store.data.showLoginMobel;
@@ -28,9 +33,7 @@ const showLogin = (back) => {
       })
     },
     cancel() {
-      if(back) {
-        router.go();
-      }
+      router.goTabbar();
     }
   })
 }
@@ -74,7 +77,8 @@ export default {
     const userInfo = getStorageUserInfo();
     const refreshToken = wx.getStorageSync("REFRESH_TOKEN");
     if(!refreshToken) return;
-    if(!userInfo && !isShowLoginMobal) {
+    if(!userInfo && !store.data.showLoginMobel) {
+      clearLoginInfo();
       showLogin();
       store.data.showLoginMobel = true;
       return ;
@@ -93,7 +97,9 @@ export default {
       refreshToken: wx.getStorageSync("REFRESH_TOKEN"),
       id: userInfo.id,
     }
-    return Request.post(url.refreshToken, postData).then(res => {
+    return Request.post(url.refreshToken, postData, {
+      showLoading: false
+    }).then(res => {
       wx.setStorageSync("ACCESS_TOKEN", res.accessToken);
       wx.setStorageSync("REFRESH_TOKEN", res.refreshToken);
       store.data.showLoginMobel = false;
@@ -102,11 +108,8 @@ export default {
       return res;
     }).catch(err => {
       // if(err.code == 405 || err.code == 200109 || err.code == 10018 || err.code == 200104) {
-        wx.removeStorageSync("ACCESS_TOKEN");
-        wx.removeStorageSync("REFRESH_TOKEN");
-        wx.removeStorageSync("USER_INFO");
-        wx.removeStorageSync("USER_OTHER_INFO");
-        if(!isShowLoginMobal) {
+        clearLoginInfo();
+        if(!store.data.showLoginMobel) {
           showLogin(true);
           store.data.showLoginMobel = true;
         }
@@ -114,25 +117,6 @@ export default {
       refreshingToken = false;
       return err;
     })
-  },
-
-  // 重新调需要登录接口
-  runOverList() {
-    const overList = wx.getStorageSync("OVER_LIST");
-    if(!overList.length) return ;
-    overList.forEach(item => {
-    console.log("🚀 ~ file: common.js ~ line 76 ~ runOverList ~ item", item)
-      if(item.method === "GET") {
-        Request.get({
-          ...item,
-        });
-      } else if(item.method === "POST") {
-        Request.post({
-          ...item,
-        });
-      }
-    });
-    wx.setStorageSync("OVER_LIST", []);
   },
 
   // 获取商品分享参数
@@ -148,6 +132,30 @@ export default {
     });
   },
 
+  // 解析分享参数
+  getShareParam(options = {}, params = {}) {
+    return new Promise((resolve, reject) => {
+      const sceneData = wx.getLaunchOptionsSync()
+      console.log('——启动小程序的场景值:', sceneData.scene)
+      // if(CODE_SCENE[sceneData.scene]) {
+        Request.post(url.shareParam, {
+          scene: options.scene,
+        }, {
+          showLoading: false,
+          ...params
+        }).then(res => {
+          const param = strToParamObj(res);
+          resolve(param);
+        }).catch(err => {
+          options.error = err;
+          reject(options);
+        });
+      // } else {
+      //   reject(options); 
+      // }
+    })
+  },
+
   // 检查是否填写邀请码
   getInviteCode(params, option) {
     return Request.post(url.inviteCode, params, option);
@@ -158,8 +166,13 @@ export default {
     return Request.get(url.ossConfig, params, option);
   },
 
-  // 解析分享参数
-  getShareParam(params, option) {
-    return Request.post(url.shareParam, params, option);
+  // 根据地址获取经纬度
+  getCoordinate(params, option) {
+    return Request.get(url.coordinate, params, option);
+  },
+
+  // 获取banner 
+  getBanner(params, option) {
+    return Request.get(url.banner, params, option);
   },
 }

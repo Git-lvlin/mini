@@ -1,0 +1,157 @@
+<wxs module="tools" src="../../wxs/common.wxs" />
+<wxs module="u">
+  var time = function (a) {
+    if (a<10) {
+      return '0' + a.toString()
+    }
+    return a
+  }
+  var num = function (a) {
+    if (a<=999) {
+      return a
+    }
+    if (999<a<10000) {
+      return '999+'
+    }
+    if (10000<=a<100000) {
+      return (a/10000).toFixed(2) + '万'
+    }
+    if (a>100000) {
+      return '10万+'
+    }
+  }
+  module.exports = {
+    time: time,
+    num: num,
+  };
+</wxs>
+<!-- <image class="back" style="top: {{$.systemInfo.statusHeight + 12 * $.systemInfo.rpxRatio}}rpx" bindtap="onBack" src="{{tools.getImgUrl('miniprogram/common/back_white@2x.png')}}" /> -->
+<view class="container">
+  <view class="banner">
+    <van-image
+      width="100%"
+      height="360rpx"
+      src="{{tools.getImgUrl('miniprogram/seckill/seckill-bg.png')}}"
+    />
+    <view class="top-box">
+      <view class="top-number" wx:if="{{active==0}}">{{seckillData.virtualBuyNum}}人疯抢中</view>
+      <view class="top-number" wx:else>{{tomorrow.virtualNoticeNum}}已设置提醒</view>
+      <swiper
+        class="swiper"
+        autoplay
+        display-multiple-items="4"
+        circular
+        easing-function="linear"
+        bindchange="iconChange"
+        current="0"
+        next-margin="22rpx"
+      >
+        <block
+          wx:for="{{active?tomorrow.avatorList:seckillData.avatorList}}"
+          wx:key="id"
+        >
+          <swiper-item skip-hidden-item-layout class="swiper-item {{itemIndex <= index&&index<(itemIndex+4)?'visible':'op'}}">
+            <view class="img-box">
+              <image class="userIcon" src="{{item.icon}}" />
+            </view>
+          </swiper-item>
+        </block>
+      </swiper>
+      <view class="time-box">
+        <text class="text">距{{active==0?'结束':'开始'}}</text>
+        <van-count-down use-slot millisecond time="{{ seckillData.deadlineTime-seckillData.currentTime }}" bind:change="onChange">
+          <text class="time">{{ u.time(timeData.hours) }}</text>
+          <text class="time-symbol">:</text>
+          <text class="time">{{ u.time(timeData.minutes) }}</text>
+          <text class="time-symbol">:</text>
+          <text class="time">{{ u.time(timeData.seconds) }}</text>
+        </van-count-down>
+      </view>
+    </view>
+  </view>
+  <view class="tab-box">
+    <van-tabs lazy-render custom-class="custom" nav-class="nav-class" tab-active-class="tab-active" swipeable animated sticky active="{{ active }}" bind:change="tabChange">
+      <van-tab title-style="font-size:32rpx" title="正在疯抢">
+        <view class="today">
+          <block wx:for="{{seckillData.records}}" wx:key="id">
+            <view class="tab-item" data-data="{{item}}" bindtap="onGood">
+              <van-image
+                class="left-img"
+                width="234rpx"
+                height="234rpx"
+                src="{{item.image}}"
+              />
+              <view class="right-box">
+                <view class="title">{{item.title}}</view>
+                <view class="progress-bar-box">
+                  <view class="progress-bar">
+                    <view class="progress-index" style="width:{{item.buyNumDisplay}}%">{{item.buyNumDisplay>=50?item.buyNumDisplay+'%':''}}</view>
+                    <!-- <van-image
+                      class="progress-img"
+                      width="40rpx"
+                      height="40rpx"
+                      src="{{tools.getImgUrl('miniprogram/seckill/index-icon.png')}}"
+                    /> -->
+                    <image mode="widthFix" class="progress-img" src="{{tools.getImgUrl('miniprogram/seckill/index-icon.png')}}" />
+                    <view wx:if="{{item.buyNumDisplay<50}}" style="width:{{100-item.buyNumDisplay}}%" class="poor">{{item.buyNumDisplay}}%</view>
+                  </view>
+                  <view class="stock">库存{{u.num(item.stockNum)}}</view>
+                </view>
+                <view class="subtitle">{{item.subtitle}}</view>
+                <view class="price-box">
+                  <text class="head">¥</text>
+                  <text class="money">{{tools.priceToF2(item.salePrice)}}</text>
+                  <text class="maxnum" wx:if="{{item.reducePriceDisplay}}">{{item.reducePriceDisplay}}</text>
+                </view>
+                <view class="t">{{item.nearDaysDisplay}}</view>
+              </view>
+              <view class="btn">抢购</view>
+            </view>
+          </block>
+        </view>
+      </van-tab>
+      <van-tab title-style="font-size:32rpx" title="明日疯抢">
+        <view class="tomorrow">
+          <block wx:for="{{tomorrow.records}}" wx:key="id">
+            <view class="tab-item">
+              <van-image
+                class="left-img"
+                width="234rpx"
+                height="234rpx"
+                src="{{item.image}}"
+              />
+              <view class="right-box">
+                <view class="title">{{item.title}}</view>
+                <view class="subtitle-t">{{item.subtitle}}</view>
+                <view class="price-box-t">
+                  <text class="head">¥</text>
+                  <text class="money">{{tools.priceToF2(item.salePrice)}}</text>
+                  <text class="maxnum" wx:if="{{item.reducePriceDisplay}}">{{item.reducePriceDisplay}}</text>
+                </view>
+                <view class="t" wx:if="{{item.nearDaysDisplay}}">{{item.nearDaysDisplay}}</view>
+              </view>
+              <view class="btn-t {{item.isNotice==2?'btn-t-ed':''}}" data-data="{{[tomorrow, item]}}" bindtap="onRemind">{{item.isNotice==2?'已提醒':'提醒我'}}</view>
+            </view>
+          </block>
+        </view>
+      </van-tab>
+    </van-tabs>
+  </view>
+
+  <view class="bottom-swiper-box">
+    <swiper vertical circular autoplay display-multiple-items="3" class="bottom-swiper">
+      <block wx:for="{{seckillData.avatorList}}" wx:key="id">
+        <swiper-item>
+          <view class="bottom-swiper-item">
+            <image class="bottom-swiper-img" src="{{item.icon}}" />
+            <text class="bottom-swiper-text">刚刚下单了</text>
+          </view>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+
+  <view class="go-top" wx:if="{{showTop}}" bindtap="backTop">
+    <image class="go-top-img" mode="widthFix" src="{{tools.getImgUrl('miniprogram/seckill/go-top.png')}}" />
+  </view>
+</view>

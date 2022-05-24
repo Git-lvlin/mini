@@ -1,0 +1,38 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="good_card" style="width: {{size}}" bindtap="onToDetail">
+  <van-image
+    width="{{size}}"
+    height="{{size}}"
+    custom-class="good_cover"
+    src="{{data.image}}"
+  />
+  <view class="good_info">
+    <view class="good_title text_two_line">{{data.title}}</view>
+    <view class="good_sku text_one_line" wx:if="{{data.goodsDesc || data.subTitle}}">{{data.goodsDesc || data.subTitle}}</view>
+    <view class="good_label" wx:if="{{data.orderType == 15 || data.orderType == 16}}">{{data.orderType == 15 ? "集约特惠" : ""}}{{data.orderType == 16 ? "新人尝鲜" : ""}}</view>
+    <view class="good_price">
+        <view class="flex_middle">
+          <price-mobel
+            showMarket="{{showMarket}}"
+            money="{{data.salePrice}}"
+            minSize="{{24}}"
+            defaultColor="#ccc"
+            bold="{{400}}"
+            marketMoney="{{data.marketPrice}}"
+          />
+        </view>
+        <view class="flex_fix cart" wx:if="{{!descText}}">
+          <view class="cart_num">{{data.goodsSaleNumStr || data.goodsSaleNumDesc}}</view>
+        </view>
+        <view class="desc_view" wx:if="{{!!descText}}">{{descText}}</view>
+    </view>
+    <view class="good_store" wx:if="{{data.storeName?true:false}}">
+      <view class="store_name">{{data.storeName}}</view>
+      <view class="advance" catchtap="onToStore">
+        <view class="advance_store">进店逛逛</view>
+        <view class="right_arrow_gray" />
+      </view>
+    </view>
+  </view>
+</view>

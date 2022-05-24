@@ -15,7 +15,7 @@ Component({
       observer(now, old) {
         const nowStr = JSON.stringify(now);
         const oldStr = JSON.stringify(old);
-        if(nowStr != oldStr) {
+        if(now && now.content) {
           this.setClassList(now.content);
         }
       }
@@ -38,27 +38,23 @@ Component({
           })
         }
         homeApi.getFloorCustom(content.dataUrl).then(res => {
-          let list = this.mapTypeList(res);
+          // let list = this.mapTypeList(res);
+          let list = res;
           homeCache.goodTypeList = list;
           this.setData({
             goodTypeList: list
           });
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          })
+          wx.setStorageSync("HOME_CACHE", homeCache);
         });
       } else {
-        let list = this.mapTypeList(content.data);
+        // let list = this.mapTypeList(content.data);
+        let list = content.data;
         this.setData({
           goodTypeList: list
         })
         if(homeCache.goodTypeList) {
           delete homeCache.goodTypeList;
-          wx.setStorage({
-            key: "HOME_CACHE",
-            data: homeCache,
-          })
+          wx.setStorageSync("HOME_CACHE", homeCache);
         }
       }
     },
@@ -103,7 +99,6 @@ Component({
       currentTarget
     }) {
       let data = currentTarget.dataset.data;
-      console.log("豆腐块跳转链接", data.actionUrl)
       if(!!data.actionUrl) {
         router.getUrlRoute(data.actionUrl);
       }

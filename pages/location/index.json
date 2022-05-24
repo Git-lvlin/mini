@@ -1,6 +1,11 @@
 {
-  "navigationBarTitleText": "选择自提点",
+  "navigationBarTitleText": "切换社区店",
   "usingComponents": {
-    "take-spot": "/components/other/take_spot/index"
+    "take-spot": "/components/other/take_spot/index",
+    "nodata": "/components/common/nodata/index",
+    "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
+    "address-popup": "/components/common/address-popup/index",
+    "van-tab": "/miniprogram_npm/@vant/weapp/tab/index",
+    "van-tabs": "/miniprogram_npm/@vant/weapp/tabs/index"
   }
 }

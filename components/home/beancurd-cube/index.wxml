@@ -5,6 +5,7 @@
   <view
     class="beancurd_content"
     style="{{utils.getHeadBackCss(floor.style)}}"
+    wx:if="{{goodTypeList.length}}"
   >
     <scroll-view
       scroll-x
@@ -12,23 +13,22 @@
       bindscroll="handleScroll"
     >
       <view class="beancurd_body">
-        <view class="beancurd_list" wx:for="{{goodTypeList}}" wx:key="index">
+        <view class="beancurd_list">
           <view
             class="beancurd_item"
-            wx:for="{{item}}"
-            wx:for-item="child"
-            wx:key="id"
-            data-data="{{child}}"
+            wx:for="{{goodTypeList}}"
+            wx:key="index"
+            data-data="{{item}}"
             bindtap="onToClass"
           >
-            <image class="beancurd_img" src="{{child.image}}" />
-            <view class="name text_one_line">{{child.title}}</view>
+            <image class="beancurd_img" src="{{item.image}}" />
+            <view class="name text_one_line">{{item.title}}</view>
           </view>
         </view>
       </view>
     </scroll-view>
     <view class="progress_back">
-      <view class="progress {{goodTypeList.length < 2 ? 'progress_full' : ''}}" style="left: {{scrollListWidth}}rpx" />
+      <view class="progress {{goodTypeList.length < 5 ? 'progress_full' : ''}}" style="left: {{scrollListWidth}}rpx" />
     </view>
   </view>
 </view>

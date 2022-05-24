@@ -1,0 +1,21 @@
+
+.banner {
+  width: 702rpx;
+  height: 200rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+  margin: 0 auto;
+}
+.swiper {
+  width: 702rpx;
+  height: 200rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+}
+
+.swiper_item {
+  width: 100%;
+  height: 200rpx;
+  border-radius: 24rpx;
+  overflow: hidden;
+}

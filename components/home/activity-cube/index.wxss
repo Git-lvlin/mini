@@ -1,0 +1,55 @@
+
+.activity {
+  padding: 24rpx 24rpx 0;
+}
+
+.activity_content {
+  position: relative;
+  width: 100%;
+  height: 158rpx;
+  box-sizing: border-box;
+}
+
+.activity_scroll {
+  width: 100%;
+  height: 100%;
+}
+
+.activity_body {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 100%;
+}
+
+.activity_list {
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+  /* justify-content: space-between; */
+  /* flex-wrap: wrap; */
+  width: 100%;
+  height: 100%;
+}
+
+.activity_item {
+  flex-grow: 0;
+  flex-shrink: 0;
+  width: 112rpx;
+  padding: 0 14rpx;
+}
+
+.activity_img {
+  width: 112rpx;
+  height: 112rpx;
+  margin-bottom: 12rpx;
+}
+
+.name {
+  color: #333333;
+  font-size: 24rpx;
+  line-height: 34rpx;
+  text-align: center;
+  white-space: nowrap;
+}

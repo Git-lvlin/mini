@@ -1,0 +1,160 @@
+.fresh {
+  padding: 24rpx 24rpx 0;
+}
+
+.fresh_one {
+  width: 100%;
+  height: 276rpx;
+  box-sizing: border-box;
+  background-color: #FFFFFF;
+  border-radius: 16rpx;
+}
+.fresh_two {
+  margin-top: 12rpx;
+  width: 100%;
+  height: 276rpx;
+  box-sizing: border-box;
+  background-color: #FFFFFF;
+  border-radius: 16rpx;
+}
+.title {
+  height: 72rpx;
+  position: relative;
+}
+
+.title_text {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  position: absolute;
+  top: 16rpx;
+  left: 24rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #01B832;
+}
+
+.title_big {
+}
+.title_ {
+  margin: 0 10rpx;
+  width: 1px;
+  height: 28rpx;
+  background-color: #01B832;
+}
+.title_offer {
+  margin: 0 10rpx;
+  width: 1px;
+  height: 28rpx;
+  background-color: #FF9900;
+}
+.title_small {
+  font-size: 24rpx;
+  font-weight: 400;
+}
+.offer_color {
+  color: #FF9900;
+}
+
+.title_right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 24rpx;
+  right: 24rpx;
+}
+
+.right_text {
+  font-size: 22rpx;
+  font-weight: 400;
+  color: #999999;
+}
+
+.right_icon {
+  width: 24rpx;
+  height: 24rpx;
+}
+
+
+.item_one {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.item_one_img {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 8rpx;
+  margin-right: 24rpx;
+  overflow: hidden;
+}
+
+.item_one_right {
+  display: flex;
+  flex-direction: column;
+  width: 450rpx;
+}
+
+.one_name {
+  margin-bottom: 24rpx;
+  width: 100%;
+  height: 84rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333333;
+  line-height: 42rpx;
+}
+.one_num {
+  margin-bottom: 2rpx;
+  width: 100%;
+  height: 32rpx;
+  font-size: 22rpx;
+  font-weight: 400;
+  color: #999999;
+  line-height: 32rpx;  
+}
+.one_price_box {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  color: #E5352F;
+}
+
+.price-head-red {
+  font-size: 24rpx;
+}
+
+.price-index {
+  font-size: 32rpx;
+}
+
+.last-price {
+  margin-left: 16rpx;
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #999999;
+  text-decoration: line-through;
+}
+
+.one_btn {
+  position: absolute;
+  right: 24rpx;
+  bottom: 40rpx;
+  width: 160rpx;
+  height: 48rpx;
+  background: linear-gradient(270deg, #FF3333 0%, #FF6161 100%);
+  border-radius: 24rpx;
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #FFFFFF;
+  line-height: 48rpx;
+  text-align: center;
+}
+
+
+
+
+

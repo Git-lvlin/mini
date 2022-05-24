@@ -1,5 +1,5 @@
 import homeApi from "../../../apis/home"
-import { mapNum } from "../../../utils/homeFloor";
+import { mapNum } from "../../../utils/tools";
 import router from "../../../utils/router";
 
 Component({
@@ -11,7 +11,7 @@ Component({
       observer(now, old) {
         const nowStr = JSON.stringify(now);
         const oldStr = JSON.stringify(old);
-        if(nowStr != oldStr) {
+        if(now && now.content) {
           this.setGoodList(now.content);
         }
       }

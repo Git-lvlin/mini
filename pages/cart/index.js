@@ -26,9 +26,9 @@ create.Page(store, {
   },
 
   pageData: {
-    page: 1,
-    pageSize: 10,
-    totalPage: 1,
+    hasNext: false,
+    next: "",
+    size: 20,
   },
   loading: false,
 
@@ -52,10 +52,12 @@ create.Page(store, {
       hotGoodList,
     } = this.data;
     if(!!userInfo) {
-      this.store.updateCart();
+      this.store.updateCart(true);
       this.setData({
         userInfo,
       })
+    } else {
+      this.store.clearCart();
     }
     // 更新tabbar显示
     router.updateSelectTabbar(this, 2);
@@ -70,34 +72,34 @@ create.Page(store, {
     goodApi.checkedAllCart({
       isChecked: !this.data.selectAll,
     }).then(res => {
-      this.store.updateCart();
+      this.store.updateCart(true);
     })
   },
 
   // 获取热销商品
   getHotGood() {
     const {
-      page,
-      pageSize,
+      next,
+      size,
     } = this.pageData;
     if(this.loading) return;
     this.loading = true;
-    homeApi.getHotGood({
-      page,
-      pageSize
-    }, {
+    const postData = {
+      size,
+    };
+    if(!!next) {
+      postData.next = next;
+    }
+    homeApi.getHotGood(postData, {
       showLoading: false
     }).then(res => {
       const list = mapNum(res.records);
       let {
         hotGoodList
       } = this.data;
-      this.pageData.totalPage = res.totalPage;
-      if(page > 1) {
-        hotGoodList = hotGoodList.concat(list)
-      } else {
-        hotGoodList = list;
-      }
+      this.pageData.hasNext = res.hasNext;
+      this.pageData.next = res.next;
+      hotGoodList = hotGoodList.concat(list)
       this.setData({
         hotGoodList,
       }, () => {
@@ -111,11 +113,9 @@ create.Page(store, {
   // 滚动到底部
   handleScrollBottom() {
     const {
-      page,
-      totalPage,
+      hasNext,
     } = this.pageData;
-    if(page < totalPage) {
-      this.pageData.page = page + 1;
+    if(hasNext) {
       this.getHotGood();
     }
   },

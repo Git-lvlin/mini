@@ -1,21 +1,30 @@
+
 // var IMG_CDN = "https://dev-yeahgo-oss.yeahgo.com/"
-// var IMG_CDN = "https://uat-yeahgo-oss.yeahgo.com/"
+var IMG_CDN = "https://uat-yeahgo-oss.yeahgo.com/"
 // var IMG_CDN = "https://fat-yeahgo-oss.yeahgo.com/"
-var IMG_CDN = "https://pro-yeahgo-oss.yeahgo.com/"
+// var IMG_CDN = "https://pro-yeahgo-oss.yeahgo.com/"
 
 // 格式化图片路径
 var getImgUrl = function (url) {
   return IMG_CDN + url;
 }
 
-// 拆解价格
+// 拆解价格补零
+// type 是否数小数位
 var getPriceSplit = function (price, type) {
   var str = price !== undefined ? price.toString() : "0";
   var strArr = str.split(".");
   if(!type) {
     return strArr[0];
   } else {
-    return !!strArr[1] ? "." + strArr[1] : "";
+    var floatStr = ''; 
+    if(!!strArr[1]) {
+      var zero = strArr[1].length < 2 ? '0' : '';
+      floatStr = '.' + strArr[1] + zero;
+    } else {
+      floatStr = '.00'
+    }
+    return floatStr;
   }
 }
 
@@ -82,6 +91,13 @@ var getLastTime = function(time) {
   return endTime
 }
 
+// 数字补零
+var priceToF2 = function(price, miniUtil = true) {
+  var p = (miniUtil ? price/100 : price).toFixed(3)
+  var res = p.substring(0, p.lastIndexOf('.')+3)
+  return res
+}
+
 module.exports = {
   floatAdd: floatAdd,
   floatReduce: floatReduce,
@@ -89,4 +105,5 @@ module.exports = {
   getPriceSplit: getPriceSplit,
   getQuantity: getQuantity,
   getLastTime: getLastTime,
+  priceToF2: priceToF2,
 }

@@ -1,30 +1,17 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 <wxs module="utils" src="../../../wxs/homeFloor.wxs" />
 
-<view
-  class="seckill"
-  style="{{utils.getHeadBackCss(floor.style, tools.getImgUrl('miniprogram/home/seckill_back.png'))}}"
-  wx:if="{{secGoodList.length}}"
->
+<view class="seckill" style="{{utils.getHeadBackCss(floor.style)}}" wx:if="{{secGoodList.length}}">
   <view class="sec_body">
     <view class="head">
       <panel-title
         title="{{floor.header.title[0].name}}"
-        desc="{{floor.header.subTitle[0].name}}"
+        useTitleSlot
       >
-        <!-- <view class="down_time" slot="body">
-          <van-count-down
-            use-slot time="{{ time }}"
-            bind:change="handleTimeChange"
-          >
-            <text class="time_item days" wx:if="{{timeData.days}}">{{ timeData.days }}天</text>
-            <text class="time_item">{{ timeData.hours < 10 ? "0" + timeData.hours : timeData.hours }}</text>
-            <text class="time_mark">:</text>
-            <text class="time_item">{{ timeData.minutes < 10 ? "0" + timeData.minutes : timeData.minutes }}</text>
-            <text class="time_mark">:</text>
-            <text class="time_item">{{ timeData.seconds < 10 ? "0" + timeData.seconds : timeData.seconds }}</text>
-          </van-count-down>
-        </view> -->
+        <image slot="title" class="kill_icon" src="{{tools.getImgUrl('miniprogram/home/kill_icon.png')}}" />
+        <view class="down_time" slot="body">
+          <count-down time="{{ time }}" needDay isFull />
+        </view>
       </panel-title>
       <!-- 
         more
@@ -32,7 +19,13 @@
         actionUrl="{{floor.header.subTitle[0].actionUrl}}"
       -->
     </view>
-  <scroll-view scroll-x class="good_scroll" show-scrollbar="{{false}}" bindscrolltolower="handleScroll">
+  <scroll-view
+    scroll-x
+    class="good_scroll"
+    enhanced="{{true}}"
+    show-scrollbar="{{false}}"
+    bindscrolltolower="handleScroll"
+  >
     <view class="good_list">
       <view
         class="good_item"
