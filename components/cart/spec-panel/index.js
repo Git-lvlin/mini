@@ -66,6 +66,25 @@ create.Component(store, {
       type: String,
       value: "",
     },
+    create: {
+      type: Number,
+      value: 0,
+      observer(now, old) {
+        console.log('create-now', now)
+      }
+    },
+    isAlone: {
+      type: Number,
+      value: 0,
+      observer(now, old) {
+        console.log('now', now)
+        if(now != old) {
+          this.getCheckSku({
+            orderType: now?2:this.data.good.orderType
+          });
+        }
+      }
+    }
   },
 
   data: {
@@ -78,6 +97,7 @@ create.Component(store, {
   lifetimes: {
     ready() {
       console.log('ready')
+      console.log('isAlone', this.data.isAlone)
       if (this.data.good.isMultiSpec === 1) {
         this.getCheckSku({
           skuId: this.data.good.skuId,
@@ -208,11 +228,15 @@ create.Component(store, {
     },
 
     onConfirm() {
+      console.log('onConfirm')
+      console.log('isAlone', this.data.isAlone)
       const {
         good,
         specType,
         curSku,
         skuNum,
+        isAlone,
+        create,
       } = this.data;
       if(specType === "buy") {
         this.triggerEvent("setSku", {
@@ -223,10 +247,15 @@ create.Component(store, {
           buyMaxNum: curSku.buyMaxNum,
           buyMinNum: curSku.buyMinNum,
         });
-        this.triggerEvent("specBuy", {
+
+        let param = {
           skuId: curSku.id,
           skuNum,
-        });
+          isAlone,
+          create,
+        }
+        this.triggerEvent("specBuy", param);
+
       } else if(specType === "add") {
         this.triggerEvent("setSku", {
           skuId: curSku.id,

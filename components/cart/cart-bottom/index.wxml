@@ -13,7 +13,8 @@
       <text class="zprice">.{{zPrice}}</text>
     </view>
   </view>
-  <view class="btn" bindtap="createOrder">去下单</view>
+  <view wx:if="{{(aPrice+zPrice) == 0}}" class="disable">去下单</view>
+  <view wx:else class="sub-btn" bindtap="createOrder">去下单</view>
 </view>
 <!-- <view class="cart_button" wx:else>
   <view class="cart_popup_click_box" bindtap="onShowPopup">

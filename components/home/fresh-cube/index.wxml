@@ -37,7 +37,7 @@
         <view class="right_text">{{spec.title.action}}</view>
       </view>
     </view>
-    <view class="item_one" wx:if="{{spec.fresh}}" data-data="{{cent.fresh.list[0]}}" bindtap="onToDetail">
+    <view class="item_one" wx:if="{{spec.fresh}}" data-data="{{spec.fresh.list[0]}}" bindtap="onToDetail">
       <image class="item_one_img" src="{{spec.fresh.list[0].imageUrl}}" />
       <view class="item_one_right">
         <view class="one_name text_two_line">{{spec.fresh.list[0].goodsName}}</view>

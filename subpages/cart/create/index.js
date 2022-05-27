@@ -406,6 +406,8 @@ create.Page(store, {
       name: "changeShipper",
       data: {
         storeNo: storeAdress.storeNo,
+        linkman: storeAdress.linkman,
+        phone: storeAdress.phone,
       }
     })
   },
@@ -434,7 +436,10 @@ create.Page(store, {
     let {
       orderInfo,
     } = this.data;
-    orderInfo.storeGoodsInfos[detail.idx] = detail.data;
+    console.log('修改订单备注', detail)
+    console.log('orderInfo.storeGoodsInfos', orderInfo.storeGoodsInfos)
+    orderInfo.storeGoodsInfos[0] = detail.data
+    // orderInfo.storeGoodsInfos[detail.idx] = detail.data;
     this.setData({
       orderInfo,
     });

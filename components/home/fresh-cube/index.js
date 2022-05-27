@@ -88,6 +88,7 @@ Component({
       };
       params.activityId = data.activityId || 0;
       params.objectId = data.objectId || 0;
+      params.isHome = 1;
       if(!!data.orderType) params.orderType = data.orderType;
       router.push({
         name: "detail",

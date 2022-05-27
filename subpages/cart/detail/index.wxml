@@ -88,7 +88,7 @@
           <view class="b_min_buy">{{good.buyMinNum}}{{good.unit}}起订</view>
         </view>
       </view>
-      <view class="intensive_time" wx:if="{{!isCart}}">
+      <!-- <view class="intensive_time" wx:if="{{!isCart && !isHome}}">
         <image class="intensive_time_back" src="{{tools.getImgUrl('miniprogram/cart/jiyue_time.png?v=2021')}}" />
         <view class="flex_center intensive_time_box ">
           <view class="intensive_time_text">距活动结束仅剩</view>
@@ -100,7 +100,7 @@
             />
           </view>
         </view>
-      </view>
+      </view> -->
     </view>
     <view class="good_head">
       <!-- 普通商品价格 -->
@@ -437,6 +437,8 @@
       wx:if="{{good.id}}"
       good="{{good}}"
       skuId="{{skuId}}"
+      isAlone="{{isAlone}}"
+      create="{{create}}"
       specType="{{specType}}"
       bind:specBuy="onToCreate"
       bind:setSku="setCurrentSku"
@@ -534,10 +536,16 @@
         >去参团<view class="right_arrow"/></view>
       </view>
       <view class="flex_middle together_order_btn">
-        <view
+        <!-- <view
           class="flex_center order_btn_item"
           data-type="alone"
           bindtap="onToCreate"
+        > -->
+        <view
+          class="flex_center order_btn_item"
+          data-type="alone"
+          data-data="{{personalList[0]}}"
+          bindtap="openSpecPopup"
         >
           <view class="mar_price">￥{{tools.priceToF2(good.goodsSaleMinPrice || 0, false)}}</view>
           <view class="mar_price">单独购买</view>
@@ -549,7 +557,7 @@
         > -->
         <view
           class="flex_center order_btn_item together_buy_btn"
-          data-data="{{personalList[0]}}"
+          data-type="create"
           bindtap="openSpecPopup"
         >
           <view class="mar_price">￥{{tools.priceToF2(good.activityPrice || 0, false)}}</view>

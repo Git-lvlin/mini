@@ -11,7 +11,15 @@ Page({
 
   onLoad(options) {
     this.storeNo = options.storeNo;
+    if (options.linkman) {
+      this.setData({
+        user: options.linkman,
+        phone: options.phone,
+      });
+      return
+    }
     let data = wx.getStorageSync("ORDER_STORE_LOCATION");
+    console.log('ORDER_STORE_LOCATION-data', data)
     if(data && data.setUser) {
       this.setData({
         user: data.setUser,

@@ -84,13 +84,24 @@
   font-size: 24rpx;
   color: #FF0000;
 }
-.btn {
+.sub-btn {
   margin-right: 24rpx;
   width: 200rpx;
   height: 72rpx;
   line-height: 72rpx;
   text-align: center;
-  background-image: linear-gradient(145deg, #ED8065 0%, #D7291D 100%);
+  background-image: linear-gradient(145deg, #FF6E53 0%, #FF0000 100%);
+  border-radius: 36rpx;
+  font-size: 32rpx;
+  color: #FFFFFF;
+}
+.disable {
+  margin-right: 24rpx;
+  width: 200rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  text-align: center;
+  background-image: linear-gradient(90deg, #FFC4BA 0, #FF9999 100%);
   border-radius: 36rpx;
   font-size: 32rpx;
   color: #FFFFFF;

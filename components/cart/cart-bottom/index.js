@@ -164,15 +164,15 @@ create.Component(store, {
         let goodsInfos = [];
         let len = submitData.length;
         for(let i=0;i<len;i++) {
-          let {spuId, skuId, buyMinNum, activityId, objectId, orderType, goodsFromType} = submitData[i];
-          let num = buyMinNum > 0 ? buyMinNum : 1;
+          let {spuId, skuId, buyMinNum, activityId, objectId, orderType, goodsFromType, quantity} = submitData[i];
+          // let num = buyMinNum > 0 ? buyMinNum : 1;
           let obj = {
             spuId,
             skuId,
             activityId,
             objectId,
             orderType,
-            skuNum: num,
+            skuNum: quantity,
             goodsFromType,
             isActivityCome: false
           }

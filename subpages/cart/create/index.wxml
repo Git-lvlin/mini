@@ -57,6 +57,7 @@
         </view>
         <view class="store_address_info">
           <view class="store_name">自提点：<text class="name_gray">{{storeAdress.storeName}}</text></view>
+          <view class="store_name" wx:if="{{storeAdress.shopMemberAccount}}">店铺编号：<text class="name_gray">{{storeAdress.shopMemberAccount}}</text></view>
           <view class="store_address_detail">{{storeAdress.fullAddress}}</view>
         </view>
       </view>
@@ -67,6 +68,7 @@
           wx:key="storeNo"
           data="{{item}}"
           idx="{{index}}"
+          ix="{{index}}"
           objectId="{{objectId}}"
           activityId="{{activityId}}"
           bind:changeNum="handleChangeNum"

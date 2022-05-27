@@ -109,6 +109,9 @@ create.Page(store, {
     currentPages: [],
     inviteCode: '',
     isCart: '',
+    isAlone: '',
+    create: '',
+    isHome: '',
   },
 
   onLoad(options) {
@@ -164,6 +167,7 @@ create.Page(store, {
       isActivityGood,
       skuId: options.skuId,
       isCart: options.isCart || '',
+      isHome: options.isHome || '',
     }, () => {
       console.log('isActivityGood', isActivityGood)
     })
@@ -189,10 +193,14 @@ create.Page(store, {
        });
       return;
     }
-    this.getGoodDetail({
-      shareId: options.shareMemberId,
-      shareStoreNo: options.shareStoreNo,
-    });
+    if (options.shareMemberId && options.shareStoreNo) {
+      this.getGoodDetail({
+        shareId: options.shareMemberId,
+        shareStoreNo: options.shareStoreNo,
+      });
+    } else {
+      this.getGoodDetail();
+    }
     if(options.orderType != 5 && options.orderType != 6) {
       this.getDetailImg();
     }
@@ -1242,6 +1250,8 @@ create.Page(store, {
       this.setData({
         specType: "buy",
         isActivityCome: this.goodParams.orderType == 3?true:false,
+        isAlone: (e?.currentTarget?.dataset?.type === 'alone')?1:'',
+        create: (e?.currentTarget?.dataset?.type === 'create')?1:'',
       }, () => {
         // 打开选择规格弹窗
         store.onChangeSpecState(true);
@@ -1260,13 +1270,24 @@ create.Page(store, {
   // 跳转确认订单
   onToCreate(e) {
     console.log('eeeeeeeeeeeeeeeeeeeee', e)
-    // let outData = {}
-    // if (e && e.detail) {
-    //   outData = e.detail
-    // }
+    if(!this.data.userInfo) {
+      getStorageUserInfo(true);
+      return;
+    }
+    let outData = {}
+    if (e && e.detail) {
+      outData = e.detail
+    }
     let isActivityCome = false;
     if (e?.currentTarget?.dataset?.type === 'alone') {
       isActivityCome = true
+    }
+    if (e?.detail?.isAlone) {
+      isActivityCome = true
+    }
+    if (e?.detail?.create) {
+      this.onPushTogether()
+      return
     }
     let {
       activityId,
@@ -1315,11 +1336,9 @@ create.Page(store, {
         }]
       }]
     };
-    console.log('活动购买前')
-    // 活动购买
-    // if(orderType == 3 && outData.groupId && !isActivityCome) {
 
-    if(orderType == 3 && personalList[0].groupId) {
+    // 活动购买
+    if(orderType == 3 && outData.groupId && !isActivityCome) {
       let params = {
         storeGoodsInfos: [{
           storeNo: good.storeNo,
@@ -1327,23 +1346,47 @@ create.Page(store, {
             spuId: spuId ? spuId : good.id,
             skuId: skuId ? skuId : currentSku.skuId,
             activityId: activityId || good.activityId || '',
-            objectId: personalList[0].groupId,
+            objectId: outData.groupId,
             orderType,
             skuNum,
-            groupId: personalList[0].groupId,
+            groupId: outData.groupId,
             goodsFromType: good.goodsFromType,
             isActivityCome: isActivityCome
           }]
         }]
       };
-      console.log('活动购买', params)
+      console.log('参团', params)
       wx.setStorageSync("CREATE_INTENSIVE", params);
     }
+
+    // 多规格拼团
+    if(orderType == 3 && outData?.skuId && outData?.skuNum && !isActivityCome) {
+      let params = {
+        storeGoodsInfos: [{
+          storeNo: good.storeNo,
+          goodsInfos: [{
+            spuId: spuId ? spuId : good.id,
+            skuId: outData.skuId,
+            activityId: activityId || good.activityId || '',
+            objectId: outData.objectId,
+            orderType,
+            skuNum: outData.skuNum,
+            goodsFromType: good.goodsFromType,
+            isActivityCome: isActivityCome
+          }]
+        }]
+      };
+      console.log('多规格拼团', params)
+      wx.setStorageSync("CREATE_INTENSIVE", params);
+    }
+
     if(orderType == 15 || orderType == 16) {
       data.storeAdress = storeInfo.storeAddress;
       data.selectAddressType = selectAddressType;
+      console.log('15/16', data)
       wx.setStorageSync("CREATE_INTENSIVE", data);
     } else {
+      console.log('其它', data)
       wx.setStorageSync("GOOD_LIST", data);
     }
     let p = {
@@ -1355,6 +1398,8 @@ create.Page(store, {
     if (this.shareStoreNo) {
       p.shareStoreNo = this.shareStoreNo
     }
+    console.log('111', p)
+    // return
     router.push({
       name: "createOrder",
       data: p

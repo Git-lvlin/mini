@@ -12,7 +12,7 @@ export const orderList = [
       subNum: 0,
   }, {
     icon: `${IMG_CDN}miniprogram/user/wait_push.png`,
-    name: "待发货",
+    name: "待收货",
     subNum: 0,
   }, {
     icon: `${IMG_CDN}miniprogram/user/finish.png`,
@@ -34,7 +34,9 @@ export const orderList = [
 */
 export const otherSetting = [
   {
-    icon: `${IMG_CDN}miniprogram/user/coupon.png?v=202106170`,
+    // icon: `${IMG_CDN}miniprogram/user/setting.png?v=202106170`,
+
+    icon: `${IMG_CDN}miniprogram/user/xcoupon.png?v=20220525`,
     name: "我的红包",
     type: 1,
     path: "coupon",

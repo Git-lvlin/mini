@@ -78,13 +78,14 @@ create.Component(store, {
     },
 
     handleInput({
-      detail,
+      detail,currentTarget
     }) {
       let {
         data,
         idx
       } = this.data;
       data.note = detail.value;
+      idx = currentTarget.dataset.index;
       this.triggerEvent("changeNot", { data, idx});
     },
   }
