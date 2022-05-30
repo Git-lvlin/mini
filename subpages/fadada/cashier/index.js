@@ -24,7 +24,7 @@ create.Page(store, {
   loading: false,
   payType: 7,
   orderInfo: {},
-
+  options: {},
   data: {
     showPopupIsPT: false,
     isPay: false,
@@ -49,6 +49,7 @@ create.Page(store, {
   },
 
   onLoad(options) {
+    this.options = options
     commonApi.getResourceDetail({
       resourceKey: PAY_TYPE_KEY,
     }, {
@@ -107,13 +108,13 @@ create.Page(store, {
 
   findCompanyCert() {
     fadadaApi.findCompanyCert({
-      companyId: this.orderInfo.id
+      companyId: this.options.contractId
     }).then(res => {
       if (res) {
         fadadaApi.genCompanyContract({
-          companyId: this.orderInfo.id,
-          businessId: this.orderInfo.id,
-          contractUrl: this.orderInfo.pactUrl
+          companyId: this.options.contractId,
+          businessId: this.options.contractId,
+          contractUrl: this.options.url
         }).then(res => {
           router.push({
             name: "webview",
@@ -125,7 +126,7 @@ create.Page(store, {
         })
       } else {
         fadadaApi.getCompanyVerifyUrl({
-          companyId: this.orderInfo.id
+          companyId: this.options.contractId
         }).then(res => {
           router.push({
             name: "webview",
