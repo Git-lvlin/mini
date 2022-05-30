@@ -1,7 +1,7 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
-<view class="fresh" wx:if="{{cent.fresh&&cent.fresh.list.length}}">
-  <view class="fresh_one">
+<view class="fresh">
+  <view class="fresh_one" wx:if="{{cent.fresh&&cent.fresh.list.length}}">
     <view class="title">
       <view class="title_text">
         <view class="title_big">1分钱领生鲜</view>
