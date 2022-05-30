@@ -13,7 +13,10 @@ Page({
       router.go();
       return;
     }
-    const link = options.url.includes('%')?decodeURIComponent(options.url):options.url;
+    let link = options.url.includes('%')?decodeURIComponent(options.url):options.url;
+    if (options.encode) {
+      link = decodeURIComponent(link)
+    }
     this.setData({
       link,
     });
