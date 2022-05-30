@@ -62,7 +62,8 @@
     {
       "root": "subpages/fadada",
       "pages": [
-        "main/index"
+        "main/index",
+        "cashier/index"
       ]
     }
   ],

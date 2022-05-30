@@ -7,13 +7,26 @@ page {
   margin-bottom: 12rpx;
 }
 
-.btn {
-  position: absolute;
-  left: 16rpx;
-  right: 16rpx;
-  bottom: 60rpx;
+.bottom_confirm {
+  width: 686rpx;
+  height: 96rpx;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
-button:not([size='mini']){
-  width: 100% !important;
+.comfirm_btn {
+  position: fixed;
+  bottom: calc(constant(safe-area-inset-bottom) + 20rpx);
+  bottom: calc(env(safe-area-inset-bottom) + 20rpx);
+  left: 32rpx;
+  width: 686rpx;
+  height: 96rpx;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 32rpx;
+  line-height: 96rpx;
+  text-align: center;
+  background-color:#e5352f;
+  border-radius: 16rpx;
+  box-shadow: 0rpx 6rpx 12rpx rgba(229, 53, 47, 0.4);
 }

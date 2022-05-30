@@ -166,5 +166,9 @@ export default {
 
   list: {
     path: "/pages/list/index"
-  }
+  },
+
+  fadadaCashier: {
+    path: "/subpages/fadada/cashier/index"
+  },
 }
