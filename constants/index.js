@@ -10,7 +10,7 @@ export const SYS_ENV = 'pro';
 export const CHANGE_ENV = false;
 
 // 小程序版本号
-export const VERSION = "2.5.3";
+export const VERSION = "2.5.4";
 
 // 服务器接口域名S
 export const baseApi = {
