@@ -256,6 +256,7 @@ create.Page(store, {
       encryptedData: uInfo.encryptedData,
       iv: uInfo.iv,
       openId: uInfo.openId,
+      wxUId: uInfo.uId,
     };
     if(isInvite) {
       data.inviteCode = inviteInfo.inviteCode;
