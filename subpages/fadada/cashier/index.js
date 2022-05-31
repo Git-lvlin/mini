@@ -78,6 +78,14 @@ create.Page(store, {
 
     app.trackEvent('shopping_cashier');
   },
+  onShow() {
+    // if (!this.options.contractId) {
+    //   return
+    // }
+    // fadadaApi.getContractGetDetail({contractId: this.options.contractId}).then((res) => {
+
+    // })
+  },
   /**
    * 获取支付信息
    * isNotPayment boolean 是否是模拟支付

@@ -5,7 +5,7 @@
 <van-cell title="入驻编号" value="{{contractDetail.pactNo}}" />
 <van-cell title="合同签订状态" value="{{contractDetail.signStatusDesc}}" />
 <view class="bottom_confirm" wx:if="{{contractDetail.signStatus === 2 && contractDetail.payStatus === 2}}">
-  <view class="comfirm_btn" bind:tap="pactUrl">立即签订</view>
+  <view class="comfirm_btn" bind:tap="sign">立即签订</view>
 </view>
 <view class="bottom_confirm" wx:if="{{contractDetail.signStatus === 2 && contractDetail.payStatus < 2}}">
   <view class="comfirm_btn" bind:tap="pactUrl">查看入驻合作协议</view>
