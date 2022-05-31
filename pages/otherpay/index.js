@@ -47,6 +47,8 @@ Page({
     } else if(this.params.scene == 6) {
       // 获取氢原子支付信息
       this.getAtomPay(this.params);
+    } else if(this.params.scene == 7) {
+      this.getVipPay(this.params);
     }
   },
 
@@ -114,6 +116,39 @@ Page({
       }
       this.setData({
         payInfo
+      })
+    });
+  },
+  // 获取升级为VIP-支付服务费支付信息
+  getVipPay(data) {
+    console.log("VIP-支付服务费")
+    const {
+      payInfo,
+    } = this.data;
+    cartApi.getPayInfoVip({
+      action: 'pay',
+      payType: 7,
+      orderId: data.id,
+      openId: data.openId,
+    }).then(res => {
+      payInfo.state = 0;
+      this.setData({
+        payInfo,
+        payData: res,
+      }, () => {
+        this.openPay();
+        wx.hideLoading();
+      })
+    }).catch(err => {
+      // if(err.code == 10110) {
+      //   payInfo.state = 4;
+      // } else {
+        payInfo.state = 3;
+      // }
+      this.setData({
+        payInfo
+      }, () => {
+        wx.hideLoading();
       })
     });
   },
