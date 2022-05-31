@@ -49,6 +49,7 @@ create.Page(store, {
   },
 
   onLoad(options) {
+    console.log('options', options)
     this.options = options
     commonApi.getResourceDetail({
       resourceKey: PAY_TYPE_KEY,
