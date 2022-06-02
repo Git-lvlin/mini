@@ -1234,6 +1234,7 @@ create.Page(store, {
 
   // 打开选规格弹窗
   openSpecPopup(e) {
+    
     if(!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
@@ -1245,6 +1246,16 @@ create.Page(store, {
       // 商品已下架 改为 已售罄
       showToast({ title: "商品已售罄" });
       return;
+    }
+    // 单规格拼团购买
+    if (!good.isMultiSpec && e?.currentTarget?.dataset?.type == 'create') {
+      this.onPushTogether()
+      return
+    }
+    // 单规格单独购买
+    if (!good.isMultiSpec && e?.currentTarget?.dataset?.type == 'alone') {
+      this.onToCreateOne()
+      return
     }
     if(good.isMultiSpec) {
       this.setData({
@@ -1267,6 +1278,56 @@ create.Page(store, {
     // store.onChangeSpecState(true);
   },
 
+  // 拼团单独购买
+  onToCreateOne() {
+    let isActivityCome = true;
+    let {
+      activityId,
+      objectId,
+      orderType,
+      spuId,
+      skuId,
+    } = this.goodParams;
+    const {
+      selectAddressType,
+      good,
+      currentSku,
+      storeInfo,
+      personalList,
+    } = this.data;
+    let skuNum = good.buyMinNum > 0 ? good.buyMinNum : 1;
+    let data = {
+      storeGoodsInfos: [{
+        storeNo: good.storeNo,
+        goodsInfos: [{
+          spuId: spuId ? spuId : good.id,
+          skuId: skuId ? skuId : currentSku.skuId,
+          activityId: activityId || good.activityId || '',
+          objectId: objectId || good.objectId || '',
+          orderType: isActivityCome?2:orderType,
+          skuNum,
+          goodsFromType: good.goodsFromType,
+          isActivityCome: isActivityCome
+        }]
+      }]
+    };
+    wx.setStorageSync("GOOD_LIST", data);
+    let p = {
+      orderType: isActivityCome?2:orderType,
+      activityId: !!activityId ? activityId : "",
+      objectId: !!objectId ? objectId : this.goodParams.objectId,
+      isActivityCome: isActivityCome,
+    }
+    if (this.shareStoreNo) {
+      p.shareStoreNo = this.shareStoreNo
+    }
+    router.push({
+      name: "createOrder",
+      data: p
+    });
+  },
+
+
   // 跳转确认订单
   onToCreate(e) {
     console.log('eeeeeeeeeeeeeeeeeeeee', e)
@@ -1285,7 +1346,7 @@ create.Page(store, {
     if (e?.detail?.isAlone) {
       isActivityCome = true
     }
-    if (e?.detail?.create) {
+    if (e?.detail?.create || e?.currentTarget?.dataset?.type) {
       this.onPushTogether()
       return
     }

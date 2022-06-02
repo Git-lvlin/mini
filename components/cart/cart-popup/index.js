@@ -83,6 +83,29 @@ create.Component(store, {
   },
 
   methods: {
+    // 跳转详情
+    onGood({
+      currentTarget
+    }) {
+      let {
+        spuId,
+        skuId,
+        activityId,
+        objectId,
+        orderType,
+      } = currentTarget.dataset.data;
+      router.push({
+        name: 'detail',
+        data: {
+          spuId,
+          skuId,
+          activityId,
+          objectId,
+          orderType,
+          isCart: 1,
+        }
+      });
+    },
     //  切换配送、自提状态
     checkSelf() {
       this.triggerEvent("check", !this.data.isSelf);
@@ -148,6 +171,10 @@ create.Component(store, {
           cartGoodsTwo: two
         })
       })
+    },
+    // 一键清空失效商品
+    clearExpiredAll() {
+      cartApi.clearExpired()
     },
     // 设置购物车商品数量
     setCartNum(itemInfo) {

@@ -171,11 +171,16 @@ create.Page(store, {
       objectId: objectId,
       quantity: value,
     }
-    cartApi.setCartNum(params).then((res) => {
-      console.log('设置购物车商品数量', res)
-      if (res.value) {
-        this.getSummaryByCartData()
-      }
+    return new Promise((resolve) => {
+      cartApi.setCartNum(params).then((res) => {
+        console.log('设置购物车商品数量', res)
+        if (res.value) {
+          this.getSummaryByCartData()
+        }
+        resolve(1)
+      }).catch((err) => {
+        resolve()
+      })
     })
   },
   // 选中购物车明细
@@ -367,7 +372,7 @@ create.Page(store, {
 
   },
 
-  onStepChangeAdd(e) {
+  async onStepChangeAdd(e) {
     // Toast.loading({ forbidClick: true });
     let {index, item} = e.currentTarget.dataset;
     let {buyMaxNum, value, unit, stockNum} = item;
@@ -380,7 +385,10 @@ create.Page(store, {
       return
     }
     goodsData[index].value = value + 1
-    this.setCartNum(goodsData[index]);
+    const yes = await this.setCartNum(goodsData[index]);
+    if (!yes) {
+      return
+    }
     setTimeout(() => {
       Toast.clear();
       this.setData({

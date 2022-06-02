@@ -33,8 +33,8 @@
             <view class="one_item_left" data-item="{{item}}" data-index="{{index}}" bindtap="checkedItem">
               <image class="checkout_icon" wx:if="{{item.isChecked}}" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-yes.png')}}" />
               <image class="checkout_icon" wx:else src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-no.png')}}" />
-              <image class="goods_img" src="{{item.thumbnail}}"/>
-              <view class="goods_detail">
+              <image class="goods_img" src="{{item.thumbnail}}" data-data="{{item}}" catchtap="onGood"/>
+              <view class="goods_detail" data-data="{{item}}" catchtap="onGood">
                 <view class="goods_name">{{item.goodsName}}</view>
                 <view class="goods_price">
                   <text class="price_head">¥</text>
@@ -55,7 +55,7 @@
           <view class="border" wx:if="{{cartGoodsOne.length}}"></view>
           <view class="list_two_top">
             <view class="list_two_top_text">失效商品</view>
-            <view class="clear_btn">
+            <view class="clear_btn" bindtap="clearExpiredAll">
               <image class="clear_icon" src="{{tools.getImgUrl('miniprogram/intensive/clear.png')}}" />
               <view class="clear_text">清空</view>
             </view>
