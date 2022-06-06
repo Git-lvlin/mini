@@ -175,7 +175,9 @@ create.Component(store, {
     },
     // 一键清空失效商品
     clearExpiredAll() {
-      cartApi.clearExpired()
+      cartApi.clearExpired().then(() => {
+        this.getCartList()
+      })
     },
     // 设置购物车商品数量
     setCartNum(itemInfo) {

@@ -107,11 +107,11 @@
     bindtap="onCloseCartsPopupAll"
   >
     <view class="popup_in_cart">
-      <view class="in_title">{{inTitle}}</view>
-      <view class="in_content">{{inContent}}</view>
+      <view class="in_title">清除失效商品</view>
+      <view class="in_content">确定清空购物车中所有失效商品吗?</view>
       <view class="in_btn_box">
-        <view class="cancel" bindtap="onCloseCartsPopupAll">取消</view>
-        <view class="confirm" bindtap="clearExpiredAll">{{confirmText}}</view>
+        <view class="cancel" bindtap="onCloseCartsPopupAll">再想想</view>
+        <view class="confirm" bindtap="clearExpiredAll">确认删除</view>
       </view>
     </view>
   </van-popup>
