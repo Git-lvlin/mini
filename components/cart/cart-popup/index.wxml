@@ -55,7 +55,7 @@
           <view class="border" wx:if="{{cartGoodsOne.length}}"></view>
           <view class="list_two_top">
             <view class="list_two_top_text">失效商品</view>
-            <view class="clear_btn" bindtap="clearExpiredAll">
+            <view class="clear_btn" bindtap="showCartsPopupAll">
               <image class="clear_icon" src="{{tools.getImgUrl('miniprogram/intensive/clear.png')}}" />
               <view class="clear_text">清空</view>
             </view>
@@ -97,6 +97,21 @@
       <view class="in_btn_box">
         <view class="cancel" bindtap="onCloseCartsPopup">取消</view>
         <view class="confirm" bindtap="confirDelete">{{confirmText}}</view>
+      </view>
+    </view>
+  </van-popup>
+  <van-popup
+    show="{{deletePopupShowAll}}"
+    round
+    closeable
+    bindtap="onCloseCartsPopupAll"
+  >
+    <view class="popup_in_cart">
+      <view class="in_title">{{inTitle}}</view>
+      <view class="in_content">{{inContent}}</view>
+      <view class="in_btn_box">
+        <view class="cancel" bindtap="onCloseCartsPopupAll">取消</view>
+        <view class="confirm" bindtap="clearExpiredAll">{{confirmText}}</view>
       </view>
     </view>
   </van-popup>

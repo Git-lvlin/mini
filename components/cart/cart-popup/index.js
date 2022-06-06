@@ -80,6 +80,7 @@ create.Component(store, {
     inTitle: '删除商品',
     inContent: '确定删除该商品吗？',
     confirmText: '删除',
+    deletePopupShowAll: false,
   },
 
   methods: {
@@ -275,12 +276,25 @@ create.Component(store, {
         deletePopupShow: false
       })
     },
+    onCloseCartsPopupAll() {
+      this.setData({
+        deletePopupShowAll: false
+      })
+    },
     confirDelete() {
+      this.setCartNum(this.data.deleteData);
+    },
+    confirDeleteAll() {
       this.setCartNum(this.data.deleteData);
     },
     showCartsPopup() {
       this.setData({
         deletePopupShow: true
+      })
+    },
+    showCartsPopupAll() {
+      this.setData({
+        deletePopupShowAll: true
       })
     },
     onClose() {
