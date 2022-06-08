@@ -54,13 +54,17 @@
 
 .home_content {
   position: relative;
-  top: 100rpx;
-  /* flex: 1; */
+  padding-top: 100rpx;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
   /* height: 1300rpx; */
-  max-height: 1300rpx;
+  /* max-height: 1300rpx; */
 }
 .no_search {
   top: 0;
+  padding-top: 0;
 }
 .home_content_no_class {
   position: relative;
@@ -171,8 +175,8 @@
 }
 
 .cart_box {
-  position: relative;
-  top: 100rpx;
+  /* position: relative;
+  top: 100rpx; */
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
@@ -197,21 +201,28 @@
 .cart_left_box {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center; */
+  /* align-items: center; */
   background-color: #F7F7F7;
   overflow: hidden;
   overflow-y: auto;
+  height: 100%;
+  padding-bottom: 300rpx;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 .cart_right_box {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  /* align-items: center; */
   background-color: #ffffff;
-  height: 1000rpx;
-  overflow: hidden;
-  overflow-y: auto;
+  height: 100%;
+  /* overflow: hidden;
+  overflow-y: auto; */
+  /* padding-bottom: 300rpx; */
+  box-sizing: border-box;
+  flex: 1;
 }
 .cart_right_box2 {
   display: flex;
@@ -235,6 +246,7 @@
   color: #444440;
   font-size: 24rpx;
   background-color: #F7F7F7;
+  flex-shrink: 0;
 }
 .left_act {
   color: #FF0000;
@@ -276,6 +288,7 @@
   width: 160rpx;
   height: 160rpx;
   overflow: hidden;
+  flex-shrink: 0;
 }
 .goods_img_box2 {
   margin: 0 24rpx;
@@ -293,7 +306,7 @@
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  width: 382rpx;
+  flex: 1;
   height: 100%;
 }
 .goods_right_box2 {
@@ -645,3 +658,26 @@
   background: #F7F7F7;
 }
 
+.tab {
+  height: 100%;
+  overflow: hidden;
+}
+
+.tabs {
+  flex: 1;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.recommend {
+  margin-top: 10rpx;
+  height: 1000rpx;
+  overflow-y: auto;
+}
+
+.van-tabs {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
