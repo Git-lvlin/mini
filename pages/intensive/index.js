@@ -28,7 +28,7 @@ create.Page(store, {
     "userInfo",
     "systemInfo"
   ],
-  
+
   data: {
     cartAllData: null,
     fixationTop: 600,
@@ -54,13 +54,17 @@ create.Page(store, {
     intensiveData: null,
     remindData: [],
     recommendData: [],
+    goodsData2: [],
     storeNo: 'store_m_123942', // 测试用店铺号
     classData: null,
+    classData2: [],
     goodsData: null,
     tabIndexId: 0,
+    tabIndexId2: 0,
     goodsNum: 0,
     value: 0,
     showCartPopup: false,
+    tabActive: 0,
     invalidList: [
       {
         name: 'dasdasdasd',
@@ -87,7 +91,7 @@ create.Page(store, {
       systemInfo,
     } = this.store.data;
     query.select('#fixation').boundingClientRect((rect) => {
-      if(rect) {
+      if (rect) {
         this.setData({
           fixationTop: rect.top,
         })
@@ -95,10 +99,10 @@ create.Page(store, {
     }).exec();
     this.getLocationAuth(this);
     query.select('#top_search').boundingClientRect((rect) => {
-      if(rect) {
+      if (rect) {
         this.setData({
           topSearchHeight: rect.height,
-          navigationBarHeight:systemInfo.navBarHeight+(systemInfo.rpxRatio*rect.height)
+          navigationBarHeight: systemInfo.navBarHeight + (systemInfo.rpxRatio * rect.height)
         })
       }
     }).exec();
@@ -107,7 +111,7 @@ create.Page(store, {
   onShow() {
     const takeSpot = wx.getStorageSync("TAKE_SPOT");
     console.log('takeSpot', takeSpot)
-    if(takeSpot) {
+    if (takeSpot) {
       this.setData({
         takeSpot,
       });
@@ -126,23 +130,26 @@ create.Page(store, {
   },
 
   // 初始化
-  init(id='') {
-    Promise.all([this.getAllGoodsList(id),this.getGoodsCategory(),this.getSummaryByCartData(),this.getBannerData()]).then((res) => {
+  init(id = '') {
+    Promise.all([this.getAllGoodsList(id), this.getGoodsCategory(), this.getSummaryByCartData(), this.getBannerData()]).then((res) => {
       this.setData({
         refresherTriggered: false,
       })
     })
+
+    this.shopIndexCategory()
+    this.getAllGoodsList2()
   },
 
   onCloseCartPopup() {
-    this.setData({showCartPopup:false})
+    this.setData({ showCartPopup: false })
   },
   openCartPopup() {
-    this.setData({showCartPopup:true})
+    this.setData({ showCartPopup: true })
   },
   // 设置购物车明细
   addCart() {
-    const {storeNo, } = this.data
+    const { storeNo, } = this.data
     const params = {
       quantity, // 数量，负数表示减数量
       skuId,
@@ -155,7 +162,7 @@ create.Page(store, {
   },
   // 移除购物车明细
   removeCart() {
-    const {storeNo, } = this.data
+    const { storeNo, } = this.data
     const params = {
       objectIds, // 业务id数组
       skuIds, // 商品skuid数组
@@ -185,7 +192,7 @@ create.Page(store, {
   },
   // 选中购物车明细
   checkedCart() {
-    const {storeNo, } = this.data
+    const { storeNo, } = this.data
     const params = {
       skuId,
       skuStoreNo: storeNo,
@@ -195,7 +202,7 @@ create.Page(store, {
   },
   // 全选购物车明细
   checkedAllCart() {
-    const {storeNo, } = this.data
+    const { storeNo, } = this.data
     const params = {
       isChecked,
       skuStoreNo: storeNo,
@@ -215,7 +222,7 @@ create.Page(store, {
   },
   // 清空购物车
   clearCart() {
-    const {storeNo} = this.data
+    const { storeNo } = this.data
     const params = {
       skuStoreNo: storeNo,
     }
@@ -223,7 +230,7 @@ create.Page(store, {
   },
   // 清空失效商品
   clearExpired() {
-    const {storeNo} = this.data
+    const { storeNo } = this.data
     const params = {
       skuStoreNo: storeNo,
     }
@@ -273,7 +280,7 @@ create.Page(store, {
   async getAllGoodsList(gcId1) {
     const params = {
       page: 1,
-      size: 99,
+      size: 999,
       gcId1: gcId1 || 0,
     }
     const resolveData = await this.getCartList();
@@ -289,7 +296,7 @@ create.Page(store, {
           return
         }
         let list = res.records.map((item) => {
-          let p = (item.salePrice/100).toString();
+          let p = (item.salePrice / 100).toString();
           let a = '';
           let z = '';
           let v = 0;
@@ -315,7 +322,7 @@ create.Page(store, {
         console.log('集约商品列表返回', list)
         if (!this.data.hasClass) {
           if (list.length > 10) {
-            this.setData({hasClass:1})
+            this.setData({ hasClass: 1 })
           }
         }
         this.setData({
@@ -326,9 +333,42 @@ create.Page(store, {
       })
     })
   },
+  getAllGoodsList2(gcId1) {
+    const { storeNo } = this.data
+    const params = {
+      page: 1,
+      size: 999,
+      gcId2: gcId1 || 0,
+      storeNo,
+    }
+    intensiveApi.shopIndexGoods(params).then((res) => {
+      let list = res.records.map((item) => {
+        let p = (item.salePrice / 100).toString();
+        let a = '';
+        let z = '';
+        let v = 0;
+        if (p.includes('.')) {
+          a = p.split('.')[0]
+          z = p.split('.')[1]
+        } else {
+          a = p
+        }
+        return {
+          ...item,
+          aPrice: a,
+          zPrice: z,
+          value: v,
+        }
+      })
+
+      this.setData({
+        goodsData2: list,
+      })
+    })
+  },
   // 查询商品分类
   getGoodsCategory() {
-    const {storeNo} = this.data
+    const { storeNo } = this.data
     const params = {
       storeNo
     }
@@ -343,9 +383,18 @@ create.Page(store, {
       })
     })
   },
+  shopIndexCategory() {
+    const { storeNo } = this.data
+    intensiveApi.shopIndexCategory({ storeNo })
+      .then(res => {
+        this.setData({
+          classData2: res.records
+        })
+      })
+  },
   // 推荐商品列表
   getRecGoods() {
-    const {storeNo} = this.data
+    const { storeNo } = this.data
     const params = {
       storeNo
     }
@@ -368,15 +417,15 @@ create.Page(store, {
           reject()
         })
       });
-    }) 
+    })
 
   },
 
   async onStepChangeAdd(e) {
     // Toast.loading({ forbidClick: true });
-    let {index, item} = e.currentTarget.dataset;
-    let {buyMaxNum, value, unit, stockNum} = item;
-    let {goodsData} = this.data;
+    let { index, item } = e.currentTarget.dataset;
+    let { buyMaxNum, value, unit, stockNum } = item;
+    let { goodsData } = this.data;
     if (buyMaxNum > stockNum) {
       buyMaxNum = stockNum
     }
@@ -398,15 +447,15 @@ create.Page(store, {
   },
   onStepChangeDelete(e) {
     // Toast.loading({ forbidClick: true });
-    let {index, item} = e.currentTarget.dataset;
-    let {buyMinNum, value, unit} = item;
-    let {goodsData} = this.data;
+    let { index, item } = e.currentTarget.dataset;
+    let { buyMinNum, value, unit } = item;
+    let { goodsData } = this.data;
     if (value == 0) {
       return
     }
     let num = value - 1;
     goodsData[index].value = num;
-    if ((buyMinNum>1) && (value - 1 < buyMinNum)) {
+    if ((buyMinNum > 1) && (value - 1 < buyMinNum)) {
       Toast(`该商品${buyMinNum}${unit}起购`);
     }
     this.setCartNum(goodsData[index]);
@@ -425,6 +474,30 @@ create.Page(store, {
     this.setData({
       tabIndexId: gcId1
     })
+    wx.createSelectorQuery()
+      .select('#scroll-view1')
+      .node()
+      .exec((res) => {
+        const scrollView = res[0].node;
+        scrollView.scrollTo({ top: 0 });
+      })
+  },
+  checkTab2(e) {
+    const {
+      gcId2,
+    } = e.currentTarget.dataset.class;
+    // this.getAllGoodsList(gcId2)
+    this.setData({
+      tabIndexId2: gcId2
+    })
+    this.getAllGoodsList2(gcId2)
+    wx.createSelectorQuery()
+      .select('#scroll-view2')
+      .node()
+      .exec((res) => {
+        const scrollView = res[0].node;
+        scrollView.scrollTo({ top: 0 });
+      })
   },
 
   // 获取集约列表
@@ -476,10 +549,10 @@ create.Page(store, {
     }).then(res => {
       const data = res.data;
       const miniState = this.isMiniExamine;
-      if(data.state == 1 && !miniState) {
+      if (data.state == 1 && !miniState) {
         // 审核
         this.isMiniExamine = true;
-      } else if(data.state == 0) {
+      } else if (data.state == 0) {
         // 正式版
         this.isMiniExamine = false;
       }
@@ -499,7 +572,7 @@ create.Page(store, {
     that.setData({
       locationAuth,
     });
-    if(locationAuth) {
+    if (locationAuth) {
       // 自动选择附近的一个店铺
       const takeSpot = wx.getStorageSync("TAKE_SPOT");
       !takeSpot && wx.getLocation({
@@ -513,7 +586,7 @@ create.Page(store, {
           that.getNearbyStore(data);
         },
         fail(err) {
-          
+
         },
       });
     }
@@ -530,10 +603,10 @@ create.Page(store, {
       let list = [];
       let fullAddress = "";
       let tempData = {};
-      if(res.length > 0) {
+      if (res.length > 0) {
         const MarkData = res[0];
         fullAddress = "";
-        for(let str in MarkData.areaInfo) {
+        for (let str in MarkData.areaInfo) {
           fullAddress += MarkData.areaInfo[str];
         }
         fullAddress += MarkData.address;
@@ -558,32 +631,32 @@ create.Page(store, {
   },
 
   // 跳转选择地址
-  onToLocation: async function() {
+  onToLocation: async function () {
     let {
       locationAuth,
     } = this.data;
     let auth = false;
-    if(!locationAuth) {
+    if (!locationAuth) {
       auth = await checkSetting('userLocation', true);
-      if(auth) {
+      if (auth) {
         locationAuth = true;
         this.setData({
           locationAuth,
         });
       }
     }
-    if(!locationAuth) {
+    if (!locationAuth) {
       showModal({
         content: "需要您授权地理位置才可使用",
-        ok(){
+        ok() {
           wx.openSetting({
             success(result) {
-              if(result.errMsg === "openSetting:ok") {
+              if (result.errMsg === "openSetting:ok") {
                 const {
                   authSetting,
                 } = result;
                 let state = authSetting['scope.userLocation'];
-                if(state) {
+                if (state) {
                   router.push({
                     name: 'location',
                   });
@@ -598,7 +671,7 @@ create.Page(store, {
           });
         }
       })
-      
+
     } else {
       router.push({
         name: 'location',
@@ -615,11 +688,11 @@ create.Page(store, {
 
   // 监听触控移动
   handleTouchMove(event) {
-    if(this.isScroll) return;
+    if (this.isScroll) return;
     this.isScroll = true;
     this.setData({
       scrolling: true,
-    }); 
+    });
     clearTimeout(this.touchTimer);
     this.touchTimer = null;
   },
@@ -632,7 +705,7 @@ create.Page(store, {
       });
     }, 400);
   },
- 
+
   // 监听页面滚动
   // onPageScroll(e) {
   onViewScroll({
@@ -647,14 +720,14 @@ create.Page(store, {
     } = this.data;
 
     // this.getRecordScrollTop();
-    if(scrollBottom) {
+    if (scrollBottom) {
       this.setData({
         scrollBottom: false,
       })
     }
     //滚动条距离顶部高度
     let scrollTop = detail.scrollTop;
-    if(!this.isSetScroll) {
+    if (!this.isSetScroll) {
       // 判断'滚动条'滚动的距离 和 '元素在初始时'距顶部的距离进行判断
       let isSatisfy = scrollTop >= (classGoodToTop - scrollToTop - 5) ? true : false;
       // let isSatisfy = navbarInitTop < 138 ? true : false;
@@ -669,10 +742,10 @@ create.Page(store, {
       this.isSetScroll = false;
     }
   },
-  
+
 
   // 获取楼层距离顶部距离
-  getRecordScrollTop() { 
+  getRecordScrollTop() {
     const query = wx.createSelectorQuery();
     query.select('#home_scroll').boundingClientRect();
     query.select('#classGoods').boundingClientRect().exec((res) => {
@@ -732,5 +805,11 @@ create.Page(store, {
         this.getMiniExamine(true);
       });
     }, 500)
+  },
+
+  tabChange(event) {
+    this.setData({
+      tabActive: event.detail.index
+    })
   },
 })

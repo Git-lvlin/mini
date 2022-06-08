@@ -27,7 +27,8 @@ const url = {
 
   search: '/search/option/opensearch/shopGoodsSearch',
 
-  storeNo: '/store/auth/memberShop/storeData'
+  shopIndexCategory: '/store/option/storeDropShip/shopIndexCategory',
+  shopIndexGoods: '/store/option/storeDropShip/shopIndexGoods',
 }
 
 const getExamine = (params) => {
@@ -181,5 +182,11 @@ export default {
 
   getStoreNo(params, option) {
     return Request.get(url.storeNo, params, option);
+  },
+  shopIndexCategory(params, option) {
+    return Request.post(url.shopIndexCategory, params, option);
+  },
+  shopIndexGoods(params, option) {
+    return Request.post(url.shopIndexGoods, params, option);
   },
 }
