@@ -277,6 +277,7 @@ create.Page(store, {
       orderType,
     } = this.goodParams;
     const pathParam = objToParamStr(this.goodParams);
+    console.log('good.goodsImageUrl', good.goodsImageUrl)
     let info = {
       // title: '',
       title: good && good.goodsName ? good.goodsName : defShareText,
@@ -306,10 +307,12 @@ create.Page(store, {
       console.log('...........shareInfo', shareInfo)
       info.title = info.title == defShareText && good && good.goodsName ? good.goodsName : info.title;
       info.imageUrl = info.imageUrl ? info.imageUrl : good.goodsImageUrl;
+      console.log('.....info.imageUrl', info.imageUrl)
     } else {
       info.path = `${info.path}${pathParam}`;
     }
     if(!!this.canvasImg) {
+      console.log('this.cancasImg', this.canvasImg);
       info.imageUrl = this.canvasImg;
     }
     app.trackEvent('share_goods_detail', {
@@ -704,9 +707,15 @@ create.Page(store, {
       shareInfo,
     } = this.data;
     const that = this;
+    if (!good.goodsImageUrl) {
+      good.goodsImageUrl = good.imageUrl
+    }
     let img = shareInfo.imageUrl ? shareInfo.imageUrl : good.goodsImageUrl;
     img = img?.replace(/^http:\/\//i,'https://');
     let tmpImg = '../../../images/good/logo.png';
+    console.log('shareInfo', shareInfo)
+    console.log('good', good)
+    console.log('绘制分享图片img', img)
     wx.downloadFile({
       url: img,
       success(result) {
