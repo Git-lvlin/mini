@@ -220,7 +220,7 @@
   height: 100%;
   /* overflow: hidden;
   overflow-y: auto; */
-  padding-bottom: 300rpx;
+  /* padding-bottom: 300rpx; */
   box-sizing: border-box;
   flex: 1;
 }
@@ -659,7 +659,7 @@
 }
 
 .tab {
-  flex: 1;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -673,4 +673,11 @@
   margin-top: 10rpx;
   height: 1000rpx;
   overflow-y: auto;
+}
+
+.van-tabs {
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
