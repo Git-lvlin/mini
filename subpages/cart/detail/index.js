@@ -1356,6 +1356,7 @@ create.Page(store, {
       orderType,
       spuId,
       skuId,
+      shareStoreNo,
     } = this.goodParams;
     const {
       selectAddressType,
@@ -1393,7 +1394,8 @@ create.Page(store, {
           orderType: isActivityCome?2:orderType,
           skuNum,
           goodsFromType: good.goodsFromType,
-          isActivityCome: isActivityCome
+          isActivityCome: isActivityCome,
+          shareStoreNo
         }]
       }]
     };
@@ -1412,7 +1414,8 @@ create.Page(store, {
             skuNum,
             groupId: outData.groupId,
             goodsFromType: good.goodsFromType,
-            isActivityCome: isActivityCome
+            isActivityCome: isActivityCome,
+            shareStoreNo
           }]
         }]
       };
@@ -1433,7 +1436,8 @@ create.Page(store, {
             orderType,
             skuNum: outData.skuNum,
             goodsFromType: good.goodsFromType,
-            isActivityCome: isActivityCome
+            isActivityCome: isActivityCome,
+            shareStoreNo
           }]
         }]
       };
