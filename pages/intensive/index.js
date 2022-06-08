@@ -65,6 +65,8 @@ create.Page(store, {
     value: 0,
     showCartPopup: false,
     tabActive: 0,
+    height1: 500,
+    height2: 500,
     invalidList: [
       {
         name: 'dasdasdasd',
@@ -363,6 +365,16 @@ create.Page(store, {
 
       this.setData({
         goodsData2: list,
+      }, () => {
+        const query = wx.createSelectorQuery()
+        query.select('#tabs').boundingClientRect()
+        query.selectViewport().scrollOffset()
+        query.exec((res)=> {
+          this.setData({
+            height1: res[0].height,
+            height2: res[0].height,
+          })
+        })
       })
     })
   },

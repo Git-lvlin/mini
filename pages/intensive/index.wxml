@@ -58,7 +58,7 @@
       <view class="null_text">请选择自提点</view>
     </view>
 
-    <van-tabs active="{{tabActive}}" class="tabs" bind:change="tabChange">
+    <van-tabs active="{{tabActive}}" class="tabs" bind:change="tabChange" id="tabs">
       <van-tab title="到店自提" class="tab">
         <view class="recommend" wx:if="{{recommendData.records.length && !goodsData.length}}"><recommend remindList="{{recommendData}}" /></view>
         <view class="cart_box" wx:else>
@@ -69,7 +69,7 @@
               </view>
             </block>
           </view>
-          <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" wx:if="{{goodsData.length}}">
+          <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" style="height:{{height1}}px; padding-bottom: 120px" wx:if="{{goodsData.length}}">
             <block wx:for="{{goodsData}}" wx:key="index">
               <view class="goods_item_box" data-data="{{item}}" bindtap="onGood">
                 <view class="goods_img_box">
@@ -106,7 +106,7 @@
               </view>
             </block>
           </view>
-          <scroll-view  id="scroll-view2" scroll-y enhanced class="cart_right_box" wx:if="{{goodsData2.length}}">
+          <scroll-view  id="scroll-view2" scroll-y enhanced class="cart_right_box" style="height:{{height2}}px" wx:if="{{goodsData2.length}}">
             <block wx:for="{{goodsData2}}" wx:key="index">
               <view class="goods_item_box" data-data="{{item}}" bindtap="onGood">
                 <view class="goods_img_box">
