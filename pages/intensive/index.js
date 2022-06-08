@@ -262,6 +262,31 @@ create.Page(store, {
     });
   },
 
+  onGood2({
+    currentTarget
+  }) {
+    let {
+      spuId,
+      skuId,
+      activityId,
+      objectId,
+      orderType,
+    } = currentTarget.dataset.data;
+    const { storeNo } = this.data
+    router.push({
+      name: 'detail',
+      data: {
+        spuId,
+        skuId,
+        activityId,
+        objectId,
+        orderType,
+        isCart: 1,
+        shareStoreNo: storeNo,
+      }
+    });
+  },
+
   handleUpdate() {
     this.init(this.data.tabIndexId)
   },

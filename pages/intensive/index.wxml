@@ -108,7 +108,7 @@
           </view>
           <scroll-view  id="scroll-view2" scroll-y enhanced class="cart_right_box" style="height:{{height2}}px" wx:if="{{goodsData2.length}}">
             <block wx:for="{{goodsData2}}" wx:key="index">
-              <view class="goods_item_box" data-data="{{item}}" bindtap="onGood">
+              <view class="goods_item_box" data-data="{{item}}" bindtap="onGood2">
                 <view class="goods_img_box">
                   <image class="goods_img_index" src="{{item.imageUrl}}" />
                 </view>
