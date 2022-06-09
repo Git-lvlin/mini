@@ -116,6 +116,7 @@ create.Page(store, {
     if (takeSpot) {
       this.setData({
         takeSpot,
+        storeNo: takeSpot.storeNo
       });
     }
     // 更新tabbar显示
