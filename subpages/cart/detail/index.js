@@ -112,6 +112,7 @@ create.Page(store, {
     isAlone: '',
     create: '',
     isHome: '',
+    selfStoreNo: '',
   },
 
   onLoad(options) {
@@ -149,6 +150,7 @@ create.Page(store, {
     this.setData({
       userInfo,
     })
+    this.getStoreNo();
     app.trackEvent('shopping_detail');
 
   },
@@ -230,13 +232,21 @@ create.Page(store, {
   },
   getStoreNo () {
     console.log('getStoreNo', this.data.userInfo)
-    if(!this.data.userInfo) {
-      getStorageUserInfo(true);
+    if (!this.data.userInfo) {
+      // getStorageUserInfo(true);
       return;
     }
+
+    if (this.data.userInfo.userType === 0) {
+      return;
+    }
+
     return new Promise((resolve) => {
       intensiveApi.getStoreNo({userType: 1}, {notErrorMsg: true}).then((res) => {
         console.log('getStoreNo-res', res)
+        this.setData({
+          selfStoreNo: res[0].storeNo
+        })
         resolve(res[0])
       }).catch(() => {
         resolve({storeNo: null})
@@ -249,23 +259,32 @@ create.Page(store, {
   async onShareAppMessage({from}) {
     console.log('from', from)
     console.log('点击分享后this.goodParams', this.goodParams)
+    console.log('this.data.selfStoreNo', this.data.selfStoreNo)
     let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
     let {shareStoreNo, ...rest} = this.goodParams
     let all = {};
-    if(takeSpot.storeNo) {
+    if (this.data.selfStoreNo) {
       all = {
         ...rest,
-        shareStoreNo: takeSpot.storeNo
+        shareStoreNo: this.data.selfStoreNo,
       }
     } else {
-      let {storeNo} = await this.getStoreNo()
-      all = {
-        ...rest
-      }
-      if (storeNo) {
-        all.shareStoreNo = storeNo
+      if (takeSpot.storeNo) {
+        all = {
+          ...rest,
+          shareStoreNo: takeSpot.storeNo
+        }
+      } else {
+        let { storeNo } = await this.getStoreNo()
+        all = {
+          ...rest
+        }
+        if (storeNo) {
+          all.shareStoreNo = storeNo
+        }
       }
     }
+    
     console.log('all', all)
     this.goodParams = all
     const {

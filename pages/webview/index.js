@@ -1,4 +1,6 @@
 import router from "../../utils/router";
+import commonApis from '../../apis/common'
+
 
 Page({
   optionsInfo: {},
@@ -9,18 +11,23 @@ Page({
   },
 
   onLoad(options) {
-    if(!options.url) {
-      router.go();
-      return;
+    if (options.scene) {
+      this.getShareParam(options);
+    } else {
+      if (!options.url) {
+        router.go();
+        return;
+      }
+      let link = options.url.includes('%') ? decodeURIComponent(options.url) : options.url;
+      if (options.encode) {
+        link = decodeURIComponent(link)
+      }
+      this.setData({
+        link,
+      });
+      this.optionsInfo = options;
     }
-    let link = options.url.includes('%')?decodeURIComponent(options.url):options.url;
-    if (options.encode) {
-      link = decodeURIComponent(link)
-    }
-    this.setData({
-      link,
-    });
-    this.optionsInfo = options;
+    
   },
 
   onShow() {
@@ -29,6 +36,26 @@ Page({
 
   onHide() {
 
+  },
+
+  getShareParam(data) {
+    commonApis.getShareParam({
+      scene: data.scene,
+    }).then(res => {
+      const options = res;
+      if (!options.url) {
+        router.go();
+        return;
+      }
+      let link = options.url.includes('%') ? decodeURIComponent(options.url) : options.url;
+      if (options.encode) {
+        link = decodeURIComponent(link)
+      }
+      this.setData({
+        link,
+      });
+      this.optionsInfo = options;
+    })
   },
 
   handlePostMsg(event) {
