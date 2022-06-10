@@ -195,6 +195,7 @@ create.Page(store, {
         const payData = res.records;
         const data = {
           payType: this.payType,
+          failJump: false,
         };
         onOrderPay({
           data,
