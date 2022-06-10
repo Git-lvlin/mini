@@ -62,7 +62,7 @@
       <van-tab title="到店自提" class="tab">
         <view class="recommend" wx:if="{{recommendData.records.length && !goodsData.length}}"><recommend remindList="{{recommendData}}" /></view>
         <view class="cart_box" wx:else>
-          <view class="cart_left_box" wx:if="{{goodsData.length>10}}">
+          <view class="cart_left_box" wx:if="{{hasClass}}">
             <block wx:for="{{classData}}" wx:key="index">
               <view class="class_item_box {{item.gcId1==tabIndexId?'left_act':''}}" data-class="{{item}}" bindtap="checkTab">
                 {{item.gcName1}}

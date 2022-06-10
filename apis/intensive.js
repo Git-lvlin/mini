@@ -29,6 +29,7 @@ const url = {
 
   shopIndexCategory: '/store/option/storeDropShip/shopIndexCategory',
   shopIndexGoods: '/store/option/storeDropShip/shopIndexGoods',
+  storeNo: '/store/auth/memberShop/storeData',
 }
 
 const getExamine = (params) => {

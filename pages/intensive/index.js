@@ -113,12 +113,18 @@ create.Page(store, {
   onShow() {
     const takeSpot = wx.getStorageSync("TAKE_SPOT");
     console.log('takeSpot', takeSpot)
-    if (takeSpot) {
+    if (takeSpot.storeNo !== this.data.storeNo) {
       this.setData({
         takeSpot,
-        storeNo: takeSpot.storeNo
+        storeNo: takeSpot.storeNo,
+        tabIndexId: 0,
+        tabIndexId2: 0
       });
     }
+
+    console.log('takeSpot.storeNo', takeSpot.storeNo)
+    console.log('this.data.storeNo', this.data.storeNo)
+    
     // 更新tabbar显示
     router.updateSelectTabbar(this, 2);
     app.trackEvent('tab_intensive');
@@ -134,14 +140,14 @@ create.Page(store, {
 
   // 初始化
   init(id = '') {
-    Promise.all([this.getAllGoodsList(id), this.getGoodsCategory(), this.getSummaryByCartData(), this.getBannerData()]).then((res) => {
+    Promise.all([this.getAllGoodsList(this.data.tabIndexId), this.getGoodsCategory(), this.getSummaryByCartData(), this.getBannerData()]).then((res) => {
       this.setData({
         refresherTriggered: false,
       })
     })
 
     this.shopIndexCategory()
-    this.getAllGoodsList2()
+    this.getAllGoodsList2(this.data.tabIndexId2)
   },
 
   onCloseCartPopup() {
@@ -348,9 +354,11 @@ create.Page(store, {
           }
         })
         console.log('集约商品列表返回', list)
-        if (!this.data.hasClass) {
+        if (gcId1 == 0) {
           if (list.length > 10) {
-            this.setData({ hasClass: 1 })
+            this.setData({ hasClass: true })
+          } else {
+            this.setData({ hasClass: false })
           }
         }
         this.setData({
@@ -395,7 +403,7 @@ create.Page(store, {
         const query = wx.createSelectorQuery()
         query.select('#tabs').boundingClientRect()
         query.selectViewport().scrollOffset()
-        query.exec((res)=> {
+        query.exec((res) => {
           this.setData({
             height1: res[0].height,
             height2: res[0].height,
