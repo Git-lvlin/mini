@@ -352,3 +352,12 @@
 .bold {
   font-weight: bold;
 }
+
+.title-text {
+  padding: 0 32rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  color: #333 !important;
+}

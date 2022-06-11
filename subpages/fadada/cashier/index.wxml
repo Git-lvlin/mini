@@ -22,7 +22,11 @@
         </van-count-down>
       </view> -->
     </view>
-    <van-cell title-class="bold" value-class="bold info_text" title="收款方：" value="法大大在线电子签章云平台" />
+    <!-- <van-cell title-class="bold" value-class="bold info_text" title="收款方：" value="法大大在线电子签章云平台" /> -->
+    <view class="title-text">
+      <view class="">收款方：</view>
+      <view class="">法大大在线电子签章云平台</view>
+    </view>
     <van-cell title-class="bold" label-class="bold" title="付款项说明：" label="法大大平台为入驻合作协议的线上电子签约提供技术服务费，除因法大大技术支撑问题外不支持退款" />
     <view class="pay_content">
       <view class="pay_title">支付方式</view>
