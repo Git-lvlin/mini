@@ -64,7 +64,7 @@ create.Page(store, {
     goodsNum: 0,
     value: 0,
     showCartPopup: false,
-    tabActive: 0,
+    tabActive: 1,
     height1: 500,
     height2: 500,
     invalidList: [
