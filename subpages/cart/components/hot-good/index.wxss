@@ -14,8 +14,8 @@
 }
 
 .hot_icon {
-  width: 40rpx;
-  height: 40rpx;
+  width: 38rpx;
+  height: 38rpx;
   margin-right: 8rpx;
 }
 

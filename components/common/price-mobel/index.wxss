@@ -8,7 +8,7 @@
 }
 
 .price {
-  color: #e5352f;
+  color: #FF0000;
   font-weight: 600;
 }
 

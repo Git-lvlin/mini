@@ -23,7 +23,7 @@ Component({
     },
     color: {
       type: String,
-      value: "#e5352f"
+      value: "#FF0000"
     },
     minSize: {
       type: Number,

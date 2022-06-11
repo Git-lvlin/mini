@@ -1,0 +1,55 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="fresh">
+  <view class="fresh_one" wx:if="{{cent.fresh&&cent.fresh.list.length}}">
+    <view class="title">
+      <view class="title_text">
+        <view class="title_big">1分钱领生鲜</view>
+        <view class="title_"></view>
+        <view class="title_small">限购1份</view>
+      </view>
+      <view class="title_right" data-data="{{cent.title}}" bindtap="onToClass">
+        <view class="right_text">{{cent.title.action}}</view>
+      </view>
+    </view>
+    <view class="item_one" wx:if="{{cent.fresh}}" data-data="{{cent.fresh.list[0]}}" bindtap="onToDetail">
+      <image class="item_one_img" src="{{cent.fresh.list[0].imageUrl}}" />
+      <view class="item_one_right">
+        <view class="one_name text_two_line">{{cent.fresh.list[0].goodsName}}</view>
+        <view class="one_num">{{cent.fresh.list[0].saleNumStr}}</view>
+        <view class="one_price_box">
+          <view class="price-head-red">¥</view>
+          <view class="price-index">{{cent.fresh.list[0].salePrice/100}}</view>
+          <view class="last-price">¥{{cent.fresh.list[0].marketPrice/100}}</view>
+        </view>
+      </view>
+      <view class="one_btn">立即抢购</view>
+    </view>
+  </view>
+  <view class="fresh_two" wx:if="{{spec.fresh&&spec.fresh.list.length}}">
+    <view class="title">
+      <view class="title_text offer_color">
+        <view class="title_big">今日特价生鲜</view>
+        <view class="title_offer"></view>
+        <view class="title_small">先到先得</view>
+      </view>
+      <view class="title_right" data-data="{{spec.title}}" bindtap="onToClass">
+        <view class="right_text">{{spec.title.action}}</view>
+      </view>
+    </view>
+    <view class="item_one" wx:if="{{spec.fresh}}" data-data="{{spec.fresh.list[0]}}" bindtap="onToDetail">
+      <image class="item_one_img" src="{{spec.fresh.list[0].imageUrl}}" />
+      <view class="item_one_right">
+        <view class="one_name text_two_line">{{spec.fresh.list[0].goodsName}}</view>
+        <view class="one_num">{{spec.fresh.list[0].saleNumStr}}</view>
+        <view class="one_price_box">
+          <view class="price-head-red">¥</view>
+          <view class="price-index">{{spec.fresh.list[0].salePrice/100}}</view>
+          <view class="last-price">¥{{spec.fresh.list[0].marketPrice/100}}</view>
+        </view>
+      </view>
+      <view class="one_btn">立即抢购</view>
+    </view>
+  </view>
+  <view class="fresh_tab"></view>
+</view>

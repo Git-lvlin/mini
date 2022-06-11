@@ -9,10 +9,6 @@ create.Page(store, {
   use: [
     'systemInfo',
   ],
-  redPage: {
-    hasNext: false,
-    next: '',
-  },
   goodPage: {
     page: 1,
     size: 10,
@@ -26,8 +22,10 @@ create.Page(store, {
     resPopupActType: 1,
     rulePopup: false,
     redDetailPopup: false,
-    redUseType: '',
+    redUseType: 0,
     redUseList: [],
+    hasNext: false,
+    next: 0,
   },
 
   onLoad(options) {
@@ -36,10 +34,15 @@ create.Page(store, {
 
   onShow() {
     this.getSignInfo();
-    this.getQueryRecord(true);
     app.trackEvent('mine_sign_in_detail');
   },
-  
+  handleScrollTop() {
+    wx.pageScrollTo({
+      scrollTop: 350,
+      // selector: '.good_content_back',
+      // offsetTop: -200
+    })
+  },
   // 获取签到信息
   getSignInfo(isRevice) {
     let resPopupActType = 1;
@@ -52,7 +55,8 @@ create.Page(store, {
         index < 7 && signList.push({
           value: util.divide(+item + (+extraList[index]), 100),
           hasGife: !!(+extraList[index]),
-          isSign: index < signInfo.signNumber
+          isSign: index < signInfo.signNumber,
+          isToday: signInfo.signNumber + 1 > index && signInfo.signNumber -1 !== index,
         })
       })
       signInfo.signAmount = util.divide(signInfo.signAmount, 100);
@@ -79,21 +83,19 @@ create.Page(store, {
     let {
       redUseType,
       redUseList,
-    } = this.data;
-    const {
       next,
-    } = this.redPage;
-    const data = {};
+    } = this.data;
+    let param = {};
     if(!!redUseType) {
-      data.recordType = redUseType;
+      param.recordType = redUseType;
     }
     if(!!next) {
-      data.next = next;
+      param.next = next;
     }
-    activityApi.getQueryRecord(data).then(res => {
+    console.log('获取红包明细请求参数', param)
+    activityApi.getQueryRecord(param).then(res => {
+      console.log('获取红包明细返回参数', res)
       let list = res.records;
-      this.redPage.hasNext = res.hasNext;
-      this.redPage.next = res.next || '';
       list.forEach(item => {
         item.changeValue = util.divide(item.changeValue, 100);
       })
@@ -104,6 +106,8 @@ create.Page(store, {
       }
       this.setData({
         redUseList,
+        hasNext: res.hasNext,
+        next: res.next || '',
       });
     });
   },
@@ -145,7 +149,8 @@ create.Page(store, {
   handleScrollBottom() {
     const {
       hasNext,
-    } = this.redPage;
+    } = this.data;
+    console.log('明细滚动到底部', this.data)
     if(hasNext) {
       this.getQueryRecord();
     }
@@ -204,15 +209,21 @@ create.Page(store, {
     const {
       type
     } = currentTarget.dataset;
-    this.setData({
-      redUseType: type
-    }, () => {
+    let param = {
+      redUseType: type,
+    };
+    if (this.data.redUseType !== type){
+      param.next = 0
+    }
+    console.log('切换tab更新参数', param)
+    this.setData(param, () => {
       this.getQueryRecord(true);
     })
   },
 
   // 打开使用明细
   onOpenDetailRed() {
+    this.getQueryRecord(true);
     this.setData({
       redDetailPopup: true
     })

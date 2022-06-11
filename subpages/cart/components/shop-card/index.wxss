@@ -30,6 +30,10 @@
 }
 
 .item {
+  margin-top: 40rpx;
+}
+.item:first-child {
+  margin-top: 0;
 }
 
 .good_img {

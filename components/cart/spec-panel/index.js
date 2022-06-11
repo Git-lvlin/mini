@@ -43,21 +43,19 @@ create.Component(store, {
     //   return quantity
     // },
   },
-  
+
   properties: {
     good: {
       type: Object,
       value: {},
-      observer(now, old) {
-        if(now.isMultiSpec == 1) {
-          const skuId = this.data.skuId;
-          debounce(() => {
-            this.getCheckSku({
-              skuId,
-            });
-          }, 200)();
-        }
-      }
+      // observer(now, old) {
+      //   if(now.isMultiSpec == 1) {
+      //     const skuId = this.data.skuId;
+      //     this.getCheckSku({
+      //       skuId,
+      //     });
+      //   }
+      // }
     },
     skuId: {
       type: String,
@@ -68,6 +66,25 @@ create.Component(store, {
       type: String,
       value: "",
     },
+    create: {
+      type: Number,
+      value: 0,
+      observer(now, old) {
+        console.log('create-now', now)
+      }
+    },
+    isAlone: {
+      type: Number,
+      value: 0,
+      observer(now, old) {
+        console.log('now', now)
+        if(now != old) {
+          this.getCheckSku({
+            orderType: now?2:this.data.good.orderType
+          });
+        }
+      }
+    }
   },
 
   data: {
@@ -77,7 +94,17 @@ create.Component(store, {
     curSku: {},
     // currentCart: [],
   },
-
+  lifetimes: {
+    ready() {
+      console.log('ready')
+      console.log('isAlone', this.data.isAlone)
+      if (this.data.good.isMultiSpec === 1) {
+        this.getCheckSku({
+          skuId: this.data.good.skuId,
+        });
+      }
+    }
+  },
   methods: {
     // 获取sku列表
     getCheckSku(data, fristLoad = true) {
@@ -87,6 +114,7 @@ create.Component(store, {
       } = this.data;
       const postData = {
         id: good.id,
+        spuId: good.spuId,
         orderType: good.orderType,
         objectId: good.objectId,
         activityId: good.activityId,
@@ -200,11 +228,15 @@ create.Component(store, {
     },
 
     onConfirm() {
+      console.log('onConfirm')
+      console.log('isAlone', this.data.isAlone)
       const {
         good,
         specType,
         curSku,
         skuNum,
+        isAlone,
+        create,
       } = this.data;
       if(specType === "buy") {
         this.triggerEvent("setSku", {
@@ -215,10 +247,15 @@ create.Component(store, {
           buyMaxNum: curSku.buyMaxNum,
           buyMinNum: curSku.buyMinNum,
         });
-        this.triggerEvent("specBuy", {
+
+        let param = {
           skuId: curSku.id,
           skuNum,
-        });
+          isAlone,
+          create,
+        }
+        this.triggerEvent("specBuy", param);
+
       } else if(specType === "add") {
         this.triggerEvent("setSku", {
           skuId: curSku.id,

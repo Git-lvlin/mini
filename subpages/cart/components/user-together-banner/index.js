@@ -8,7 +8,7 @@ Component({
       observer(nVal, oVal) {
         if(JSON.stringify(nVal) != JSON.stringify(oVal)) {
           const nowTime = new Date().getTime();
-          if(this.data.orderType == 15) {
+          if(this.data.orderType == 15 || this.data.orderType == 3) {
             nVal.forEach(item => {
               item.leaveStr = getRelativeTime(nowTime - item.leaveTime);
             })

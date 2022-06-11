@@ -1,0 +1,13 @@
+<van-cell title="签写流程说明" label="请先确认供应商名称和手机号，然后预览入驻合作协议具体内容，确认无误后支付签写入驻电子合同的费用，支付成功后进入法大大平台进行企业认证和具体的合同签写。" border="{{ false }}" />
+<view class="block"></view>
+<van-cell title="供应商名称" value="{{contractDetail.name}}" />
+<van-cell title="供应商手机" value="{{contractDetail.phone}}" />
+<van-cell title="入驻编号" value="{{contractDetail.pactNo}}" />
+<van-cell title="合同签订状态" value="{{contractDetail.signStatusDesc}}" />
+<view class="bottom_confirm" wx:if="{{contractDetail.signStatus === 2 && contractDetail.payStatus === 2}}">
+  <view class="comfirm_btn" bind:tap="sign">立即签订</view>
+</view>
+<view class="bottom_confirm" wx:if="{{contractDetail.signStatus === 2 && contractDetail.payStatus < 2}}">
+  <view class="comfirm_btn" bind:tap="pactUrl">查看入驻合作协议</view>
+</view>
+<!-- <web-view src="{{contractDetail.pactUrl}}" /> -->

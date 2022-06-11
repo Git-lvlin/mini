@@ -27,7 +27,7 @@
       <view class="flex_fix right_arrow user_head_right" />
     </view>
 
-    <view class="flex_center user_data">
+    <!-- <view class="flex_center user_data">
       <block
         wx:for="{{userData}}"
         wx:key="index"
@@ -43,7 +43,7 @@
         </view>
         <view class="flex_fix data_item_line" wx:if="{{index != 0 && index != userData.length - 1}}" />
       </block>
-    </view>
+    </view> -->
 
     <view class="order">
         <!-- value="查看全部"

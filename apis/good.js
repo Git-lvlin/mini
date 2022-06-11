@@ -22,6 +22,7 @@ const url = {
   intensiveUser: "/goods/option/goodsRandomVirtual",
   personalDetail: "/activity/option/group/personal/goodsInfo",
   pushTogether: "/activity/auth/group/createSingle",
+  checkout: "/activity/auth/group/personal/checkMemberOrder",
   memberList: "/activity/option/group/personal/memberList",
   teamDetail: "/activity/option/group/personal/info",
   posterDetail: "/activity/option/group/poster",
@@ -45,6 +46,7 @@ const url = {
   businessDetail: "/store/option/v2/wholesale/productDetail",
 
   nearbyStore: "/store/option/memberShop/nearby",
+  nearbyWords: "/store/option/memberShop/nearbywords",
 
   commentTotal: "/cms/option/comment/findAllCount",
   detailComment: "/cms/option/comment/getTwoComment",
@@ -52,9 +54,15 @@ const url = {
   commentListTotal: "/cms/option/comment/findCount",
   commentDetail: "/cms/option/comment/findCommentDetail",
   fabulous: "/cms/auth/comment/point",
+
+  cancel: "/order/auth/cancelOrder",
 }
 
 export default {
+  // 取消订单
+  cancelOrder(params, option) {
+    return Request.post(url.cancel, params, option);
+  },
   // 获取一级二级分类
   getCategory(params, option) {
     return Request.get(url.category, params, option);
@@ -130,6 +138,10 @@ export default {
   pushTogether(params, option) {
     return Request.post(url.pushTogether, params, option);
   },
+  // 检查待支付订单
+  getHasOrderInfo(params, option) {
+    return Request.post(url.checkout, params, option);
+  },
   // 获取单约列表
   getTogetherList(params, option) {
     return Request.post(url.memberList, params, option);
@@ -150,7 +162,7 @@ export default {
   getIntensiveUser(params, option) {
     return Request.post(url.intensiveUser, params, option);
   },
-
+  
 
   // 获取详情比价信息
   getDetailRatio(params, option) {
@@ -211,6 +223,10 @@ export default {
   // 获取一定范围内的店铺数
   getNearbyStore(params, option) {
     return Request.get(url.nearbyStore, params, option);
+  },
+  // 获取一定范围内的店铺数
+  getNearbyWords(params, option) {
+    return Request.get(url.nearbyWords, params, option);
   },
 
   // 获取商品详情评价总数

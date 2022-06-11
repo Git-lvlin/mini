@@ -196,6 +196,7 @@ create.Page(store, {
       return;
     }
     const eventData = event.detail || {};
+    console.log('eventData', eventData)
     const agreenLogin = eventData.errMsg == "getPhoneNumber:ok" ? true : false;
     const scene = wx.getStorageSync("SHARE_SCENE") || "";
     if(!!scene && agreenLogin) {
@@ -256,6 +257,7 @@ create.Page(store, {
       encryptedData: uInfo.encryptedData,
       iv: uInfo.iv,
       openId: uInfo.openId,
+      wxUId: uInfo.uId,
     };
     if(isInvite) {
       data.inviteCode = inviteInfo.inviteCode;

@@ -1,0 +1,12 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "nav-bar": "/components/common/nav-bar/index",
+    "price-mobel": "/components/common/price-mobel/index",
+    "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
+    "van-count-down": "/miniprogram_npm/@vant/weapp/count-down/index",
+    "down-app-code": "/components/common/default-down-app-code/index",
+    "count-down": "/components/common/count-down/index",
+    "van-cell": "/miniprogram_npm/@vant/weapp/cell/index"
+  }
+}

@@ -10,10 +10,11 @@
     bindscrolltolower="handleScrollBottom"
   >
     <view class="position banner_content" id="detailTop">
+
       <image
         class="back_icon"
         style="top: {{backTopHeight}}rpx"
-        src="{{tools.getImgUrl('miniprogram/cart/good_back.png')}}"
+        src="{{currentPages>1?tools.getImgUrl('miniprogram/cart/good_back.png'):tools.getImgUrl('miniprogram/cart/good_back_home.png')}}"
         bindtap="onToBack"
       />
       <user-together-banner
@@ -87,7 +88,7 @@
           <view class="b_min_buy">{{good.buyMinNum}}{{good.unit}}起订</view>
         </view>
       </view>
-      <view class="intensive_time">
+      <!-- <view class="intensive_time" wx:if="{{!isCart && !isHome}}">
         <image class="intensive_time_back" src="{{tools.getImgUrl('miniprogram/cart/jiyue_time.png?v=2021')}}" />
         <view class="flex_center intensive_time_box ">
           <view class="intensive_time_text">距活动结束仅剩</view>
@@ -99,7 +100,7 @@
             />
           </view>
         </view>
-      </view>
+      </view> -->
     </view>
     <view class="good_head">
       <!-- 普通商品价格 -->
@@ -111,9 +112,9 @@
         <!-- <view class="sales">月售188{{good.unit}}</view> -->
         <view class="sales">{{good.spuSaleNumStr}}</view>
       </view>
-      <view class="good_info">
+      <view class="good_info" wx:if="{{isActivityGood != 3}}">
         <!-- 商品标题 -->
-        <view class="good_title">
+        <view class="good__">
           <view class="text">{{good.goodsName}}</view>
           <view class="flex_middle good_desc_box">
             <view class="desc_text text_one_line">{{good.goodsDesc}}</view>
@@ -124,6 +125,35 @@
           </view>
         </view>
       </view>
+      <view class="good_info" wx:else>
+        <!-- 商品标题 -->
+        <view class="good_p">
+          <view class="good_p__">
+            <van-image
+              wx:if="{{good.memberType}}"
+              class="good_p_name_head_icon"
+              width="80rpx"
+              height="32rpx"
+              src="{{tools.getImgUrl('miniprogram/common/icon/new.png')}}"
+            />
+            <view class="text">{{good.goodsName}}</view>
+          </view>
+          <view class="good_p_two">
+            <view class="good_p_two_l">
+              <view class="good_p_red_bag">
+                <van-image
+                  width="100%"
+                  height="100%"
+                  src="{{tools.getImgUrl('miniprogram/common/icon/redbag.png')}}"
+                />
+              </view>
+              <view>{{good.groupNum}}人团</view>
+            </view>
+            <view class="good_p_two_r">{{good.goodsSaleNumStr+'件'}}</view>
+          </view>
+        </view>
+      </view>
+
       <!-- 集约进度 -->
       <!-- <view class="flex_middle intensive_progress" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}">
         <view class="progress_box">
@@ -178,7 +208,7 @@
       <!-- <view class="store_price" wx:if="{{isActivityGood == 2 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11 || isActivityGood == 17 || isActivityGood == 18}}"> -->
       <view class="store_price" wx:if="{{isActivityGood != 1 && isActivityGood != 5 && isActivityGood != 6 && isActivityGood != 15 && isActivityGood != 16}}">
         <view class="flex_middle" style="flex: 1;">
-          <view class="store_price_title">{{ utils.getPriceTitle(isActivityGood) }}</view>
+          <view class="store_price__">{{ utils.getPrice_(isActivityGood) }}</view>
           <price-mobel
             money="{{good.activityPrice != undefined ? good.activityPrice : good.goodsSaleMinPrice}}"
             marketMoney="{{isActivityGood == 2 ? 0 : good.goodsMarketPrice}}"
@@ -212,8 +242,19 @@
           </view>
         </view> -->
       </view>
+
       <view class="sec_market_price" wx:if="{{isActivityGood == 2}}">
         市场价<text class="line_text">￥{{tools.priceToF2(good.goodsMarketPrice || 0, false)}}</text>
+      </view>
+      <view class="new_p_tips" wx:if="{{isActivityGood == 3 && good.memberTypeStr}}">
+        <view class="new_p_tips_icon">
+          <van-image
+            width="100%"
+            height="100%"
+            src="{{tools.getImgUrl('miniprogram/common/icon/new_tips.png')}}"
+          />
+        </view>
+        <view class="new_p_tips_text">{{good.memberTypeStr}}</view>
       </view>
     </view>
 
@@ -223,7 +264,7 @@
     <view class="spec_conetnt" wx:if="{{good.isMultiSpec == 1 || refuseText || ((isActivityGood == 5 || isActivityGood == 6) && good.extend && good.extend.stockText) || (isActivityGood != 15 && isActivityGood != 16)}}">
       <view
         class="flex_middle info_bar"
-        wx:if="{{good.isMultiSpec == 1}}"
+        wx:if="{{good.isMultiSpec == 1 && isActivityGood != 3}}"
         bindtap="openSpecPopup"
       >
         <view class="flex_fix info_bar_name">已选</view>
@@ -276,7 +317,7 @@
     
     <!-- 集约提货地址 -->
     <view class="flex_middle pick_info" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" >
-      <view class="flex_fix pick_info_title">选择配送方式：</view>
+      <view class="flex_fix pick_info__">选择配送方式：</view>
       <view class="flex_middle pick_way">
         <view
           class="flex_middle pick_way_item {{!item.status ? '' : 'way_item_act'}}"
@@ -304,12 +345,25 @@
     
     <!-- <store-panel storeInfo="{{storeInfo}}" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" /> -->
     
+    <!-- 拼团须知 -->
+    <block wx:if="{{isActivityGood == 3}}">
+      <view class="space_20" />
+      <view class="buy_together" bindtap="onOpenRule">
+        <view class="together_head">
+          <view class="rule-head">拼团须知</view>
+          <view class="rule-title">开团或参团，人满发货，人不满退款</view>
+          <view class="together_more"><image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" /></view>
+        </view>
+      </view>
+    </block>
+
     <!-- 拼单列表 -->
     <block wx:if="{{(isActivityGood == 3 || isActivityGood == 4) && !!personalList.length}}">
       <view class="space_20" />
       <view class="buy_together">
         <view class="together_head">
-          <view class="together_title">{{personalList.length}}人正在拼单，立即参与</view>
+          <image class="together_icon" src="{{tools.getImgUrl('miniprogram/common/icon/together-icon.png')}}" />
+          <view class="together_title">{{personalList.length}}人正在拼团，可直接参与</view>
           <view class="together_more" bindtap="onOpenTeam">查看全部<image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" /></view>
         </view>
         <block
@@ -319,6 +373,7 @@
           <together-item
             data="{{item}}"
             bind:toBuy="onOpenTogether"
+            bind:toShare="clickShare"
           />
         </block>
       </view>
@@ -379,8 +434,11 @@
 
     <!-- 选择规格 bind:specAdd="specUpdateCart" -->
     <spec-panel
+      wx:if="{{good.id}}"
       good="{{good}}"
       skuId="{{skuId}}"
+      isAlone="{{isAlone}}"
+      create="{{create}}"
       specType="{{specType}}"
       bind:specBuy="onToCreate"
       bind:setSku="setCurrentSku"
@@ -399,7 +457,7 @@
         <image class="bar_item_icon" src="{{tools.getImgUrl('miniprogram/common/mini_cart.png')}}" />
         <view class="bar_item_name">购物车</view>
       </view> -->
-      <block wx:if="{{isActivityGood != 5 && isActivityGood != 6}}">
+      <block wx:if="{{isActivityGood != 5 && isActivityGood != 6 && isActivityGood != 3}}">
         <view
           class="flex_fix buy_bar_item"
           wx:if="{{isActivityGood == 11}}"
@@ -448,33 +506,62 @@
             src="{{personalList[0].icon}}"
           />
         </view>
-        <view class="together_num">还差{{personalList[0].distanceNum}}人拼成</view>
+        <view class="together_num">还差{{personalList[0].distanceNum}}人成团</view>
         <count-down
           time="{{ personalList[0].distancetime }}"
           isFull
         />
+        <!-- <view
+          wx:if="{{personalList[0].groupJoined}}"
+          data-data="{{personalList[0]}}"
+          class="together_btn together_btn_share"
+          bindtap="clickShare"
+        >
+          <button open-type="share">
+            去邀请<view class="right_arrow"/>
+          </button>
+        </view> -->
+        <view class="button_box" data-id="{{personalList[0].groupId}}" bindtap="bottomClickShare" wx:if="{{personalList[0].groupJoined}}">
+          <button class="button_index" open-type="share">
+            <view class="share_sm_btn">
+              去邀请<view class="right_arrow"/>
+            </view>
+          </button>
+        </view>
         <view
+          wx:else
           data-data="{{personalList[0]}}"
           class="together_btn"
           bindtap="onOpenTogether"
-        >去拼单<view class="right_arrow"/></view>
+        >去参团<view class="right_arrow"/></view>
       </view>
       <view class="flex_middle together_order_btn">
-        <view
+        <!-- <view
           class="flex_center order_btn_item"
           data-type="alone"
           bindtap="onToCreate"
+        > -->
+        <view
+          class="flex_center order_btn_item"
+          data-type="alone"
+          data-data="{{personalList[0]}}"
+          bindtap="openSpecPopup"
         >
-          <view class="mar_price">￥{{tools.priceToF2(good.goodsSaleMinPrice)}}</view>
+          <view class="mar_price">￥{{tools.priceToF2(good.goodsSaleMinPrice || 0, false)}}</view>
           <view class="mar_price">单独购买</view>
         </view>
-        <view
+        <!-- <view
           class="flex_center order_btn_item together_buy_btn"
           data-data="{{personalList[0]}}"
           bindtap="onPushTogether"
+        > -->
+        <view
+          class="flex_center order_btn_item together_buy_btn"
+          data-type="create"
+          bindtap="openSpecPopup"
         >
-          <view class="mar_price">￥{{tools.priceToF2(good.activityPrice)}}</view>
-          <view class="mar_price" >发起拼单</view>
+          <view class="mar_price">￥{{tools.priceToF2(good.activityPrice || 0, false)}}</view>
+          <view class="mar_price" >我要开团</view>
         </view>
       </view>
     </view>
@@ -493,7 +580,7 @@
 
   <!-- 可拼团列表 -->
   <team-popup
-    list="{{personalList}}"
+    list="{{fiveList}}"
     show="{{showTeamPopup}}"
     bind:close="handleCloseTeamPopup"
     bind:toBuy="onOpenTogether"
@@ -506,6 +593,37 @@
     bind:close="handleCloseTogetherPopup"
     bind:jump="onToCreate"
   />
+
+  <!-- <van-popup
+    show="{{orderShow}}"
+    position="bottom"
+    closeable
+    bind:close="closeOrderPopup"
+  >
+    <view class="order-popup">
+      <view class="top-box">
+        <view class="title">你有订单占用购买名额</view>
+        <view class="subtitle">请先支付或取消以下订单</view>
+      </view>
+      <view class="content-box">
+        <view class="goods-pic">
+          <image src="{{tools.getImgUrl('miniprogram/common/mini_store.png')}}" />
+        </view>
+        <view class="goods-detail">
+          <view class="goods-name"></view>
+          <view class="goods-spe"></view>
+          <view class="pay-time">
+            <text class="">待支付：¥{{28.80}}</text>
+            <text>剩余</text>
+            <count-down
+              time="{{ personalList[0].distancetime }}"
+              isFull
+            />
+          </view>
+        </view>
+      </view>
+    </view>
+  </van-popup> -->
 
   <!-- 不销售区域 -->
   <van-popup
@@ -525,6 +643,38 @@
           wx:key="index"
         >{{item.areaName}}；</view>
       </view>
+    </view>
+  </van-popup>
+  <!-- 有未支付拼团订单 -->
+  <van-popup
+    show="{{ showHasOrderPopup }}"
+    position="bottom"
+    round
+    closeable
+    safe-area-inset-bottom
+    bind:close="onCloseHasOrder"
+  >
+    <view class="has_order_popup">
+      <view class="title-box">
+        <view class="has_order_popup_title">你有订单占用购买名额</view>
+        <view class="has_order_popup_subtitle">请先支付或取消以下订单</view>
+      </view>
+      <view class="has_order_popup_item" wx:if="{{hasOrderData.curGoods}}">
+        <image class="has_order_popup_img" src="{{hasOrderData.curGoods.imageUrl}}" />
+        <view class="has_order_popup_item_right">
+          <view class="has_order_popup_goods_name">{{hasOrderData.curGoods.goodsName}}</view>
+          <view class="has_order_popup_goods_detail">{{hasOrderData.curGoods.goodsDesc}}</view>
+          <view class="has_order_popup_price">
+            <text>待支付：</text>
+            <text class="has_order_popup_money">¥{{hasOrderData.curGoods.activityPrice/100}}</text>
+          </view>
+          <view class="has_order_popup_price">
+            <text>剩余</text><count-down time="{{(hasOrderData.distancetime*1000) || 0}}" isFull />
+          </view>
+        </view>
+      </view>
+      <view class="has_order_popup_btn_y" bindtap="hasOrderPay">去支付</view>
+      <view class="has_order_popup_btn_n" bindtap="cancel">取消订单</view>
     </view>
   </van-popup>
 </view>

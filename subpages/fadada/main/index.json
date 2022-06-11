@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "供应商签写入驻合同",
+  "usingComponents": {
+    "van-cell": "/miniprogram_npm/@vant/weapp/cell/index"
+  }
+}

@@ -10,7 +10,7 @@ export const SYS_ENV = 'pro';
 export const CHANGE_ENV = false;
 
 // 小程序版本号
-export const VERSION = "2.5.0";
+export const VERSION = "2.5.5";
 
 // 服务器接口域名S
 export const baseApi = {
@@ -41,6 +41,7 @@ export const CODE_SCENE = {
   1048: true,
   // 扫描手机相册中选取的小程序码
   1049: true,
+  1007: true,
 }
 
 

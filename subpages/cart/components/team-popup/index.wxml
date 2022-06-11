@@ -14,5 +14,6 @@
         bind:toBuy="onToCreate"
       />
     </block>
+    <view class="bottom_text" wx:if="{{list.length > 4}}">—— 仅展示5个可参与的拼团 ——</view>
   </view>
 </van-popup>

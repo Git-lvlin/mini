@@ -139,6 +139,11 @@
           />
         </view>
 
+        <!-- 1分钱&特价 生鲜活动 -->
+        <view wx:if="{{item.floorType === 17}}">
+          <fresh-cube floor="{{item}}" />
+        </view>
+
         <!-- 活动金刚区 -->
         <view wx:if="{{item.floorType === 12}}">
           <activity-cube floor="{{item}}" />

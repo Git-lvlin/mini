@@ -6,19 +6,19 @@ export const orderList = [
     icon: `${IMG_CDN}miniprogram/user/wait_pay.png`,
     name: "待付款",
     subNum: 0,
-  // },{
-  //   icon: `${IMG_CDN}miniprogram/user/wait_share.png`,
-  //   name: "待分享",
-  //   subNum: 0,
   },{
+      icon: `${IMG_CDN}miniprogram/user/wait_share.png`,
+      name: "待分享",
+      subNum: 0,
+  }, {
     icon: `${IMG_CDN}miniprogram/user/wait_push.png`,
-    name: "待发货",
+    name: "待收货",
     subNum: 0,
-  },{
+  }, {
     icon: `${IMG_CDN}miniprogram/user/finish.png`,
     name: "已完成",
     subNum: 0,
-  },{
+  }, {
     icon: `${IMG_CDN}miniprogram/user/service.png?v=20210617`,
     name: "售后/退款",
     subNum: 0,
@@ -33,6 +33,14 @@ export const orderList = [
  * path string 地址名
 */
 export const otherSetting = [
+  {
+    // icon: `${IMG_CDN}miniprogram/user/setting.png?v=202106170`,
+
+    icon: `${IMG_CDN}miniprogram/user/xcoupon.png?v=20220525`,
+    name: "我的红包",
+    type: 1,
+    path: "coupon",
+  },
   {
     icon: `${IMG_CDN}miniprogram/user/address.png?v=202106170`,
     name: "收货地址",

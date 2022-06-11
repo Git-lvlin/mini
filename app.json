@@ -46,7 +46,8 @@
         "popularGood/index",
         "classGood/index",
         "evaluate/index",
-        "evaluateDetail/index"
+        "evaluateDetail/index",
+        "storeSearch/index"
       ]
     },
     {
@@ -57,6 +58,13 @@
         "changePhone/index",
         "information/index",
         "coupon/index"
+      ]
+    },
+    {
+      "root": "subpages/fadada",
+      "pages": [
+        "main/index",
+        "cashier/index"
       ]
     }
   ],
@@ -110,6 +118,12 @@
         "text": "秒杀",
         "iconPath": "/images/tabbar/seckill.png",
         "selectedIconPath": "/images/tabbar/actSeckill.png"
+      },
+      {
+        "pagePath": "pages/intensive/index",
+        "text": "集约",
+        "iconPath": "/images/tabbar/intensive-new.png",
+        "selectedIconPath": "/images/tabbar/intensive-new-act.png"
       },
       {
         "pagePath": "pages/user/index",

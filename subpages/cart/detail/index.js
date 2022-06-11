@@ -2,17 +2,18 @@ import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
 import homeApi from '../../../apis/home'
-import { IMG_CDN, DETAIL_SERVICE_LIST } from '../../../constants/common'
+import intensiveApi from '../../../apis/intensive'
+import { IMG_CDN, DETAIL_SERVICE_LIST, H5_HOST, webHost } from '../../../constants/common'
 import { CODE_SCENE } from '../../../constants/index'
 import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj, haveStore, debounce } from '../../../utils/tools'
+import { getPayInfo } from '../../../utils/orderPay'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
 import commonApis from '../../../apis/common'
-
 const shareBack = '../../../images/good/good_share_back.png'
 const shareBtn = '../../../images/good/good_share_btn.png'
 const defShareText = '约购超值集约！约着买 更便宜~'
-
+const shareBtn_pt = '../../../images/good/btn.png'
 const app = getApp();
 create.Page(store, {
   goodParams: {},
@@ -27,7 +28,7 @@ create.Page(store, {
     size: 20,
   },
   canvasImg: '',
-
+  indexStoreNo: '',
   use: [
     "systemInfo",
     // "cartList",
@@ -35,6 +36,7 @@ create.Page(store, {
     // "goodListTotal",
   ],
 
+  shareStoreNo: '',
   computed: {
     // quantity: ({
     //   options,
@@ -98,6 +100,19 @@ create.Page(store, {
     // 滚动到某个ID
     scrollToId: '',
     recommendList: [],
+    paramId: 1,
+    indexObjectId: 0,
+    shareInfo_pt: '',
+    fiveList: [],
+    showHasOrderPopup: false,
+    hasOrderData: {},
+    currentPages: [],
+    inviteCode: '',
+    isCart: '',
+    isAlone: '',
+    create: '',
+    isHome: '',
+    selfStoreNo: '',
   },
 
   onLoad(options) {
@@ -115,6 +130,11 @@ create.Page(store, {
     }else{
       this.hanldeGoodsParams(options)
     }
+
+    this.setData({
+      currentPages: getCurrentPages().length
+    })
+
   },
 
   onShow() {
@@ -130,7 +150,9 @@ create.Page(store, {
     this.setData({
       userInfo,
     })
+    this.getStoreNo();
     app.trackEvent('shopping_detail');
+
   },
 
   // 基础数据
@@ -138,13 +160,25 @@ create.Page(store, {
     let { systemInfo } = this.store.data;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
     this.goodParams = options;
+    console.log('hanldeGoodsParams', this.goodParams)
     let isActivityGood = 1;
     if(!!options.orderType) isActivityGood = options.orderType;
+    console.log('isActivityGood', isActivityGood)
     this.setData({
       backTopHeight,
       isActivityGood,
       skuId: options.skuId,
+      isCart: options.isCart || '',
+      isHome: options.isHome || '',
+    }, () => {
+      console.log('isActivityGood', isActivityGood)
     })
+    if (options && options.shareStoreNo) {
+      this.shareStoreNo = options.shareStoreNo
+      app.trackEvent('shopping_detail_share', {
+        shareStoreNo: options.shareStoreNo
+      });
+    }
     if(options && options.inviteCode) {
       wx.setStorageSync("INVITE_INFO", {
         inviteCode: options.inviteCode,
@@ -161,7 +195,14 @@ create.Page(store, {
        });
       return;
     }
-    this.getGoodDetail();
+    if (options.shareMemberId && options.shareStoreNo) {
+      this.getGoodDetail({
+        shareId: options.shareMemberId,
+        shareStoreNo: options.shareStoreNo,
+      });
+    } else {
+      this.getGoodDetail();
+    }
     if(options.orderType != 5 && options.orderType != 6) {
       this.getDetailImg();
     }
@@ -171,17 +212,91 @@ create.Page(store, {
       this.getTogetherUser();
     }
   },
+  clickShare(e) {
+    console.log('e', e)
+    if (e&&e.detail) {
+      console.log('e.detail',e.detail, e.detail.groupId)
+      this.setData({
+        indexObjectId: e.detail.groupId
+      })
+    }
+  },
+  bottomClickShare(e) {
+    console.log('e', e)
+    if (e&&e.currentTarget) {
+      console.log('indexObjectId',e.currentTarget.dataset.id)
+      this.setData({
+        indexObjectId: e.currentTarget.dataset.id
+      })
+    }
+  },
+  getStoreNo () {
+    console.log('getStoreNo', this.data.userInfo)
+    if (!this.data.userInfo) {
+      // getStorageUserInfo(true);
+      return;
+    }
+
+    if (this.data.userInfo.userType === 0) {
+      return;
+    }
+
+    return new Promise((resolve) => {
+      intensiveApi.getStoreNo({userType: 1}, {notErrorMsg: true}).then((res) => {
+        console.log('getStoreNo-res', res)
+        this.setData({
+          selfStoreNo: res[0].storeNo
+        })
+        resolve(res[0])
+      }).catch(() => {
+        resolve({storeNo: null})
+      })
+    })
+
+  },
 
   // 转发
-  onShareAppMessage() {
+  async onShareAppMessage({from}) {
+    console.log('from', from)
+    console.log('点击分享后this.goodParams', this.goodParams)
+    console.log('this.data.selfStoreNo', this.data.selfStoreNo)
+    let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
+    let {shareStoreNo, ...rest} = this.goodParams
+    let all = {};
+    if (this.data.selfStoreNo) {
+      all = {
+        ...rest,
+        shareStoreNo: this.data.selfStoreNo,
+      }
+    } else {
+      if (takeSpot.storeNo) {
+        all = {
+          ...rest,
+          shareStoreNo: takeSpot.storeNo
+        }
+      } else {
+        let { storeNo } = await this.getStoreNo()
+        all = {
+          ...rest
+        }
+        if (storeNo) {
+          all.shareStoreNo = storeNo
+        }
+      }
+    }
+    
+    console.log('all', all)
+    this.goodParams = all
     const {
       good,
       shareInfo,
+      shareInfo_pt
     } = this.data;
     const {
       orderType,
     } = this.goodParams;
     const pathParam = objToParamStr(this.goodParams);
+    console.log('good.goodsImageUrl', good.goodsImageUrl)
     let info = {
       // title: '',
       title: good && good.goodsName ? good.goodsName : defShareText,
@@ -191,25 +306,38 @@ create.Page(store, {
         console.log(res);
       },
     }
-    if(orderType == 3 || orderType == 4) {
+    if(orderType == 3 && from == 'button') {
       info.path = "/subpages/cart/teamDetail/index?";
     }
-    if(shareInfo && shareInfo.path) {
-      info = {
+    if(shareInfo && shareInfo.path && shareInfo_pt) {
+      console.log('path', shareInfo.path)
+      console.log('indexObjectId', this.data.indexObjectId)
+      if (from == 'button') {
+        shareInfo_pt.path = shareInfo_pt.path.includes('objectId=0') && from == 'button'?shareInfo_pt.path.replace('objectId=0', `objectId=${this.data.indexObjectId}`):shareInfo_pt.path
+      }
+      info = from == 'button'?{
+        ...info,
+        ...shareInfo_pt
+
+      }:{
         ...info,
         ...shareInfo
       }
+      console.log('...........shareInfo', shareInfo)
       info.title = info.title == defShareText && good && good.goodsName ? good.goodsName : info.title;
       info.imageUrl = info.imageUrl ? info.imageUrl : good.goodsImageUrl;
+      console.log('.....info.imageUrl', info.imageUrl)
     } else {
       info.path = `${info.path}${pathParam}`;
     }
     if(!!this.canvasImg) {
+      console.log('this.cancasImg', this.canvasImg);
       info.imageUrl = this.canvasImg;
     }
     app.trackEvent('share_goods_detail', {
       share_type: 'weixin'
     });
+    console.log('info', info)
     return info;
   },
 
@@ -219,6 +347,7 @@ create.Page(store, {
       scene: data.scene,
     }).then(res => {
       // const param = strToParamObj(res);
+      console.log('解析分享配置', res)
       const param = res;
       this.setData(param)
       this.hanldeGoodsParams(param)
@@ -286,7 +415,7 @@ create.Page(store, {
       orderType,
       spuId
     } = this.goodParams;
-    if(orderType == 3) return; 
+    if(orderType == 3) return;
     goodApi.getDetailImg({
       spuId,
     }).then(res => {
@@ -297,7 +426,7 @@ create.Page(store, {
   },
 
   // 商品详情  30199 商品不存在
-  getGoodDetail() {
+  getGoodDetail(options = {}) {
     let {
       activityId,
       objectId,
@@ -307,6 +436,7 @@ create.Page(store, {
     } = this.goodParams
     let params = {
       spuId,
+      ...options,
     };
     if(!!skuId) {
       params.skuId = skuId;
@@ -323,24 +453,27 @@ create.Page(store, {
     // 单约详情
     if(orderType == 3) {
       params.spuId = spuId;
+      console.log('商品详情请求前传参orderType3', params)
       goodApi.getPersonalDetail(params).then(res => {
-        const good = res.curGoods;
+        const good = res;
         const personalList = res.personalList;
-        const detailImg = good && good.images || [];
+        const detailImg = good && good.contentImageList || [];
         if(!good.isMultiSpec) {
           this.specLoaded = true;
         }
         good.activityPrice = util.divide(good.activityPrice, 100);
         good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
         good.goodsMarketPrice = util.divide(good.marketPrice, 100);
+        console.log('good', good)
         // good.goodsSaleNum = good.saleNum;
         good.goodsSaleNum = `月售${good.activitySaleNum}件`;
-        good.imageList = good.imageUrlList;
         personalList.forEach(item => {
           item.distancetime = item.distancetime * 1000;
         })
+        let list = personalList.filter((item, index) => index<5)
         this.setData({
           personalList,
+          fiveList: list,
           good,
           detailImg,
         }, () => {
@@ -352,6 +485,7 @@ create.Page(store, {
       })
     // orderType == 1 详情
     } else if(orderType == 1) {
+      console.log('商品详情请求前传参orderType1', params)
       goodApi.getGoodDetail(params).then(res => {
         let good = res;
         let selectAddressType = "";
@@ -396,6 +530,7 @@ create.Page(store, {
       this.getBusinessDetail(params);
     // 其他详情
     } else {
+      console.log('商品详情请求前传参-其它详情', params)
       goodApi.getGoodDetailNew(params).then(res => {
         let good = res;
         let selectAddressType = "";
@@ -462,6 +597,7 @@ create.Page(store, {
 
   // B端详情
   getBusinessDetail(params) {
+    console.log('b端详情请求参数', params)
     goodApi.getBusinessDetail(params).then(res => {
       let good = res;
       good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
@@ -485,10 +621,17 @@ create.Page(store, {
     const {
       shareInfo,
     } = this.data;
+    let {
+      orderType,
+    } = this.goodParams
     // 推荐商品
     this.getGoodRecommend();
     if(!shareInfo || !shareInfo.path) {
-      this.getShareInfo();
+      if (orderType == 3) {
+        this.getShareInfo_pt()
+      } else {
+        this.getShareInfo();
+      }
     }
   },
   
@@ -496,7 +639,7 @@ create.Page(store, {
   getShareInfo() {
     let userInfo = getStorageUserInfo();
     if(!userInfo) {
-      this.downShareImg();
+      this.downShareImg(1);
       return;
     }
     const {
@@ -514,9 +657,6 @@ create.Page(store, {
       ext: this.goodParams,
       sourceType: 1,
     }
-    if(orderType == 3 || orderType == 4) {
-      shareParams.paramId = 3;
-    }
     homeApi.getShareInfo(shareParams, {
       showLoading: false,
     }, {
@@ -530,40 +670,134 @@ create.Page(store, {
       this.setData({
         shareInfo,
       }, () => {
-        this.downShareImg();
+        this.downShareImg(1);
       })
     }).catch(err => {
-      this.downShareImg();
+      this.downShareImg(1);
+    });
+  },
+
+  // 获取分享参数
+  getShareInfo_pt() {
+    let userInfo = getStorageUserInfo();
+    if(!userInfo) {
+      this.downShareImg(2);
+      return;
+    }
+    const {
+      orderType,
+      spuId,
+      activityId,
+    } = this.goodParams;
+    this.goodParams.activityId = !!activityId ? activityId : 0;
+    const shareParams = {
+      shareType: 1,
+      contentType: 1,
+      shareObjectNo: spuId,
+      paramId: 3,
+      shareParams: this.goodParams,
+      ext: this.goodParams,
+      sourceType: 1,
+    }
+    homeApi.getShareInfo(shareParams, {
+      showLoading: false,
+    }, {
+      showLoading: false,
+    }).then(res => {
+      const shareInfo_pt = {
+      title: res.title || defShareText,
+        path: res.shareUrl,
+        imageUrl: res.thumbData,
+      };
+      this.setData({
+        shareInfo_pt,
+      }, () => {
+        this.downShareImg(2);
+      })
+    }).catch(err => {
+      this.downShareImg(2);
     });
   },
 
   // 绘制分享图片
-  downShareImg() {
+  downShareImg(type) {
     const {
       good,
       shareInfo,
     } = this.data;
     const that = this;
+    if (!good.goodsImageUrl) {
+      good.goodsImageUrl = good.imageUrl
+    }
     let img = shareInfo.imageUrl ? shareInfo.imageUrl : good.goodsImageUrl;
-    img = img.replace(/^http:\/\//i,'https://');
+    img = img?.replace(/^http:\/\//i,'https://');
     let tmpImg = '../../../images/good/logo.png';
+    console.log('shareInfo', shareInfo)
+    console.log('good', good)
+    console.log('绘制分享图片img', img)
     wx.downloadFile({
       url: img,
       success(result) {
         console.log("download img", result.tempFilePath)
-        that.drawShareImg(result.tempFilePath)
+        that.drawShareImg(result.tempFilePath, type)
       },
       fail(err) {
-        that.drawShareImg(tmpImg);
+        that.drawShareImg(tmpImg, type);
       },
     });
   },
 
-  // 绘制分享图片
-  drawShareImg(tmpImg) {
+  // 拼团绘制分享图片
+  drawShareImg_pt(tmpImg) {
     const {
       good,
     } = this.data;
+    const that = this;
+    const salePrice = '¥' + parseFloat(good.goodsSaleMinPrice).toFixed(2);
+    const marketPrice = '¥' + parseFloat(good.goodsMarketPrice).toFixed(2);
+    const marketlength = marketPrice.length;
+    const textWidth = marketlength * 8;
+    const ctx = wx.createCanvasContext('shareCanvas');
+    // ctx.setFillStyle('#f5f5f5')
+    // ctx.fillRect(0, 0, 250, 200)
+    ctx.drawImage(shareBack, 0, 0, 218, 174);
+    ctx.drawImage(shareBtn_pt,  140, 104, 66, 28);
+    this.handleBorderRect(ctx, 10, 43, 120, 120, 8, tmpImg);
+    ctx.setTextAlign('center')
+    ctx.setFillStyle('#DC2D23')
+    ctx.setFontSize(17)
+    ctx.fillText(salePrice, 171, 70)
+    ctx.setFillStyle('#999999')
+    ctx.setFontSize(14)
+    ctx.fillText(marketPrice, 171, 92)
+    ctx.setStrokeStyle('#999999')
+    ctx.beginPath();
+    ctx.moveTo(172-textWidth/2, 87)
+    ctx.lineTo(170+textWidth/2, 87)
+    ctx.closePath();
+    ctx.stroke()
+    // ctx.strokeRect(171-(textWidth/2), 87, textWidth, 0)
+    ctx.draw(true, () => {
+      wx.canvasToTempFilePath({
+        // destWidth: 436,
+        // destHeight: 348,
+        canvasId: 'shareCanvas',
+        success(res) {
+          that.canvasImg = res.tempFilePath;
+        }
+      })
+    });
+  },
+
+  // 绘制分享图片
+  drawShareImg(tmpImg, type) {
+    const {
+      good,
+    } = this.data;
+    if (type === 2) {
+      this.drawShareImg_pt(tmpImg)
+      return 
+    }
     const that = this;
     const salePrice = '¥' + parseFloat(good.goodsSaleMinPrice).toFixed(2);
     const marketPrice = '¥' + parseFloat(good.goodsMarketPrice).toFixed(2);
@@ -1027,7 +1261,8 @@ create.Page(store, {
   },
 
   // 打开选规格弹窗
-  openSpecPopup(event) {
+  openSpecPopup(e) {
+    
     if(!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
@@ -1040,9 +1275,22 @@ create.Page(store, {
       showToast({ title: "商品已售罄" });
       return;
     }
+    // 单规格拼团购买
+    if (!good.isMultiSpec && e?.currentTarget?.dataset?.type == 'create') {
+      this.onPushTogether()
+      return
+    }
+    // 单规格单独购买
+    if (!good.isMultiSpec && e?.currentTarget?.dataset?.type == 'alone') {
+      this.onToCreateOne()
+      return
+    }
     if(good.isMultiSpec) {
       this.setData({
         specType: "buy",
+        isActivityCome: this.goodParams.orderType == 3?true:false,
+        isAlone: (e?.currentTarget?.dataset?.type === 'alone')?1:'',
+        create: (e?.currentTarget?.dataset?.type === 'create')?1:'',
       }, () => {
         // 打开选择规格弹窗
         store.onChangeSpecState(true);
@@ -1058,12 +1306,9 @@ create.Page(store, {
     // store.onChangeSpecState(true);
   },
 
-  // 跳转确认订单
-  onToCreate() {
-    if(!this.data.userInfo) {
-      getStorageUserInfo(true);
-      return;
-    }
+  // 拼团单独购买
+  onToCreateOne() {
+    let isActivityCome = true;
     let {
       activityId,
       objectId,
@@ -1076,23 +1321,9 @@ create.Page(store, {
       good,
       currentSku,
       storeInfo,
+      personalList,
     } = this.data;
-    let stockOverData = this.handleGoodStock(currentSku.stockNum);
-    // 多规格商品，规格时候已加载
-    if(!this.specLoaded) {
-      return;
-    }
-    if(stockOverData.stockOver != 0) {
-      // this.onStockOver(stockOverData.stockOver);
-      return;
-    }
     let skuNum = good.buyMinNum > 0 ? good.buyMinNum : 1;
-    // 选择规格回来下单
-    if(good.isMultiSpec) {
-      skuId = currentSku.skuId;
-      skuNum = currentSku.skuNum;
-    }
-    let isActivityCome = false;
     let data = {
       storeGoodsInfos: [{
         storeNo: good.storeNo,
@@ -1101,31 +1332,170 @@ create.Page(store, {
           skuId: skuId ? skuId : currentSku.skuId,
           activityId: activityId || good.activityId || '',
           objectId: objectId || good.objectId || '',
-          orderType,
+          orderType: isActivityCome?2:orderType,
           skuNum,
           goodsFromType: good.goodsFromType,
+          isActivityCome: isActivityCome
         }]
       }]
     };
-    // 活动购买
-    if(orderType == 3) {
-      data.objectId = currentSku.groupId;
-      objectId = currentSku.groupId;
+    wx.setStorageSync("GOOD_LIST", data);
+    let p = {
+      orderType: isActivityCome?2:orderType,
+      activityId: !!activityId ? activityId : "",
+      objectId: !!objectId ? objectId : this.goodParams.objectId,
+      isActivityCome: isActivityCome,
     }
-    if(orderType == 15 || orderType == 16) {
-      data.storeAdress = storeInfo.storeAddress;
-      data.selectAddressType = selectAddressType;
-      wx.setStorageSync("CREATE_INTENSIVE", data);
-    } else {
-      wx.setStorageSync("GOOD_LIST", data);
+    if (this.shareStoreNo) {
+      p.shareStoreNo = this.shareStoreNo
     }
     router.push({
       name: "createOrder",
-      data: {
-        orderType,
-        activityId: !!activityId ? activityId : "",
-        objectId: !!objectId ? objectId : "",
-      }
+      data: p
+    });
+  },
+
+
+  // 跳转确认订单
+  onToCreate(e) {
+    console.log('eeeeeeeeeeeeeeeeeeeee', e)
+    if(!this.data.userInfo) {
+      getStorageUserInfo(true);
+      return;
+    }
+    let outData = {}
+    if (e && e.detail) {
+      outData = e.detail
+    }
+    let isActivityCome = false;
+    if (e?.currentTarget?.dataset?.type === 'alone') {
+      isActivityCome = true
+    }
+    if (e?.detail?.isAlone) {
+      isActivityCome = true
+    }
+    if (e?.detail?.create || e?.currentTarget?.dataset?.type) {
+      this.onPushTogether()
+      return
+    }
+    let {
+      activityId,
+      objectId,
+      orderType,
+      spuId,
+      skuId,
+      shareStoreNo,
+    } = this.goodParams;
+    const {
+      selectAddressType,
+      good,
+      currentSku,
+      storeInfo,
+      personalList,
+    } = this.data;
+    console.log('this.specLoaded', this.specLoaded)
+    // let stockOverData = this.handleGoodStock(currentSku.stockNum);
+    // 多规格商品，规格时候已加载
+    if(!this.specLoaded) {
+      return;
+    }
+    // if(stockOverData.stockOver != 0) {
+    //   // this.onStockOver(stockOverData.stockOver);
+    //   return;
+    // }
+    let skuNum = good.buyMinNum > 0 ? good.buyMinNum : 1;
+    // 选择规格回来下单
+    if(good.isMultiSpec) {
+      skuId = currentSku.skuId;
+      skuNum = currentSku.skuNum;
+    }
+
+
+    let data = {
+      storeGoodsInfos: [{
+        storeNo: good.storeNo,
+        goodsInfos: [{
+          spuId: spuId ? spuId : good.id,
+          skuId: skuId ? skuId : currentSku.skuId,
+          activityId: activityId || good.activityId || '',
+          objectId: objectId || good.objectId || '',
+          orderType: isActivityCome?2:orderType,
+          skuNum,
+          goodsFromType: good.goodsFromType,
+          isActivityCome: isActivityCome,
+          shareStoreNo
+        }]
+      }]
+    };
+
+    // 活动购买
+    if(orderType == 3 && outData.groupId && !isActivityCome) {
+      let params = {
+        storeGoodsInfos: [{
+          storeNo: good.storeNo,
+          goodsInfos: [{
+            spuId: spuId ? spuId : good.id,
+            skuId: skuId ? skuId : currentSku.skuId,
+            activityId: activityId || good.activityId || '',
+            objectId: outData.groupId,
+            orderType,
+            skuNum,
+            groupId: outData.groupId,
+            goodsFromType: good.goodsFromType,
+            isActivityCome: isActivityCome,
+            shareStoreNo
+          }]
+        }]
+      };
+      console.log('参团', params)
+      wx.setStorageSync("CREATE_INTENSIVE", params);
+    }
+
+    // 多规格拼团
+    if(orderType == 3 && outData?.skuId && outData?.skuNum && !isActivityCome) {
+      let params = {
+        storeGoodsInfos: [{
+          storeNo: good.storeNo,
+          goodsInfos: [{
+            spuId: spuId ? spuId : good.id,
+            skuId: outData.skuId,
+            activityId: activityId || good.activityId || '',
+            objectId: outData.objectId,
+            orderType,
+            skuNum: outData.skuNum,
+            goodsFromType: good.goodsFromType,
+            isActivityCome: isActivityCome,
+            shareStoreNo
+          }]
+        }]
+      };
+      console.log('多规格拼团', params)
+      wx.setStorageSync("CREATE_INTENSIVE", params);
+    }
+
+    if(orderType == 15 || orderType == 16) {
+      data.storeAdress = storeInfo.storeAddress;
+      data.selectAddressType = selectAddressType;
+      console.log('15/16', data)
+      wx.setStorageSync("CREATE_INTENSIVE", data);
+    } else {
+      console.log('其它', data)
+      wx.setStorageSync("GOOD_LIST", data);
+    }
+    let p = {
+      orderType: isActivityCome?2:orderType,
+      activityId: !!activityId ? activityId : "",
+      objectId: !!objectId ? objectId : this.goodParams.objectId,
+      isActivityCome: isActivityCome,
+    }
+    if (this.shareStoreNo) {
+      p.shareStoreNo = this.shareStoreNo
+    }
+    console.log('111', p)
+    // return
+    router.push({
+      name: "createOrder",
+      data: p
     });
   },
 
@@ -1151,6 +1521,26 @@ create.Page(store, {
     })
   },
 
+  // 跳转拼团规则
+  onOpenRule() {
+    let ENV = wx.getStorageSync("SYS_ENV");
+    console.log('ENV', ENV)
+    console.log('H5_HOST', H5_HOST)
+    console.log('src', webHost[ENV])
+    let src = webHost[ENV]
+    const {activityId, spuId, skuId} = this.data.good;
+    const str = `/web/group-rule?activityId=${activityId}&spuId=${spuId}&skuId=${skuId}`;
+    const url = src + str;
+    console.log('url', url)
+    router.getUrlRoute(url);
+    // router.push({
+    //   name: "webview",
+    //   data: {
+    //     url: encodeURIComponent(url),
+    //   },
+    // })
+  },
+
   // 监听关闭拼单弹窗
   handleCloseTeamPopup() {
     this.setData({
@@ -1158,8 +1548,68 @@ create.Page(store, {
     })
   },
 
+  cancel() {
+    let that = this
+    wx.showModal({
+      title: '提示',
+      content: '确定取消订单吗?',
+      success (res) {
+        if (res.confirm) {
+          console.log('用户点击确定', that)
+          that.cancelOrder()
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
+  },
+  cancelOrder() {
+    const {hasOrderData} = this.data;
+    let params = {
+      sumId: hasOrderData.id
+    }
+    console.log('确认取消订单-params', params)
+    goodApi.cancelOrder(params)
+    this.onCloseHasOrder()
+  },
+  hasOrderPay() {
+    this.onCloseHasOrder()
+    const params = {
+      ...this.data.hasOrderData
+    } 
+    router.replace({
+      name: "cashier",
+      data: params,
+    })
+  },
+
+  getHasOrder(type) {
+    const {
+      spuId,
+      skuId,
+    } = this.goodParams;
+    return new Promise((resolve) => {
+      const params = {
+        checkType: type,
+        spuId,
+        skuId,
+      }
+      goodApi.getHasOrderInfo(params).then((res) => {
+        console.log('getHasOrderInfo-res', res)
+        if (!res.id) {
+          resolve(true)
+        } else {
+          this.setData({
+            hasOrderData: res
+          }, () => {
+            this.openHasOrder()
+          })
+        }
+      })
+    })
+  },
   // 打开拼单用户弹窗
-  onOpenTogether(event) {
+  async onOpenTogether(event) {
     let data = {};
     const {
       currentTarget,
@@ -1171,6 +1621,7 @@ create.Page(store, {
     } else if(type === "toBuy") {
       data = detail;
     }
+    await this.getHasOrder(2)
     this.getTeamDetail(data);
     this.setData({
       showTeamPopup: false,
@@ -1179,12 +1630,13 @@ create.Page(store, {
   },
 
   // 发起拼单
-  onPushTogether() {
+  async onPushTogether() {
     const {
       activityId,
       spuId,
       skuId,
     } = this.goodParams;
+    await this.getHasOrder(1)
     goodApi.pushTogether({
       activityId,
       spuId,
@@ -1192,9 +1644,10 @@ create.Page(store, {
     }).then(res => {
       this.onToCreate({
         detail: {
-          groupId: res.groupId,
-        },
+          groupId:res.groupId
+        }
       });
+      
     });
   },
 
@@ -1237,6 +1690,20 @@ create.Page(store, {
   onCloseArea() {
     this.setData({
       showAreaPopup: false,
+    });
+  },
+
+  // 关闭待支付拼团弹窗
+  onCloseHasOrder() {
+    this.setData({
+      showHasOrderPopup: false,
+    });
+  },
+
+  // 打开待支付拼团弹窗
+  openHasOrder() {
+    this.setData({
+      showHasOrderPopup: true,
     });
   },
 

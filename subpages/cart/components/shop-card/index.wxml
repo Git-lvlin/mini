@@ -44,20 +44,31 @@
           </view>
         </view>
       </view>
-      <view class="flex_middle note_box">
+      <!-- <view class="flex_middle note_box">
         <view class="flex_fix note_title">订单备注</view>
         <input
           class="note_input"
-          maxlength="10"
+          maxlength="40"
+          data-index="{{index}}"
           bindinput="handleInput"
-          placeholder="输入10字以内留言信息"
+          placeholder="输入40字以内留言信息"
           placeholder-class="ipunt_desc"
         />
-      </view>
+      </view> -->
+    </view>
+    <view class="flex_middle note_box">
+      <view class="flex_fix note_title">订单备注</view>
+      <input
+        class="note_input"
+        maxlength="40"
+        bindinput="handleInput"
+        placeholder="输入40字以内留言信息"
+        placeholder-class="ipunt_desc"
+      />
     </view>
   </view>
 
-  <view class="total_price">
+  <!-- <view class="total_price">
     <view class="txt">小计：</view>
     <price-mobel
       money="{{data.totalAmount}}"
@@ -65,9 +76,9 @@
       max-size="{{28}}"
       bold="{{600}}"
     />
-    <!-- <view class="text">￥{{tools.getPriceSplit(data.totalAmount)}}<text class="min_price">{{tools.getPriceSplit(data.totalAmount, 1)}}</text></view> -->
-    <!-- <view class="freight">(运费：￥{{data.shippingFeeAmount}})</view> -->
-  </view>
+    <view class="text">￥{{tools.getPriceSplit(data.totalAmount)}}<text class="min_price">{{tools.getPriceSplit(data.totalAmount, 1)}}</text></view>
+    <view class="freight">(运费：￥{{data.shippingFeeAmount}})</view>
+  </view> -->
 
   <van-toast id="van-toast" />
 </view>

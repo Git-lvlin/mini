@@ -61,6 +61,7 @@ create.Page(store, {
   },
 
   onLoad(options) {
+    console.log('确认订单-options', options)
     let { systemInfo } = this.data.$;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
     let orderType = options.orderType || 1;
@@ -70,6 +71,7 @@ create.Page(store, {
     if (teamGoods.storeGoodsInfos) {
       teamGoods.storeGoodsInfos =JSON.parse(options.storeGoodsInfos);
     }
+    this.shareStoreNo = options.shareStoreNo || ''
     this.orderType = orderType;
     // 活动页面 - 单独购买
     this.isActivityCome = !!options.isActivityCome;
@@ -165,6 +167,7 @@ create.Page(store, {
       }
     } else if(selectAddressType.type == 3) {
       const setStoreAddress = wx.getStorageSync('ORDER_STORE_LOCATION');
+      console.log('111111111111setStoreAddress', setStoreAddress)
       if(setStoreAddress && setStoreAddress.setUser) {
         storeAdress.linkman = setStoreAddress.setUser;
         storeAdress.setUser = setStoreAddress.setUser;
@@ -179,6 +182,7 @@ create.Page(store, {
     this.setData({
       storeAdress
     }, () => {
+      console.log('storeAdress', storeAdress)
       // 必须获取地址再请求商品信息
       this.getConfirmInfo();
     });
@@ -238,6 +242,7 @@ create.Page(store, {
     if(this.changeStoreData.length) {
       postData.storeGoodsInfos = this.changeStoreData;
     }
+    console.log('postData', postData)
     cartApi.getConfirmInfo(postData).then(res => {
       let orderInfo = res;
       let skuNum = 1;
@@ -401,6 +406,8 @@ create.Page(store, {
       name: "changeShipper",
       data: {
         storeNo: storeAdress.storeNo,
+        linkman: storeAdress.linkman,
+        phone: storeAdress.phone,
       }
     })
   },
@@ -429,7 +436,10 @@ create.Page(store, {
     let {
       orderInfo,
     } = this.data;
-    orderInfo.storeGoodsInfos[detail.idx] = detail.data;
+    console.log('修改订单备注', detail)
+    console.log('orderInfo.storeGoodsInfos', orderInfo.storeGoodsInfos)
+    orderInfo.storeGoodsInfos[0] = detail.data
+    // orderInfo.storeGoodsInfos[detail.idx] = detail.data;
     this.setData({
       orderInfo,
     });
@@ -511,6 +521,7 @@ create.Page(store, {
         shippingFeeAmount,
         totalAmount,
         storeShippingFeeAmount,
+        shipping,
       } = res;
       storeShippingFeeAmount.forEach(item => {
         item.totalAmount = util.divide(item.totalAmount, 100);
@@ -526,6 +537,7 @@ create.Page(store, {
         reduceAmount: util.divide(reduceAmount, 100),
         shippingFeeAmount: util.divide(shippingFeeAmount, 100),
         totalAmount: util.divide(totalAmount, 100),
+        shipping,
         // storeGoodsInfos: storeShippingFeeAmount
       }
       if(changeStore && changeStore.data && changeStore.data.storeNo) {
@@ -751,6 +763,10 @@ create.Page(store, {
       postData = this.getStoreGood();
     }
     if(!postData || !postData.deliveryInfo) return;
+    if (postData.storeGoodsInfos.length == 1 && this.shareStoreNo) {
+      postData.storeGoodsInfos[0].goodsInfos[0].shareStoreNo = this.shareStoreNo
+    }
+    console.log('确认订单前传参', postData)
     cartApi.createOrder(postData).then(res => {
       res.orderType = this.orderType;
       this.orderId = res.id;

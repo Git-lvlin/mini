@@ -3,7 +3,6 @@
   "usingComponents": {
     "price-mobel": "/components/common/price-mobel/index",
     "count-down": "/components/common/count-down/index",
-    "together-user": "../components/together-user/index",
-    "hot-good": "../components/hot-good/index"
+    "together-user": "../components/together-user/index"
   }
 }

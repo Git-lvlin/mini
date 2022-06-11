@@ -16,7 +16,7 @@ export default {
       route: 'seckill',
     },
     2: {
-      isTabbar: false,
+      isTabbar: true,
       route: 'intensive',
     },
     3: {
@@ -56,6 +56,10 @@ export default {
   // 搜索页面
   "/home/search": {
     path: "search",
+  },
+  // 店内搜索页面
+  "/home/storeSearch": {
+    path: "storeSearch",
   },
   // 会员专享
   "/home/members": {

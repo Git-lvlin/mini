@@ -1,8 +1,13 @@
 
 
 .list {
-  padding: 0 24rpx;
   box-sizing: border-box;
+  width: 702rpx;
+  /* min-height: 1064rpx; */
+  margin: 0 auto;
+  background-color: #FFFFFF;
+  border-radius: 24rpx;
+  overflow: hidden;
 }
 
 .title-box {
@@ -24,13 +29,13 @@
 }
 
 .tips-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
   width: 100%;
-  height: 30px;
-  background: #FFF9F1;
-  border-radius: 8rpx 8rpx 0px 0px;
+  height: 74rpx;
+}
+.tips_title {
+  width: 100%;
+  height: 100%;
 }
 .tips-after {
   margin-right: 4rpx;
@@ -46,10 +51,11 @@
   align-items: center;
 }
 .tips-text {
-  font-size: 24rpx;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: #FFB84B;
+  position: absolute;
+  top: 12rpx;
+  left: 20rpx;
+  font-size: 36rpx;
+  color: #FFFFFF;
 }
 
 
@@ -59,6 +65,9 @@
   justify-content: center;
   align-items: center;
   background: #FFFFFF;
+}
+.list-item:nth-last-child(1) {
+  padding-bottom: 24rpx;
 }
 .img {
   width: 200rpx;
@@ -87,27 +96,42 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-bottom: 92rpx;
+  margin-bottom: 10rpx;
 }
 .price-box {
   display: flex;
   justify-content: flex-start;
 }
+.tab_icon_box {
+  position: relative;
+  width: 204rpx;
+  height: 38rpx;
+  margin-bottom: 22rpx;
+}
+.tab_icon {
+  width: 100%;
+  height: 100%;
+}
+.tab_icon_text {
+  position: absolute;
+  top: 2rpx;
+  right: 6rpx;
+  font-size: 24rpx;
+  color: #FF0000;
+}
 .price1 {
   height: 44rpx;
   font-size: 32rpx;
-  color: #D7291D;
+  color: #FF0000;
   font-family: HelveticaNeue-Bold, HelveticaNeue;
   font-weight: bold;
   line-height: 44rpx;
   letter-spacing: 1rpx;
 }
 .price2 {
-  margin-left: 10rpx;
   font-size: 20rpx;
   color: #B2B2B2;
   text-decoration: line-through;
-  line-height: 52rpx;
   letter-spacing: .5rpx;
 }
 .span {
@@ -120,7 +144,7 @@
   width: 176rpx;
   height: 60rpx;
   line-height: 60rpx;
-  background: #FEA319;
+  background: linear-gradient(90deg, #FF5E4B 0%, #F32214 100%);
   border-radius: 30rpx;
   text-align: center;
   font-size: 24rpx;
@@ -142,4 +166,9 @@
   font-family: PingFangSC-Medium, PingFang SC;
   font-weight: 500;
   color: #FFFFFF;
+}
+
+.mark {
+  width: 100%;
+  height: 88rpx;
 }

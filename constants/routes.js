@@ -87,6 +87,10 @@ export default {
   search: {
     path: "/subpages/cart/search/index"
   },
+  // 搜索
+  storeSearch: {
+    path: "/subpages/cart/storeSearch/index"
+  },
   // 商品详情
   detail: {
     path: "/subpages/cart/detail/index"
@@ -166,5 +170,9 @@ export default {
 
   list: {
     path: "/pages/list/index"
-  }
+  },
+
+  fadadaCashier: {
+    path: "/subpages/fadada/cashier/index"
+  },
 }
