@@ -1,6 +1,6 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
-<view class="fresh">
+<view class="fresh" wx:if="{{(cent.fresh&&cent.fresh.list.length) || (spec.fresh&&spec.fresh.list.length)}}">
   <view class="fresh_one" wx:if="{{cent.fresh&&cent.fresh.list.length}}">
     <view class="title">
       <view class="title_text">
