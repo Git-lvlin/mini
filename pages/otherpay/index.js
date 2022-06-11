@@ -47,7 +47,7 @@ Page({
     } else if(this.params.scene == 6) {
       // 获取氢原子支付信息
       this.getAtomPay(this.params);
-    } else if(this.params.scene == 7){
+    } else if(this.params.scene == 7) {
       this.getVipPay(this.params);
     }
   },

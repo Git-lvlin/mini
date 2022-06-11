@@ -87,6 +87,10 @@ export default {
   getPayInfo(params, option) {
     return Request.post(url.payInfo, params, option);
   },
+  // 获取vip支付信息
+  getPayInfoVip(params, option) {
+    return Request.post(url.vipPayInfo, params, option);
+  },
   // 获取氢原子支付信息
   getPayInfoAtom(params, option) {
     return Request.post(url.newPayInfo, params, option);
