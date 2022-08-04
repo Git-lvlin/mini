@@ -14,6 +14,10 @@ Component({
       type: String,
       value: 248
     },
+    imgStyle: {
+      type:String,
+      value: ""
+    },
   },
 
   data: {

@@ -7,7 +7,7 @@
       wx:key="type"
       wx:if="{{item.type === type}}"
     >
-      <image class="img" src="{{item.img}}" />
+      <image class="img" src="{{item.img}}" style="{{imgStyle}}"/>
       <view class="title">{{!!title ? title : item.title}}</view>
     </view>
   </view>

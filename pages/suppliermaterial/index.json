@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "企业资质",
+  "usingComponents": {
+    "nodata": "/components/common/nodata/index"
+  }
+}

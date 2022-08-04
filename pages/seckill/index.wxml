@@ -73,8 +73,8 @@
     <van-tabs lazy-render custom-class="custom" nav-class="nav-class" tab-active-class="tab-active" swipeable animated sticky active="{{ active }}" bind:change="tabChange">
       <van-tab title-style="font-size:32rpx" title="正在疯抢">
         <view class="today">
-          <block wx:for="{{seckillData.records}}" wx:key="id">
-            <view class="tab-item" data-data="{{item}}" bindtap="onGood">
+          <block wx:for="{{seckillData.records}}" data-index="index" wx:key="id">
+            <view class="tab-item" data-data="{{item}}" bindtap="onGood" style="{{index == (seckillData.records.length-1) ? 'margin-bottom:72rpx;' : ''}}">
               <van-image
                 class="left-img"
                 width="234rpx"

@@ -18,7 +18,7 @@
 
 .back_btn {
   position: fixed;
-  bottom: 20%;
+  bottom: 48%;
   left: 50%;
   color: #fff;
   background-color: #d7291d;

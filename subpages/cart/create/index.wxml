@@ -29,32 +29,50 @@
         </view>
         <view class="push_text">{{lateDeliveryDesc}}</view>
       </view>
-
-      <view
-        class="address"
-        wx:if="{{(orderToken && orderType != 15) || (orderType == 15 && selectAddressType.type == 3)}}"
-        bindtap="onToAddress"
-      >
-        <view class="no_address" wx:if="{{orderType != 15 && !addressInfo.id || orderType == 15 && selectAddressType.type == 3 && !storeAdress.setUser}}">
-          <image class="add_address" src="{{tools.getImgUrl('miniprogram/cart/add_address.png')}}" />
-          <view class="no_address_title">{{selectAddressType.type == 3 ? '添加商家配送地址' : '添加收货地址'}}</view>
-        </view>
-        <view class="select_view" wx:else>
-          <image class="location_icon" src="{{tools.getImgUrl('miniprogram/common/location_icon.png')}}" />
-          <view class="address_info">
-            <view class="name">{{addressInfo.consignee || storeAdress.setUser}}<text class="phone">{{addressInfo.phone || storeAdress.setPhone}}</text></view>
-            <view class="address_detail text_two_line">{{addressInfo.fullAddress || storeAdress.setAllAddress + storeAdress.setAddress}}</view>
-          </view>
-          <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
-        </view>
+      <view class="tab-box" wx:if="{{(orderType == 15 || orderType == 16) && (selectAddressType.type == 2 || selectAddressType.type == 3)}}">
+        <van-tabs lazy-render custom-class="custom" nav-class="nav-class" tab-active-class="tab-active" swipeable animated sticky active="{{ tabActive }}" bind:change="tabChange" >
+          <van-tab title="上门提货" name="2" class="tab">
+          </van-tab>
+          <van-tab title="商家配送" name="3" class="tab">
+          </van-tab>
+        </van-tabs>
       </view>
-      <view class="store_address" wx:if="{{orderType == 15 && selectAddressType.type == 2}}">
+      <block  wx:if="{{isEscrow==1}}">
+      <view class="address" style="justify-content: left;">
+            <image class="location_icon" src="{{tools.getImgUrl('miniprogram/v2-home/home-location.png')}}" />
+            <view class="no_address_title">委托受托方代收及验货</view>
+      </view>
+      </block>
+      <block wx:else>
+        <view
+          class="address"
+          wx:if="{{(orderToken && orderType != 15) || (orderType == 15)}}"
+          bindtap="onToAddress"
+          style="{{(orderType == 15 || orderType == 16) ? 'border-radius: 0 0 24rpx 24rpx !important;' : ''}}"
+        >
+          <view class="no_address" wx:if="{{!addressInfo.id}}">
+            <image class="add_address" src="{{tools.getImgUrl('miniprogram/cart/add_address.png')}}" />
+            <view class="no_address_title">{{selectAddressType.type == 3 ? '添加商家配送地址' : '添加收货地址'}}</view>
+          </view>
+          <view class="select_view" wx:else>
+            <image class="location_icon" src="{{tools.getImgUrl('miniprogram/common/location_icon.png')}}" />
+            <view class="address_info">
+              <view class="name">{{addressInfo.consignee}}<text class="phone">{{addressInfo.phone}}</text></view>
+              <view class="address_detail text_two_line">{{addressInfo.fullAddress}}</view>
+            </view>
+            <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
+          </view>
+        </view>
+      </block>
+      <view class="store_address" wx:if="{{(orderType == 15 || orderType == 16) && selectAddressType.type == 2}}">
+        <!-- 产品说不需要了
         <view class="store_address_user" bindtap="onToChangeUser">
           <image class="position_icon" src="{{tools.getImgUrl('miniprogram/common/location_black.png')}}" />
           <view class="store_user_name">{{storeAdress.linkman}}</view>
           <view class="store_user_phone">{{storeAdress.phone}}</view>
           <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
-        </view>
+          </view>
+          -->
         <view class="store_address_info">
           <view class="store_name">自提点：<text class="name_gray">{{storeAdress.storeName}}</text></view>
           <view class="store_name" wx:if="{{storeAdress.shopMemberAccount}}">店铺编号：<text class="name_gray">{{storeAdress.shopMemberAccount}}</text></view>

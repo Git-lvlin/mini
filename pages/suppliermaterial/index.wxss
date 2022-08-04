@@ -1,0 +1,71 @@
+
+page {
+  background-color: #f5f5f5;
+}
+
+.captcha, .info {
+  padding: 48rpx 32rpx 32rpx;
+  background-color: #fff;
+  box-shadow: 0rpx 8rpx 16rpx rgba(0, 0, 0, 0.01);
+}
+
+.captcha-tips {
+  display: flex;
+  /*
+  align-items: center;
+  justify-content: center;
+  */
+}
+
+.captcha-img {
+  width: 320rpx; height: 120rpx;
+  margin:auto;
+  display: flex;
+}
+
+.captcha-input {
+  width: 400rpx; height: 120rpx;
+  margin:auto;
+  display: flex;
+}
+.captcha-input-item {
+  width: 80rpx; height: 80rpx;
+  margin: 16rpx 8rpx;
+  border: 2rpx solid #ccc;
+  border-radius: 8rpx;
+  padding-left:30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.captcha-input-item:focus, input:focus {
+  border: 2rpx solid red;
+}
+
+.info {
+  margin-top: 16rpx;
+}
+
+.table {
+  border: 0px solid darkgray;
+  width: 100%;
+  height: auto;
+}
+.tr {
+  border-bottom: 1px solid darkgray;
+  margin-bottom: 30rpx;
+}
+.th, .td {
+  display: block;
+  justify-content: left;
+  text-align: left;
+  align-items: left;
+  font-size: 36rpx;
+  width:100%;
+  margin-bottom: 20rpx;
+  height:auto;
+}
+.td {
+  font-size: 34rpx;
+}

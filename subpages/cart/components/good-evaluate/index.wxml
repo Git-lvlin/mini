@@ -11,9 +11,13 @@
       wx:key="index"
       wx:if="{{commentList.length}}"
     >
-      <view class="flex_middle evaluate_user">
+      <view class="flex_middle evaluate_user" style="position: relative;">
         <image class="flex_fix user_avtar" src="{{item.userImg}}" />
         <view class="user_name">{{item.nickName}}</view>
+        <eveluate-star
+          score="{{item.score}}"
+          boxStyle="position:absolute; top:2rpx; right:-10rpx;"
+        />
       </view>
       <view class="evaluate_info text_two_line">{{item.content}}</view>
     </view>

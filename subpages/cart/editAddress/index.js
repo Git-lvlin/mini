@@ -200,6 +200,9 @@ Page({
           showToast({ 
             title: "删除成功", 
             ok() {
+              wx.removeStorage({
+                key: "CHOOSE_ADDRESS"
+              });
               router.go();
             } 
           })

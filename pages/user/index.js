@@ -173,11 +173,12 @@ create.Page(store, {
       return;
     }
     if (path == "coupon") {
-      const userInfo = getStorageUserInfo(true);
-      if (!userInfo) return;
-      router.push({
-        name: 'coupon',
-      });
+      this.showPopup();
+      // const userInfo = getStorageUserInfo(true);
+      // if (!userInfo) return;
+      // router.push({
+      //   name: 'coupon',
+      // });
       return;
     }
     if(type === 1) {

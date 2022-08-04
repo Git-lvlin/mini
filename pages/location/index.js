@@ -401,6 +401,14 @@ create.Page(store, {
   },
 
   getNearbyWords(keywords) {
+    // console.log('querykeywords getNearbyWords this.location', this.location, '; this.selectLocation', this.selectLocation)
+    if (this.selectLocation) {
+      this.location = {
+        latitude: this.selectLocation.split(',')[1],
+        longitude: this.selectLocation.split(',')[0],
+      }
+    }
+    // console.log('querykeywords getNearbyWords this.location', this.location)
     goodApi.getNearbyWords({
       radius: 50000,
       unit: 'm',
@@ -474,14 +482,8 @@ create.Page(store, {
         const sdata = {
           addMarkers,
         };
-        if(addMarkers.length) {
-          sdata.showAddress = true
-        }
-        that.setData(sdata, () => {
-          if(!addMarkers.length) {
-            showToast({ title: "没有结果呢" });
-          }
-        });
+        sdata.showAddress = true
+        that.setData(sdata);
       },
       fail(info) {
         showToast({ title: info.errMsg });

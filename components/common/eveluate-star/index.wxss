@@ -1,0 +1,9 @@
+
+.eveluate_star_box {
+  width: 200rpx;
+  height: 40rpx;
+}
+.eveluate_star {
+  width: 40rpx;
+  height: 40rpx;
+}

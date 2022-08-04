@@ -23,20 +23,40 @@ Page({
 
   // 解析分享配置
   getShareParam(data) {
-    commonApis.getShareParam({
-      scene: data.scene,
-    }).then(res => {
-      this.contractId = res.contractId
-      fadadaApi.getContractGetDetail({
-        ...res
+    var that = this
+    console.log("getShareParam data ", data)
+    if (data.contractId && data.callback==1) {
+      this.getContractGetDetail(data.contractId)
+    } else {
+      commonApis.getShareParam({
+        scene: data.scene,
       }).then(res => {
+        this.contractId = res.contractId
+        that.getContractGetDetail(this.contractId)
+      })
+    }
+  },
 
-        this.setData({
-          contractDetail: {
-            ...res.records,
-            signStatusDesc: res.records.signStatus === 1 ? '已签订' : '未签订'
-          }
-        })
+  //
+  getContractGetDetail(contractId) {
+    fadadaApi.getContractGetDetail({
+      contractId: contractId,
+    }).then(res => {
+      wx.setStorageSync('CURRENT_CONTRACT_ID', contractId)
+      // console.log('pactUrl contractId ', wx.getStorageSync('CURRENT_CONTRACT_ID'), '; contractId', contractId)
+      // 签订状态，1 已签订 ，2未签订，3待上传，4待支付，5待签订
+      var signStatusDesc = {
+        1: '已签订',
+        2: '未签订',
+        3: '待上传',
+        4: '待支付',
+        5: '待签订',
+      }
+      this.setData({
+        contractDetail: {
+          ...res.records,
+          signStatusDesc: signStatusDesc[res.records.signStatus] || '-'
+        }
       })
     })
   },

@@ -1153,3 +1153,42 @@ button {
   line-height: 44rpx;
 }
 
+.step_box {
+  right: 16rpx;
+  bottom: 24rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.step_delete_icon,.step_add_icon {
+  width: 48rpx;
+  height: 48rpx;
+}
+.step_index_num {
+  margin: 0 8rpx;
+  font-size: 36rpx;
+  color: #333333;
+}
+
+.avatar {
+  position: relative;
+  width: 120rpx;
+  height: 120rpx;
+  border: 2rpx solid #fff;
+  border-radius: 50%;
+}
+.more_btn {
+  font-size: 28rpx;
+  color:red;
+  display:flex;
+  padding:8rpx 12rpx;
+  border: 2rpx solid red;
+  border-radius: 30rpx;
+}
+.more_right {
+  width: 12rpx;height: 12rpx;
+  border-top: 2rpx solid red;
+  border-right: 2rpx solid red;
+  transform: rotate(45deg) translate(-4rpx);
+  margin-top:16rpx;
+}

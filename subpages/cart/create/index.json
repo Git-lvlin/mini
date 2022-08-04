@@ -6,6 +6,8 @@
     "price-mobel": "/components/common/price-mobel/index",
     "shop-card": "../components/shop-card/index",
     "coupon-popup": "../components/coupon-popup/index",
+    "van-tab": "@vant/weapp/tab/index",
+    "van-tabs": "@vant/weapp/tabs/index",
     "set-sku-num": "../components/set-sku-num/index"
   }
 }

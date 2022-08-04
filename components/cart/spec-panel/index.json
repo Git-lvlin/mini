@@ -1,6 +1,8 @@
 {
   "component": true,
   "usingComponents": {
+    "van-radio": "/miniprogram_npm/@vant/weapp/radio/index",
+    "van-radio-group": "/miniprogram_npm/@vant/weapp/radio-group/index",
     "van-popup": "/miniprogram_npm/@vant/weapp/popup/index"
   }
 }

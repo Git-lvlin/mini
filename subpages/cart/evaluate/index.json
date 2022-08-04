@@ -1,6 +1,7 @@
 {
   "navigationBarTitleText": "商品评价",
   "usingComponents": {
+    "eveluate-star": "/components/common/eveluate-star/index",
     "nodata": "/components/common/nodata/index"
   }
 }

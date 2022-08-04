@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/home/index",
+    "pages/supplier/index",
+    "pages/suppliermaterial/index",
     "pages/community/index",
     "pages/cart/index",
     "pages/user/index",

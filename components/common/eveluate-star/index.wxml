@@ -1,0 +1,8 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="eveluate_star_box" style="{{boxStyle}}">
+  <a class="eveluate_star" wx:for="{{[1,2,3,4,5]}}" wx:for-item="item">
+    <image class="eveluate_star" wx:if="{{score>=item}}" src="/images/comment/ic_rating_{{item}}.png" mode="aspectFill"></image>
+    <image class="eveluate_star" wx:else src="/images/comment/ic_rating_0.png" mode="aspectFill"></image>
+  </a>
+</view>

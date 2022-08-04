@@ -29,6 +29,7 @@
       wx:key="id"
       data-id="{{item.id}}"
       bindtap="onToEvaluateDetail"
+      style="position: relative;"
     >
       <view class="flex_middle evaluate_head">
         <image class="flex_fix user_avatar" src="{{item.userImg}}" />
@@ -36,6 +37,10 @@
           <view class="user_name">{{item.nickName}}</view>
           <view class="evaluate_time">{{item.commentTime}}</view>
         </view>
+        <eveluate-star
+          score="{{item.score}}"
+          boxStyle="position:absolute; top:20rpx; right:120rpx;"
+        />
         <view
           class="flex_fix flex_middle user_star {{item.isPoint ? 'user_star_act' : ''}}"
           data-idx="{{index}}"

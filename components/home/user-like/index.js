@@ -52,7 +52,7 @@ Component({
       // if(!!next) {
       //   data.next = next;
       // } 
-      goodApi.getUserLike({size:10}).then(res => {
+      goodApi.getUserLike({size:10}, {showLoading: false}).then(res => {
         // console.log('res',res)
         // const {
         //   pageData,

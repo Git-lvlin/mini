@@ -15,6 +15,8 @@ const url = {
 
   // banner: '/cms/open/banner/list',
   banner: '/cms/option/banner/list',
+  // http://rap.ops.yeahgo.com/organization/repository/editor?id=21&mod=93&itf=1538
+  findAddressById: '/member/auth/memberAddress/findAddressById',
 }
 
 let isShowLoginMobal = store.data.showLoginMobel;
@@ -174,5 +176,10 @@ export default {
   // 获取banner 
   getBanner(params, option) {
     return Request.get(url.banner, params, option);
+  },
+
+  // http://rap.ops.yeahgo.com/organization/repository/editor?id=21&mod=93&itf=1538
+  findAddressById(params) {
+    return Request.post(url.findAddressById, params, {});
   },
 }

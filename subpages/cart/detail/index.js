@@ -5,16 +5,19 @@ import homeApi from '../../../apis/home'
 import intensiveApi from '../../../apis/intensive'
 import { IMG_CDN, DETAIL_SERVICE_LIST, H5_HOST, webHost } from '../../../constants/common'
 import { CODE_SCENE } from '../../../constants/index'
-import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj, haveStore, debounce } from '../../../utils/tools'
+import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj, haveStore, debounce, mapNum} from '../../../utils/tools'
 import { getPayInfo } from '../../../utils/orderPay'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
 import commonApis from '../../../apis/common'
+import cartApi from "../../../apis/cart";
+
 const shareBack = '../../../images/good/good_share_back.png'
 const shareBtn = '../../../images/good/good_share_btn.png'
 const defShareText = '约购超值集约！约着买 更便宜~'
 const shareBtn_pt = '../../../images/good/btn.png'
 const app = getApp();
+
 create.Page(store, {
   goodParams: {},
   // 规格加载完毕
@@ -55,6 +58,7 @@ create.Page(store, {
   },
 
   data: {
+    cartAllData: null,
     skuId: "",
     good: {},
     stock: 0,
@@ -80,6 +84,8 @@ create.Page(store, {
     intensiveBack: `${IMG_CDN}miniprogram/cart/jiyue_back.png?v=20211126`,
     // buy 立即购买  add 添加到购物车
     specType: "buy",
+    // 是否显示托管协议 1 是  0 否
+    escrowAgreement: 0,
     refuseText: "",
     secJoinUser: [],
     // 店铺信息
@@ -108,6 +114,11 @@ create.Page(store, {
     hasOrderData: {},
     currentPages: [],
     inviteCode: '',
+    // 是否展示购物车 1=是，0=否
+    cartBtnIsShow: 0,
+    // {name: "上门提货", type: 2, status: 0}
+    // {name: "商家配送", type: 3, status: 0}
+    selectAddressType: {},
     isCart: '',
     isAlone: '',
     create: '',
@@ -115,6 +126,41 @@ create.Page(store, {
     selfStoreNo: '',
   },
 
+  lifetimes: {
+    show: function() {
+      this.updateSelectAddressType('lifetimes show ')
+    }
+  },
+  pageLifetimes: {
+    show: function() {
+      this.updateSelectAddressType('pageLifetimes show ')
+    }
+  },
+  handleUpdate(res) {
+    this.updateSelectAddressType('handleUpdate show ')
+    this.getCartList()
+  },
+  updateSelectAddressType(name) {
+    let data = wx.getStorageSync("CREATE_INTENSIVE")
+    if (data.selectAddressType && data.selectAddressType.type) {
+      this.setData({
+        selectAddressType: data.selectAddressType,
+      })
+    }
+    var good = this.data.good
+    if(good && good.sendTypeList && this.data.selectAddressType) {
+      good.sendTypeList.forEach(item => {
+        if(item.type === this.data.selectAddressType.type) {
+          item.status = 1;
+        } else {
+          item.status = 0;
+        }
+      })
+      this.setData({
+        good,
+      })
+    }
+  },
   onLoad(options) {
     const {
       appScene,
@@ -134,7 +180,8 @@ create.Page(store, {
     this.setData({
       currentPages: getCurrentPages().length
     })
-
+    this.getCartList()
+    this.getSummaryByCartData()
   },
 
   onShow() {
@@ -153,17 +200,163 @@ create.Page(store, {
     this.getStoreNo();
     app.trackEvent('shopping_detail');
 
+    this.updateSelectAddressType('detail onShow ')
   },
+
+  // 跳转到供应商详情页面
+  onToSupplier(e) {
+    var id = e.currentTarget.dataset.supplierid
+    console.log('onToSupplier id ', id)
+    wx.navigateTo({
+      url: '/pages/supplier/index?id=' + id,
+    })
+  },
+
+  // 购物车相关
+  onCloseCartPopup() {
+    this.setData({ showCartPopup: false })
+  },
+  openCartPopup() {
+    this.setData({ showCartPopup: true })
+  },
+
+  // 购物车商品列表
+  getCartList() {
+    let {
+      activityId,
+      objectId,
+      orderType,
+      skuId,
+      spuId,
+    } = this.goodParams
+    return new Promise((resolve) => {
+      cartApi.cartList().then((res) => {
+        // console.log('购物车商品列表', res)
+        let cartList = mapNum(res)
+        // console.log("on cart spuId ", spuId, "; cartList", cartList)
+        let quantity = 0
+        cartList.forEach(item => {
+          if(item.spuId === spuId) {
+            quantity = item.quantity
+          }
+        })
+        this.setData({
+          cartList: res,
+          quantity: quantity,
+        })
+        resolve(res)
+      })
+    })
+  },
+  // 增加购物车 for goods
+  increaseCart() {
+    const { quantity, skuId, good} = this.data
+    const {objectId} = good
+    const params = {
+      skuId,
+      objectId,
+      quantity: quantity + 1, // 数量，负数表示减数量
+    }
+    console.log("on cart increaseCart params ", params)
+    this.setCartNum(params)
+  },
+  // 减少购物车 for goods
+  decreaseCart() {
+    var { quantity, skuId, good} = this.data
+    const {objectId} = good
+    quantity -= 1
+    const params = {
+      skuId,
+      objectId,
+      quantity: quantity, // 数量，负数表示减数量
+    }
+    console.log("on cart decreaseCart params ", params)
+    this.setCartNum(params)
+  },
+
+  // 设置购物车商品数量
+  setCartNum(itemInfo) {
+    const { quantity, skuId, objectId } = itemInfo;
+    const params = {
+      skuId: skuId,
+      objectId: objectId,
+      quantity: quantity, // 数量，负数表示减数量
+    }
+    return new Promise((resolve) => {
+      cartApi.setCartNum(params).then((res) => {
+        console.log('设置购物车商品数量', res)
+        if (res.value) {
+          this.setData({
+            quantity: quantity
+          })
+          this.getSummaryByCartData()
+        }
+        resolve(1)
+      }).catch((err) => {
+        resolve()
+      })
+    })
+  },
+
+  // 选中购物车明细
+  checkedCart() {
+    const { storeNo, } = this.data
+    const params = {
+      skuId,
+      skuStoreNo: storeNo,
+      objectId,
+    }
+    cartApi.checkedCart(params)
+  },
+  // 全选购物车明细
+  checkedAllCart() {
+    const { storeNo, } = this.data
+    const params = {
+      isChecked,
+      skuStoreNo: storeNo,
+    }
+    cartApi.checkedAllCart(params)
+  },
+  // 购物车商品列表汇总
+  getSummaryByCartData() {
+    // console.log('on cart getSummaryByCartData')
+    return new Promise((resolve) => {
+      cartApi.summaryByCartData().then((res) => {
+        resolve(true)
+        console.log('on cart getSummaryByCartData ', res)
+        this.setData({
+          cartAllData: res
+        })
+      })
+    })
+  },
+  // 清空购物车
+  clearCart() {
+    const { storeNo } = this.data
+    const params = {
+      skuStoreNo: storeNo,
+    }
+    cartApi.clearCart(params)
+  },
+  // 清空失效商品
+  clearExpired() {
+    const { storeNo } = this.data
+    const params = {
+      skuStoreNo: storeNo,
+    }
+    cartApi.clearExpired(params)
+  },
+  // 购物车相关 end
 
   // 基础数据
   hanldeGoodsParams(options){
     let { systemInfo } = this.store.data;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
     this.goodParams = options;
-    console.log('hanldeGoodsParams', this.goodParams)
+    // console.log('checkSpec hanldeGoodsParams', this.goodParams)
     let isActivityGood = 1;
     if(!!options.orderType) isActivityGood = options.orderType;
-    console.log('isActivityGood', isActivityGood)
+
     this.setData({
       backTopHeight,
       isActivityGood,
@@ -171,7 +364,7 @@ create.Page(store, {
       isCart: options.isCart || '',
       isHome: options.isHome || '',
     }, () => {
-      console.log('isActivityGood', isActivityGood)
+      // console.log('isActivityGood', isActivityGood)
     })
     if (options && options.shareStoreNo) {
       this.shareStoreNo = options.shareStoreNo
@@ -231,7 +424,7 @@ create.Page(store, {
     }
   },
   getStoreNo () {
-    console.log('getStoreNo', this.data.userInfo)
+    // console.log('getStoreNo', this.data.userInfo)
     if (!this.data.userInfo) {
       // getStorageUserInfo(true);
       return;
@@ -284,7 +477,7 @@ create.Page(store, {
         }
       }
     }
-    
+
     console.log('all', all)
     this.goodParams = all
     const {
@@ -418,7 +611,7 @@ create.Page(store, {
     if(orderType == 3) return;
     goodApi.getDetailImg({
       spuId,
-    }).then(res => {
+    }, {showLoading: false}).then(res => {
       this.setData({
         detailImg: res.images
       })
@@ -427,6 +620,7 @@ create.Page(store, {
 
   // 商品详情  30199 商品不存在
   getGoodDetail(options = {}) {
+    const that = this
     let {
       activityId,
       objectId,
@@ -481,6 +675,7 @@ create.Page(store, {
           this.getDetailAfter();
         })
       }).catch(err => {
+        console.log('orderType ', orderType, err)
         this.handleGoodError();
       })
     // orderType == 1 详情
@@ -488,16 +683,30 @@ create.Page(store, {
       console.log('商品详情请求前传参orderType1', params)
       goodApi.getGoodDetail(params).then(res => {
         let good = res;
-        let selectAddressType = "";
+        let selectAddressType = {};
         let currentSku = {};
         if(!good.isMultiSpec) {
           this.specLoaded = true;
         }
         good.goodsSaleMinPrice = util.divide(good.goodsSaleMinPrice, 100);
         good.goodsMarketPrice = util.divide(good.goodsMarketPrice, 100);
-        if(good.sendTypeList) {
+
+        let data = wx.getStorageSync("CREATE_INTENSIVE")
+        if (data.selectAddressType && data.selectAddressType.type) {
+          selectAddressType = data.selectAddressType
+        } else if (good.sendTypeList) {
           selectAddressType = good.sendTypeList.find(item => item.status == 1);
         }
+        if(good.sendTypeList) {
+          good.sendTypeList.forEach(item => {
+            if(item.type === selectAddressType.type) {
+              item.status = 1;
+            } else {
+              item.status = 0;
+            }
+          })
+        }
+
         if(good.goodsState == 1) {
           if(good.isMultiSpec == 0) {
             currentSku = {
@@ -513,7 +722,7 @@ create.Page(store, {
         good.refuseArea && good.refuseArea.forEach((item, index) => {
           refuseText += `${item.areaName}${index != good.refuseArea.length - 1? '；' : ''}`;
         });
-        this.setData({
+        that.setData({
           currentSku,
           good,
           refuseText,
@@ -523,6 +732,7 @@ create.Page(store, {
           this.getDetailAfter();
         });
       }).catch(err => {
+        console.log('orderType ', orderType, err)
         this.handleGoodError();
       });
     // B端集约
@@ -531,9 +741,9 @@ create.Page(store, {
     // 其他详情
     } else {
       console.log('商品详情请求前传参-其它详情', params)
-      goodApi.getGoodDetailNew(params).then(res => {
+      goodApi.getGoodDetailNew(params, {showLoading: false}).then(res => {
         let good = res;
-        let selectAddressType = "";
+        let selectAddressType = {};
         let currentSku = {};
         let nowTime = new Date().getTime();
         if(!good.isMultiSpec) {
@@ -545,8 +755,21 @@ create.Page(store, {
           good.lastTime = good.deadlineTime - nowTime;
           good.lastTime = good.lastTime > 0 ? good.lastTime : 0;
         }
-        if(good.sendTypeList) {
+
+        let data = wx.getStorageSync("CREATE_INTENSIVE")
+        if (data.selectAddressType && data.selectAddressType.type) {
+          selectAddressType = data.selectAddressType
+        } else if (good.sendTypeList) {
           selectAddressType = good.sendTypeList.find(item => item.status == 1);
+        }
+        if(good.sendTypeList) {
+          good.sendTypeList.forEach(item => {
+            if(item.type === selectAddressType.type) {
+              item.status = 1;
+            } else {
+              item.status = 0;
+            }
+          })
         }
         if(good.goodsState == 1) {
           if(good.isMultiSpec == 0) {
@@ -563,7 +786,7 @@ create.Page(store, {
         good.refuseArea && good.refuseArea.forEach((item, index) => {
           refuseText += `${item.areaName}${index != good.refuseArea.length - 1? '；' : ''}`;
         });
-        this.setData({
+        that.setData({
           currentSku,
           good,
           refuseText,
@@ -577,17 +800,22 @@ create.Page(store, {
           // this.getIntensiveUser(good.storeSaleSumNum || 100);
           // 获取商品详情
           const isStore = haveStore(good.storeNo);
-          if(isStore) {
-            this.getStoreInfo({
-              orderType,
-              storeNo: good.storeNo,
-            });
-          }
+          // if(isStore) {
+          //   this.getStoreInfo({
+          //     orderType,
+          //     storeNo: good.storeNo,
+          //   });
+          // }
+          this.getStoreInfo({
+            orderType,
+            storeNo: good.storeNo,
+          });
         }
         // if(orderType == 2 || orderType == 11) {
           this.getSecUser();
         // }
       }).catch(err => {
+        console.log('orderType ', err)
         this.handleGoodError({
           isOver: !!err.code == 30199
         });
@@ -597,6 +825,7 @@ create.Page(store, {
 
   // B端详情
   getBusinessDetail(params) {
+    const that = this
     console.log('b端详情请求参数', params)
     goodApi.getBusinessDetail(params).then(res => {
       let good = res;
@@ -612,12 +841,16 @@ create.Page(store, {
       // 下单用户轮播
       this.getSecUser(15);
     }).catch(err => {
+      console.log('orderType ', orderType, err)
       this.handleGoodError();
     })
   },
 
   // 获取商品详情回调
   getDetailAfter() {
+    this.setData({
+      cartBtnIsShow: this.data.good.cartBtnIsShow,
+    })
     const {
       shareInfo,
     } = this.data;
@@ -634,7 +867,7 @@ create.Page(store, {
       }
     }
   },
-  
+
   // 获取分享参数
   getShareInfo() {
     let userInfo = getStorageUserInfo();
@@ -796,7 +1029,7 @@ create.Page(store, {
     } = this.data;
     if (type === 2) {
       this.drawShareImg_pt(tmpImg)
-      return 
+      return
     }
     const that = this;
     const salePrice = '¥' + parseFloat(good.goodsSaleMinPrice).toFixed(2);
@@ -866,19 +1099,28 @@ create.Page(store, {
 
   // 获取商品推荐
   getGoodRecommend(isNext) {
-    const {
-      next,
-      size,
-    } = this.recommendPage;
+    var that = this
+    var next = ""
+    var size = 20
+    if (this.recommendPage && this.recommendPage.next) {
+      next = this.recommendPage.next
+    }
+    if (this.recommendPage && this.recommendPage.size) {
+      size = this.recommendPage.size
+    }
     let {
       recommendList
     } = this.data;
     goodApi.getUserLike({
       next,
       size,
-    }).then(res => {
-      this.recommendPage.hasNext = res.hasNext;
-      this.recommendPage.next = res.next;
+    }, {showLoading: false}).then(res => {
+      if (that.recommendPage && that.recommendPage.hasOwnProperty('hasNext')) {
+        that.recommendPage.hasNext = res.hasOwnProperty('hasNext') ? res.hasNext : false;
+      } else {
+        that.recommendPage = {hasNext: false, next:""};
+      }
+      that.recommendPage.next = res.hasOwnProperty('next')  ? res.next : '';
       const list = res.records;
       list.forEach(item => {
         item.title = item.goodsName;
@@ -924,20 +1166,21 @@ create.Page(store, {
       });
     // }, 1000)();
   },
-  
+
   // 商详报错处理
   handleGoodError({
     isOver
   }) {
     if(isOver) {
       this.setData({
+        stockOver: 1,
         stockOverText: "商品已售罄"
       })
     }
     this.goodOver = true;
     let timer = setTimeout(() => {
       clearTimeout(timer);
-      router.go();
+      // router.go();
     }, 1500);
   },
 
@@ -961,6 +1204,7 @@ create.Page(store, {
     currentTarget
   }) {
     const current = currentTarget.dataset.data;
+    console.log('onChangePickType ', current);
     const {
       good,
     } = this.data;
@@ -971,9 +1215,17 @@ create.Page(store, {
         item.status = 0;
       }
     });
+    let data2 = wx.getStorageSync("CREATE_INTENSIVE")
+    if (data2) {
+      data2.selectAddressType = current
+      wx.setStorageSync("CREATE_INTENSIVE", data2)
+    } else {
+      wx.setStorageSync("CREATE_INTENSIVE", {selectAddressType: current})
+    }
+    console.log('onChangePickType selectAddressType cg', wx.getStorageSync("CREATE_INTENSIVE").selectAddressType)
     this.setData({
       good,
-      selectAddressType: current, 
+      selectAddressType: current,
     });
   },
 
@@ -1225,7 +1477,7 @@ create.Page(store, {
       stockOverText
     };
     this.setData(result);
-    return result; 
+    return result;
   },
 
   // 获取比价信息
@@ -1250,10 +1502,15 @@ create.Page(store, {
   // 多规格设置当前sku
   setCurrentSku({ detail }) {
     this.specLoaded = true;
+    console.log("checkSpec setCurrentSku detail", this.goodParams.skuId != detail.skuId, detail, '; this.goodParams ', this.goodParams)
     if(detail.skuId) {
       this.setData({
         currentSku: detail,
       })
+      if (this.goodParams && this.goodParams.skuId != detail.skuId) {
+        this.goodParams.skuId = detail.skuId
+        this.hanldeGoodsParams(this.goodParams)
+      }
       // , () => {
       //   this.handleGoodStock();
       // }
@@ -1262,7 +1519,6 @@ create.Page(store, {
 
   // 打开选规格弹窗
   openSpecPopup(e) {
-    
     if(!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
@@ -1355,10 +1611,9 @@ create.Page(store, {
     });
   },
 
-
   // 跳转确认订单
   onToCreate(e) {
-    console.log('eeeeeeeeeeeeeeeeeeeee', e)
+    console.log('selectAddressType e', e)
     if(!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
@@ -1476,17 +1731,20 @@ create.Page(store, {
     if(orderType == 15 || orderType == 16) {
       data.storeAdress = storeInfo.storeAddress;
       data.selectAddressType = selectAddressType;
-      console.log('15/16', data)
+      console.log('15/16 selectAddressType', data)
       wx.setStorageSync("CREATE_INTENSIVE", data);
     } else {
       console.log('其它', data)
       wx.setStorageSync("GOOD_LIST", data);
     }
+    let escrowAgreement = e?.detail?.escrowAgreement
+    console.log('selectAddressType e ', escrowAgreement)
     let p = {
       orderType: isActivityCome?2:orderType,
       activityId: !!activityId ? activityId : "",
       objectId: !!objectId ? objectId : this.goodParams.objectId,
       isActivityCome: isActivityCome,
+      isEscrow: escrowAgreement,
     }
     if (this.shareStoreNo) {
       p.shareStoreNo = this.shareStoreNo
@@ -1509,6 +1767,7 @@ create.Page(store, {
 
   // 监听拼团剩余时间
   onChangeTime(e) {
+    console.log('onChangeTime ', e)
     this.setData({
       timeData: e.detail,
     });

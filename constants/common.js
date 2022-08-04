@@ -22,7 +22,7 @@ export const webHost = {
 export const IMG_CDN = ossHost[ENV] || ossHost['pro'];
 // export const H5_HOST = webHost[ENV] || webHost['pro'];
 
-export const H5_HOST = webHost[ENV] || webHost['uat'];
+export const H5_HOST = webHost[ENV] || webHost['pro'];
 
 // 协议
 const agreementHost = {

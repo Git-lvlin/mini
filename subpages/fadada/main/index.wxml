@@ -4,10 +4,11 @@
 <van-cell title="供应商手机" value="{{contractDetail.phone}}" />
 <van-cell title="入驻编号" value="{{contractDetail.pactNo}}" />
 <van-cell title="合同签订状态" value="{{contractDetail.signStatusDesc}}" />
-<view class="bottom_confirm" wx:if="{{contractDetail.signStatus === 2 && contractDetail.payStatus === 2}}">
+<!-- payStatus === 2 已支付 ;  signStatus 签订状态，1 已签订 ，2未签订，3待上传，4待支付，5待签订-->
+<view class="bottom_confirm" wx:if="{{contractDetail.signStatus > 3 && contractDetail.payStatus === 2}}">
   <view class="comfirm_btn" bind:tap="sign">立即签订</view>
 </view>
-<view class="bottom_confirm" wx:if="{{contractDetail.signStatus === 2 && contractDetail.payStatus < 2}}">
+<view class="bottom_confirm" wx:if="{{contractDetail.payStatus < 2}}">
   <view class="comfirm_btn" bind:tap="pactUrl">查看入驻合作协议</view>
 </view>
 <!-- <web-view src="{{contractDetail.pactUrl}}" /> -->
