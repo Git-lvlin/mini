@@ -69,12 +69,12 @@
             bind:click="onTakeSpot"
           />
         </view>
-        <!-- <nodata wx:if="{{listIsLoad && !markers.length}}" title="附近没有店铺呢" type="search" top="{{20}}" /> -->
+        <nodata wx:if="{{listIsLoad && !markers.length}}" title="定位·附近暂时没有社区店，请切换其他地址" type="search" top="{{10}}" imgStyle="width:180rpx; height:180rpx;" />
       </view>
     </view>
 
     <view class="confirm_box">
-      <view
+      <view wx:if="{{markers.length > 0}}"
         class="confirm_btn"
         style="background-image: url({{tools.getImgUrl('miniprogram/location/confirm_btn_back.png')}});"
         bindtap="onConfirm"
@@ -90,7 +90,7 @@
   <view class="address_wrap" wx:if="{{showAddress}}">
     <van-tabs>
       <van-tab title="地址">
-        <view class="sreach_address">
+        <view class="sreach_address" wx:if="{{addMarkers.length}}">
           <view class="address_item" wx:for="{{addMarkers}}" wx:key="index" data-data="{{item}}" bindtap="onSelectAddress">
             <view class="company_name text_one_line">
               <text class="{{child.type === 2 ? 'text_red' : ''}}" wx:for="{{item.nameArr}}" wx:key="index" wx:for-item="child">{{child.text}}</text>
@@ -100,10 +100,16 @@
             <view class="distanceDisplay">{{item.distanceDisplay}}</view>
           </view>
         </view>
+        <view class="sreach_address" wx:else>
+          <nodata top="{{200}}" type="search" title="暂无数据" />
+        </view>
       </van-tab>
       <van-tab title="社区店">
         <view class="store_list" wx:if="{{stores.length}}">
           <take-spot wx:for="{{stores}}" wx:key="sn" data="{{item}}" bind:click="onTakeSpot2" />
+        </view>
+        <view class="store_list" wx:else>
+          <nodata top="{{200}}" type="search" title="暂无数据" />
         </view>
       </van-tab>
     </van-tabs>

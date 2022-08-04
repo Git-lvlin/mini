@@ -1,0 +1,8 @@
+{
+  "navigationBarTextStyle": "white",
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "good-card": "/components/common/good-card/index",
+    "down-app-code": "/components/common/default-down-app-code/index"
+  }
+}

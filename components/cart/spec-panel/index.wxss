@@ -136,3 +136,14 @@
   color: #777;
   background: #f0f0f0;
 }
+.red_text {
+  color: #e5352f;
+}
+
+.radio_icon {
+  width: 34rpx;
+  height: 34rpx;
+  vertical-align: middle;
+  margin-right: 16rpx;
+  margin-bottom: 8rpx;
+}

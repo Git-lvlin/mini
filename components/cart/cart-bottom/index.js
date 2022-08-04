@@ -31,6 +31,10 @@ create.Component(store, {
       type: Number,
       value: 0
     },
+    buttonTitle: {
+      type: String,
+      value: '立即购买'
+    },
     info: {
       type: Object,
       value: {},
@@ -50,18 +54,35 @@ create.Component(store, {
       } else {
         this.getSummaryByCartData()
       }
-      let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
-      let userInfo = getStorageUserInfo();
+      let takeSpot = wx.getStorageSync("TAKE_SPOT") || {}
       this.setData({
         storeNo: takeSpot?.storeNo,
+      }, () => {
+        console.log('currentStoreNo cart bt ready ', this.data.storeNo)
+      })
+      let userInfo = getStorageUserInfo();
+      this.setData({
         userInfo,
       }, () => {
         console.log('userInfo', this.data.userInfo)
       })
+      this.updateSelectAddressType('lifetimes show')
       this.getStoreInfo()
     }
   },
 
+  pageLifetimes: {
+    show: function() {
+      let takeSpot = wx.getStorageSync("TAKE_SPOT") || {}
+      this.setData({
+        storeNo: takeSpot?.storeNo,
+      }, () => {
+        console.log('currentStoreNo cart bt pageLifetimes show ', this.data.storeNo)
+      })
+      this.updateSelectAddressType('pageLifetimes show')
+      this.getStoreInfo()
+    }
+  },
 
   data: {
     notSelectIcon: `${IMG_CDN}miniprogram/common/def_choose.png`,
@@ -79,8 +100,19 @@ create.Component(store, {
   },
 
   methods: {
+    updateSelectAddressType(name) {
+      let data = wx.getStorageSync("CREATE_INTENSIVE")
+      console.log(name, ' selectAddressType 31', this.data.selectAddressType)
+      if (data.selectAddressType && data.selectAddressType.type) {
+        this.setData({
+          selectAddressType: data.selectAddressType,
+        }, () => {
+          console.log(name, ' selectAddressType 31', this.data.selectAddressType)
+        })
+      }
+    },
     checkChange({detail}) {
-      console.log('type', detail)
+      console.log('selectAddressType detail', detail)
       this.setData({
         selectAddressType: {type: detail?2:3}
       })
@@ -121,6 +153,10 @@ create.Component(store, {
       })
     },
     onShowPopup() {
+      this.updateSelectAddressType('onShowPopup')
+      // 触发回调
+      this.triggerEvent("popup", true)
+      console.log('onShowPopup selectAddressType cart-popup', !this.data.popupType, this.data.selectAddressType.type)
       this.setData({
         popupType: !this.data.popupType
       })
@@ -197,6 +233,7 @@ create.Component(store, {
         return
       }
       let goodsInfos = await this.handleSubmitData(submitData);
+
       const {
         selectAddressType,
         storeNo,
@@ -210,6 +247,12 @@ create.Component(store, {
       };
       data.storeAdress = storeInfo.storeAddress;
       data.selectAddressType = selectAddressType;
+      let cacheData = wx.getStorageSync("CREATE_INTENSIVE")
+      if (cacheData.selectAddressType && cacheData.selectAddressType.type) {
+        data.selectAddressType = cacheData.selectAddressType
+      }
+      // console.log('selectAddressType 32', data.selectAddressType, selectAddressType)
+      // return
       wx.setStorageSync("CREATE_INTENSIVE", data);
       let p = {
         orderType: 15,

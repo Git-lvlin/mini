@@ -1,7 +1,8 @@
 import Request from '../utils/request'
 
 const url = {
-  xsmsGoodsList: "/activity/option/xsmsGoodsList",
+  // xsmsGoodsList: "/activity/option/xsmsGoodsList",
+  xsmsGoodsList: "/activity/option/seckillingGoodsList",
   xsmsNotice:"/activity/auth/xsmsNotice",
 }
 const getExamine = (params) => {

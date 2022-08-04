@@ -1,0 +1,34 @@
+<wxs module="tools" src="../../wxs/common.wxs" />
+
+<view class="container">
+  <view class="nav_back" style="padding-top: {{$.systemInfo.statusHeight}}rpx">
+    <image class="nav_back_img" src="{{tools.getImgUrl('miniprogram/user/user_back.png')}}" />
+  </view>
+  <view class="content" style="position: relative;">
+    <view class="nav_height" style="height: {{$.systemInfo.statusHeight + $.systemInfo.navBarHeight}}rpx" />
+    <view class="head" bindtap="back">
+      <view class="flex_fix left_arrow" />
+    </view>
+    <view class="right_btn" style="position: absolute; right:10rpx; margin-top:10rpx;" bindtap="onSupplierMaterial" data-supplierid="{{supplierId}}">
+      企业资质 <view class="right_arrow" style="margin-top:16rpx;"></view></view>
+    <view class="head_title">{{info.companyName || ''}}</view>
+    <view class="head_intro">
+      {{info.intro || ''}}
+    </view>
+
+    <view class="good_list">
+      <view
+        class="good_item"
+        wx:for="{{productList.records}}"
+        wx:key="id"
+      >
+        <good-card
+          data="{{item}}"
+          size="220rpx"
+        />
+
+      </view>
+    </view>
+  </view>
+</view>
+

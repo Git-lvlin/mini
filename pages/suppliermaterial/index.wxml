@@ -1,0 +1,44 @@
+<wxs module="tools" src="../../wxs/common.wxs" />
+
+<view class="container">
+  <view wx:if="{{showInfo == true}}">
+  <view class="info">
+    <view class="table">
+      <view class="tr">
+        <view class="th">企业名称:</view>
+        <view class="td">{{info.companyName}}</view>
+      </view>
+      <view class="tr">
+      <view class="th">注册地址:</view>
+      <view class="td">{{info.companyAddress}}</view>
+      </view>
+
+      <view class="tr">
+      <view class="th">经营范围:</view>
+      <view class="td">{{info.businessScope}}</view>
+      </view>
+      <!-- 证件照 -->
+      <view wx:for="{{info.supplierImg}}" wx:key="index">
+          <view class="th" style="margin-bottom:-20rpx;">{{item.name}}:</view>
+          <view>
+            <block wx:for="{{item.imgs}}" wx:for-item="url">
+              <image mode="aspectFit" src="{{url}}" catchtap="preview" data-src="{{url}}" style="margin: auto 20rpx; width: 100%;"/>
+            </block>
+          </view>
+      </view>
+    </view>
+  </view>
+  </view>
+  <view wx:if="{{showInfo == false}}">
+  <view class="captcha">
+    <view class="captcha-tips">请输入图中的验证码</view>
+    <image class="captcha-img" src="{{captcha}}" catchtap="changecode"/>
+    <view class="captcha-input">
+      <input class="captcha-input-item" maxlength="1" auto-focus="true" bindinput="getCodeValue" data-name="captcha1" value="{{captcha.captcha1}}" focus></input>
+      <input class="captcha-input-item" maxlength="1" auto-focus="false" bindinput="getCodeValue" data-name="captcha2" value="{{captcha.captcha2}}"></input>
+      <input class="captcha-input-item" maxlength="1" auto-focus="false" bindinput="getCodeValue" data-name="captcha3" value="{{captcha.captcha3}}"></input>
+      <input class="captcha-input-item" maxlength="1" auto-focus="false" bindinput="getCodeValue" data-name="captcha4" value="{{captcha.captcha4}}"></input>
+    </view>
+  </view>
+  </view>
+</view>

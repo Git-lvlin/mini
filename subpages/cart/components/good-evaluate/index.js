@@ -34,7 +34,7 @@ Component({
         storeNo: good.storeNo,
         spuId: good.spuId,
         commentType: good.commentType,
-      }).then(res => {
+      }, {showLoading: false}).then(res => {
         if(res.allCount != "0") {
           this.getDetailComment(good);
         }

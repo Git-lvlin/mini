@@ -55,7 +55,8 @@ create.Page(store, {
     remindData: [],
     recommendData: [],
     goodsData2: [],
-    storeNo: 'store_m_123942', // 测试用店铺号
+    // storeNo: 'store_m_123942', // 测试用店铺号
+    storeNo: '', // 测试用店铺号
     classData: null,
     classData2: [],
     goodsData: null,
@@ -294,7 +295,7 @@ create.Page(store, {
     });
   },
 
-  handleUpdate() {
+  handleUpdate(res) {
     this.init(this.data.tabIndexId)
   },
 
@@ -404,10 +405,12 @@ create.Page(store, {
         query.select('#tabs').boundingClientRect()
         query.selectViewport().scrollOffset()
         query.exec((res) => {
-          this.setData({
-            height1: res[0].height,
-            height2: res[0].height,
-          })
+          if (res[0] && res[0].hasOwnProperty('height')) {
+            this.setData({
+              height1: res[0].height,
+              height2: res[0].height,
+            })
+          }
         })
       })
     })

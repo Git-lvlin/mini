@@ -1,6 +1,7 @@
 {
   "component": true,
   "usingComponents": {
+    "eveluate-star": "/components/common/eveluate-star/index",
     "nodata": "/components/common/nodata/index"
   }
 }

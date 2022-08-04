@@ -9,6 +9,14 @@ Component({
       type: String,
       value: ""
     },
+    mkStyle:{
+      type: String,
+      value: ""
+    },
+    descMoney:{
+      type: String,
+      value: ""
+    },
     money: {
       type: Number,
       value: 0

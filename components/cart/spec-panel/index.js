@@ -2,7 +2,9 @@ import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
 import util from '../../../utils/util';
+import router from '../../../utils/router'
 import { debounce, showToast } from '../../../utils/tools';
+import { H5_HOST,IMG_CDN } from '../../../constants/common'
 
 create.Component(store, {
   use: [
@@ -66,6 +68,11 @@ create.Component(store, {
       type: String,
       value: "",
     },
+    // 是否显示托管协议 1 是  0 否
+    escrowAgreement: {
+      type: Number,
+      value: 0,
+    },
     create: {
       type: Number,
       value: 0,
@@ -92,6 +99,9 @@ create.Component(store, {
     skuList: [],
     checkSpec: [],
     curSku: {},
+    selectIcon: `${IMG_CDN}miniprogram/common/def_choose.png`,
+    selectedIcon: `${IMG_CDN}miniprogram/common/choose.png`,
+    checked: false,
     // currentCart: [],
   },
   lifetimes: {
@@ -120,8 +130,10 @@ create.Component(store, {
         activityId: good.activityId,
         ...data,
       };
-      goodApi.getCheckSku(postData).then(res => {
+      // console.log('getCheckSku postData ', postData)
+      goodApi.getCheckSku(postData, {showLoading: false}).then(res => {
         const curSku = res.curSku;
+        console.log(' checkSpec 1', checkSpec, data, '; curSku ', curSku)
         curSku.salePrice = util.divide(curSku.salePrice, 100);
         curSku.stockOver = 0;
         if(curSku.stockNum <= 0) {
@@ -142,15 +154,14 @@ create.Component(store, {
             });
           });
         }
-        if(fristLoad) {
-          this.triggerEvent("setSku", {
-            skuId: curSku.id,
-            skuName: curSku.skuName,
-            stockNum: good.stockNum,
-            buyMaxNum: curSku.buyMaxNum,
-            skuNum: curSku.buyMinNum > 0 ? curSku.buyMinNum : 1,
-          });
-        }
+
+        this.triggerEvent("setSku", {
+          skuId: curSku.id,
+          skuName: curSku.skuName,
+          stockNum: good.stockNum,
+          buyMaxNum: curSku.buyMaxNum,
+          skuNum: curSku.buyMinNum > 0 ? curSku.buyMinNum : 1,
+        });
         this.setData({
           skuData: res,
           skuList: res.specList,
@@ -158,6 +169,7 @@ create.Component(store, {
           skuNum: curSku.buyMinNum > 0 ? curSku.buyMinNum : 1,
           checkSpec,
         })
+
       })
     },
 
@@ -176,6 +188,7 @@ create.Component(store, {
       let data = {
         checkSpec,
       };
+      console.log(' checkSpec 1', checkSpec, data, '; ')
       // checkSpec.forEach((item, index) => {
       //   data[`checkSpec[${index}]`] = item;
       // });
@@ -233,11 +246,19 @@ create.Component(store, {
       const {
         good,
         specType,
+        escrowAgreement,
         curSku,
         skuNum,
         isAlone,
         create,
       } = this.data;
+      console.log(" escrowAgreement ", escrowAgreement, '; specType ', specType)
+      if (escrowAgreement == 1 && (!this.data.checked)) {
+          showToast({
+            title: '请先阅读并勾选合同',
+          })
+        return
+      }
       if(specType === "buy") {
         this.triggerEvent("setSku", {
           skuId: curSku.id,
@@ -253,6 +274,7 @@ create.Component(store, {
           skuNum,
           isAlone,
           create,
+          escrowAgreement,
         }
         this.triggerEvent("specBuy", param);
 
@@ -269,5 +291,41 @@ create.Component(store, {
       }
       this.onClose();
     },
+
+    // 勾选条件
+    onChangeRadio(event) {
+      var check = this.data.checked;
+      if (check) {
+        this.data.checked = false;
+        console.log("已取消选中");
+      } else {
+        this.data.checked = true;
+        console.log("已选中");
+      }
+      this.setData({
+        checked: this.data.checked,
+      });
+    },
+    // 协议跳转
+    onClickAgreement(event) {
+      const {
+        agreement
+      } = event.currentTarget.dataset;
+      // console.log('agreement ', agreement)
+      // return
+      if (agreement == 'escrow-agreement') {
+        //  《托管代运营合同》
+        router.push({
+          name: "webview",
+          data: {
+            url: encodeURIComponent(H5_HOST + '/web/escrow-agreement'),
+          },
+        })
+      } else {
+          showToast({
+            title: '协议类型有误',
+          })
+      }
+    }
   }
 })

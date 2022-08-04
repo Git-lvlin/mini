@@ -16,6 +16,7 @@
     "price-ratio-bar": "../components/price-ratio-bar/index",
     "user-together-banner": "../components/user-together-banner/index",
     "good-evaluate": "../components/good-evaluate/index",
+    "cart-bottom": "/components/cart/cart-bottom/index",
     "detail-nav": "../components/detail-nav/index"
   }
 }

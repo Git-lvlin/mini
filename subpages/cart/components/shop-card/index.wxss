@@ -147,10 +147,10 @@
 
 .note_input {
   flex: 1;
-  height: 40rpx;
-  padding: 0;
-  line-height: 40rpx;
-  text-align: right;
+  height: 120rpx;
+  padding-left: 16rpx;
+  line-height: 48rpx;
+  text-align: left;
 }
 
 .ipunt_desc {

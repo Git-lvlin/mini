@@ -60,12 +60,15 @@ create.Component(store, {
   },
   lifetimes: {
     ready() {
-      this.getCartList()
+      // this.getCartList()
+      this.updateSelectAddressType('lifetimes read');
     },
   },
   pageLifetimes: {
+    ready() {
+      this.updateSelectAddressType('pageLifetimes read');
+    }
   },
-
   data: {
     notSelectIcon: `${IMG_CDN}miniprogram/common/def_choose.png`,
     selectIcon: `${IMG_CDN}miniprogram/common/choose.png`,
@@ -75,7 +78,9 @@ create.Component(store, {
     checkoutAll: false,
     cartGoodsOne: null,
     cartGoodsTwo: null,
-    isSelf: true,
+    // {name: "上门提货", type: 2, status: 0}
+    // {name: "商家配送", type: 3, status: 0}
+    selectAddressType: {},
     deletePopupShow: false,
     inTitle: '删除商品',
     inContent: '确定删除该商品吗？',
@@ -84,6 +89,18 @@ create.Component(store, {
   },
 
   methods: {
+    updateSelectAddressType(name) {
+      let data = wx.getStorageSync("CREATE_INTENSIVE")
+      console.log(name, ' selectAddressType 35 cart-popup', this.data.selectAddressType)
+      if (data.selectAddressType && data.selectAddressType.type) {
+        this.setData({
+          selectAddressType: data.selectAddressType,
+        }, () => {
+          console.log(name, ' selectAddressType 35 cart-popup', this.data.selectAddressType)
+        })
+      }
+    },
+
     // 跳转详情
     onGood({
       currentTarget
@@ -109,10 +126,27 @@ create.Component(store, {
     },
     //  切换配送、自提状态
     checkSelf() {
-      this.triggerEvent("check", !this.data.isSelf);
+      let data2 = wx.getStorageSync("CREATE_INTENSIVE")
+      if (data2) {
+        console.log('selectAddressType  before', data2.selectAddressType.type)
+        var current = {"type": 3} // 配送
+        if (data2.selectAddressType.type == 3) {
+          current = {"type": 2} // 自提
+        }
+        data2.selectAddressType = current
+        wx.setStorageSync("CREATE_INTENSIVE", data2)
+      } else {
+        wx.setStorageSync("CREATE_INTENSIVE", {selectAddressType: current})
+      }
       this.setData({
-        isSelf: !this.data.isSelf
+        selectAddressType: current,
       })
+      console.log('selectAddressType  after', data2.selectAddressType.type)
+
+      // this.triggerEvent("check", !this.data.isSelf);
+      // this.setData({
+      //   isSelf: !this.data.isSelf
+      // })
     },
     // 选中购物车明细
     checkedItem(e) {
@@ -181,6 +215,7 @@ create.Component(store, {
     },
     // 设置购物车商品数量
     setCartNum(itemInfo) {
+      const that = this
       const { quantity, skuId, objectId } = itemInfo;
       const params = {
         skuId: skuId,
@@ -188,11 +223,12 @@ create.Component(store, {
         quantity: quantity,
       }
       cartApi.setCartNum(params).then((res) => {
-        console.log('设置购物车商品数量', res)
+        // console.log('设置购物车商品数量 226', res)
         if (res.value) {
-          this.getCartList()
+          that.getCartList()
           // 设置完还需要更新购物车汇总数据
-          this.toUpdateCartAll()
+          that.toUpdateCartAll()
+          that.onCloseCartsPopup()
         }
       })
     },
@@ -436,6 +472,34 @@ create.Component(store, {
           }).then(res => {
             showToast({ title: "删除成功" });
             store.updateCart(true);
+          });
+        },
+      })
+    },
+    // 点击移除购物车
+    removeCart({
+      currentTarget,
+    }) {
+      const {
+        good,
+      } = currentTarget.dataset
+      const that = this
+      showModal({
+        content: "您确定要删除？",
+        ok() {
+          const { skuStoreNo, objectId, skuId} = good
+          console.log("on cart removeCart good", good)
+          const params = {
+            objectIds: [objectId], // 业务id数组
+            skuIds: [skuId], //
+            skuStoreNo,
+          }
+          console.log("on cart removeCart params", params)
+          cartApi.removeCart(params).then(res => {
+            showToast({ title: "删除成功" });
+            that.getCartList();
+            that.toUpdateCartAll()
+            // that.onClose();
           });
         },
       })

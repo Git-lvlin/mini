@@ -109,8 +109,8 @@ create.Component(store, {
       const url = event.currentTarget.dataset.path;
       const pages = getCurrentPages();
       const currPage = pages[pages.length - 1].route
-      console.log('currpage', currPage)
-      console.log('url', url)
+      // console.log('currpage', currPage)
+      // console.log('url', url)
       // const index = event.currentTarget.dataset.index;
       if(url === `/${currPage}`) return;
       if (url === '/pages/intensive/index') {

@@ -49,7 +49,7 @@ create.Page(store, {
   },
 
   onLoad(options) {
-    console.log('options', options)
+    console.log('onLoad options', options)
     this.options = options
     commonApi.getResourceDetail({
       resourceKey: PAY_TYPE_KEY,
@@ -82,9 +82,20 @@ create.Page(store, {
     // if (!this.options.contractId) {
     //   return
     // }
-    // fadadaApi.getContractGetDetail({contractId: this.options.contractId}).then((res) => {
-
-    // })
+    //
+    var contractId = wx.getStorageSync('CURRENT_CONTRACT_ID')
+    console.log('onShow contractId ', contractId, '; ', wx.getStorageSync('CURRENT_CONTRACT_ID'))
+    if (!contractId) {
+      return
+    }
+    fadadaApi.getContractGetDetail({contractId: contractId}).then((res) => {
+        // 签订状态，1 已签订 ，2未签订，3待上传，4待支付，5待签订
+        if (res.records.signStatus == 1) {
+          wx.navigateTo({
+            url: '/subpages/fadada/main/index?callback=1&contractId=' + contractId
+          })
+        }
+    })
   },
   /**
    * 获取支付信息
