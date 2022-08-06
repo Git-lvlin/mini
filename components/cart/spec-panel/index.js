@@ -326,6 +326,17 @@ create.Component(store, {
             title: '协议类型有误',
           })
       }
-    }
+    },
+
+    //预览图片，放大预览
+    previewSelf(e) {
+      var that = this
+      console.log(e.currentTarget.dataset.src)
+      let currentUrl = e.currentTarget.dataset.src
+      wx.previewImage({
+        current: currentUrl, // 当前显示图片的http链接
+        urls: [currentUrl] // 需要预览的图片http链接列表
+      })
+    },
   }
 })

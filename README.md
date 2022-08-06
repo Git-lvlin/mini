@@ -1,5 +1,5 @@
-appid wxb8db75a7eea8787f  汇意
-appid wxdc1fcef98ae73d1e  聚创  current
+AppID wxb8db75a7eea8787f  汇意
+AppID wxdc1fcef98ae73d1e  聚创  current
 
 # 上线注意事项
 务必在发布前确认环境变量是否已修改，环境变量包含接口环境变量和OSS图片环境变量：
