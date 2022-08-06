@@ -435,8 +435,8 @@ create.Page(store, {
     }
 
     return new Promise((resolve) => {
-      intensiveApi.getStoreNo({userType: 1}, {notErrorMsg: true}).then((res) => {
-        console.log('getStoreNo-res', res)
+      intensiveApi.getStoreNo({userType: 1}, {notErrorMsg: true, showLoading: false}).then((res) => {
+        // console.log('getStoreNo-res', res)
         this.setData({
           selfStoreNo: res[0].storeNo
         })

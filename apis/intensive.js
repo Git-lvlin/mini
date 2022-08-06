@@ -154,34 +154,35 @@ export default {
   // 2.5.2生鲜店商品列表
   getGoodsList(params, option) {
     // params = getExamine(params);
-    params = getStoreNo(params)
+    params = getStoreNo(params, {showLoading: false})
     return Request.get(url.goodsList, params, option);
   }, 
   // 2.5.2生鲜店分类列表
   getGoodsCategory(params, option) {
     // params = getExamine(params);
-    params = getStoreNo(params)
+    params = getStoreNo(params, {showLoading: false})
     return Request.get(url.category, params, option);
   },
   // 2.5.2生鲜店为你推荐
   getRecGoods(params, option) {
     // params = getExamine(params);
-    params = getStoreNo(params)
+    params = getStoreNo(params, {showLoading: false})
     return Request.get(url.rec, params, option);
   },
   // 2.5.2店铺猜你喜欢
   getYouLike(params, option) {
     // params = getExamine(params);
-    params = getStoreNo(params)
+    params = getStoreNo(params, {showLoading: false})
     return Request.get(url.love, params, option);
   },
   // 2.5.2店内商品搜索
   searchInStore(params, option) {
-    params = getStoreNo(params)
+    params = getStoreNo(params, {showLoading: false})
     return Request.get(url.search, params, option);
   },
 
   getStoreNo(params, option) {
+    // console.log('getStoreNo ', params, '; ', option)
     return Request.get(url.storeNo, params, option);
   },
   shopIndexCategory(params, option) {

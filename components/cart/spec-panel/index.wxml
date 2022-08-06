@@ -11,7 +11,7 @@
 >
   <view class="spec_content" style="padding-bottom: {{$.systemInfo.bottomBarHeight}}rpx">
     <view class="spec_head">
-      <van-image width="236rpx" height="236rpx" class="spec_img" src="{{curSku.imageUrl}}" />
+      <van-image width="236rpx" height="236rpx" class="spec_img" src="{{curSku.imageUrl}}" catchtap="previewSelf" data-src="{{curSku.imageUrl}}"/>
       <view class="price">￥<text class="text">{{tools.priceToF2(curSku.salePrice || 0, false)}}</text></view>
     </view>
     <view class="spec_box">
