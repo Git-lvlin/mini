@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/home/index",
+    "pages/devicemanage/createorder/index",
     "pages/supplier/index",
     "pages/suppliermaterial/index",
     "pages/community/index",

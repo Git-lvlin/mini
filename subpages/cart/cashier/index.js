@@ -51,6 +51,7 @@ create.Page(store, {
     },
     showSharePopup: false,
     groupInfo: null,
+    scene: 0,
   },
 
   onLoad(options) {
@@ -72,6 +73,7 @@ create.Page(store, {
       });
     }
     this.setData({
+      scene: options.scene,
       payAmount: util.divide(options.payAmount, 100),
       downTime,
       sysEnv,
@@ -180,30 +182,44 @@ create.Page(store, {
    * */ 
   getPayInfo(isNotPayment = false) {
     console.log()
-    getPayInfo({
-      id: this.id,
-      payType: this.payType,
-      isNotPayment,
-    }).then(res => {
-      const {
-        payData,
-        isPay,
-      } = res;
-      if(isPay) {
+    if (this.data.scene == 27) {
+      cartApi.getPayOrderInfo({
+        orderId: this.id,
+        orderType: this.data.scene,
+      }).then(res => {
+        let downTime = res.deadlineTime - res.currentTime;
         this.setData({
-          isPay
-        })
-        // 模拟支付
-        this.getFaterRed();
-      }
-      this.setData({
-        payData,
-        orderCreateTime: dayjs(payData.orderCreateTime).format("YYYY-MM-DD HH:mm:ss"),
-      });
-      app.trackEvent('goods_pay_success', {
-        pay_method_name: isNotPayment ? '模拟支付' : '微信支付'
-      });
-    });
+          downTime: downTime,
+          payAmount: util.divide(res.payAmount, 100),
+          orderCreateTime: dayjs(res.orderCreateTime).format("YYYY-MM-DD HH:mm:ss"),
+        });
+      })
+    } else {
+      getPayInfo({
+        id: this.id,
+        payType: this.payType,
+        isNotPayment,
+      }).then(res => {
+        const {
+          payData,
+          isPay,
+        } = res;
+        if(isPay) {
+          this.setData({
+            isPay
+          })
+          // 模拟支付
+          this.getFaterRed();
+        }
+        this.setData({
+          payData,
+          orderCreateTime: dayjs(payData.orderCreateTime).format("YYYY-MM-DD HH:mm:ss"),
+        });
+        app.trackEvent('goods_pay_success', {
+          pay_method_name: isNotPayment ? '模拟支付' : '微信支付'
+        });
+      })
+    }
   },
 
   // 获取热销商品
@@ -322,41 +338,95 @@ create.Page(store, {
 
   // 点击确定支付
   onPay() {
-    const that = this;
+    const that = this
+    const openId = wx.getStorageSync("OPENID") || ""
     const { orderType } = this.orderInfo
-    if(this.payType === 0) {
-      this.getPayInfo(true)
-      if (orderType == 3) {
-        setTimeout(() => {
-          this.getPoster()
-          // this.getPosterDetail()
-          this.getPersonalDetail()
-        }, 1000)
-      }
-      return ;
-    }
-    const payData = this.data.payData;
     const data = {
       payType: this.payType,
     };
-    onOrderPay({
-      data,
-      payData,
-    }).then(res => {
-      that.setData({
-        isPay: true,
-      })
-      that.getFaterRed();
-      if (orderType == 3) {
-        setTimeout(() => {
-          that.getPoster()
-          // that.getPosterDetail()
-          that.getPersonalDetail()
-        }, 1000)
+    if (this.data.scene == 27) {
+      var param = {
+        orderType: this.data.scene,
+        orderId: this.id,
+        payType: this.payType,
+        payAmount: this.data.payAmount * 100,
+        openId: openId,
+        payPassword: "",
       }
-    }).catch(err => {
+      cartApi.prepayOrder(param).then(res => {
+        console.log('onPay prepayOrder res ', res)
+        // {orderId: "2022081660638687748263727", payType: 7, payAmount: 700000, prepayData: "{"timeStamp":"1660639847","orderNo":"2022081660638…2","nonceStr":"D79KzsjyRDrOlBOlDh6Iw6pKtL6dndxG"}", title: "交易类型：设备运营费",}
+        if (that.payType == 0) {
+          that.setData({
+            isPay: true,
+          })
+          wx.showModal({
+            title: '提示',
+            content: '签署运营服务合同需要在约购APP上进行，请下载约购APP',
+            showCancel: false,
+            confirmText: '我知道了',
+          })
+        } else {
+          that.setData({
+            payData: {
+              prepayData: res.prepayData,
+            },
+          })
+          const payData = this.data.payData;
+          console.log('onPay prepayOrder payData ', payData)
+          // 调起微信支付
+          onOrderPay({
+            data,
+            payData,
+          }).then(res => {
+            that.setData({
+              isPay: true,
+            })
+            wx.showModal({
+              title: '提示',
+              content: '签署运营服务合同需要在约购APP上进行，请下载约购APP',
+              showCancel: false,
+              confirmText: '我知道了',
+            })
+          }).catch(err => {
 
-    });
+          })
+        }
+      })
+    } else {
+      if(this.payType === 0) {
+        this.getPayInfo(true)
+        if (orderType == 3) {
+          setTimeout(() => {
+            this.getPoster()
+            // this.getPosterDetail()
+            this.getPersonalDetail()
+          }, 1000)
+        }
+        return ;
+      }
+      const payData = this.data.payData;
+      console.log('onPay prepayOrder payData ', payData)
+      // 调起微信支付
+      onOrderPay({
+        data,
+        payData,
+      }).then(res => {
+        that.setData({
+          isPay: true,
+        })
+        that.getFaterRed();
+        if (orderType == 3) {
+          setTimeout(() => {
+            that.getPoster()
+            // that.getPosterDetail()
+            that.getPersonalDetail()
+          }, 1000)
+        }
+      }).catch(err => {
+
+      });
+    }
   },
 
   getOrderDetail() {

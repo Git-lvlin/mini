@@ -98,7 +98,18 @@ var priceToF2 = function(price, miniUtil = true) {
   return res
 }
 
+var newlineFilter = function(text){
+  if(text){
+    console.log(text);
+    var pattern = "\\\\n";
+    var target = "\n";
+    var reg = getRegExp(pattern, "g");
+    return text.replace(reg, target);
+  }
+}
+
 module.exports = {
+  newlineFilter: newlineFilter,
   floatAdd: floatAdd,
   floatReduce: floatReduce,
   getImgUrl: getImgUrl,

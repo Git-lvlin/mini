@@ -49,6 +49,11 @@ Page({
       this.getAtomPay(this.params);
     } else if(this.params.scene == 7) {
       this.getVipPay(this.params);
+    } else if(this.params.scene == 27) {
+      // 运营资质支付订单
+      this.prepayOrder(this.params)
+    } else {
+      console.log('不支持的支付方式')
     }
   },
 
@@ -82,6 +87,40 @@ Page({
     return openId;
   },
 
+  prepayOrder(data) {
+    const {
+      payInfo,
+    } = this.data;
+    cartApi.prepayOrder({
+      orderId: data.id,
+      orderType: data.scene,
+      openId: data.openId,
+      payType: data.payType || 7,
+    }, {
+      showLoading: false,
+      notErrorMsg: true,
+    }).then(res => {
+      payInfo.state = 0;
+      this.setData({
+        payInfo,
+        payData: res,
+      }, () => {
+        this.openPay();
+        wx.hideLoading();
+      })
+    }).catch(err => {
+      if(err.code == 20806) {
+        payInfo.state = 4;
+        wx.hideLoading();
+      } else {
+        payInfo.state = 3;
+        this.handleErrorInfo(err);
+      }
+      this.setData({
+        payInfo
+      })
+    });
+  },
   // 获取商品支付信息
   getPayInfo(data) {
     // id=1403266210801328130

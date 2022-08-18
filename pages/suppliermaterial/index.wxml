@@ -19,8 +19,8 @@
       </view>
       <!-- 证件照 -->
       <view wx:for="{{info.supplierImg}}" wx:key="index">
-          <view class="th" style="margin-bottom:-20rpx;">{{item.name}}:</view>
-          <view>
+          <view class="th" style="margin-top:40rpx;">{{item.name}}:</view>
+          <view style="border-bottom: 1px solid darkgray; padding-bottom: 40rpx;">
             <block wx:for="{{item.imgs}}" wx:for-item="url">
               <image mode="aspectFit" src="{{url}}" catchtap="preview" data-src="{{url}}" style="margin: auto 20rpx; width: 100%;"/>
             </block>
@@ -34,10 +34,10 @@
     <view class="captcha-tips">请输入图中的验证码</view>
     <image class="captcha-img" src="{{captcha}}" catchtap="changecode"/>
     <view class="captcha-input">
-      <input class="captcha-input-item" maxlength="1" auto-focus="true" bindinput="getCodeValue" data-name="captcha1" value="{{captcha.captcha1}}" focus></input>
-      <input class="captcha-input-item" maxlength="1" auto-focus="false" bindinput="getCodeValue" data-name="captcha2" value="{{captcha.captcha2}}"></input>
-      <input class="captcha-input-item" maxlength="1" auto-focus="false" bindinput="getCodeValue" data-name="captcha3" value="{{captcha.captcha3}}"></input>
-      <input class="captcha-input-item" maxlength="1" auto-focus="false" bindinput="getCodeValue" data-name="captcha4" value="{{captcha.captcha4}}"></input>
+      <input class="captcha-input-item" maxlength="1" focus="{{onFocus == '1' ? true : false}}" bindinput="getCodeValue" data-name="1" value="{{captchaInput[1]}}"></input>
+      <input class="captcha-input-item" maxlength="1" focus="{{onFocus == '2' ? true : false}}" bindinput="getCodeValue" data-name="2" value="{{captchaInput[2]}}"></input>
+      <input class="captcha-input-item" maxlength="1" focus="{{onFocus == '3' ? true : false}}" bindinput="getCodeValue" data-name="3" value="{{captchaInput[3]}}"></input>
+      <input class="captcha-input-item" maxlength="1" focus="{{onFocus == '4' ? true : false}}" bindinput="getCodeValue" data-name="4" value="{{captchaInput[4]}}"></input>
     </view>
   </view>
   </view>
