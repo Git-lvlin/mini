@@ -12,6 +12,10 @@ Component({
       type: String,
       value: "",
     },
+    valueStyle: {
+      type: String,
+      value: "",
+    },
     jump: {
       type: Boolean,
       value: false, 

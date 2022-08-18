@@ -29,6 +29,9 @@ const url = {
 
   newPayInfo: '/iot/auth/leaseOrder/prepayOrder',
   vipPayInfo: '/store/auth/memberShop/payServiceFee',
+
+  getPayOrderInfo: '/activity/auth/payment/get',
+  prepayOrder: '/activity/auth/payment/pay',
 }
 
 export default {
@@ -83,6 +86,17 @@ export default {
     return Request.post(url.deliveryDesc, params, option);
   },
   
+  // 支付业务-查询支付订单
+  // http://rap.ops.yeahgo.com/repository/editor?id=33&mod=633&itf=5018
+  getPayOrderInfo(params, option) {
+    return Request.get(url.getPayOrderInfo, params, option);
+  },
+  // 支付业务-获取预付款信息
+  // http://rap.ops.yeahgo.com/repository/editor?id=33&mod=633&itf=5019
+  prepayOrder(params, option) {
+    return Request.post(url.prepayOrder, params, option);
+  },
+
   // 获取支付信息
   getPayInfo(params, option) {
     return Request.post(url.payInfo, params, option);

@@ -1,0 +1,56 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="box" wx:for="{{text}}" wx:for-item="item">
+  <view wx:for="{{item}}" wx:for-index="key"  wx:for-item="value">
+    <block  wx:if="{{key == 'title'}}">
+    <view style="margin-bottom: 24rpx;">
+    <cell-item title="{{item.title}}"/>
+    </view>
+    </block>
+    <view class="title paragraph" wx:else>
+    <rich-text nodes="{{ value }}"></rich-text>
+    </view>
+  </view>
+</view>
+
+<view class="box">
+  <cell-item title="开通数量" value="{{numTips}}" valueStyle="color: #999999;font-size: 30rpx; text-align: left;"/>
+  <view class="numbox">
+    <view class="num">
+      <view class="controller" bindtap="onReduceNum">
+        <image class="controller_img" wx:if="{{num > minNum}}" src="{{tools.getImgUrl('miniprogram/cart/reduce.png')}}" />
+        <image class="controller_img" wx:else src="{{tools.getImgUrl('miniprogram/cart/reduce_gray.png')}}" />
+      </view>
+      <view class="num_value">{{num}}</view>
+      <view class="controller" bindtap="onAddNum">
+        <image
+          class="controller_img gray_add"
+          wx:if="{{num >= maxNum}}"
+          src="{{tools.getImgUrl('miniprogram/cart/add.png')}}"
+        />
+        <image
+          class="controller_img"
+          wx:else
+          src="{{tools.getImgUrl('miniprogram/cart/add.png')}}"
+        />
+      </view>
+    </view>
+  </view>
+  <view class="title paragraph" style="text-align:right; font-size: 36rpx; margin-right: 32rpx;">
+    小计：<span class="E5352F">¥{{num * unitPrice / 100}}.00</span>
+  </view>
+
+  <view class="" style="margin: 40rpx 32rpx 32rpx 32rpx; font-size:32rpx;position: relative !important;z-index:998;">
+    <van-radio-group value="{{ checked }}" catchtap="onChangeRadio">
+        <image class="radio_icon" src="{{checked ? selectedIcon : selectIcon}}" />{{agreement.prefix}}
+        <text class="red_text" data-agreement="agreement" catchtap="onClickAgreement" style="position: relative !important;z-index:999;">《{{agreement.name}}</text>
+    </van-radio-group>
+  </view>
+
+    <view class="btn_content">
+      <view
+        class="btn"
+        bindtap="onConfirm"
+      >提交</view>
+    </view>
+</view>

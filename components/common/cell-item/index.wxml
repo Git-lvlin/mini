@@ -4,7 +4,7 @@
   <view class="flex_middle cell_info {{border ? 'border' : ''}}" bindtap="onClickCell">
     <view class="title">{{title}}</view>
     <view class="flex_middle right_box" bindtap="onClickValue">
-      <view class="value" wx:if="{{!soltRight}}">{{value}}</view>
+      <view class="value" wx:if="{{!soltRight}}" style="{{valueStyle}}">{{value}}</view>
       <slot wx:if="{{soltRight}}" />
       <view class="flex_fix flex_center icon_box" wx:if="{{jump}}">
         <image class="flex_fix cell_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />

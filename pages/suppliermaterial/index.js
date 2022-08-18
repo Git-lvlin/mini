@@ -10,11 +10,12 @@ create.Page(store, {
     captcha: "",
     showInfo: false,
     captchaInput: {
-      'captcha1': '',
-      'captcha2': '',
-      'captcha3': '',
-      'captcha4': '',
+      '1': '',
+      '2': '',
+      '3': '',
+      '4': '',
     },
+    onFocus: '1',
     info: {
       companyName: '',
     },
@@ -41,10 +42,10 @@ create.Page(store, {
     const userInfo = getStorageUserInfo()
     this.setData({
       captchaInput: {
-        'captcha1': '',
-        'captcha2': '',
-        'captcha3': '',
-        'captcha4': '',
+        '1': '',
+        '2': '',
+        '3': '',
+        '4': '',
       }
     })
     // console.log('userInfo ', userInfo)
@@ -53,10 +54,14 @@ create.Page(store, {
   getCodeValue(e) {
     var captchaInput = this.data.captchaInput;
     captchaInput[e.currentTarget.dataset.name] = e.detail.value
-    console.log('getCodeValue e ', e.detail.value, '; ', e.currentTarget.dataset.name, '; captchaInput ', captchaInput)
     this.setData({
+      onFocus: +e.currentTarget.dataset.name + 1,
       captchaInput: captchaInput,
+    }, () => {
+
+    console.log('getCodeValue e ', e.detail.value, '; name: ', e.currentTarget.dataset.name, '; captchaInput ', captchaInput, 'this.data.onFocus', this.data.onFocus)
     })
+
     this.checkCaptchaInput()
   },
   // 计算 checkCaptchaInput 是否输入完毕

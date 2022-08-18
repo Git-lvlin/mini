@@ -61,7 +61,13 @@
       </view>
     </view>
 
-    <view class="" style="margin: -88rpx auto 40rpx 32rpx; font-size:32rpx;position: relative !important;z-index:998;" wx:if="{{escrowAgreement == 1}}">
+    <view class="" style="margin: auto 40rpx 32rpx; font-size:32rpx; height:160rpx;">
+      <text style="color:red;" wx:if="{{curSku.extendStr && curSku.extendStr.length > 0}}">
+        {{tools.newlineFilter(curSku.extendStr)}}
+      </text>
+    </view>
+
+    <view class="" style="margin: -86rpx auto 40rpx 32rpx; font-size:32rpx;position: relative !important;z-index:998;" wx:if="{{escrowAgreement == 1}}">
       <van-radio-group value="{{ checked }}" catchtap="onChangeRadio">
           <image class="radio_icon" src="{{checked ? selectedIcon : selectIcon}}" />阅读并同意
           <text class="red_text" data-agreement="escrow-agreement" catchtap="onClickAgreement" style="position: relative !important;z-index:999;">《托管代运营合同》</text>
