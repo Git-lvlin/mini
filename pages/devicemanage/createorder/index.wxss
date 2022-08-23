@@ -12,13 +12,16 @@ page {
 .paragraph {
   padding-left: 32rpx;
   color: #333333;
-  font-size: 30rpx;
+  font-size: 28rpx;
   line-height: 64rpx;
   text-align: left;
   background-color: #ffffff;
 }
 .E5352F {
   color: #E5352F;
+}
+.CCC {
+  color: #99999 !important;
 }
 
 .numbox {

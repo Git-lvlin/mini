@@ -223,7 +223,6 @@ create.Page(store, {
   // 购物车商品列表
   getCartList() {
     let {
-      activityId,
       objectId,
       orderType,
       skuId,
@@ -250,8 +249,11 @@ create.Page(store, {
   },
   // 增加购物车 for goods
   increaseCart() {
-    const { quantity, skuId, good} = this.data
+    let { quantity, skuId, good} = this.data
     const {objectId} = good
+    if (!quantity) {
+      quantity = 0
+    }
     const params = {
       skuId,
       objectId,
@@ -800,16 +802,13 @@ create.Page(store, {
           // this.getIntensiveUser(good.storeSaleSumNum || 100);
           // 获取商品详情
           const isStore = haveStore(good.storeNo);
-          // if(isStore) {
-          //   this.getStoreInfo({
-          //     orderType,
-          //     storeNo: good.storeNo,
-          //   });
-          // }
-          this.getStoreInfo({
-            orderType,
-            storeNo: good.storeNo,
-          });
+          console.log('getStoreNo takeSpot change isStore ', isStore)
+          if(isStore) {
+            this.getStoreInfo({
+              orderType,
+              storeNo: good.storeNo,
+            });
+          }
         }
         // if(orderType == 2 || orderType == 11) {
           this.getSecUser();
@@ -1180,7 +1179,7 @@ create.Page(store, {
     this.goodOver = true;
     let timer = setTimeout(() => {
       clearTimeout(timer);
-      // router.go();
+      router.go();
     }, 1500);
   },
 
@@ -1193,6 +1192,18 @@ create.Page(store, {
       orderType,
       storeNo,
     }).then(res => {
+      console.log("getStoreNo takeSpot getStoreInfo", res)
+      if (res.storeAddress) {
+        let takeSpot = {
+          selected: 1,
+          storeNo: storeNo,
+          storeName: res.storeName,
+          address: res.storeAddress.fullAddress,
+          longitude: res.storeAddress.longitude,
+          latitude: res.storeAddress.latitude,
+        }
+        wx.setStorageSync('TAKE_SPOT', takeSpot)
+      }
       this.setData({
         storeInfo: res
       })

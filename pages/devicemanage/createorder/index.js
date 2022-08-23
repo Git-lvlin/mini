@@ -26,6 +26,11 @@ create.Page(store, {
   },
 
   onLoad(options) {
+    if(options.inviteCode) {
+      wx.setStorageSync("INVITE_INFO", {
+        inviteCode: options.inviteCode,
+      });
+    }
     const userInfo = getStorageUserInfo() || ""
     this.setData({
       userInfo

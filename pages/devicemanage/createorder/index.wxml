@@ -1,10 +1,10 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
-<view class="box" wx:for="{{text}}" wx:for-item="item">
-  <view wx:for="{{item}}" wx:for-index="key"  wx:for-item="value">
+<view class="box" wx:for="{{text}}" wx:for-item="row">
+  <view wx:for="{{row}}" wx:for-index="key"  wx:for-item="value">
     <block  wx:if="{{key == 'title'}}">
     <view style="margin-bottom: 24rpx;">
-    <cell-item title="{{item.title}}"/>
+    <cell-item title="{{row.title}}"/>
     </view>
     </block>
     <view class="title paragraph" wx:else>
@@ -37,7 +37,7 @@
     </view>
   </view>
   <view class="title paragraph" style="text-align:right; font-size: 36rpx; margin-right: 32rpx;">
-    小计：<span class="E5352F">¥{{num * unitPrice / 100}}.00</span>
+    小计：<span class="E5352F">¥{{tools.priceToF2(num * unitPrice)}}</span>
   </view>
 
   <view class="" style="margin: 40rpx 32rpx 32rpx 32rpx; font-size:32rpx;position: relative !important;z-index:998;">

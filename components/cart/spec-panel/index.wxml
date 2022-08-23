@@ -61,7 +61,7 @@
       </view>
     </view>
 
-    <view class="" style="margin: auto 40rpx 32rpx; font-size:32rpx; height:160rpx;">
+    <view class="" style="margin: 0rpx auto 40rpx 32rpx; font-size:32rpx; height:320rpx;">
       <text style="color:red;" wx:if="{{curSku.extendStr && curSku.extendStr.length > 0}}">
         {{tools.newlineFilter(curSku.extendStr)}}
       </text>
