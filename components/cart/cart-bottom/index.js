@@ -60,12 +60,14 @@ create.Component(store, {
       }, () => {
         console.log('currentStoreNo cart bt ready ', this.data.storeNo)
       })
-      let userInfo = getStorageUserInfo();
-      this.setData({
-        userInfo,
-      }, () => {
-        console.log('userInfo', this.data.userInfo)
-      })
+      let userInfo = getStorageUserInfo(false);
+      if (userInfo) {
+        this.setData({
+          userInfo,
+        }, () => {
+          console.log('userInfo', this.data.userInfo)
+        })
+      }
       this.updateSelectAddressType('lifetimes show')
       this.getStoreInfo()
     }
@@ -73,6 +75,14 @@ create.Component(store, {
 
   pageLifetimes: {
     show: function() {
+      let userInfo = getStorageUserInfo(false);
+      if (userInfo) {
+        this.setData({
+          userInfo,
+        }, () => {
+          console.log('userInfo', this.data.userInfo)
+        })
+      }
       let takeSpot = wx.getStorageSync("TAKE_SPOT") || {}
       this.setData({
         storeNo: takeSpot?.storeNo,
@@ -220,6 +230,7 @@ create.Component(store, {
 
     async createOrder() {
       const {aPrice, zPrice} = this.data
+      console.log("createOrder ", aPrice, zPrice, !this.data.userInfo)
       if(!this.data.userInfo) {
         getStorageUserInfo(true);
         return;

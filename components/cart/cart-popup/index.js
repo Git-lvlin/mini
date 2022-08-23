@@ -128,9 +128,9 @@ create.Component(store, {
     checkSelf() {
       let data2 = wx.getStorageSync("CREATE_INTENSIVE")
       if (data2) {
-        console.log('selectAddressType  before', data2.selectAddressType.type)
+        console.log('selectAddressType  before', data2.selectAddressType)
         var current = {"type": 3} // 配送
-        if (data2.selectAddressType.type == 3) {
+        if (data2 && data2.selectAddressType && data2.selectAddressType.type == 3) {
           current = {"type": 2} // 自提
         }
         data2.selectAddressType = current
@@ -141,8 +141,6 @@ create.Component(store, {
       this.setData({
         selectAddressType: current,
       })
-      console.log('selectAddressType  after', data2.selectAddressType.type)
-
       // this.triggerEvent("check", !this.data.isSelf);
       // this.setData({
       //   isSelf: !this.data.isSelf

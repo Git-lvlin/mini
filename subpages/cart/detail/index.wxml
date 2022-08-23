@@ -555,10 +555,12 @@
 
         <!-- 购物车常驻栏 -->
         <view wx:if="{{cartBtnIsShow == 1}}" style="margin-left:-28rpx;">
-          <cart-bottom
-            info="{{cartAllData}}"
-            bind:popup="handleUpdate"
-          />
+          <view wx:if="{{stockOver == 0}}">
+            <cart-bottom
+              info="{{cartAllData}}"
+              bind:popup="handleUpdate"
+            />
+          </view>
         </view>
 
         <view
