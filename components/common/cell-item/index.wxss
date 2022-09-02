@@ -13,11 +13,23 @@
   border-bottom: 2rpx solid #f5f5f5;
 }
 
+.radio_icon {
+  width: 34rpx;
+  height: 34rpx;
+  vertical-align: middle;
+  margin-right: 16rpx;
+}
 .title {
   font-weight: 600;
   color: #333333;
   font-size: 32rpx;
   line-height: 32rpx;
+}
+.subtitle {
+  font-weight: 400;
+  color: #999999;
+  font-size: 28rpx;
+  line-height: 28rpx;
 }
 
 .right_box {

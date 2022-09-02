@@ -58,7 +58,6 @@ create.Page(store, {
       onFocus: +e.currentTarget.dataset.name + 1,
       captchaInput: captchaInput,
     }, () => {
-
     console.log('getCodeValue e ', e.detail.value, '; name: ', e.currentTarget.dataset.name, '; captchaInput ', captchaInput, 'this.data.onFocus', this.data.onFocus)
     })
 

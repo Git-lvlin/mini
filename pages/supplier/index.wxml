@@ -26,7 +26,6 @@
           data="{{item}}"
           size="220rpx"
         />
-
       </view>
     </view>
   </view>
