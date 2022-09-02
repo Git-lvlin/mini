@@ -181,8 +181,11 @@ create.Page(store, {
    * isNotPayment boolean 是否是模拟支付
    * */ 
   getPayInfo(isNotPayment = false) {
-    console.log()
-    if (this.data.scene == 27) {
+    // 27 运营设备服务费
+    // 28 托管租赁租金
+    // 29 运营设备服务费 + 托管租赁租金
+    // 30 - 49 预留
+    if (this.data.scene > 26 && this.data.scene < 50) {
       cartApi.getPayOrderInfo({
         orderId: this.id,
         orderType: this.data.scene,
@@ -344,7 +347,12 @@ create.Page(store, {
     const data = {
       payType: this.payType,
     };
-    if (this.data.scene == 27) {
+
+    // 27 运营设备服务费
+    // 28 托管租赁租金
+    // 29 运营设备服务费 + 托管租赁租金
+    // 30 - 49 预留
+    if (this.data.scene > 26 && this.data.scene < 50) {
       var param = {
         orderType: this.data.scene,
         orderId: this.id,
@@ -360,12 +368,14 @@ create.Page(store, {
           that.setData({
             isPay: true,
           })
-          wx.showModal({
-            title: '提示',
-            content: '签署运营服务合同需要在约购APP上进行，请下载约购APP',
-            showCancel: false,
-            confirmText: '我知道了',
-          })
+          if (this.data.scene == 27 || this.data.scene == 29) {
+            wx.showModal({
+              title: '提示',
+              content: '签署运营服务合同需要在约购APP上进行，请下载约购APP',
+              showCancel: false,
+              confirmText: '我知道了',
+            })
+          }
         } else {
           that.setData({
             payData: {
@@ -382,12 +392,14 @@ create.Page(store, {
             that.setData({
               isPay: true,
             })
-            wx.showModal({
-              title: '提示',
-              content: '签署运营服务合同需要在约购APP上进行，请下载约购APP',
-              showCancel: false,
-              confirmText: '我知道了',
-            })
+            if (this.data.scene == 27 || this.data.scene == 29) {
+              wx.showModal({
+                title: '提示',
+                content: '签署运营服务合同需要在约购APP上进行，请下载约购APP',
+                showCancel: false,
+                confirmText: '我知道了',
+              })
+            }
           }).catch(err => {
 
           })

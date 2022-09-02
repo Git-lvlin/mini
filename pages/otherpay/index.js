@@ -50,7 +50,12 @@ Page({
     } else if(this.params.scene == 7) {
       this.getVipPay(this.params);
     } else if(this.params.scene == 27) {
-      // 运营资质支付订单
+      // 27 运营资质支付订单
+      this.prepayOrder(this.params)
+    } else if(this.params.scene == 28) {
+      // 28 托管租赁租金
+      this.prepayOrder(this.params)
+    } else if(this.params.scene > 28) {
       this.prepayOrder(this.params)
     } else {
       console.log('不支持的支付方式')

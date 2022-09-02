@@ -2,7 +2,11 @@
 
 <view class="cell_box">
   <view class="flex_middle cell_info {{border ? 'border' : ''}}" bindtap="onClickCell">
-    <view class="title">{{title}}</view>
+    <view class="title">
+      <image class="radio_icon" src="{{icon}}" wx:if="{{icon.length > 0}}"/>
+      {{title}}
+    </view>
+    <view class="subtitle" style="{{subtitleStyle}}" wx:if="{{subtitle.length>0}}">{{subtitle}}</view>
     <view class="flex_middle right_box" bindtap="onClickValue">
       <view class="value" wx:if="{{!soltRight}}" style="{{valueStyle}}">{{value}}</view>
       <slot wx:if="{{soltRight}}" />
