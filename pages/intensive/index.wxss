@@ -54,7 +54,7 @@
 
 .home_content {
   position: relative;
-  padding-top: 100rpx;
+  /* padding-top: 100rpx; */
   flex: 1;
   overflow: hidden;
   display: flex;
@@ -181,7 +181,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   border-top: 2rpx solid #D8D8D8;
-  height: 1000rpx;
+  height: 2000rpx;
 }
 .cart_box2 {
   display: flex;
@@ -266,7 +266,7 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  border-bottom: 2rpx solid #D8D8D8;
+  /* border-bottom: 2rpx solid #D8D8D8; */
   /* width: 566rpx; */
   height: 200rpx;
 }
@@ -279,9 +279,64 @@
   height: 202rpx;
   margin-bottom: 24rpx;
 }
+
+.goods_img_box_wrap {
+  display: flex;
+}
+
+.showAddress {
+  width: 600rpx;
+}
+
+.showAddress-wrap {
+  margin-bottom: 20rpx;
+  width: 100%;
+  font-size: 24rpx;
+  display: flex;
+  color: #999999;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 30rpx;
+  box-sizing: border-box;
+  position: relative;
+  padding-left: 40rpx;
+}
+
+.showAddress-wrap .location_icon {
+  width: 30rpx;
+  height: 30rpx;
+  position: absolute;
+  left: 0;
+}
+
+.goods_item_box4 {
+  flex-direction: column;
+  align-items: flex-start;
+  height: auto;
+  padding-top: 20rpx;
+}
+.goods_item_box4:not(:last-child) {
+  margin-bottom: 20rpx;
+}
 .goods_item_box:nth-last-child(1) {
   padding-bottom: 160rpx;
   border-bottom: none;
+}
+.notice-btn {
+  width: 240rpx;
+  line-height: 72rpx;
+  background: linear-gradient(180deg, #FF5E4B 0%, #F32214 100%);
+  border-radius: 36rpx;
+  font-size: 32rpx;
+  text-align: center;
+  color: #fff;
+  position: absolute;
+  right: 40rpx;
+  bottom: 20rpx;
+}
+.notice-btn-disable {
+  background: rgb(207, 205, 205);
+  width: 160rpx;
 }
 .goods_img_box {
   margin-right: 24rpx;
@@ -318,6 +373,16 @@
   width: 430rpx;
   height: 100%;
 }
+.goods_item_box4 .goods_name,
+.goods_item_box5 .goods_name{
+  width: 450rpx;
+}
+
+.goods_item_box5 .goods_right_box {
+  padding-top: 20rpx;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
 .goods_name {
   width: 308rpx;
   height: 40rpx;
@@ -342,7 +407,7 @@
 .goods_nums {
   margin-top: 4rpx;
   margin-bottom: 32rpx;
-  width: 156rpx;
+  /* width: 156rpx; */
   height: 34rpx;
   font-size: 24rpx;
   color: #999999;

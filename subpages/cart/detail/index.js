@@ -284,6 +284,11 @@ create.Page(store, {
       objectId: objectId,
       quantity: quantity, // 数量，负数表示减数量
     }
+
+    if (objectId == '-15') {
+      params.subType = 151
+    }
+
     return new Promise((resolve) => {
       cartApi.setCartNum(params).then((res) => {
         console.log('设置购物车商品数量', res)
@@ -803,7 +808,7 @@ create.Page(store, {
           // 获取商品详情
           const isStore = haveStore(good.storeNo);
           console.log('getStoreNo takeSpot change isStore ', isStore)
-          if(isStore) {
+          if (isStore) {
             this.getStoreInfo({
               orderType,
               storeNo: good.storeNo,
@@ -1202,6 +1207,8 @@ create.Page(store, {
           longitude: res.storeAddress.longitude,
           latitude: res.storeAddress.latitude,
         }
+        const takeSpotOld = wx.getStorageSync("TAKE_SPOT") || {}
+        wx.setStorageSync('OLD_TAKE_SPOT', takeSpotOld)
         wx.setStorageSync('TAKE_SPOT', takeSpot)
       }
       this.setData({
@@ -1457,7 +1464,8 @@ create.Page(store, {
       good,
     } = this.data;
     const {
-      orderType
+      orderType,
+      objectId,
     } = this.goodParams;
     let stockOver = 0;
     let stockOverText = "";
@@ -1474,7 +1482,7 @@ create.Page(store, {
         stockOverText = "库存不足"
       }
     }
-    if((orderType == 15 || orderType == 16) && nowTime >= good.deadlineTime) {
+    if ((orderType == 15 || orderType == 16) && objectId != '-15' && nowTime >= good.deadlineTime) {
       stockOver = 3;
       stockOverText = "活动已结束"
     }

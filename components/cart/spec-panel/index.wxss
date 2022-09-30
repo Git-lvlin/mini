@@ -30,7 +30,7 @@
 }
 
 .spec_box {
-  height: 300rpx;
+  min-height: 300rpx;
   overflow-y: auto;
   padding-top: 16rpx;
 }

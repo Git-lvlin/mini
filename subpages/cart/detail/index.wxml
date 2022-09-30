@@ -284,7 +284,7 @@
         />
       </view>
 
-      <view class="step_box" wx:if="{{cartBtnIsShow == 1}}">
+      <!-- <view class="step_box" wx:if="{{cartBtnIsShow == 1}}">
         <image class="step_delete_icon" wx:if="{{quantity > 0}}" data-item="{{currentSku}}" bindtap="decreaseCart" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
         <view class="step_index_num" wx:if="{{quantity > 0}}"> {{quantity}} </view>
         <view wx:if="{{quantity > 0}}">
@@ -296,7 +296,7 @@
             wx:if="{{!quantity || quantity && good.isMultiSpec == 1}}"
             bindtap="increaseCart"
           >加入购物车</view>
-      </view>
+      </view> -->
 
       <view class="b_intensive" wx:if="{{isActivityGood == 5 || isActivityGood == 6}}">
         <view class="flex_middle b_price">
@@ -554,14 +554,14 @@
         <view class="flex_fix buy_bar_space" wx:if="{{isActivityGood == 11}}" />
 
         <!-- 购物车常驻栏 -->
-        <view wx:if="{{cartBtnIsShow == 1}}" style="margin-left:-28rpx;">
+        <!-- <view wx:if="{{cartBtnIsShow == 1}}" style="margin-left:-28rpx;">
           <view wx:if="{{stockOver == 0}}">
             <cart-bottom
               info="{{cartAllData}}"
               bind:popup="handleUpdate"
             />
           </view>
-        </view>
+        </view> -->
 
         <view
           class="gray_buy_btn"

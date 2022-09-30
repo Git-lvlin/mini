@@ -22,6 +22,12 @@ const url = {
 
   goodsList: '/store/option/v/FreshMemberShop/shopIndexGoodList',
   category: '/store/option/v/FreshMemberShop/shopIndexCategory',
+  goodsList3: '/activity/option/wholesale/storeWholesaleGoodsList',
+  category3: '/activity/option/wholesale/category',
+
+  goodsList4: '/store/option/memberShopGoods/nearbyGoods',
+  goodsList5: '/activity/option/wholesale/getNoticeSpuList',
+  remindStoreBuyNotice: '/activity/auth/wholesale/remindStoreBuyNotice',
   rec: '/store/option/FreshMemberShop/shopRecGoods',
   love: '/store/option/FreshMemberShop/shopGuessFavourite',
 
@@ -30,6 +36,7 @@ const url = {
   shopIndexCategory: '/store/option/storeDropShip/shopIndexCategory',
   shopIndexGoods: '/store/option/storeDropShip/shopIndexGoods',
   storeNo: '/store/auth/memberShop/storeData',
+  getWholesaleStatus: '/activity/open/wholesale/getWholesaleStatus',
 }
 
 const getExamine = (params) => {
@@ -154,14 +161,34 @@ export default {
   // 2.5.2生鲜店商品列表
   getGoodsList(params, option) {
     // params = getExamine(params);
-    params = getStoreNo(params, {showLoading: false})
+    params = getStoreNo(params, { showLoading: false })
     return Request.get(url.goodsList, params, option);
-  }, 
+  },
   // 2.5.2生鲜店分类列表
   getGoodsCategory(params, option) {
     // params = getExamine(params);
-    params = getStoreNo(params, {showLoading: false})
+    params = getStoreNo(params, { showLoading: false })
     return Request.get(url.category, params, option);
+  },
+  getGoodsList3(params, option) {
+    // params = getExamine(params);
+    params = getStoreNo(params, { showLoading: false })
+    return Request.post(url.goodsList3, params, option);
+  },
+  getGoodsList4(params, option) {
+    // params = getExamine(params);
+    params = getStoreNo(params, { showLoading: false })
+    return Request.get(url.goodsList4, params, option);
+  },
+  getGoodsList5(params, option) {
+    // params = getExamine(params);
+    params = getStoreNo(params, { showLoading: false })
+    return Request.post(url.goodsList5, params, option);
+  },
+  getGoodsCategory3(params, option) {
+    // params = getExamine(params);
+    params = getStoreNo(params, { showLoading: false })
+    return Request.post(url.category3, params, option);
   },
   // 2.5.2生鲜店为你推荐
   getRecGoods(params, option) {
@@ -190,5 +217,12 @@ export default {
   },
   shopIndexGoods(params, option) {
     return Request.post(url.shopIndexGoods, params, option);
+  },
+  getWholesaleStatus(params, option) {
+    return Request.post(url.getWholesaleStatus, params, option);
+  },
+  remindStoreBuyNotice(params, option) {
+    params = getStoreNo(params)
+    return Request.post(url.remindStoreBuyNotice, params, option);
   },
 }

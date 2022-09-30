@@ -209,6 +209,9 @@ create.Component(store, {
     clearExpiredAll() {
       cartApi.clearExpired().then(() => {
         this.getCartList()
+        this.setData({
+          deletePopupShowAll:false
+        })
       })
     },
     // 设置购物车商品数量

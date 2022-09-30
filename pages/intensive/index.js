@@ -55,6 +55,9 @@ create.Page(store, {
     remindData: [],
     recommendData: [],
     goodsData2: [],
+    goodsData3: [],
+    goodsData4: [],
+    goodsData5: [],
     // storeNo: 'store_m_123942', // 测试用店铺号
     storeNo: '', // 测试用店铺号
     classData: null,
@@ -62,12 +65,14 @@ create.Page(store, {
     goodsData: null,
     tabIndexId: 0,
     tabIndexId2: 0,
+    tabIndexId3: 0,
     goodsNum: 0,
     value: 0,
     showCartPopup: false,
     tabActive: 1,
     height1: 500,
     height2: 500,
+    wholesaleStatus: [],
     invalidList: [
       {
         name: 'dasdasdasd',
@@ -112,7 +117,12 @@ create.Page(store, {
   },
 
   onShow() {
-    const takeSpot = wx.getStorageSync("TAKE_SPOT");
+    const takeSpotOld = wx.getStorageSync("OLD_TAKE_SPOT");
+    if (takeSpotOld) {
+      wx.setStorageSync("TAKE_SPOT", takeSpotOld);
+      wx.removeStorageSync('OLD_TAKE_SPOT')
+    }
+    let takeSpot = wx.getStorageSync("TAKE_SPOT");
     console.log('takeSpot', takeSpot)
     if (takeSpot.storeNo !== this.data.storeNo) {
       this.setData({
@@ -123,9 +133,6 @@ create.Page(store, {
       });
     }
 
-    console.log('takeSpot.storeNo', takeSpot.storeNo)
-    console.log('this.data.storeNo', this.data.storeNo)
-    
     // 更新tabbar显示
     router.updateSelectTabbar(this, 2);
     app.trackEvent('tab_intensive');
@@ -149,6 +156,32 @@ create.Page(store, {
 
     this.shopIndexCategory()
     this.getAllGoodsList2(this.data.tabIndexId2)
+    this.getWholesaleStatus()
+
+    this.getAllGoodsList3(this.data.tabIndexId3);
+    this.getGoodsCategory3()
+
+    this.getAllGoodsList4();
+    this.getAllGoodsList5();
+  },
+
+  getWholesaleStatus() {
+    intensiveApi.getWholesaleStatus()
+      .then(res => {
+        const arr = [];
+        let index = 0
+        res.forEach((item, i) => {
+          arr.push(item.id)
+
+          if (item.defaultSelected) {
+            index = i
+          }
+        })
+        this.setData({
+          wholesaleStatus: arr,
+          // tabActive: index,
+        })
+      })
   },
 
   onCloseCartPopup() {
@@ -295,6 +328,19 @@ create.Page(store, {
     });
   },
 
+  remindStoreBuyNotice(e) {
+    const {
+      data,
+    } = e.currentTarget.dataset;
+    intensiveApi.remindStoreBuyNotice({
+      skuId: data.skuId,
+      spuId: data.spuId,
+    })
+      .then(res => {
+        this.getAllGoodsList5()
+      })
+  },
+
   handleUpdate(res) {
     this.init(this.data.tabIndexId)
   },
@@ -318,18 +364,9 @@ create.Page(store, {
       size: 999,
       gcId1: gcId1 || 0,
     }
-    const resolveData = await this.getCartList();
+    // const resolveData = await this.getCartList();
     return new Promise((resolve) => {
       intensiveApi.getGoodsList(params).then((res) => {
-        if (!res.records.length) {
-          this.getRecommendData()
-          this.setData({
-            goodsData: []
-          }, () => {
-            resolve(true)
-          })
-          return
-        }
         let list = res.records.map((item) => {
           let p = (item.salePrice / 100).toString();
           let a = '';
@@ -342,11 +379,11 @@ create.Page(store, {
             a = p
           }
 
-          resolveData.map(cartItem => {
-            if (cartItem.objectId == item.objectId) {
-              v = cartItem.quantity
-            }
-          })
+          // resolveData.map(cartItem => {
+          //   if (cartItem.objectId == item.objectId) {
+          //     v = cartItem.quantity
+          //   }
+          // })
           return {
             ...item,
             aPrice: a,
@@ -355,6 +392,54 @@ create.Page(store, {
           }
         })
         console.log('集约商品列表返回', list)
+        // if (gcId1 == 0) {
+        //   if (list.length > 10) {
+        //     this.setData({ hasClass: true })
+        //   } else {
+        //     this.setData({ hasClass: false })
+        //   }
+        // }
+        this.setData({
+          goodsData: list,
+        }, () => {
+          resolve(true)
+        })
+      })
+    })
+  },
+  async getAllGoodsList3(gcId1) {
+    const params = {
+      page: 1,
+      size: 999,
+      gcId1: gcId1 || 0,
+    }
+    // const resolveData = await this.getCartList();
+    return new Promise((resolve) => {
+      intensiveApi.getGoodsList3(params).then((res) => {
+        let list = res.records.map((item) => {
+          let p = (item.salePrice / 100).toString();
+          let a = '';
+          let z = '';
+          let v = 0;
+          if (p.includes('.')) {
+            a = p.split('.')[0]
+            z = p.split('.')[1]
+          } else {
+            a = p
+          }
+
+          // resolveData.map(cartItem => {
+          //   if (cartItem.objectId == item.objectId) {
+          //     v = cartItem.quantity
+          //   }
+          // })
+          return {
+            ...item,
+            aPrice: a,
+            zPrice: z,
+            value: v,
+          }
+        })
         if (gcId1 == 0) {
           if (list.length > 10) {
             this.setData({ hasClass: true })
@@ -363,7 +448,87 @@ create.Page(store, {
           }
         }
         this.setData({
-          goodsData: list,
+          goodsData3: list,
+        }, () => {
+          resolve(true)
+        })
+      })
+    })
+  },
+  async getAllGoodsList4() {
+    const storeInfo = wx.getStorageSync("TAKE_SPOT")
+    const _this = this;
+    wx.getLocation({
+        type: 'gcj02',
+        isHighAccuracy: true,
+        success(result) {
+          const params = {
+            latitude: result.latitude,
+            longitude: result.longitude,
+            orderType: 30
+          }
+          // const resolveData = await this.getCartList();
+          return new Promise((resolve) => {
+            intensiveApi.getGoodsList4(params).then((res) => {
+              let list = res.map((item) => {
+                let p = (item.salePrice / 100).toString();
+                let a = '';
+                let z = '';
+                let v = 0;
+                if (p.includes('.')) {
+                  a = p.split('.')[0]
+                  z = p.split('.')[1]
+                } else {
+                  a = p
+                }
+
+                return {
+                  ...item,
+                  aPrice: a,
+                  zPrice: z,
+                  value: v,
+                }
+              })
+              _this.setData({
+                goodsData4: list,
+              }, () => {
+                resolve(true)
+              })
+            })
+          })
+        }
+    })
+    
+  },
+  async getAllGoodsList5() {
+    const params = {
+      page: 1,
+      size: 999,
+    }
+    // const resolveData = await this.getCartList();
+    return new Promise((resolve) => {
+      intensiveApi.getGoodsList5(params).then((res) => {
+        let list = res.records.map((item) => {
+          let p = (item.salePrice / 100).toString();
+          let a = '';
+          let z = '';
+          let v = 0;
+          if (p.includes('.')) {
+            a = p.split('.')[0]
+            z = p.split('.')[1]
+          } else {
+            a = p
+          }
+
+          return {
+            ...item,
+            aPrice: a,
+            zPrice: z,
+            value: v,
+          }
+        })
+        this.setData({
+          goodsData5: list,
         }, () => {
           resolve(true)
         })
@@ -426,6 +591,21 @@ create.Page(store, {
         console.log('getGoodsCategory-res', res);
         this.setData({
           classData: res.records
+        }, () => {
+          resolve(true)
+        })
+      })
+    })
+  },
+  getGoodsCategory3() {
+    const { storeNo } = this.data
+    const params = {
+      storeNo
+    }
+    return new Promise((resolve) => {
+      intensiveApi.getGoodsCategory3(params).then((res) => {
+        this.setData({
+          classData3: res.records
         }, () => {
           resolve(true)
         })
@@ -540,6 +720,23 @@ create.Page(store, {
       tabIndexId2: gcId2
     })
     this.getAllGoodsList2(gcId2)
+    wx.createSelectorQuery()
+      .select('#scroll-view2')
+      .node()
+      .exec((res) => {
+        const scrollView = res[0].node;
+        scrollView.scrollTo({ top: 0 });
+      })
+  },
+  checkTab3(e) {
+    const {
+      gcId1,
+    } = e.currentTarget.dataset.class;
+    // this.getAllGoodsList(gcId2)
+    this.setData({
+      tabIndexId3: gcId1
+    })
+    this.getAllGoodsList3(gcId1)
     wx.createSelectorQuery()
       .select('#scroll-view2')
       .node()

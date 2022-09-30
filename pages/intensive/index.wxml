@@ -17,13 +17,13 @@
         <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/triangle_bottom_black.png')}}" />
       </view>
       <!-- 搜索栏 -->
-      <view id="top_search" class="search_content" style="">
+      <!-- <view id="top_search" class="search_content" style="">
         <view class="search_body" bindtap="onToSearch">
           <image class="search_icon" src="{{tools.getImgUrl('miniprogram/intensive/search-icon.png')}}" />
           <view class="search_text">店内搜索</view>
           <view class="search_btn">搜索</view>
         </view>
-      </view>
+      </view> -->
     </view>
   </view>
 
@@ -58,19 +58,19 @@
       <view class="null_text">请选择自提点</view>
     </view>
 
-    <van-tabs active="{{tabActive}}" class="tabs" bind:change="tabChange" id="tabs">
-      <van-tab title="到店自提" class="tab">
-        <view class="recommend" wx:if="{{recommendData.records.length && !goodsData.length}}"><recommend remindList="{{recommendData}}" /></view>
-        <view class="cart_box" wx:else>
-          <view class="cart_left_box" wx:if="{{hasClass}}">
-            <block wx:for="{{classData}}" wx:key="index">
-              <view class="class_item_box {{item.gcId1==tabIndexId?'left_act':''}}" data-class="{{item}}" bindtap="checkTab">
+    <van-tabs active="{{tabActive}}" class="tabs" bind:change="tabChange" id="tabs"  swipe-threshold="3">
+      <van-tab title="到店自提" class="tab" wx:if="{{tools.hasIndex(wholesaleStatus,1)}}">
+        <!-- <view class="recommend" wx:if="{{recommendData.records.length && !goodsData.length}}"><recommend remindList="{{recommendData}}" /></view> -->
+        <view class="cart_box">
+          <view class="cart_left_box">
+            <block wx:for="{{classData3}}" wx:key="index">
+              <view class="class_item_box {{item.gcId1==tabIndexId3?'left_act':''}}" data-class="{{item}}" bindtap="checkTab3">
                 {{item.gcName1}}
               </view>
             </block>
           </view>
-          <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" style="height:{{height1}}px; padding-bottom: 120px" wx:if="{{goodsData.length}}">
-            <block wx:for="{{goodsData}}" wx:key="index">
+          <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" style="height:{{height1}}px" wx:if="{{goodsData3.length}}">
+            <block wx:for="{{goodsData3}}" wx:key="index">
               <view class="goods_item_box" data-data="{{item}}" bindtap="onGood">
                 <view class="goods_img_box">
                   <image class="goods_img_index" src="{{item.imageUrl}}" />
@@ -86,18 +86,16 @@
                     </view>
                     <view class="price_old">¥{{item.marketPrice/100}}</view>
                   </view>
-                  <view class="step_box" wx:if="{{item.isCartShow}}">
-                    <image class="step_delete_icon" wx:if="{{item.value}}" data-item="{{item}}" data-index="{{index}}" catchtap="onStepChangeDelete" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
-                    <view class="step_index_num" wx:if="{{item.value}}">{{item.value}}</view>
-                    <image class="step_add_icon" data-item="{{item}}" data-index="{{index}}" catchtap="onStepChangeAdd" src="{{tools.getImgUrl('miniprogram/intensive/a-icon.png')}}" />
-                  </view>
                 </view>
               </view>
             </block>
           </scroll-view>
+          <view class="flex_center" style="width: 100%" wx:else>
+            <nodata />
+          </view>
         </view>
       </van-tab>
-      <van-tab title="快递配送" class="tab">
+      <van-tab title="快递配送" class="tab" wx:if="{{tools.hasIndex(wholesaleStatus,2)}}">
         <view class="cart_box">
           <view class="cart_left_box">
             <block wx:for="{{classData2}}" wx:key="index">
@@ -114,6 +112,41 @@
                 </view>
                 <view class="goods_right_box">
                   <view class="goods_name">{{item.goodsName}}</view>
+                  <view class="goods_nums">{{item.goodsSaleNumStr}}</view>
+                  <view class="goods_price_box">
+                    <view class="price_index">
+                      <text class="price_head">¥</text>
+                      <text class="a_price">{{item.aPrice}}</text>
+                      <text class="z_price" wx:if="{{item.zPrice}}">{{'.' + item.zPrice}}</text>
+                    </view>
+                    <view class="price_old">¥{{item.marketPrice/100}}</view>
+                  </view>
+                </view>
+              </view>
+            </block>
+          </scroll-view>
+          <view class="flex_center" style="width: 100%" wx:else>
+            <nodata />
+          </view>
+        </view>
+      </van-tab>
+      <van-tab title="店主推荐" class="tab" wx:if="{{tools.hasIndex(wholesaleStatus,3)}}">
+        <view class="cart_box">
+          <view class="cart_left_box">
+            <block wx:for="{{classData}}" wx:key="index">
+              <view class="class_item_box {{item.gcId1==tabIndexId?'left_act':''}}" data-class="{{item}}" bindtap="checkTab">
+                {{item.gcName1}}
+              </view>
+            </block>
+          </view>
+          <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" style="height:{{height1}}px" wx:if="{{goodsData.length}}">
+            <block wx:for="{{goodsData}}" wx:key="index">
+              <view class="goods_item_box" data-data="{{item}}" bindtap="onGood">
+                <view class="goods_img_box">
+                  <image class="goods_img_index" src="{{item.imageUrl}}" />
+                </view>
+                <view class="goods_right_box">
+                  <view class="goods_name">{{item.goodsName}}</view>
                   <view class="goods_nums">{{item.saleNumStr}}</view>
                   <view class="goods_price_box">
                     <view class="price_index">
@@ -127,6 +160,73 @@
               </view>
             </block>
           </scroll-view>
+          <view class="flex_center" style="width: 100%" wx:else><nodata /></view>
+          
+        </view>
+      </van-tab>
+      <van-tab title="附近热销" class="tab" wx:if="{{tools.hasIndex(wholesaleStatus,4)}}">
+        <view class="cart_box">
+          <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" style="height:{{height1}}px" wx:if="{{goodsData4.length}}">
+            <block wx:for="{{goodsData4}}" wx:key="index">
+              <view class="goods_item_box goods_item_box4" data-data="{{item}}" bindtap="onGood">
+                <view class="showAddress-wrap">
+                  <image class="location_icon" src="{{tools.getImgUrl('miniprogram/home/location-black.png')}}" />
+                  <view class="showAddress  van-ellipsis">{{item.showAddress}}</view>
+                  <view class="distanceUnit">{{item.distanceUnit}}</view>
+                </view>
+                <view class="goods_img_box_wrap">
+                  <view class="goods_img_box">
+                    <image class="goods_img_index" src="{{item.imageUrl}}" />
+                  </view>
+                  <view class="goods_right_box">
+                    <view class="goods_name">{{item.goodsName}}</view>
+                    <view class="goods_nums">{{item.saleNumStr}}</view>
+                    <view class="goods_price_box">
+                      <view class="price_index">
+                        <text class="price_head">¥</text>
+                        <text class="a_price">{{item.aPrice}}</text>
+                        <text class="z_price" wx:if="{{item.zPrice}}">{{'.' + item.zPrice}}</text>
+                      </view>
+                      <view class="price_old">¥{{item.marketPrice/100}}</view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </block>
+          </scroll-view>
+          <view class="flex_center" style="width: 100%" wx:else>
+            <nodata />
+          </view>
+        </view>
+      </van-tab>
+      <van-tab title="提醒店主采购" class="tab" wx:if="{{tools.hasIndex(wholesaleStatus,5)}}">
+        <view class="cart_box">
+          <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" style="height:{{height1}}px" wx:if="{{goodsData5.length}}">
+            <block wx:for="{{goodsData5}}" wx:key="index">
+              <view class="goods_item_box  goods_item_box5" data-data="{{item}}" bindtap="onGood">
+                <view class="goods_img_box">
+                  <image class="goods_img_index" src="{{item.goodsImageUrl}}" />
+                </view>
+                <view class="goods_right_box">
+                  <view class="goods_name">{{item.goodsName}}</view>
+                  <view class="goods_nums">{{item.goodsSaleNumStr}}</view>
+                  <view class="notice-btn" wx:if="{{item.isRemind===0}}" data-data="{{item}}" catchtap="remindStoreBuyNotice">提醒店主集约</view>
+                  <view class="notice-btn notice-btn-disable" wx:else>已提醒</view>
+                  <!-- <view class="goods_price_box">
+                    <view class="price_index">
+                      <text class="price_head">¥</text>
+                      <text class="a_price">{{item.aPrice}}</text>
+                      <text class="z_price" wx:if="{{item.zPrice}}">{{'.' + item.zPrice}}</text>
+                    </view>
+                    <view class="price_old">¥{{item.marketPrice/100}}</view>
+                  </view> -->
+                </view>
+              </view>
+            </block>
+          </scroll-view>
+          <view class="flex_center" style="width: 100%" wx:else>
+            <nodata />
+          </view>
         </view>
       </van-tab>
     </van-tabs>
@@ -239,12 +339,12 @@
   
 
   <!-- 购物车常驻栏 -->
-  <cart-bottom
+  <!-- <cart-bottom
     wx:if="{{goodsData.length && tabActive === 0}}"
     jump="true"
     info="{{cartAllData}}"
     bind:popup="handleUpdate"
-  />
+  /> -->
   <van-toast id="van-toast" />
   <!-- 底部占位 -->
   <view class="flex_fix bar_height" />

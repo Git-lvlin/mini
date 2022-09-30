@@ -132,7 +132,21 @@ create.Component(store, {
       };
       // console.log('getCheckSku postData ', postData)
       goodApi.getCheckSku(postData, {showLoading: false}).then(res => {
-        const curSku = res.curSku;
+        let curSku = res.curSku;
+        if (!curSku) {
+          curSku = {}
+          curSku.stockOver = 1;
+          curSku.stockOverText = "已售罄";
+          console.log('curSku', curSku)
+          this.setData({
+            curSku: {
+              ...this.data.curSku,
+              ...curSku,
+            },
+            skuList: res.specList
+          })
+          return
+        }
         console.log(' checkSpec 1', checkSpec, data, '; curSku ', curSku)
         curSku.salePrice = util.divide(curSku.salePrice, 100);
         curSku.stockOver = 0;
