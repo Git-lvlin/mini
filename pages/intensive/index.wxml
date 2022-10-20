@@ -57,9 +57,21 @@
       <image class="null_img" src="{{tools.getImgUrl('miniprogram/intensive/null.png')}}" />
       <view class="null_text">请选择自提点</view>
     </view>
-
-    <van-tabs active="{{tabActive}}" class="tabs" bind:change="tabChange" id="tabs"  swipe-threshold="3">
-      <van-tab title="到店自提" class="tab" wx:if="{{tools.hasIndex(wholesaleStatus,1)}}">
+    <cart-bottom
+      jump="true"
+      info="{{cartAllData3}}"
+      bind:popup="handleUpdate"
+      objectId="-15"
+      wx:if="{{tabActive==0&&tools.hasIndex(wholesaleStatus,1)}}"
+    />
+    <cart-bottom
+      jump="true"
+      info="{{cartAllData}}"
+      bind:popup="handleUpdate"
+      wx:if="{{tabActive==2&&tools.hasIndex(wholesaleStatus,3)}}"
+    />
+    <van-tabs active="{{tabActive}}" class="tabs" bind:change="tabChange" id="tabs"  swipe-threshold="3" z-index="1">
+      <van-tab title="到店自提" class="tab">
         <!-- <view class="recommend" wx:if="{{recommendData.records.length && !goodsData.length}}"><recommend remindList="{{recommendData}}" /></view> -->
         <view class="cart_box">
           <view class="cart_left_box">
@@ -69,7 +81,7 @@
               </view>
             </block>
           </view>
-          <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" style="height:{{height1}}px" wx:if="{{goodsData3.length}}">
+          <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" style="height:{{height1}}px; padding-bottom:120rpx" wx:if="{{goodsData3.length}}">
             <block wx:for="{{goodsData3}}" wx:key="index">
               <view class="goods_item_box" data-data="{{item}}" bindtap="onGood">
                 <view class="goods_img_box">
@@ -86,6 +98,11 @@
                     </view>
                     <view class="price_old">¥{{item.marketPrice/100}}</view>
                   </view>
+                  <view class="step_box" wx:if="{{item.isCartShow}}">
+                    <image class="step_delete_icon" wx:if="{{item.value}}" data-item="{{item}}" data-index="{{index}}" catchtap="onStepChangeDelete" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
+                    <view class="step_index_num" wx:if="{{item.value}}">{{item.value}}</view>
+                    <image class="step_add_icon" data-item="{{item}}" data-index="{{index}}" data-type="3" catchtap="onStepChangeAdd" src="{{tools.getImgUrl('miniprogram/intensive/a-icon.png')}}" />
+                  </view>
                 </view>
               </view>
             </block>
@@ -94,8 +111,9 @@
             <nodata />
           </view>
         </view>
+        
       </van-tab>
-      <van-tab title="快递配送" class="tab" wx:if="{{tools.hasIndex(wholesaleStatus,2)}}">
+      <van-tab title="快递配送" class="tab">
         <view class="cart_box">
           <view class="cart_left_box">
             <block wx:for="{{classData2}}" wx:key="index">
@@ -130,7 +148,7 @@
           </view>
         </view>
       </van-tab>
-      <van-tab title="店主推荐" class="tab" wx:if="{{tools.hasIndex(wholesaleStatus,3)}}">
+      <van-tab title="店主推荐" class="tab" >
         <view class="cart_box">
           <view class="cart_left_box">
             <block wx:for="{{classData}}" wx:key="index">
@@ -139,7 +157,7 @@
               </view>
             </block>
           </view>
-          <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" style="height:{{height1}}px" wx:if="{{goodsData.length}}">
+          <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" style="height:{{height1}}px; padding-bottom:120rpx" wx:if="{{goodsData.length}}">
             <block wx:for="{{goodsData}}" wx:key="index">
               <view class="goods_item_box" data-data="{{item}}" bindtap="onGood">
                 <view class="goods_img_box">
@@ -156,6 +174,11 @@
                     </view>
                     <view class="price_old">¥{{item.marketPrice/100}}</view>
                   </view>
+                  <view class="step_box" wx:if="{{item.isCartShow}}">
+                    <image class="step_delete_icon" wx:if="{{item.value}}" data-item="{{item}}" data-index="{{index}}" catchtap="onStepChangeDelete" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
+                    <view class="step_index_num" wx:if="{{item.value}}">{{item.value}}</view>
+                    <image class="step_add_icon" data-item="{{item}}" data-index="{{index}}" catchtap="onStepChangeAdd" src="{{tools.getImgUrl('miniprogram/intensive/a-icon.png')}}" />
+                  </view>
                 </view>
               </view>
             </block>
@@ -163,8 +186,9 @@
           <view class="flex_center" style="width: 100%" wx:else><nodata /></view>
           
         </view>
+        
       </van-tab>
-      <van-tab title="附近热销" class="tab" wx:if="{{tools.hasIndex(wholesaleStatus,4)}}">
+      <van-tab title="附近热销" class="tab">
         <view class="cart_box">
           <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" style="height:{{height1}}px" wx:if="{{goodsData4.length}}">
             <block wx:for="{{goodsData4}}" wx:key="index">
@@ -199,7 +223,7 @@
           </view>
         </view>
       </van-tab>
-      <van-tab title="提醒店主采购" class="tab" wx:if="{{tools.hasIndex(wholesaleStatus,5)}}">
+      <van-tab title="提醒店主采购" class="tab">
         <view class="cart_box">
           <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" style="height:{{height1}}px" wx:if="{{goodsData5.length}}">
             <block wx:for="{{goodsData5}}" wx:key="index">
@@ -339,12 +363,15 @@
   
 
   <!-- 购物车常驻栏 -->
-  <!-- <cart-bottom
-    wx:if="{{goodsData.length && tabActive === 0}}"
-    jump="true"
-    info="{{cartAllData}}"
-    bind:popup="handleUpdate"
-  /> -->
+  
+  <spec-panel
+    wx:if="{{selectSku}}"
+    good="{{selectSku}}"
+    skuId="{{selectSku.skuId}}"
+    specType="add"
+    bind:specBuy="onToCreate"
+    bind:specAdd="specAdd"
+  />
   <van-toast id="van-toast" />
   <!-- 底部占位 -->
   <view class="flex_fix bar_height" />

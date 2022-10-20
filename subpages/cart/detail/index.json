@@ -17,6 +17,7 @@
     "user-together-banner": "../components/user-together-banner/index",
     "good-evaluate": "../components/good-evaluate/index",
     "cart-bottom": "/components/cart/cart-bottom/index",
-    "detail-nav": "../components/detail-nav/index"
+    "detail-nav": "../components/detail-nav/index",
+    "van-toast": "@vant/weapp/toast/index"
   }
 }

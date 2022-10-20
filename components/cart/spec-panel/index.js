@@ -300,7 +300,7 @@ create.Component(store, {
         });
         this.triggerEvent("specAdd", {
           skuId: curSku.id,
-          quantity,
+          quantity: skuNum,
         });
       }
       this.onClose();

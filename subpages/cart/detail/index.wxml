@@ -284,7 +284,7 @@
         />
       </view>
 
-      <!-- <view class="step_box" wx:if="{{cartBtnIsShow == 1}}">
+      <view class="step_box" wx:if="{{cartBtnIsShow == 1}}">
         <image class="step_delete_icon" wx:if="{{quantity > 0}}" data-item="{{currentSku}}" bindtap="decreaseCart" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
         <view class="step_index_num" wx:if="{{quantity > 0}}"> {{quantity}} </view>
         <view wx:if="{{quantity > 0}}">
@@ -292,11 +292,11 @@
           <image class="step_add_icon" wx:else src="{{tools.getImgUrl('miniprogram/intensive/add-disable.png')}}" />
         </view>
         <view
+            wx:else
             class="cart_btn"
-            wx:if="{{!quantity || quantity && good.isMultiSpec == 1}}"
             bindtap="increaseCart"
           >加入购物车</view>
-      </view> -->
+      </view>
 
       <view class="b_intensive" wx:if="{{isActivityGood == 5 || isActivityGood == 6}}">
         <view class="flex_middle b_price">
@@ -378,10 +378,10 @@
       bind:click="onToPriceDetail"
     />
 
-    <view class="space_20" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" />
+    <!-- <view class="space_20" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" /> -->
     
     <!-- 集约提货地址 -->
-    <view class="flex_middle pick_info" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" >
+    <!-- <view class="flex_middle pick_info" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" >
       <view class="flex_fix pick_info__">选择配送方式：</view>
       <view class="flex_middle pick_way">
         <view
@@ -396,7 +396,7 @@
           <view class="pick_way_name">{{item.name}}</view>
         </view>
       </view>
-    </view>
+    </view> -->
 
     <view class="space_20" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}" />
 
@@ -518,7 +518,7 @@
 
     <!-- 选择规格 bind:specAdd="specUpdateCart" -->
     <spec-panel
-      wx:if="{{good.id}}"
+      wx:if="{{good.id && (isActivityGood !=15||isActivityGood!=16)}}"
       good="{{good}}"
       skuId="{{skuId}}"
       isAlone="{{isAlone}}"
@@ -529,9 +529,26 @@
       bind:setSku="setCurrentSku"
     />
 
+    <spec-panel
+      wx:if="{{good && (isActivityGood ==15||isActivityGood == 16)}}"
+      good="{{good}}"
+      skuId="{{skuId}}"
+      specType="add"
+      bind:specBuy="onToCreate"
+      bind:specAdd="specAdd"
+    />
+
+    <cart-bottom
+      wx:if="{{isActivityGood == 15 || isActivityGood == 16}}"
+      info="{{cartAllData}}"
+      bind:popup="handleUpdate"
+      objectId="{{objectId}}"
+    />
+
     <!-- 普通 || 1688商品 -->
     <view
       class="flex_center to_buy"
+      wx:if="{{isActivityGood !=15&&isActivityGood!=16}}"
     >
       <!-- <view
         class="flex_fix buy_bar_item"
@@ -554,14 +571,7 @@
         <view class="flex_fix buy_bar_space" wx:if="{{isActivityGood == 11}}" />
 
         <!-- 购物车常驻栏 -->
-        <!-- <view wx:if="{{cartBtnIsShow == 1}}" style="margin-left:-28rpx;">
-          <view wx:if="{{stockOver == 0}}">
-            <cart-bottom
-              info="{{cartAllData}}"
-              bind:popup="handleUpdate"
-            />
-          </view>
-        </view> -->
+        
 
         <view
           class="gray_buy_btn"
@@ -774,4 +784,5 @@
       <view class="has_order_popup_btn_n" bindtap="cancel">取消订单</view>
     </view>
   </van-popup>
+  <van-toast id="van-toast" />
 </view>

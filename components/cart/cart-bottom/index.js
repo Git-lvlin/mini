@@ -35,6 +35,10 @@ create.Component(store, {
       type: String,
       value: '立即购买'
     },
+    objectId: {
+      type: String,
+      value: ''
+    },
     info: {
       type: Object,
       value: {},
@@ -129,7 +133,11 @@ create.Component(store, {
     },
     // 购物车商品列表汇总
     getSummaryByCartData() {
-      cartApi.summaryByCartData().then((res) => {
+      const params = {}
+      if (this.data.objectId == '-15') {
+        params.subType = 151
+      }
+      cartApi.summaryByCartData(params).then((res) => {
         console.log('bottom-购物车汇总数据', res)
         this.infoChange(res)
       })
@@ -155,7 +163,11 @@ create.Component(store, {
     },
     getSubmitData() {
       return new Promise((resolve) => {
-        cartApi.cartList({},{showLoading: false}).then((res) => {
+        const params = {}
+        if (this.data.objectId == '-15') {
+          params.subType = 151
+        }
+        cartApi.cartList(params).then((res) => {
           console.log('购物车商品列表', res)
           let one = res.filter(item => item.goodsState && item.isChecked)
           resolve(one)
@@ -268,7 +280,7 @@ create.Component(store, {
       let p = {
         orderType: 15,
         activityId: '',
-        objectId: '',
+        objectId: this.data.objectId,
         isActivityCome: false,
       }
       this.handleCloseToCartPopup()

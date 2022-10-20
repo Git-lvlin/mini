@@ -1,5 +1,5 @@
 import create from '../../utils/create'
-import store from '../../store/index'
+import store from '../../store/good'
 import router from '../../utils/router'
 import homeApi from '../../apis/home'
 import intensiveApi from '../../apis/intensive'
@@ -31,6 +31,7 @@ create.Page(store, {
 
   data: {
     cartAllData: null,
+    cartAllData3: null,
     fixationTop: 600,
     isOnGoods: false,
     scrolling: false,
@@ -73,6 +74,7 @@ create.Page(store, {
     height1: 500,
     height2: 500,
     wholesaleStatus: [],
+    selectSku: null,
     invalidList: [
       {
         name: 'dasdasdasd',
@@ -148,7 +150,7 @@ create.Page(store, {
 
   // 初始化
   init(id = '') {
-    Promise.all([this.getAllGoodsList(this.data.tabIndexId), this.getGoodsCategory(), this.getSummaryByCartData(), this.getBannerData()]).then((res) => {
+    Promise.all([this.getAllGoodsList(this.data.tabIndexId), this.getGoodsCategory(), this.getBannerData()]).then((res) => {
       this.setData({
         refresherTriggered: false,
       })
@@ -216,16 +218,21 @@ create.Page(store, {
   // 设置购物车商品数量
   setCartNum(itemInfo) {
     const { value, skuId, objectId } = itemInfo;
+    console.log('itemInfo', itemInfo)
     const params = {
       skuId: skuId,
       objectId: objectId,
       quantity: value,
+      subType: 151
+    }
+    if (itemInfo.objectId != '-15') {
+      delete params.subType
     }
     return new Promise((resolve) => {
       cartApi.setCartNum(params).then((res) => {
         console.log('设置购物车商品数量', res)
         if (res.value) {
-          this.getSummaryByCartData()
+          this.getSummaryByCartData(params)
         }
         resolve(1)
       }).catch((err) => {
@@ -253,13 +260,19 @@ create.Page(store, {
     cartApi.checkedAllCart(params)
   },
   // 购物车商品列表汇总
-  getSummaryByCartData() {
+  getSummaryByCartData(params) {
     return new Promise((resolve) => {
-      cartApi.summaryByCartData().then((res) => {
+      cartApi.summaryByCartData(params).then((res) => {
         resolve(true)
-        this.setData({
-          cartAllData: res
-        })
+        if (params?.subType) {
+          this.setData({
+            cartAllData3: res
+          })
+        } else {
+          this.setData({
+            cartAllData: res
+          })
+        }
       })
     })
   },
@@ -346,9 +359,9 @@ create.Page(store, {
   },
 
   // 购物车商品列表
-  getCartList() {
+  getCartList(params={}) {
     return new Promise((resolve) => {
-      cartApi.cartList().then((res) => {
+      cartApi.cartList(params).then((res) => {
         console.log('购物车商品列表', res)
         this.setData({
           cartList: res
@@ -364,7 +377,7 @@ create.Page(store, {
       size: 999,
       gcId1: gcId1 || 0,
     }
-    // const resolveData = await this.getCartList();
+    const resolveData = await this.getCartList();
     return new Promise((resolve) => {
       intensiveApi.getGoodsList(params).then((res) => {
         let list = res.records.map((item) => {
@@ -379,11 +392,11 @@ create.Page(store, {
             a = p
           }
 
-          // resolveData.map(cartItem => {
-          //   if (cartItem.objectId == item.objectId) {
-          //     v = cartItem.quantity
-          //   }
-          // })
+          resolveData.map(cartItem => {
+            if (cartItem.spuId == item.spuId) {
+              v = cartItem.quantity
+            }
+          })
           return {
             ...item,
             aPrice: a,
@@ -391,6 +404,7 @@ create.Page(store, {
             value: v,
           }
         })
+        this.getSummaryByCartData();
         console.log('集约商品列表返回', list)
         // if (gcId1 == 0) {
         //   if (list.length > 10) {
@@ -413,7 +427,7 @@ create.Page(store, {
       size: 999,
       gcId1: gcId1 || 0,
     }
-    // const resolveData = await this.getCartList();
+    const resolveData = await this.getCartList({ subType: 151 });
     return new Promise((resolve) => {
       intensiveApi.getGoodsList3(params).then((res) => {
         let list = res.records.map((item) => {
@@ -428,16 +442,17 @@ create.Page(store, {
             a = p
           }
 
-          // resolveData.map(cartItem => {
-          //   if (cartItem.objectId == item.objectId) {
-          //     v = cartItem.quantity
-          //   }
-          // })
+          resolveData.map(cartItem => {
+            if (cartItem.spuId == item.spuId) {
+              v = cartItem.quantity
+            }
+          })
           return {
             ...item,
             aPrice: a,
             zPrice: z,
             value: v,
+            type: 3
           }
         })
         if (gcId1 == 0) {
@@ -447,6 +462,7 @@ create.Page(store, {
             this.setData({ hasClass: false })
           }
         }
+        this.getSummaryByCartData({subType:151})
         this.setData({
           goodsData3: list,
         }, () => {
@@ -459,46 +475,46 @@ create.Page(store, {
     const storeInfo = wx.getStorageSync("TAKE_SPOT")
     const _this = this;
     wx.getLocation({
-        type: 'gcj02',
-        isHighAccuracy: true,
-        success(result) {
-          const params = {
-            latitude: result.latitude,
-            longitude: result.longitude,
-            orderType: 30
-          }
-          // const resolveData = await this.getCartList();
-          return new Promise((resolve) => {
-            intensiveApi.getGoodsList4(params).then((res) => {
-              let list = res.map((item) => {
-                let p = (item.salePrice / 100).toString();
-                let a = '';
-                let z = '';
-                let v = 0;
-                if (p.includes('.')) {
-                  a = p.split('.')[0]
-                  z = p.split('.')[1]
-                } else {
-                  a = p
-                }
+      type: 'gcj02',
+      isHighAccuracy: true,
+      success(result) {
+        const params = {
+          latitude: result.latitude,
+          longitude: result.longitude,
+          orderType: 30
+        }
+        // const resolveData = await this.getCartList();
+        return new Promise((resolve) => {
+          intensiveApi.getGoodsList4(params).then((res) => {
+            let list = res.map((item) => {
+              let p = (item.salePrice / 100).toString();
+              let a = '';
+              let z = '';
+              let v = 0;
+              if (p.includes('.')) {
+                a = p.split('.')[0]
+                z = p.split('.')[1]
+              } else {
+                a = p
+              }
 
-                return {
-                  ...item,
-                  aPrice: a,
-                  zPrice: z,
-                  value: v,
-                }
-              })
-              _this.setData({
-                goodsData4: list,
-              }, () => {
-                resolve(true)
-              })
+              return {
+                ...item,
+                aPrice: a,
+                zPrice: z,
+                value: v,
+              }
+            })
+            _this.setData({
+              goodsData4: list,
+            }, () => {
+              resolve(true)
             })
           })
-        }
+        })
+      }
     })
-    
+
   },
   async getAllGoodsList5() {
     const params = {
@@ -651,48 +667,115 @@ create.Page(store, {
   },
 
   async onStepChangeAdd(e) {
-    // Toast.loading({ forbidClick: true });
-    let { index, item } = e.currentTarget.dataset;
-    let { buyMaxNum, value, unit, stockNum } = item;
-    let { goodsData } = this.data;
-    if (buyMaxNum > stockNum) {
-      buyMaxNum = stockNum
-    }
-    if (value + 1 > buyMaxNum) {
-      Toast(`该商品最多购买${buyMaxNum}${unit}`);
-      return
-    }
-    goodsData[index].value = value + 1
-    const yes = await this.setCartNum(goodsData[index]);
-    if (!yes) {
-      return
-    }
-    setTimeout(() => {
-      Toast.clear();
+    let { index, item, type } = e.currentTarget.dataset;
+    let { buyMaxNum, value, unit, stockNum, isMultiSpec } = item;
+    if (isMultiSpec === 1) {
+      store.onChangeSpecState(true)
       this.setData({
-        goodsData: goodsData
-      });
-    }, 300);
+        selectSku:null,
+      },()=>{
+        this.setData({
+          selectSku: {
+            ...item,
+            type,
+            index,
+          }
+        })
+      })
+    } else {
+      // Toast.loading({ forbidClick: true });
+      let { goodsData3, goodsData } = this.data;
+      let data = goodsData;
+      if (type == 3) {
+        data = goodsData3
+      }
+      if (buyMaxNum > stockNum) {
+        buyMaxNum = stockNum
+      }
+      if (value + 1 > buyMaxNum) {
+        Toast(`该商品最多购买${buyMaxNum}${unit}`);
+        return
+      }
+      data[index].value = value + 1
+      const yes = await this.setCartNum(data[index]);
+      if (!yes) {
+        return
+      }
+      setTimeout(() => {
+        Toast.clear();
+        if (type == 3) {
+          this.setData({
+            goodsData3: data
+          });
+        } else {
+          this.setData({
+            goodsData: data
+          });
+        }
+      }, 300);
+    }
+
+  },
+  specAdd({ detail }) {
+    const selectSku = this.data.selectSku
+
+    let { goodsData3, goodsData } = this.data;
+    let data = goodsData;
+    if (selectSku.type == 3) {
+      data = goodsData3
+    }
+
+    data[selectSku.index].value = selectSku.value + detail.quantity
+    selectSku.value = selectSku.value + detail.quantity
+    selectSku.skuId = detail.skuId
+
+    this.setCartNum(selectSku)
+      .then(res => {
+        if (selectSku.type == 3) {
+          this.setData({
+            goodsData3: data
+          });
+        } else {
+          this.setData({
+            goodsData: data
+          });
+        }
+      })
+
   },
   onStepChangeDelete(e) {
     // Toast.loading({ forbidClick: true });
     let { index, item } = e.currentTarget.dataset;
-    let { buyMinNum, value, unit } = item;
-    let { goodsData } = this.data;
+    let { buyMinNum, value, unit, isMultiSpec } = item;
+    if (isMultiSpec === 1) {
+      Toast('请到购物车删除商品')
+      return;
+    }
+    let data = this.data.goodsData
+    if (item.type === 3) {
+      data = this.data.goodsData3
+    }
     if (value == 0) {
       return
     }
     let num = value - 1;
-    goodsData[index].value = num;
+    data[index].value = num;
     if ((buyMinNum > 1) && (value - 1 < buyMinNum)) {
       Toast(`该商品${buyMinNum}${unit}起购`);
     }
-    this.setCartNum(goodsData[index]);
+    this.setCartNum(data[index]);
     setTimeout(() => {
       Toast.clear();
-      this.setData({
-        goodsData: goodsData
-      });
+      if (item.type === 3) {
+        this.setData({
+          goodsData3: data
+        });
+      }else {
+        this.setData({
+          goodsData: data
+        });
+      }
+      
     }, 300);
   },
   checkTab(e) {

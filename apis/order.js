@@ -32,6 +32,7 @@ const url = {
 
   getPayOrderInfo: '/activity/auth/payment/get',
   prepayOrder: '/activity/auth/payment/pay',
+  getStoreDeliveryStatus: "/store/option/memberShop/getStoreDeliveryStatus",
 }
 
 export default {
@@ -141,5 +142,15 @@ export default {
   // 领取每日
   getFaterRed(params, option) {
     return Request.post(url.faterRed, params, option);
+  },
+  getStoreDeliveryStatus(params, option) {
+    let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
+    if (takeSpot.storeNo) {
+      params = {
+        ...params,
+        storeNo: takeSpot.storeNo,
+      }
+    }
+    return Request.get(url.getStoreDeliveryStatus, params, option);
   },
 }
