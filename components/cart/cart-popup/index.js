@@ -21,7 +21,7 @@ create.Component(store, {
       value: false,
       observer(now, old) {
         if (now !== old) {
-          this.getCartList()
+          // this.getCartList()
         }
       }
     },
@@ -45,6 +45,10 @@ create.Component(store, {
       type: Number,
       value: 0
     },
+    objectId: {
+      type: String,
+      value: ''
+    },
     info: {
       type: Object,
       value: {},
@@ -60,8 +64,9 @@ create.Component(store, {
   },
   lifetimes: {
     ready() {
-      // this.getCartList()
-      this.updateSelectAddressType('lifetimes read');
+      this.getCartList()
+      this.updateSelectAddressType('lifetimes read')
+      this.getStoreDeliveryStatus()
     },
   },
   pageLifetimes: {
@@ -86,9 +91,18 @@ create.Component(store, {
     inContent: '确定删除该商品吗？',
     confirmText: '删除',
     deletePopupShowAll: false,
+    sendStatus: 'close'
   },
 
   methods: {
+    getStoreDeliveryStatus() {
+      cartApi.getStoreDeliveryStatus()
+        .then(res => {
+          this.setData({
+            sendStatus: res.sendStatus
+          })
+        })
+    },
     updateSelectAddressType(name) {
       let data = wx.getStorageSync("CREATE_INTENSIVE")
       console.log(name, ' selectAddressType 35 cart-popup', this.data.selectAddressType)
@@ -126,17 +140,20 @@ create.Component(store, {
     },
     //  切换配送、自提状态
     checkSelf() {
+      if (this.data.sendStatus === 'close') {
+        return;
+      }
       let data2 = wx.getStorageSync("CREATE_INTENSIVE")
       if (data2) {
         console.log('selectAddressType  before', data2.selectAddressType)
-        var current = {"type": 3} // 配送
+        var current = { "type": 3 } // 配送
         if (data2 && data2.selectAddressType && data2.selectAddressType.type == 3) {
-          current = {"type": 2} // 自提
+          current = { "type": 2 } // 自提
         }
         data2.selectAddressType = current
         wx.setStorageSync("CREATE_INTENSIVE", data2)
       } else {
-        wx.setStorageSync("CREATE_INTENSIVE", {selectAddressType: current})
+        wx.setStorageSync("CREATE_INTENSIVE", { selectAddressType: current })
       }
       this.setData({
         selectAddressType: current,
@@ -148,7 +165,7 @@ create.Component(store, {
     },
     // 选中购物车明细
     checkedItem(e) {
-      const {skuId, objectId} = e.currentTarget.dataset.item;
+      const { skuId, objectId } = e.currentTarget.dataset.item;
       const clickIndex = e.currentTarget.dataset.index;
       const params = {
         skuId,
@@ -166,8 +183,8 @@ create.Component(store, {
     },
     // 删除失效商品
     invalidGoodDelete(e) {
-      let {index, item} = e.currentTarget.dataset;
-      let {cartGoodsTwo} = this.data;
+      let { index, item } = e.currentTarget.dataset;
+      let { cartGoodsTwo } = this.data;
       cartGoodsTwo[index].quantity = 0;
       this.setData({
         deleteData: cartGoodsTwo[index]
@@ -195,7 +212,11 @@ create.Component(store, {
     },
     // 购物车商品列表详情
     getCartList() {
-      cartApi.cartList().then((res) => {
+      const params = {}
+      if (this.data.objectId == '-15') {
+        params.subType = 151
+      }
+      cartApi.cartList(params).then((res) => {
         console.log('购物车商品列表', res)
         let one = res.filter(item => item.goodsState)
         let two = res.filter(item => !item.goodsState)
@@ -207,8 +228,15 @@ create.Component(store, {
     },
     // 一键清空失效商品
     clearExpiredAll() {
-      cartApi.clearExpired().then(() => {
+      const params = {}
+      if (this.data.objectId == '-15') {
+        params.subType = 151
+      }
+      cartApi.clearExpired(params).then(() => {
         this.getCartList()
+        this.setData({
+          deletePopupShowAll: false
+        })
       })
     },
     // 设置购物车商品数量
@@ -220,6 +248,11 @@ create.Component(store, {
         objectId: objectId,
         quantity: quantity,
       }
+
+      if (this.data.objectId == '-15') {
+        params.subType = 151
+      }
+
       cartApi.setCartNum(params).then((res) => {
         // console.log('设置购物车商品数量 226', res)
         if (res.value) {
@@ -235,7 +268,11 @@ create.Component(store, {
     },
     // 购物车商品列表汇总
     getSummaryByCartData() {
-      cartApi.summaryByCartData().then((res) => {
+      const params = {}
+      if (this.data.objectId == '-15') {
+        params.subType = 151
+      }
+      cartApi.summaryByCartData(params).then((res) => {
         console.log('购物车汇总数据', res)
         this.triggerEvent("change", res);
         // this.setData({
@@ -245,9 +282,9 @@ create.Component(store, {
     },
     onStepChangeAdd(e) {
       // Toast.loading({ forbidClick: true });
-      let {index, item} = e.currentTarget.dataset;
-      let {buyMaxNum, quantity, unit} = item;
-      let {cartGoodsOne} = this.data;
+      let { index, item } = e.currentTarget.dataset;
+      let { buyMaxNum, quantity, unit } = item;
+      let { cartGoodsOne } = this.data;
       if (quantity + 1 > buyMaxNum) {
         Toast(`该商品最多购买${buyMaxNum}${unit}`);
         return
@@ -262,9 +299,9 @@ create.Component(store, {
       }, 300);
     },
     onStepChangeDelete(e) {
-      let {index, item} = e.currentTarget.dataset;
-      let {buyMinNum, quantity, unit} = item;
-      let {cartGoodsOne} = this.data;
+      let { index, item } = e.currentTarget.dataset;
+      let { buyMinNum, quantity, unit } = item;
+      let { cartGoodsOne } = this.data;
       if (quantity == 0) {
         return
       }
@@ -296,7 +333,10 @@ create.Component(store, {
     // 全选
     onCheckoutAll() {
       const params = {
-        isChecked: !this.data.checkoutAll
+        isChecked: !this.data.checkoutAll,
+      }
+      if (this.data.objectId == '-15') {
+        params.subType = 151
       }
       cartApi.checkedAllCart(params).then((res) => {
         console.log('全选购物车明细', res.value)
@@ -354,7 +394,7 @@ create.Component(store, {
     // },
     infoChange(data) {
       if (data && data.subtotalPromotion) {
-        let price = (data.subtotalPromotion/100).toString();
+        let price = (data.subtotalPromotion / 100).toString();
         let a = '';
         let z = '';
         if (price.includes('.')) {
@@ -373,7 +413,7 @@ create.Component(store, {
         })
       }
     },
-    
+
     // 店铺全选
     onChooseAll() {
       const {
@@ -411,17 +451,17 @@ create.Component(store, {
         orderType: good.orderType,
         goodsFromType: good.goodsFromType,
       };
-      if(good.activityId) data.activityId = good.activityId;
-      if(good.objectId) data.objectId = good.objectId;
-      if(detail.type === "add") {
+      if (good.activityId) data.activityId = good.activityId;
+      if (good.objectId) data.objectId = good.objectId;
+      if (detail.type === "add") {
         this.store.addCart(data);
       }
-      if(detail.type === "set") {
+      if (detail.type === "set") {
         this.store.setCartNum(data);
       }
     },
     // 用于点击阻止事件冒泡
-    onNum() {},
+    onNum() { },
     // 点击跳转店铺
     onToShop() {
       const {
@@ -429,7 +469,7 @@ create.Component(store, {
       } = this.data;
       let id = store.storeNo.slice(8, store.storeNo.length);
       id = +id;
-      if(id < 123580) return;
+      if (id < 123580) return;
       router.push({
         name: "store",
         data: {
@@ -485,7 +525,7 @@ create.Component(store, {
       showModal({
         content: "您确定要删除？",
         ok() {
-          const { skuStoreNo, objectId, skuId} = good
+          const { skuStoreNo, objectId, skuId } = good
           console.log("on cart removeCart good", good)
           const params = {
             objectIds: [objectId], // 业务id数组

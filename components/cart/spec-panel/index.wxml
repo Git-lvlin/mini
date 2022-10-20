@@ -3,7 +3,7 @@
 <van-popup
   show="{{$.showSpecPopup}}"
   round
-  z-index="{{1000}}"
+  z-index="{{99999}}"
   position="bottom"
   closeable
   custom-style="min-height: 20%;padding-bottom: 0;"

@@ -37,4 +37,5 @@
   bind:change="dataChange"
   bind:check="checkChange"
   wx:if="{{popupType}}"
+  objectId="{{objectId}}"
 />

@@ -2,6 +2,9 @@
 
 
 .cart_popup {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
 }
 .cart_popup_title {
@@ -41,7 +44,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 160rpx;
+  /* width: 160rpx; */
   height: 48rpx;
   line-height: 48rpx;
   background: #C7C7C7;
@@ -79,16 +82,20 @@
 }
 
 .btn_left {
-  margin-right: 24rpx;
+  /* margin-right: 24rpx; */
   z-index: 3;
+  width: 88rpx;
+  text-align: center;
 }
 .btn_right {
   z-index: 3;
+  width: 88rpx;
+  text-align: center;
 }
 .btn_checkouted {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 88rpx;
   width: 88rpx;
   height: 100%;
   background: #FF2E23;
@@ -98,18 +105,21 @@
 .self {
   position: absolute;
   top: 0;
-  left: -24rpx;
+  left: 0rpx;
   width: 88rpx;
   height: 100%;
   background: #FF2E23;
   border-radius: 12px;
   z-index: 2;
+  margin-left: 0;
 }
 .list_box {
   width: 100%;
-  max-height: 800rpx;
   overflow: hidden;
   overflow-y: auto;
+  flex: 1;
+  box-sizing: border-box;
+  padding-bottom: 200px;
 }
 .list_one {
   padding: 0 24rpx 22rpx 24rpx;

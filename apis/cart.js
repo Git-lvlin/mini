@@ -12,6 +12,7 @@ const url = {
   clear: "/cart/auth/collectCart/clearCart",
   clearExpired: "/cart/auth/collectCart/clearExpired",
   storeSearch: "/search/option/opensearch/shopGoodsSearch",
+  getStoreDeliveryStatus: "/store/option/memberShop/getStoreDeliveryStatus",
 }
 
 const getStoreNo = (p) => {
@@ -36,6 +37,16 @@ export default {
       }
     }
     return Request.post(url.storeSearch, params, option);
+  },
+  getStoreDeliveryStatus(params, option) {
+    let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
+    if(takeSpot.storeNo) {
+      params = {
+        ...params,
+        storeNo: takeSpot.storeNo,
+      }
+    }
+    return Request.get(url.getStoreDeliveryStatus, params, option);
   },
   // 添加购物车明细
   addCartInfo(params, option) {

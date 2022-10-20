@@ -31,9 +31,9 @@
       </view>
       <view class="tab-box" wx:if="{{(orderType == 15 || orderType == 16) && (selectAddressType.type == 2 || selectAddressType.type == 3)}}">
         <van-tabs lazy-render custom-class="custom" nav-class="nav-class" tab-active-class="tab-active" swipeable animated sticky active="{{ tabActive }}" bind:change="tabChange" >
-          <van-tab title="上门提货" name="2" class="tab">
+          <van-tab title="站点自提" name="2" class="tab">
           </van-tab>
-          <van-tab title="商家配送" name="3" class="tab">
+          <van-tab title="商家配送" name="3" class="tab" wx:if="{{sendStatus==='open'}}">
           </van-tab>
         </van-tabs>
       </view>
@@ -94,6 +94,14 @@
         />
       </view>
 
+      <view class="order_price" style="margin-bottom:24rpx" wx:if="{{(orderType == 15 || orderType == 16)}}">
+        <view class="cell_item">
+          <view class="cell_name">配送方式</view>
+          <view class="cell_value" wx:if="{{tabActive==2}}">站点自提</view>
+          <view class="cell_value" wx:else>商家配送</view>
+        </view>
+      </view>
+
       <view class="order_price" wx:if="{{orderToken && orderInfo.storeGoodsInfos.length}}">
         <view class="cell_item">
           <view class="cell_name">商品金额</view>
@@ -113,7 +121,12 @@
             />
           </view>
         </view>
-        <view class="cell_item">
+        <view class="cell_item" wx:if="{{(orderType == 15 || orderType == 16) &&tabActive==3}}">
+          <view class="cell_name">配送费</view>
+          <!-- <view class="cell_value">{{sendMoney/100}}</view> -->
+          <view class="cell_value">0</view>
+        </view>
+        <view class="cell_item"  wx:if="{{orderType != 15 && orderType != 16}}">
           <view class="cell_name">运费</view>
           <view class="cell_value">{{orderInfo.shipping}}</view>
         </view>

@@ -1,5 +1,5 @@
 import create from '../../utils/create'
-import store from '../../store/index'
+import store from '../../store/good'
 import router from '../../utils/router'
 import homeApi from '../../apis/home'
 import intensiveApi from '../../apis/intensive'
@@ -31,6 +31,7 @@ create.Page(store, {
 
   data: {
     cartAllData: null,
+    cartAllData3: null,
     fixationTop: 600,
     isOnGoods: false,
     scrolling: false,
@@ -55,6 +56,9 @@ create.Page(store, {
     remindData: [],
     recommendData: [],
     goodsData2: [],
+    goodsData3: [],
+    goodsData4: [],
+    goodsData5: [],
     // storeNo: 'store_m_123942', // 测试用店铺号
     storeNo: '', // 测试用店铺号
     classData: null,
@@ -62,12 +66,15 @@ create.Page(store, {
     goodsData: null,
     tabIndexId: 0,
     tabIndexId2: 0,
+    tabIndexId3: 0,
     goodsNum: 0,
     value: 0,
     showCartPopup: false,
     tabActive: 1,
     height1: 500,
     height2: 500,
+    wholesaleStatus: [],
+    selectSku: null,
     invalidList: [
       {
         name: 'dasdasdasd',
@@ -112,7 +119,12 @@ create.Page(store, {
   },
 
   onShow() {
-    const takeSpot = wx.getStorageSync("TAKE_SPOT");
+    const takeSpotOld = wx.getStorageSync("OLD_TAKE_SPOT");
+    if (takeSpotOld) {
+      wx.setStorageSync("TAKE_SPOT", takeSpotOld);
+      wx.removeStorageSync('OLD_TAKE_SPOT')
+    }
+    let takeSpot = wx.getStorageSync("TAKE_SPOT");
     console.log('takeSpot', takeSpot)
     if (takeSpot.storeNo !== this.data.storeNo) {
       this.setData({
@@ -123,9 +135,6 @@ create.Page(store, {
       });
     }
 
-    console.log('takeSpot.storeNo', takeSpot.storeNo)
-    console.log('this.data.storeNo', this.data.storeNo)
-    
     // 更新tabbar显示
     router.updateSelectTabbar(this, 2);
     app.trackEvent('tab_intensive');
@@ -141,7 +150,7 @@ create.Page(store, {
 
   // 初始化
   init(id = '') {
-    Promise.all([this.getAllGoodsList(this.data.tabIndexId), this.getGoodsCategory(), this.getSummaryByCartData(), this.getBannerData()]).then((res) => {
+    Promise.all([this.getAllGoodsList(this.data.tabIndexId), this.getGoodsCategory(), this.getBannerData()]).then((res) => {
       this.setData({
         refresherTriggered: false,
       })
@@ -149,6 +158,32 @@ create.Page(store, {
 
     this.shopIndexCategory()
     this.getAllGoodsList2(this.data.tabIndexId2)
+    this.getWholesaleStatus()
+
+    this.getAllGoodsList3(this.data.tabIndexId3);
+    this.getGoodsCategory3()
+
+    this.getAllGoodsList4();
+    this.getAllGoodsList5();
+  },
+
+  getWholesaleStatus() {
+    intensiveApi.getWholesaleStatus()
+      .then(res => {
+        const arr = [];
+        let index = 0
+        res.forEach((item, i) => {
+          arr.push(item.id)
+
+          if (item.defaultSelected) {
+            index = i
+          }
+        })
+        this.setData({
+          wholesaleStatus: arr,
+          // tabActive: index,
+        })
+      })
   },
 
   onCloseCartPopup() {
@@ -183,16 +218,21 @@ create.Page(store, {
   // 设置购物车商品数量
   setCartNum(itemInfo) {
     const { value, skuId, objectId } = itemInfo;
+    console.log('itemInfo', itemInfo)
     const params = {
       skuId: skuId,
       objectId: objectId,
       quantity: value,
+      subType: 151
+    }
+    if (itemInfo.objectId != '-15') {
+      delete params.subType
     }
     return new Promise((resolve) => {
       cartApi.setCartNum(params).then((res) => {
         console.log('设置购物车商品数量', res)
         if (res.value) {
-          this.getSummaryByCartData()
+          this.getSummaryByCartData(params)
         }
         resolve(1)
       }).catch((err) => {
@@ -220,13 +260,19 @@ create.Page(store, {
     cartApi.checkedAllCart(params)
   },
   // 购物车商品列表汇总
-  getSummaryByCartData() {
+  getSummaryByCartData(params) {
     return new Promise((resolve) => {
-      cartApi.summaryByCartData().then((res) => {
+      cartApi.summaryByCartData(params).then((res) => {
         resolve(true)
-        this.setData({
-          cartAllData: res
-        })
+        if (params?.subType) {
+          this.setData({
+            cartAllData3: res
+          })
+        } else {
+          this.setData({
+            cartAllData: res
+          })
+        }
       })
     })
   },
@@ -295,14 +341,27 @@ create.Page(store, {
     });
   },
 
+  remindStoreBuyNotice(e) {
+    const {
+      data,
+    } = e.currentTarget.dataset;
+    intensiveApi.remindStoreBuyNotice({
+      skuId: data.skuId,
+      spuId: data.spuId,
+    })
+      .then(res => {
+        this.getAllGoodsList5()
+      })
+  },
+
   handleUpdate(res) {
     this.init(this.data.tabIndexId)
   },
 
   // 购物车商品列表
-  getCartList() {
+  getCartList(params={}) {
     return new Promise((resolve) => {
-      cartApi.cartList().then((res) => {
+      cartApi.cartList(params).then((res) => {
         console.log('购物车商品列表', res)
         this.setData({
           cartList: res
@@ -321,15 +380,6 @@ create.Page(store, {
     const resolveData = await this.getCartList();
     return new Promise((resolve) => {
       intensiveApi.getGoodsList(params).then((res) => {
-        if (!res.records.length) {
-          this.getRecommendData()
-          this.setData({
-            goodsData: []
-          }, () => {
-            resolve(true)
-          })
-          return
-        }
         let list = res.records.map((item) => {
           let p = (item.salePrice / 100).toString();
           let a = '';
@@ -343,7 +393,7 @@ create.Page(store, {
           }
 
           resolveData.map(cartItem => {
-            if (cartItem.objectId == item.objectId) {
+            if (cartItem.spuId == item.spuId) {
               v = cartItem.quantity
             }
           })
@@ -354,7 +404,57 @@ create.Page(store, {
             value: v,
           }
         })
+        this.getSummaryByCartData();
         console.log('集约商品列表返回', list)
+        // if (gcId1 == 0) {
+        //   if (list.length > 10) {
+        //     this.setData({ hasClass: true })
+        //   } else {
+        //     this.setData({ hasClass: false })
+        //   }
+        // }
+        this.setData({
+          goodsData: list,
+        }, () => {
+          resolve(true)
+        })
+      })
+    })
+  },
+  async getAllGoodsList3(gcId1) {
+    const params = {
+      page: 1,
+      size: 999,
+      gcId1: gcId1 || 0,
+    }
+    const resolveData = await this.getCartList({ subType: 151 });
+    return new Promise((resolve) => {
+      intensiveApi.getGoodsList3(params).then((res) => {
+        let list = res.records.map((item) => {
+          let p = (item.salePrice / 100).toString();
+          let a = '';
+          let z = '';
+          let v = 0;
+          if (p.includes('.')) {
+            a = p.split('.')[0]
+            z = p.split('.')[1]
+          } else {
+            a = p
+          }
+
+          resolveData.map(cartItem => {
+            if (cartItem.spuId == item.spuId) {
+              v = cartItem.quantity
+            }
+          })
+          return {
+            ...item,
+            aPrice: a,
+            zPrice: z,
+            value: v,
+            type: 3
+          }
+        })
         if (gcId1 == 0) {
           if (list.length > 10) {
             this.setData({ hasClass: true })
@@ -362,8 +462,89 @@ create.Page(store, {
             this.setData({ hasClass: false })
           }
         }
+        this.getSummaryByCartData({subType:151})
         this.setData({
-          goodsData: list,
+          goodsData3: list,
+        }, () => {
+          resolve(true)
+        })
+      })
+    })
+  },
+  async getAllGoodsList4() {
+    const storeInfo = wx.getStorageSync("TAKE_SPOT")
+    const _this = this;
+    wx.getLocation({
+      type: 'gcj02',
+      isHighAccuracy: true,
+      success(result) {
+        const params = {
+          latitude: result.latitude,
+          longitude: result.longitude,
+          orderType: 30
+        }
+        // const resolveData = await this.getCartList();
+        return new Promise((resolve) => {
+          intensiveApi.getGoodsList4(params).then((res) => {
+            let list = res.map((item) => {
+              let p = (item.salePrice / 100).toString();
+              let a = '';
+              let z = '';
+              let v = 0;
+              if (p.includes('.')) {
+                a = p.split('.')[0]
+                z = p.split('.')[1]
+              } else {
+                a = p
+              }
+
+              return {
+                ...item,
+                aPrice: a,
+                zPrice: z,
+                value: v,
+              }
+            })
+            _this.setData({
+              goodsData4: list,
+            }, () => {
+              resolve(true)
+            })
+          })
+        })
+      }
+    })
+
+  },
+  async getAllGoodsList5() {
+    const params = {
+      page: 1,
+      size: 999,
+    }
+    // const resolveData = await this.getCartList();
+    return new Promise((resolve) => {
+      intensiveApi.getGoodsList5(params).then((res) => {
+        let list = res.records.map((item) => {
+          let p = (item.salePrice / 100).toString();
+          let a = '';
+          let z = '';
+          let v = 0;
+          if (p.includes('.')) {
+            a = p.split('.')[0]
+            z = p.split('.')[1]
+          } else {
+            a = p
+          }
+
+          return {
+            ...item,
+            aPrice: a,
+            zPrice: z,
+            value: v,
+          }
+        })
+        this.setData({
+          goodsData5: list,
         }, () => {
           resolve(true)
         })
@@ -432,6 +613,21 @@ create.Page(store, {
       })
     })
   },
+  getGoodsCategory3() {
+    const { storeNo } = this.data
+    const params = {
+      storeNo
+    }
+    return new Promise((resolve) => {
+      intensiveApi.getGoodsCategory3(params).then((res) => {
+        this.setData({
+          classData3: res.records
+        }, () => {
+          resolve(true)
+        })
+      })
+    })
+  },
   shopIndexCategory() {
     const { storeNo } = this.data
     intensiveApi.shopIndexCategory({ storeNo })
@@ -471,48 +667,115 @@ create.Page(store, {
   },
 
   async onStepChangeAdd(e) {
-    // Toast.loading({ forbidClick: true });
-    let { index, item } = e.currentTarget.dataset;
-    let { buyMaxNum, value, unit, stockNum } = item;
-    let { goodsData } = this.data;
-    if (buyMaxNum > stockNum) {
-      buyMaxNum = stockNum
-    }
-    if (value + 1 > buyMaxNum) {
-      Toast(`该商品最多购买${buyMaxNum}${unit}`);
-      return
-    }
-    goodsData[index].value = value + 1
-    const yes = await this.setCartNum(goodsData[index]);
-    if (!yes) {
-      return
-    }
-    setTimeout(() => {
-      Toast.clear();
+    let { index, item, type } = e.currentTarget.dataset;
+    let { buyMaxNum, value, unit, stockNum, isMultiSpec } = item;
+    if (isMultiSpec === 1) {
+      store.onChangeSpecState(true)
       this.setData({
-        goodsData: goodsData
-      });
-    }, 300);
+        selectSku:null,
+      },()=>{
+        this.setData({
+          selectSku: {
+            ...item,
+            type,
+            index,
+          }
+        })
+      })
+    } else {
+      // Toast.loading({ forbidClick: true });
+      let { goodsData3, goodsData } = this.data;
+      let data = goodsData;
+      if (type == 3) {
+        data = goodsData3
+      }
+      if (buyMaxNum > stockNum) {
+        buyMaxNum = stockNum
+      }
+      if (value + 1 > buyMaxNum) {
+        Toast(`该商品最多购买${buyMaxNum}${unit}`);
+        return
+      }
+      data[index].value = value + 1
+      const yes = await this.setCartNum(data[index]);
+      if (!yes) {
+        return
+      }
+      setTimeout(() => {
+        Toast.clear();
+        if (type == 3) {
+          this.setData({
+            goodsData3: data
+          });
+        } else {
+          this.setData({
+            goodsData: data
+          });
+        }
+      }, 300);
+    }
+
+  },
+  specAdd({ detail }) {
+    const selectSku = this.data.selectSku
+
+    let { goodsData3, goodsData } = this.data;
+    let data = goodsData;
+    if (selectSku.type == 3) {
+      data = goodsData3
+    }
+
+    data[selectSku.index].value = selectSku.value + detail.quantity
+    selectSku.value = selectSku.value + detail.quantity
+    selectSku.skuId = detail.skuId
+
+    this.setCartNum(selectSku)
+      .then(res => {
+        if (selectSku.type == 3) {
+          this.setData({
+            goodsData3: data
+          });
+        } else {
+          this.setData({
+            goodsData: data
+          });
+        }
+      })
+
   },
   onStepChangeDelete(e) {
     // Toast.loading({ forbidClick: true });
     let { index, item } = e.currentTarget.dataset;
-    let { buyMinNum, value, unit } = item;
-    let { goodsData } = this.data;
+    let { buyMinNum, value, unit, isMultiSpec } = item;
+    if (isMultiSpec === 1) {
+      Toast('请到购物车删除商品')
+      return;
+    }
+    let data = this.data.goodsData
+    if (item.type === 3) {
+      data = this.data.goodsData3
+    }
     if (value == 0) {
       return
     }
     let num = value - 1;
-    goodsData[index].value = num;
+    data[index].value = num;
     if ((buyMinNum > 1) && (value - 1 < buyMinNum)) {
       Toast(`该商品${buyMinNum}${unit}起购`);
     }
-    this.setCartNum(goodsData[index]);
+    this.setCartNum(data[index]);
     setTimeout(() => {
       Toast.clear();
-      this.setData({
-        goodsData: goodsData
-      });
+      if (item.type === 3) {
+        this.setData({
+          goodsData3: data
+        });
+      }else {
+        this.setData({
+          goodsData: data
+        });
+      }
+      
     }, 300);
   },
   checkTab(e) {
@@ -540,6 +803,23 @@ create.Page(store, {
       tabIndexId2: gcId2
     })
     this.getAllGoodsList2(gcId2)
+    wx.createSelectorQuery()
+      .select('#scroll-view2')
+      .node()
+      .exec((res) => {
+        const scrollView = res[0].node;
+        scrollView.scrollTo({ top: 0 });
+      })
+  },
+  checkTab3(e) {
+    const {
+      gcId1,
+    } = e.currentTarget.dataset.class;
+    // this.getAllGoodsList(gcId2)
+    this.setData({
+      tabIndexId3: gcId1
+    })
+    this.getAllGoodsList3(gcId1)
     wx.createSelectorQuery()
       .select('#scroll-view2')
       .node()

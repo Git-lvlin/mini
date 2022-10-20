@@ -5,12 +5,13 @@ import homeApi from '../../../apis/home'
 import intensiveApi from '../../../apis/intensive'
 import { IMG_CDN, DETAIL_SERVICE_LIST, H5_HOST, webHost } from '../../../constants/common'
 import { CODE_SCENE } from '../../../constants/index'
-import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj, haveStore, debounce, mapNum} from '../../../utils/tools'
+import { showModal, getStorageUserInfo, showToast, objToParamStr, strToParamObj, haveStore, debounce, mapNum } from '../../../utils/tools'
 import { getPayInfo } from '../../../utils/orderPay'
 import util from '../../../utils/util'
 import router from '../../../utils/router'
 import commonApis from '../../../apis/common'
 import cartApi from "../../../apis/cart";
+import Toast from '../../../miniprogram_npm/@vant/weapp/toast/toast';
 
 const shareBack = '../../../images/good/good_share_back.png'
 const shareBtn = '../../../images/good/good_share_btn.png'
@@ -124,21 +125,22 @@ create.Page(store, {
     create: '',
     isHome: '',
     selfStoreNo: '',
+    objectId: '',
   },
 
   lifetimes: {
-    show: function() {
+    show: function () {
       this.updateSelectAddressType('lifetimes show ')
     }
   },
   pageLifetimes: {
-    show: function() {
+    show: function () {
       this.updateSelectAddressType('pageLifetimes show ')
     }
   },
   handleUpdate(res) {
     this.updateSelectAddressType('handleUpdate show ')
-    this.getCartList()
+    // this.getCartList()
   },
   updateSelectAddressType(name) {
     let data = wx.getStorageSync("CREATE_INTENSIVE")
@@ -148,9 +150,9 @@ create.Page(store, {
       })
     }
     var good = this.data.good
-    if(good && good.sendTypeList && this.data.selectAddressType) {
+    if (good && good.sendTypeList && this.data.selectAddressType) {
       good.sendTypeList.forEach(item => {
-        if(item.type === this.data.selectAddressType.type) {
+        if (item.type === this.data.selectAddressType.type) {
           item.status = 1;
         } else {
           item.status = 0;
@@ -166,22 +168,22 @@ create.Page(store, {
       appScene,
     } = app.globalData;
     // 获取进入小程序场景值
-    if(CODE_SCENE[appScene]) {
-      if(!options.scene) {
+    if (CODE_SCENE[appScene]) {
+      if (!options.scene) {
         console.log("未获取到解析参数", options);
         this.hanldeGoodsParams(options)
       } else {
         this.getShareParam(options);
       }
-    }else{
+    } else {
       this.hanldeGoodsParams(options)
     }
 
     this.setData({
       currentPages: getCurrentPages().length
     })
-    this.getCartList()
-    this.getSummaryByCartData()
+    // this.getCartList()
+    
   },
 
   onShow() {
@@ -189,7 +191,7 @@ create.Page(store, {
       orderType,
     } = this.goodParams;
     debounce(() => {
-      if(!this.data.good.imageList && !this.data.good.goodsName && !this.goodOver) {
+      if (!this.data.good.imageList && !this.data.good.goodsName && !this.goodOver) {
         this.hanldeGoodsParams(this.goodParams);
       }
     }, 3500)();
@@ -229,19 +231,22 @@ create.Page(store, {
       spuId,
     } = this.goodParams
     return new Promise((resolve) => {
-      cartApi.cartList().then((res) => {
-        // console.log('购物车商品列表', res)
-        let cartList = mapNum(res)
-        // console.log("on cart spuId ", spuId, "; cartList", cartList)
-        let quantity = 0
-        cartList.forEach(item => {
-          if(item.spuId === spuId) {
+      const params = {}
+      if (objectId == '-15') {
+        params.subType = 151
+      }
+      cartApi.cartList(params).then((res) => {
+        const {good} = this.data;
+        let quantity= 0
+        res.forEach(item => {
+          if (item.skuId === skuId) {
+            good.quantity = item.quantity
             quantity = item.quantity
           }
         })
         this.setData({
-          cartList: res,
-          quantity: quantity,
+          good,
+          quantity
         })
         resolve(res)
       })
@@ -249,8 +254,12 @@ create.Page(store, {
   },
   // 增加购物车 for goods
   increaseCart() {
-    let { quantity, skuId, good} = this.data
-    const {objectId} = good
+    let { quantity, skuId, good } = this.data
+    if (good.isMultiSpec===1) {
+      store.onChangeSpecState(true);
+      return;
+    }
+    const { objectId } = good
     if (!quantity) {
       quantity = 0
     }
@@ -264,16 +273,27 @@ create.Page(store, {
   },
   // 减少购物车 for goods
   decreaseCart() {
-    var { quantity, skuId, good} = this.data
-    const {objectId} = good
+    var { quantity, skuId, good } = this.data
+    const { objectId } = good
+    if (good.isMultiSpec === 1) {
+      Toast('请到购物车删除商品')
+      return;
+    }
     quantity -= 1
     const params = {
       skuId,
       objectId,
       quantity: quantity, // 数量，负数表示减数量
     }
-    console.log("on cart decreaseCart params ", params)
+    
     this.setCartNum(params)
+      .then(() => {
+        const selectSku = this.data.good
+        selectSku.quantity = quantity
+        this.setData({
+          good:selectSku
+        })
+      })
   },
 
   // 设置购物车商品数量
@@ -284,6 +304,11 @@ create.Page(store, {
       objectId: objectId,
       quantity: quantity, // 数量，负数表示减数量
     }
+
+    if (objectId == '-15') {
+      params.subType = 151
+    }
+
     return new Promise((resolve) => {
       cartApi.setCartNum(params).then((res) => {
         console.log('设置购物车商品数量', res)
@@ -291,7 +316,7 @@ create.Page(store, {
           this.setData({
             quantity: quantity
           })
-          this.getSummaryByCartData()
+          this.getSummaryByCartData(params)
         }
         resolve(1)
       }).catch((err) => {
@@ -320,10 +345,10 @@ create.Page(store, {
     cartApi.checkedAllCart(params)
   },
   // 购物车商品列表汇总
-  getSummaryByCartData() {
+  getSummaryByCartData(params) {
     // console.log('on cart getSummaryByCartData')
     return new Promise((resolve) => {
-      cartApi.summaryByCartData().then((res) => {
+      cartApi.summaryByCartData(params).then((res) => {
         resolve(true)
         console.log('on cart getSummaryByCartData ', res)
         this.setData({
@@ -351,15 +376,16 @@ create.Page(store, {
   // 购物车相关 end
 
   // 基础数据
-  hanldeGoodsParams(options){
+  hanldeGoodsParams(options) {
     let { systemInfo } = this.store.data;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
     this.goodParams = options;
     // console.log('checkSpec hanldeGoodsParams', this.goodParams)
     let isActivityGood = 1;
-    if(!!options.orderType) isActivityGood = options.orderType;
+    if (!!options.orderType) isActivityGood = options.orderType;
 
     this.setData({
+      objectId: options.objectId,
       backTopHeight,
       isActivityGood,
       skuId: options.skuId,
@@ -374,20 +400,20 @@ create.Page(store, {
         shareStoreNo: options.shareStoreNo
       });
     }
-    if(options && options.inviteCode) {
+    if (options && options.inviteCode) {
       wx.setStorageSync("INVITE_INFO", {
         inviteCode: options.inviteCode,
         shareMemberId: options.shareMemberId,
       });
     }
-    if(!options.orderType) {
+    if (!options.orderType) {
       showModal({
         content: "商品数据有误",
         showCancel: false,
         ok() {
           router.go();
         },
-       });
+      });
       return;
     }
     if (options.shareMemberId && options.shareStoreNo) {
@@ -398,10 +424,10 @@ create.Page(store, {
     } else {
       this.getGoodDetail();
     }
-    if(options.orderType != 5 && options.orderType != 6) {
+    if (options.orderType != 5 && options.orderType != 6) {
       this.getDetailImg();
     }
-    if(options.orderType == 3) {
+    if (options.orderType == 3) {
       // this.getTogetherList();
       // 拼成用户列表
       this.getTogetherUser();
@@ -409,8 +435,8 @@ create.Page(store, {
   },
   clickShare(e) {
     console.log('e', e)
-    if (e&&e.detail) {
-      console.log('e.detail',e.detail, e.detail.groupId)
+    if (e && e.detail) {
+      console.log('e.detail', e.detail, e.detail.groupId)
       this.setData({
         indexObjectId: e.detail.groupId
       })
@@ -418,14 +444,14 @@ create.Page(store, {
   },
   bottomClickShare(e) {
     console.log('e', e)
-    if (e&&e.currentTarget) {
-      console.log('indexObjectId',e.currentTarget.dataset.id)
+    if (e && e.currentTarget) {
+      console.log('indexObjectId', e.currentTarget.dataset.id)
       this.setData({
         indexObjectId: e.currentTarget.dataset.id
       })
     }
   },
-  getStoreNo () {
+  getStoreNo() {
     // console.log('getStoreNo', this.data.userInfo)
     if (!this.data.userInfo) {
       // getStorageUserInfo(true);
@@ -437,26 +463,26 @@ create.Page(store, {
     }
 
     return new Promise((resolve) => {
-      intensiveApi.getStoreNo({userType: 1}, {notErrorMsg: true, showLoading: false}).then((res) => {
+      intensiveApi.getStoreNo({ userType: 1 }, { notErrorMsg: true, showLoading: false }).then((res) => {
         // console.log('getStoreNo-res', res)
         this.setData({
           selfStoreNo: res[0].storeNo
         })
         resolve(res[0])
       }).catch(() => {
-        resolve({storeNo: null})
+        resolve({ storeNo: null })
       })
     })
 
   },
 
   // 转发
-  async onShareAppMessage({from}) {
+  async onShareAppMessage({ from }) {
     console.log('from', from)
     console.log('点击分享后this.goodParams', this.goodParams)
     console.log('this.data.selfStoreNo', this.data.selfStoreNo)
     let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
-    let {shareStoreNo, ...rest} = this.goodParams
+    let { shareStoreNo, ...rest } = this.goodParams
     let all = {};
     if (this.data.selfStoreNo) {
       all = {
@@ -501,20 +527,20 @@ create.Page(store, {
         console.log(res);
       },
     }
-    if(orderType == 3 && from == 'button') {
+    if (orderType == 3 && from == 'button') {
       info.path = "/subpages/cart/teamDetail/index?";
     }
-    if(shareInfo && shareInfo.path && shareInfo_pt) {
+    if (shareInfo && shareInfo.path && shareInfo_pt) {
       console.log('path', shareInfo.path)
       console.log('indexObjectId', this.data.indexObjectId)
       if (from == 'button') {
-        shareInfo_pt.path = shareInfo_pt.path.includes('objectId=0') && from == 'button'?shareInfo_pt.path.replace('objectId=0', `objectId=${this.data.indexObjectId}`):shareInfo_pt.path
+        shareInfo_pt.path = shareInfo_pt.path.includes('objectId=0') && from == 'button' ? shareInfo_pt.path.replace('objectId=0', `objectId=${this.data.indexObjectId}`) : shareInfo_pt.path
       }
-      info = from == 'button'?{
+      info = from == 'button' ? {
         ...info,
         ...shareInfo_pt
 
-      }:{
+      } : {
         ...info,
         ...shareInfo
       }
@@ -525,7 +551,7 @@ create.Page(store, {
     } else {
       info.path = `${info.path}${pathParam}`;
     }
-    if(!!this.canvasImg) {
+    if (!!this.canvasImg) {
       console.log('this.cancasImg', this.canvasImg);
       info.imageUrl = this.canvasImg;
     }
@@ -556,9 +582,9 @@ create.Page(store, {
     detail
   }) {
     // debounce(() => {
-      this.setData({
-        pageScrollTop: detail.scrollTop
-      })
+    this.setData({
+      pageScrollTop: detail.scrollTop
+    })
     // }, 200)();
   },
 
@@ -567,7 +593,7 @@ create.Page(store, {
     const {
       hasNext
     } = this.recommendPage
-    if(hasNext) {
+    if (hasNext) {
       this.getGoodRecommend(true)
     }
   },
@@ -585,16 +611,16 @@ create.Page(store, {
     // let scrollToTop = 0;
     let scrollToId = '';
     // let topHeight = systemInfo.navTotalHeightPx + 36;
-    if(detail == 1) {
+    if (detail == 1) {
       // scrollToTop = barTap.top;
       scrollToId = 'detailTop';
-    } else if(detail == 2) {
+    } else if (detail == 2) {
       // scrollToTop = barTap.evaluate - topHeight;
       scrollToId = 'detailEvaluate';
-    } else if(detail == 3) {
+    } else if (detail == 3) {
       // scrollToTop = barTap.info - topHeight;
       scrollToId = 'detailInfo';
-    } else if(detail == 4) {
+    } else if (detail == 4) {
       // scrollToTop = barTap.recommend - topHeight;
       scrollToId = 'detailRecommend';
     }
@@ -610,10 +636,10 @@ create.Page(store, {
       orderType,
       spuId
     } = this.goodParams;
-    if(orderType == 3) return;
+    if (orderType == 3) return;
     goodApi.getDetailImg({
       spuId,
-    }, {showLoading: false}).then(res => {
+    }, { showLoading: false }).then(res => {
       this.setData({
         detailImg: res.images
       })
@@ -634,27 +660,27 @@ create.Page(store, {
       spuId,
       ...options,
     };
-    if(!!skuId) {
+    if (!!skuId) {
       params.skuId = skuId;
     }
     let refuseText = "";
-    if(!!orderType) {
+    if (!!orderType) {
       params = {
         ...params,
         orderType,
       }
-      if(objectId) params.objectId = objectId;
-      if(activityId) params.activityId = activityId;
+      if (objectId) params.objectId = objectId;
+      if (activityId) params.activityId = activityId;
     }
     // 单约详情
-    if(orderType == 3) {
+    if (orderType == 3) {
       params.spuId = spuId;
       console.log('商品详情请求前传参orderType3', params)
       goodApi.getPersonalDetail(params).then(res => {
         const good = res;
         const personalList = res.personalList;
         const detailImg = good && good.contentImageList || [];
-        if(!good.isMultiSpec) {
+        if (!good.isMultiSpec) {
           this.specLoaded = true;
         }
         good.activityPrice = util.divide(good.activityPrice, 100);
@@ -666,7 +692,7 @@ create.Page(store, {
         personalList.forEach(item => {
           item.distancetime = item.distancetime * 1000;
         })
-        let list = personalList.filter((item, index) => index<5)
+        let list = personalList.filter((item, index) => index < 5)
         this.setData({
           personalList,
           fiveList: list,
@@ -680,14 +706,14 @@ create.Page(store, {
         console.log('orderType ', orderType, err)
         this.handleGoodError();
       })
-    // orderType == 1 详情
-    } else if(orderType == 1) {
+      // orderType == 1 详情
+    } else if (orderType == 1) {
       console.log('商品详情请求前传参orderType1', params)
       goodApi.getGoodDetail(params).then(res => {
         let good = res;
         let selectAddressType = {};
         let currentSku = {};
-        if(!good.isMultiSpec) {
+        if (!good.isMultiSpec) {
           this.specLoaded = true;
         }
         good.goodsSaleMinPrice = util.divide(good.goodsSaleMinPrice, 100);
@@ -699,9 +725,9 @@ create.Page(store, {
         } else if (good.sendTypeList) {
           selectAddressType = good.sendTypeList.find(item => item.status == 1);
         }
-        if(good.sendTypeList) {
+        if (good.sendTypeList) {
           good.sendTypeList.forEach(item => {
-            if(item.type === selectAddressType.type) {
+            if (item.type === selectAddressType.type) {
               item.status = 1;
             } else {
               item.status = 0;
@@ -709,8 +735,8 @@ create.Page(store, {
           })
         }
 
-        if(good.goodsState == 1) {
-          if(good.isMultiSpec == 0) {
+        if (good.goodsState == 1) {
+          if (good.isMultiSpec == 0) {
             currentSku = {
               skuId,
               buyMaxNum: good.buyMaxNum,
@@ -722,7 +748,7 @@ create.Page(store, {
           }
         }
         good.refuseArea && good.refuseArea.forEach((item, index) => {
-          refuseText += `${item.areaName}${index != good.refuseArea.length - 1? '；' : ''}`;
+          refuseText += `${item.areaName}${index != good.refuseArea.length - 1 ? '；' : ''}`;
         });
         that.setData({
           currentSku,
@@ -737,23 +763,23 @@ create.Page(store, {
         console.log('orderType ', orderType, err)
         this.handleGoodError();
       });
-    // B端集约
-    } else if(orderType == 5 || orderType == 6) {
+      // B端集约
+    } else if (orderType == 5 || orderType == 6) {
       this.getBusinessDetail(params);
-    // 其他详情
+      // 其他详情
     } else {
       console.log('商品详情请求前传参-其它详情', params)
-      goodApi.getGoodDetailNew(params, {showLoading: false}).then(res => {
+      goodApi.getGoodDetailNew(params, { showLoading: false }).then(res => {
         let good = res;
         let selectAddressType = {};
         let currentSku = {};
         let nowTime = new Date().getTime();
-        if(!good.isMultiSpec) {
+        if (!good.isMultiSpec) {
           this.specLoaded = true;
         }
         good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
         good.goodsMarketPrice = util.divide(good.marketPrice, 100);
-        if(good.deadlineTime) {
+        if (good.deadlineTime) {
           good.lastTime = good.deadlineTime - nowTime;
           good.lastTime = good.lastTime > 0 ? good.lastTime : 0;
         }
@@ -764,17 +790,17 @@ create.Page(store, {
         } else if (good.sendTypeList) {
           selectAddressType = good.sendTypeList.find(item => item.status == 1);
         }
-        if(good.sendTypeList) {
+        if (good.sendTypeList) {
           good.sendTypeList.forEach(item => {
-            if(item.type === selectAddressType.type) {
+            if (item.type === selectAddressType.type) {
               item.status = 1;
             } else {
               item.status = 0;
             }
           })
         }
-        if(good.goodsState == 1) {
-          if(good.isMultiSpec == 0) {
+        if (good.goodsState == 1) {
+          if (good.isMultiSpec == 0) {
             currentSku = {
               skuId,
               buyMaxNum: good.buyMaxNum,
@@ -786,7 +812,7 @@ create.Page(store, {
           }
         }
         good.refuseArea && good.refuseArea.forEach((item, index) => {
-          refuseText += `${item.areaName}${index != good.refuseArea.length - 1? '；' : ''}`;
+          refuseText += `${item.areaName}${index != good.refuseArea.length - 1 ? '；' : ''}`;
         });
         that.setData({
           currentSku,
@@ -797,13 +823,14 @@ create.Page(store, {
           this.handleGoodStock();
           this.getDetailAfter();
         });
-        if(orderType == 15 || orderType == 16) {
+        if (orderType == 15 || orderType == 16) {
+          
           // 集约用户列表
           // this.getIntensiveUser(good.storeSaleSumNum || 100);
           // 获取商品详情
           const isStore = haveStore(good.storeNo);
           console.log('getStoreNo takeSpot change isStore ', isStore)
-          if(isStore) {
+          if (isStore) {
             this.getStoreInfo({
               orderType,
               storeNo: good.storeNo,
@@ -811,7 +838,7 @@ create.Page(store, {
           }
         }
         // if(orderType == 2 || orderType == 11) {
-          this.getSecUser();
+        this.getSecUser();
         // }
       }).catch(err => {
         console.log('orderType ', err)
@@ -858,7 +885,7 @@ create.Page(store, {
     } = this.goodParams
     // 推荐商品
     this.getGoodRecommend();
-    if(!shareInfo || !shareInfo.path) {
+    if (!shareInfo || !shareInfo.path) {
       if (orderType == 3) {
         this.getShareInfo_pt()
       } else {
@@ -870,7 +897,7 @@ create.Page(store, {
   // 获取分享参数
   getShareInfo() {
     let userInfo = getStorageUserInfo();
-    if(!userInfo) {
+    if (!userInfo) {
       this.downShareImg(1);
       return;
     }
@@ -895,7 +922,7 @@ create.Page(store, {
       showLoading: false,
     }).then(res => {
       const shareInfo = {
-      title: res.title || defShareText,
+        title: res.title || defShareText,
         path: res.shareUrl,
         imageUrl: res.thumbData,
       };
@@ -912,7 +939,7 @@ create.Page(store, {
   // 获取分享参数
   getShareInfo_pt() {
     let userInfo = getStorageUserInfo();
-    if(!userInfo) {
+    if (!userInfo) {
       this.downShareImg(2);
       return;
     }
@@ -937,7 +964,7 @@ create.Page(store, {
       showLoading: false,
     }).then(res => {
       const shareInfo_pt = {
-      title: res.title || defShareText,
+        title: res.title || defShareText,
         path: res.shareUrl,
         imageUrl: res.thumbData,
       };
@@ -962,7 +989,7 @@ create.Page(store, {
       good.goodsImageUrl = good.imageUrl
     }
     let img = shareInfo.imageUrl ? shareInfo.imageUrl : good.goodsImageUrl;
-    img = img?.replace(/^http:\/\//i,'https://');
+    img = img?.replace(/^http:\/\//i, 'https://');
     let tmpImg = '../../../images/good/logo.png';
     console.log('shareInfo', shareInfo)
     console.log('good', good)
@@ -993,7 +1020,7 @@ create.Page(store, {
     // ctx.setFillStyle('#f5f5f5')
     // ctx.fillRect(0, 0, 250, 200)
     ctx.drawImage(shareBack, 0, 0, 218, 174);
-    ctx.drawImage(shareBtn_pt,  140, 104, 66, 28);
+    ctx.drawImage(shareBtn_pt, 140, 104, 66, 28);
     this.handleBorderRect(ctx, 10, 43, 120, 120, 8, tmpImg);
     ctx.setTextAlign('center')
     ctx.setFillStyle('#DC2D23')
@@ -1004,8 +1031,8 @@ create.Page(store, {
     ctx.fillText(marketPrice, 171, 92)
     ctx.setStrokeStyle('#999999')
     ctx.beginPath();
-    ctx.moveTo(172-textWidth/2, 87)
-    ctx.lineTo(170+textWidth/2, 87)
+    ctx.moveTo(172 - textWidth / 2, 87)
+    ctx.lineTo(170 + textWidth / 2, 87)
     ctx.closePath();
     ctx.stroke()
     // ctx.strokeRect(171-(textWidth/2), 87, textWidth, 0)
@@ -1039,7 +1066,7 @@ create.Page(store, {
     // ctx.setFillStyle('#f5f5f5')
     // ctx.fillRect(0, 0, 250, 200)
     ctx.drawImage(shareBack, 0, 0, 218, 174);
-    ctx.drawImage(shareBtn,  150, 104, 48, 48);
+    ctx.drawImage(shareBtn, 150, 104, 48, 48);
     this.handleBorderRect(ctx, 10, 43, 120, 120, 8, tmpImg);
     ctx.setTextAlign('center')
     ctx.setFillStyle('#DC2D23')
@@ -1050,8 +1077,8 @@ create.Page(store, {
     ctx.fillText(marketPrice, 171, 92)
     ctx.setStrokeStyle('#999999')
     ctx.beginPath();
-    ctx.moveTo(172-textWidth/2, 87)
-    ctx.lineTo(170+textWidth/2, 87)
+    ctx.moveTo(172 - textWidth / 2, 87)
+    ctx.lineTo(170 + textWidth / 2, 87)
     ctx.closePath();
     ctx.stroke()
     // ctx.strokeRect(171-(textWidth/2), 87, textWidth, 0)
@@ -1113,13 +1140,13 @@ create.Page(store, {
     goodApi.getUserLike({
       next,
       size,
-    }, {showLoading: false}).then(res => {
+    }, { showLoading: false }).then(res => {
       if (that.recommendPage && that.recommendPage.hasOwnProperty('hasNext')) {
         that.recommendPage.hasNext = res.hasOwnProperty('hasNext') ? res.hasNext : false;
       } else {
-        that.recommendPage = {hasNext: false, next:""};
+        that.recommendPage = { hasNext: false, next: "" };
       }
-      that.recommendPage.next = res.hasOwnProperty('next')  ? res.next : '';
+      that.recommendPage.next = res.hasOwnProperty('next') ? res.next : '';
       const list = res.records;
       list.forEach(item => {
         item.title = item.goodsName;
@@ -1129,7 +1156,7 @@ create.Page(store, {
         item.spuId = item.id;
         item.skuId = item.defaultSkuId;
       })
-      if(isNext) {
+      if (isNext) {
         recommendList = recommendList.concat(list);
       } else {
         recommendList = list
@@ -1154,15 +1181,15 @@ create.Page(store, {
     query.select('#detailInfo').boundingClientRect()
     query.select('#detailRecommend').boundingClientRect()
     // debounce(() => {
-      query.selectViewport().scrollOffset().exec(res => {
-        barTap.top = res[0].top;
-        barTap.evaluate = res[1].top;
-        barTap.info = res[2].top;
-        barTap.recommend = res[3].top;
-        this.setData({
-          barTap,
-        });
+    query.selectViewport().scrollOffset().exec(res => {
+      barTap.top = res[0].top;
+      barTap.evaluate = res[1].top;
+      barTap.info = res[2].top;
+      barTap.recommend = res[3].top;
+      this.setData({
+        barTap,
       });
+    });
     // }, 1000)();
   },
 
@@ -1170,7 +1197,7 @@ create.Page(store, {
   handleGoodError({
     isOver
   }) {
-    if(isOver) {
+    if (isOver) {
       this.setData({
         stockOver: 1,
         stockOverText: "商品已售罄"
@@ -1202,11 +1229,22 @@ create.Page(store, {
           longitude: res.storeAddress.longitude,
           latitude: res.storeAddress.latitude,
         }
+        const takeSpotOld = wx.getStorageSync("TAKE_SPOT") || {}
+        wx.setStorageSync('OLD_TAKE_SPOT', takeSpotOld)
         wx.setStorageSync('TAKE_SPOT', takeSpot)
       }
       this.setData({
         storeInfo: res
       })
+      this.getCartList();
+      let {
+        objectId,
+      } = this.goodParams
+      const params = {}
+      if (objectId == '-15') {
+        params.subType = 151
+      }
+      this.getSummaryByCartData(params)
     });
   },
 
@@ -1220,7 +1258,7 @@ create.Page(store, {
       good,
     } = this.data;
     good.sendTypeList.forEach(item => {
-      if(item.type === current.type) {
+      if (item.type === current.type) {
         item.status = 1;
       } else {
         item.status = 0;
@@ -1231,7 +1269,7 @@ create.Page(store, {
       data2.selectAddressType = current
       wx.setStorageSync("CREATE_INTENSIVE", data2)
     } else {
-      wx.setStorageSync("CREATE_INTENSIVE", {selectAddressType: current})
+      wx.setStorageSync("CREATE_INTENSIVE", { selectAddressType: current })
     }
     console.log('onChangePickType selectAddressType cg', wx.getStorageSync("CREATE_INTENSIVE").selectAddressType)
     this.setData({
@@ -1381,18 +1419,18 @@ create.Page(store, {
       currentSku,
     } = this.data;
     let stockOverData = this.handleGoodStock(currentSku.stockNum);
-    if(!this.specLoaded) {
+    if (!this.specLoaded) {
       return;
     }
-    if(stockOverData.stockOver != 0) {
+    if (stockOverData.stockOver != 0) {
       this.onStockOver(stockOverData.stockOver);
       return;
     }
-    if(quantity >= currentSku.buyMaxNum) {
-      showToast({ title: `最多购买${currentSku.buyMaxNum}件`});
+    if (quantity >= currentSku.buyMaxNum) {
+      showToast({ title: `最多购买${currentSku.buyMaxNum}件` });
       return;
     }
-    if(quantity < currentSku.buyMinNum) {
+    if (quantity < currentSku.buyMinNum) {
       quantity = currentSku.buyMinNum;
       // showToast({ title: `至少购买${quantity}件`});
     } else {
@@ -1404,8 +1442,8 @@ create.Page(store, {
       orderType: good.orderType,
       goodsFromType: good.goodsFromType,
     }
-    if(good.activityId) data.activityId = good.activityId;
-    if(good.objectId) data.objectId = good.objectId;
+    if (good.activityId) data.activityId = good.activityId;
+    if (good.objectId) data.objectId = good.objectId;
     this.updateCart(data);
   },
 
@@ -1416,11 +1454,11 @@ create.Page(store, {
       quantity = 0,
       currentSku,
     } = this.data;
-    if(!this.specLoaded) {
+    if (!this.specLoaded) {
       return;
     }
     const minBuy = currentSku.buyMinNum > 1 ? currentSku.buyMinNum : 1;
-    if(quantity == minBuy) {
+    if (quantity == minBuy) {
       quantity = -currentSku.buyMinNum;
       showModal({
         content: "您确定要清除该商品？",
@@ -1431,7 +1469,7 @@ create.Page(store, {
           })
         }
       });
-      return ;
+      return;
     }
     this.updateCart({
       skuId: currentSku.skuId,
@@ -1457,28 +1495,29 @@ create.Page(store, {
       good,
     } = this.data;
     const {
-      orderType
+      orderType,
+      objectId,
     } = this.goodParams;
     let stockOver = 0;
     let stockOverText = "";
     let nowTime = new Date().getTime();
     let stockNum = good.goodsStockNum;
-    if(stockNum <= 0) {
+    if (stockNum <= 0) {
       // 已售罄
       stockOver = 1;
       stockOverText = "已售罄"
     } else {
       // B端集约最小购买量一定是步增的倍数，其他不校验
-      if(stockNum < good.buyMinNum) {
+      if (stockNum < good.buyMinNum) {
         stockOver = 2;
         stockOverText = "库存不足"
       }
     }
-    if((orderType == 15 || orderType == 16) && nowTime >= good.deadlineTime) {
+    if ((orderType == 15 || orderType == 16) && objectId != '-15' && nowTime >= good.deadlineTime) {
       stockOver = 3;
       stockOverText = "活动已结束"
     }
-    if(good.goodsState != 1) {
+    if (good.goodsState != 1) {
       // 商品已下架 改为 已售罄
       stockOver = 4;
       stockOverText = "商品已售罄"
@@ -1514,7 +1553,7 @@ create.Page(store, {
   setCurrentSku({ detail }) {
     this.specLoaded = true;
     console.log("checkSpec setCurrentSku detail", this.goodParams.skuId != detail.skuId, detail, '; this.goodParams ', this.goodParams)
-    if(detail.skuId) {
+    if (detail.skuId) {
       this.setData({
         currentSku: detail,
       })
@@ -1530,14 +1569,14 @@ create.Page(store, {
 
   // 打开选规格弹窗
   openSpecPopup(e) {
-    if(!this.data.userInfo) {
+    if (!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
     }
     const {
       good,
     } = this.data;
-    if(good.goodsState != 1) {
+    if (good.goodsState != 1) {
       // 商品已下架 改为 已售罄
       showToast({ title: "商品已售罄" });
       return;
@@ -1552,12 +1591,12 @@ create.Page(store, {
       this.onToCreateOne()
       return
     }
-    if(good.isMultiSpec) {
+    if (good.isMultiSpec) {
       this.setData({
         specType: "buy",
-        isActivityCome: this.goodParams.orderType == 3?true:false,
-        isAlone: (e?.currentTarget?.dataset?.type === 'alone')?1:'',
-        create: (e?.currentTarget?.dataset?.type === 'create')?1:'',
+        isActivityCome: this.goodParams.orderType == 3 ? true : false,
+        isAlone: (e?.currentTarget?.dataset?.type === 'alone') ? 1 : '',
+        create: (e?.currentTarget?.dataset?.type === 'create') ? 1 : '',
       }, () => {
         // 打开选择规格弹窗
         store.onChangeSpecState(true);
@@ -1599,7 +1638,7 @@ create.Page(store, {
           skuId: skuId ? skuId : currentSku.skuId,
           activityId: activityId || good.activityId || '',
           objectId: objectId || good.objectId || '',
-          orderType: isActivityCome?2:orderType,
+          orderType: isActivityCome ? 2 : orderType,
           skuNum,
           goodsFromType: good.goodsFromType,
           isActivityCome: isActivityCome
@@ -1608,7 +1647,7 @@ create.Page(store, {
     };
     wx.setStorageSync("GOOD_LIST", data);
     let p = {
-      orderType: isActivityCome?2:orderType,
+      orderType: isActivityCome ? 2 : orderType,
       activityId: !!activityId ? activityId : "",
       objectId: !!objectId ? objectId : this.goodParams.objectId,
       isActivityCome: isActivityCome,
@@ -1625,7 +1664,7 @@ create.Page(store, {
   // 跳转确认订单
   onToCreate(e) {
     console.log('selectAddressType e', e)
-    if(!this.data.userInfo) {
+    if (!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
     }
@@ -1662,7 +1701,7 @@ create.Page(store, {
     console.log('this.specLoaded', this.specLoaded)
     // let stockOverData = this.handleGoodStock(currentSku.stockNum);
     // 多规格商品，规格时候已加载
-    if(!this.specLoaded) {
+    if (!this.specLoaded) {
       return;
     }
     // if(stockOverData.stockOver != 0) {
@@ -1671,7 +1710,7 @@ create.Page(store, {
     // }
     let skuNum = good.buyMinNum > 0 ? good.buyMinNum : 1;
     // 选择规格回来下单
-    if(good.isMultiSpec) {
+    if (good.isMultiSpec) {
       skuId = currentSku.skuId;
       skuNum = currentSku.skuNum;
     }
@@ -1685,7 +1724,7 @@ create.Page(store, {
           skuId: skuId ? skuId : currentSku.skuId,
           activityId: activityId || good.activityId || '',
           objectId: objectId || good.objectId || '',
-          orderType: isActivityCome?2:orderType,
+          orderType: isActivityCome ? 2 : orderType,
           skuNum,
           goodsFromType: good.goodsFromType,
           isActivityCome: isActivityCome,
@@ -1695,7 +1734,7 @@ create.Page(store, {
     };
 
     // 活动购买
-    if(orderType == 3 && outData.groupId && !isActivityCome) {
+    if (orderType == 3 && outData.groupId && !isActivityCome) {
       let params = {
         storeGoodsInfos: [{
           storeNo: good.storeNo,
@@ -1718,7 +1757,7 @@ create.Page(store, {
     }
 
     // 多规格拼团
-    if(orderType == 3 && outData?.skuId && outData?.skuNum && !isActivityCome) {
+    if (orderType == 3 && outData?.skuId && outData?.skuNum && !isActivityCome) {
       let params = {
         storeGoodsInfos: [{
           storeNo: good.storeNo,
@@ -1739,7 +1778,7 @@ create.Page(store, {
       wx.setStorageSync("CREATE_INTENSIVE", params);
     }
 
-    if(orderType == 15 || orderType == 16) {
+    if (orderType == 15 || orderType == 16) {
       data.storeAdress = storeInfo.storeAddress;
       data.selectAddressType = selectAddressType;
       console.log('15/16 selectAddressType', data)
@@ -1751,7 +1790,7 @@ create.Page(store, {
     let escrowAgreement = e?.detail?.escrowAgreement
     console.log('selectAddressType e ', escrowAgreement)
     let p = {
-      orderType: isActivityCome?2:orderType,
+      orderType: isActivityCome ? 2 : orderType,
       activityId: !!activityId ? activityId : "",
       objectId: !!objectId ? objectId : this.goodParams.objectId,
       isActivityCome: isActivityCome,
@@ -1798,7 +1837,7 @@ create.Page(store, {
     console.log('H5_HOST', H5_HOST)
     console.log('src', webHost[ENV])
     let src = webHost[ENV]
-    const {activityId, spuId, skuId} = this.data.good;
+    const { activityId, spuId, skuId } = this.data.good;
     const str = `/web/group-rule?activityId=${activityId}&spuId=${spuId}&skuId=${skuId}`;
     const url = src + str;
     console.log('url', url)
@@ -1823,7 +1862,7 @@ create.Page(store, {
     wx.showModal({
       title: '提示',
       content: '确定取消订单吗?',
-      success (res) {
+      success(res) {
         if (res.confirm) {
           console.log('用户点击确定', that)
           that.cancelOrder()
@@ -1834,7 +1873,7 @@ create.Page(store, {
     })
   },
   cancelOrder() {
-    const {hasOrderData} = this.data;
+    const { hasOrderData } = this.data;
     let params = {
       sumId: hasOrderData.id
     }
@@ -1846,7 +1885,7 @@ create.Page(store, {
     this.onCloseHasOrder()
     const params = {
       ...this.data.hasOrderData
-    } 
+    }
     router.replace({
       name: "cashier",
       data: params,
@@ -1886,9 +1925,9 @@ create.Page(store, {
       detail,
       type,
     } = event;
-    if(type === "tap") {
+    if (type === "tap") {
       data = currentTarget.dataset.data;
-    } else if(type === "toBuy") {
+    } else if (type === "toBuy") {
       data = detail;
     }
     await this.getHasOrder(2)
@@ -1914,10 +1953,10 @@ create.Page(store, {
     }).then(res => {
       this.onToCreate({
         detail: {
-          groupId:res.groupId
+          groupId: res.groupId
         }
       });
-      
+
     });
   },
 
@@ -1935,7 +1974,7 @@ create.Page(store, {
     } = this.data;
     let id = good.storeNo.slice(8, good.storeNo.length);
     id = +id;
-    if(id < 123580) return;
+    if (id < 123580) return;
     router.push({
       name: "store",
       data: {
@@ -1986,14 +2025,25 @@ create.Page(store, {
     const overType = state !== undefined && typeof state === 'number' ? state : stockOver;
     let errText = !!good.isMultiSpec ? "当前规格" : "商品";
     let errTextAfter = !!good.isMultiSpec ? "，请选择其他规格" : "";
-    if(!!good.isMultiSpec) {
-      if(overType == 1) {
+    if (!!good.isMultiSpec) {
+      if (overType == 1) {
         showToast({ title: `当前规格已售罄，请选择其他规格` });
-      } else if(overType == 2) {
+      } else if (overType == 2) {
         showToast({ title: `当前规格库存不足，请选择其他规格` });
-      } else if(overType == 3) {
+      } else if (overType == 3) {
         // showToast({ title: `活动已结束` });
       }
     }
+  },
+  specAdd({ detail }) {
+    const selectSku = this.data.good
+    selectSku.quantity = (selectSku.quantity || 0) + detail.quantity
+    this.setCartNum(selectSku)
+      .then(res => {
+        this.setData({
+          good: selectSku
+        });
+      })
+
   },
 })

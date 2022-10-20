@@ -61,9 +61,11 @@ create.Page(store, {
     // 是否允许选择红包
     unOpenCoupon: false,
     lateDeliveryDesc: "",
-    tabActive: "",
+    tabActive: '2',
     // isEscrow = 1 的时候为 投资氢原子
     isEscrow: 0,
+    sendStatus: 'close',
+    sendMoney: 0,
   },
 
   tabChange(event) {
@@ -92,6 +94,16 @@ create.Page(store, {
         console.log('initData selectAddressType 12', this.data.selectAddressType)
       })
     }
+  },
+
+  getStoreDeliveryStatus() {
+    cartApi.getStoreDeliveryStatus()
+      .then(res => {
+        this.setData({
+          sendStatus: res.sendStatus,
+          sendMoney: res.sendMoney,
+        })
+      })
   },
 
   onLoad(options) {
@@ -129,8 +141,11 @@ create.Page(store, {
   onShow() {
     this.getDefaultAddress();
     this.initData()
+    this.getStoreDeliveryStatus()
     app.trackEvent('shopping_confirmOrder');
   },
+
+  
 
   // 获取默认地址
   getDefaultAddress() {

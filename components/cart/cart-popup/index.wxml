@@ -7,6 +7,7 @@
     closeable
     bind:close="onClose"
     custom-style="height: 80%;"
+    z-index="10"
   >
     <view class="cart_popup">
       <view class="cart_popup_title">购物车</view>
@@ -17,9 +18,9 @@
           <view class="top_left_text">全选</view>
         </view>
         <view class="top_right" catchtap="checkSelf">
-          <view class="btn_left">配送</view>
+          <view class="btn_left" wx:if="{{sendStatus==='open'}}">配送</view>
           <view class="btn_right">自提</view>
-          <view class="btn_checkouted {{selectAddressType.type == 2?'':'self'}}"></view>
+          <view class="btn_checkouted {{selectAddressType.type == 2 &&sendStatus==='open'?'':'self'}}"></view>
         </view>
       </view>
       <view wx:if="{{!cartGoodsOne.length && !cartGoodsTwo.length}}" class="cart_null_box">
