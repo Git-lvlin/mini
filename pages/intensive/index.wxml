@@ -62,13 +62,13 @@
       info="{{cartAllData3}}"
       bind:popup="handleUpdate"
       objectId="-15"
-      wx:if="{{tabActive==0&&tools.hasIndex(wholesaleStatus,1)}}"
+      wx:if="{{tabActive==0}}"
     />
     <cart-bottom
       jump="true"
       info="{{cartAllData}}"
       bind:popup="handleUpdate"
-      wx:if="{{tabActive==2&&tools.hasIndex(wholesaleStatus,3)}}"
+      wx:if="{{tabActive==2}}"
     />
     <van-tabs active="{{tabActive}}" class="tabs" bind:change="tabChange" id="tabs"  swipe-threshold="3" z-index="1">
       <van-tab title="到店自提" class="tab">

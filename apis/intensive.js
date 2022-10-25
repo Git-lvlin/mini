@@ -26,8 +26,8 @@ const url = {
   category3: '/activity/option/wholesale/category',
 
   goodsList4: '/store/option/memberShopGoods/nearbyGoods',
-  goodsList5: '/activity/option/wholesale/getNoticeSpuList',
-  remindStoreBuyNotice: '/activity/auth/wholesale/remindStoreBuyNotice',
+  goodsList5: '/activity/option/getStoreNotInSkus',
+  remindStoreBuyNotice: '/activity/auth/remindStorekeeperBuy',
   rec: '/store/option/FreshMemberShop/shopRecGoods',
   love: '/store/option/FreshMemberShop/shopGuessFavourite',
 

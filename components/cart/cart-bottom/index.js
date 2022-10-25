@@ -256,6 +256,7 @@ create.Component(store, {
         return
       }
       let goodsInfos = await this.handleSubmitData(submitData);
+      let takeSpot = wx.getStorageSync("TAKE_SPOT") || {}
 
       const {
         selectAddressType,
@@ -264,7 +265,7 @@ create.Component(store, {
       } = this.data;
       let data = {
         storeGoodsInfos: [{
-          storeNo,
+          storeNo: takeSpot?.storeNo,
           goodsInfos,
         }]
       };

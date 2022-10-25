@@ -301,6 +301,7 @@ create.Component(store, {
         this.triggerEvent("specAdd", {
           skuId: curSku.id,
           quantity: skuNum,
+          skuName: curSku.skuName
         });
       }
       this.onClose();
