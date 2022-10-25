@@ -139,6 +139,7 @@ create.Page(store, {
     }
   },
   handleUpdate(res) {
+    this.getCartList()
     this.updateSelectAddressType('handleUpdate show ')
     // this.getCartList()
   },
@@ -238,6 +239,7 @@ create.Page(store, {
       cartApi.cartList(params).then((res) => {
         const {good} = this.data;
         let quantity= 0
+        good.quantity = 0
         res.forEach(item => {
           if (item.skuId === skuId) {
             good.quantity = item.quantity
@@ -2036,14 +2038,32 @@ create.Page(store, {
     }
   },
   specAdd({ detail }) {
+    this.setData({
+      currentSku: detail,
+    })
     const selectSku = this.data.good
-    selectSku.quantity = (selectSku.quantity || 0) + detail.quantity
-    this.setCartNum(selectSku)
-      .then(res => {
-        this.setData({
-          good: selectSku
-        });
-      })
-
+    if (selectSku.skuId !== detail.skuId) {
+      selectSku.quantity = 0
+      this.setCartNum(selectSku)
+        .then(res => {
+          selectSku.quantity = (selectSku.quantity || 0) + detail.quantity
+          selectSku.skuId = detail.skuId
+          this.setCartNum(selectSku)
+            .then(res => {
+              this.setData({
+                good: selectSku
+              });
+            })
+        })
+    } else {
+      selectSku.quantity = (selectSku.quantity || 0) + detail.quantity
+      selectSku.skuId = detail.skuId
+      this.setCartNum(selectSku)
+        .then(res => {
+          this.setData({
+            good: selectSku
+          });
+        })
+    }
   },
 })

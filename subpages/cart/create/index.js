@@ -81,6 +81,7 @@ create.Page(store, {
     } else {
       wx.setStorageSync("CREATE_INTENSIVE", {selectAddressType: this.data.selectAddressType})
     }
+    this.getConfirmInfo()
   },
 
   initData() {
@@ -264,17 +265,22 @@ create.Page(store, {
       addressInfo,
       teamGoods,
     } = this.data;
+    console.log('this.orderType', this.orderType)
     let deliveryInfo = this.mapAddress(addressInfo);
     postData.deliveryInfo = deliveryInfo;
     if(this.orderType == 15 || this.orderType == 16) {
       // 集约
       let data = wx.getStorageSync("CREATE_INTENSIVE");
+      console.log('data', data)
       let {
         storeAdress,
         selectAddressType,
         ...other
       } = data;
-      postData = other;
+      postData = {
+        ...postData,
+        ...other,
+      };
       this.setData({
         storeActivityGood: other,
       });
@@ -306,6 +312,7 @@ create.Page(store, {
       };
     }
     if(this.changeStoreData && this.changeStoreData.length) {
+      console.log('222222')
       postData.storeGoodsInfos = this.changeStoreData;
     }
     console.log('postData', postData)
@@ -580,6 +587,10 @@ create.Page(store, {
       changeStore,
       ...data
     } = postData;
+    if (this.orderType == 15 || this.orderType == 16) {
+      const deliveryMode = wx.getStorageSync("CREATE_INTENSIVE")
+      data.deliveryMode = deliveryMode.selectAddressType.type
+    }
     cartApi.getOrderAmount(data).then(res => {
       const {
         payAmount,

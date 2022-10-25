@@ -348,6 +348,7 @@ create.Page(store, {
     intensiveApi.remindStoreBuyNotice({
       skuId: data.skuId,
       spuId: data.spuId,
+      wsId: data.wsId
     })
       .then(res => {
         this.getAllGoodsList5()
@@ -481,7 +482,6 @@ create.Page(store, {
         const params = {
           latitude: result.latitude,
           longitude: result.longitude,
-          orderType: 30
         }
         // const resolveData = await this.getCartList();
         return new Promise((resolve) => {
@@ -725,22 +725,45 @@ create.Page(store, {
       data = goodsData3
     }
 
-    data[selectSku.index].value = selectSku.value + detail.quantity
-    selectSku.value = selectSku.value + detail.quantity
-    selectSku.skuId = detail.skuId
+    if (selectSku.skuId !== detail.skuId) {
+      selectSku.value = 0
+      this.setCartNum(selectSku)
+        .then(res => {
+          data[selectSku.index].value = selectSku.value + detail.quantity
+          selectSku.value = selectSku.value + detail.quantity
+          selectSku.skuId = detail.skuId
 
-    this.setCartNum(selectSku)
-      .then(res => {
-        if (selectSku.type == 3) {
-          this.setData({
-            goodsData3: data
-          });
-        } else {
-          this.setData({
-            goodsData: data
-          });
-        }
-      })
+          this.setCartNum(selectSku)
+            .then(res => {
+              if (selectSku.type == 3) {
+                this.setData({
+                  goodsData3: data
+                });
+              } else {
+                this.setData({
+                  goodsData: data
+                });
+              }
+            })
+        })
+    } else {
+      data[selectSku.index].value = selectSku.value + detail.quantity
+      selectSku.value = selectSku.value + detail.quantity
+      selectSku.skuId = detail.skuId
+
+      this.setCartNum(selectSku)
+        .then(res => {
+          if (selectSku.type == 3) {
+            this.setData({
+              goodsData3: data
+            });
+          } else {
+            this.setData({
+              goodsData: data
+            });
+          }
+        })
+    }
 
   },
   onStepChangeDelete(e) {

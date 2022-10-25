@@ -251,6 +251,7 @@ create.Page(store, {
       })
     })
     wx.setStorageSync("TAKE_SPOT", detail);
+    wx.removeStorageSync("CREATE_INTENSIVE");
     router.go();
   },
 
@@ -306,6 +307,7 @@ create.Page(store, {
       storeNo: marketSelect.storeNo
     });
     wx.setStorageSync("TAKE_SPOT", marketSelect);
+    wx.removeStorageSync("CREATE_INTENSIVE");
     router.go();
   },
 
