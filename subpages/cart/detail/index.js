@@ -126,6 +126,8 @@ create.Page(store, {
     isHome: '',
     selfStoreNo: '',
     objectId: '',
+    showDownTips: false,
+    showSharePopup: false
   },
 
   lifetimes: {
@@ -1571,13 +1573,22 @@ create.Page(store, {
 
   // 打开选规格弹窗
   openSpecPopup(e) {
+    const {
+      good,
+    } = this.data;
+
+    if(good.orderType == 30) {
+      this.setData({
+        showDownTips: true
+      })
+      return;
+    }
+
     if (!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
     }
-    const {
-      good,
-    } = this.data;
+    
     if (good.goodsState != 1) {
       // 商品已下架 改为 已售罄
       showToast({ title: "商品已售罄" });
@@ -1811,9 +1822,12 @@ create.Page(store, {
 
   // 点击立即采购
   onBIntensive() {
-    showModal({
-      content: "请下载约购APP完成采购",
-      showCancel: false,
+    // showModal({
+    //   content: "请下载约购APP完成采购",
+    //   showCancel: false,
+    // })
+    this.setData({
+      showDownTips: true
     })
   },
 
@@ -2065,5 +2079,24 @@ create.Page(store, {
           });
         })
     }
+  },
+  showDownTipsClose(){
+    this.setData({
+      showDownTips: false,
+    })
+  },
+  downTips() {
+    this.showDownTipsClose()
+    this.showSharePopup()
+  },
+  showSharePopup() {
+    this.setData({
+      showSharePopup: true,
+    })
+  },
+  onHideSharePopup() {
+    this.setData({
+      showSharePopup: false,
+    })
   },
 })

@@ -211,7 +211,7 @@
       </view>
       <!-- 单约团约价格显示 -->
       <!-- <view class="store_price" wx:if="{{isActivityGood == 2 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11 || isActivityGood == 17 || isActivityGood == 18}}"> -->
-      <view class="store_price" wx:if="{{isActivityGood != 1 && isActivityGood != 5 && isActivityGood != 6 && isActivityGood != 15 && isActivityGood != 16}}">
+      <view class="store_price" wx:if="{{isActivityGood != 1 && isActivityGood != 5 && isActivityGood != 6 && isActivityGood != 15 && isActivityGood != 16 &&  isActivityGood != 30}}">
         <view class="flex_middle" style="flex: 1;">
           <view class="store_price__">{{ utils.getPrice_(isActivityGood) }}</view>
           <price-mobel
@@ -267,7 +267,7 @@
     <view
       style="border: 1rpx solid #ccc; padding-right:20rpx;"
       class="flex_middle intensive_price"
-      wx:if="{{isActivityGood == 15 || isActivityGood == 16 || isActivityGood == 5 || isActivityGood == 6}}"
+      wx:if="{{isActivityGood == 15 || isActivityGood == 16}}"
     >
       <view class="intensive_price_mobel" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}">
         <price-mobel
@@ -785,4 +785,20 @@
     </view>
   </van-popup>
   <van-toast id="van-toast" />
+  <van-popup
+    show="{{showDownTips}}"
+    round
+    closeable
+    catchtap="showDownTipsClose"
+  >
+    <view class="popup_in_cart">
+      <view class="in_title">提示</view>
+      <view class="in_content">此商品仅限店主在约购APP的店主模块购买。</view>
+      <view class="in_btn_box">
+        <view class="cancel" catchtap="showDownTipsClose">知道了</view>
+        <view class="confirm" catchtap="downTips">下载APP</view>
+      </view>
+    </view>
+  </van-popup>
+  <down-app-code show="{{ showSharePopup }}" bind:close="onHideSharePopup" />
 </view>
