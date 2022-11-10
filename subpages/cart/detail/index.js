@@ -638,11 +638,13 @@ create.Page(store, {
   getDetailImg() {
     let {
       orderType,
-      spuId
+      spuId,
+      objectId,
     } = this.goodParams;
     if (orderType == 3) return;
     goodApi.getDetailImg({
       spuId,
+      objectId,
     }, { showLoading: false }).then(res => {
       this.setData({
         detailImg: res.images
