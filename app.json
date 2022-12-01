@@ -50,7 +50,8 @@
         "classGood/index",
         "evaluate/index",
         "evaluateDetail/index",
-        "storeSearch/index"
+        "storeSearch/index",
+        "list/index"
       ]
     },
     {
@@ -68,6 +69,13 @@
       "pages": [
         "main/index",
         "cashier/index"
+      ]
+    },
+    {
+      "root": "subpages/healthyPackage",
+      "pages": [
+        "list/index",
+        "location/index"
       ]
     }
   ],

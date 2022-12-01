@@ -1,0 +1,147 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+<view class="container" bindtouchmove="handleTouchMove" bindtouchend="handleTouchEnd">
+  <scroll-view id="home_scroll" class="home_content" scroll-y scroll-top="{{scrollTop}}" refresher-enabled refresher-default-style="none" refresher-triggered="{{refresherTriggered}}" bindrefresherrefresh="onPullDownRefresh" bindscrolltolower="handleScrollBottom" bindscroll="onViewScroll">
+    <!-- 加载gif -->
+    <image class="pul_icon" wx:if="{{showLoadImg}}" src="{{tools.getImgUrl('miniprogram/home/homeloading.gif')}}" />
+    <view class="cart_popup" wx:if="{{cartGoodsOne.length || cartGoodsTwo.length}}">
+      <view class="box">
+        <view class="top" wx:if="{{cartGoodsOne.length}}">
+          <!-- <view class="top_left" catchtap="onCheckoutAll">
+            <image class="checkout_icon" wx:if="{{checkoutAll}}" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-yes.png')}}" />
+            <image class="checkout_icon" wx:else src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-no.png')}}" />
+            <view class="top_left_text">全选</view>
+          </view> -->
+          <view class="top_right" catchtap="checkSelf">
+            <view class="btn_left" wx:if="{{sendStatus==='open'}}">配送</view>
+            <view class="btn_right">自提</view>
+            <view class="btn_checkouted {{selectAddressType.type == 2 &&sendStatus==='open'?'':'self'}}"></view>
+          </view>
+          <view bindtap="showCartsPopupAll" style="color:{{cartAllData.checkedQuantity>0?'#000':'#999'}}">
+            删除
+          </view>
+        </view>
+        <view class="list_box" wx:if="{{cartGoodsOne.length || cartGoodsTwo.length}}">
+          <view class="list_one" wx:if="{{cartGoodsOne.length}}" wx:for="{{cartGoodsOne}}" wx:key="index">
+            <view class="one_item" data-good="{{item}}">
+              <view class="one_item_left" data-item="{{item}}" data-index="{{index}}" catchtap="checkedItem">
+                <image class="checkout_icon" wx:if="{{item.isChecked}}" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-yes.png')}}" />
+                <image class="checkout_icon" wx:else src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-no.png')}}" />
+                <image class="goods_img" src="{{item.thumbnail}}" data-data="{{item}}" catchtap="onGood" />
+                <view class="goods_detail" data-data="{{item}}" catchtap="onGood">
+                  <view>
+                    <view class="goods_name">
+                      {{item.goodsName}}
+                    </view>
+                    <view class="spec">
+                      <view class="spec_text van-ellipsis" data-data="{{item}}" catchtap="showSpec">
+                        {{item.skuName}}
+                      </view>
+                      <image class="spec_icon" src="{{tools.getImgUrl('miniprogram/common/down_spot.png')}}" />
+                    </view>
+                  </view>
+                  
+                  <view class="goods_price">
+                    <text class="price_head">¥</text>
+                    <text class="sale_price">{{item.salePrice/100}}</text>
+                    <!-- <text class="mark_price">¥{{item.marketPrice/100}}</text> -->
+                  </view>
+                </view>
+              </view>
+              <view class="add-btn-box">
+                <van-stepper value="{{item.quantity}}" integer max="{{item.buyMaxNum}}" bind:change="onStepChange" data-index="{{index}}" data-item="{{item}}" bind:overlimit="overlimit" />
+                <!-- <image class="step_delete_icon" wx:if="{{item.quantity}}" data-item="{{item}}" data-index="{{index}}" catchtap="onStepChangeDelete" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
+                <view class="step_index_num" wx:if="{{item.quantity}}">{{item.quantity}}</view>
+                <image class="step_add_icon" wx:if="{{item.stockNum>item.quantity}}" data-item="{{item}}" data-index="{{index}}" catchtap="onStepChangeAdd" src="{{tools.getImgUrl('miniprogram/intensive/a-icon.png')}}" />
+                <image class="step_add_icon" wx:else src="{{tools.getImgUrl('miniprogram/intensive/add-disable.png')}}" /> -->
+              </view>
+            </view>
+          </view>
+          <view class="list_two" wx:if="{{cartGoodsTwo.length}}">
+            <view class="border" wx:if="{{cartGoodsTwo.length}}"></view>
+            <view class="list_two_top">
+              <view class="list_two_top_text">{{cartGoodsTwo.length}}件失效商品</view>
+              <view class="clear_btn" catchtap="clearExpiredAll">
+                <!-- <image class="clear_icon" src="{{tools.getImgUrl('miniprogram/intensive/clear.png')}}" /> -->
+                <view class="clear_text">清空失效商品</view>
+              </view>
+            </view>
+            <block wx:if="{{cartGoodsTwo.length}}" wx:for="{{cartGoodsTwo}}" wx:key="index">
+              <view class="two_item">
+                <!-- <view class="check_box">
+                  <image class="checkout_icon" wx:if="{{item.isChecked}}" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon.png')}}" />
+                  <image class="checkout_icon" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-no.png')}}" />
+                </view> -->
+                <view class="two_img_box">
+                  <image class="two_goods_img" src="{{item.thumbnail}}" />
+                  <!-- <image class="invalid_icon" src="{{tools.getImgUrl('miniprogram/intensive/invalid-icon.png')}}" /> -->
+                </view>
+                <view class="goods_detail">
+                  <view class="goods_name">
+                    {{item.goodsName}}
+                    <view class="solid">抱歉，商品已售罄</view>
+                  </view>
+                  <view class="goods_price">
+                    <text class="price_head op">¥</text>
+                    <text class="sale_price op">{{item.salePrice/100}}</text>
+                    <!-- <text class="mark_price">¥{{item.marketPrice/100}}</text> -->
+                  </view>
+                </view>
+                <view class="two_delete_btn" data-item="{{item}}" data-index="{{index}}" catchtap="invalidGoodDelete">
+                  x{{item.quantity}}
+                </view>
+              </view>
+            </block>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{!cartGoodsOne.length && !cartGoodsTwo.length}}" class="cart_null_box">
+      <image class="cart_null_icon" src="{{tools.getImgUrl('miniprogram/intensive/cart-null.png')}}" />
+      <view class="cart_null_text">购物车还是空的哦</view>
+      <!-- <view class="cart_null_btn" catchtap="onClose">去选购</view> -->
+    </view>
+  </scroll-view>
+  <view class="new-cart">
+    <view class="top_left" catchtap="onCheckoutAll">
+      <image class="checkout_icon" wx:if="{{checkoutAll}}" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-yes.png')}}" />
+      <image class="checkout_icon" wx:else src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-no.png')}}" />
+      <view class="top_left_text">全选</view>
+    </view>
+    <view class="new-cart_btn-group">
+      <view class="price-box">
+        <view class="price-box_price">¥{{cartAllData.subtotalPromotion/100}}</view>
+        <view class="price-box_text">合计金额</view>
+      </view>
+      <view class="new-cart_btn-right" bindtap="createOrder">
+        结算{{cartAllData.checkedQuantity>0?'('+cartAllData.checkedQuantity+')':''}}
+      </view>
+    </view>
+  </view>
+  <!-- <van-popup show="{{deletePopupShow}}" round closeable catchtap="onCloseCartsPopup">
+    <view class="popup_in_cart">
+      <view class="in_title">{{inTitle}}</view>
+      <view class="in_content">{{inContent}}</view>
+      <view class="in_btn_box">
+        <view class="cancel" catchtap="onCloseCartsPopup">取消</view>
+        <view class="confirm" catchtap="confirDelete">{{confirmText}}</view>
+      </view>
+    </view>
+  </van-popup> -->
+  <spec-panel
+    good="{{selectSku}}"
+    skuId="{{selectSku.skuId}}"
+    specType="add"
+    bind:specAdd="specAdd"
+  />
+  <van-popup show="{{deletePopupShowAll}}" round closeable catchtap="onCloseCartsPopupAll">
+    <view class="popup_in_cart">
+      <view class="in_title">提示</view>
+      <view class="in_content">确认要删除选中的商品吗?</view>
+      <view class="in_btn_box">
+        <view class="cancel" catchtap="onCloseCartsPopupAll">取消</view>
+        <view class="confirm" catchtap="remove">删除</view>
+      </view>
+    </view>
+  </van-popup>
+  <van-toast id="van-toast" />
+</view>

@@ -89,6 +89,7 @@ create.Page(store, {
     ],
     cartList: [],
     hasClass: false,
+    hasClass3: false,
   },
 
   onLoad(options) {
@@ -165,6 +166,7 @@ create.Page(store, {
 
     this.getAllGoodsList4();
     this.getAllGoodsList5();
+    this.selectComponent('#tabs').resize()
   },
 
   getWholesaleStatus() {
@@ -231,8 +233,10 @@ create.Page(store, {
     return new Promise((resolve) => {
       cartApi.setCartNum(params).then((res) => {
         console.log('设置购物车商品数量', res)
-        if (res.value) {
-          this.getSummaryByCartData(params)
+        if (itemInfo.objectId != '-15') {
+          this.getAllGoodsList()
+        } else {
+          this.getAllGoodsList3()
         }
         resolve(1)
       }).catch((err) => {
@@ -266,11 +270,17 @@ create.Page(store, {
         resolve(true)
         if (params?.subType) {
           this.setData({
-            cartAllData3: res
+            cartAllData3: {
+              ...res,
+              checkedSkuQuantity: params.length,
+            }
           })
         } else {
           this.setData({
-            cartAllData: res
+            cartAllData: {
+              ...res,
+              checkedSkuQuantity: params.length,
+            }
           })
         }
       })
@@ -379,6 +389,7 @@ create.Page(store, {
       gcId1: gcId1 || 0,
     }
     const resolveData = await this.getCartList();
+    const spuIds = []
     return new Promise((resolve) => {
       intensiveApi.getGoodsList(params).then((res) => {
         let list = res.records.map((item) => {
@@ -392,28 +403,31 @@ create.Page(store, {
           } else {
             a = p
           }
-
-          resolveData.map(cartItem => {
-            if (cartItem.spuId == item.spuId) {
-              v = cartItem.quantity
-            }
-          })
-          return {
+          
+          const obj = {
             ...item,
             aPrice: a,
             zPrice: z,
             value: v,
           }
+
+          resolveData.map(cartItem => {
+            spuIds.push(cartItem.spuId)
+            if (cartItem.spuId == item.spuId) {
+              obj.value += cartItem.quantity
+              obj[cartItem.skuId] = cartItem.quantity
+            }
+          })
+          return obj
         })
-        this.getSummaryByCartData();
-        console.log('集约商品列表返回', list)
-        // if (gcId1 == 0) {
-        //   if (list.length > 10) {
-        //     this.setData({ hasClass: true })
-        //   } else {
-        //     this.setData({ hasClass: false })
-        //   }
-        // }
+        this.getSummaryByCartData({ length: [...new Set(spuIds)].length });
+        if (gcId1 == 0) {
+          if (list.length > 6) {
+            this.setData({ hasClass: true })
+          } else {
+            this.setData({ hasClass: false })
+          }
+        }
         this.setData({
           goodsData: list,
         }, () => {
@@ -429,6 +443,7 @@ create.Page(store, {
       gcId1: gcId1 || 0,
     }
     const resolveData = await this.getCartList({ subType: 151 });
+    const spuIds = []
     return new Promise((resolve) => {
       intensiveApi.getGoodsList3(params).then((res) => {
         let list = res.records.map((item) => {
@@ -443,27 +458,31 @@ create.Page(store, {
             a = p
           }
 
-          resolveData.map(cartItem => {
-            if (cartItem.spuId == item.spuId) {
-              v = cartItem.quantity
-            }
-          })
-          return {
+          const obj = {
             ...item,
             aPrice: a,
             zPrice: z,
             value: v,
-            type: 3
+            type: 3,
           }
+
+          resolveData.map(cartItem => {
+            spuIds.push(cartItem.spuId)
+            if (cartItem.spuId == item.spuId) {
+              obj.value += cartItem.quantity
+              obj[cartItem.skuId] = cartItem.quantity
+            }
+          })
+          return obj
         })
         if (gcId1 == 0) {
-          if (list.length > 10) {
-            this.setData({ hasClass: true })
+          if (list.length > 6) {
+            this.setData({ hasClass3: true })
           } else {
-            this.setData({ hasClass: false })
+            this.setData({ hasClass3: false })
           }
         }
-        this.getSummaryByCartData({subType:151})
+        this.getSummaryByCartData({ subType: 151, length: [...new Set(spuIds)].length })
         this.setData({
           goodsData3: list,
         }, () => {
@@ -725,45 +744,22 @@ create.Page(store, {
       data = goodsData3
     }
 
-    if (selectSku.skuId !== detail.skuId) {
-      selectSku.value = 0
-      this.setCartNum(selectSku)
-        .then(res => {
-          data[selectSku.index].value = selectSku.value + detail.quantity
-          selectSku.value = selectSku.value + detail.quantity
-          selectSku.skuId = detail.skuId
+    data[selectSku.index].value = selectSku.value + detail.quantity
+    selectSku.value = (selectSku[detail.skuId] ? selectSku[detail.skuId]:0) + detail.quantity
+    selectSku.skuId = detail.skuId
 
-          this.setCartNum(selectSku)
-            .then(res => {
-              if (selectSku.type == 3) {
-                this.setData({
-                  goodsData3: data
-                });
-              } else {
-                this.setData({
-                  goodsData: data
-                });
-              }
-            })
-        })
-    } else {
-      data[selectSku.index].value = selectSku.value + detail.quantity
-      selectSku.value = selectSku.value + detail.quantity
-      selectSku.skuId = detail.skuId
-
-      this.setCartNum(selectSku)
-        .then(res => {
-          if (selectSku.type == 3) {
-            this.setData({
-              goodsData3: data
-            });
-          } else {
-            this.setData({
-              goodsData: data
-            });
-          }
-        })
-    }
+    this.setCartNum(selectSku)
+      .then(res => {
+        if (selectSku.type == 3) {
+          this.setData({
+            goodsData3: data
+          });
+        } else {
+          this.setData({
+            goodsData: data
+          });
+        }
+      })
 
   },
   onStepChangeDelete(e) {
@@ -1161,7 +1157,7 @@ create.Page(store, {
 
   tabChange(event) {
     this.setData({
-      tabActive: event.detail.index
+      tabActive: event.detail.name
     })
   },
 })

@@ -1,6 +1,7 @@
 import cartApi from '../apis/order'
 import { getStorageUserInfo, showToast } from '../utils/tools'
 import router from '../utils/router'
+import submsg from '../utils/subscribeMessage'
 
 /**
    * 获取支付信息
@@ -80,6 +81,12 @@ export const onOrderPay = ({
           result: res,
           payData,
         });
+        // 订阅消息
+        submsg.orderSubscribeMessage(function (res) {
+        }, function (res) {
+        }, function (res) {
+
+        },)
       },
       fail (res) {
         reject({

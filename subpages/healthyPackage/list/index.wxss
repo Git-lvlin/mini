@@ -1,0 +1,91 @@
+page {
+  background-color: #F5F5F5;
+}
+
+.page {
+  background: #fff;
+  padding: 0 24rpx 30rpx;
+}
+
+.list {
+  margin-top: 30rpx;
+  max-height: 100vh;
+}
+
+.box {
+  display: flex;
+  position: relative;
+  margin-bottom: 30rpx;
+  border-bottom: 1rpx solid #eee;
+  padding-bottom: 20rpx;
+}
+
+.wrap {
+  position: relative;
+  flex: 1;
+}
+
+.img {
+  flex-shrink: 0;
+  width: 180rpx;
+  height: 180rpx;
+  margin-right: 20rpx;
+  border-radius: 16rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  color: #333;
+}
+
+.sub_title {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.price_wrap {
+  color: #999999;
+  font-size: 24rpx;
+  display: flex;
+  line-height: 30rpx;
+  position: absolute;
+  bottom: 0;
+}
+
+.sale_price {
+  color: #FF0000;
+  font-size: 36rpx;
+  margin-right: 10rpx;
+}
+
+.marker_price {
+  color: #FE915D;
+  text-decoration: line-through;
+  font-size: 24rpx;
+}
+
+.nav_head {
+  position: fixed;
+  width: 100vw;
+  left: 0;
+  z-index: 9999;
+  background: #fff;
+}
+
+.head {
+  position: absolute;
+  bottom: 14rpx;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.nav_back {
+  position: absolute;
+  bottom: 14rpx;
+  left: 32rpx;
+  width: 48rpx;
+  height: 48rpx;
+}

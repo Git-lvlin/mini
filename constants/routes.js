@@ -143,6 +143,9 @@ export default {
   evaluateDetail: {
     path: "/subpages/cart/evaluateDetail/index"
   },
+  cartList: {
+    path: "/subpages/cart/list/index"
+  },
   
 
 
@@ -174,5 +177,9 @@ export default {
 
   fadadaCashier: {
     path: "/subpages/fadada/cashier/index"
+  },
+
+  healthyPackageLocation: {
+    path: "/subpages/healthyPackage/location/index"
   },
 }

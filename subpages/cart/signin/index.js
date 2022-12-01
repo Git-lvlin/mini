@@ -26,6 +26,7 @@ create.Page(store, {
     redUseList: [],
     hasNext: false,
     next: 0,
+    show: false
   },
 
   onLoad(options) {
@@ -35,6 +36,13 @@ create.Page(store, {
   onShow() {
     this.getSignInfo();
     app.trackEvent('mine_sign_in_detail');
+    activityApi.queryValueByCode({
+      code: 'REDPACKET_SIGNIN_DISPLAY'
+    }).then(res => {
+      this.setData({
+        show: +res.value
+      })
+    })
   },
   handleScrollTop() {
     wx.pageScrollTo({

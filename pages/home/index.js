@@ -9,6 +9,8 @@ import { debounce, showModal, showToast } from '../../utils/tools'
 import { checkSetting } from '../../utils/wxSetting';
 import { HTTP_TIMEOUT } from '../../constants/index'
 import { FLOOR_TYPE } from '../../constants/home'
+import routes from '../../constants/routes'
+
 
 const deflocationIcon = `${IMG_CDN}miniprogram/location/def_location.png?V=465656`;
 const app = getApp();
@@ -510,5 +512,12 @@ create.Page(store, {
     this.setData({
       inviteRegister: false,
     })
+  },
+
+  onShareAppMessage() {
+    return {
+      title: '约购尊享',
+      path: routes.home.path
+    };
   }
 })

@@ -175,11 +175,13 @@ create.Page(store, {
       if (!options.scene) {
         console.log("未获取到解析参数", options);
         this.hanldeGoodsParams(options)
+        this.saveShareStoreInfo(options)
       } else {
         this.getShareParam(options);
       }
     } else {
       this.hanldeGoodsParams(options)
+      this.saveShareStoreInfo(options)
     }
 
     this.setData({
@@ -193,11 +195,9 @@ create.Page(store, {
     const {
       orderType,
     } = this.goodParams;
-    debounce(() => {
-      if (!this.data.good.imageList && !this.data.good.goodsName && !this.goodOver) {
-        this.hanldeGoodsParams(this.goodParams);
-      }
-    }, 3500)();
+    if (orderType) {
+      this.hanldeGoodsParams(this.goodParams);
+    }
     let userInfo = getStorageUserInfo();
     this.setData({
       userInfo,
@@ -243,9 +243,10 @@ create.Page(store, {
         let quantity= 0
         good.quantity = 0
         res.forEach(item => {
-          if (item.skuId === skuId) {
+          if (item.spuId === spuId) {
             good.quantity = item.quantity
             quantity = item.quantity
+            good[item.skuId] = item.quantity
           }
         })
         this.setData({
@@ -259,8 +260,17 @@ create.Page(store, {
   // 增加购物车 for goods
   increaseCart() {
     let { quantity, skuId, good } = this.data
+    if (good.goodsStockNum===0) {
+      Toast('商品库存不足')
+      return;
+    }
     if (good.isMultiSpec===1) {
-      store.onChangeSpecState(true);
+      this.setData({
+        specType: "add",
+      }, () => {
+        // 打开选择规格弹窗
+        store.onChangeSpecState(true);
+      });
       return;
     }
     const { objectId } = good
@@ -272,7 +282,6 @@ create.Page(store, {
       objectId,
       quantity: quantity + 1, // 数量，负数表示减数量
     }
-    console.log("on cart increaseCart params ", params)
     this.setCartNum(params)
   },
   // 减少购物车 for goods
@@ -320,8 +329,8 @@ create.Page(store, {
           this.setData({
             quantity: quantity
           })
-          this.getSummaryByCartData(params)
         }
+        this.getSummaryByCartData(params)
         resolve(1)
       }).catch((err) => {
         resolve()
@@ -566,6 +575,27 @@ create.Page(store, {
     return info;
   },
 
+  saveShareStoreInfo(param) {
+    if (param.orderType == 32 && param.shareStoreNo) {
+      goodApi.getStoreInfo({
+        storeNo: param.shareStoreNo,
+      }).then(res => {
+        if (res.storeAddress) {
+          let takeSpot = {
+            ...res.storeAddress,
+            selected: 1,
+            storeNo: param.shareStoreNo,
+            storeName: res.storeName,
+          }
+          const takeSpotOld = wx.getStorageSync("TAKE_SPOT") || {}
+          wx.setStorageSync('OLD_TAKE_SPOT', takeSpotOld)
+          wx.setStorageSync('TAKE_SPOT', takeSpot)
+        }
+      });
+    }
+  },
+
+
   // 解析分享配置
   getShareParam(data) {
     commonApis.getShareParam({
@@ -576,6 +606,8 @@ create.Page(store, {
       const param = res;
       this.setData(param)
       this.hanldeGoodsParams(param)
+      
+      this.saveShareStoreInfo(param)
     }).catch(err => {
       this.hanldeGoodsParams(data);
     });
@@ -1183,15 +1215,15 @@ create.Page(store, {
     } = this.data;
     let query = wx.createSelectorQuery();
     query.select('#detailTop').boundingClientRect()
-    query.select('#detailEvaluate').boundingClientRect()
     query.select('#detailInfo').boundingClientRect()
     query.select('#detailRecommend').boundingClientRect()
+    query.select('#detailEvaluate').boundingClientRect()
     // debounce(() => {
     query.selectViewport().scrollOffset().exec(res => {
       barTap.top = res[0].top;
-      barTap.evaluate = res[1].top;
-      barTap.info = res[2].top;
-      barTap.recommend = res[3].top;
+      barTap.info = res[1].top;
+      barTap.recommend = res[2].top;
+      barTap.evaluate = res?.[3]?.top;
       this.setData({
         barTap,
       });
@@ -2058,29 +2090,15 @@ create.Page(store, {
       currentSku: detail,
     })
     const selectSku = this.data.good
-    if (selectSku.skuId !== detail.skuId) {
-      selectSku.quantity = 0
-      this.setCartNum(selectSku)
-        .then(res => {
-          selectSku.quantity = (selectSku.quantity || 0) + detail.quantity
-          selectSku.skuId = detail.skuId
-          this.setCartNum(selectSku)
-            .then(res => {
-              this.setData({
-                good: selectSku
-              });
-            })
-        })
-    } else {
-      selectSku.quantity = (selectSku.quantity || 0) + detail.quantity
-      selectSku.skuId = detail.skuId
-      this.setCartNum(selectSku)
-        .then(res => {
-          this.setData({
-            good: selectSku
-          });
-        })
-    }
+    selectSku.quantity = (selectSku[detail.skuId] ? selectSku[detail.skuId]:0) + detail.quantity
+    selectSku.skuId = detail.skuId
+    this.setCartNum(selectSku)
+      .then(res => {
+        selectSku[detail.skuId] = selectSku.quantity
+        this.setData({
+          good: selectSku
+        });
+      })
   },
   showDownTipsClose(){
     this.setData({
@@ -2101,4 +2119,12 @@ create.Page(store, {
       showSharePopup: false,
     })
   },
+  toCartList() {
+    router.push({
+      name: "cartList",
+      data: {
+        objectId: this.goodParams.objectId
+      }
+    });
+  }
 })

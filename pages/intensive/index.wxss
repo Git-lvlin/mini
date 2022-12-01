@@ -181,7 +181,7 @@
   justify-content: flex-start;
   align-items: flex-start;
   border-top: 2rpx solid #D8D8D8;
-  height: 2000rpx;
+  /* height: 2000rpx; */
 }
 .cart_box2 {
   display: flex;

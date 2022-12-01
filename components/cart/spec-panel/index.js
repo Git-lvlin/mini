@@ -50,14 +50,14 @@ create.Component(store, {
     good: {
       type: Object,
       value: {},
-      // observer(now, old) {
-      //   if(now.isMultiSpec == 1) {
-      //     const skuId = this.data.skuId;
-      //     this.getCheckSku({
-      //       skuId,
-      //     });
-      //   }
-      // }
+      observer(now, old) {
+        if(now.isMultiSpec == 1) {
+          const skuId = this.data.skuId;
+          this.getCheckSku({
+            skuId,
+          });
+        }
+      },
     },
     skuId: {
       type: String,
@@ -107,7 +107,7 @@ create.Component(store, {
   lifetimes: {
     ready() {
       console.log('ready')
-      console.log('isAlone', this.data.isAlone)
+      console.log('isAlone', this.data.good)
       if (this.data.good.isMultiSpec === 1) {
         this.getCheckSku({
           skuId: this.data.good.skuId,
@@ -147,7 +147,6 @@ create.Component(store, {
           })
           return
         }
-        console.log(' checkSpec 1', checkSpec, data, '; curSku ', curSku)
         curSku.salePrice = util.divide(curSku.salePrice, 100);
         curSku.stockOver = 0;
         if(curSku.stockNum <= 0) {
@@ -176,6 +175,7 @@ create.Component(store, {
           buyMaxNum: curSku.buyMaxNum,
           skuNum: curSku.buyMinNum > 0 ? curSku.buyMinNum : 1,
         });
+        
         this.setData({
           skuData: res,
           skuList: res.specList,

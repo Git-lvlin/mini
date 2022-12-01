@@ -62,7 +62,7 @@ page {
 .content {
   position: relative;
   z-index: 1;
-  padding: 20rpx 24rpx;
+  padding: 20rpx 24rpx 100px;
 }
 
 
@@ -397,4 +397,61 @@ page {
   height: 6rpx;
   background: linear-gradient(90deg, #F20825 0%, #FEB900 100%) !important;
   border-radius: 2rpx !important;
+}
+
+.healthy_bar {
+  position: absolute;
+  left: 0rpx;
+  right: 0rpx;
+  top: 0;
+  transform: translate(0,-100%);
+  display: flex;
+  background: #fff;
+  padding: 15rpx;
+  font-size: 24rpx;
+  align-items: center;
+}
+
+.healthy_bar .text {
+  color: red;
+  text-decoration: underline;
+}
+
+.checkout_icon {
+  width: 40rpx;
+  height: 42rpx;
+  flex-shrink: 0;
+  margin-right: 10rpx;
+}
+
+.healthy_box {
+  padding: 32rpx;
+  background-color:#ffffff;
+  border-radius: 24rpx;
+  box-shadow: 0rpx 8rpx 16rpx rgba(0, 0, 0, 0.01);
+  margin-top: 24rpx;
+}
+
+.healthy_box_title {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 10rpx;
+}
+
+.healthy_box_unit {
+  font-size: 20rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.healthy_box_unit_red {
+  color: #E5352F;
+  font-size: 26rpx;
+}
+
+.healthy_img {
+  width: 138rpx;
+  height: 138rpx;
+  margin-right: 10rpx;
+  margin-top: 10rpx;
 }

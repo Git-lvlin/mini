@@ -25,6 +25,7 @@
         wx:key="index"
         data-type="{{item.type}}"
         bindtap="onBarChange"
+        wx:if="{{!(good.orderType === 32 && item.type==2)}}"
       >{{item.name}}</view>
     </view>
   </view>

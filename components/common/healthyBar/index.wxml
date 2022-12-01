@@ -1,0 +1,6 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+<view class="bar" bindtap="go">
+  <image class="notice" src="{{tools.getImgUrl('miniprogram/healthyPackage/notice.png')}}" />
+  <view class="text">套餐中赠送的服务仅限在您选择的服务商使用</view>
+  <view class="check">查看></view>
+</view>
