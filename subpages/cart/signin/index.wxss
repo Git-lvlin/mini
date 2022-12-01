@@ -519,10 +519,9 @@ page {
 
 .good_label {
   display: inline-block;
-  height: 28rpx;
-  font-size: 20rpx;
+  line-height: 46rpx;
+  font-size: 28rpx;
   color: #EB483F;
-  line-height: 28rpx;
   padding: 0 12rpx;
   margin-bottom: 22rpx;
   background: rgba(235, 72, 63, 0.1);
@@ -755,4 +754,27 @@ page {
   font-weight: 400;
   color: #CCCCCC;
   line-height: 40rpx;
+}
+
+.red_list_text {
+  font-size: 24rpx;
+  color: #666;
+  text-align: center;
+}
+
+.sign_red_bag {
+  width: 144rpx;
+  height: 144rpx;
+}
+
+.sign_box2 {
+  display: flex;
+  align-items: center;
+}
+
+.sign_content_box {
+  border-radius: 24rpx;
+  background: #fff;
+  position: relative;
+  margin-bottom: 40rpx;
 }

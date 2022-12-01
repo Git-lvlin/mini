@@ -42,7 +42,7 @@
     </view>
 
     <view class="bottom_confirm">
-      <view class="comfirm_btn" bindtap="onPay">确定支付￥{{payAmount}}</view>
+      <view class="comfirm_btn" bindtap="prePay">确定支付￥{{payAmount}}</view>
     </view>
   </view>
 
@@ -172,4 +172,23 @@
       style="width: 436rpx;height: 348rpx;"
     />
   </view>
+
+  <van-popup
+    show="{{showDownTips}}"
+    round
+    closeable
+    catchtap="showDownTipsClose"
+  >
+    <view class="popup_in_cart">
+      <view class="in_title">提示</view>
+      <view class="in_content">
+        请下载APP查看享受获赠的服务
+        <view class="in_content_text">在APP“我的-孝爱礼包”中查看订单和获赠的服务</view>
+      </view>
+      <view class="in_btn_box">
+        <view class="cancel" catchtap="showDownTipsClose">知道了</view>
+        <view class="confirm" catchtap="downTips">下载APP</view>
+      </view>
+    </view>
+  </van-popup>
 </view>

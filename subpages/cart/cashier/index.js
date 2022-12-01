@@ -10,6 +10,7 @@ import { IMG_CDN, PAY_TYPE_KEY } from '../../../constants/common'
 import commonApi from '../../../apis/common'
 import cartApi from '../../../apis/order'
 import homeApi from '../../../apis/home'
+import submsg from '../../../utils/subscribeMessage'
 const shareBack = '../../../images/good/share_bg.png'
 const shareBtn = '../../../images/good/btn.png'
 const defaultList = [
@@ -52,6 +53,7 @@ create.Page(store, {
     showSharePopup: false,
     groupInfo: null,
     scene: 0,
+    showDownTips: false
   },
 
   onLoad(options) {
@@ -113,6 +115,7 @@ create.Page(store, {
     this.getHotGood();
     // }
     app.trackEvent('shopping_cashier');
+
   },
   // 获取海报信息
   getPoster() {
@@ -213,6 +216,12 @@ create.Page(store, {
           })
           // 模拟支付
           this.getFaterRed();
+
+          if (this.orderInfo.orderType == 32 && isNotPayment) {
+            this.setData({
+              showDownTips: true
+            })
+          }
         }
         this.setData({
           payData,
@@ -339,6 +348,20 @@ create.Page(store, {
     })
   },
 
+  prePay() {
+    if (this.payType == 0) {
+      // 订阅消息
+      submsg.orderSubscribeMessage(function (res) {
+      }, function (res) {
+      }, (res)=> {
+        console.log('orderSubscribeMessage', res)
+        this.onPay()
+      },)
+    } else {
+      this.onPay()
+    }
+  },
+
   // 点击确定支付
   onPay() {
     const that = this
@@ -434,6 +457,12 @@ create.Page(store, {
             // that.getPosterDetail()
             that.getPersonalDetail()
           }, 1000)
+        }
+
+        if (this.orderInfo.orderType == 32) {
+          this.setData({
+            showDownTips: true
+          })
         }
       }).catch(err => {
 
@@ -621,6 +650,17 @@ create.Page(store, {
     ctx.clip();
     ctx.drawImage(img, x, y, w, h);
     ctx.restore()
+  },
+  showDownTipsClose() {
+    this.setData({
+      showDownTips: false,
+    })
+  },
+  downTips() {
+    this.showDownTipsClose()
+    this.setData({
+      showSharePopup:true
+    })
   },
 
   // onReachBottom() {

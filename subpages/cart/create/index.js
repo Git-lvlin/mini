@@ -8,6 +8,7 @@ import { getPayInfo } from '../../../utils/orderPay'
 import util from '../../../utils/util'
 import submsg from '../../../utils/subscribeMessage'
 import { PAY_TYPE_KEY } from '../../../constants/common'
+import routes from '../../../constants/routes'
 
 const refreshOrderToken = {
   20802: "库存不足！",
@@ -37,7 +38,7 @@ create.Page(store, {
   orderId: "",
   // 修改的商品信息
   changeStoreData: [],
-  
+
   // 是否活动商品单独购买
   isActivityCome: false,
   // 获取各类金额入参
@@ -66,20 +67,22 @@ create.Page(store, {
     isEscrow: 0,
     sendStatus: 'close',
     sendMoney: 0,
+    healthyCheck: false,
+    takeSpot: {}
   },
 
   tabChange(event) {
     console.log('tabChange ', event)
     this.setData({
-        selectAddressType: {'type':parseInt(event.detail.name)},
-        tabActive: event.detail.name
+      selectAddressType: { 'type': parseInt(event.detail.name) },
+      tabActive: event.detail.name
     })
     let data2 = wx.getStorageSync("CREATE_INTENSIVE")
     if (data2) {
       data2.selectAddressType = this.data.selectAddressType
       wx.setStorageSync("CREATE_INTENSIVE", data2)
     } else {
-      wx.setStorageSync("CREATE_INTENSIVE", {selectAddressType: this.data.selectAddressType})
+      wx.setStorageSync("CREATE_INTENSIVE", { selectAddressType: this.data.selectAddressType })
     }
     this.getConfirmInfo()
   },
@@ -116,7 +119,7 @@ create.Page(store, {
     let teamGoods = options.orderType == 4 ? options : {};
     let unOpenCoupon = options.orderType == 17 || options.orderType == 18 ? false : true;
     if (teamGoods.storeGoodsInfos) {
-      teamGoods.storeGoodsInfos =JSON.parse(options.storeGoodsInfos);
+      teamGoods.storeGoodsInfos = JSON.parse(options.storeGoodsInfos);
     }
     this.shareStoreNo = options.shareStoreNo || ''
     this.orderType = orderType;
@@ -134,11 +137,31 @@ create.Page(store, {
     this.getOrderToken();
     const env = wx.getStorageSync("SYS_ENV") || "pro";
     this.env = env;
-    if(env === "fat" || env === "pro") {
+    if (env === "fat" || env === "pro") {
       this.getPayType();
     }
+
+    if (options.orderType == 32) {
+      commonApi.getAgreements({ code: 'STORE_ACTIVITY_RULE' })
+        .then(res => {
+          this.setData({
+            agreementsUrl: res[0].url
+          })
+        })
+      let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
+      this.setData({
+        takeSpot,
+      })
+
+      commonApi.getStoreShop({ ext: 'img', storeNo: takeSpot.storeNo })
+        .then(res => {
+          this.setData({
+            takeSpot: res,
+          })
+        })
+    }
   },
-  
+
   onShow() {
     this.getDefaultAddress();
     this.initData()
@@ -146,7 +169,7 @@ create.Page(store, {
     app.trackEvent('shopping_confirmOrder');
   },
 
-  
+
 
   // 获取默认地址
   getDefaultAddress() {
@@ -156,8 +179,8 @@ create.Page(store, {
     } = this.data;
     console.log('addressInfo orderType 138 ', this.orderType, '; chooseAddress ', chooseAddress)
     console.log('addressInfo orderType 139 ', this.orderType, '; addressInfo ', addressInfo)
-    if(chooseAddress) {
-      if(this.orderType == 15 || this.orderType == 16) {
+    if (chooseAddress) {
+      if (this.orderType == 15 || this.orderType == 16) {
         this.setStoreAddressNoType(chooseAddress);
       }
       this.setData({
@@ -174,11 +197,11 @@ create.Page(store, {
     cartApi.getDefaultAddress({}, {
       showLoading: false,
     }).then(res => {
-      if(this.orderType == 15 || this.orderType == 16) {
+      if (this.orderType == 15 || this.orderType == 16) {
         this.setStoreAddressNoType(res);
       }
       this.setData({
-        addressInfo:res,
+        addressInfo: res,
       }, () => {
         // 必须获取地址再请求商品信息
         this.getConfirmInfo();
@@ -197,7 +220,7 @@ create.Page(store, {
       selectAddressType,
     } = data;
     const setStoreAddress = wx.getStorageSync('ORDER_STORE_LOCATION');
-    if(setStoreAddress && setStoreAddress.setUser) {
+    if (setStoreAddress && setStoreAddress.setUser) {
       storeAdress.linkman = setStoreAddress.setUser;
       storeAdress.setUser = setStoreAddress.setUser;
       storeAdress.phone = setStoreAddress.setPhone;
@@ -223,9 +246,9 @@ create.Page(store, {
       storeAdress,
       selectAddressType,
     } = data;
-    if(selectAddressType.type == 2) {
+    if (selectAddressType.type == 2) {
       let userData = wx.getStorageSync("ORDER_STORE_LOCATION");
-      if(userData && userData.setUser) {
+      if (userData && userData.setUser) {
         storeAdress.linkman = userData.setUser;
         storeAdress.phone = userData.setPhone;
       } else if (!!address.consignee) {
@@ -235,9 +258,9 @@ create.Page(store, {
         storeAdress.linkman = "请输入提货人信息";
         storeAdress.phone = "";
       }
-    } else if(selectAddressType.type == 3) {
+    } else if (selectAddressType.type == 3) {
       const setStoreAddress = wx.getStorageSync('ORDER_STORE_LOCATION');
-      if(setStoreAddress && setStoreAddress.setUser) {
+      if (setStoreAddress && setStoreAddress.setUser) {
         storeAdress.linkman = setStoreAddress.setUser;
         storeAdress.setUser = setStoreAddress.setUser;
         storeAdress.phone = setStoreAddress.setPhone;
@@ -268,7 +291,7 @@ create.Page(store, {
     console.log('this.orderType', this.orderType)
     let deliveryInfo = this.mapAddress(addressInfo);
     postData.deliveryInfo = deliveryInfo;
-    if(this.orderType == 15 || this.orderType == 16) {
+    if (this.orderType == 15 || this.orderType == 16) {
       // 集约
       let data = wx.getStorageSync("CREATE_INTENSIVE");
       console.log('data', data)
@@ -284,7 +307,7 @@ create.Page(store, {
       this.setData({
         storeActivityGood: other,
       });
-    }  else if(this.orderType == 3) {
+    } else if (this.orderType == 3) {
       // 单约
       let data = wx.getStorageSync("CREATE_INTENSIVE");
       postData = {
@@ -294,7 +317,7 @@ create.Page(store, {
       this.setData({
         storeActivityGood: data
       })
-    } else if(this.orderType == 4) {
+    } else if (this.orderType == 4) {
       // 团约
       postData = {
         ...postData,
@@ -311,8 +334,7 @@ create.Page(store, {
         storeGoodsInfos: goodList.storeGoodsInfos
       };
     }
-    if(this.changeStoreData && this.changeStoreData.length) {
-      console.log('222222')
+    if (this.changeStoreData && this.changeStoreData.length) {
       postData.storeGoodsInfos = this.changeStoreData;
     }
     console.log('postData', postData)
@@ -331,27 +353,27 @@ create.Page(store, {
         item.goodsInfos.forEach((child, idx) => {
           child.skuSalePrice = util.divide(child.skuSalePrice, 100);
           // 设置最小购买数
-          skuNum  = postData.storeGoodsInfos[index].goodsInfos[idx].skuNum;
-          if(skuNum < child.buyMinNum) {
+          skuNum = postData.storeGoodsInfos[index].goodsInfos[idx].skuNum;
+          if (skuNum < child.buyMinNum) {
             postData.storeGoodsInfos[index].skuNum = child.buyMinNum;
           }
         });
       })
-      if(orderInfo.usefulCoupon) {
+      if (orderInfo.usefulCoupon) {
         orderInfo.usefulCoupon = this.mapCoupon(orderInfo.usefulCoupon);
         orderInfo.usefulCoupon.forEach(item => {
-          if(!!item.isDefault) {
+          if (!!item.isDefault) {
             orderInfo.currentCoupon = item;
           }
         });
       }
-      if(orderInfo.unusefulCoupon) {
+      if (orderInfo.unusefulCoupon) {
         orderInfo.unusefulCoupon = this.mapCoupon(orderInfo.unusefulCoupon);
       }
       postData.deliveryInfo = deliveryInfo;
-      if(orderInfo.currentCoupon) {
+      if (orderInfo.currentCoupon) {
         postData.couponAmount = util.multiply(orderInfo.currentCoupon.couponAmount, 100);
-        if(orderInfo.currentCoupon.memberCouponId) {
+        if (orderInfo.currentCoupon.memberCouponId) {
           postData.couponId = orderInfo.currentCoupon.memberCouponId;
         }
       }
@@ -398,7 +420,7 @@ create.Page(store, {
     }).then(res => {
       let list = res.data.records;
       list.forEach((item, index) => {
-        if(item.state === 1 && item.payType === 7) {
+        if (item.state === 1 && item.payType === 7) {
           that.payType = 7;
         }
       })
@@ -407,7 +429,7 @@ create.Page(store, {
 
   // 组装提交的地址数据
   mapAddress(info) {
-    if(!info.phone) return undefined;
+    if (!info.phone) return undefined;
     const {
       orderType,
     } = this.data;
@@ -429,12 +451,12 @@ create.Page(store, {
       selectAddressType,
     } = storeData;
     // 集约商家配送
-    if(orderType == 15 || orderType == 16) {
+    if (orderType == 15 || orderType == 16) {
       let newStoreAddress = wx.getStorageSync('ORDER_STORE_LOCATION');
-      if(newStoreAddress && newStoreAddress.setUser) {
+      if (newStoreAddress && newStoreAddress.setUser) {
         data.consignee = newStoreAddress.setUser;
         data.phone = newStoreAddress.setPhone;
-        if(selectAddressType && selectAddressType.type == 3) {
+        if (selectAddressType && selectAddressType.type == 3) {
           // data.address = newStoreAddress.setAllAddress + newStoreAddress.setAddress;
           data.address = newStoreAddress.address + newStoreAddress.setAddress;
           data.fullAddress = newStoreAddress.setAllAddress + newStoreAddress.setAddress;
@@ -448,7 +470,7 @@ create.Page(store, {
   onBack() {
     router.go();
   },
-  
+
   // 跳转选择地址
   onToAddress() {
     const {
@@ -461,12 +483,12 @@ create.Page(store, {
     //     data: {}
     //   })
     // } else {
-      router.push({
-        name: "address",
-        data: {
-          isChoose: true,
-        }
-      })
+    router.push({
+      name: "address",
+      data: {
+        isChoose: true,
+      }
+    })
     // }
   },
 
@@ -568,9 +590,9 @@ create.Page(store, {
       }
     }
     this.changeStoreData = postData.storeGoodsInfos;
-    if(orderInfo.currentCoupon) {
+    if (orderInfo.currentCoupon) {
       postData.couponAmount = util.multiply(orderInfo.currentCoupon.couponAmount, 100);
-      if(orderInfo.currentCoupon.memberCouponId) {
+      if (orderInfo.currentCoupon.memberCouponId) {
         postData.couponId = orderInfo.currentCoupon.memberCouponId;
       }
     }
@@ -617,7 +639,7 @@ create.Page(store, {
         shipping,
         // storeGoodsInfos: storeShippingFeeAmount
       }
-      if(changeStore && changeStore.data && changeStore.data.storeNo) {
+      if (changeStore && changeStore.data && changeStore.data.storeNo) {
         orderInfo.storeGoodsInfos[changeStore.idx] = {
           ...orderInfo.storeGoodsInfos[changeStore.idx],
           goodsInfos: changeStore.data.goodsInfos,
@@ -655,7 +677,7 @@ create.Page(store, {
     const {
       unOpenCoupon,
     } = this.data;
-    if(!unOpenCoupon) {
+    if (!unOpenCoupon) {
       return
     }
     this.setData({
@@ -679,11 +701,11 @@ create.Page(store, {
     } = this.data;
     const getAmountData = this.getAmountData;
     let currentCoupon = orderInfo.currentCoupon;
-    if(!!detail.memberCouponId) {
+    if (!!detail.memberCouponId) {
       getAmountData.couponId = detail.memberCouponId;
       getAmountData.couponAmount = util.multiply(detail.couponAmount, 100);
       orderInfo.usefulCoupon.forEach(item => {
-        if(item.memberCouponId == detail.memberCouponId) {
+        if (item.memberCouponId == detail.memberCouponId) {
           item.isDefault = 1;
           currentCoupon = item;
         }
@@ -728,11 +750,11 @@ create.Page(store, {
       activityId,
     } = storeActivityGood;
     // console.log('getSubmitGood isEscrow ', this.data.isEscrow)
-    if(!addressInfo.consignee && this.data.isEscrow != 1) {
+    if (!addressInfo.consignee && this.data.isEscrow != 1) {
       showToast({ title: "请选择收货地址" });
       return;
     }
-    if(orderInfo.storeGoodsInfos.length < 1) {
+    if (orderInfo.storeGoodsInfos.length < 1) {
       showToast({ title: "抱歉，爆品好货已售光，下次早点抢哦" });
       return;
     }
@@ -750,15 +772,15 @@ create.Page(store, {
       deliveryInfo: this.data.isEscrow == 1 ? {} : this.mapAddress(addressInfo),
       storeGoodsInfos: [],
     };
-    if(orderInfo.currentCoupon) {
+    if (orderInfo.currentCoupon) {
       postData.couponAmount = util.multiply(orderInfo.currentCoupon.couponAmount, 100);
-      if(orderInfo.currentCoupon.memberCouponId) {
+      if (orderInfo.currentCoupon.memberCouponId) {
         postData.couponId = orderInfo.currentCoupon.memberCouponId;
       }
     }
-    if(orderType == 3 || orderType == 4 || orderType == 11) {
-      if(!!activityId) postData.activityId = activityId;
-      if(!!objectId) postData.objectId = objectId;
+    if (orderType == 3 || orderType == 4 || orderType == 11) {
+      if (!!activityId) postData.activityId = activityId;
+      if (!!objectId) postData.objectId = objectId;
     }
     postData.storeGoodsInfos = this.getStoreGoodsInfos(orderInfo.storeGoodsInfos);
     return postData;
@@ -773,15 +795,15 @@ create.Page(store, {
       selectAddressType,
       orderToken,
     } = this.data;
-    if(!addressInfo.id && selectAddressType.type == 3) {
+    if (!addressInfo.id && selectAddressType.type == 3) {
       showToast({ title: "请添加商家配送地址" });
       return;
     }
-    if(selectAddressType.type == 2 && (!storeAdress.linkman || !storeAdress.phone)) {
+    if (selectAddressType.type == 2 && (!storeAdress.linkman || !storeAdress.phone)) {
       showToast({ title: "请填写提货人信息" });
       return;
     }
-    if(orderInfo.storeGoodsInfos.length < 1) {
+    if (orderInfo.storeGoodsInfos.length < 1) {
       showToast({ title: "抱歉，爆品好货已售光，下次早点抢哦" });
       return;
     }
@@ -798,7 +820,7 @@ create.Page(store, {
     }
     return postData;
   },
-  
+
   // 遍历店铺商品
   getStoreGoodsInfos(storeList) {
     let storeGoodsInfos = [];
@@ -825,13 +847,19 @@ create.Page(store, {
 
   // 确认下单 跳转收银台
   onToCashier() {
+
+    if (this.orderType == 32 && !this.data.healthyCheck) {
+      showToast({ title: "请同意孝爱活动规则" });
+      return
+    }
+
     let userInfo = getStorageUserInfo(true, true);
-    if(!userInfo) return;
+    if (!userInfo) return;
     const {
       orderInfo,
       addressInfo,
     } = this.data;
-    if(!orderInfo.storeGoodsInfos || !orderInfo.storeGoodsInfos.length) {
+    if (!orderInfo.storeGoodsInfos || !orderInfo.storeGoodsInfos.length) {
       showToast({ title: "抱歉，爆品好货已售光，下次早点抢哦" });
       return;
     }
@@ -841,7 +869,7 @@ create.Page(store, {
     } else {
       postData = this.getStoreGood();
     }
-    if(!postData || !postData.deliveryInfo) return;
+    if (!postData || !postData.deliveryInfo) return;
     if (postData.storeGoodsInfos.length == 1 && this.shareStoreNo) {
       postData.storeGoodsInfos[0].goodsInfos[0].shareStoreNo = this.shareStoreNo
     }
@@ -850,42 +878,44 @@ create.Page(store, {
     var that = this
     console.log('that.data.isEscrow ', that.data.isEscrow, '; postData ', postData)
     // return
-    if(that.data.isEscrow == 1) {
-     // id=88888 ：获取默认托管地址
-      commonApi.findAddressById({id:88888}).then(res => {
+    if (that.data.isEscrow == 1) {
+      // id=88888 ：获取默认托管地址
+      commonApi.findAddressById({ id: 88888 }).then(res => {
         postData.deliveryInfo = res
         // console.log('defaultAddress  res ', res)
       })
     }
-    // 订阅消息
-    submsg.orderSubscribeMessage(function (res) {
-    }, function (res) {
-    }, function (res) {
-      cartApi.createOrder(postData).then(res => {
-        res.orderType = that.orderType;
-        that.orderId = res.id;
-        if(that.env === "fat" || that.env === "pro") {
-          that.getPayInfo(res);
-          return;
-        }
-        wx.setStorageSync("order_info", res);
-        router.replace({
-          name: "cashier",
-          data: res,
-        })
-      }).catch(err => {
-        // if(refreshOrderToken[err.code]) {
-          that.getOrderToken();
-        // } else {
-          // let timer = setTimeout(() => {
-          //   router.go();
-          //   clearTimeout(timer);
-          // }, 1500);
-        // }
-      });
-    },)
+
+    if (this.orderType == 32) {
+      let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
+      postData.giftPackageStoreNo = takeSpot.storeNo
+    }
+
+    cartApi.createOrder(postData).then(res => {
+      res.orderType = that.orderType;
+      that.orderId = res.id;
+      if (that.env === "fat" || that.env === "pro") {
+        that.getPayInfo(res);
+        return;
+      }
+      wx.setStorageSync("order_info", res);
+      router.replace({
+        name: "cashier",
+        data: res,
+      })
+    }).catch(err => {
+      // if(refreshOrderToken[err.code]) {
+      that.getOrderToken();
+      // } else {
+      // let timer = setTimeout(() => {
+      //   router.go();
+      //   clearTimeout(timer);
+      // }, 1500);
+      // }
+    });
+
     // 保存上次下单地址
-    if(this.orderType != 15 && this.orderType != 16) {
+    if (this.orderType != 15 && this.orderType != 16) {
       wx.setStorageSync('ORDER_LAST_ADDRESS', addressInfo);
     }
   },
@@ -915,4 +945,25 @@ create.Page(store, {
       });
     });
   },
+
+  checkedItem() {
+    this.setData({
+      healthyCheck: !this.data.healthyCheck
+    })
+  },
+
+  toWebView(e) {
+    const url = e.currentTarget.dataset.url
+    router.push({ name: 'webview', data: { url:encodeURIComponent(url), encode:true } })
+  },
+  onOpenImg(e) {
+    const idx = e.currentTarget.dataset.idx;
+    const comment = e.currentTarget.dataset.comment
+    if (comment && comment.length) {
+      wx.previewImage({
+        current: comment[idx],
+        urls: comment,
+      });
+    }
+  }
 })

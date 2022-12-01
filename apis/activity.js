@@ -5,6 +5,7 @@ const url = {
   sign: '/public/auth/userSign/sign',
   queryRecord: '/integral/auth/redPacketRecord/queryRecordList',
   signGood: '/integral/open/redPacketProd/page',
+  queryValueByCode: '/integral/open/global/config/queryValueByCode',
 }
 
 export default {
@@ -23,5 +24,8 @@ export default {
   // 获取签到商品列表
   getSignGood(params, option) {
     return Request.get(url.signGood, params, option);
+  },
+  queryValueByCode(params, option) {
+    return Request.get(url.queryValueByCode, params, option);
   },
 }

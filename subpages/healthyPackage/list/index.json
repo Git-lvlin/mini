@@ -1,0 +1,6 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "healthy-bar": "/components/common/healthyBar/index"
+  }
+}

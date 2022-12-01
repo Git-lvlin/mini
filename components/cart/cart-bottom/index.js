@@ -53,7 +53,7 @@ create.Component(store, {
     ready() {
       let {info} = this.data;
       // 汇总数据props 异步更新 ，首次加载需要判断
-      if (info && info.length) {
+      if (info && info.quantity) {
         this.infoChange(info)
       } else {
         this.getSummaryByCartData()
@@ -175,13 +175,19 @@ create.Component(store, {
       })
     },
     onShowPopup() {
-      this.updateSelectAddressType('onShowPopup')
-      // 触发回调
-      this.triggerEvent("popup", true)
-      console.log('onShowPopup selectAddressType cart-popup', !this.data.popupType, this.data.selectAddressType.type)
-      this.setData({
-        popupType: !this.data.popupType
-      })
+      // this.updateSelectAddressType('onShowPopup')
+      // // 触发回调
+      // this.triggerEvent("popup", true)
+      // console.log('onShowPopup selectAddressType cart-popup', !this.data.popupType, this.data.selectAddressType.type)
+      // this.setData({
+      //   popupType: !this.data.popupType
+      // })
+      router.push({
+        name: "cartList",
+        data: {
+          objectId: this.data.objectId
+        }
+      });
     },
     handleCloseToCartPopup() {
       this.triggerEvent("popup", true);
@@ -195,7 +201,7 @@ create.Component(store, {
         let a = '';
         let z = '';
         let n = 0;
-        n = data.quantity;
+        n = data.checkedSkuQuantity;
         if (n > 99) {
           n = '...'
         }

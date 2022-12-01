@@ -24,7 +24,7 @@
       </view>
     </view> -->
 
-    <view class="sign_content" wx:if="{{signList.length}}">
+    <view class="sign_content" wx:if="{{signList.length && show}}">
       <view class="flex_middle sign_head">
         <view class="flex_center sign_label_back" style="background-image: url({{tools.getImgUrl('miniprogram/sign/red-title-label-back.png')}})">
           <image class="sign_label_title" src="{{tools.getImgUrl('miniprogram/sign/red-label-text.png')}}" />
@@ -88,9 +88,27 @@
           {{!signInfo.signRedRule.status ? '活动已结束' : '今日已签到'}}</view>
       </view>
     </view>
+
+    <view class="sign_content" wx:if="{{!show}}">
+      <view class="sign_content_box">
+        <view class="rule">
+          <view class="rule-left" catchtap="onOpenDetailRed">明细</view>
+          <view class="rule-border">｜</view>
+          <view class="rule-right" catchtap="onOpenRule">规则</view>
+        </view>
+        <view class="sign_box2">
+          <image class="sign_red_bag" src="{{tools.getImgUrl('miniprogram/sign/sign_red_bag.png')}}" />
+          <view>
+            <view>余额<text class="red_text">¥{{signInfo.signAmount || 0}}</text></view>
+            <view wx:if="{{signInfo.expireAmount>0}}" class="sign_desc_day">有{{signInfo.expireAmount/100}}元红包即将过期</view>
+          </view>
+        </view>
+      </view>
+    </view>
   </view>
 
-  <image class="red_list_title" src="{{tools.getImgUrl('miniprogram/sign/red-title.png')}}" />
+  <image class="red_list_title" src="{{tools.getImgUrl('miniprogram/sign/red-title.png?v=1')}}" />
+  <view class="red_list_text">红包一经抵扣，不可撤回，商品只可换货，不支持退货退款。</view>
   <view class="good_content" wx:if="{{goodList.length}}">
     <!-- <view class="good_content_back">
       <image class="good_content_title" src="{{tools.getImgUrl('miniprogram/sign/red-good-title-label.png')}}" />
@@ -115,7 +133,7 @@
             </view>
             <view class="good_price_box">
               <view class="flex_middle sale_price">
-                到手价
+                福利价
                 <price-mobel money="{{item.finalPrice}}" maxSize="{{40}}" />
               </view>
               <view class="market_price">销售价¥{{item.goodsSalePrice}}</view>

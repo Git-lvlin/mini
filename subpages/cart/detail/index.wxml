@@ -122,7 +122,7 @@
         <view class="good__">
           <view class="text">{{good.goodsName}}</view>
           <view class="flex_middle good_desc_box">
-            <view class="desc_text text_one_line">{{good.goodsDesc}}</view>
+            <view class="desc_text">{{good.goodsDesc}}</view>
             <view
               class="store_show_sale"
               wx:if="{{isActivityGood != 1 && isActivityGood != 5 && isActivityGood != 6}}"
@@ -211,7 +211,7 @@
       </view>
       <!-- 单约团约价格显示 -->
       <!-- <view class="store_price" wx:if="{{isActivityGood == 2 || isActivityGood == 3 || isActivityGood == 4 || isActivityGood == 11 || isActivityGood == 17 || isActivityGood == 18}}"> -->
-      <view class="store_price" wx:if="{{isActivityGood != 1 && isActivityGood != 5 && isActivityGood != 6 && isActivityGood != 15 && isActivityGood != 16}}">
+      <view class="store_price" wx:if="{{isActivityGood != 1 && isActivityGood != 5 && isActivityGood != 6 && isActivityGood != 15 && isActivityGood != 16 &&  isActivityGood != 30}}">
         <view class="flex_middle" style="flex: 1;">
           <view class="store_price__">{{ utils.getPrice_(isActivityGood) }}</view>
           <price-mobel
@@ -267,7 +267,7 @@
     <view
       style="border: 1rpx solid #ccc; padding-right:20rpx;"
       class="flex_middle intensive_price"
-      wx:if="{{isActivityGood == 15 || isActivityGood == 16 || isActivityGood == 5 || isActivityGood == 6}}"
+      wx:if="{{isActivityGood == 15 || isActivityGood == 16}}"
     >
       <view class="intensive_price_mobel" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}">
         <price-mobel
@@ -277,14 +277,14 @@
           minSize="{{32}}"
           maxSize="{{56}}"
           mkStyle="font-size:28rpx;"
-          descMoney="集约价"
+          descMoney=""
           desc="市场价"
           color="red"
           defaultColor="grey"
         />
       </view>
 
-      <view class="step_box" wx:if="{{cartBtnIsShow == 1}}">
+      <!-- <view class="step_box" wx:if="{{cartBtnIsShow == 1}}">
         <image class="step_delete_icon" wx:if="{{quantity > 0}}" data-item="{{currentSku}}" bindtap="decreaseCart" src="{{tools.getImgUrl('miniprogram/intensive/d-icon.png')}}" />
         <view class="step_index_num" wx:if="{{quantity > 0}}"> {{quantity}} </view>
         <view wx:if="{{quantity > 0}}">
@@ -296,7 +296,7 @@
             class="cart_btn"
             bindtap="increaseCart"
           >加入购物车</view>
-      </view>
+      </view> -->
 
       <view class="b_intensive" wx:if="{{isActivityGood == 5 || isActivityGood == 6}}">
         <view class="flex_middle b_price">
@@ -321,6 +321,13 @@
           </view>
         </view>
       </view> -->
+    </view>
+
+    <view class="space_20" wx:if="{{isActivityGood==32}}" />
+
+    <view class="healthy_box" wx:if="{{isActivityGood==32}}">
+      <view class="healthy_box_title">温馨提示：</view>
+      <view class="healthy_box_unit">{{good.declarationStr}}</view>
     </view>
 
     <view class="space_20" wx:if="{{good.isMultiSpec == 1 || refuseText || ((isActivityGood == 5 || isActivityGood == 6) && good.extend && good.extend.stockText) || (isActivityGood != 15 && isActivityGood != 16)}}" />
@@ -353,7 +360,7 @@
         <view class="flex_fix info_bar_name">库存</view>
         <view class="info_bar_value">{{good.extend.stockText}}</view>
       </view>
-      <view class="flex_middle info_bar" wx:if="{{isActivityGood != 15 && isActivityGood != 16}}">
+      <view class="flex_middle info_bar" wx:if="{{isActivityGood != 15 && isActivityGood != 16 && isActivityGood !=32 }}">
         <view class="flex_fix info_bar_name">服务</view>
         <view class="info_bar_value">
           <view class="flex_middle service_list">
@@ -464,7 +471,7 @@
     </view>
 
     <!-- 商品评价 -->
-    <view class="position ">
+    <view class="position " wx:if="{{isActivityGood !=32}}">
       <view class="scrollId_mark" style="top: -{{$.systemInfo.navTotalHeight + 72}}rpx" id="detailEvaluate" />
       <good-evaluate good="{{good}}" />
     </view>
@@ -518,7 +525,7 @@
 
     <!-- 选择规格 bind:specAdd="specUpdateCart" -->
     <spec-panel
-      wx:if="{{good.id && (isActivityGood !=15||isActivityGood!=16)}}"
+      wx:if="{{good.id && (isActivityGood !=15&&isActivityGood!=16)}}"
       good="{{good}}"
       skuId="{{skuId}}"
       isAlone="{{isAlone}}"
@@ -533,17 +540,30 @@
       wx:if="{{good && (isActivityGood ==15||isActivityGood == 16)}}"
       good="{{good}}"
       skuId="{{skuId}}"
-      specType="add"
+      specType="{{specType}}"
       bind:specBuy="onToCreate"
       bind:specAdd="specAdd"
+      bind:setSku="setCurrentSku"
     />
 
-    <cart-bottom
+    <view class="new-cart" wx:if="{{isActivityGood == 15 || isActivityGood == 16}}">
+      <view class="new-cart_icon-wrap" bindtap="toCartList">
+        <image class="new-cart_icon" src="{{tools.getImgUrl('miniprogram/cart/cart.png')}}" />
+        <view class="new-cart_icon-text">购物车</view>
+        <view class="new-cart_icon-num" wx:if="{{cartAllData.checkedSkuQuantity>0}}">{{cartAllData.checkedSkuQuantity}}</view>
+      </view>
+      <view class="new-cart_btn-group">
+        <view class="new-cart_btn-left" bindtap="increaseCart">加入购物车</view>
+        <view class="new-cart_btn-right" bindtap="openSpecPopup">立即购买</view>
+      </view>
+    </view>
+
+    <!-- <cart-bottom
       wx:if="{{isActivityGood == 15 || isActivityGood == 16}}"
       info="{{cartAllData}}"
       bind:popup="handleUpdate"
       objectId="{{objectId}}"
-    />
+    /> -->
 
     <!-- 普通 || 1688商品 -->
     <view
@@ -585,6 +605,9 @@
 
       </block>
       <view class="b_buy_btn" bindtap="onBIntensive" wx:if="{{isActivityGood == 5 || isActivityGood == 6}}">立即采购</view>
+      <view class="healthy_bar" wx:if="{{isActivityGood==32}}">
+        <healthy-bar />
+      </view>
     </view>
 
     <!-- 集约商品 -->
@@ -785,4 +808,20 @@
     </view>
   </van-popup>
   <van-toast id="van-toast" />
+  <van-popup
+    show="{{showDownTips}}"
+    round
+    closeable
+    catchtap="showDownTipsClose"
+  >
+    <view class="popup_in_cart">
+      <view class="in_title">提示</view>
+      <view class="in_content">此商品仅限店主在约购APP的店主模块购买。</view>
+      <view class="in_btn_box">
+        <view class="cancel" catchtap="showDownTipsClose">知道了</view>
+        <view class="confirm" catchtap="downTips">下载APP</view>
+      </view>
+    </view>
+  </van-popup>
+  <down-app-code show="{{ showSharePopup }}" bind:close="onHideSharePopup" />
 </view>

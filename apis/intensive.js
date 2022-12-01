@@ -219,6 +219,7 @@ export default {
     return Request.post(url.shopIndexGoods, params, option);
   },
   getWholesaleStatus(params, option) {
+    params = getStoreNo(params, { showLoading: false })
     return Request.post(url.getWholesaleStatus, params, option);
   },
   remindStoreBuyNotice(params, option) {

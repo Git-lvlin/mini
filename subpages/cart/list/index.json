@@ -1,0 +1,12 @@
+{
+  "navigationBarTextStyle": "black",
+  "onReachBottomDistance": 0,
+  "navigationBarTitleText": "购物车",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "van-stepper": "@vant/weapp/stepper/index",
+    "van-popup": "@vant/weapp/popup/index",
+    "van-toast": "@vant/weapp/toast/index",
+    "spec-panel": "/components/cart/spec-panel/index"
+  }
+}

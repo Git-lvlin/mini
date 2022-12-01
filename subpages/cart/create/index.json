@@ -8,6 +8,7 @@
     "coupon-popup": "../components/coupon-popup/index",
     "van-tab": "@vant/weapp/tab/index",
     "van-tabs": "@vant/weapp/tabs/index",
-    "set-sku-num": "../components/set-sku-num/index"
+    "set-sku-num": "../components/set-sku-num/index",
+    "healthy-bar": "/components/common/healthyBar/index"
   }
 }

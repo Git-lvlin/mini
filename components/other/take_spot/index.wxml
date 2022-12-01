@@ -19,8 +19,13 @@
       /> -->
     </view>
     <view class="store_location text_two_line">
-      <text class="distance">距离{{data.distanceUnit}}</text>
-      {{data.fullAddress}}
+      <text class="shopMemberAccount">店铺编号{{data.shopMemberAccount}}</text><text class="shopMemberAccount">距离{{data.distanceUnit}}</text>
+    </view>
+    <view class="store_location text_two_line fullAddress">
+      地址：{{data.fullAddress}}
+    </view>
+    <view class="store_location text_two_line fullAddress">
+      电话：{{data.phone}}
     </view>
     <view class="store_flag_wrap" wx:if="{{data.storeFlag.length}}">
       <view class="store_flag" wx:for="{{data.storeFlag}}">{{item}}</view>

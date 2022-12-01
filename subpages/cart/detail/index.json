@@ -18,6 +18,8 @@
     "good-evaluate": "../components/good-evaluate/index",
     "cart-bottom": "/components/cart/cart-bottom/index",
     "detail-nav": "../components/detail-nav/index",
-    "van-toast": "@vant/weapp/toast/index"
+    "van-toast": "@vant/weapp/toast/index",
+    "down-app-code": "/components/common/default-down-app-code/index",
+    "healthy-bar": "/components/common/healthyBar/index"
   }
 }

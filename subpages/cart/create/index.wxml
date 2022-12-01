@@ -39,8 +39,8 @@
       </view>
       <block  wx:if="{{isEscrow==1}}">
       <view class="address" style="justify-content: left;">
-            <image class="location_icon" src="{{tools.getImgUrl('miniprogram/v2-home/home-location.png')}}" />
-            <view class="no_address_title">委托受托方代收及验货</view>
+        <image class="location_icon" src="{{tools.getImgUrl('miniprogram/v2-home/home-location.png')}}" />
+        <view class="no_address_title">委托受托方代收及验货</view>
       </view>
       </block>
       <block wx:else>
@@ -121,7 +121,7 @@
             />
           </view>
         </view>
-        <view class="cell_item" wx:if="{{(orderType == 15 || orderType == 16) &&tabActive==3}}">
+        <view class="cell_item" wx:if="{{(orderType == 15 || orderType == 16) && tabActive==3}}">
           <view class="cell_name">配送费</view>
           <view class="cell_value">{{sendMoney/100}}</view>
           <!-- <view class="cell_value">0</view> -->
@@ -142,6 +142,21 @@
             />
           </view>
         </view> -->
+      </view>
+
+      <view class="healthy_box" wx:if="{{orderType==32}}">
+        <view class="healthy_box_title">健康套餐购买说明：</view>
+        <view class="healthy_box_unit_red">{{orderInfo.declarationStr}}</view>
+      </view>
+
+      <view class="healthy_box" wx:if="{{orderType==32}}">
+        <view class="healthy_box_title">赠送的服务仅限在服务商：{{takeSpot.shopMemberAccount}}中使用</view>
+        <view class="healthy_box_unit">服务姓名：{{takeSpot.realname}}</view>
+        <view class="healthy_box_unit">服务电话：{{takeSpot.phone}}</view>
+        <view class="healthy_box_unit">服务地址：{{takeSpot.fullAddress}}</view>
+        <view>
+          <image class="healthy_img" bindtap="onOpenImg" data-idx="{{index}}" data-comment="{{takeSpot.imageList}}" wx:for="{{takeSpot.imageList}}" src="{{item}}" />
+        </view>
       </view>
 
       <!-- <view class="store_msg" wx:if="{{orderType == 15}}">
@@ -167,6 +182,14 @@
         class="submit_btn {{!orderInfo.storeGoodsInfos ? 'btn_gray' : ''}}"
         bindtap="{{!orderInfo.storeGoodsInfos ? '' : 'onToCashier'}}"
       >去支付</view>
+      <view class="healthy_bar" wx:if="{{orderType==32}}">
+        <!-- <healthy-bar /> -->
+        <view bindtap="checkedItem">
+          <image class="checkout_icon" wx:if="{{healthyCheck}}" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-yes.png')}}" />
+          <image class="checkout_icon" wx:else src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-no.png')}}" />
+        </view>
+        <view>我已阅读并同意《<text class="text" data-url="{{agreementsUrl}}" bindtap="toWebView">孝爱活动规则</text>》</view>
+      </view>
     </view>
   </view>
 

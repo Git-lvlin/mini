@@ -1,0 +1,255 @@
+
+.container {
+  position: relative;
+}
+
+/* 搜索框 */
+.search_box_wrap {
+  position: absolute;
+  z-index: 110;
+  width: 100%;
+  height: 64rpx;
+  padding: 16rpx 0;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+}
+.search_box {
+  width: 686rpx;
+  height: 64rpx;
+  background-color: #f5f5f5;
+  border-radius: 32rpx;
+}
+
+.area_box {
+  margin-right: 20rpx;
+  border-right: 2rpx solid #eee;
+}
+
+.area_name {
+  color: #000;
+  font-size: 28rpx;
+  line-height: 32rpx;
+  padding: 0 16rpx 0 8rpx;
+}
+
+.area_icon {
+  width: 24rpx;
+  height: 24rpx;
+  margin-right: 16rpx;
+  transform: rotate(-90deg);
+}
+
+.search_icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 16rpx;
+}
+
+.close_icon {
+  width: 40rpx;
+  height: 40rpx;
+  position: absolute;
+  right: 60rpx;
+}
+
+.sreach_input {
+  height: 36rpx;
+  color: #333;
+  font-size: 28rpx;
+  line-height: 36rpx;
+  padding: 0;
+}
+
+/* 地图 */
+.map_container{
+  position: fixed;
+  top: 0;
+  bottom: 460rpx;
+  left: 0;
+  right: 0;
+  z-index: 9;
+}
+
+.map{
+  width: 100%;
+  height: 100%;
+}
+
+/* 搜索内容 */
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 11;
+  width: 100%;
+}
+
+.store_panel {
+  width: 100%;
+  height: 570rpx;
+  transform: translateY(160rpx);
+  transition: transform .3s ease-in-out;
+}
+
+.store_panel_top {
+  transform: translateY(0);
+}
+
+.panel_haed_bar {
+  width: 100%;
+  padding: 38rpx 0 20rpx;
+  background-color: #fff;
+  border-radius: 32rpx 32rpx 0 0;
+}
+
+.bar_line {
+  width: 74rpx;
+  height: 12rpx;
+  margin: 0 auto;
+  background-color: #dddddd;
+  border-radius: 6rpx;
+}
+
+.store_spot_list {
+  overflow: auto;
+  height: 500rpx;
+  padding: 0 24rpx;
+  background-color: #fff;
+}
+
+.current_spot_text {
+  color: #666666;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin-bottom: 16rpx;
+}
+
+/* 确认按钮 */
+.confirm_box {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 114rpx;
+  padding-top: 16rpx;
+  background: #fff;
+}
+
+.confirm_btn{
+  width: 686rpx;
+  height: 102rpx;
+  font-weight: 600;
+  color: #ffffff;
+  font-size: 32rpx;
+  line-height: 98rpx;
+  text-align: center;
+  padding: 0 16rpx;
+  margin: 0 auto;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+}
+
+/* 搜索地址 */
+.sreach_address {
+  width: 100%;
+  height: calc(100vh - 200rpx);
+  overflow-y: auto;
+  background-color: #fff;
+  border-radius: 24rpx 24rpx 0 0;
+}
+
+.address_item {
+  position: relative ;
+  padding: 20rpx 114rpx 20rpx 52rpx;
+}
+
+.address_item:not(:last-child) {
+  border: 2rpx solid #f5f5f5;
+}
+
+.distanceDisplay {
+  position: absolute;
+  right: 30rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 28rpx;
+  color: #999;
+}
+
+.location_icon {
+  position: absolute;
+  width: 24rpx;
+  height: 34rpx;
+  margin-right: 8rpx;
+  left: 15rpx;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.company_name {
+  font-weight: 500;
+  color: #333333;
+  font-size: 28rpx;
+  line-height: 40rpx;
+  margin-bottom: 4rpx;
+}
+
+.text_red {
+  color: #e5352f;
+}
+
+.company_address {
+  color: #999999;
+  font-size: 20rpx;
+  line-height: 28rpx;
+}
+
+.address_wrap {
+  position: fixed;
+  width: 100%;
+  top: 80rpx;
+  bottom: 0;
+  background: #fff;
+  z-index: 999;
+  overflow: auto;
+}
+
+.store_list {
+  width: 100%;
+  /* height: calc(100vh - 200rpx); */
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.store_flag_wrap {
+  display: flex;
+  margin-top: 10rpx;
+}
+
+.store_flag {
+  border: 1rpx solid #00D769;
+  color: #00D769;
+  border-radius: 20rpx;
+  padding: 5rpx;
+  font-size: 24rpx;
+  margin-right: 10rpx;
+}
+
+.location_name_wrap {
+  width: 100%;
+  height: 72rpx;
+  background: #FCF6F5;
+  position: fixed;
+  top: 95rpx;
+  z-index: 110;
+  padding-left: 24rpx;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  font-size: 24rpx;
+}
+
+.location_name_label {
+  color: #666;
+}
+
