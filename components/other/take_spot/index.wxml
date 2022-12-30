@@ -8,6 +8,7 @@
       radius="16rpx"
       src="{{data.storeLogo}}"
     />
+    <view class="mask" wx:if="{{data.selectable==0}}">{{data.tags[0]}}</view>
   </view>
   <view class="store_info">
     <view class="flex_middle store_title">

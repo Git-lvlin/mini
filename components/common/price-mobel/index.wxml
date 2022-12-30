@@ -6,6 +6,7 @@
     <text class="unit">{{!!descMoney ? descMoney : ""}}¥</text>
     <text class="max_price" style="font-size: {{!!maxSize ? maxSize : 40}}rpx;line-height: {{!!maxSize ? maxSize : 40}}rpx;">{{tools.getPriceSplit(money)}}</text>
     <text class="min_price">{{tools.getPriceSplit(money, 1)}}</text>
+    <text class="sec_label" wx:if="{{secLabel}}">{{secLabel}}</text>
   </view>
   <view class="market_money" style="{{!!mkStyle ? mkStyle : ''}}" wx:if="{{!!marketMoney && showMarket}}">{{!!desc ? desc : ""}}¥{{tools.priceToF2(marketMoney, false)}}</view>
 </view>

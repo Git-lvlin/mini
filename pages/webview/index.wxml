@@ -1,2 +1,1 @@
-
 <web-view src="{{link}}" bindmessage="handlePostMsg"></web-view>

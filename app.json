@@ -77,6 +77,12 @@
         "list/index",
         "location/index"
       ]
+    },
+    {
+      "root": "subpages/orderList",
+      "pages": [
+        "index"
+      ]
     }
   ],
   "preloadRule": {

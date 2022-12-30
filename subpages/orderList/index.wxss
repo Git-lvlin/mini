@@ -1,0 +1,63 @@
+page {
+  background-color: #F5F5F5;
+}
+
+.page {
+  padding: 0 0 30rpx;
+}
+
+.tab-class {
+  padding: 0 20rpx;
+}
+
+.card {
+  background: #fff;
+  margin-bottom: 20rpx;
+  border-radius: 10rpx;
+  padding: 0 10rpx;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 24rpx;
+  color: #666;
+  line-height: 72rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.center {
+  padding: 10rpx;
+  display: flex;
+  position: relative;
+}
+
+
+.img {
+  width: 180rpx;
+  height: 180rpx;
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+
+.goodsName {
+  font-size: 28rpx;
+}
+
+.bottom {
+  border-top: 1rpx solid #eee;
+  font-size: 24rpx;
+  color: #666;
+  line-height: 72rpx;
+}
+
+.total {
+  position: absolute;
+  bottom: 10rpx;
+  right: 10rpx;
+  font-size: 26rpx;
+}
+
+.price {
+  color: red;
+}

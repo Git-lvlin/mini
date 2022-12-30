@@ -231,7 +231,7 @@ create.Page(store, {
   onTakeSpot({
     detail
   }) {
-    if(!detail.isCurrent) {
+    if (!detail.isCurrent && detail.selectable) {
       this.setMarket(detail.id);
       this.setData({
         latitude: detail.latitude,
