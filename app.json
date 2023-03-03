@@ -83,6 +83,14 @@
       "pages": [
         "index"
       ]
+    },
+    {
+      "root": "subpages/fingerDoctor",
+      "pages": [
+        "main/index",
+        "doc/index",
+        "checkin/index"
+      ]
     }
   ],
   "preloadRule": {

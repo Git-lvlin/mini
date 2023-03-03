@@ -3,6 +3,7 @@ import store from '../../store/index'
 import router from '../../utils/router'
 import { orderList, otherSetting, USER_LEVEL } from '../../constants/user'
 import userApi from '../../apis/user'
+import fingerDoctorApi from '../../apis/fingerDoctor'
 import { getStorageUserInfo, setStorageUserInfo, showToast } from '../../utils/tools'
 
 const app = getApp();
@@ -65,14 +66,35 @@ create.Page(store, {
     } = this.data;
     router.updateSelectTabbar(this, 3);
     const userInfo = getStorageUserInfo() || "";
+    
     if(userInfo) {
       // userData[2].value = userInfo.integralValue || 0;
       this.updateUserInfo(userInfo);
       this.getUserData(userInfo);
       this.getOrderCount();
+      this.setData({
+        otherSetting: otherSetting.filter(item => !item.needLogin)
+      })
+      fingerDoctorApi.getConfig()
+        .then(res => {
+          if (res.store === 1 && userInfo.userType === 1) {
+            this.setData({
+              otherSetting
+            })
+          }
+
+          if (res.user === 1 && userInfo.userType === 0) {
+            this.setData({
+              otherSetting: otherSetting.filter(item => item.path !=='fingerDoctorDoc2')
+            })
+          }
+        })
     } else {
       userData.forEach(item => item.value = 0);
       orderTypeList.forEach(item => item.subNum = 0);
+      this.setData({
+        otherSetting: otherSetting.filter(item => !item.needLogin)
+      })
     }
     this.setData({
       userInfo,

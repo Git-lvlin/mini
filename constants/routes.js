@@ -182,4 +182,16 @@ export default {
   healthyPackageLocation: {
     path: "/subpages/healthyPackage/location/index"
   },
+  fingerDoctor: {
+    path: "/subpages/fingerDoctor/main/index",
+  },
+  fingerDoctorDoc1: {
+    path: "/subpages/fingerDoctor/doc/index?type=user",
+  },
+  fingerDoctorDoc2: {
+    path: "/subpages/fingerDoctor/doc/index?type=store",
+  },
+  fingerDoctorCheckin: {
+    path: "/subpages/fingerDoctor/checkin/index",
+  }
 }

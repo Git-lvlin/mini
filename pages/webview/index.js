@@ -87,7 +87,7 @@ Page({
     const pathParam = objToParamStr(shareParams);
     const shareInfo = {
       title,
-      path: "/pages/webview/index",
+      path: `/pages/webview/index?url=${this.optionsInfo.link}`,
       imageUrl: cover,
     }
     const userInfo = getStorageUserInfo();
