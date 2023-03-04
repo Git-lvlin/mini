@@ -6,7 +6,7 @@
       <!-- <van-field bind:tap="birthdayShowOpen" required readonly label="生日" model:value="{{ birthday }}" placeholder="请选择" is-link error-message="{{birthdayError}}"/> -->
       <van-field required readonly label="生日" placeholder="请选择" is-link error-message="{{birthdayError}}">
         <picker style="width:100%" slot="input" mode="date" value="{{currentDate}}" start="{{minDate}}" end="{{maxDate}}" bindchange="birthdayConfirm">
-          <view>{{birthday}}</view>
+          <view>{{birthday || '请选择'}}</view>
         </picker>
       </van-field>
       <van-field required label="身高" bind:input="checkHeight" type="number" model:value="{{ height }}" placeholder="请输入" error-message="{{heightError}}">

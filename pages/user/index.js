@@ -77,15 +77,23 @@ create.Page(store, {
       })
       fingerDoctorApi.getConfig()
         .then(res => {
-          if (res.store === 1 && userInfo.userType === 1) {
+          
+
+          if ((res.user === 1 && userInfo.userType === 0) || (res.user === 1 && userInfo.userType === 1)) {
             this.setData({
-              otherSetting
+              otherSetting: otherSetting.filter(item => item.path !=='fingerDoctorDoc2')
             })
           }
 
-          if (res.user === 1 && userInfo.userType === 0) {
+          if (res.store === 1 && userInfo.userType === 1) {
             this.setData({
-              otherSetting: otherSetting.filter(item => item.path !=='fingerDoctorDoc2')
+              otherSetting: otherSetting.filter(item => item.path !== 'fingerDoctorDoc1')
+            })
+          }
+
+          if (res.store === 1 && userInfo.userType === 1 && res.user === 1) {
+            this.setData({
+              otherSetting
             })
           }
         })

@@ -170,7 +170,7 @@ create.Page(store, {
             })
 
         },
-        cancel() {
+        cancel:()=> {
           this.scanInfo = null
         }
       })

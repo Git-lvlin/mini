@@ -301,7 +301,8 @@ create.Page(store, {
             getPayInfo({
               id: res.id,
               payType: SYS_ENV === 'uat' ? 0 : 7,
-              pullPayment: !SYS_ENV === 'uat',
+              pullPayment: true,
+              message: false,
             }).then(_ => {
               this.setData({
                 isPay: true,
@@ -316,7 +317,6 @@ create.Page(store, {
           }
         })
     })
-
   },
   goback() {
     router.go()
