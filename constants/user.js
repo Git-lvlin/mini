@@ -60,6 +60,20 @@ export const otherSetting = [
     path: "share",
   },
   {
+    icon: `${IMG_CDN}miniprogram/user/doc.png?v=202106170`,
+    name: "检测报告",
+    type: 1,
+    path: "fingerDoctorDoc1",
+    needLogin: true,
+  },
+  {
+    icon: `${IMG_CDN}miniprogram/user/doc.png?v=202106170`,
+    name: "设备检测报告",
+    type: 1,
+    path: "fingerDoctorDoc2",
+    needLogin: true,
+  },
+  {
     icon: `${IMG_CDN}miniprogram/user/setting.png?v=202106170`,
     name: "设置",
     type: 1,

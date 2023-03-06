@@ -77,6 +77,20 @@
         "list/index",
         "location/index"
       ]
+    },
+    {
+      "root": "subpages/orderList",
+      "pages": [
+        "index"
+      ]
+    },
+    {
+      "root": "subpages/fingerDoctor",
+      "pages": [
+        "main/index",
+        "doc/index",
+        "checkin/index"
+      ]
     }
   ],
   "preloadRule": {

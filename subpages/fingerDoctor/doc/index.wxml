@@ -1,0 +1,6 @@
+<view class="page">
+  <block wx:if="{{data.length}}">
+    <van-cell wx:for="{{data}}" title="{{item.name}}" is-link center label="{{item.createTime}}" link-type="navigateTo" url="{{'/pages/webview/index?url='+item.reportUrl}}" />
+  </block>
+  <nodata wx:else />
+</view>

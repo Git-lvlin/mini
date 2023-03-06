@@ -13,6 +13,7 @@ export const getPayInfo = (data) => {
     payType = 2,
     isNotPayment = false,
     pullPayment = false,
+    message = true,
   } = data;
   const userInfo = getStorageUserInfo(true, true);
   if(!userInfo) return;
@@ -57,6 +58,7 @@ export const onOrderPay = ({
   const {
     payType,
     failJump = true,
+    message = true,
   } = data;
   if(payType === 0) {
     getPayInfo(data)
@@ -82,11 +84,14 @@ export const onOrderPay = ({
           payData,
         });
         // 订阅消息
-        submsg.orderSubscribeMessage(function (res) {
-        }, function (res) {
-        }, function (res) {
+        if (message) {
+          submsg.orderSubscribeMessage(function (res) {
+          }, function (res) {
+          }, function (res) {
 
-        },)
+          },)
+        }
+        
       },
       fail (res) {
         reject({

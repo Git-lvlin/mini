@@ -13,6 +13,10 @@ Component({
       type: String,
       value: ""
     },
+    secLabel:{
+      type: String,
+      value: ""
+    },
     descMoney:{
       type: String,
       value: ""

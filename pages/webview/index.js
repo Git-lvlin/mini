@@ -1,5 +1,6 @@
 import router from "../../utils/router";
 import commonApis from '../../apis/common'
+import { getStorageUserInfo, objToParamStr } from '../../utils/tools'
 
 
 Page({
@@ -22,10 +23,14 @@ Page({
       if (options.encode) {
         link = decodeURIComponent(link)
       }
+      console.log('link', link);
       this.setData({
         link,
       });
-      this.optionsInfo = options;
+      this.optionsInfo = {
+        ...options,
+        link
+      };
     }
     
   },
@@ -54,7 +59,10 @@ Page({
       this.setData({
         link,
       });
-      this.optionsInfo = options;
+      this.optionsInfo = {
+        ...options,
+        link
+      };
     })
   },
 
@@ -64,45 +72,41 @@ Page({
   },
 
   // 分享
-  onShareAppMessage() {
+  async onShareAppMessage() {
     const {
       title,
       cover,
       contentType,
+      url,
+      link
     } = this.optionsInfo;
-    const {
-      link,
-    } = this.data;
+    
     const shareParams = {
       ...this.optionsInfo,
     };
-    // shareParams.url = link;
     const pathParam = objToParamStr(shareParams);
     const shareInfo = {
       title,
-      path: "/pages/webview/index",
+      path: `/pages/webview/index?url=${this.optionsInfo.link}`,
       imageUrl: cover,
     }
     const userInfo = getStorageUserInfo();
-    if(userInfo) {
+    if (url && url.includes('customize') && userInfo) {
+      
       let params = {
         shareType: 1,
-        contentType: contentType ? contentType : 1,
-        shareObjectNo: shareObjectNo ? shareObjectNo : "normal",
-        paramId: paramId ? paramId : 1,
-        shareParams: {
-          ...shareParams,
-          url: link,
-        },
+        contentType: 22,
+        shareObjectNo: "normal",
+        paramId: 23,
         ext: {
-          ...shareParams,
-          url: link,
+          id: link.match(/id=(.+)/)[1]
         },
       };
-      promise = commonApi.getShareInfo(params);
-      shareInfo.promise = promise;
+      const res = await commonApis.getShareInfo(params);
+      shareInfo.path = res.shareUrl;
+      shareInfo.imageUrl = res.thumbData;
+      shareInfo.title = res.title;
     }
-    shareInfo.path = `${shareInfo.path}${pathParam}`;
     return shareInfo;
   },
 })

@@ -20,3 +20,17 @@
   text-decoration: line-through;
   margin-left: 12rpx;
 }
+
+.sec_label {
+  height: 36rpx;
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #DC3D2E;
+  line-height: 36rpx;
+  text-align: center;
+  padding: 0 12rpx;
+  background-image: linear-gradient(90deg, #FFD672 0%, #FDEEC1 100%);
+  border-radius: 18rpx 18rpx 18rpx 0;
+  /* margin: 0 0 6rpx 8rpx; */
+  position: absolute;
+}

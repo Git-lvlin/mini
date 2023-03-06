@@ -3,9 +3,10 @@ import store from '../../store/index'
 import router from '../../utils/router'
 import homeApi from '../../apis/home'
 import goodApi from '../../apis/good'
+import fingerDoctorApi from '../../apis/fingerDoctor'
 import commonApi from '../../apis/common'
 import { IMG_CDN } from '../../constants/common'
-import { debounce, showModal, showToast } from '../../utils/tools'
+import { debounce, showModal, showToast, strToParamObj, getStorageUserInfo } from '../../utils/tools'
 import { checkSetting } from '../../utils/wxSetting';
 import { HTTP_TIMEOUT } from '../../constants/index'
 import { FLOOR_TYPE } from '../../constants/home'
@@ -28,14 +29,16 @@ create.Page(store, {
     "userInfo",
     "systemInfo"
   ],
-  
+
+  scanInfo: null,
+
   data: {
     fixationTop: 600,
     isOnGoods: false,
     scrolling: false,
     scrollBottom: false,
     floor: {},
-    headBackCss: '', 
+    headBackCss: '',
     activityAdvert: {},
     locationAuth: false,
     takeSpot: {},
@@ -55,6 +58,12 @@ create.Page(store, {
   },
 
   onLoad(options) {
+    console.log('options', options)
+    if (options && options.q) {
+      const str = decodeURIComponent(options.q)
+      this.scanInfo = strToParamObj(str.substring(str.indexOf('?') + 1))
+      
+    }
     // 系统弹窗
     this.getMiniExamine();
     this.getSystemPopup();
@@ -74,7 +83,7 @@ create.Page(store, {
       systemInfo,
     } = this.store.data;
     query.select('#fixation').boundingClientRect((rect) => {
-      if(rect) {
+      if (rect) {
         this.setData({
           fixationTop: rect.top,
         })
@@ -83,18 +92,25 @@ create.Page(store, {
     // 检查定位权限 获取当前定位
     this.getLocationAuth(this);
     query.select('#top_search').boundingClientRect((rect) => {
-      if(rect) {
+      if (rect) {
         this.setData({
           topSearchHeight: rect.height,
-          navigationBarHeight:systemInfo.navBarHeight+(systemInfo.rpxRatio*rect.height)
+          navigationBarHeight: systemInfo.navBarHeight + (systemInfo.rpxRatio * rect.height)
         })
       }
     }).exec();
+    if (this?.scanInfo?.path === 'subpages/fingerDoctor/checkin/index') {
+      setTimeout(() => {
+        router.push({
+          name: 'fingerDoctorCheckin'
+        });
+      });
+    }
   },
 
   onShow() {
     const takeSpot = wx.getStorageSync("TAKE_SPOT");
-    if(takeSpot) {
+    if (takeSpot) {
       this.setData({
         takeSpot,
       });
@@ -106,6 +122,61 @@ create.Page(store, {
       this.getRecordScrollTop(0);
     }, 200)();
     app.trackEvent('tab_home');
+    if (this.scanInfo && this.scanInfo.device) {
+      const userInfo = getStorageUserInfo(true)
+      if (!userInfo) {
+        return
+      }
+      const deviceId = this.scanInfo.device
+      showModal({
+        content: "是否立即进行健康检测？",
+        confirmText: "立即检测",
+        ok: () => {
+          fingerDoctorApi.scan({
+            imei: this.scanInfo.device
+          })
+            .then(res => {
+              this.scanInfo = null
+              if (res.type !== 11) {
+                showModal({
+                  content: res.tips,
+                  confirmText: "确定",
+                  showCancel: false,
+                  ok: () => {
+                    if (res.type !== 13) {
+                      router.push({
+                        name: 'fingerDoctor',
+                        data: {
+                          imei: deviceId
+                        }
+                      });
+                    }
+                  },
+
+                })
+              } else {
+                router.push({
+                  name: 'fingerDoctor',
+                  data: {
+                    imei: deviceId
+                  }
+                });
+              }
+            })
+            .catch(_ => {
+              if (_.code !== 10015 && _.code !== 10014) {
+                this.scanInfo = null
+              }
+            })
+
+        },
+        cancel:()=> {
+          this.scanInfo = null
+        }
+      })
+
+
+    }
   },
 
   // 获取审核状态
@@ -117,14 +188,14 @@ create.Page(store, {
     }).then(res => {
       const data = res.data;
       const miniState = this.isMiniExamine;
-      if(data.state == 1 && !miniState) {
+      if (data.state == 1 && !miniState) {
         // 审核
         this.isMiniExamine = true;
-      } else if(data.state == 0) {
+      } else if (data.state == 0) {
         // 正式版
         this.isMiniExamine = false;
         const inviteRegister = wx.getStorageSync("INVITE_REGISTER") || false;
-        if(inviteRegister) {
+        if (inviteRegister) {
           this.setData({
             inviteRegister,
           });
@@ -151,7 +222,7 @@ create.Page(store, {
     let isShowFloor = {};
     // 2 代表小程序审核版本 3 代表小程序正试版本
     let verifyVersionId = this.isMiniExamine ? 2 : 3;
-    if(!!floor) {
+    if (!!floor) {
       this.floorTimer = setTimeout(() => {
         headBackCss = this.setHeadBack(floor.headData && floor.headData.style || "");
         pageBackCss = this.setHeadBack(floor.backgroundData && floor.backgroundData.style || "");
@@ -168,7 +239,7 @@ create.Page(store, {
     }, {
       showLoading: this.isFristLoad,
     }).then(res => {
-      if(isReload) {
+      if (isReload) {
         this.setData({
           floor: {}
         })
@@ -177,7 +248,7 @@ create.Page(store, {
       this.isFristLoad = true;
       headBackCss = this.setHeadBack(res.headData && res.headData.style || "");
       pageBackCss = this.setHeadBack(res.backgroundData && res.backgroundData.style || "");
-      if(res.floors && res.floors.length) {
+      if (res.floors && res.floors.length) {
         res.floors.forEach(item => {
           isShowFloor[item.floorType] = true;
         })
@@ -198,14 +269,14 @@ create.Page(store, {
   // 获取系统弹窗
   getSystemPopup() {
     const sysEnv = wx.getStorageSync("SYS_ENV");
-    if(sysEnv == "dev") return;
+    if (sysEnv == "dev") return;
     commonApi.getResourceDetail({
       resourceKey: "SYSTEMPOP",
     }, {
       showLoading: false,
     }).then(res => {
       const data = res.data;
-      if(data.state === 1) {
+      if (data.state === 1) {
         showModal({
           title: data.title,
           content: data.content,
@@ -222,15 +293,15 @@ create.Page(store, {
     }, {
       showLoading: false,
     }).then(res => {
-      if(!res.length) return;
+      if (!res.length) return;
       const data = {};
       res.forEach(item => {
         // 活动广告
-        if(type === 2) {
+        if (type === 2) {
           data.activityAdvert = item;
         }
       });
-      if(!!data.activityAdvert) {
+      if (!!data.activityAdvert) {
         this.setData(data);
       }
     });
@@ -239,11 +310,11 @@ create.Page(store, {
   // 设置首页头部背景
   setHeadBack(style) {
     let backCss = '';
-    if(style.appletBackgroundImage) {
+    if (style.appletBackgroundImage) {
       backCss = `background-image: url(${style.appletBackgroundImage});`
-    }else if(style.backgroundImage) {
+    } else if (style.backgroundImage) {
       backCss = `background-image: url(${style.backgroundImage});`
-    } else if(style.backgroundColor) {
+    } else if (style.backgroundColor) {
       backCss = `background-color: ${style.backgroundColor};`
     }
     return backCss;
@@ -254,7 +325,7 @@ create.Page(store, {
     currentTarget
   }) {
     let url = currentTarget.dataset.url;
-    if(!url) return;
+    if (!url) return;
     router.getUrlRoute(url);
     // router.push({
     //   name: url,
@@ -266,14 +337,14 @@ create.Page(store, {
     //   },
     // });
   },
-  
+
   // 获取位置权限
   getLocationAuth: async (that) => {
     const locationAuth = await checkSetting('userLocation', true);
     that.setData({
       locationAuth,
     });
-    if(locationAuth) {
+    if (locationAuth) {
       // 自动选择附近的一个店铺
       const takeSpot = wx.getStorageSync("TAKE_SPOT");
       !takeSpot && wx.getLocation({
@@ -287,7 +358,7 @@ create.Page(store, {
           that.getNearbyStore(data);
         },
         fail(err) {
-          
+
         },
       });
     }
@@ -304,10 +375,10 @@ create.Page(store, {
       let list = [];
       let fullAddress = "";
       let tempData = {};
-      if(res.length > 0) {
+      if (res.length > 0) {
         const MarkData = res[0];
         fullAddress = "";
-        for(let str in MarkData.areaInfo) {
+        for (let str in MarkData.areaInfo) {
           fullAddress += MarkData.areaInfo[str];
         }
         fullAddress += MarkData.address;
@@ -332,32 +403,32 @@ create.Page(store, {
   },
 
   // 跳转选择地址
-  onToLocation: async function() {
+  onToLocation: async function () {
     let {
       locationAuth,
     } = this.data;
     let auth = false;
-    if(!locationAuth) {
+    if (!locationAuth) {
       auth = await checkSetting('userLocation', true);
-      if(auth) {
+      if (auth) {
         locationAuth = true;
         this.setData({
           locationAuth,
         });
       }
     }
-    if(!locationAuth) {
+    if (!locationAuth) {
       showModal({
         content: "需要您授权地理位置才可使用",
-        ok(){
+        ok() {
           wx.openSetting({
             success(result) {
-              if(result.errMsg === "openSetting:ok") {
+              if (result.errMsg === "openSetting:ok") {
                 const {
                   authSetting,
                 } = result;
                 let state = authSetting['scope.userLocation'];
-                if(state) {
+                if (state) {
                   router.push({
                     name: 'location',
                   });
@@ -372,7 +443,7 @@ create.Page(store, {
           });
         }
       })
-      
+
     } else {
       router.push({
         name: 'location',
@@ -389,11 +460,11 @@ create.Page(store, {
 
   // 监听触控移动
   handleTouchMove(event) {
-    if(this.isScroll) return;
+    if (this.isScroll) return;
     this.isScroll = true;
     this.setData({
       scrolling: true,
-    }); 
+    });
     clearTimeout(this.touchTimer);
     this.touchTimer = null;
   },
@@ -406,7 +477,7 @@ create.Page(store, {
       });
     }, 400);
   },
- 
+
   // 监听页面滚动
   // onPageScroll(e) {
   onViewScroll({
@@ -418,7 +489,7 @@ create.Page(store, {
 
     this.getRecordScrollTop(detail.scrollTop);
     // 是否滚动到底部
-    if(scrollBottom) {
+    if (scrollBottom) {
       this.setData({
         scrollBottom: false,
       })
@@ -435,11 +506,11 @@ create.Page(store, {
     // ShowFloorDistance
     // scrollview距离顶部距离
     query.select('#home_scroll').boundingClientRect();
-    if(isShowFloor[FLOOR_TYPE.classGood]) {
+    if (isShowFloor[FLOOR_TYPE.classGood]) {
       // classGoods（分类商品列表）距离顶部距离
       query.select('#classGoods').boundingClientRect();
     }
-    if(isShowFloor[FLOOR_TYPE.classGood2]) {
+    if (isShowFloor[FLOOR_TYPE.classGood2]) {
       // classGoods（分类商品列表）距离顶部距离
       query.select('#classGoods2').boundingClientRect();
     }
@@ -506,7 +577,7 @@ create.Page(store, {
       });
     }, 500)
   },
-  
+
   // 关闭下载弹窗
   onHideSharePopup() {
     this.setData({

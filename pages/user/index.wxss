@@ -211,3 +211,7 @@ page{
   width: 500rpx;
   height: 300rpx;
 }
+
+.container {
+  padding-bottom: 150rpx;
+}
