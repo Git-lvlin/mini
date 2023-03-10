@@ -44,7 +44,7 @@
               <view class="coupon_btn" data-coupon="{{item}}" wx:if="{{selectType == 1}}" bindtap="onToUse">去使用</view>
             </view>
           </view>
-          <image class="seal_img" wx:if="{{selectType == 4}}" src="{{tools.getImgUrl('miniprogram/user/coupon/invalid.png')}}" />
+          <image class="seal_img" if="{{selectType == 4}}" src="{{tools.getImgUrl('miniprogram/user/coupon/invalid.png')}}" />
           <image class="seal_img" wx:if="{{selectType == 2}}" src="{{toold.getImgUrl('miniprogram/user/coupon/used.png')}}" />
         </view>
         <view class="coupon_rule" wx:if="{{item.ruleOpen}}">

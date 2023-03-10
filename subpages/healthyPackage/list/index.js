@@ -15,10 +15,13 @@ create.Page(store, {
    * 页面的初始数据
    */
   data: {
-    goodsData: []
+    goodsData: [],
+    orderType: ''
   },
 
   options: {},
+
+ 
 
   // 解析分享配置
   getShareParam(data) {
@@ -28,7 +31,10 @@ create.Page(store, {
       this.getStoreInfo({
         storeNo: res.shareStoreNo
       })
-
+      this.setData({
+        orderType:res.orderType
+      })
+      this.getGiftPackage(res.orderType)
       wx.setStorageSync("INVITE_INFO", {
         inviteCode: res.inviteCode,
         shareMemberId: res.shareMemberId,
@@ -46,7 +52,10 @@ create.Page(store, {
       this.getStoreInfo({
         storeNo: options.shareStoreNo
       })
-
+      this.setData({
+        orderType:options.orderType
+      })
+      this.getGiftPackage(options.orderType)
       wx.setStorageSync("INVITE_INFO", {
         inviteCode: options.inviteCode,
         shareMemberId: options.shareMemberId,
@@ -68,7 +77,18 @@ create.Page(store, {
    */
   onShow: function () {
     // this.getShareParam(this.options);
-    healthyPackageApis.getGiftPackage({ orderType: 32, size: 999, page:1 })
+    if(this.orderType){
+     this.getGiftPackage(this.options)
+    }
+  },
+
+  getGiftPackage(orderType){
+    let params={
+        orderType, 
+        size: 999,
+        page:1 
+    }
+    healthyPackageApis.getGiftPackage(params)
       .then(res => {
         console.log(res);
         this.setData({

@@ -2,12 +2,13 @@
 <view class="page">
   <view class="nav_head" style="height: {{$.systemInfo.navTotalHeight}}rpx;">
     <view class="head">
-      <view class="head_title">孝爱活动专区</view>
+      <view class="head_title" wx:if="{{orderType==34}}">活动专区</view>
+      <view class="head_title" wx:else>孝爱活动专区</view>
     </view>
     <image class="nav_back" style="bottom: {{$.systemInfo.menuToNavHeight}}rpx" src="{{tools.getImgUrl('miniprogram/cart/good_back_home.png')}}" bindtap="onBack" />
   </view>
   <view style="height: {{$.systemInfo.navTotalHeight}}rpx;"/>
-  <view style="position:fixed;left:24rpx;right:24rpx;z-index:10;top:{{$.systemInfo.navTotalHeight}}rpx"><healthy-bar /></view>
+  <view style="position:fixed;left:24rpx;right:24rpx;z-index:10;top:{{$.systemInfo.navTotalHeight}}rpx"><healthy-bar orderType="{{orderType}}" /></view>
   <view class="list" style="padding-top:66rpx">
     <view class="box" wx:for="{{goodsData}}" wx:key="index" data-data="{{item}}" bindtap="onGood">
       <image class="img" src="{{item.imageUrl}}" />
