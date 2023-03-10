@@ -56,7 +56,10 @@ create.Page(store, {
     inputText: '',
     stores: [],
     locationName: '',
+    orderType: '',
   },
+
+  options: {},
 
   onShow() {
     const that = this;
@@ -104,6 +107,18 @@ create.Page(store, {
     });
   },
 
+  onLoad: function (options) {
+      this.options=options
+      this.setData({
+        orderType: options.orderType
+      })
+      if(options.orderType == 34){
+        wx.setNavigationBarTitle({ title: '服务站' })
+      }else{
+        wx.setNavigationBarTitle({ title: '健康服务商' })
+      }
+  },
+
   // 定位提示
   openLocationTip(goBack = false) {
     showModal({
@@ -121,7 +136,7 @@ create.Page(store, {
       currentSpot,
     } = this.data;
     healthyPackageApis.getNearbyStore({
-      type: 'health_card',
+      type:this.options.orderType==34? 'station_manager':'health_card',
       radius: 50000,
       unit: 'm',
       limit: 200,
@@ -231,7 +246,13 @@ create.Page(store, {
   onTakeSpot({
     detail
   }) {
-    if (!detail.isCurrent && detail.selectable) {
+    if(this.options.orderType==34){
+      this.setMarket(detail.id);
+      this.setData({
+        latitude: detail.latitude,
+        longitude: detail.longitude,
+      });
+    }else if (!detail.isCurrent && detail.selectable) {
       this.setMarket(detail.id);
       this.setData({
         latitude: detail.latitude,
@@ -413,7 +434,7 @@ create.Page(store, {
     }
     // console.log('querykeywords getNearbyWords this.location', this.location)
     healthyPackageApis.getNearbyStore({
-      type: 'health_card',
+      type:this.options.orderType==34? 'station_manager':'health_card',
       radius: 50000,
       unit: 'm',
       limit: 200,

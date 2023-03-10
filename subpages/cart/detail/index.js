@@ -576,7 +576,7 @@ create.Page(store, {
   },
 
   saveShareStoreInfo(param) {
-    if (param.orderType == 32 && param.shareStoreNo) {
+    if ((param.orderType == 32 || param.orderType == 34) && param.shareStoreNo) {
       goodApi.getStoreInfo({
         storeNo: param.shareStoreNo,
       }).then(res => {

@@ -53,14 +53,16 @@
       </view>
       <view class="store_spot_list">
         <view class="current_spot" wx:if="{{currentSpot.storeNo}}">
-          <view class="current_spot_text">当前选中支持吸氢的服务商</view>
+          <view class="current_spot_text" wx:if="{{orderType==34}}">当前选中的服务站</view>
+          <view class="current_spot_text" wx:else>当前选中支持吸氢的服务商</view>
           <take-spot
             data="{{currentSpot}}"
             bind:click="onCurrentSpot"
           />
         </view>
         <view class="other_spot" wx:if="{{markers.length}}">
-          <view class="current_spot_text">定位附近支持吸氢的其他服务商</view>
+          <view class="current_spot_text" wx:if="{{orderType==34}}">定位附近其他服务站</view>
+          <view class="current_spot_text" wx:else>定位附近支持吸氢的其他服务商</view>
           <take-spot
             wx:for="{{markers}}"
             wx:key="id"
@@ -78,7 +80,7 @@
         class="confirm_btn"
         style="background-image: url({{tools.getImgUrl('miniprogram/location/confirm_btn_back.png')}});"
         bindtap="onConfirm"
-      >确认切换服务商</view>
+      >{{orderType==34?'确认切换服务站':'确认切换服务商'}}</view>
     </view>
   </view>
 

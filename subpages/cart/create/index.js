@@ -141,8 +141,8 @@ create.Page(store, {
       this.getPayType();
     }
 
-    if (options.orderType == 32) {
-      commonApi.getAgreements({ code: 'STORE_ACTIVITY_RULE' })
+    if (options.orderType == 32 || options.orderType == 34) {
+      commonApi.getAgreements({ code:options.orderType == 34?'LOVE_ACTIVITY_RULE':'STORE_ACTIVITY_RULE' })
         .then(res => {
           this.setData({
             agreementsUrl: res[0].url
@@ -848,7 +848,7 @@ create.Page(store, {
   // 确认下单 跳转收银台
   onToCashier() {
 
-    if (this.orderType == 32 && !this.data.healthyCheck) {
+    if ((this.orderType == 32 || this.orderType == 34) && !this.data.healthyCheck) {
       showToast({ title: "请同意孝爱活动规则" });
       return
     }
@@ -886,7 +886,7 @@ create.Page(store, {
       })
     }
 
-    if (this.orderType == 32) {
+    if (this.orderType == 32 || this.orderType == 34) {
       let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
       postData.giftPackageStoreNo = takeSpot.storeNo
     }

@@ -324,11 +324,16 @@
       </view> -->
     </view>
 
-    <view class="space_20" wx:if="{{isActivityGood==32}}" />
+    <view class="space_20" wx:if="{{isActivityGood==32||isActivityGood==34}}" />
 
     <view class="healthy_box" wx:if="{{isActivityGood==32}}">
       <view class="healthy_box_title">温馨提示：</view>
       <view class="healthy_box_unit">{{good.declarationStr}}</view>
+    </view>
+
+     <view class="healthy_box" wx:if="{{isActivityGood==34}}">
+      <view class="healthy_box_title">温馨提示：</view>
+      <view class="healthy_box_unit_red">{{good.declarationStr}}</view>
     </view>
 
     <view class="space_20" wx:if="{{good.isMultiSpec == 1 || refuseText || ((isActivityGood == 5 || isActivityGood == 6) && good.extend && good.extend.stockText) || (isActivityGood != 15 && isActivityGood != 16)}}" />
@@ -606,8 +611,8 @@
 
       </block>
       <view class="b_buy_btn" bindtap="onBIntensive" wx:if="{{isActivityGood == 5 || isActivityGood == 6}}">立即采购</view>
-      <view class="healthy_bar" wx:if="{{isActivityGood==32}}">
-        <healthy-bar />
+      <view class="healthy_bar" wx:if="{{isActivityGood==32||isActivityGood==34}}">
+        <healthy-bar orderType="{{isActivityGood}}" />
       </view>
     </view>
 

@@ -1342,3 +1342,8 @@ button {
   color: #666;
   margin-bottom: 10rpx;
 }
+
+.healthy_box_unit_red {
+  color: #E5352F;
+  font-size: 26rpx;
+}

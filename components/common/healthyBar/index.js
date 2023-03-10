@@ -6,10 +6,15 @@ Component({
   properties: {
     text: {
       type: 'string'
+    },
+    orderType:{
+      type: 'string'
     }
   },
 
-  data: {},
+  data: {
+    orderType: ''
+  },
 
   ready() {
   },
@@ -18,7 +23,9 @@ Component({
     go() {
       router.push({
         name: "healthyPackageLocation",
-        data: {}
+        data: {
+          orderType:this.data.orderType
+        }
       });
     }
   }

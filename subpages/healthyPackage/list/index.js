@@ -77,6 +77,9 @@ create.Page(store, {
    */
   onShow: function () {
     // this.getShareParam(this.options);
+    if(this.orderType){
+     this.getGiftPackage(this.options)
+    }
   },
 
   getGiftPackage(orderType){
