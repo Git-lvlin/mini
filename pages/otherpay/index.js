@@ -198,13 +198,14 @@ Page({
   },
   // 获取氢原子支付信息
   getAtomPay(data) {
-    console.log("氢原子支付")
+    console.log("氢原子支付", data)
     const {
       payInfo,
     } = this.data;
     cartApi.getPayInfoAtom({
       orderId: data.id,
       openId: data.openId,
+      ...data,
     }).then(res => {
       payInfo.state = 0;
       this.setData({

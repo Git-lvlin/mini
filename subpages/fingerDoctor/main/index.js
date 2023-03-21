@@ -72,7 +72,6 @@ create.Page(store, {
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
   },
 
   /**
@@ -273,6 +272,15 @@ create.Page(store, {
     this.checkWeight()
     this.checkPhone()
   },
+  paySuccess() {
+    this.setData({
+      isPay: true,
+    })
+    wx.requestSubscribeMessage({
+      tmplIds: ['xveUu4hH3xVklw5G2NTzDLq3wNFbLXQFlRBo1O_7Dgg', '8As-y0hm-Ggkqb__5yWNwXLvwMDDvupOcqa7CBr0gnM'],
+      success(res) { }
+    })
+  },
   submit() {
     this.check()
     const userInfo = wx.getStorageSync("USER_INFO") || {}
@@ -304,14 +312,10 @@ create.Page(store, {
               pullPayment: true,
               message: false,
             }).then(_ => {
-              this.setData({
-                isPay: true,
-              })
-              wx.requestSubscribeMessage({
-                tmplIds: ['xveUu4hH3xVklw5G2NTzDLq3wNFbLXQFlRBo1O_7Dgg'],
-                success(res) { }
-              })
+              this.paySuccess()
             })
+          } else if (res.type === 10) {
+            this.paySuccess()
           } else {
             showToast({ title: res.tips })
           }
