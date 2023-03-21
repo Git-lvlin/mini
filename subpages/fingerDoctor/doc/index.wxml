@@ -1,6 +1,12 @@
 <view class="page">
   <block wx:if="{{data.length}}">
-    <van-cell wx:for="{{data}}" title="{{item.name}}" is-link center label="{{item.createTime}}" link-type="navigateTo" url="{{'/pages/webview/index?url='+item.reportUrl}}" />
+    <van-cell wx:for="{{data}}" use-label-slot title="{{item.name}}" is-link center link-type="navigateTo" url="{{'/pages/webview/index?url='+item.reportUrl}}">
+      <view slot="label" class="label">
+        {{item.createTime}} |
+        <view class="copy" data-url="{{item.reportUrl}}" catch:tap="copy">复制链接</view>
+      </view>
+    </van-cell>
   </block>
   <nodata wx:else />
+  <view wx:if="{{type === 'user'}}" class="edit" catch:tap="edit">点击修改健康资料>></view>
 </view>

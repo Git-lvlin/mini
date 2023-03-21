@@ -17,7 +17,8 @@ create.Page(store, {
    * 页面的初始数据
    */
   data: {
-    data: []
+    data: [],
+    type: '',
   },
   page: 1,
   totalPage: 1,
@@ -28,6 +29,9 @@ create.Page(store, {
    */
   onLoad: function (options) {
     this.options = options
+    this.setData({
+      type: options.type
+    })
   },
 
   /**
@@ -56,6 +60,19 @@ create.Page(store, {
         })
         this.page++
       })
+  },
+  copy({ target }) {
+    wx.setClipboardData({
+      data: target.dataset.url,
+      success(res) {
+
+      }
+    })
+  },
+  edit() {
+    router.push({
+      name: 'fingerDoctorCheckin'
+    });
   },
 
   /**

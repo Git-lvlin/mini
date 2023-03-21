@@ -38,6 +38,6 @@
     <van-icon name="checked" color="#09bb07" size="250rpx" />
     <text class="text">登记成功！</text>
     <!-- <text class="text">请在设备上点击 “开始测量”</text> -->
-    <view bind:tap="goback" class="btn2">返回首页</view>
+    <view bind:tap="goback" class="btn2">返回</view>
   </view>
 </view>
