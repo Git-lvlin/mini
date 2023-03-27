@@ -89,5 +89,5 @@ page{
   margin: 20rpx;
 }
 .good_title {
-  width: 70% !important;
+  width: 400rpx;
 }
