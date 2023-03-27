@@ -56,7 +56,16 @@ create.Page(store, {
     }).then(res => {
       console.log("getProductList id ", id, "; res: ", res, '; ')
       this.setData({
-        productList: res,
+        productList: {
+          ...res,
+          records: res.records.map(item => {
+            return {
+              ...item,
+              salePrice: item.salePrice / 100,
+              marketPrice: item.marketPrice / 100
+            }
+          }),
+        }
       })
     });
   },
