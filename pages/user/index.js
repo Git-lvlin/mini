@@ -72,31 +72,17 @@ create.Page(store, {
       this.updateUserInfo(userInfo);
       this.getUserData(userInfo);
       this.getOrderCount();
-      this.setData({
-        otherSetting: otherSetting.filter(item => !item.needLogin)
-      })
-      fingerDoctorApi.getConfig()
-        .then(res => {
-          
-
-          if ((res.user === 1 && userInfo.userType === 0) || (res.user === 1 && userInfo.userType === 1)) {
-            this.setData({
-              otherSetting: otherSetting.filter(item => item.path !=='fingerDoctorDoc2')
-            })
-          }
-
-          if (res.store === 1 && userInfo.userType === 1) {
-            this.setData({
-              otherSetting: otherSetting.filter(item => item.path !== 'fingerDoctorDoc1')
-            })
-          }
-
-          if (res.store === 1 && userInfo.userType === 1 && res.user === 1) {
-            this.setData({
-              otherSetting
-            })
-          }
+      if (userInfo.userType === 0) {
+        this.setData({
+          otherSetting: otherSetting.filter(item => item.path !== 'fingerDoctorDoc2')
         })
+      }
+
+      if (userInfo.userType === 1) {
+        this.setData({
+          otherSetting
+        })
+      }
     } else {
       userData.forEach(item => item.value = 0);
       orderTypeList.forEach(item => item.subNum = 0);

@@ -849,7 +849,7 @@ create.Page(store, {
   onToCashier() {
 
     if ((this.orderType == 32 || this.orderType == 34) && !this.data.healthyCheck) {
-      showToast({ title: "请同意孝爱活动规则" });
+      showToast({ title: "请同意活动规则" });
       return
     }
 
