@@ -2126,5 +2126,11 @@ create.Page(store, {
         objectId: this.goodParams.objectId
       }
     });
+  },
+  toWebView(e) {
+    const data = e.currentTarget.dataset.data
+    if (data.isJump === 1) {
+      router.push({ name: 'webview', data: { url: encodeURIComponent(data.jumpUrl), encode: true } })
+    }
   }
 })
