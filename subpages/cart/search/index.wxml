@@ -103,6 +103,7 @@
         wx:for="{{goodList}}"
         wx:key="index"
         data="{{item}}"
+        showMarket="{{false}}"
       />
     </view>
   </scroll-view>

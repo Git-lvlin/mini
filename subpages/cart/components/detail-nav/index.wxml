@@ -6,7 +6,7 @@
   wx:if="{{scrollTop > 70 && good.goodsName}}"
 >
   <view class="content">
-    <view class="users" style="height: {{systemInfo.navBarHeight}}rpx">
+    <!-- <view class="users" style="height: {{systemInfo.navBarHeight}}rpx">
       <view class="users_box" wx:if="{{opacity == 1}}">
         <user-together-banner
           style="position: relative;"
@@ -17,7 +17,7 @@
           top="{{0}}"
         />
       </view>
-    </view>
+    </view> -->
     <view class="bar_box">
       <view
         class="bar_item {{actType == item.type ? 'bar_item_act' : ''}}"

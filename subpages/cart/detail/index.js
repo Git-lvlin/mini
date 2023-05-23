@@ -724,6 +724,7 @@ create.Page(store, {
         good.activityPrice = util.divide(good.activityPrice, 100);
         good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
         good.goodsMarketPrice = util.divide(good.marketPrice, 100);
+        good.gcRemark = `${good.gcRemark}`?.match?.(/<body>(.*)<\/body>/)?.[1]
         console.log('good', good)
         // good.goodsSaleNum = good.saleNum;
         good.goodsSaleNum = `月售${good.activitySaleNum}件`;
@@ -756,7 +757,7 @@ create.Page(store, {
         }
         good.goodsSaleMinPrice = util.divide(good.goodsSaleMinPrice, 100);
         good.goodsMarketPrice = util.divide(good.goodsMarketPrice, 100);
-
+        good.gcRemark = `${good.gcRemark}`?.match?.(/<body>(.*)<\/body>/)?.[1]
         let data = wx.getStorageSync("CREATE_INTENSIVE")
         if (data.selectAddressType && data.selectAddressType.type) {
           selectAddressType = data.selectAddressType
@@ -815,6 +816,7 @@ create.Page(store, {
         if (!good.isMultiSpec) {
           this.specLoaded = true;
         }
+        good.gcRemark = `${good.gcRemark}`?.match?.(/<body>(.*)<\/body>/)?.[1]
         good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
         good.goodsMarketPrice = util.divide(good.marketPrice, 100);
         if (good.deadlineTime) {
@@ -896,6 +898,7 @@ create.Page(store, {
       good.goodsSaleMinPrice = util.divide(good.salePrice, 100);
       good.goodsMarketPrice = util.divide(good.marketPrice, 100);
       good.lastTime = good.deadlineTime - good.currentTime;
+      good.gcRemark = `${good.gcRemark}`?.match?.(/<body>(.*)<\/body>/)?.[1]
       this.setData({
         good,
         detailImg: good.contentImageList
@@ -1339,7 +1342,7 @@ create.Page(store, {
       showLoading: false,
     }).then(res => {
       let list = res.records;
-      list = list && list.length ? list.slice(0, 5) : [];
+      // list = list && list.length ? list.slice(0, 5) : [];
       this.setData({
         secJoinUser: list
       })
@@ -1611,12 +1614,12 @@ create.Page(store, {
       good,
     } = this.data;
 
-    if(good.orderType == 30) {
-      this.setData({
-        showDownTips: true
-      })
-      return;
-    }
+    // if(good.orderType == 30) {
+    //   this.setData({
+    //     showDownTips: true
+    //   })
+    //   return;
+    // }
 
     if (!this.data.userInfo) {
       getStorageUserInfo(true);

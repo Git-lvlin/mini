@@ -1,4 +1,4 @@
-<view class="evaluate_content">
+<view class="evaluate_content"  wx:if="{{commentList.length}}">
   <view class="space_20" />
   <view class="evaluate_box">
     <view class="flex_middle head">

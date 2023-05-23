@@ -122,4 +122,4 @@ export const NODATA_LIST = [
     img: `${IMG_CDN}miniprogram/common/nodata/user.png`,
     title: "暂无好友"
   }
-];
+]

@@ -14,6 +14,7 @@
     style="width: {{width}};"
     wx:for="{{userList}}"
     wx:key="index"
+    catchtouchmove="move"
   >
     <view class="user_banner" style="background-color: {{back}}">
       <view class="user_avater">

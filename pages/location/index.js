@@ -60,7 +60,7 @@ create.Page(store, {
 
   onShow() {
     const that = this;
-    const takeSpot = wx.getStorageSync("TAKE_SPOT") || "";
+    const takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
     this.setData({
       currentSpot: takeSpot
     })

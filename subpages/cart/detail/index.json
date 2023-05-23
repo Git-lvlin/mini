@@ -1,6 +1,5 @@
 {
   "navigationBarTextStyle": "black",
-  "navigationStyle": "custom",
   "usingComponents": {
     "settlement-bar": "../components/settlement-bar/index",
     "spec-panel": "/components/cart/spec-panel/index",

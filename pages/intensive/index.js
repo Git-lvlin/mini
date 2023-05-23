@@ -23,6 +23,7 @@ create.Page(store, {
   isMiniExamine: false, // true 2 代表小程序审核版本, false 3 代表小程序正试版本
   // 是否是点击设置滚动高度
   isSetScroll: false,
+  tabActiveArrOri: [0, 1, 2, 3, 4],
 
   use: [
     "userInfo",
@@ -74,7 +75,9 @@ create.Page(store, {
     height1: 500,
     height2: 500,
     wholesaleStatus: [],
+    tabActiveArr: [0, 1, 2, 3, 4],
     selectSku: null,
+    showModalFlag: true,
     invalidList: [
       {
         name: 'dasdasdasd',
@@ -146,7 +149,20 @@ create.Page(store, {
         showLoadImg: true
       });
     });
-    this.init()
+    if (takeSpot) {
+      this.init()
+    } else if (this.data.showModalFlag) {
+      showModal({
+        content: '请选择自提点',
+        confirmText: '去选择',
+        ok: () => {
+          this.setData({
+            showModalFlag: false,
+          })
+          this.onToLocation()
+        }
+      })
+    }
   },
 
   // 初始化
@@ -156,6 +172,8 @@ create.Page(store, {
         refresherTriggered: false,
       })
     })
+
+    this.tabActiveArrOri = [0, 1, 2, 3, 4]
 
     this.shopIndexCategory()
     this.getAllGoodsList2(this.data.tabIndexId2)
@@ -170,7 +188,7 @@ create.Page(store, {
   },
 
   getWholesaleStatus() {
-    intensiveApi.getWholesaleStatus()
+    intensiveApi.getWholesaleStatus({}, { showLoading: false })
       .then(res => {
         const arr = [];
         let index = 0
@@ -266,7 +284,7 @@ create.Page(store, {
   // 购物车商品列表汇总
   getSummaryByCartData(params) {
     return new Promise((resolve) => {
-      cartApi.summaryByCartData(params).then((res) => {
+      cartApi.summaryByCartData(params, { showLoading: false }).then((res) => {
         resolve(true)
         if (params?.subType) {
           this.setData({
@@ -359,7 +377,7 @@ create.Page(store, {
       skuId: data.skuId,
       spuId: data.spuId,
       wsId: data.wsId
-    })
+    }, { showLoading: false })
       .then(res => {
         this.getAllGoodsList5()
       })
@@ -370,9 +388,9 @@ create.Page(store, {
   },
 
   // 购物车商品列表
-  getCartList(params={}) {
+  getCartList(params = {}) {
     return new Promise((resolve) => {
-      cartApi.cartList(params).then((res) => {
+      cartApi.cartList(params, { showLoading: false }).then((res) => {
         console.log('购物车商品列表', res)
         this.setData({
           cartList: res
@@ -391,7 +409,7 @@ create.Page(store, {
     const resolveData = await this.getCartList();
     const spuIds = []
     return new Promise((resolve) => {
-      intensiveApi.getGoodsList(params).then((res) => {
+      intensiveApi.getGoodsList(params, { showLoading: false }).then((res) => {
         let list = res.records.map((item) => {
           let p = (item.salePrice / 100).toString();
           let a = '';
@@ -403,7 +421,7 @@ create.Page(store, {
           } else {
             a = p
           }
-          
+
           const obj = {
             ...item,
             aPrice: a,
@@ -420,6 +438,17 @@ create.Page(store, {
           })
           return obj
         })
+        if (list.length === 0) {
+          this.tabActiveArrOri = this.tabActiveArrOri.filter(item => item !== 2)
+          this.setData({
+            tabActive: this.tabActiveArrOri[0]
+          }, () => {
+            setTimeout(() => {
+              this.selectComponent('#tabs').resize()
+            }, 1000);
+          })
+
+        }
         this.getSummaryByCartData({ length: [...new Set(spuIds)].length });
         if (gcId1 == 0) {
           if (list.length > 6) {
@@ -445,7 +474,7 @@ create.Page(store, {
     const resolveData = await this.getCartList({ subType: 151 });
     const spuIds = []
     return new Promise((resolve) => {
-      intensiveApi.getGoodsList3(params).then((res) => {
+      intensiveApi.getGoodsList3(params, { showLoading: false }).then((res) => {
         let list = res.records.map((item) => {
           let p = (item.salePrice / 100).toString();
           let a = '';
@@ -482,6 +511,18 @@ create.Page(store, {
             this.setData({ hasClass3: false })
           }
         }
+
+        if (list.length === 0) {
+          this.tabActiveArrOri = this.tabActiveArrOri.filter(item => item !== 0)
+          this.setData({
+            tabActive: this.tabActiveArrOri[0]
+          }, () => {
+            setTimeout(() => {
+              this.selectComponent('#tabs').resize()
+            }, 1000);
+          })
+        }
+
         this.getSummaryByCartData({ subType: 151, length: [...new Set(spuIds)].length })
         this.setData({
           goodsData3: list,
@@ -504,7 +545,7 @@ create.Page(store, {
         }
         // const resolveData = await this.getCartList();
         return new Promise((resolve) => {
-          intensiveApi.getGoodsList4(params).then((res) => {
+          intensiveApi.getGoodsList4(params, { showLoading: false }).then((res) => {
             let list = res.map((item) => {
               let p = (item.salePrice / 100).toString();
               let a = '';
@@ -524,6 +565,17 @@ create.Page(store, {
                 value: v,
               }
             })
+
+            if (list.length === 0) {
+              this.tabActiveArrOri = this.tabActiveArrOri.filter(item => item !== 3)
+              this.setData({
+                tabActive: this.tabActiveArrOri[0]
+              }, () => {
+                setTimeout(() => {
+                  this.selectComponent('#tabs').resize()
+                }, 1000);
+              })
+            }
             _this.setData({
               goodsData4: list,
             }, () => {
@@ -542,7 +594,7 @@ create.Page(store, {
     }
     // const resolveData = await this.getCartList();
     return new Promise((resolve) => {
-      intensiveApi.getGoodsList5(params).then((res) => {
+      intensiveApi.getGoodsList5(params, { showLoading: false }).then((res) => {
         let list = res.records.map((item) => {
           let p = (item.salePrice / 100).toString();
           let a = '';
@@ -562,6 +614,16 @@ create.Page(store, {
             value: v,
           }
         })
+        if (list.length === 0) {
+          this.tabActiveArrOri = this.tabActiveArrOri.filter(item => item !== 4)
+          this.setData({
+            tabActive: this.tabActiveArrOri[0]
+          }, () => {
+            setTimeout(() => {
+              this.selectComponent('#tabs').resize()
+            }, 1000);
+          })
+        }
         this.setData({
           goodsData5: list,
         }, () => {
@@ -578,7 +640,7 @@ create.Page(store, {
       gcId2: gcId1 || 0,
       storeNo,
     }
-    intensiveApi.shopIndexGoods(params).then((res) => {
+    intensiveApi.shopIndexGoods(params, { showLoading: false }).then((res) => {
       let list = res.records.map((item) => {
         let p = (item.salePrice / 100).toString();
         let a = '';
@@ -597,6 +659,17 @@ create.Page(store, {
           value: v,
         }
       })
+
+      if (list.length === 0) {
+        this.tabActiveArrOri = this.tabActiveArrOri.filter(item => item !== 1)
+        this.setData({
+          tabActive: this.tabActiveArrOri[0]
+        }, () => {
+          setTimeout(() => {
+            this.selectComponent('#tabs').resize()
+          }, 1000);
+        })
+      }
 
       this.setData({
         goodsData2: list,
@@ -622,7 +695,7 @@ create.Page(store, {
       storeNo
     }
     return new Promise((resolve) => {
-      intensiveApi.getGoodsCategory(params).then((res) => {
+      intensiveApi.getGoodsCategory(params, { showLoading: false }).then((res) => {
         console.log('getGoodsCategory-res', res);
         this.setData({
           classData: res.records
@@ -638,7 +711,7 @@ create.Page(store, {
       storeNo
     }
     return new Promise((resolve) => {
-      intensiveApi.getGoodsCategory3(params).then((res) => {
+      intensiveApi.getGoodsCategory3(params, { showLoading: false }).then((res) => {
         this.setData({
           classData3: res.records
         }, () => {
@@ -649,7 +722,7 @@ create.Page(store, {
   },
   shopIndexCategory() {
     const { storeNo } = this.data
-    intensiveApi.shopIndexCategory({ storeNo })
+    intensiveApi.shopIndexCategory({ storeNo }, { showLoading: false })
       .then(res => {
         this.setData({
           classData2: res.records
@@ -662,7 +735,7 @@ create.Page(store, {
     const params = {
       storeNo
     }
-    intensiveApi.getRecGoods(params).then((res) => {
+    intensiveApi.getRecGoods(params, { showLoading: false }).then((res) => {
       console.log('getRecGoods-res', res);
     })
   },
@@ -674,7 +747,7 @@ create.Page(store, {
       location: 2,
     }
     return new Promise((reject) => {
-      homeApi.getBannerList(params).then((res) => {
+      homeApi.getBannerList(params, { showLoading: false }).then((res) => {
         this.setData({
           bannerData: res
         }, () => {
@@ -691,8 +764,8 @@ create.Page(store, {
     if (isMultiSpec === 1) {
       store.onChangeSpecState(true)
       this.setData({
-        selectSku:null,
-      },()=>{
+        selectSku: null,
+      }, () => {
         this.setData({
           selectSku: {
             ...item,
@@ -745,7 +818,7 @@ create.Page(store, {
     }
 
     data[selectSku.index].value = selectSku.value + detail.quantity
-    selectSku.value = (selectSku[detail.skuId] ? selectSku[detail.skuId]:0) + detail.quantity
+    selectSku.value = (selectSku[detail.skuId] ? selectSku[detail.skuId] : 0) + detail.quantity
     selectSku.skuId = detail.skuId
 
     this.setCartNum(selectSku)
@@ -789,12 +862,12 @@ create.Page(store, {
         this.setData({
           goodsData3: data
         });
-      }else {
+      } else {
         this.setData({
           goodsData: data
         });
       }
-      
+
     }, 300);
   },
   checkTab(e) {
@@ -857,7 +930,7 @@ create.Page(store, {
       size: 99,
     }
     return new Promise((reject) => {
-      homeApi.getIntensiveGood(params).then(res => {
+      homeApi.getIntensiveGood(params, { showLoading: false }).then(res => {
         this.setData({
           intensiveData: res
         }, () => {
@@ -880,7 +953,7 @@ create.Page(store, {
       size: 99,
       storeNo: spot.storeNo || '',
     }
-    homeApi.getStoreNotInSkus(params).then(res => {
+    homeApi.getStoreNotInSkus(params, { showLoading: false }).then(res => {
       console.log('提醒采购商品列表', res)
       this.setData({
         recommendData: res
@@ -947,7 +1020,7 @@ create.Page(store, {
       unit: 'm',
       limit: 200,
       ...data,
-    }).then(res => {
+    }, { showLoading: false }).then(res => {
       let list = [];
       let fullAddress = "";
       let tempData = {};
@@ -996,9 +1069,12 @@ create.Page(store, {
     if (!locationAuth) {
       showModal({
         content: "需要您授权地理位置才可使用",
-        ok() {
+        ok: () => {
           wx.openSetting({
             success(result) {
+              this.setData({
+                showModalFlag: true,
+              })
               if (result.errMsg === "openSetting:ok") {
                 const {
                   authSetting,
@@ -1013,10 +1089,18 @@ create.Page(store, {
                 }
               }
             },
-            fail(err) {
+            fail: (err) => {
+              this.setData({
+                showModalFlag: true,
+              })
               showToast('您没有授权成功呢！');
             },
           });
+        },
+        cancel: () => {
+          this.setData({
+            showModalFlag: true,
+          })
         }
       })
 

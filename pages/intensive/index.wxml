@@ -70,8 +70,8 @@
       bind:popup="handleUpdate"
       wx:if="{{tabActive==2}}"
     />
-    <van-tabs active="{{tabActive}}" class="tabs" bind:change="tabChange" id="tabs"  swipe-threshold="3" z-index="1">
-      <van-tab title="健康专区" class="tab" name="{{0}}" wx:if="{{tools.hasIndex(wholesaleStatus,1)}}">
+    <van-tabs active="{{tabActiveArr[tabActive]}}" class="tabs" bind:change="tabChange" id="tabs"  swipe-threshold="3" z-index="1">
+      <van-tab title="健康专区" class="tab" name="{{0}}" wx:if="{{tools.hasIndex(wholesaleStatus,1)&&goodsData3.length!==0}}">
         <view class="cart_box">
           <view class="cart_left_box" wx:if="{{hasClass3}}" style="height:{{height1}}px; padding-bottom:240rpx">
             <block wx:for="{{classData3}}" wx:key="index">
@@ -111,7 +111,7 @@
           </view>
         </view>
       </van-tab>
-      <van-tab title="快递配送" class="tab" name="{{1}}">
+      <van-tab title="快递配送" class="tab" name="{{1}}" wx:if="{{goodsData2.length}}">
         <view class="cart_box">
           <view class="cart_left_box" style="height:{{height2}}px">
             <block wx:for="{{classData2}}" wx:key="index">
@@ -146,7 +146,7 @@
           </view>
         </view>
       </van-tab>
-      <van-tab title="到店自提" class="tab" name="{{2}}">
+      <van-tab title="到店自提" class="tab" name="{{2}}" wx:if="{{goodsData.length}}">
         <view class="cart_box">
           <view class="cart_left_box" style="height:{{height1}}px; padding-bottom:240rpx"  wx:if="{{hasClass}}">
             <block wx:for="{{classData}}" wx:key="index">
@@ -186,7 +186,7 @@
         </view>
         
       </van-tab>
-      <van-tab title="附近热销" class="tab" name="{{3}}">
+      <van-tab title="附近热销" class="tab" name="{{3}}" wx:if="{{goodsData4.length}}">
         <view class="cart_box">
           <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" style="height:{{height1}}px" wx:if="{{goodsData4.length}}">
             <block wx:for="{{goodsData4}}" wx:key="index">
@@ -221,7 +221,7 @@
           </view>
         </view>
       </van-tab>
-      <van-tab title="提醒店主采购" class="tab" name="{{4}}">
+      <van-tab title="提醒店主采购" class="tab" name="{{4}}" wx:if="{{goodsData5.length}}">
         <view class="cart_box">
           <scroll-view id="scroll-view1" scroll-y enhanced class="cart_right_box" style="height:{{height1}}px" wx:if="{{goodsData5.length}}">
             <block wx:for="{{goodsData5}}" wx:key="index">
