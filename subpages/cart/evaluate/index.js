@@ -111,7 +111,7 @@ Page({
       pageData.hasNext = res.hasNext;
       this.setData({
         pageData,
-        commentList: res.records
+        commentList: [...this.data.commentList, ...res.records]
       });
     })
   },
@@ -130,6 +130,7 @@ Page({
       pageData.next = 0;
       pageData.hasNext = false;
       this.setData({
+        commentList: [],
         type: +val,
         pageData,
       }, () => {

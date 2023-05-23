@@ -25,6 +25,10 @@ Component({
     twoTitle: {
       type: Boolean,
       value: false,
+    },
+    showMarket: {
+      type: Boolean,
+      value: true,
     }
   },
   data: {

@@ -16,7 +16,7 @@
     <view class="good_str text_one_line" wx:if="{{data.goodsSaleNumStr}}">{{data.goodsSaleNumStr}}</view>
     <view class="good_price">
         <view class="flex_middle">
-          <price-mobel money="{{data.salePrice}}" minSize="{{24}}" defaultColor="#ccc" marketMoney="{{data.marketPrice}}" />
+          <price-mobel money="{{data.salePrice}}" minSize="{{24}}" showMarket="{{showMarket}}" defaultColor="#ccc" marketMoney="{{data.marketPrice}}" />
         </view>
         <view class="flex_fix cart">
           <view class="cart_num">{{data.saleNumStr || data.goodsSaleNumDesc}}</view>

@@ -74,6 +74,13 @@
       </van-radio-group>
     </view>
 
+    <view class="" style="margin: -86rpx auto 40rpx 32rpx; font-size:32rpx;position: relative !important;z-index:998;" wx:if="{{curSku.entrustInfoNew.length}}">
+      <van-radio-group value="{{ checked }}" catchtap="onChangeRadio">
+          <image class="radio_icon" src="{{checked ? selectedIcon : selectIcon}}" />{{agreementTitle1}}
+          <text class="red_text" data-agreement="escrow-agreement" catchtap="onClickAgreement" style="position: relative !important;z-index:999;">{{agreementTitle2}}</text>
+      </van-radio-group>
+    </view>
+
     <view class="btn_content">
       <view
         class="btn {{curSku.stockOver == 1 || curSku.stockOver == 2 ? 'def_btn' : ''}}"

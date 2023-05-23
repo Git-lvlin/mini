@@ -35,7 +35,7 @@
       <view class="flex_middle good_box">
         <image class="good_img" src="{{comment.goodsImg}}" />
         <view class="good_info">
-          <view class="good_name text_one_line">{{comment.goodsName}}</view>
+          <view class="good_name">{{comment.goodsName}}</view>
           <!-- <view class="good_price">¥{{tools.priceToF2(comment.price || 0)}}</view> -->
         </view>
       </view>

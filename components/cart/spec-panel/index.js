@@ -102,6 +102,8 @@ create.Component(store, {
     selectIcon: `${IMG_CDN}miniprogram/common/def_choose.png`,
     selectedIcon: `${IMG_CDN}miniprogram/common/choose.png`,
     checked: false,
+    agreementTitle1: '',
+    agreementTitle2: '',
     // currentCart: [],
   },
   lifetimes: {
@@ -133,6 +135,14 @@ create.Component(store, {
       // console.log('getCheckSku postData ', postData)
       goodApi.getCheckSku(postData, {showLoading: false}).then(res => {
         let curSku = res.curSku;
+        if (curSku && curSku?.entrustInfoNew?.length) {
+          const titleStr = curSku.entrustInfoNew[0].agreementTitle
+          const textIndex = titleStr.indexOf('《');
+          this.setData({
+            agreementTitle1: titleStr.slice(0,textIndex),
+            agreementTitle2: titleStr.slice(textIndex, titleStr.length),
+          })
+        }
         if (!curSku) {
           curSku = {}
           curSku.stockOver = 1;
@@ -273,6 +283,12 @@ create.Component(store, {
           })
         return
       }
+      if (this.data.curSku && this?.data?.curSku?.entrustInfoNew?.length && (!this.data.checked)) {
+        showToast({
+          title: '请先阅读并勾选协议',
+        })
+        return
+      }
       if(specType === "buy") {
         this.triggerEvent("setSku", {
           skuId: curSku.id,
@@ -329,13 +345,23 @@ create.Component(store, {
       // console.log('agreement ', agreement)
       // return
       if (agreement == 'escrow-agreement') {
-        //  《托管代运营合同》
-        router.push({
-          name: "webview",
-          data: {
-            url: encodeURIComponent(H5_HOST + '/web/escrow-agreement'),
-          },
-        })
+        if (this.data.curSku && this.data.curSku.entrustInfoNew.length) {
+          router.push({
+            name: "webview",
+            data: {
+              url: encodeURIComponent(this.data.curSku.entrustInfoNew[0].agreementUrl),
+            },
+          })
+        } else {
+          //  《托管代运营合同》
+          router.push({
+            name: "webview",
+            data: {
+              url: encodeURIComponent(H5_HOST + '/web/escrow-agreement'),
+            },
+          })
+        }
+        
       } else {
           showToast({
             title: '协议类型有误',
