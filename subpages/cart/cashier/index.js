@@ -499,28 +499,28 @@ create.Page(store, {
   },
 
   // 分享
-  onShareAppMessage() {
-    const {
-      id,
-      objectId
-    } = this.orderInfo;
-    let data = wx.getStorageSync("CREATE_INTENSIVE");
-    const goodsInfo = data.storeGoodsInfos[0].goodsInfos[0]
-    let param = {
-      activityType: 3,
-      groupId:objectId,
-      ...this.orderInfo,
-      ...goodsInfo
-    }
-    param.orderId = id
-    const pathParam = objToParamStr(param);
-    let pathUrl = `/subpages/cart/teamDetail/index?${pathParam}`
-    return {
-      title: goodsInfo?.goodsName || '',
-      path: pathUrl,
-      imageUrl: this.canvasImg || '',
-    };
-  },
+  // onShareAppMessage() {
+  //   const {
+  //     id,
+  //     objectId
+  //   } = this.orderInfo;
+  //   let data = wx.getStorageSync("CREATE_INTENSIVE");
+  //   const goodsInfo = data.storeGoodsInfos[0].goodsInfos[0]
+  //   let param = {
+  //     activityType: 3,
+  //     groupId:objectId,
+  //     ...this.orderInfo,
+  //     ...goodsInfo
+  //   }
+  //   param.orderId = id
+  //   const pathParam = objToParamStr(param);
+  //   let pathUrl = `/subpages/cart/teamDetail/index?${pathParam}`
+  //   return {
+  //     title: goodsInfo?.goodsName || '',
+  //     path: pathUrl,
+  //     imageUrl: this.canvasImg || '',
+  //   };
+  // },
 
   // 获取单约详情
   getPersonalDetail() {
