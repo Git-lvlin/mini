@@ -39,10 +39,6 @@ Page({
     app.trackEvent('shopping_storeDetail');
   },
 
-  onShareAppMessage() {
-
-  },
-
   // 获取店铺信息
   getStoreDetail() {
     goodApi.getStoreDetail({

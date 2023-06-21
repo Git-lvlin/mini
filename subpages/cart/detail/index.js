@@ -509,12 +509,8 @@ create.Page(store, {
           shareStoreNo: takeSpot.storeNo
         }
       } else {
-        let { storeNo } = await this.getStoreNo()
         all = {
           ...rest
-        }
-        if (storeNo) {
-          all.shareStoreNo = storeNo
         }
       }
     }
@@ -1112,16 +1108,18 @@ create.Page(store, {
     ctx.setTextAlign('center')
     ctx.setFillStyle('#DC2D23')
     ctx.setFontSize(17)
-    ctx.fillText(salePrice, 171, 70)
-    ctx.setFillStyle('#999999')
-    ctx.setFontSize(14)
-    ctx.fillText(marketPrice, 171, 92)
-    ctx.setStrokeStyle('#999999')
-    ctx.beginPath();
-    ctx.moveTo(172 - textWidth / 2, 87)
-    ctx.lineTo(170 + textWidth / 2, 87)
-    ctx.closePath();
-    ctx.stroke()
+    if (good.orderType != 30 && good.orderType != 5) {
+      ctx.fillText(salePrice, 171, 70)
+      ctx.setFillStyle('#999999')
+      ctx.setFontSize(14)
+      ctx.fillText(marketPrice, 171, 92)
+      ctx.setStrokeStyle('#999999')
+      ctx.beginPath();
+      ctx.moveTo(172 - textWidth / 2, 87)
+      ctx.lineTo(170 + textWidth / 2, 87)
+      ctx.closePath();
+      ctx.stroke()
+    }
     // ctx.strokeRect(171-(textWidth/2), 87, textWidth, 0)
     ctx.draw(true, () => {
       wx.canvasToTempFilePath({
@@ -1614,15 +1612,17 @@ create.Page(store, {
       good,
     } = this.data;
 
-    // if(good.orderType == 30) {
-    //   this.setData({
-    //     showDownTips: true
-    //   })
-    //   return;
-    // }
+    
 
     if (!this.data.userInfo) {
       getStorageUserInfo(true);
+      return;
+    }
+
+    if (good.orderType == 30) {
+      this.setData({
+        showDownTips: true
+      })
       return;
     }
     
