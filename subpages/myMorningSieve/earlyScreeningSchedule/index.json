@@ -1,0 +1,7 @@
+{
+    "navigationBarTitleText": "早筛服务进度",
+    "usingComponents": {
+      "van-steps": "/miniprogram_npm/@vant/weapp/steps/index",
+      "van-icon": "/miniprogram_npm/@vant/weapp/icon/index"
+    }
+}

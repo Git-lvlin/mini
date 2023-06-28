@@ -1,0 +1,86 @@
+.page {
+    height: 100vh;
+    overflow: auto;
+    background-color: #fff;
+}
+
+.headFixation{
+    background-color: #666;
+    color: #fff;
+    position: fixed;
+    width: 100%;
+    font-size: 25rpx;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+.earlyTitle{
+    text-align: center;
+    margin: 50rpx auto;
+    margin-top: 100rpx;
+    font-weight: bold;
+    font-size: 33rpx;
+}
+
+.earlyHint{
+    text-align: center;
+    line-height: 50rpx;
+    font-size: 24rpx;
+    color: #C682D1;
+    margin-bottom: 20rpx;
+}
+
+.form{
+   padding-bottom: 40rpx;
+}
+
+.form_item{
+    background-color: #EEF4FB; 
+    margin-bottom: 20rpx;
+    padding: 20rpx;
+    color: #3A3B3B;
+    font-size: 25rpx;
+}
+
+.marck{
+    background-color: #F6EEF1; 
+} 
+
+.input_highlight{
+    background-color: #EEF4FB; 
+    margin-bottom: 20rpx;
+}
+
+.statement{
+    padding: 20rpx;
+    background-color: #EEF4FB;
+    color: #3A3B3B;
+    font-size: 25rpx;
+}
+.signature_name{
+    color: #9C26B0;
+    font-weight: bold;
+    margin: 100rpx 0 20rpx 240rpx;
+    position: relative;
+}
+
+.avatarImage{
+    width: 150rpx;
+    height: 100rpx;
+    position: absolute;
+    right: 100rpx;
+    bottom: 20rpx;
+}
+
+.tips{
+    color: #3A3B3B;
+    font-size: 25rpx; 
+    margin: 20rpx 0;
+    padding: 0 20rpx;
+}
+
+.led{
+    color: #FA822B;
+    display: inline;
+}

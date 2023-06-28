@@ -1,0 +1,7 @@
+<view class="page">
+    <van-cell-group>
+      <van-cell title="***51659" value="检测中" bind:click="onDisplay" is-link/>
+      <van-cell title="***51659" value="检测中" bind:click="onDisplay" is-link/>
+      <van-cell title="***51659" value="检测中" bind:click="onDisplay" is-link/>
+    </van-cell-group>
+</view>

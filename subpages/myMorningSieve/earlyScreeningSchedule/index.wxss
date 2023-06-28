@@ -1,0 +1,4 @@
+page {
+    background-color: #fff;
+    padding: 50rpx 12rpx;
+  }

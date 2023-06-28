@@ -1,0 +1,17 @@
+{
+  "navigationBarTitleText": "早筛报名",
+  "usingComponents": {
+    "van-tab": "/miniprogram_npm/@vant/weapp/tab/index",
+    "van-tabs": "/miniprogram_npm/@vant/weapp/tabs/index",
+    "van-field": "/miniprogram_npm/@vant/weapp/field/index",
+    "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
+    "canvas-signature": "/components/common/canvas-signature/index",
+    "van-radio": "/miniprogram_npm/@vant/weapp/radio/index",
+    "van-radio-group": "/miniprogram_npm/@vant/weapp/radio-group/index",
+    "van-picker": "/miniprogram_npm/@vant/weapp/picker/index",
+    "van-checkbox": "/miniprogram_npm/@vant/weapp/checkbox/index",
+    "van-checkbox-group": "/miniprogram_npm/@vant/weapp/checkbox-group/index",
+    "van-button": "/miniprogram_npm/@vant/weapp/button/index",
+    "van-dialog": "/miniprogram_npm/@vant/weapp/dialog/index"
+  }
+}
