@@ -74,7 +74,7 @@ export const otherSetting = [
     needLogin: true,
   },
   {
-    icon: `${IMG_CDN}miniprogram/user/doc.png?v=202106170`,
+    icon: `${IMG_CDN}miniprogram/user/container_slices.png?v=202106170`,
     name: "我的早筛",
     type: 1,
     path: "earlyScreeningList",

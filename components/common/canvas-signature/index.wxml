@@ -1,4 +1,4 @@
-<van-popup show="{{ show }}" closeable round bind:close="onHidePopup">
+<van-popup class="canvasSignature" show="{{ show }}" closeable round bind:close="onHidePopup">
     <view class="title">请于下方框内签字（正楷）</view>
     <canvas class="signature" type="2d" id="canvas" bindtouchmove="move" bindtouchstart="start"  binderror="error"></canvas>
     <view class="btn">

@@ -1,8 +1,8 @@
 
-// var IMG_CDN = "https://dev-yeahgo-oss.yeahgo.com/"
+var IMG_CDN = "https://dev-yeahgo-oss.yeahgo.com/"
 // var IMG_CDN = "https://uat-yeahgo-oss.yeahgo.com/"
 // var IMG_CDN = "https://fat-yeahgo-oss.yeahgo.com/"
-var IMG_CDN = "https://pro-yeahgo-oss.yeahgo.com/"
+// var IMG_CDN = "https://pro-yeahgo-oss.yeahgo.com/"
 
 // 格式化图片路径
 var getImgUrl = function (url) {
@@ -112,6 +112,15 @@ var hasIndex = function (arr, index){
   return arr.indexOf(index) === -1 ? false : true
 }
 
+//时间戳转换为 yyyy-mm-dd
+var timestampToTime= function(timestamp){
+    var date = getDate(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+    var Y = date.getFullYear() + '-';
+    var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1):date.getMonth()+1) + '-';
+    var D = (date.getDate()< 10 ? '0'+date.getDate():date.getDate())+ ' ';
+    return Y+M+D;
+}
+
 module.exports = {
   newlineFilter: newlineFilter,
   floatAdd: floatAdd,
@@ -122,4 +131,5 @@ module.exports = {
   getLastTime: getLastTime,
   priceToF2: priceToF2,
   hasIndex: hasIndex,
+  timestampToTime:timestampToTime,
 }

@@ -1,0 +1,129 @@
+.questionnaire {
+    height: 100vh;
+    overflow: auto;
+    background-color: #fff;
+}
+
+.questionnaire .required{
+    display: inline-block;
+    color: red;
+}
+
+.headFixation{
+    background-color: #666;
+    color: #fff;
+    position: fixed;
+    width: 100%;
+    font-size: 25rpx;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+.questionnaire .earlyTitle{
+    width: 524rpx;
+    height: 68rpx;
+    font-size: 52rpx;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #333333;
+    line-height: 68rpx;
+    margin: 0 auto;
+}
+
+.questionnaire .earlyHint{
+    font-size: 24rpx;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #333333;
+    line-height: 42rpx;
+    text-align: center;
+    margin: 40rpx;
+}
+
+.questionnaire .form{
+   padding-bottom: 40rpx;
+}
+
+.questionnaire .form_item{
+    background-color: #EEF4FB; 
+    margin-bottom: 20rpx;
+    padding: 20rpx 20rpx 50rpx 20rpx;
+    color: #3A3B3B;
+    font-size: 25rpx;
+    position: relative;
+}
+.questionnaire .form_item .label{
+    width: 524rpx;
+    height: 42rpx;
+    font-size: 28rpx;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #8A8A8A;
+}
+
+.questionnaire .form_item .physical{
+    background-color: #fff;
+    padding: 20rpx;
+    font-size: 28rpx;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #333333;
+}
+
+.questionnaire .form_input{
+    background-color: #fff;
+    padding: 20rpx;
+    margin-top: 20rpx;
+    font-size: 28rpx;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #333333;
+    line-height: 42rpx;
+}
+
+.questionnaire .location {
+    position: absolute;
+    right: 30rpx;
+    top: 105rpx;
+  }
+  
+  .questionnaire .location_icon {
+    width: 30rpx;
+    height: 30rpx;
+    margin-right: 8rpx;
+  }
+
+.questionnaire .marck{
+    background-color: #F6EEF1; 
+    text-align: center;
+    font-size: 28rpx;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #8A8A8A;
+    line-height: 42rpx;
+} 
+
+.questionnaire .marck .entrance{
+    width: 700rpx;
+    height: 98rpx;
+    background: linear-gradient(95deg, #FF6E53 0%, #FF0000 100%);
+    box-shadow: 0rpx 6rpx 12rpx 0rpx rgba(229,53,47,0.4);
+    border-radius: 16rpx 16rpx 16rpx 16rpx;
+    opacity: 1;
+    font-size: 32rpx;
+    font-family: PingFang SC-Heavy, PingFang SC;
+    font-weight: 400;
+    color: #FFFFFF;
+    line-height: 98rpx;
+    margin-top: 20rpx;
+}
+
+.questionnaire .friendly_reminder{
+    font-size: 28rpx;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #AA2F2F;
+    line-height: 42rpx;
+    text-align: center;
+}

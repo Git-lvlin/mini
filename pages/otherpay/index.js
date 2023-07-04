@@ -184,7 +184,7 @@ Page({
         wx.hideLoading();
       })
     }).catch(err => {
-      // if(err.code == 10110) {
+      // if(err.code == ) {
       //   payInfo.state = 4;
       // } else {
         payInfo.state = 3;

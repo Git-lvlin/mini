@@ -95,7 +95,9 @@
     {
       "root": "subpages/earlyScreening",
       "pages": [
-        "index"
+        "main/index",
+        "fillout/index",
+        "doc/index"
       ]
     },
     {

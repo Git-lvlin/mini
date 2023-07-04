@@ -1,4 +1,5 @@
 import router from '../../../utils/router'
+import myMorningSieveApi from '../../../apis/myMorningSieve'
 
 Page({
 
@@ -13,7 +14,13 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad(options) {
-
+        let that = this
+        myMorningSieveApi.getOwnerList().then(res=>{
+            console.log('res',res)
+            that.setData({
+                earlyScreeningArr:res
+            })
+        })
     },
 
     /**
@@ -44,10 +51,14 @@ Page({
 
     },
 
-    onDisplay(){
-        console.log('asda')
+    onDetail({currentTarget}){
+        const { code } = currentTarget.dataset;
+        console.log('code',code)
         router.push({
-          name: 'earlyScreeningSchedule'
+          name: 'earlyScreeningSchedule',
+          data:{
+            code
+          }
         })
     }
 })

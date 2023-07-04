@@ -7,6 +7,9 @@ const url = {
   getCompanyVerifyUrl: "/public/open/contract/getCompanyVerifyUrl",
   genCompanyContract: "/public/open/contract/genCompanyContract",
   contractPayOrder: "/activity/auth/supplier/contractPayOrder",
+  findCert: "/auth/contract/findCert",
+  getVerifyUrl: "/auth/contract/getVerifyUrl",
+  genContract: "/auth/contract/genContract",
 }
 
 export default {
@@ -27,5 +30,14 @@ export default {
   },
   contractPayOrder(params, option) {
     return Request.post(url.contractPayOrder, params, option);
+  },
+  findCert(params, option) {
+    return Request.post(url.findCert, params, option);
+  },
+  getVerifyUrl(params, option) {
+    return Request.post(url.getVerifyUrl, params, option);
+  },
+  genContract(params, option) {
+    return Request.post(url.genContract, params, option);
   },
 }

@@ -115,6 +115,9 @@ Component({
                 ossConfig,
             } = this.data.fileConfig;
             let that = this;
+            wx.showLoading({
+                title: '玩命加载中...',
+            });
             wx.canvasToTempFilePath({
                 x: 0,
                 y: 0,
@@ -146,6 +149,7 @@ Component({
                                 console.log("阿里云OSS上传图片成功" + avatarUrl);
                                 that.triggerEvent("confirm", avatarUrl)
                                 that.onHidePopup()
+                                wx.hideLoading();
                             } else {
                                 showToast({
                                     title: "上传出错啦，请重试"

@@ -1,7 +1,12 @@
-<view class="page">
-    <van-cell-group>
-      <van-cell title="***51659" value="检测中" bind:click="onDisplay" is-link/>
-      <van-cell title="***51659" value="检测中" bind:click="onDisplay" is-link/>
-      <van-cell title="***51659" value="检测中" bind:click="onDisplay" is-link/>
+<view class="earlyScreeningList">
+    <van-cell-group wx:for="{{ earlyScreeningArr }}" wx:key="id">
+      <van-cell   
+      title="{{ item.processTime }}" 
+      value="{{ item.processStr }}" 
+      bind:click="onDetail" 
+      is-link
+      data-code="{{item.subOrderSn}}"
+      />
     </van-cell-group>
+    <view class="footer_text">没有更多了~</view>
 </view>
