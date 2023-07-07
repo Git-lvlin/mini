@@ -9,7 +9,7 @@
   <view class="form">
     <view class="form_item">
       <view class="label">以下是您的采样地点</view>
-      <view class="physical">体检地点：{{checkAddress.address}}</view>
+      <view class="physical">体检地点：{{checkAddress.provinceName}}{{checkAddress.cityName}}{{checkAddress.areaName}}{{checkAddress.address}}</view>
     </view>
     <view class="form_item">
       <view  class="label">您的所在地区</view>

@@ -1,7 +1,7 @@
 <wxs module="tools" src="../../../wxs/common.wxs" />
 
 <view class="earlyScreening" style="overflow: {{showPopup?'hidden':'scroll'}}" catchtouchmove="{{showPopup?'touchMove':''}}">
-  <view class="headFixation">早筛码：{{code}}</view>
+  <view class="headFixation">早筛码：{{signCode}}</view>
   <view class="earlyTitle">健康问卷+知情同意书</view>
   <view class="earlyHint">所填信息必须和签署知情同意书一致。如信息有误，造成一切结果和责任，由本人承担</view>
   <view class="form">
@@ -20,7 +20,7 @@
 
     <view class="form_item">
       <view>3、年龄（请选择 18-75 适用年龄区间内的周岁数）<view class="required">*</view></view>
-      <view style="margin: 40rpx;"  bindtap="ageShow">{{age?age:"选择年龄"}} <view class="arrows">＞</view></view>
+      <view style="margin: 40rpx; display: flex;align-items: center;"  bindtap="ageShow">{{age?age:"选择年龄"}} <image class="arrows" src="{{tools.getImgUrl('miniprogram/common/back_gray@2x.png')}}" /></view>
       <van-popup show="{{ genderShow }}" position="bottom">
         <van-picker show-toolbar bind:cancel="genderShowClose" columns="{{ columns }}" bind:confirm="genderConfirm" />
       </van-popup>
@@ -54,7 +54,7 @@
 
     <view class="form_item">
       <view>7、手机号（请确保此手机号可联系到您）<view class="required"> *</view></view>
-      <van-field maxlength="11" bind:input="checkPhone" custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;" required model:value="{{ phone }}" placeholder="请输入"  error-message="{{phoneError}}" />
+      <van-field maxlength="11" disabled bind:input="checkPhone" custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;" required model:value="{{ phone }}" placeholder="请输入"  error-message="{{phoneError}}" />
     </view>
 
     <view class="form_item marck">
@@ -100,7 +100,7 @@
         <van-radio-group style="margin: 50rpx;" value="{{ family }}" bind:change="onChangeFamily">
           <van-radio name="无">无</van-radio>
           <van-radio name="有">有，请详述</van-radio>
-          <van-field custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ familyHistory }}" placeholder="______________________________________________" />
+          <van-field wx:if="{{ family== '有'?true:false }}" required type="textarea" autosize custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ familyHistory }}" placeholder="______________________________________________" />
       </van-radio-group>
     </view>
 
@@ -117,7 +117,7 @@
         <van-radio-group style="margin: 50rpx;" value="{{ medicine }}" bind:change="onChangeMedicine">
           <van-radio name="否">否</van-radio>
           <van-radio name="是">是，请详述</van-radio>
-          <van-field custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ expand }}" placeholder="______________________________________________" />
+          <van-field wx:if="{{ medicine== '是'?true:false }}" required type="textarea" autosize custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ expand }}" placeholder="______________________________________________" />
       </van-radio-group>
     </view>
 
@@ -163,7 +163,7 @@
       <view>19、最近是否做过肠镜？<view class="required">*</view></view>
         <van-radio-group style="margin: 50rpx;" value="{{ colonoscopy }}" bind:change="onChangeColonoscopy" >
           <van-radio name="否">否</van-radio>
-          <van-radio name="是" bindtap="polypShow">是，检查时间是：{{tools.timestampToTime(currentDate)}} <view class="arrows">＞</view></van-radio>
+          <van-radio name="是" bindtap="polypShow">是，检查时间是：{{tools.timestampToTime(currentDate)}} <image class="arrows" src="{{tools.getImgUrl('miniprogram/common/back_gray@2x.png')}}" /></van-radio>
         </van-radio-group>
         <view wx:if="{{ colonoscopy== '是'?true:false }}">
             <view>检查结果：</view>
@@ -187,7 +187,7 @@
       <view>20、最近是否做过胃镜？<view class="required">*</view></view>
         <van-radio-group style="margin: 50rpx;" value="{{ gastroscope }}" bind:change="onChangeGastroscope" >
           <van-radio name="否">否</van-radio>
-          <van-radio name="是" bindtap="stomachShow">是，检查时间是：{{tools.timestampToTime(timeDate)}} <view class="arrows">＞</view></van-radio>
+          <van-radio name="是" bindtap="stomachShow">是，检查时间是：{{tools.timestampToTime(timeDate)}} <image class="arrows" src="{{tools.getImgUrl('miniprogram/common/back_gray@2x.png')}}" /></van-radio>
         </van-radio-group>
         <view wx:if="{{ gastroscope== '是'?true:false }}">
             <view>检查结果：</view>
@@ -213,13 +213,13 @@
           <van-radio name="未检测">未检测</van-radio>
           <van-radio name="已检测">
           已检测，结果：
-          <van-radio-group wx:if="{{ landmark == '已检测' }}"  style="margin: 50rpx; display: inline-block;" direction="horizontal"  value="{{ lung }}" bind:change="onChangeLung" >
+          <van-radio-group wx:if="{{ landmark == '已检测' }}"  style="display: inline-block;" direction="horizontal"  value="{{ lung }}" bind:change="onChangeLung" >
             <van-radio name="正常">正常</van-radio>
             <van-radio name="有异常">有异常</van-radio>
          </van-radio-group>
         </van-radio>
       </van-radio-group>
-      <view wx:if="{{ lung == '有异常' }}">
+      <view wx:if="{{ lung == '有异常'&&landmark == '已检测' }}">
         <view>异常项目为：</view>
         <van-checkbox-group style="margin: 50rpx;" value="{{ various }}" bind:change="onChangeVarious">
             <van-checkbox shape="square" name="胃癌">胃癌</van-checkbox>
@@ -241,15 +241,15 @@
           <van-radio name="未检测">未检测</van-radio>
           <van-radio name="已检测">
           已检测，结果：
-          <van-radio-group wx:if="{{ ldct == '已检测'  }}" style="margin: 50rpx; display: inline-block;" direction="horizontal"  value="{{ spiral }}" bind:change="onChangeSpiral" >
+          <van-radio-group wx:if="{{ ldct == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ spiral }}" bind:change="onChangeSpiral" >
             <van-radio name="正常">正常</van-radio>
             <van-radio name="有异常">有异常</van-radio>
          </van-radio-group>
         </van-radio>
       </van-radio-group>
-      <view wx:if="{{ spiral == '有异常'  }}">
+      <view wx:if="{{ spiral == '有异常'&&ldct == '已检测'  }}">
         <view>异常为：</view>
-        <van-field custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ drugCause }}" placeholder="______________________________________________" />
+        <van-field required type="textarea" autosize  custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ drugCause }}" placeholder="______________________________________________" />
       </view>
     </view>
 
@@ -259,15 +259,15 @@
           <van-radio name="未检测">未检测</van-radio>
           <van-radio name="已检测">
            已检测，结果：
-          <van-radio-group wx:if="{{ breast == '已检测'  }}" style="margin: 50rpx; display: inline-block;" direction="horizontal"  value="{{ ultrasound }}" bind:change="onChangeUltrasound" >
+          <van-radio-group wx:if="{{ breast == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ ultrasound }}" bind:change="onChangeUltrasound" >
             <van-radio name="正常">正常</van-radio>
             <van-radio name="有异常">有异常</van-radio>
          </van-radio-group>
         </van-radio>
       </van-radio-group>
-      <view wx:if="{{ ultrasound == '有异常'  }}">
+      <view wx:if="{{ ultrasound == '有异常'&&breast == '已检测'  }}">
         <view>异常为：</view>
-        <van-field custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;"  model:value="{{ tungsten }}" placeholder="______________________________________________" />
+        <van-field required type="textarea" autosize custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;"  model:value="{{ tungsten }}" placeholder="______________________________________________" />
       </view>
     </view>
 
@@ -277,15 +277,15 @@
           <van-radio name="未检测">未检测</van-radio>
           <van-radio name="已检测">
            已检测，结果：
-          <van-radio-group  wx:if="{{ liver == '已检测'  }}" style="margin: 50rpx; display: inline-block;" direction="horizontal"  value="{{ dirty }}" bind:change="onChangeDirty" >
+          <van-radio-group  wx:if="{{ liver == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ dirty }}" bind:change="onChangeDirty" >
             <van-radio name="正常">正常</van-radio>
             <van-radio name="有异常">有异常</van-radio>
          </van-radio-group>
         </van-radio>
       </van-radio-group>
-      <view wx:if="{{ dirty == '有异常'  }}">
+      <view wx:if="{{ dirty == '有异常'&&liver == '已检测'  }}">
         <view>异常为：</view>
-        <van-field custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ exceed }}" placeholder="______________________________________________" />
+        <van-field required type="textarea" autosize custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ exceed }}" placeholder="______________________________________________" />
       </view>
     </view>
 
@@ -295,15 +295,15 @@
           <van-radio name="未检测">未检测</van-radio>
           <van-radio name="已检测">
            已检测，结果：
-          <van-radio-group wx:if="{{ prostate == '已检测'  }}" style="margin: 50rpx; display: inline-block;" direction="horizontal"  value="{{ nuclear }}" bind:change="onChangeNuclear" >
+          <van-radio-group wx:if="{{ prostate == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ nuclear }}" bind:change="onChangeNuclear" >
             <van-radio name="正常">正常</van-radio>
             <van-radio name="有异常">有异常</van-radio>
          </van-radio-group>
         </van-radio>
       </van-radio-group>
-      <view wx:if="{{ nuclear == '有异常'  }}">
+      <view wx:if="{{ nuclear == '有异常'&&prostate == '已检测'  }}">
         <view>异常为：</view>
-        <van-field custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;"  model:value="{{ resonance }}" placeholder="______________________________________________" />
+        <van-field required type="textarea" autosize custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;"  model:value="{{ resonance }}" placeholder="______________________________________________" />
       </view>  
     </view>
 
@@ -313,15 +313,15 @@
           <van-radio name="未检测">未检测</van-radio>
           <van-radio name="已检测">
            已检测，结果：
-          <van-radio-group wx:if="{{ pancreas == '已检测'  }}" style="margin: 50rpx; display: inline-block;" direction="horizontal"  value="{{ insulin }}" bind:change="onChangeInsulin" >
+          <van-radio-group wx:if="{{ pancreas == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ insulin }}" bind:change="onChangeInsulin" >
             <van-radio name="正常">正常</van-radio>
             <van-radio name="有异常">有异常</van-radio>
          </van-radio-group>
         </van-radio>
       </van-radio-group>
-      <view wx:if="{{ insulin == '有异常'  }}">
+      <view wx:if="{{ insulin == '有异常'&&pancreas == '已检测'  }}">
         <view>异常为：</view>
-        <van-field custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ gland }}" placeholder="______________________________________________" />
+        <van-field required type="textarea" autosize custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ gland }}" placeholder="______________________________________________" />
       </view>
     
     </view>
@@ -332,15 +332,15 @@
           <van-radio name="未检测">未检测</van-radio>
           <van-radio name="已检测">
            已检测，结果：
-          <van-radio-group wx:if="{{ blood == '已检测'  }}" style="margin: 50rpx; display: inline-block;" direction="horizontal"  value="{{ routine }}" bind:change="onChangeRoutine" >
+          <van-radio-group wx:if="{{ blood == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ routine }}" bind:change="onChangeRoutine" >
             <van-radio name="正常">正常</van-radio>
             <van-radio name="有异常">有异常</van-radio>
          </van-radio-group>
         </van-radio>
       </van-radio-group>
-      <view wx:if="{{ routine == '有异常'  }}">
+      <view wx:if="{{ routine == '有异常'&&blood == '已检测'  }}">
         <view>异常为：</view>
-        <van-field custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;"  model:value="{{ examination }}" placeholder="______________________________________________" />
+        <van-field required type="textarea" autosize custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;"  model:value="{{ examination }}" placeholder="______________________________________________" />
       </view>
     </view>
 
@@ -350,15 +350,15 @@
           <van-radio name="未检测">未检测</van-radio>
           <van-radio name="已检测">
            已检测，结果：
-          <van-radio-group wx:if="{{ ovary == '已检测'  }}" style="margin: 50rpx; display: inline-block;" direction="horizontal"  value="{{ oophoron }}" bind:change="onChangeOophoron" >
+          <van-radio-group wx:if="{{ ovary == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ oophoron }}" bind:change="onChangeOophoron" >
             <van-radio name="正常">正常</van-radio>
             <van-radio name="有异常">有异常</van-radio>
          </van-radio-group>
         </van-radio>
       </van-radio-group>
-      <view wx:if="{{ oophoron == '有异常'  }}">
+      <view wx:if="{{ oophoron == '有异常'&&ovary == '已检测'  }}">
         <view>异常为：</view>
-        <van-field custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ ootheca }}" placeholder="______________________________________________" />
+        <van-field required type="textarea" autosize custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ ootheca }}" placeholder="______________________________________________" />
       </view>
     </view>
 
@@ -368,15 +368,15 @@
           <van-radio name="未检测">未检测</van-radio>
           <van-radio name="已检测">
            已检测，结果：
-          <van-radio-group wx:if="{{ thyroid == '已检测'  }}" style="margin: 50rpx; display: inline-block;" direction="horizontal"  value="{{ thyroidea }}" bind:change="onChangeThyroidea" >
+          <van-radio-group wx:if="{{ thyroid == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ thyroidea }}" bind:change="onChangeThyroidea" >
             <van-radio name="正常">正常</van-radio>
             <van-radio name="有异常">有异常</van-radio>
          </van-radio-group>
         </van-radio>
       </van-radio-group>
-      <view wx:if="{{ thyroidea == '有异常'  }}">
+      <view wx:if="{{ thyroidea == '有异常'&&thyroid == '已检测'  }}">
         <view>异常为：</view>
-        <van-field custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;"  model:value="{{ glandula }}" placeholder="______________________________________________" />
+        <van-field required type="textarea" autosize custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;"  model:value="{{ glandula }}" placeholder="______________________________________________" />
       </view>
     </view>
 
@@ -386,15 +386,15 @@
           <van-radio name="未检测">未检测</van-radio>
           <van-radio name="已检测">
            已检测，结果：
-          <van-radio-group wx:if="{{ skull == '已检测'  }}" style="margin: 50rpx; display: inline-block;" direction="horizontal"  value="{{ vertex }}" bind:change="onChangeVertex" >
+          <van-radio-group wx:if="{{ skull == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ vertex }}" bind:change="onChangeVertex" >
             <van-radio name="正常">正常</van-radio>
             <van-radio name="有异常">有异常</van-radio>
          </van-radio-group>
         </van-radio>
       </van-radio-group>
-      <view wx:if="{{ vertex == '有异常'  }}">
+      <view wx:if="{{ vertex == '有异常'&&skull == '已检测'  }}">
         <view>异常为：</view>
-        <van-field custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ scalp }}" placeholder="______________________________________________" />
+        <van-field required type="textarea" autosize custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ scalp }}" placeholder="______________________________________________" />
       </view>
     </view>
 
@@ -448,4 +448,5 @@
     </van-button> -->
   </view>
   <canvas-signature show="{{ showPopup }}" bind:close="onHidePopup" bind:confirm="onChanCanvas"/>
+  <van-toast id="van-toast" />
 </view>

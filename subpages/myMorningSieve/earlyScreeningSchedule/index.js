@@ -1,4 +1,5 @@
 import myMorningSieveApi from '../../../apis/myMorningSieve'
+import router from '../../../utils/router'
 
 Page({
 
@@ -7,7 +8,11 @@ Page({
      */
     data: {
         steps: [],
-        active: 0
+        active: 0,
+        showSharePopup: false,
+        code: '',
+        signcode: '',
+        actionurl: ''
     },
 
     /**
@@ -15,6 +20,12 @@ Page({
      */
     onLoad(options) {
         let that = this
+        console.log('options',options)
+        this.setData({
+            code:options.code,
+            signcode:options.signcode,
+            actionurl:options.actionurl
+        })
         myMorningSieveApi.getProcess({ code:options.code }).then(res=>{
             that.setData({
                 steps: res.map(item=>({ text: item.name, desc: item.timeStr })),
@@ -70,5 +81,26 @@ Page({
      */
     onShareAppMessage() {
 
+    },
+    showSharePopup() {
+        this.setData({
+            showSharePopup: true,
+        })
+    },
+    onHideSharePopup() {
+        this.setData({
+            showSharePopup: false,
+        })
+    },
+    onDetail(){
+        console.log('detail')
+        const token =encodeURIComponent(wx.getStorageSync("ACCESS_TOKEN"))  || '';
+        router.push({
+            name: "webview",
+            data: {
+              url: encodeURIComponent(`${this.data.actionurl}&token=${token}`),
+              encode: true
+            }
+        });
     }
 })

@@ -3,8 +3,9 @@ import store from '../../../store/index'
 import earlyScreeningApi from '../../../apis/earlyScreening'
 import router from '../../../utils/router'
 import fadadaApi from '../../../apis/fadada'
-import { showToast } from "../../../utils/tools"
+import { getStorageUserInfo } from "../../../utils/tools"
 import moment from 'dayjs'
+import Toast from '../../../miniprogram_npm/@vant/weapp/toast/toast';
 
 
 create.Page(store, {
@@ -17,12 +18,13 @@ create.Page(store, {
    */
   data: {
     code: '',
+    signCode: '',
     name: '',
     nameError: '',
     sender: '',
     genderShow: false,
     age:0,
-    columns: ['18', '19', '20', '21', '22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69','70','71','72','73','74','75'],
+    columns: ['18','19', '20', '21', '22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69','70','71','72','73','74','75'],
     height: '',
     heightError: '',
     weight: '',
@@ -121,31 +123,10 @@ create.Page(store, {
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-      console.log('options',options)
       this.options=options
-      const selectAddress= wx.getStorageSync("EARLY_ADDRESS");
       this.setData({
-        selectAddress:selectAddress
-      })
-      this.setData({
-        code:options.code
-      })
-      earlyScreeningApi.checkSignCode({ code: options.code }).then(res=>{
-          console.log('res',res)
-          this.setData({
-            contract: res.contract
-          })
-      }).catch(err=>{
-        wx.showModal({
-            title: '温馨提示',
-            content: err.msg,
-            showCancel: false,
-            success (res) {
-              if (res.confirm) {
-                router.go()
-              } 
-            }
-          })
+        code:this.options.code,
+        signCode:this.options.signCode
       })
   },
 
@@ -160,7 +141,29 @@ create.Page(store, {
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
+    const userInfo = getStorageUserInfo(true, true)
+      if (!userInfo) {
+        return
+      }
+      const selectAddress= wx.getStorageSync("EARLY_ADDRESS");
+      this.setData({
+        selectAddress:selectAddress,
+        phone: userInfo.phoneNumber
+      })
+      earlyScreeningApi.checkSignCode({ code: this.options.code }).then(res=>{
+
+      }).catch(err=>{
+        wx.showModal({
+            title: '温馨提示',
+            content: err.msg,
+            showCancel: false,
+            success (res) {
+              if (res.confirm) {
+                router.go()
+              } 
+            }
+          })
+      })
   },
   touchMove() {
     return
@@ -491,238 +494,459 @@ create.Page(store, {
     this.checkPhone()
   },
   onSubmitter() {
-    this.check()
-    const {code,name,sender,age,height,weight,cardNo,phone,smoke,breakfast,midnight,exercise,family,familyHistory,spirit,medicine,
-expand,defecate,hepatitis,virus,humanPapilloma,colonoscopy,polyp,currentDate,gastroscope,stomach,timeDate,landmark,lung,various,
-ldct,spiral,drugCause,breast,ultrasound,tungsten,liver,dirty,exceed,prostate,nuclear,resonance,pancreas,insulin,gland,blood,routine,
-examination,ovary,oophoron,ootheca,thyroid,thyroidea,glandula,skull,vertex,scalp,signUrl,informedArr,selectAddress,} = this.data
-    const params={
-        code,
-        name,
-        sender,
-        age,
-        height,
-        weight,
-        cardNo,
-        phone,
-        smoke,
-        other:[
-            {
-                index:8,
-                title: informedArr[0],
-                select: smoke,
-                remark: '',
-            },
-            {
-                index:9,
-                title: informedArr[1],
-                select: breakfast,
-                remark: ''
-            },
-            {
-                index:10,
-                title: informedArr[2],
-                select: midnight,
-                remark: ''
-            },
-            {
-                index:11,
-                title: informedArr[3],
-                select: exercise,
-                remark: ''
-            },
-            {
-                index:12,
-                title: informedArr[4],
-                select: family,
-                remark: family=='有'?familyHistory:''
-            },
-            {
-                index:13,
-                title: informedArr[5],
-                select: spirit,
-                remark: ''
-            },
-            {
-                index:14,
-                title: informedArr[6],
-                select: medicine,
-                remark: medicine=='是'?expand:''
-            },
-            {
-                index:15,
-                title: informedArr[7],
-                select: defecate,
-                remark: ''
-            },
-            {
-                index:16,
-                title: informedArr[8],
-                select: hepatitis,
-                remark: ''
-            },
-            {
-                index:17,
-                title: informedArr[9],
-                select: virus,
-                remark: ''
-            },
-            {
-                index:18,
-                title: informedArr[10],
-                select: humanPapilloma,
-                remark: ''
-            },
-            {
-                index:19,
-                title: informedArr[11],
-                select: colonoscopy=="是"?`是，检查时间是：${moment(currentDate).format('YYYY-MM-DD')}，检查结果：${polyp}`:"否",
-                answer: {
-                    colonoscopy,
-                    currentDate:moment(currentDate).format('YYYY-MM-DD'),
-                    polyp
+    try {
+        this.check()
+        const {code,name,nameError,sender,age,height,heightError,weight,weightError,cardNo,cardNoError,phone,phoneError,smoke,breakfast,midnight,exercise,family,familyHistory,spirit,medicine,
+    expand,defecate,hepatitis,virus,humanPapilloma,colonoscopy,polyp,currentDate,gastroscope,stomach,timeDate,landmark,lung,various,
+    ldct,spiral,drugCause,breast,ultrasound,tungsten,liver,dirty,exceed,prostate,nuclear,resonance,pancreas,insulin,gland,blood,routine,
+    examination,ovary,oophoron,ootheca,thyroid,thyroidea,glandula,skull,vertex,scalp,signUrl,informedArr,selectAddress} = this.data
+    console.log('selectAddress',selectAddress)
+        const params={
+            code,
+            name,
+            sender,
+            age,
+            height,
+            weight,
+            cardNo,
+            phone,
+            smoke,
+            other:[
+                {
+                    index:8,
+                    title: informedArr[0],
+                    select: smoke,
+                    remark: '',
                 },
-                remark: ''
-            },
-            {
-                index:20,
-                title: informedArr[12],
-                select: gastroscope=="是"?`是，检查时间是：${moment(timeDate).format('YYYY-MM-DD')}，检查结果：${stomach}`:"否",
-                answer: {
-                    gastroscope,
-                    timeDate:moment(timeDate).format('YYYY-MM-DD'),
-                    stomach
+                {
+                    index:9,
+                    title: informedArr[1],
+                    select: breakfast,
+                    remark: ''
                 },
-                remark: ''
-            },
-            {
-                index:21,
-                title: informedArr[13],
-                select: landmark=="已检测"?`已检测，结果：${lung=='有异常'?`有异常，异常项目为：${various.toString()}`:lung}`:"未检测",
-                answer: {
-                    landmark,
-                    lung,
-                    various
+                {
+                    index:10,
+                    title: informedArr[2],
+                    select: midnight,
+                    remark: ''
                 },
-                remark: ''
-            },
-            {
-                index:22,
-                title: informedArr[14],
-                select: ldct=="已检测"?`已检测，结果：${spiral=='有异常'?`有异常，异常为：${drugCause}`:spiral}`:"未检测",
-                answer: {
-                    ldct,
-                    spiral,
-                    drugCause
+                {
+                    index:11,
+                    title: informedArr[3],
+                    select: exercise,
+                    remark: ''
                 },
-                remark: ''
-            },
-            {
-                index:23,
-                title: informedArr[15],
-                select: breast=="已检测"?`已检测，结果：${ultrasound=='有异常'?`有异常，异常为：${tungsten}`:ultrasound}`:"未检测",
-                answer: {
-                    breast,
-                    ultrasound,
-                    tungsten
+                {
+                    index:12,
+                    title: informedArr[4],
+                    select: family,
+                    remark: family=='有'?familyHistory:''
                 },
-                remark: ''
-            },
-            {
-                index:24,
-                title: informedArr[16],
-                select: liver=="已检测"?`已检测，结果：${dirty=='有异常'?`有异常，异常为：${exceed}`:dirty}`:"未检测",
-                answer: {
-                    liver,
-                    dirty,
-                    exceed
+                {
+                    index:13,
+                    title: informedArr[5],
+                    select: spirit,
+                    remark: ''
                 },
-                remark: ''
-            },
-            {
-                index:25,
-                title: informedArr[17],
-                select: prostate=="已检测"?`已检测，结果：${nuclear=='有异常'?`有异常，异常为：${resonance}`:nuclear}`:"未检测",
-                answer: {
-                    prostate,
-                    nuclear,
-                    resonance
+                {
+                    index:14,
+                    title: informedArr[6],
+                    select: medicine,
+                    remark: medicine=='是'?expand:''
                 },
-                remark: ''
-            },
-            {
-                index:26,
-                title: informedArr[18],
-                select: pancreas=="已检测"?`已检测，结果：${insulin=='有异常'?`有异常，异常为：${gland}`:insulin}`:"未检测",
-                answer: {
-                    pancreas,
-                    insulin,
-                    gland
+                {
+                    index:15,
+                    title: informedArr[7],
+                    select: defecate,
+                    remark: ''
                 },
-                remark: ''
-            },
-            {
-                index:27,
-                title: informedArr[19],
-                select: blood=="已检测"?`已检测，结果：${routine=='有异常'?`有异常，异常为：${examination}`:routine}`:"未检测",
-                answer: {
-                    blood,
-                    routine,
-                    examination
+                {
+                    index:16,
+                    title: informedArr[8],
+                    select: hepatitis,
+                    remark: ''
                 },
-                remark: ''
-            },
-            {
-                index:28,
-                title: informedArr[20],
-                select: ovary=="已检测"?`已检测，结果：${oophoron=='有异常'?`有异常，异常为：${ootheca}`:oophoron}`:"未检测",
-                answer: {
-                    ovary,
-                    oophoron,
-                    ootheca
+                {
+                    index:17,
+                    title: informedArr[9],
+                    select: virus,
+                    remark: ''
                 },
-                remark: ''
-            },
-            {
-                index:29,
-                title: informedArr[21],
-                select: thyroid=="已检测"?`已检测，结果：${thyroidea=='有异常'?`有异常，异常为：${glandula}`:thyroidea}`:"未检测",
-                answer: {
-                    thyroid,
-                    thyroidea,
-                    glandula
+                {
+                    index:18,
+                    title: informedArr[10],
+                    select: humanPapilloma,
+                    remark: ''
                 },
-                remark: ''
-            },
-            {
-                index:30,
-                title: informedArr[22],
-                select: skull=="已检测"?`已检测，结果：${vertex=='有异常'?`有异常，异常为：${scalp}`:vertex}`:"未检测",
-                answer: {
-                    skull,
-                    vertex,
-                    scalp
+                {
+                    index:19,
+                    title: informedArr[11],
+                    select: colonoscopy=="是"?`是，检查时间是：${moment(currentDate).format('YYYY-MM-DD')}，检查结果：${polyp}`:"否",
+                    answer: {
+                        colonoscopy,
+                        currentDate:moment(currentDate).format('YYYY-MM-DD'),
+                        polyp
+                    },
+                    remark: ''
                 },
-                remark: ''
-            }
-        ],
-        agreeRemark:[],
-        signUrl,
-        selectAddress,
-        userProvinceId: selectAddress.province.id,
-        userCityId: selectAddress.city.id,
-        userDistrictId: selectAddress.area.id,
-        userAddress: `${selectAddress.province.name} ${selectAddress.city.name} ${selectAddress.area.name}`,
-    }
-    if(!signUrl){
-        showToast({ title: "请认真填写后签名" });
-        return
-    }
-    earlyScreeningApi.signUp(params).then(res=>{
-        router.replace({
-            name: 'earlyScreeningDoc'
+                {
+                    index:20,
+                    title: informedArr[12],
+                    select: gastroscope=="是"?`是，检查时间是：${moment(timeDate).format('YYYY-MM-DD')}，检查结果：${stomach}`:"否",
+                    answer: {
+                        gastroscope,
+                        timeDate:moment(timeDate).format('YYYY-MM-DD'),
+                        stomach
+                    },
+                    remark: ''
+                },
+                {
+                    index:21,
+                    title: informedArr[13],
+                    select: landmark=="已检测"?`已检测，结果：${lung=='有异常'?`有异常，异常项目为：${various.toString()}`:lung}`:"未检测",
+                    answer: {
+                        landmark,
+                        lung,
+                        various
+                    },
+                    remark: ''
+                },
+                {
+                    index:22,
+                    title: informedArr[14],
+                    select: ldct=="已检测"?`已检测，结果：${spiral=='有异常'?`有异常，异常为：${drugCause}`:spiral}`:"未检测",
+                    answer: {
+                        ldct,
+                        spiral,
+                        drugCause
+                    },
+                    remark: ''
+                },
+                {
+                    index:23,
+                    title: informedArr[15],
+                    select: breast=="已检测"?`已检测，结果：${ultrasound=='有异常'?`有异常，异常为：${tungsten}`:ultrasound}`:"未检测",
+                    answer: {
+                        breast,
+                        ultrasound,
+                        tungsten
+                    },
+                    remark: ''
+                },
+                {
+                    index:24,
+                    title: informedArr[16],
+                    select: liver=="已检测"?`已检测，结果：${dirty=='有异常'?`有异常，异常为：${exceed}`:dirty}`:"未检测",
+                    answer: {
+                        liver,
+                        dirty,
+                        exceed
+                    },
+                    remark: ''
+                },
+                {
+                    index:25,
+                    title: informedArr[17],
+                    select: prostate=="已检测"?`已检测，结果：${nuclear=='有异常'?`有异常，异常为：${resonance}`:nuclear}`:"未检测",
+                    answer: {
+                        prostate,
+                        nuclear,
+                        resonance
+                    },
+                    remark: ''
+                },
+                {
+                    index:26,
+                    title: informedArr[18],
+                    select: pancreas=="已检测"?`已检测，结果：${insulin=='有异常'?`有异常，异常为：${gland}`:insulin}`:"未检测",
+                    answer: {
+                        pancreas,
+                        insulin,
+                        gland
+                    },
+                    remark: ''
+                },
+                {
+                    index:27,
+                    title: informedArr[19],
+                    select: blood=="已检测"?`已检测，结果：${routine=='有异常'?`有异常，异常为：${examination}`:routine}`:"未检测",
+                    answer: {
+                        blood,
+                        routine,
+                        examination
+                    },
+                    remark: ''
+                },
+                {
+                    index:28,
+                    title: informedArr[20],
+                    select: ovary=="已检测"?`已检测，结果：${oophoron=='有异常'?`有异常，异常为：${ootheca}`:oophoron}`:"未检测",
+                    answer: {
+                        ovary,
+                        oophoron,
+                        ootheca
+                    },
+                    remark: ''
+                },
+                {
+                    index:29,
+                    title: informedArr[21],
+                    select: thyroid=="已检测"?`已检测，结果：${thyroidea=='有异常'?`有异常，异常为：${glandula}`:thyroidea}`:"未检测",
+                    answer: {
+                        thyroid,
+                        thyroidea,
+                        glandula
+                    },
+                    remark: ''
+                },
+                {
+                    index:30,
+                    title: informedArr[22],
+                    select: skull=="已检测"?`已检测，结果：${vertex=='有异常'?`有异常，异常为：${scalp}`:vertex}`:"未检测",
+                    answer: {
+                        skull,
+                        vertex,
+                        scalp
+                    },
+                    remark: ''
+                }
+            ],
+            agreeRemark:[],
+            signUrl,
+            selectAddress,
+            userProvinceId:selectAddress&&selectAddress.province.id,
+            userCityId: selectAddress&&selectAddress.city.id,
+            userDistrictId: selectAddress&&selectAddress.area.id,
+            userAddress: selectAddress&&selectAddress.areaStr,
+        }
+        if(nameError){
+            Toast(nameError);
+            return
+        }
+        if(!sender){
+            Toast("请选择性别");
+            return
+        }
+        if(!age){
+            Toast("请选择年龄");
+            return
+        }
+        if(heightError){
+            Toast(heightError);
+            return
+        }
+        if(weightError){
+            Toast(weightError);
+            return
+        }
+        if(cardNoError){
+            Toast(cardNoError);
+            return
+        }
+        if(phoneError){
+            Toast(phoneError);
+            return
+        }
+        if(!smoke){
+            Toast(`请填写${informedArr[0]}`);
+            return
+        }
+        if(!breakfast){
+            Toast(`请填写${informedArr[1]}`);
+            return
+        }
+        if(!midnight){
+            Toast(`请填写${informedArr[2]}`);
+            return
+        }
+        if(!exercise){
+            Toast(`请填写${informedArr[3]}`);
+            return
+        }
+        if(!family){
+            Toast(`请填写${informedArr[4]}`);
+            return
+        }
+        if(family=='有'&&!familyHistory){
+            Toast(`请填写${informedArr[4]}的详述`);
+            return
+        }
+        if(!spirit){
+            Toast(`请填写${informedArr[5]}`);
+            return
+        }
+        if(!medicine){
+            Toast(`请填写${informedArr[6]}`);
+            return
+        }
+        if(medicine=='是'&&!expand){
+            Toast(`请填写${informedArr[6]}的详述`);
+            return
+        }
+        if(!defecate){
+            Toast(`请填写${informedArr[7]}`);
+            return
+        }
+        if(!hepatitis){
+            Toast(`请填写${informedArr[8]}`);
+            return
+        }
+        if(!virus){
+            Toast(`请填写${informedArr[9]}`);
+            return
+        }
+        if(!humanPapilloma){
+            Toast(`请填写${informedArr[10]}`);
+            return
+        }
+        if(!colonoscopy){
+            Toast(`请填写${informedArr[11]}`);
+            return
+        }
+        if(colonoscopy=='是'&&!polyp){
+            Toast(`请填写${informedArr[11]}的检测结果`);
+            return
+        }
+        if(!gastroscope){
+            Toast(`请填写${informedArr[12]}`);
+            return
+        }
+        if(gastroscope=='是'&&!stomach){
+            Toast(`请填写${informedArr[12]}的检测结果`);
+            return
+        }
+        if(!landmark){
+            Toast(`请填写${informedArr[13]}`);
+            return
+        }
+        if(landmark=='已检测'&&!lung){
+            Toast(`请填写${informedArr[13]}的检测结果`);
+            return
+        }
+        if(landmark=='已检测'&&lung=='有异常'&&various.length==0){
+            Toast(`请填写${informedArr[13]}的异常项目`);
+            return
+        }
+        if(!ldct){
+            Toast(`请填写${informedArr[14]}`);
+            return
+        }
+        if(ldct=='已检测'&&!spiral){
+            Toast(`请填写${informedArr[14]}的检测结果`);
+            return
+        }
+        if(ldct=='已检测'&&spiral=='有异常'&&!drugCause){
+            Toast(`请填写${informedArr[14]}的异常情况`);
+            return
+        }
+        if(!breast){
+            Toast(`请填写${informedArr[15]}`);
+            return
+        }
+        if(breast=='已检测'&&!ultrasound){
+            Toast(`请填写${informedArr[15]}的检测结果`);
+            return
+        }
+        if(breast=='已检测'&&ultrasound=='有异常'&&!tungsten){
+            Toast(`请填写${informedArr[15]}的异常情况`);
+            return
+        }
+        if(!liver){
+            Toast(`请填写${informedArr[16]}`);
+            return
+        }
+        if(liver=='已检测'&&!dirty){
+            Toast(`请填写${informedArr[16]}的检测结果`);
+            return
+        }
+        if(liver=='已检测'&&dirty=='有异常'&&!exceed){
+            Toast(`请填写${informedArr[16]}的异常情况`);
+            return
+        }
+        if(!prostate){
+            Toast(`请填写${informedArr[17]}`);
+            return
+        }
+        if(prostate=='已检测'&&!nuclear){
+            Toast(`请填写${informedArr[17]}的检测结果`);
+            return
+        }
+        if(prostate=='已检测'&&nuclear=='有异常'&&!resonance){
+            Toast(`请填写${informedArr[17]}的异常情况`);
+            return
+        }
+        if(!pancreas){
+            Toast(`请填写${informedArr[18]}`);
+            return
+        }
+        if(pancreas=='已检测'&&!insulin){
+            Toast(`请填写${informedArr[18]}的检测结果`);
+            return
+        }
+        if(pancreas=='已检测'&&insulin=='有异常'&&!gland){
+            Toast(`请填写${informedArr[18]}的异常情况`);
+            return
+        }
+        if(!blood){
+            Toast(`请填写${informedArr[19]}`);
+            return
+        }
+        if(blood=='已检测'&&!routine){
+            Toast(`请填写${informedArr[19]}的检测结果`);
+            return
+        }
+        if(blood=='已检测'&&routine=='有异常'&&!examination){
+            Toast(`请填写${informedArr[19]}的异常情况`);
+            return
+        }
+        if(!ovary){
+            Toast(`请填写${informedArr[20]}`);
+            return
+        }
+        if(ovary=='已检测'&&!oophoron){
+            Toast(`请填写${informedArr[20]}的检测结果`);
+            return
+        }
+        if(ovary=='已检测'&&oophoron=='有异常'&&!ootheca){
+            Toast(`请填写${informedArr[20]}的异常情况`);
+            return
+        }
+        if(!thyroid){
+            Toast(`请填写${informedArr[21]}`);
+            return
+        }
+        if(thyroid=='已检测'&&!thyroidea){
+            Toast(`请填写${informedArr[21]}的检测结果`);
+            return
+        }
+        if(thyroid=='已检测'&&thyroidea=='有异常'&&!glandula){
+            Toast(`请填写${informedArr[21]}的异常情况`);
+            return
+        }
+        if(!skull){
+            Toast(`请填写${informedArr[22]}`);
+            return
+        }
+        if(skull=='已检测'&&!vertex){
+            Toast(`请填写${informedArr[22]}的检测结果`);
+            return
+        }
+        if(skull=='已检测'&&vertex=='有异常'&&!scalp){
+            Toast(`请填写${informedArr[22]}的异常情况`);
+            return
+        }
+        if(!signUrl){
+            Toast("请签名");
+            return
+        }
+        earlyScreeningApi.signUp(params).then(res=>{
+            router.replace({
+                name: 'earlyScreeningDoc'
+            })
         })
-    })
+    } catch (error) {
+        console.log('error',error)
+    }
   },
   findCert() {
     const { id, pactUrl } = this.options

@@ -16,7 +16,6 @@ Page({
     onLoad(options) {
         let that = this
         myMorningSieveApi.getOwnerList().then(res=>{
-            console.log('res',res)
             that.setData({
                 earlyScreeningArr:res
             })
@@ -52,12 +51,14 @@ Page({
     },
 
     onDetail({currentTarget}){
-        const { code } = currentTarget.dataset;
-        console.log('code',code)
+        console.log('currentTarget',currentTarget)
+        const { code,signcode,actionurl } = currentTarget.dataset;
         router.push({
           name: 'earlyScreeningSchedule',
           data:{
-            code
+            code,
+            signcode,
+            actionurl
           }
         })
     }

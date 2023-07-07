@@ -1,5 +1,5 @@
 {
-    "navigationBarTitleText": "早筛列表",
+    "navigationBarTitleText": "我的早筛",
     "usingComponents": {
       "van-cell": "/miniprogram_npm/@vant/weapp/cell/index",
       "van-cell-group": "/miniprogram_npm/@vant/weapp/cell-group/index"

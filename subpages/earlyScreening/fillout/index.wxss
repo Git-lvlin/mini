@@ -1,5 +1,4 @@
 .earlyScreening {
-    height: 100vh;
     overflow: auto;
     background-color: #fff;
 }
@@ -175,4 +174,6 @@
     font-size: 35rpx; 
     font-weight: bold;
     margin-left: 25rpx;
+    width: 30rpx;
+    height: 30rpx;
 }

@@ -2,14 +2,21 @@ import create from '../../../utils/create.js'
 import store from '../../../store/index'
 import earlyScreeningApi from '../../../apis/earlyScreening'
 import router from '../../../utils/router'
-import { showToast } from "../../../utils/tools"
+import { showToast, getStorageUserInfo } from "../../../utils/tools"
+import amapFile from '../../../libs/amap-wx';
+import { MAP_KEY } from '../../../constants/index';
+import area from '../../../utils/area'
 
+const myAmapFun = new amapFile.AMapWX({
+  key: MAP_KEY,
+});
 
 create.Page(store, {
   use: [
     "systemInfo"
   ],
-
+  // 当前位置经纬度
+  location: {},
   /**
    * 页面的初始数据
    */
@@ -31,7 +38,7 @@ create.Page(store, {
         cityName: '',
         areaName: '',
         address: ''
-    }
+    },
   },
 
   options: {},
@@ -39,14 +46,6 @@ create.Page(store, {
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-      console.log('options',options)
-      let that=this
-      earlyScreeningApi.subCompanyInfo({ subOrderSn:options.code }).then(res=>{
-          console.log('res',res)
-          that.setData({
-            checkAddress: res.data
-          })
-      })
       this.options=options
   },
 
@@ -61,7 +60,66 @@ create.Page(store, {
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    
+    const userInfo = getStorageUserInfo(true, true)
+    if (!userInfo) {
+      return
+    }
+    wx.getLocation({
+        type: 'gcj02',
+        isHighAccuracy: true,
+        success(result) {
+          let data = {
+            latitude: result.latitude,
+            longitude: result.longitude,
+          }
+          that.location = data;
+          that.setData(data);
+          that.getRegeo()
+        }
+    });
+    let that=this
+    earlyScreeningApi.subCompanyInfo({ subOrderSn:this.options.code }).then(res=>{
+        that.setData({
+          checkAddress: res
+        })
+    })
+  },
+
+// 根据经纬度获取地址信息
+getRegeo() {
+    const that = this;
+    const {
+      longitude,
+      latitude,
+    } = this.location;
+    myAmapFun.getRegeo({
+      location: `${longitude},${latitude}`,
+      success(data){
+          if(data.length){
+            const addres=data[0].regeocodeData.addressComponent
+            that.setData({
+                editData:{
+                    provinceId,
+                    cityId,
+                    districtId
+                },
+                selectAddress:{
+                    areaStr: `${addres.province}${addres.city}${addres.district}`,
+                }
+            })
+            const provinceId=area.filter(item=>item.name==addres.province)[0].id
+            const cityId=area.filter(item=>item.name==addres.city)[0].id
+            const districtId=area.filter(item=>item.name==addres.district)[0].id
+            wx.setStorageSync('EARLY_ADDRESS',{
+                areaStr: `${addres.province}${addres.city}${addres.district}`,
+                area: {id: districtId, name:addres.district},
+                city: {id: cityId, name: addres.city},
+                isAct: "area",
+                province: {id: provinceId, name: addres.province},
+            })
+          }
+      },
+    })
   },
  // 打开省市区弹窗
  onOpenAddress() {
@@ -73,8 +131,6 @@ create.Page(store, {
    onCloseAddress({
     detail
   }) {
-    console.log('detail',detail)
-    wx.setStorageSync('EARLY_ADDRESS',detail.selectAddress)
     const {
       selectAddress,
       areaData,
@@ -83,14 +139,12 @@ create.Page(store, {
       showPopup: false
     };
     if(!!selectAddress && selectAddress.area.name) {
-    //   selectAddress.province = {};
-    //   selectAddress.city = {};
-    // } else {
-      selectAddress.areaStr = `${selectAddress.province.name} ${selectAddress.city.name} ${selectAddress.area.name}`
+      selectAddress.areaStr = `${selectAddress.province.name}${selectAddress.city.name}${selectAddress.area.name}`
       data.selectAddress = selectAddress;
       data.areaData = areaData;
     }
     this.setData(data);
+    wx.setStorageSync('EARLY_ADDRESS',data.selectAddress)
   },
   // 保存编辑地址区域
     handleEditAddress({
@@ -106,7 +160,6 @@ create.Page(store, {
     //进入问卷
     entranceQuestionnaire() {
         const { selectAddress } = this.data
-        console.log('this.options',this.options)
         if(selectAddress.areaStr){
             router.replace({
                 name: 'earlyScreeningFillout',
