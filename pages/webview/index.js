@@ -12,6 +12,7 @@ Page({
   },
 
   onLoad(options) {
+      console.log('options',options)
     if (options.scene) {
       this.getShareParam(options);
     } else {

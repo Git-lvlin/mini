@@ -1,0 +1,452 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="earlyScreening" style="overflow: {{showPopup?'hidden':'scroll'}}" catchtouchmove="{{showPopup?'touchMove':''}}">
+  <view class="headFixation">早筛码：{{signCode}}</view>
+  <view class="earlyTitle">健康问卷+知情同意书</view>
+  <view class="earlyHint">所填信息必须和签署知情同意书一致。如信息有误，造成一切结果和责任，由本人承担</view>
+  <view class="form">
+    <view class="form_item">
+      <view>1.姓名（请与本人身份证姓名一致，否则造成的法律纠纷由本人承担）<view class="required">*</view></view>
+      <van-field  custom-style="background-color: #EEF4FB;"  required bind:input="checkName" model:value="{{ name }}" placeholder="请输入" error-message="{{nameError}}" input-align="bottom"/>
+    </view>
+
+    <view class="form_item marck">
+      <view>2、性别 <view class="required"> *</view></view>
+        <van-radio-group direction="horizontal"  style="margin: 50rpx;" value="{{ sender }}" bind:change="onChangeRadio">
+          <van-radio name="1">男</van-radio>
+          <van-radio name="2">女</van-radio>
+        </van-radio-group>
+    </view>
+
+    <view class="form_item">
+      <view>3、年龄（请选择 18-75 适用年龄区间内的周岁数）<view class="required">*</view></view>
+      <view style="margin: 40rpx; display: flex;align-items: center;"  bindtap="ageShow">{{age?age:"选择年龄"}} <image class="arrows" src="{{tools.getImgUrl('miniprogram/common/back_gray@2x.png')}}" /></view>
+      <van-popup show="{{ genderShow }}" position="bottom">
+        <van-picker show-toolbar bind:cancel="genderShowClose" columns="{{ columns }}" bind:confirm="genderConfirm" />
+      </van-popup>
+    </view>
+
+    <view class="form_item marck">
+      <view>4、身高 <view class="required">*</view></view>
+      <van-field custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;" required bind:input="checkHeight"  model:value="{{ height }}" error-message="{{heightError}}"  placeholder="请输入" use-button-slot>
+        <view  slot="button">cm</view>
+     </van-field>
+    </view>
+
+    <view class="form_item">
+      <view>5、体重 <view class="required">*</view></view>
+      <van-field custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;" required bind:input="checkWeight"  model:value="{{ weight }}" error-message="{{weightError}}"  placeholder="请输入">
+        <view  slot="button">kg</view>
+      </van-field>
+    </view>
+
+    <view class="form_item marck">
+      <view>6、身份证号（中国大陆）<view class="required"> *</view></view>
+      <van-field 
+       custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;" 
+       required 
+       model:value="{{ cardNo }}" 
+       placeholder="请输入" 
+       bind:input="checkCardNo"
+       error-message="{{cardNoError}}"
+      />
+    </view>
+
+    <view class="form_item">
+      <view>7、手机号（请确保此手机号可联系到您）<view class="required"> *</view></view>
+      <van-field maxlength="11" disabled bind:input="checkPhone" custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;" required model:value="{{ phone }}" placeholder="请输入"  error-message="{{phoneError}}" />
+    </view>
+
+    <view class="form_item marck">
+      <view>8、每天的吸烟量 <view class="required">*</view></view>
+        <van-radio-group style="margin: 50rpx;" value="{{ smoke }}" bind:change="onChangeSmoke">
+          <van-radio name="不吸烟">不吸烟</van-radio>
+          <van-radio name="半包以下">半包以下</van-radio>
+          <van-radio name="半包到1包">半包到1包</van-radio>
+          <van-radio name="1-2包">1-2包</van-radio>
+          <van-radio name="2包以上">2包以上</van-radio>
+      </van-radio-group>
+    </view>
+
+    <view class="form_item">
+      <view>9、每周不吃早饭的频率 <view class="required">*</view></view>
+      <van-radio-group style="margin: 50rpx;" value="{{ breakfast }}" bind:change="onChangeBreakfast">
+          <van-radio name="0次">0次</van-radio>
+          <van-radio name="1-2次">1-2次</van-radio>
+          <van-radio name="3次及以上">3次及以上</van-radio>
+      </van-radio-group>
+    </view>
+
+    <view class="form_item marck">
+      <view>10、每周吃夜宵的频率 <view class="required"> *</view></view>
+        <van-radio-group style="margin: 50rpx;" value="{{ midnight }}" bind:change="onChangeMidnight">
+          <van-radio name="0次">0次</van-radio>
+          <van-radio name="1-2次">1-2次</van-radio>
+          <van-radio name="3次及以上">3次及以上</van-radio>
+      </van-radio-group>
+    </view>
+
+    <view class="form_item">
+      <view>11、平常运动的频率是？ <view class="required">*</view></view>
+        <van-radio-group style="margin: 50rpx;" value="{{ exercise }}" bind:change="onChangeExercise">
+          <van-radio name="一周三次及以上">一周三次及以上</van-radio>
+          <van-radio name="一周一至两次">一周一至两次</van-radio>
+          <van-radio name="从不">从不</van-radio>
+      </van-radio-group>
+    </view>
+
+    <view class="form_item marck">
+      <view>12、本人是否有癌症家族史？ <view class="required">*</view></view>
+        <van-radio-group style="margin: 50rpx;" value="{{ family }}" bind:change="onChangeFamily">
+          <van-radio name="无">无</van-radio>
+          <van-radio name="有">有，请详述</van-radio>
+          <van-field wx:if="{{ family== '有'?true:false }}" required type="textarea" autosize custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ familyHistory }}" placeholder="______________________________________________" />
+      </van-radio-group>
+    </view>
+
+    <view class="form_item">
+      <view>13、是否长期感觉精神压力大？ <view class="required">*</view></view>
+        <van-radio-group style="margin: 50rpx;" value="{{ spirit }}" bind:change="onChangeSpirit">
+          <van-radio name="是">是</van-radio>
+          <van-radio name="否">否</van-radio>
+      </van-radio-group>
+    </view>
+
+    <view class="form_item marck">
+      <view>14、近一个月内是否服用过药物？ <view class="required">*</view></view>
+        <van-radio-group style="margin: 50rpx;" value="{{ medicine }}" bind:change="onChangeMedicine">
+          <van-radio name="否">否</van-radio>
+          <van-radio name="是">是，请详述</van-radio>
+          <van-field wx:if="{{ medicine== '是'?true:false }}" required type="textarea" autosize custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ expand }}" placeholder="______________________________________________" />
+      </van-radio-group>
+    </view>
+
+    <view class="form_item">
+      <view>15、您的排便情况？ <view class="required">*</view></view>
+        <van-radio-group style="margin: 50rpx;" value="{{ defecate }}" bind:change="onChangeDefecate">
+          <van-radio name="每周1-2次腹泻">每周1-2次腹泻</van-radio>
+          <van-radio name="每周腹泻3次及以上">每周腹泻3次及以上</van-radio>
+          <van-radio name="每周1-2次便秘">每周1-2次便秘</van-radio>
+          <van-radio name="每周便秘3次及以上">每周便秘3次及以上</van-radio>
+          <van-radio name="排便规律">排便规律</van-radio>
+      </van-radio-group>
+    </view>
+
+    <view class="form_item marck">
+      <view>16、是否携带肝炎病毒（HBV、HCV）？ <view class="required">*</view></view>
+        <van-radio-group style="margin: 50rpx;" value="{{ hepatitis }}" bind:change="onChangeHepatitis">
+          <van-radio name="是">是</van-radio>
+          <van-radio name="否">否</van-radio>
+          <van-radio name="未检查">未检查</van-radio>
+      </van-radio-group>
+    </view>
+
+    <view class="form_item">
+      <view>17、是否携带病毒（HIV）？ <view class="required">*</view></view>
+        <van-radio-group style="margin: 50rpx;" value="{{ virus }}" bind:change="onChangeVirus">
+          <van-radio name="是">是</van-radio>
+          <van-radio name="否">否</van-radio>
+          <van-radio name="未检查">未检查</van-radio>
+      </van-radio-group>
+    </view>
+
+    <view class="form_item marck">
+      <view>18、是否携带HPV（人乳头瘤病毒）病毒？<view class="required">*</view></view>
+        <van-radio-group style="margin: 50rpx;" value="{{ humanPapilloma }}" bind:change="onChangeHumanPapilloma">
+          <van-radio name="是">是</van-radio>
+          <van-radio name="否">否</van-radio>
+          <van-radio name="未检查">未检查</van-radio>
+      </van-radio-group>
+    </view>
+
+    <view class="form_item">
+      <view>19、最近是否做过肠镜？<view class="required">*</view></view>
+        <van-radio-group style="margin: 50rpx;" value="{{ colonoscopy }}" bind:change="onChangeColonoscopy" >
+          <van-radio name="否">否</van-radio>
+          <van-radio name="是" bindtap="polypShow">是，检查时间是：{{tools.timestampToTime(currentDate)}} <image class="arrows" src="{{tools.getImgUrl('miniprogram/common/back_gray@2x.png')}}" /></van-radio>
+        </van-radio-group>
+        <view wx:if="{{ colonoscopy== '是'?true:false }}">
+            <view>检查结果：</view>
+            <van-radio-group style="margin: 50rpx;" value="{{ polyp }}" bind:change="onChangePolyp">
+            <van-radio name="正常">正常</van-radio>
+            <van-radio name="息肉">息肉</van-radio>
+            <van-radio name="肿瘤">肿瘤</van-radio>
+            </van-radio-group>
+        </view>
+        <van-popup show="{{ polypShow }}" position="bottom">
+            <van-datetime-picker
+                type="date"
+                value="{{ currentDate }}"
+                bind:cancel="polypShowClose" 
+                bind:confirm="polypConfirm"
+            />
+         </van-popup>
+    </view>
+
+    <view class="form_item marck">
+      <view>20、最近是否做过胃镜？<view class="required">*</view></view>
+        <van-radio-group style="margin: 50rpx;" value="{{ gastroscope }}" bind:change="onChangeGastroscope" >
+          <van-radio name="否">否</van-radio>
+          <van-radio name="是" bindtap="stomachShow">是，检查时间是：{{tools.timestampToTime(timeDate)}} <image class="arrows" src="{{tools.getImgUrl('miniprogram/common/back_gray@2x.png')}}" /></van-radio>
+        </van-radio-group>
+        <view wx:if="{{ gastroscope== '是'?true:false }}">
+            <view>检查结果：</view>
+            <van-radio-group style="margin: 50rpx;" value="{{ stomach }}" bind:change="onChangeStomach">
+            <van-radio name="正常">正常</van-radio>
+            <van-radio name="息肉">息肉</van-radio>
+            <van-radio name="肿瘤">肿瘤</van-radio>
+            </van-radio-group>
+        </view>
+        <van-popup show="{{ stomachShow }}" position="bottom">
+            <van-datetime-picker
+                type="date"
+                value="{{ timeDate }}"
+                bind:cancel="stomachShowClose" 
+                bind:confirm="stomachConfirm"
+            />
+         </van-popup>
+    </view>
+
+    <view class="form_item">
+      <view>21、近半年内，是否针对某一种（或某几种）癌症进行过肿瘤标志物检测？<view class="required">*</view></view>
+      <van-radio-group style="margin: 50rpx 0 0 50rpx;" value="{{ landmark }}" bind:change="onChangeLandmark" >
+          <van-radio name="未检测">未检测</van-radio>
+          <van-radio name="已检测">
+          已检测，结果：
+          <van-radio-group wx:if="{{ landmark == '已检测' }}"  style="display: inline-block;" direction="horizontal"  value="{{ lung }}" bind:change="onChangeLung" >
+            <van-radio name="正常">正常</van-radio>
+            <van-radio name="有异常">有异常</van-radio>
+         </van-radio-group>
+        </van-radio>
+      </van-radio-group>
+      <view wx:if="{{ lung == '有异常'&&landmark == '已检测' }}">
+        <view>异常项目为：</view>
+        <van-checkbox-group style="margin: 50rpx;" value="{{ various }}" bind:change="onChangeVarious">
+            <van-checkbox shape="square" name="胃癌">胃癌</van-checkbox>
+            <van-checkbox shape="square" name="肝癌">肝癌</van-checkbox>
+            <van-checkbox shape="square" name="肠癌">肠癌</van-checkbox>
+            <van-checkbox shape="square" name="胰腺癌">胰腺癌</van-checkbox>
+            <van-checkbox shape="square" name="卵巢癌">卵巢癌</van-checkbox>
+            <van-checkbox shape="square" name="前列腺癌">前列腺癌</van-checkbox>
+            <van-checkbox shape="square" name="甲状腺癌">甲状腺癌</van-checkbox>
+            <van-checkbox shape="square" name="食管癌">食管癌</van-checkbox>
+        </van-checkbox-group>
+      </view>
+    
+    </view>
+
+    <view class="form_item marck">
+      <view>22、近1年是否做过肺部低剂量螺旋CT（LDCT）检查？<view class="required">*</view></view>
+      <van-radio-group style="margin: 50rpx 0 0 50rpx;" value="{{ ldct }}" bind:change="onChangeLdct" >
+          <van-radio name="未检测">未检测</van-radio>
+          <van-radio name="已检测">
+          已检测，结果：
+          <van-radio-group wx:if="{{ ldct == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ spiral }}" bind:change="onChangeSpiral" >
+            <van-radio name="正常">正常</van-radio>
+            <van-radio name="有异常">有异常</van-radio>
+         </van-radio-group>
+        </van-radio>
+      </van-radio-group>
+      <view wx:if="{{ spiral == '有异常'&&ldct == '已检测'  }}">
+        <view>异常为：</view>
+        <van-field required type="textarea" autosize  custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ drugCause }}" placeholder="______________________________________________" />
+      </view>
+    </view>
+
+    <view class="form_item">
+      <view>23、近1年是否做过乳腺超声或钼靶检查检查（男性选否）？<view class="required">*</view></view>
+      <van-radio-group style="margin: 50rpx 0 0 50rpx;" value="{{ breast }}" bind:change="onChangeBreast" >
+          <van-radio name="未检测">未检测</van-radio>
+          <van-radio name="已检测">
+           已检测，结果：
+          <van-radio-group wx:if="{{ breast == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ ultrasound }}" bind:change="onChangeUltrasound" >
+            <van-radio name="正常">正常</van-radio>
+            <van-radio name="有异常">有异常</van-radio>
+         </van-radio-group>
+        </van-radio>
+      </van-radio-group>
+      <view wx:if="{{ ultrasound == '有异常'&&breast == '已检测'  }}">
+        <view>异常为：</view>
+        <van-field required type="textarea" autosize custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;"  model:value="{{ tungsten }}" placeholder="______________________________________________" />
+      </view>
+    </view>
+
+    <view class="form_item marck">
+      <view>24、近1年是否做过肝脏超声检查？<view class="required">*</view></view>
+      <van-radio-group style="margin: 50rpx 0 0 50rpx;" value="{{ liver }}" bind:change="onChangeLiver" >
+          <van-radio name="未检测">未检测</van-radio>
+          <van-radio name="已检测">
+           已检测，结果：
+          <van-radio-group  wx:if="{{ liver == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ dirty }}" bind:change="onChangeDirty" >
+            <van-radio name="正常">正常</van-radio>
+            <van-radio name="有异常">有异常</van-radio>
+         </van-radio-group>
+        </van-radio>
+      </van-radio-group>
+      <view wx:if="{{ dirty == '有异常'&&liver == '已检测'  }}">
+        <view>异常为：</view>
+        <van-field required type="textarea" autosize custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ exceed }}" placeholder="______________________________________________" />
+      </view>
+    </view>
+
+    <view class="form_item">
+      <view>25、近1年是否做过前列腺核磁共振检查（女性选否）？<view class="required">*</view></view>
+      <van-radio-group style="margin: 50rpx 0 0 50rpx;" value="{{ prostate }}" bind:change="onChangeProstate" >
+          <van-radio name="未检测">未检测</van-radio>
+          <van-radio name="已检测">
+           已检测，结果：
+          <van-radio-group wx:if="{{ prostate == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ nuclear }}" bind:change="onChangeNuclear" >
+            <van-radio name="正常">正常</van-radio>
+            <van-radio name="有异常">有异常</van-radio>
+         </van-radio-group>
+        </van-radio>
+      </van-radio-group>
+      <view wx:if="{{ nuclear == '有异常'&&prostate == '已检测'  }}">
+        <view>异常为：</view>
+        <van-field required type="textarea" autosize custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;"  model:value="{{ resonance }}" placeholder="______________________________________________" />
+      </view>  
+    </view>
+
+    <view class="form_item marck">
+      <view>26、近1年是否做过胰腺超声检查？<view class="required">*</view></view>
+      <van-radio-group style="margin: 50rpx 0 0 50rpx;" value="{{ pancreas }}" bind:change="onChangePancreas" >
+          <van-radio name="未检测">未检测</van-radio>
+          <van-radio name="已检测">
+           已检测，结果：
+          <van-radio-group wx:if="{{ pancreas == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ insulin }}" bind:change="onChangeInsulin" >
+            <van-radio name="正常">正常</van-radio>
+            <van-radio name="有异常">有异常</van-radio>
+         </van-radio-group>
+        </van-radio>
+      </van-radio-group>
+      <view wx:if="{{ insulin == '有异常'&&pancreas == '已检测'  }}">
+        <view>异常为：</view>
+        <van-field required type="textarea" autosize custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ gland }}" placeholder="______________________________________________" />
+      </view>
+    
+    </view>
+
+    <view class="form_item">
+      <view>27、近1年是否做过血常规检查？<view class="required">*</view></view>
+      <van-radio-group style="margin: 50rpx 0 0 50rpx;" value="{{ blood }}" bind:change="onChangeBlood" >
+          <van-radio name="未检测">未检测</van-radio>
+          <van-radio name="已检测">
+           已检测，结果：
+          <van-radio-group wx:if="{{ blood == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ routine }}" bind:change="onChangeRoutine" >
+            <van-radio name="正常">正常</van-radio>
+            <van-radio name="有异常">有异常</van-radio>
+         </van-radio-group>
+        </van-radio>
+      </van-radio-group>
+      <view wx:if="{{ routine == '有异常'&&blood == '已检测'  }}">
+        <view>异常为：</view>
+        <van-field required type="textarea" autosize custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;"  model:value="{{ examination }}" placeholder="______________________________________________" />
+      </view>
+    </view>
+
+    <view class="form_item marck">
+      <view>28、近1年是否做过卵巢核磁共振检查（男性选否）？<view class="required">*</view></view>
+      <van-radio-group style="margin: 50rpx 0 0 50rpx;" value="{{ ovary }}" bind:change="onChangeOvary" >
+          <van-radio name="未检测">未检测</van-radio>
+          <van-radio name="已检测">
+           已检测，结果：
+          <van-radio-group wx:if="{{ ovary == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ oophoron }}" bind:change="onChangeOophoron" >
+            <van-radio name="正常">正常</van-radio>
+            <van-radio name="有异常">有异常</van-radio>
+         </van-radio-group>
+        </van-radio>
+      </van-radio-group>
+      <view wx:if="{{ oophoron == '有异常'&&ovary == '已检测'  }}">
+        <view>异常为：</view>
+        <van-field required type="textarea" autosize custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ ootheca }}" placeholder="______________________________________________" />
+      </view>
+    </view>
+
+    <view class="form_item">
+      <view>29、近1年是否做甲状腺超声检查？<view class="required">*</view></view>
+      <van-radio-group style="margin: 50rpx 0 0 50rpx;" value="{{ thyroid }}" bind:change="onChangeThyroid" >
+          <van-radio name="未检测">未检测</van-radio>
+          <van-radio name="已检测">
+           已检测，结果：
+          <van-radio-group wx:if="{{ thyroid == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ thyroidea }}" bind:change="onChangeThyroidea" >
+            <van-radio name="正常">正常</van-radio>
+            <van-radio name="有异常">有异常</van-radio>
+         </van-radio-group>
+        </van-radio>
+      </van-radio-group>
+      <view wx:if="{{ thyroidea == '有异常'&&thyroid == '已检测'  }}">
+        <view>异常为：</view>
+        <van-field required type="textarea" autosize custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;"  model:value="{{ glandula }}" placeholder="______________________________________________" />
+      </view>
+    </view>
+
+    <view class="form_item marck">
+      <view>30、近1年是否做头颅核磁共振检查？<view class="required">*</view></view>
+      <van-radio-group style="margin: 50rpx 0 0 50rpx;" value="{{ skull }}" bind:change="onChangeSkull" >
+          <van-radio name="未检测">未检测</van-radio>
+          <van-radio name="已检测">
+           已检测，结果：
+          <van-radio-group wx:if="{{ skull == '已检测'  }}" style="display: inline-block;" direction="horizontal"  value="{{ vertex }}" bind:change="onChangeVertex" >
+            <van-radio name="正常">正常</van-radio>
+            <van-radio name="有异常">有异常</van-radio>
+         </van-radio-group>
+        </van-radio>
+      </van-radio-group>
+      <view wx:if="{{ vertex == '有异常'&&skull == '已检测'  }}">
+        <view>异常为：</view>
+        <van-field required type="textarea" autosize custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;"  model:value="{{ scalp }}" placeholder="______________________________________________" />
+      </view>
+    </view>
+
+
+    <view class="form_item">
+      <view class="informed_consent">知情同意书 <view class="required">*</view></view>
+      <view class="informed_consent_deatil">
+        1、本产品是基于代谢组学成果对人体内肿瘤代谢微环境进行综合评估的前沿检测技术，通过抽血为检测者提供肿瘤早期风险筛查预警，及早发现隐患，更有针对性地辅助推进癌症的早筛早诊早治。 
+      </view>
+      <view class="informed_consent_deatil">
+        2、适用于本产品的检测者为 18至75 周岁的普通人群。18至75 周岁年龄段之外的人群、有肿瘤病史、有肿瘤治疗史、肿瘤相关药物服用史的人群，为不适用人群。如检测者属不适用人群，但仍坚持要求实施筛查检测，则最终的筛查结果报告仅作为参考，检测方对该检测者不承担任何相关责任。 
+      </view>
+      <view class="informed_consent_deatil">
+        3、任何筛查或临床诊查手段，即便经过严格的检验检查程序，仍可能出现不可控误差。本次筛查中相关检测方将确保检测程序的严谨性，筛查结果报告只对该检测者的本次样本负责，检测者应对检测个体与样本的一致性负责。 
+      </view>
+      <view class="informed_consent_deatil">
+        4、筛查结果报告内的各种风险分析是基于机器学习模型做出的，其风险预警仅限于提示检测者存在肿瘤或相关代谢异常的可能性。 
+      </view>
+      <view class="informed_consent_deatil">
+        5、大多数肿瘤的发生是由多种遗传因素、代谢微环境水平和环境因素共同作用的结果。若检测者的筛查结果报告中提示有异常，建议去往正规医院或医疗机构专科进一步诊查。 
+      </view>
+      <view class="informed_consent_deatil">
+        6、检测者个人信息、样本信息及筛查结果报告等，将被严格保管和保密，不会透露给任何无关第三方。
+      </view>
+    </view>
+    <view class="statement">
+      <view class="statement_declaration">声明 <view class="required">*</view></view>
+      <view class="statement_declaration_detail">1）如您在本平台“中科泰康高科技产业（广州）有限公司“购买 了“泛肿瘤风险筛查项目 ” （ 14项肿瘤的代谢组学泛癌风险筛查），请在下单前与您的分享服务人员进行采血预约（采血前，请务必确保您是在合法合规的医疗机构、并由具备专业资质的医护人员进行操作。如果您发现有任何不符合规定的情况，有权向平台反映或投诉）</view>
+      <view class="statement_declaration_detail"> 2）“本健康调查问卷”及“知情同意书”仅做日常健康行为参考，将递交一份给成都泰莱高仁医学检验实验室有限公司检测并出具检测报告，在未得到您本人许可，不会透露给无关方，亦不会用到任何商业用途。本公司保留对问卷及报告的说明、解释和更新的权利。</view>
+      <view class="statement_declaration_detail">3）本人（受检人或其监护人）已阅读知情同意书且对条款理解清楚，同意进行上述的肿瘤的代谢组学泛癌风险筛查，且承诺提供的所有问卷信息准确属实。 如因本人代签或签署信息不准确，造成的一切法律纠纷问题由签署人全责承担。</view>
+      <view class="signature_name" bindtap="onShowPopup">
+        <image class="avatarImage" src="{{ signUrl }}" />
+        请点击本处签字：__________________
+      </view>
+    </view>
+    <view class="next_step">
+        <van-button 
+         bind:click="onSubmitter"
+        >
+         我填完了，提交
+        </van-button>
+    </view>
+    <!-- <van-button 
+     color="{{signUrl?'#003F6A':'#FCFCFC'}}" 
+     custom-style="color: {{signUrl?'#fff':'#E1E1E1'}}; display: flex; margin: 40rpx auto;"  
+     type="primary" 
+     bind:click="onSubmitter"
+     disabled="{{signUrl?false:true}}"
+    >
+     我填完了，提交
+    </van-button> -->
+  </view>
+  <canvas-signature show="{{ showPopup }}" bind:close="onHidePopup" bind:confirm="onChanCanvas"/>
+  <van-toast id="van-toast" />
+</view>

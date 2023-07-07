@@ -1,0 +1,179 @@
+.earlyScreening {
+    overflow: auto;
+    background-color: #fff;
+}
+
+.earlyScreening .required{
+    display: inline-block;
+    color: red;
+}
+
+.headFixation{
+    width: 410rpx;
+    height: 34rpx;
+    font-size: 24rpx;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #999999;
+    line-height: 68rpx;
+    margin: 0 20rpx;
+}
+
+.earlyTitle{
+    text-align: center;
+    margin: 50rpx auto;
+    margin-top: 50rpx;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #333333;
+    font-size: 52rpx;
+}
+
+.earlyHint{
+    font-size: 28rpx;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: bold;
+    color: #CD0303;
+    line-height: 38rpx;
+    text-align: center;
+    margin: 20rpx;
+}
+
+.earlyScreening .form{
+   padding-bottom: 40rpx;
+}
+
+.earlyScreening .form_item{
+    background-color: #EEF4FB; 
+    margin-bottom: 20rpx;
+    padding: 20rpx;
+    color: #333333;
+    font-size: 30rpx;
+    font-weight: 500;
+}
+
+.earlyScreening .form_item_hint{
+    font-size: 24rpx;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #AA2F2F;
+}
+
+.earlyScreening .marck{
+    background-color: #F6EEF1; 
+} 
+
+.earlyScreening .van-radio{
+    margin-bottom: 20rpx;
+}
+
+.earlyScreening .van-radio__icon {
+    background-color: #fff;
+}
+.earlyScreening .van-radio__icon--checked {
+    background-color: var(--radio-checked-icon-color,#1989fa);
+    border-color: var(--radio-checked-icon-color,#1989fa);
+    color: #fff;
+}
+
+.earlyScreening .van-checkbox  {
+    margin-bottom: 15rpx;
+}
+
+.earlyScreening .van-checkbox__icon {
+    background-color: #fff;
+}
+.earlyScreening .van-checkbox__icon--checked {
+    background-color: var(--checkbox-checked-icon-color,#1989fa);
+    border-color: var(--checkbox-checked-icon-color,#1989fa);
+    color: #fff;
+}
+
+.input_highlight{
+    background-color: #EEF4FB; 
+    margin-bottom: 20rpx;
+}
+
+.informed_consent{
+    font-size: 36rpx;
+    font-family: Source Han Sans CN-Bold, Source Han Sans CN;
+    font-weight: 700;
+    color: #333333;
+    line-height: 38rpx;
+    text-align: center;
+}
+
+.informed_consent_deatil{
+    font-size: 28rpx;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #333333;
+    line-height: 42rpx;
+    margin-top: 20rpx;
+}
+
+.statement{
+    padding: 20rpx;
+    background-color: #F6EEF1; 
+    line-height: 42rpx;
+    font-weight: 500;
+    color: #333333;
+    font-size: 30rpx;
+}
+.statement_declaration{
+    font-size: 36rpx;
+    font-family: Source Han Sans CN-Bold, Source Han Sans CN;
+    font-weight: 700;
+    color: #333333;
+    line-height: 38rpx;
+    text-align: center;
+}
+
+.statement_declaration_detail{
+    font-size: 28rpx;
+    font-family: Source Han Sans CN-Medium, Source Han Sans CN;
+    font-weight: 500;
+    color: #333333;
+    line-height: 42rpx;
+    margin-top: 20rpx;
+}
+
+.signature_name{
+    color: #AA2F2F;
+    font-weight: bold;
+    margin: 100rpx 0 20rpx 150rpx;
+    position: relative;
+}
+
+.avatarImage{
+    width: 150rpx;
+    height: 100rpx;
+    position: absolute;
+    right: 100rpx;
+    bottom: 20rpx;
+}
+
+.earlyScreening .next_step{
+   margin: 40rpx auto;
+   text-align: center;
+}
+
+.earlyScreening .next_step button{
+    width: 660rpx;
+    height: 98rpx;
+    background: linear-gradient(95deg, #FF6E53 0%, #FF0000 100%);
+    box-shadow: 0rpx 6rpx 12rpx 0rpx rgba(229,53,47,0.4);
+    border-radius: 16rpx 16rpx 16rpx 16rpx;
+    opacity: 1;
+    color: #fff;
+}
+
+.earlyScreening .arrows{
+    color:#838383; 
+    display: inline-block;
+    font-size: 35rpx; 
+    font-weight: bold;
+    margin-left: 25rpx;
+    width: 30rpx;
+    height: 30rpx;
+}

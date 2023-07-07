@@ -1,0 +1,22 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="earlyScreeningSchedule">
+    <view class="earlyScreeningDetail">
+        <view class="headFixation">我的早筛码：{{signcode}}</view>
+    </view>
+    <van-steps
+      steps="{{ steps }}"
+      active="{{ active }}"
+      direction="vertical"
+      active-color="#0079FE"
+    />
+    <view class="query">如有疑问请联系客服或您的服务人员。</view>
+    <view class="next_step" wx:if="{{ active==2 }}">
+        <van-button 
+         bindtap="showSharePopup"
+        >
+         查看检测报告
+        </van-button>
+    </view>
+    <down-app-code show="{{ showSharePopup }}" bind:close="onHideSharePopup" /> 
+</view>

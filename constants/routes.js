@@ -193,5 +193,20 @@ export default {
   },
   fingerDoctorCheckin: {
     path: "/subpages/fingerDoctor/checkin/index",
+  },
+  earlyScreening: {
+    path: "/subpages/earlyScreening/main/index",
+  },
+  earlyScreeningFillout: {
+    path: "/subpages/earlyScreening/fillout/index",
+  },
+  earlyScreeningDoc: {
+    path: "/subpages/earlyScreening/doc/index",
+  },
+  earlyScreeningList: {
+    path: "/subpages/myMorningSieve/earlyScreeningList/index",
+  },
+  earlyScreeningSchedule: {
+    path: "/subpages/myMorningSieve/earlyScreeningSchedule/index",
   }
 }

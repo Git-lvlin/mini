@@ -1,0 +1,49 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="questionnaire">
+  <view class="earlyTitle">嗨，欢迎体验早筛服务</view>
+  <view class="earlyHint">
+    <view>早筛服务可早期筛查14大常见恶性肿瘤更“早”</view>
+    <view>守护您的健康</view>
+  </view>
+  <view class="form">
+    <view class="form_item">
+      <view class="label">以下是您的采样地点</view>
+      <view class="physical">体检地点：{{checkAddress.provinceName}}{{checkAddress.cityName}}{{checkAddress.areaName}}{{checkAddress.address}}</view>
+    </view>
+    <view class="form_item">
+      <view  class="label">您的所在地区</view>
+      <input
+        class="form_input"
+        value="选择地区：{{selectAddress.areaStr}}"
+        disabled="{{true}}"
+        placeholder="省市区县、乡镇等"
+        placeholder-class="form_placeholder"
+        bindtap="onOpenAddress"
+      />
+      <view class="location" wx:if="{{true}}">
+        <image class="location_icon" src="{{tools.getImgUrl('miniprogram/common/back_gray%402x.png')}}" />
+      </view>
+    </view>
+
+    <view class="form_item marck">
+      <view>筛查检测地点确认无误后，请点击以下“填写协议”，即 </view>
+      <view>可直达健康问卷+知情书/抽血委托协议。</view>
+      <view class="entrance" bindtap="entranceQuestionnaire">填写协议</view>
+    </view>
+
+    <view class="friendly_reminder">
+     <view>友情提示</view>
+     <view>本产品适用于 18-75 周岁的成年人群 </view>
+     <view>不适用于已确诊肿瘤、有肿瘤病史或治疗史的人群</view>
+     <view>如有疑问，请咨询客服。</view>
+  </view>
+</view>
+<address-popup
+    show="{{ showPopup }}"
+    editData="{{ editData }}"
+    isEdit="{{ isEdit }}"
+    bind:close="onCloseAddress"
+    bind:setAddress="handleEditAddress"
+  />
+</view>

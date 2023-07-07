@@ -91,6 +91,21 @@
         "doc/index",
         "checkin/index"
       ]
+    },
+    {
+      "root": "subpages/earlyScreening",
+      "pages": [
+        "main/index",
+        "fillout/index",
+        "doc/index"
+      ]
+    },
+    {
+      "root": "subpages/myMorningSieve",
+      "pages": [
+        "earlyScreeningList/index",
+        "earlyScreeningSchedule/index"
+      ]
     }
   ],
   "preloadRule": {

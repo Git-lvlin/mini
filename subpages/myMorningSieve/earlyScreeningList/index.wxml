@@ -1,0 +1,13 @@
+<view class="earlyScreeningList">
+    <van-cell-group wx:for="{{ earlyScreeningArr }}" wx:key="id">
+      <van-cell   
+      title="{{ item.signCode }}" 
+      value="{{ item.processStr }}" 
+      bind:click="onDetail" 
+      is-link
+      data-code="{{item.subOrderSn}}"
+      data-signCode="{{item.signCode}}"
+      />
+    </van-cell-group>
+    <view class="footer_text">没有更多了~</view>
+</view>

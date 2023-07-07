@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "抽血委托协议",
+  "usingComponents": {
+    "van-tab": "/miniprogram_npm/@vant/weapp/tab/index",
+    "van-button": "/miniprogram_npm/@vant/weapp/button/index",
+    "down-app-code": "/components/common/default-down-app-code/index"
+  }
+}

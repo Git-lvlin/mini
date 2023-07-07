@@ -1,0 +1,9 @@
+{
+    "navigationBarTitleText": "早筛详情",
+    "usingComponents": {
+      "van-steps": "/miniprogram_npm/@vant/weapp/steps/index",
+      "van-icon": "/miniprogram_npm/@vant/weapp/icon/index",
+      "van-button": "/miniprogram_npm/@vant/weapp/button/index",
+      "down-app-code": "/components/common/default-down-app-code/index"
+    }
+}

@@ -1,0 +1,11 @@
+<wxs module="tools" src="../../../wxs/common.wxs" />
+
+<view class="submit_success">
+    <view class="submit_item">
+      <image class="success_icon" src="{{tools.getImgUrl('miniprogram/common/successfully.png')}}" />
+      <view class="success">提交成功</view>
+      <view class="suggest">您可以在约购APP查看检测进度和检测报告</view>
+      <van-button  bindtap="showSharePopup">点击下载约购APP</van-button>
+    </view>
+    <down-app-code show="{{ showSharePopup }}" bind:close="onHideSharePopup" /> 
+</view>
