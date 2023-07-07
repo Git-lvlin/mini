@@ -52,13 +52,12 @@ Page({
 
     onDetail({currentTarget}){
         console.log('currentTarget',currentTarget)
-        const { code,signcode,actionurl } = currentTarget.dataset;
+        const { code,signcode} = currentTarget.dataset;
         router.push({
           name: 'earlyScreeningSchedule',
           data:{
             code,
-            signcode,
-            actionurl
+            signcode
           }
         })
     }

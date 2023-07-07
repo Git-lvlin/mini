@@ -3,7 +3,6 @@
 <view class="earlyScreeningSchedule">
     <view class="earlyScreeningDetail">
         <view class="headFixation">我的早筛码：{{signcode}}</view>
-        <!-- <view class="arrows" bindtap="onDetail">查看知情同意书 <image src="{{tools.getImgUrl('miniprogram/common/back_gray_red@2x.png')}}" /></view> -->
     </view>
     <van-steps
       steps="{{ steps }}"
