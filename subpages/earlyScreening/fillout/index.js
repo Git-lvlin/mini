@@ -23,7 +23,7 @@ create.Page(store, {
     nameError: '',
     sender: '',
     genderShow: false,
-    age:0,
+    age:'',
     columns: ['18','19', '20', '21', '22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59','60','61','62','63','64','65','66','67','68','69','70','71','72','73','74','75'],
     height: '',
     heightError: '',
@@ -123,10 +123,11 @@ create.Page(store, {
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log('options',options)
       this.options=options
       this.setData({
         code:this.options.code,
-        signCode:this.options.signCode
+        signCode:this.options.signCode,
       })
   },
 
@@ -174,7 +175,11 @@ create.Page(store, {
       this.setData({
         nameError: '请输入姓名'
       })
-    } else {
+    }else if(!/^[\u4e00-\u9fa5]{2,12}$/.test(this.data.name)){
+      this.setData({
+        nameError: '请输入2-12个汉字'
+      })
+    }else {
       this.setData({
         nameError: ''
       })
@@ -215,7 +220,11 @@ create.Page(store, {
       this.setData({
         heightError: '身高必须为整数'
       })
-    } else {
+    }else if (Number(this.data.height) < 120 || Number(this.data.height) > 220) {
+        this.setData({
+          heightError: '身高在120-220之间'
+        })
+      }  else {
       this.setData({
         heightError: ''
       })
@@ -231,21 +240,44 @@ create.Page(store, {
       this.setData({
         weightError: '体重必须为数字'
       })
+    } else if (Number(this.data.weight) < 30 || Number(this.data.weight) > 150) {
+      this.setData({
+        weightError: '体重在30-150之间'
+      })
     } else {
       this.setData({
         weightError: ''
       })
     }
   },  
-  checkCardNo() {
+  checkCardNo(val) {
     if (!/^(\d{15}$|^\d{18}$|^\d{17}(\d|X|x))$/.test(this.data.cardNo)) {
       this.setData({
         cardNoError: '请输入正确的身份证号码'
       })
-    } else {
+    }else {
       this.setData({
         cardNoError: ''
       })
+      let gender = parseInt(this.data.cardNo.substr(16, 1)) % 2 === 1 ? '男' : '女';
+      this.setData({
+        sender: gender == '男'?'1':'2'
+      })
+      let birth = this.data.cardNo.substr(6, 8).replace(/(.{4})(.{2})/, '$1-$2-');
+      let age = new Date().getFullYear() - new Date(birth).getFullYear();
+      if(isNaN(age)){
+        this.setData({
+            cardNoError: '请输入正确的身份证号码'
+          })
+      }else if(parseInt(age)>=18&&parseInt(age)<=75){
+        this.setData({
+            age
+          }) 
+      }else if(parseInt(age)<18||parseInt(age)>75){
+        this.setData({
+            cardNoError: '请输入正确的身份证号码,年龄在18到75之间'
+          })
+      }
     }
   },
   checkPhone() {
@@ -494,6 +526,7 @@ create.Page(store, {
     this.checkPhone()
   },
   onSubmitter() {
+    let that=this
     try {
         this.check()
         const {code,name,nameError,sender,age,height,heightError,weight,weightError,cardNo,cardNoError,phone,phoneError,smoke,breakfast,midnight,exercise,family,familyHistory,spirit,medicine,
@@ -720,7 +753,7 @@ create.Page(store, {
             userAddress: selectAddress&&selectAddress.areaStr,
         }
         if(nameError){
-            Toast(nameError);
+            Toast(`姓名${nameError}`);
             return
         }
         if(!sender){
@@ -732,11 +765,11 @@ create.Page(store, {
             return
         }
         if(heightError){
-            Toast(heightError);
+            Toast(`身高${heightError}`);
             return
         }
         if(weightError){
-            Toast(weightError);
+            Toast(`体重${weightError}`);
             return
         }
         if(cardNoError){
@@ -941,7 +974,10 @@ create.Page(store, {
         }
         earlyScreeningApi.signUp(params).then(res=>{
             router.replace({
-                name: 'earlyScreeningDoc'
+                name: 'earlyScreeningDoc',
+                data:{
+                    p: that.options.p?that.options.p:''
+                }
             })
         })
     } catch (error) {

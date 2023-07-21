@@ -7,49 +7,51 @@
   <view class="form">
     <view class="form_item">
       <view>1.姓名（请与本人身份证姓名一致，否则造成的法律纠纷由本人承担）<view class="required">*</view></view>
-      <van-field  custom-style="background-color: #EEF4FB;"  required bind:input="checkName" model:value="{{ name }}" placeholder="请输入" error-message="{{nameError}}" input-align="bottom"/>
+      <van-field  custom-style="background-color: #EEF4FB;"  required bind:input="checkName" model:value="{{ name }}" placeholder="请输入2-12个汉字" error-message="{{nameError}}" input-align="bottom"/>
     </view>
 
+    
     <view class="form_item marck">
-      <view>2、性别 <view class="required"> *</view></view>
-        <van-radio-group direction="horizontal"  style="margin: 50rpx;" value="{{ sender }}" bind:change="onChangeRadio">
+      <view>2、身份证号（中国大陆）<view class="required"> *</view></view>
+      <van-field 
+       custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;" 
+       required 
+       model:value="{{ cardNo }}" 
+       placeholder="请输入18位数字" 
+       bind:input="checkCardNo"
+       error-message="{{cardNoError}}"
+       maxlength="{{18}}"
+      />
+    </view>
+
+    <view class="form_item">
+      <view>3、性别 <view class="required"> *</view></view>
+        <van-radio-group direction="horizontal"  disabled style="margin: 50rpx;" value="{{ sender }}" bind:change="onChangeRadio">
           <van-radio name="1">男</van-radio>
           <van-radio name="2">女</van-radio>
         </van-radio-group>
     </view>
 
-    <view class="form_item">
-      <view>3、年龄（请选择 18-75 适用年龄区间内的周岁数）<view class="required">*</view></view>
-      <view style="margin: 40rpx; display: flex;align-items: center;"  bindtap="ageShow">{{age?age:"选择年龄"}} <image class="arrows" src="{{tools.getImgUrl('miniprogram/common/back_gray@2x.png')}}" /></view>
-      <van-popup show="{{ genderShow }}" position="bottom">
+    <view class="form_item  marck">
+      <view>4、年龄（请选择 18-75 适用年龄区间内的周岁数）<view class="required">*</view></view>
+      <view style="margin: 40rpx; display: flex;align-items: center;">{{age}}</view>
+      <!-- <van-popup show="{{ genderShow }}" position="bottom">
         <van-picker show-toolbar bind:cancel="genderShowClose" columns="{{ columns }}" bind:confirm="genderConfirm" />
-      </van-popup>
+      </van-popup> -->
     </view>
 
-    <view class="form_item marck">
-      <view>4、身高 <view class="required">*</view></view>
-      <van-field custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;" required bind:input="checkHeight"  model:value="{{ height }}" error-message="{{heightError}}"  placeholder="请输入" use-button-slot>
+    <view class="form_item">
+      <view>5、身高 <view class="required">*</view></view>
+      <van-field custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;" required bind:input="checkHeight"  model:value="{{ height }}" error-message="{{heightError}}"  placeholder="请输入120-220之间的数字" use-button-slot>
         <view  slot="button">cm</view>
      </van-field>
     </view>
 
-    <view class="form_item">
-      <view>5、体重 <view class="required">*</view></view>
-      <van-field custom-style="background-color: #EEF4FB;  margin-bottom: 20rpx;" required bind:input="checkWeight"  model:value="{{ weight }}" error-message="{{weightError}}"  placeholder="请输入">
+    <view class="form_item  marck">
+      <view>6、体重 <view class="required">*</view></view>
+      <van-field custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;" required bind:input="checkWeight"  model:value="{{ weight }}" error-message="{{weightError}}"  placeholder="请输入30-150之间的数字">
         <view  slot="button">kg</view>
       </van-field>
-    </view>
-
-    <view class="form_item marck">
-      <view>6、身份证号（中国大陆）<view class="required"> *</view></view>
-      <van-field 
-       custom-style="background-color: #F6EEF1;  margin-bottom: 20rpx;" 
-       required 
-       model:value="{{ cardNo }}" 
-       placeholder="请输入" 
-       bind:input="checkCardNo"
-       error-message="{{cardNoError}}"
-      />
     </view>
 
     <view class="form_item">
