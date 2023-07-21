@@ -11,7 +11,8 @@ create.Page(store, {
    * 页面的初始数据
    */
   data: {
-    showSharePopup: false
+    showSharePopup: false,
+    p:''
   },
 
   options: {},
@@ -19,7 +20,10 @@ create.Page(store, {
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-      
+    this.setData({
+        p:options.p
+    })
+    console.log('options',options)
   },
 
   /**
@@ -45,4 +49,7 @@ create.Page(store, {
       showSharePopup: false,
     })
   },
+  launchAppError (e) {
+    console.log(e.detail.errMsg)
+  }
 })
