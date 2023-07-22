@@ -135,7 +135,7 @@ Component({
                     //上传图片的名字和路径（默认路径为根目录。自定义路径：xxx/xxx.png）
                     formData.key = path;
                     wx.uploadFile({
-                        url: IMG_CDN, //ali-oss上传地址
+                        url: `${IMG_CDN}`, //ali-oss上传地址
                         filePath: res.tempFilePath,
                         header: {
                             "Content-Type": "multipart/form-data",
@@ -151,12 +151,30 @@ Component({
                                 that.onHidePopup()
                                 wx.hideLoading();
                             } else {
+                                const params={
+                                    url: `${IMG_CDN}`,
+                                    filePath: res.tempFilePath,
+                                    formData,
+                                    res
+                                }
+                                commonApi.miniProgramLog(params).then(res=>{
+                                    console.log('res',res)
+                                })
                                 showToast({
                                     title: "上传出错啦，请重试"
                                 });
                             }
                         },
                         fail(err) {
+                            const params={
+                                url: `${IMG_CDN}`,
+                                filePath: res.tempFilePath,
+                                formData,
+                                res
+                            }
+                            commonApi.miniProgramLog(params).then(res=>{
+                                console.log('res',res)
+                            })
                             wx.showToast({
                                 title: "上传失败",
                                 icon: 'none',

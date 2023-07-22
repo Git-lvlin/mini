@@ -18,7 +18,7 @@ export const getBaseApiUrl = () => {
 
 // 获取图片最新cdn地址
 export const getImgCdn = () => {
-  const env = wx.getStorageSync("SYS_ENV");
+  const env = wx.getStorageSync("SYS_ENV") || 'pro';
   return ossHost[env];
 };
 

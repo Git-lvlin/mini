@@ -19,6 +19,7 @@ const url = {
   findAddressById: '/member/auth/memberAddress/findAddressById',
   agreements: '/cms/open/agreements',
   getStoreShop: '/store/option/storeShop/getStatus',
+  miniProgramLog: "/activity/open/miniProgramLog",
 }
 
 let isShowLoginMobal = store.data.showLoginMobel;
@@ -189,5 +190,8 @@ export default {
   },
   getStoreShop(params) {
     return Request.get(url.getStoreShop, params, {});
+  },
+  miniProgramLog(params) {
+    return Request.post(url.miniProgramLog, params, {});
   },
 }

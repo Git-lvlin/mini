@@ -1,8 +1,8 @@
 
 // var IMG_CDN = "https://dev-yeahgo-oss.yeahgo.com/"
-var IMG_CDN = "https://uat-yeahgo-oss.yeahgo.com/"
+// var IMG_CDN = "https://uat-yeahgo-oss.yeahgo.com/"
 // var IMG_CDN = "https://fat-yeahgo-oss.yeahgo.com/"
-// var IMG_CDN = "https://pro-yeahgo-oss.yeahgo.com/"
+var IMG_CDN = "https://pro-yeahgo-oss.yeahgo.com/"
 
 // 格式化图片路径
 var getImgUrl = function (url) {
