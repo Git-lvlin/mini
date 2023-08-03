@@ -22,11 +22,21 @@ create.Page(store, {
     showTop: false,
     flag: 0,
     shareInfo: "",
+    isFixed: false,
   },
   iconChange(e) {
     this.setData({
       itemIndex: e.detail.current
     })
+  },
+  scroll(e) {
+    this.setData({
+      isFixed: e.detail.isFixed
+    })
+    wx.setNavigationBarColor({
+      frontColor: e.detail.isFixed ? '#000000' : '#ffffff',
+      backgroundColor: e.detail.isFixed ? '#ffffff' : '#ffffff',
+    });
   },
   // 返回上一页
   onBack() {

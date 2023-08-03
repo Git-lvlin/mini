@@ -69,8 +69,9 @@
       </view>
     </view>
   </view>
+  <nav-bar title="限时秒杀" background="#fff" fontColor="#000" wx:if="{{isFixed}}" />
   <view class="tab-box">
-    <van-tabs lazy-render custom-class="custom" nav-class="nav-class" tab-active-class="tab-active" swipeable animated sticky active="{{ active }}" bind:change="tabChange">
+    <van-tabs offset-top="{{ $.systemInfo.navTotalHeightPx }}" bind:scroll="scroll" lazy-render custom-class="custom" nav-class="nav-class" tab-active-class="tab-active" swipeable animated sticky active="{{ active }}" bind:change="tabChange">
       <van-tab title-style="font-size:32rpx" title="正在疯抢">
         <view class="today">
           <block wx:for="{{seckillData.records}}" data-index="index" wx:key="id">
