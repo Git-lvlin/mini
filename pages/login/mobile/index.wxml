@@ -7,7 +7,7 @@
   </view>
   <view class="login_tips" bindtap="onChangeRadio" wx:if="{{!state}}">
     <image class="radio_icon" src="{{radio ? selectedIcon : selectIcon}}" />
-    <text >登陆/注册即表示您已阅读并同意</text>
+    <text >您已阅读并同意</text>
     <text class="red_text" data-type="privacy" catchtap="onClickTreaty">《用户服务协议及隐私政策》</text>
   </view>
   <view class="login">
@@ -48,7 +48,7 @@
         checked-color="#E5352F"
         icon-size="{{18}}"
       >
-        登陆/注册即表示您已阅读并同意
+        您已阅读并同意
         <text class="red_text" data-type="privacy" catchtap="onClickTreaty">《用户服务协议及隐私政策》</text>
       </van-radio>
     </van-radio-group>

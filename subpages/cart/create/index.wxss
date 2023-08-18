@@ -455,3 +455,7 @@ page {
   margin-right: 10rpx;
   margin-top: 10rpx;
 }
+
+.van-button--large{
+    width: 100% !important;
+}

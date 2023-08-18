@@ -9,6 +9,7 @@ import util from '../../../utils/util'
 import submsg from '../../../utils/subscribeMessage'
 import { PAY_TYPE_KEY } from '../../../constants/common'
 import routes from '../../../constants/routes'
+import Dialog from '../../../miniprogram_npm/@vant/weapp/dialog/dialog';
 
 const refreshOrderToken = {
   20802: "库存不足！",
@@ -68,7 +69,8 @@ create.Page(store, {
     sendStatus: 'close',
     sendMoney: 0,
     healthyCheck: false,
-    takeSpot: {}
+    takeSpot: {},
+    showSharePopup: false,
   },
 
   tabChange(event) {
@@ -847,7 +849,6 @@ create.Page(store, {
 
   // 确认下单 跳转收银台
   onToCashier() {
-
     if ((this.orderType == 32 || this.orderType == 34) && !this.data.healthyCheck) {
       showToast({ title: "请同意活动规则" });
       return
@@ -912,6 +913,19 @@ create.Page(store, {
       //   clearTimeout(timer);
       // }, 1500);
       // }
+      if(err.code===10090){
+        Dialog.confirm({
+            title: '提示',
+            message: '请下载APP进行下单',
+            // theme: 'round-button',
+            cancelButtonText: '关闭',
+            confirmButtonText: '下载约购APP'
+        }).then(() => {
+            this.setData({
+            showSharePopup: true,
+            })
+        });
+      }
     });
 
     // 保存上次下单地址
@@ -965,5 +979,10 @@ create.Page(store, {
         urls: comment,
       });
     }
-  }
+  },
+  onHideSharePopup() {
+    this.setData({
+      showSharePopup: false,
+    })
+  },
 })

@@ -19,6 +19,7 @@
     "detail-nav": "../components/detail-nav/index",
     "van-toast": "@vant/weapp/toast/index",
     "down-app-code": "/components/common/default-down-app-code/index",
-    "healthy-bar": "/components/common/healthyBar/index"
+    "healthy-bar": "/components/common/healthyBar/index",
+    "van-checkbox": "/miniprogram_npm/@vant/weapp/checkbox/index"
   }
 }

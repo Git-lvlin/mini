@@ -211,7 +211,7 @@
           <image class="checkout_icon" wx:if="{{healthyCheck}}" src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-yes.png')}}" />
           <image class="checkout_icon" wx:else src="{{tools.getImgUrl('miniprogram/intensive/cart-icon-no.png')}}" />
         </view>
-        <view>支付即同意《<text class="text" data-url="{{agreementsUrl}}" bindtap="toWebView">活动规则</text>》</view>
+        <view>支付即同意<text class="text" data-url="{{agreementsUrl}}" bindtap="toWebView">活动规则</text>》</view>
       </view>
     </view>
   </view>
@@ -229,4 +229,7 @@
     good="{{setSkuGood}}"
     bind:confirm="handleSetSkuNum"
   />
+  
+  <van-dialog id="van-dialog" />
+  <down-app-code show="{{ showSharePopup }}" bind:close="onHideSharePopup" /> 
 </view>
