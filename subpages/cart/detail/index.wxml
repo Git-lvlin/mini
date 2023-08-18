@@ -581,6 +581,11 @@
       class="flex_center to_buy"
       wx:if="{{isActivityGood !=15&&isActivityGood!=16}}"
     >
+    <view class="to_buy_checkbox" wx:if="{{ good.entrustInfoNew.length&&good.entrustInfoNew }}">
+     <van-checkbox icon-size="25rpx" value="{{ checked }}" shape="square" bind:change="onChangeAgreement">
+        阅读并同意 <text class="blue_text" data-url="{{good.entrustInfoNew[0].agreementUrl}}"  bindtap="toWebView">{{ good.entrustInfoNew[0].agreementTitle }}</text>
+     </van-checkbox>
+    </view>
       <!-- <view
         class="flex_fix buy_bar_item"
         wx:if="{{isActivityGood == 1 || isActivityGood == 2}}"
@@ -610,6 +615,7 @@
         >{{stockOverText}}</view>
         <view
           class="to_buy_btn"
+          style="{{good.entrustInfoNew.length&&good.entrustInfoNew?checked?'background-image: linear-gradient(270deg,#fb5f2a 0%,#e5352f 100%);':'background-color: #F3f3f3;':'background-image: linear-gradient(270deg,#fb5f2a 0%,#e5352f 100%);'}}"
           bindtap="openSpecPopup"
           wx:else
         >{{isActivityGood == 15 || isActivityGood == 16 ? '立即抢购' : '立即购买'}}</view>

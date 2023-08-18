@@ -127,7 +127,8 @@ create.Page(store, {
     selfStoreNo: '',
     objectId: '',
     showDownTips: false,
-    showSharePopup: false
+    showSharePopup: false,
+    checked:false
   },
 
   lifetimes: {
@@ -1610,9 +1611,13 @@ create.Page(store, {
   openSpecPopup(e) {
     const {
       good,
+      checked
     } = this.data;
 
-    
+    if (good.entrustInfoNew&&good.entrustInfoNew.length&&!checked) {
+        showToast({ title: "请勾选阅读并同意《约购平台服务合作协议》" });
+        return;
+      }
 
     if (!this.data.userInfo) {
       getStorageUserInfo(true);
@@ -2135,5 +2140,16 @@ create.Page(store, {
     if (data.isJump === 1) {
       router.push({ name: 'webview', data: { url: encodeURIComponent(data.jumpUrl), encode: true } })
     }
-  }
+  },
+  //阅读并同意
+  onChangeAgreement(e) {
+    console.log('e',e)
+    this.setData({
+        checked:e.detail
+    })
+  },
+  toWebView(e) {
+    const url = e.currentTarget.dataset.url
+    router.push({ name: 'webview', data: { url:encodeURIComponent(url), encode:true } })
+  },
 })

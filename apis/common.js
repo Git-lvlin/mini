@@ -120,7 +120,7 @@ export default {
         }
       // }
       refreshingToken = false;
-      return err;
+      return Promise.reject('Token刷新失败')
     })
   },
 

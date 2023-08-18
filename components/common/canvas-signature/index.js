@@ -166,6 +166,7 @@ Component({
                             }
                         },
                         fail(err) {
+                            console.log('err',err)
                             const params={
                                 url: `${IMG_CDN}`,
                                 filePath: res.tempFilePath,

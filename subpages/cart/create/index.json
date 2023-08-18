@@ -9,6 +9,8 @@
     "van-tab": "@vant/weapp/tab/index",
     "van-tabs": "@vant/weapp/tabs/index",
     "set-sku-num": "../components/set-sku-num/index",
-    "healthy-bar": "/components/common/healthyBar/index"
+    "healthy-bar": "/components/common/healthyBar/index",
+    "down-app-code": "/components/common/default-down-app-code/index",
+    "van-dialog": "@vant/weapp/dialog/index"
   }
 }
