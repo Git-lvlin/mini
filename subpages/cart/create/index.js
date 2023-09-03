@@ -44,6 +44,7 @@ create.Page(store, {
   isActivityCome: false,
   // 获取各类金额入参
   getAmountData: {},
+  options: {},
 
   data: {
     orderType: 1,
@@ -113,6 +114,7 @@ create.Page(store, {
   },
 
   onLoad(options) {
+    this.options = options
     console.log('selectAddressType 确认订单-options', options, this.data.selectAddressType)
     let { systemInfo } = this.data.$;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
@@ -890,6 +892,10 @@ create.Page(store, {
     if (this.orderType == 32 || this.orderType == 34) {
       let takeSpot = wx.getStorageSync("TAKE_SPOT") || {};
       postData.giftPackageStoreNo = takeSpot.storeNo
+    }
+
+    if (this.options.shareMemberId) {
+      postData.shareMemberId = this.options.shareMemberId
     }
 
     cartApi.createOrder(postData).then(res => {
