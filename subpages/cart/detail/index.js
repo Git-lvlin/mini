@@ -1614,10 +1614,10 @@ create.Page(store, {
       checked
     } = this.data;
 
-    if (good.entrustInfoNew&&good.entrustInfoNew.length&&!checked) {
-        showToast({ title: "请勾选阅读并同意《约购平台服务合作协议》" });
-        return;
-      }
+    // if (good.entrustInfoNew&&good.entrustInfoNew.length&&!checked) {
+    //     showToast({ title: "请勾选阅读并同意《约购平台服务合作协议》" });
+    //     return;
+    //   }
 
     if (!this.data.userInfo) {
       getStorageUserInfo(true);
@@ -1723,6 +1723,8 @@ create.Page(store, {
       getStorageUserInfo(true);
       return;
     }
+
+    
     let outData = {}
     if (e && e.detail) {
       outData = e.detail
@@ -1752,8 +1754,15 @@ create.Page(store, {
       currentSku,
       storeInfo,
       personalList,
+      checked,
     } = this.data;
-    console.log('this.specLoaded', this.specLoaded)
+    
+
+    if (good.entrustInfoNew&&good.entrustInfoNew.length&&!checked) {
+      showToast({ title: "请勾选阅读并同意《约购平台服务合作协议》" });
+      return;
+    }
+
     // let stockOverData = this.handleGoodStock(currentSku.stockNum);
     // 多规格商品，规格时候已加载
     if (!this.specLoaded) {
