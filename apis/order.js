@@ -33,6 +33,10 @@ const url = {
   getPayOrderInfo: '/activity/auth/payment/get',
   prepayOrder: '/activity/auth/payment/pay',
   getStoreDeliveryStatus: "/store/option/memberShop/getStoreDeliveryStatus",
+  getOrderPayInfo: "/order/auth/getOrderPayInfo",
+  findCert: '/public/auth/contract/findCert',
+  genContract: '/public/auth/contract/genContract',
+  getVerifyUrl: '/public/auth/contract/getVerifyUrl',
 }
 
 export default {
@@ -153,4 +157,23 @@ export default {
     }
     return Request.get(url.getStoreDeliveryStatus, params, option);
   },
+  //获取订单支付信息
+  getOrderPayInfo(params, option) {
+      return Request.post(url.getOrderPayInfo, params, option);
+    },
+  //获取是否实名认证
+  getFindCert(params, option) {
+      return Request.post(url.findCert, params, option);
+  },
+  //手动签署合同
+  genContract(params, option) {
+      return Request.post(url.genContract, params, option);
+
+  },
+  //获取实名认证url
+  getVerifyUrl(params, option) {
+      return Request.post(url.getVerifyUrl, params, option);
+
+  },
+    
 }

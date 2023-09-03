@@ -11,6 +11,7 @@ import commonApi from '../../../apis/common'
 import cartApi from '../../../apis/order'
 import homeApi from '../../../apis/home'
 import submsg from '../../../utils/subscribeMessage'
+import Dialog from '../../../miniprogram_npm/@vant/weapp/dialog/dialog';
 const shareBack = '../../../images/good/share_bg.png'
 const shareBtn = '../../../images/good/btn.png'
 const defaultList = [
@@ -438,6 +439,10 @@ create.Page(store, {
             this.getPersonalDetail()
           }, 1000)
         }
+        setTimeout(() => {
+          this.getOrderPayInfo()
+        }, 1000)
+      
         return ;
       }
       const payData = this.data.payData;
@@ -464,6 +469,10 @@ create.Page(store, {
             showDownTips: true
           })
         }
+        setTimeout(() => {
+          this.getOrderPayInfo()
+        }, 1000)
+      
       }).catch(err => {
 
       });
@@ -671,4 +680,56 @@ create.Page(store, {
   //     this.getHotGood();
   //   }
   // },
+
+  getOrderPayInfo() {
+    const {
+        id,
+    } = this.orderInfo;
+    cartApi.getOrderPayInfo({ id:id }).then(res=>{
+        if(res.contractParams){
+              wx.showModal({
+                title: res.contractParams.title,
+                confirmText: res.contractParams.confirmBtnText,
+                cancelText: '关闭',
+                showCancel: true,
+                content: '你也可以在“约购APP-订单管理”当前订单详情中进行签署合同。',
+                success: function (res) {
+                  if (res.confirm) {
+                    cartApi.getFindCert({ businessId: id }).then(res=>{
+                      if (res.data) {
+                        cartApi.genContract({
+                          businessId: id,
+                          ext: ext
+                        }).then(res => {
+                          router.push({
+                            name: "webview",
+                            data: {
+                              url: encodeURIComponent(res.signUrl),
+                              encode: true
+                            }
+                          });
+                        })  
+                      } else {
+                        cartApi.getVerifyUrl({
+                          businessId: id,
+                        }).then(res => {
+                          router.push({
+                            name: "webview",
+                            data: {
+                              url: encodeURIComponent(res.verifyUrl),
+                              encode: true
+                            }
+                          });
+                        })
+                      }
+                    })
+                  } else if (res.cancel) {
+                    console.log('用户点击取消')
+                  }
+            
+                }
+              })
+        }
+    })
+  },
 })
