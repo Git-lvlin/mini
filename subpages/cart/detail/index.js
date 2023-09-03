@@ -1854,6 +1854,10 @@ create.Page(store, {
     if (this.shareStoreNo) {
       p.shareStoreNo = this.shareStoreNo
     }
+
+    if (this.goodParams.shareMemberId) {
+      p.shareMemberId = this.goodParams.shareMemberId
+    }
     console.log('111', p)
     // return
     router.push({
