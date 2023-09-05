@@ -159,7 +159,7 @@ Page({
     } else if(!format.checkMobile(postData.phone)) {
       showToast({ title: "请输入正确手机号码"});
       return;
-    } else if(format.checkEmpty(postData.districtName) && areaData.area.length) {
+    } else if(format.checkEmpty(postData.provinceName)) {
       showToast({ title: "请选择所在地区"});
       return;
     } else if(format.checkEmpty(postData.address)) {
