@@ -97,7 +97,6 @@ page {
   border-radius: 24rpx;
   box-shadow: 0rpx 8rpx 16rpx rgba(0, 0, 0, 0.01);
 }
-
 .no_address {
   display: flex;
   align-items: center;
@@ -164,6 +163,46 @@ page {
   flex-shrink: 0;
   width: 12rpx;
   height: 22rpx;
+}
+
+/* 申请合作服务区域 */
+.service_area{
+  width: 100%;
+  background: #FFFFFF;
+  box-shadow: 0rpx 8rpx 16rpx 0rpx rgba(0,0,0,0.01);
+  border-radius: 24rpx 24rpx 24rpx 24rpx;
+  opacity: 1;
+  overflow: hidden;
+  margin-bottom: 28rpx;
+  padding-bottom: 32rpx;
+}
+
+.area_title{
+    font-size: 36rpx;
+    font-family: PingFang SC-Heavy, PingFang SC;
+    font-weight: 400;
+    color: #333333;
+    margin: 32rpx;
+}
+
+.area_adds{
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
+
+.area_adds .select_view .phone{
+    font-size: 32rpx;
+    font-family: PingFang SC-Medium, PingFang SC;
+    font-weight: 400;
+    color: #999999;
+}
+
+.area_adds .select_view .address_detail{
+    font-size: 36rpx;
+    font-family: PingFang SC-Medium, PingFang SC;
+    font-weight: 400;
+    color: #333333;
 }
 
 .store_address {

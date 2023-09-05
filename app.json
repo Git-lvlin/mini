@@ -51,7 +51,8 @@
         "evaluate/index",
         "evaluateDetail/index",
         "storeSearch/index",
-        "list/index"
+        "list/index",
+        "serviceArea/index"
       ]
     },
     {

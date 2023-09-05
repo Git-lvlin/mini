@@ -40,6 +40,12 @@ Page({
 
   onLoad(options) {
     // let editData = wx.getStorageSync("EDIT_ADDRESS");
+    if(options.name) {
+        wx.setNavigationBarTitle({
+            title: options.name,
+        });
+    }
+
     let editData = options.data;
     if(!!editData) {
       editData = JSON.parse(editData);

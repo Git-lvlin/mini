@@ -208,5 +208,8 @@ export default {
   },
   earlyScreeningSchedule: {
     path: "/subpages/myMorningSieve/earlyScreeningSchedule/index",
+  },
+  serviceArea: {
+    path: "/subpages/cart/serviceArea/index",
   }
 }

@@ -480,6 +480,7 @@ create.Page(store, {
     const {
       selectAddressType,
       orderType,
+      addressInfo
     } = this.data;
     // if(orderType == 15 || orderType == 16) {
     //   router.push({
@@ -493,7 +494,27 @@ create.Page(store, {
         isChoose: true,
       }
     })
-    // }
+  },
+
+  //申请合作服务区域跳转
+  onServiceArea() {
+    const {
+        selectAddressType,
+        orderType,
+        addressInfo
+    } = this.data;
+    if(true){
+        // console.log('addressInfo',addressInfo)
+        // let data = addressInfo;
+        // let params = {};
+        // if(!!data) {
+        //   params.data = JSON.stringify({...data,type:1});
+        // }
+        router.push({
+            name: "serviceArea",
+            data: { name: '申请合作区域' }
+        })
+    }
   },
 
   // 跳转修改提货人

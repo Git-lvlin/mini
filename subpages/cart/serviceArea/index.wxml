@@ -3,7 +3,7 @@
 <view class="container">
   <view class="content_view">
     <view class="form_item" >
-      <view class="form_name">收货人</view>
+      <view class="form_name">负责人</view>
       <input
         class="form_input"
         value="{{postData.consignee}}"
@@ -30,51 +30,26 @@
       />
     </view>
     <view class="form_item" >
-      <view class="form_name">所在地区</view>
+      <view class="form_name">申请服务区域</view>
       <input
         class="form_input"
         value="{{selectAddress.areaStr}}"
         disabled="{{true}}"
-        placeholder="省市区县、乡镇等"
+        placeholder="省市区/县"
         placeholder-class="form_placeholder"
         bindtap="onOpenAddress"
       />
-      <view class="location" wx:if="{{false}}">
-        <image class="location_icon" src="{{tools.getImgUrl('miniprogram/common/location.png')}}" />定位
+      <view class="location">
+        <image class="location_icon" src="{{tools.getImgUrl('miniprogram/common/rigth_arrw.png')}}" />
       </view>
     </view>
-    <view class="form_item">
-      <view class="form_name">详细地址</view>
-      <textarea
-        class="form_input form_textarea"
-        value="{{postData.address}}"
-        maxlength="30"
-        placeholder="请输入街道地址，例如：西街108号101"
-        placeholder-class="form_placeholder"
-        data-field="address"
-        data-text="请输入姓名"
-        bindinput="handleInput"
-      />
-    </view>
   </view>
 
-  <view class="set_default content_view">
-    <view class="set_info">
-      <view class="default_title">设为默认地址</view>
-      <view class="explain">提醒：每次下单会自动默认推荐使用该地址</view>
-    </view>
-    <van-switch
-      size="36rpx"
-      checked="{{ postData.isDefault }}"
-      active-color="#e5352f"
-      inactive-color="#eeeeee"
-      bind:change="handleSwitch"
-    />
-  </view>
+  <view class="confirmation_reminder">提示：请如实填写所在地，提交后不可修改。</view>
 
-  <view class="save_btn" bindtap="onSave">保存</view>
+  <view class="reminder">提示：您选择的区域已被占用，请选择其他区域</view>
 
-  <view class="delete_btn" bindtap="onDeleteAddress" wx:if="{{editData.id}}">删除</view>
+  <view class="save_btn" bindtap="onSave">确认</view>
 
   <address-popup
     show="{{ showPopup }}"

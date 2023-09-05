@@ -37,6 +37,7 @@ const url = {
   findCert: '/public/auth/contract/findCert',
   genContract: '/public/auth/contract/genContract',
   getVerifyUrl: '/public/auth/contract/getVerifyUrl',
+  checkProvider: '/healthy/auth/provider/checkProvider',
 }
 
 export default {
@@ -175,5 +176,11 @@ export default {
       return Request.post(url.getVerifyUrl, params, option);
 
   },
+
+  //检测服务商区域
+  checkProvider(params, option) {
+    return Request.post(url.checkProvider, params, option);
+
+},
     
 }
