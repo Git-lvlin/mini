@@ -93,11 +93,20 @@ Component({
       const {
         editData,
         isEdit,
+        areaData,
+        selectAddress,
       } = this.data;
       cartApi.getArea({
         id
       }).then(res => {
-        let areaData = this.data.areaData;
+        if (res.length === 0) {
+          areaData.area = []
+          this.onCloseAddress({
+            selectAddress,
+            areaData,
+          });
+          return
+        }
         let selectData = {};
         if(isEdit && isCity && this.editFristLoad) {
           selectData = {
