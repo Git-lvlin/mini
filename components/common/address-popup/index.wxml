@@ -29,7 +29,7 @@
           <view
             class="area_text {{selectAddress.isAct === 'area' ? 'area_text_act' : ''}}"
             data-type="area"
-            wx:if="{{showArea}}"
+            wx:if="{{showArea && areaData.area.length}}"
             bindtap="onSelectAddressType"
           >{{!!selectAddress.area.name ? selectAddress.area.name : "请选择" }}</view>
         </view>

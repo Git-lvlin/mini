@@ -121,11 +121,11 @@ Page({
     const data = {
       showPopup: false
     };
-    if(!!selectAddress && selectAddress.area.name) {
+    if(!!selectAddress) {
     //   selectAddress.province = {};
     //   selectAddress.city = {};
     // } else {
-      selectAddress.areaStr = `${selectAddress.province.name} ${selectAddress.city.name} ${selectAddress.area.name}`
+      selectAddress.areaStr = `${selectAddress.province.name} ${selectAddress.city.name} ${selectAddress.area.name?selectAddress.area.name:''}`
       data.selectAddress = selectAddress;
       data.areaData = areaData;
     }
@@ -144,7 +144,10 @@ Page({
     } = this.data;
     const provinceData = areaData.province[selectAddress.province.pidx].children[selectAddress.province.idx];
     const cityData = areaData.city[selectAddress.city.pidx].children[selectAddress.city.idx];
-    const properData = areaData.area[selectAddress.area.pidx].children[selectAddress.area.idx];
+    let properData = {}
+    if (areaData.area.length) {
+      properData = areaData.area[selectAddress.area.pidx].children[selectAddress.area.idx];
+    }
     postData.provinceName = provinceData.name;
     postData.cityName = cityData.name;
     postData.districtName = properData.name;
@@ -157,7 +160,7 @@ Page({
     } else if(!format.checkMobile(postData.phone)) {
       showToast({ title: "请输入正确手机号码"});
       return;
-    } else if(format.checkEmpty(postData.districtName)) {
+    } else if(format.checkEmpty(postData.provinceName)) {
       showToast({ title: "请选择所在地区"});
       return;
     } else if(format.checkEmpty(postData.address)) {
