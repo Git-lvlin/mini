@@ -91,13 +91,6 @@ Page({
     
   },
 
-  // 打开默认按钮
-  handleSwitch() {
-    this.setData({
-      "postData.isDefault": !this.data.postData.isDefault
-    })
-  },
-  
   // 打开省市区弹窗
   onOpenAddress() {
     this.setData({
@@ -127,11 +120,8 @@ Page({
     const data = {
       showPopup: false
     };
-    if(!!selectAddress && selectAddress.area.name) {
-    //   selectAddress.province = {};
-    //   selectAddress.city = {};
-    // } else {
-      selectAddress.areaStr = `${selectAddress.province.name} ${selectAddress.city.name} ${selectAddress.area.name}`
+    if(!!selectAddress) {
+        selectAddress.areaStr = `${selectAddress.province.name} ${selectAddress.city.name} ${selectAddress.area.name?selectAddress.area.name:''}`
       data.selectAddress = selectAddress;
       data.areaData = areaData;
     }
@@ -150,7 +140,10 @@ Page({
     } = this.data;
     const provinceData = areaData.province[selectAddress.province.pidx].children[selectAddress.province.idx];
     const cityData = areaData.city[selectAddress.city.pidx].children[selectAddress.city.idx];
-    const properData = areaData.area[selectAddress.area.pidx].children[selectAddress.area.idx];
+    let properData = {}
+    if (areaData.area.length) {
+      properData = areaData.area[selectAddress.area.pidx].children[selectAddress.area.idx];
+    }
     postData.provinceName = provinceData.name;
     postData.cityName = cityData.name;
     postData.districtName = properData.name;
@@ -163,11 +156,8 @@ Page({
     } else if(!format.checkMobile(postData.phone)) {
       showToast({ title: "请输入正确手机号码"});
       return;
-    } else if(format.checkEmpty(postData.districtName)) {
+    } else if(format.checkEmpty(postData.provinceName)) {
       showToast({ title: "请选择所在地区"});
-      return;
-    } else if(format.checkEmpty(postData.address)) {
-      showToast({ title: "请输入详细地址"});
       return;
     }
 
@@ -208,31 +198,5 @@ Page({
         })
       });
     }
-  },
-
-  // 删除地址
-  onDeleteAddress() {
-    const {
-      editData
-    } = this.data;
-    const ids = [editData.id]
-    showModal({
-      content: "您确定要删除地址吗？",
-      ok() {
-        cartApi.removeAddress({
-          ids
-        }).then(res => {
-          showToast({ 
-            title: "删除成功", 
-            ok() {
-              wx.removeStorage({
-                key: "CHOOSE_ADDRESS"
-              });
-              router.go();
-            } 
-          })
-        })
-      }
-    })
-  },
+  }
 })

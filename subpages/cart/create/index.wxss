@@ -191,6 +191,20 @@ page {
     justify-content: center;
 }
 
+.area_adds .area_address{
+    display: flex;
+    align-items: center;
+}
+.area_adds .area_address_title{
+    flex: 1;
+    width: 494rpx;
+    margin-right: 32rpx;
+    font-size: 36rpx;
+    font-family: PingFang SC-Medium, PingFang SC;
+    font-weight: 400;
+    color: #999999;
+}
+
 .area_adds .select_view .phone{
     font-size: 32rpx;
     font-family: PingFang SC-Medium, PingFang SC;
