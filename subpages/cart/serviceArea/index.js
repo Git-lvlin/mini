@@ -36,21 +36,21 @@ Page({
     editData: {},
     // 是否是编辑状态
     isEdit: false,
+    diffName: '',
+    diffArea: '',
+    subType: ''
   },
 
   options: {},
 
   onLoad(options) {
     this.options = options
-    // let editData = wx.getStorageSync("EDIT_ADDRESS");
-    if(options.name) {
-        wx.setNavigationBarTitle({
-            title: '请选择地区',
-        });
-    }
-
+    this.setData({
+        diffName:options.subType==2002?'联系人':'负责人',
+        diffArea:options.subType==2002?'合作商所在地':'申请服务区域',
+        subType:options.subType
+    })
     let editData = options.data;
-    console.log('editData',editData);
     if(editData) {
       editData = JSON.parse(editData)
       let {

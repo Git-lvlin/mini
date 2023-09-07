@@ -3,7 +3,7 @@
 <view class="container">
   <view class="content_view">
     <view class="form_item" >
-      <view class="form_name">负责人</view>
+      <view class="form_name">{{diffName}}</view>
       <input
         class="form_input"
         value="{{postData.consignee}}"
@@ -30,7 +30,7 @@
       />
     </view>
     <view class="form_item" >
-      <view class="form_name">申请服务区域</view>
+      <view class="form_name">{{diffArea}}</view>
       <input
         class="form_input"
         value="{{selectAddress.areaStr}}"
@@ -45,9 +45,9 @@
     </view>
   </view>
 
-  <view class="confirmation_reminder">提示：请如实填写所在地，提交后不可修改。</view>
+  <view class="confirmation_reminder" wx:if="{{subType=='2002'}}">提示：请如实填写所在地，提交后不可修改。</view>
 
-  <!-- <view class="reminder">提示：您选择的区域已被占用，请选择其他区域</view> -->
+  <!-- <view class="reminder" wx:if="{{subType=='2001'}}">提示：您选择的区域已被占用，请选择其他区域</view> -->
 
   <view class="save_btn" bindtap="onSave">确认</view>
 

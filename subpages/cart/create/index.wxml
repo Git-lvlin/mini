@@ -73,7 +73,9 @@
           <view class="area_title">{{orderInfo.ext.serverArea.title}}：</view>
           <view class="area_adds">  
             <view class="area_address" wx:if="{{!serverAreaInfo}}">
-                <image class="location_icon" src="{{tools.getImgUrl('miniprogram/common/serve.png')}}" />
+                <image 
+                 class="location_icon" 
+                 src="{{tools.getImgUrl(orderInfo.subType==2002?'miniprogram/common/location_icon.png':'miniprogram/common/serve.png')}}" />
                 <view class="area_address_title">请选择</view>
                 <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
             </view>

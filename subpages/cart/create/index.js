@@ -510,7 +510,7 @@ create.Page(store, {
     router.push({
       name: "serviceArea",
       data: {
-        name: orderInfo.serverArea.title,
+        name: orderInfo.ext.serverArea.title,
         subType: orderInfo.subType,
         data: serverAreaInfo ? JSON.stringify(serverAreaInfo) : '',
       }

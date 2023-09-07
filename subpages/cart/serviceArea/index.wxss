@@ -107,7 +107,7 @@ page {
     font-weight: normal;
     color: #E5352F;
     line-height: 66rpx;
-    margin-top: 460rpx;
+    margin-top: 530rpx;
     padding-left: 26rpx;
 }
 
