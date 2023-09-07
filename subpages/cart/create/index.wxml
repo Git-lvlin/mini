@@ -67,21 +67,21 @@
 
       <view
         class="service_area"
-        wx:if="{{(orderToken && orderType != 15) || (orderType == 15)}}"
+        wx:if="{{(orderInfo.ext.serverArea)}}"
         bindtap="onServiceArea"
         >
-          <view class="area_title">申请合作服务区域：</view>
+          <view class="area_title">{{orderInfo.ext.serverArea.title}}：</view>
           <view class="area_adds">  
-            <view class="area_address" wx:if="{{true}}">
+            <view class="area_address" wx:if="{{!serverAreaInfo}}">
                 <image class="location_icon" src="{{tools.getImgUrl('miniprogram/common/serve.png')}}" />
-                <view class="area_address_title">请选择申请的合作服务区域</view>
+                <view class="area_address_title">请选择</view>
                 <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
             </view>
             <view class="select_view" wx:else>
                 <image class="location_icon" src="{{tools.getImgUrl('miniprogram/common/serve.png')}}" />
                 <view class="address_info">
-                    <view class="name">{{addressInfo.consignee}}<text class="phone">{{addressInfo.phone}}</text></view>
-                    <view class="address_detail text_two_line">{{addressInfo.fullAddress}}</view>
+                    <view class="name">{{serverAreaInfo.consignee}}<text class="phone">{{serverAreaInfo.phone}}</text></view>
+                    <view class="address_detail text_two_line">{{serverAreaInfo.areaStr}}</view>
                 </view>
                 <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
             </view>

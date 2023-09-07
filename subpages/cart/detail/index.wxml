@@ -382,8 +382,8 @@
       </view>
       <view class="flex_middle info_bar" wx:if="{{good.supplierData}}">
         <view class="flex_fix info_bar_name">{{good.supplierData.title}}</view>
-        <view class="info_bar_value" data-data="{{good.supplierData}}" bindtap="toWebView">{{good.supplierData.companyName}}</view>
-        <view class="flex_fix right_spot right_arrow_gray" wx:if="{{good.supplierData.isJump === 1}}" data-data="{{good.supplierData}}"  bindtap="toWebView" />
+        <view class="info_bar_value" data-data="{{good.supplierData}}" bindtap="toWebView2">{{good.supplierData.companyName}}</view>
+        <view class="flex_fix right_spot right_arrow_gray" wx:if="{{good.supplierData.isJump === 1}}" data-data="{{good.supplierData}}"  bindtap="toWebView2" />
       </view>
     </view>
 

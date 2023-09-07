@@ -47,7 +47,7 @@
 
   <view class="confirmation_reminder">提示：请如实填写所在地，提交后不可修改。</view>
 
-  <view class="reminder">提示：您选择的区域已被占用，请选择其他区域</view>
+  <!-- <view class="reminder">提示：您选择的区域已被占用，请选择其他区域</view> -->
 
   <view class="save_btn" bindtap="onSave">确认</view>
 

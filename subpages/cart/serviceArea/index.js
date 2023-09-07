@@ -38,17 +38,21 @@ Page({
     isEdit: false,
   },
 
+  options: {},
+
   onLoad(options) {
+    this.options = options
     // let editData = wx.getStorageSync("EDIT_ADDRESS");
     if(options.name) {
         wx.setNavigationBarTitle({
-            title: options.name,
+            title: '请选择地区',
         });
     }
 
     let editData = options.data;
-    if(!!editData) {
-      editData = JSON.parse(editData);
+    console.log('editData',editData);
+    if(editData) {
+      editData = JSON.parse(editData)
       let {
         postData,
         selectAddress,
@@ -68,9 +72,6 @@ Page({
         isEdit
       });
     }
-    app.trackEvent('address_editAddress', {
-      type: 'address'
-    });
   },
 
   // 输入内容
@@ -128,6 +129,20 @@ Page({
     this.setData(data);
   },
 
+  saveInfo() {
+    const {
+      selectAddress,
+    } = this.data;
+    wx.setStorageSync("server_area_info",{
+      ...this.data.postData,
+      ...this.data.selectAddress,
+      provinceId:selectAddress.province.id,
+      cityId:selectAddress.city.id,
+      districtId:selectAddress.area.id
+    })
+    router.go()
+  },
+
   // 保存地址
   onSave() {
     const {
@@ -161,42 +176,25 @@ Page({
       return;
     }
 
-    // if(type==1){
-    //     const params={
-    //         provinceId:selectAddress.province.id,
-    //         cityId:selectAddress.city.id,
-    //         districtId:selectAddress.area.id 
-    //     }
-    //     cartApi.checkProvider(params).then(res=>{
-    //         console.log('res',res)
-    //     }).catch(error=>{
-    //         console.log('error',error)
-    //         showToast({ 
-    //             title: error.msg, 
-    //           })
-    //     })
-    //     return
-    // }
-
-    if(isEdit) {
-      postData.id = editData.id;
-      cartApi.updateAddress(postData).then(res => {
-        showToast({ 
-          title: "保存成功", 
-          ok() {
-            router.go();
-          } 
+    if(this.options.subType == 2001){
+        const params={
+            provinceId:selectAddress.province.id,
+            provinceName:provinceData.name,
+            cityId:selectAddress.city.id,
+            cityName:cityData.name,
+            districtId:selectAddress.area.id,
+            districtName: properData.name
+        }
+        cartApi.checkProvider(params).then(res=>{
+          this.saveInfo()
+        }).catch(error=>{
+            console.log('error',error)
+            showToast({ 
+                title: error.msg, 
+              })
         })
-      });
     } else {
-      cartApi.addAddress(postData).then(res => {
-        showToast({ 
-          title: "添加成功", 
-          ok() {
-            router.go();
-          } 
-        })
-      });
+     this.saveInfo()
     }
   }
 })

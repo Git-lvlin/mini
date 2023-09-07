@@ -72,6 +72,7 @@ create.Page(store, {
     healthyCheck: false,
     takeSpot: {},
     showSharePopup: false,
+    serverAreaInfo: null
   },
 
   tabChange(event) {
@@ -146,7 +147,7 @@ create.Page(store, {
     }
 
     if (options.orderType == 32 || options.orderType == 34) {
-      commonApi.getAgreements({ code:options.orderType == 34?'LOVE_ACTIVITY_RULE':'STORE_ACTIVITY_RULE' })
+      commonApi.getAgreements({ code: options.orderType == 34 ? 'LOVE_ACTIVITY_RULE' : 'STORE_ACTIVITY_RULE' })
         .then(res => {
           this.setData({
             agreementsUrl: res[0].url
@@ -171,6 +172,10 @@ create.Page(store, {
     this.initData()
     this.getStoreDeliveryStatus()
     app.trackEvent('shopping_confirmOrder');
+    const serverAreaInfo = wx.getStorageSync("server_area_info")
+    this.setData({
+      serverAreaInfo
+    })
   },
 
 
@@ -499,22 +504,17 @@ create.Page(store, {
   //申请合作服务区域跳转
   onServiceArea() {
     const {
-        selectAddressType,
-        orderType,
-        addressInfo
+      orderInfo,
+      serverAreaInfo,
     } = this.data;
-    if(true){
-        // console.log('addressInfo',addressInfo)
-        // let data = addressInfo;
-        // let params = {};
-        // if(!!data) {
-        //   params.data = JSON.stringify({...data,type:1});
-        // }
-        router.push({
-            name: "serviceArea",
-            data: { name: '申请合作区域' }
-        })
-    }
+    router.push({
+      name: "serviceArea",
+      data: {
+        name: orderInfo.serverArea.title,
+        subType: orderInfo.subType,
+        data: serverAreaInfo ? JSON.stringify(serverAreaInfo) : '',
+      }
+    })
   },
 
   // 跳转修改提货人
@@ -877,12 +877,22 @@ create.Page(store, {
       return
     }
 
+
+
     let userInfo = getStorageUserInfo(true, true);
     if (!userInfo) return;
     const {
       orderInfo,
       addressInfo,
+      serverAreaInfo
     } = this.data;
+
+
+    if (orderInfo.ext.serverArea && !serverAreaInfo) {
+      showToast({ title: "地址不能为空" });
+      return;
+    }
+
     if (!orderInfo.storeGoodsInfos || !orderInfo.storeGoodsInfos.length) {
       showToast({ title: "抱歉，爆品好货已售光，下次早点抢哦" });
       return;
@@ -893,6 +903,21 @@ create.Page(store, {
     } else {
       postData = this.getStoreGood();
     }
+
+
+    if (orderInfo.ext.serverArea && serverAreaInfo) {
+      postData.serverArea = {
+        consignee: serverAreaInfo.consignee,
+        phone: serverAreaInfo.phone,
+        provinceId: serverAreaInfo.provinceId,
+        provinceName: serverAreaInfo.provinceName,
+        cityId: serverAreaInfo.cityId,
+        cityName: serverAreaInfo.cityName,
+        districtId: serverAreaInfo.districtId,
+        districtName: serverAreaInfo.districtName,
+      }
+    }
+
     if (!postData || !postData.deliveryInfo) return;
     if (postData.storeGoodsInfos.length == 1 && this.shareStoreNo) {
       postData.storeGoodsInfos[0].goodsInfos[0].shareStoreNo = this.shareStoreNo
@@ -920,6 +945,7 @@ create.Page(store, {
     }
 
     cartApi.createOrder(postData).then(res => {
+      
       res.orderType = that.orderType;
       that.orderId = res.id;
       if (that.env === "fat" || that.env === "pro") {
@@ -931,6 +957,7 @@ create.Page(store, {
         name: "cashier",
         data: res,
       })
+      wx.removeStorageSync('server_area_info')
     }).catch(err => {
       // if(refreshOrderToken[err.code]) {
       that.getOrderToken();
@@ -940,17 +967,17 @@ create.Page(store, {
       //   clearTimeout(timer);
       // }, 1500);
       // }
-      if(err.code===10090){
+      if (err.code === 10090) {
         Dialog.confirm({
-            title: '提示',
-            message: '请下载APP进行下单',
-            // theme: 'round-button',
-            cancelButtonText: '关闭',
-            confirmButtonText: '下载约购APP'
+          title: '提示',
+          message: '请下载APP进行下单',
+          // theme: 'round-button',
+          cancelButtonText: '关闭',
+          confirmButtonText: '下载约购APP'
         }).then(() => {
-            this.setData({
+          this.setData({
             showSharePopup: true,
-            })
+          })
         });
       }
     });
@@ -995,7 +1022,7 @@ create.Page(store, {
 
   toWebView(e) {
     const url = e.currentTarget.dataset.url
-    router.push({ name: 'webview', data: { url:encodeURIComponent(url), encode:true } })
+    router.push({ name: 'webview', data: { url: encodeURIComponent(url), encode: true } })
   },
   onOpenImg(e) {
     const idx = e.currentTarget.dataset.idx;

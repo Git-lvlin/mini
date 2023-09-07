@@ -105,6 +105,14 @@ Component({
             selectAddress,
             areaData,
           });
+          this.setData({
+            selectAddress:{
+              ...selectAddress,
+              isAct:'city',
+            },
+            areaList:areaData['city'],
+            areaData,
+          });
           return
         }
         let selectData = {};
