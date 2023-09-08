@@ -1758,14 +1758,14 @@ create.Page(store, {
     } = this.data;
 
     if (good.checkType === 1) {
-      // await cartApi.confirmOrderCheck({
-      //   checkType: good.checkType,
-      //   orderType: good.orderType,
-      //   subType: good.subType,
-      //   buyType: good.buyType,
-      //   skuId: good.skuId,
-      //   spuId: good.spuId
-      // })
+      await cartApi.confirmOrderCheck({
+        checkType: good.checkType,
+        orderType: good.orderType,
+        subType: good.subType,
+        buyType: good.buyType,
+        skuId: good.skuId,
+        spuId: good.spuId
+      })
     }
 
 

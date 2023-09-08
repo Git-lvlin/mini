@@ -137,7 +137,8 @@
 }
 
 .note_box {
-  justify-content: space-between;
+  /* justify-content: space-between;
+  align-items: flex-start; */
   color: #333333;
   font-size: 28rpx;
   line-height: 40rpx;
@@ -148,9 +149,12 @@
 .note_input {
   flex: 1;
   height: 120rpx;
-  padding-left: 16rpx;
-  line-height: 48rpx;
+  /* padding-left: 16rpx; */
+  /* line-height: 48rpx; */
   text-align: left;
+  /* border: 1rpx solid #cccbcb; */
+  margin-top: 10rpx;
+  padding-top: 0;
 }
 
 .ipunt_desc {

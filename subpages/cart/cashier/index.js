@@ -712,6 +712,7 @@ create.Page(store, {
                       } else {
                         cartApi.getVerifyUrl({
                           businessId: id,
+                          ext: ext
                         }).then(res => {
                           router.push({
                             name: "webview",

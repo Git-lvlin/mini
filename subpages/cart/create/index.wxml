@@ -222,7 +222,7 @@
       <view
         class="submit_btn {{!orderInfo.storeGoodsInfos ? 'btn_gray' : ''}}"
         bindtap="{{!orderInfo.storeGoodsInfos ? '' : 'onToCashier'}}"
-      >去支付</view>
+      >{{ orderInfo.ext.toPay?orderInfo.ext.toPay:'去支付' }}</view>
       <view class="healthy_bar" wx:if="{{orderType==32}}">
         <!-- <healthy-bar /> -->
         <view bindtap="checkedItem">

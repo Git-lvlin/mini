@@ -45,8 +45,8 @@
         </view>
       </view>
     </view>
-    <view class="flex_middle note_box">
-      <view class="flex_fix note_title" style="height:120rpx;">订单备注</view>
+    <view class="note_box">
+      <view class="flex_fix note_title" >订单备注</view>
       <textarea
         class="note_input"
         maxlength="40"

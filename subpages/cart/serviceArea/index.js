@@ -175,30 +175,25 @@ Page({
       showToast({ title: "请选择所在地区"});
       return;
     }
-
-    if(this.options.subType == 2001){
-        const goodList = wx.getStorageSync("GOOD_LIST")
-        const good = goodList.storeGoodsInfos[0].goodsInfos[0]
-        const params={
-            provinceId:selectAddress.province.id,
-            provinceName:provinceData.name,
-            cityId:selectAddress.city.id,
-            cityName:cityData.name,
-            districtId:selectAddress.area.id,
-            districtName: properData.name,
-            skuId: good.skuId,
-            spuId: good.spuId,
-        }
-        cartApi.checkProvider(params).then(res=>{
-          this.saveInfo()
-        }).catch(error=>{
-            console.log('error',error)
-            showToast({ 
-                title: error.msg, 
-              })
-        })
-    } else {
-     this.saveInfo()
+    const goodList = wx.getStorageSync("GOOD_LIST")
+    const good = goodList.storeGoodsInfos[0].goodsInfos[0]
+    const params={
+        provinceId:selectAddress.province.id,
+        provinceName:provinceData.name,
+        cityId:selectAddress.city.id,
+        cityName:cityData.name,
+        districtId:selectAddress.area.id,
+        districtName: properData.name,
+        skuId: good.skuId,
+        spuId: good.spuId,
     }
+    cartApi.checkProvider(params).then(res=>{
+      this.saveInfo()
+    }).catch(error=>{
+        console.log('error',error)
+        showToast({ 
+            title: error.msg, 
+          })
+    })
   }
 })

@@ -401,7 +401,8 @@ page {
 }
 
 .submit_btn {
-  width: 220rpx;
+  min-width: 180rpx;
+  padding: 0 20rpx;
   height: 68rpx;
   font-weight:500;
   color: #ffffff;

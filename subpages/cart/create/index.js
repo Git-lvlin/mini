@@ -517,7 +517,7 @@ create.Page(store, {
       serverAreaInfo,
     } = this.data;
 
-    if (serverAreaInfo.cityId) {
+    if (orderInfo.ext&&orderInfo.ext.serverArea&&orderInfo.ext.serverArea.cityId) {
       return
     }
 
