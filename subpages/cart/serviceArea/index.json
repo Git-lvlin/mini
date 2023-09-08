@@ -1,4 +1,5 @@
 {
+  "navigationBarTitleText": "选择地区",
   "usingComponents": {
     "van-switch": "/miniprogram_npm/@vant/weapp/switch/index",
     "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
