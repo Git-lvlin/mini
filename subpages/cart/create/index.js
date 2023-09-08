@@ -929,6 +929,7 @@ create.Page(store, {
         cityName: serverAreaInfo.cityName,
         districtId: serverAreaInfo.districtId,
         districtName: serverAreaInfo.districtName,
+        parentSumOrderId: serverAreaInfo.parentSumOrderId,
       }
     }
 
