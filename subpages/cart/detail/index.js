@@ -128,7 +128,7 @@ create.Page(store, {
     objectId: '',
     showDownTips: false,
     showSharePopup: false,
-    checked:false
+    checked: false
   },
 
   lifetimes: {
@@ -189,7 +189,7 @@ create.Page(store, {
       currentPages: getCurrentPages().length
     })
     // this.getCartList()
-    
+
   },
 
   onShow() {
@@ -240,8 +240,8 @@ create.Page(store, {
         params.subType = 151
       }
       cartApi.cartList(params).then((res) => {
-        const {good} = this.data;
-        let quantity= 0
+        const { good } = this.data;
+        let quantity = 0
         good.quantity = 0
         res.forEach(item => {
           if (item.spuId === spuId) {
@@ -261,11 +261,11 @@ create.Page(store, {
   // 增加购物车 for goods
   increaseCart() {
     let { quantity, skuId, good } = this.data
-    if (good.goodsStockNum===0) {
+    if (good.goodsStockNum === 0) {
       Toast('商品库存不足')
       return;
     }
-    if (good.isMultiSpec===1) {
+    if (good.isMultiSpec === 1) {
       this.setData({
         specType: "add",
       }, () => {
@@ -299,13 +299,13 @@ create.Page(store, {
       objectId,
       quantity: quantity, // 数量，负数表示减数量
     }
-    
+
     this.setCartNum(params)
       .then(() => {
         const selectSku = this.data.good
         selectSku.quantity = quantity
         this.setData({
-          good:selectSku
+          good: selectSku
         })
       })
   },
@@ -603,7 +603,7 @@ create.Page(store, {
       const param = res;
       this.setData(param)
       this.hanldeGoodsParams(param)
-      
+
       this.saveShareStoreInfo(param)
     }).catch(err => {
       this.hanldeGoodsParams(data);
@@ -861,7 +861,7 @@ create.Page(store, {
           this.getDetailAfter();
         });
         if (orderType == 15 || orderType == 16) {
-          
+
           // 集约用户列表
           // this.getIntensiveUser(good.storeSaleSumNum || 100);
           // 获取商品详情
@@ -1630,7 +1630,7 @@ create.Page(store, {
       })
       return;
     }
-    
+
     if (good.goodsState != 1) {
       // 商品已下架 改为 已售罄
       showToast({ title: "商品已售罄" });
@@ -1717,14 +1717,14 @@ create.Page(store, {
   },
 
   // 跳转确认订单
-  onToCreate(e) {
+  async onToCreate(e) {
     console.log('selectAddressType e', e)
     if (!this.data.userInfo) {
       getStorageUserInfo(true);
       return;
     }
 
-    
+
     let outData = {}
     if (e && e.detail) {
       outData = e.detail
@@ -1756,9 +1756,20 @@ create.Page(store, {
       personalList,
       checked,
     } = this.data;
-    
 
-    if (good.entrustInfoNew&&good.entrustInfoNew.length&&!checked) {
+    if (good.checkType === 1) {
+      // await cartApi.confirmOrderCheck({
+      //   checkType: good.checkType,
+      //   orderType: good.orderType,
+      //   subType: good.subType,
+      //   buyType: good.buyType,
+      //   skuId: good.skuId,
+      //   spuId: good.spuId
+      // })
+    }
+
+
+    if (good.entrustInfoNew && good.entrustInfoNew.length && !checked) {
       showToast({ title: "请勾选阅读并同意《约购平台服务合作协议》" });
       return;
     }
@@ -2111,7 +2122,7 @@ create.Page(store, {
       currentSku: detail,
     })
     const selectSku = this.data.good
-    selectSku.quantity = (selectSku[detail.skuId] ? selectSku[detail.skuId]:0) + detail.quantity
+    selectSku.quantity = (selectSku[detail.skuId] ? selectSku[detail.skuId] : 0) + detail.quantity
     selectSku.skuId = detail.skuId
     this.setCartNum(selectSku)
       .then(res => {
@@ -2121,7 +2132,7 @@ create.Page(store, {
         });
       })
   },
-  showDownTipsClose(){
+  showDownTipsClose() {
     this.setData({
       showDownTips: false,
     })
@@ -2156,13 +2167,13 @@ create.Page(store, {
   },
   //阅读并同意
   onChangeAgreement(e) {
-    console.log('e',e)
+    console.log('e', e)
     this.setData({
-        checked:e.detail
+      checked: e.detail
     })
   },
   toWebView(e) {
     const url = e.currentTarget.dataset.url
-    router.push({ name: 'webview', data: { url:encodeURIComponent(url), encode:true } })
+    router.push({ name: 'webview', data: { url: encodeURIComponent(url), encode: true } })
   },
 })

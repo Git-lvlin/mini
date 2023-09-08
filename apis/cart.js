@@ -13,6 +13,7 @@ const url = {
   clearExpired: "/cart/auth/collectCart/clearExpired",
   storeSearch: "/search/option/opensearch/shopGoodsSearch",
   getStoreDeliveryStatus: "/store/option/memberShop/getStoreDeliveryStatus",
+  confirmOrderCheck: "/order/auth/confirmOrderCheck",
 }
 
 const getStoreNo = (p) => {
@@ -92,5 +93,8 @@ export default {
   clearExpired(params, option) {
     params = getStoreNo(params)
     return Request.post(url.clearExpired, params, option);
+  },
+  confirmOrderCheck(params, option) {
+    return Request.post(url.confirmOrderCheck, params, option);
   },
 }

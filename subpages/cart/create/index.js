@@ -393,6 +393,15 @@ create.Page(store, {
         this.updateOrderAmount(postData);
         this.getDeliveryDesc(postData);
       })
+
+      if (orderInfo.ext&&orderInfo.ext.serverArea&&orderInfo.ext.serverArea.cityId) {
+        this.setData({
+          serverAreaInfo: {
+            ...orderInfo.ext.serverArea,
+            areaStr: `${orderInfo.ext.serverArea.provinceName} ${orderInfo.ext.serverArea.cityName} ${orderInfo.ext.serverArea.districtName?orderInfo.ext.serverArea.districtName:''}`
+          }
+        })
+      }
     })
   },
 
@@ -507,10 +516,15 @@ create.Page(store, {
       orderInfo,
       serverAreaInfo,
     } = this.data;
+
+    if (serverAreaInfo.cityId) {
+      return
+    }
+
     router.push({
       name: "serviceArea",
       data: {
-        name: orderInfo.serverArea.title,
+        name: orderInfo.ext.serverArea.title,
         subType: orderInfo.subType,
         data: serverAreaInfo ? JSON.stringify(serverAreaInfo) : '',
       }

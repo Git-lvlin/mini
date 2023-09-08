@@ -83,7 +83,7 @@
                     <view class="name">{{serverAreaInfo.consignee}}<text class="phone">{{serverAreaInfo.phone}}</text></view>
                     <view class="address_detail text_two_line">{{serverAreaInfo.areaStr}}</view>
                 </view>
-                <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
+                <image wx:if="{{!orderInfo.ext.serverArea.cityId}}" class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
             </view>
           </view>
       </view>

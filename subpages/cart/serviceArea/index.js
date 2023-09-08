@@ -177,13 +177,17 @@ Page({
     }
 
     if(this.options.subType == 2001){
+        const goodList = wx.getStorageSync("GOOD_LIST")
+        const good = goodList.storeGoodsInfos[0].goodsInfos[0]
         const params={
             provinceId:selectAddress.province.id,
             provinceName:provinceData.name,
             cityId:selectAddress.city.id,
             cityName:cityData.name,
             districtId:selectAddress.area.id,
-            districtName: properData.name
+            districtName: properData.name,
+            skuId: good.skuId,
+            spuId: good.spuId,
         }
         cartApi.checkProvider(params).then(res=>{
           this.saveInfo()
