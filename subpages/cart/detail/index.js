@@ -394,7 +394,7 @@ create.Page(store, {
     let { systemInfo } = this.store.data;
     let backTopHeight = (systemInfo.navBarHeight - 56) / 2 + systemInfo.statusHeight;
     this.goodParams = options;
-    // console.log('checkSpec hanldeGoodsParams', this.goodParams)
+    console.log('goodParams', this.goodParams)
     let isActivityGood = 1;
     if (!!options.orderType) isActivityGood = options.orderType;
 
@@ -1756,17 +1756,6 @@ create.Page(store, {
       personalList,
       checked,
     } = this.data;
-
-    if (good.checkType === 1) {
-      await cartApi.confirmOrderCheck({
-        checkType: good.checkType,
-        orderType: good.orderType,
-        subType: good.subType,
-        buyType: good.buyType,
-        skuId: good.skuId,
-        spuId: good.spuId
-      })
-    }
 
 
     if (good.entrustInfoNew && good.entrustInfoNew.length && !checked) {

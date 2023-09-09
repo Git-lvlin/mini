@@ -582,7 +582,7 @@
       wx:if="{{isActivityGood !=15&&isActivityGood!=16}}"
     >
     <view class="to_buy_checkbox" wx:if="{{ good.entrustInfoNew.length&&good.entrustInfoNew }}">
-     <van-checkbox icon-size="25rpx" value="{{ checked }}" shape="square" bind:change="onChangeAgreement">
+     <van-checkbox icon-size="30rpx" value="{{ checked }}" shape="square" bind:change="onChangeAgreement">
         阅读并同意 <text class="blue_text" data-url="{{good.entrustInfoNew[0].agreementUrl}}"  bindtap="toWebView">{{ good.entrustInfoNew[0].agreementTitle }}</text>
      </van-checkbox>
     </view>

@@ -107,10 +107,12 @@ create.Page(store, {
   getStoreDeliveryStatus() {
     cartApi.getStoreDeliveryStatus()
       .then(res => {
-        this.setData({
-          sendStatus: res.sendStatus,
-          sendMoney: res.sendMoney,
-        })
+        if (res) {
+          this.setData({
+            sendStatus: res.sendStatus,
+            sendMoney: res.sendMoney,
+          })
+        }
       })
   },
 
@@ -902,8 +904,8 @@ create.Page(store, {
     } = this.data;
 
 
-    if (orderInfo.ext.serverArea && !serverAreaInfo) {
-      showToast({ title: "地址不能为空" });
+    if (orderInfo.ext && orderInfo.ext.serverArea && !serverAreaInfo) {
+      showToast({ title: `${orderInfo.ext.serverArea.title}不能为空` });
       return;
     }
 
@@ -919,7 +921,7 @@ create.Page(store, {
     }
 
 
-    if (orderInfo.ext.serverArea && serverAreaInfo) {
+    if (orderInfo.ext && orderInfo.ext.serverArea && serverAreaInfo) {
       postData.serverArea = {
         consignee: serverAreaInfo.consignee,
         phone: serverAreaInfo.phone,

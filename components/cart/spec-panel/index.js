@@ -1,6 +1,7 @@
 import create from '../../../utils/create'
 import store from '../../../store/good'
 import goodApi from '../../../apis/good'
+import cartApi from "../../../apis/cart";
 import util from '../../../utils/util';
 import router from '../../../utils/router'
 import { debounce, showToast } from '../../../utils/tools';
@@ -212,7 +213,6 @@ create.Component(store, {
       let data = {
         checkSpec,
       };
-      console.log(' checkSpec 1', checkSpec, data, '; ')
       // checkSpec.forEach((item, index) => {
       //   data[`checkSpec[${index}]`] = item;
       // });
@@ -264,9 +264,7 @@ create.Component(store, {
       }
     },
 
-    onConfirm() {
-      console.log('onConfirm')
-      console.log('isAlone', this.data.isAlone)
+    async onConfirm() {
       const {
         good,
         specType,
@@ -290,6 +288,16 @@ create.Component(store, {
         return
       }
       if(specType === "buy") {
+        if (good.checkType>0) {
+          await cartApi.confirmOrderCheck({
+            checkType: good.checkType,
+            orderType: good.orderType,
+            subType: good.subType,
+            buyType: good.buyType,
+            skuId: good.skuId,
+            spuId: good.spuId
+          })
+        }
         this.triggerEvent("setSku", {
           skuId: curSku.id,
           skuName: curSku.skuName,
