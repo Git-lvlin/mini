@@ -526,18 +526,18 @@ create.Page(store, {
       return
     }
 
-    this.setData({
-        serviceAreaShow: true
-    })
-
-    // router.push({
-    //   name: "serviceArea",
-    //   data: {
-    //     name: orderInfo.ext.serverArea.title,
-    //     subType: orderInfo.subType,
-    //     data: serverAreaInfo ? JSON.stringify(serverAreaInfo) : '',
-    //   }
+    // this.setData({
+    //     serviceAreaShow: true
     // })
+
+    router.push({
+      name: "serviceArea",
+      data: {
+        name: orderInfo.ext.serverArea.title,
+        subType: orderInfo.subType,
+        data: serverAreaInfo ? JSON.stringify(serverAreaInfo) : '',
+      }
+    })
   },
 
   // 跳转修改提货人

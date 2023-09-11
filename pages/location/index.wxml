@@ -143,4 +143,6 @@
       </view>
     </view>
   </van-popup> -->
+
+  <privacy-popup></privacy-popup>
 </view>

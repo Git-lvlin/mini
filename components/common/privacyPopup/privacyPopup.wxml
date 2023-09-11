@@ -1,4 +1,4 @@
-<van-popup show="{{ innerShow }}" bind:close="onClose" custom-style="padding-top:30rpx"  position="bottom" round>
+<van-popup show="{{ innerShow }}" bind:close="onClose" custom-style="padding-top:30rpx"  position="bottom" round z-index="999">
     <view class="weui-half-screen-dialog__hd">
           <text class="weui-half-screen-dialog__title">{{title}}</text>
     </view>

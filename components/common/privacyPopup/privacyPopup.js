@@ -73,12 +73,12 @@ Component({
     },
     handleDisagree(e) {
       this.disPopUp()
-    //   privacyResolves.forEach(resolve => {
-    //     resolve({
-    //       event: 'disagree',
-    //     })
-    //   })
-    //   privacyResolves.clear()
+      privacyResolves.forEach(resolve => {
+        resolve({
+          event: 'disagree',
+        })
+      })
+      privacyResolves.clear()
     },
     popUp() {
       if (this.data.innerShow === false) {

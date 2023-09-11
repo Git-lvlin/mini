@@ -46,4 +46,6 @@
     bind:close="onCloseAddress"
     bind:setAddress="handleEditAddress"
   />
+
+<privacy-popup></privacy-popup>
 </view>

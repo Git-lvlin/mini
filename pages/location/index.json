@@ -6,6 +6,7 @@
     "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
     "address-popup": "/components/common/address-popup/index",
     "van-tab": "/miniprogram_npm/@vant/weapp/tab/index",
-    "van-tabs": "/miniprogram_npm/@vant/weapp/tabs/index"
+    "van-tabs": "/miniprogram_npm/@vant/weapp/tabs/index",
+    "privacy-popup": "/components/common/privacyPopup/privacyPopup"
   }
 }
