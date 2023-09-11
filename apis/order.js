@@ -155,6 +155,8 @@ export default {
         ...params,
         storeNo: takeSpot.storeNo,
       }
+    } else {
+      return Promise.resolve(null)
     }
     return Request.get(url.getStoreDeliveryStatus, params, option);
   },

@@ -687,6 +687,7 @@ create.Page(store, {
     } = this.orderInfo;
     cartApi.getOrderPayInfo({ id:id }).then(res=>{
         if(res.contractParams){
+              const contractParams = res.contractParams
               wx.showModal({
                 title: res.contractParams.title,
                 confirmText: res.contractParams.confirmBtnText,
@@ -699,7 +700,7 @@ create.Page(store, {
                       if (res.data) {
                         cartApi.genContract({
                           businessId: id,
-                          ext: ext
+                          ext: contractParams.ext
                         }).then(res => {
                           router.push({
                             name: "webview",
@@ -712,7 +713,7 @@ create.Page(store, {
                       } else {
                         cartApi.getVerifyUrl({
                           businessId: id,
-                          ext: ext
+                          ext: contractParams.ext
                         }).then(res => {
                           router.push({
                             name: "webview",

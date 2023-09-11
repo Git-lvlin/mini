@@ -45,13 +45,14 @@ Page({
 
   onLoad(options) {
     this.options = options
+
     this.setData({
-        diffName:options.subType==2002?'联系人':'负责人',
-        diffArea:options.subType==2002?'合作商所在地':'申请服务区域',
-        subType:options.subType
+      diffName: options.subType == 2002 ? '联系人' : '负责人',
+      diffArea: options.name,
+      subType: options.subType
     })
     let editData = options.data;
-    if(editData) {
+    if (editData) {
       editData = JSON.parse(editData)
       let {
         postData,
@@ -89,7 +90,7 @@ Page({
     this.setData({
       postData,
     })
-    
+
   },
 
   // 打开省市区弹窗
@@ -121,8 +122,8 @@ Page({
     const data = {
       showPopup: false
     };
-    if(!!selectAddress) {
-        selectAddress.areaStr = `${selectAddress.province.name} ${selectAddress.city.name} ${selectAddress.area.name?selectAddress.area.name:''}`
+    if (!!selectAddress) {
+      selectAddress.areaStr = `${selectAddress.province.name} ${selectAddress.city.name} ${selectAddress.area.name ? selectAddress.area.name : ''}`
       data.selectAddress = selectAddress;
       data.areaData = areaData;
     }
@@ -133,12 +134,12 @@ Page({
     const {
       selectAddress,
     } = this.data;
-    wx.setStorageSync("server_area_info",{
+    wx.setStorageSync("server_area_info", {
       ...this.data.postData,
       ...this.data.selectAddress,
-      provinceId:selectAddress.province.id,
-      cityId:selectAddress.city.id,
-      districtId:selectAddress.area.id
+      provinceId: selectAddress.province.id,
+      cityId: selectAddress.city.id,
+      districtId: selectAddress.area.id
     })
     router.go()
   },
@@ -162,38 +163,38 @@ Page({
     postData.provinceName = provinceData.name;
     postData.cityName = cityData.name;
     postData.districtName = properData.name;
-    if(format.checkEmpty(postData.consignee)) {
-      showToast({ title: "请输入姓名"});
+    if (format.checkEmpty(postData.consignee)) {
+      showToast({ title: "请输入姓名" });
       return;
-    } else if(format.checkEmpty(postData.phone)) {
-      showToast({ title: "请输入手机号码"});
+    } else if (format.checkEmpty(postData.phone)) {
+      showToast({ title: "请输入手机号码" });
       return;
-    } else if(!format.checkMobile(postData.phone)) {
-      showToast({ title: "请输入正确手机号码"});
+    } else if (!format.checkMobile(postData.phone)) {
+      showToast({ title: "请输入正确手机号码" });
       return;
-    } else if(format.checkEmpty(postData.provinceName)) {
-      showToast({ title: "请选择所在地区"});
+    } else if (format.checkEmpty(postData.provinceName)) {
+      showToast({ title: "请选择所在地区" });
       return;
     }
     const goodList = wx.getStorageSync("GOOD_LIST")
     const good = goodList.storeGoodsInfos[0].goodsInfos[0]
-    const params={
-        provinceId:selectAddress.province.id,
-        provinceName:provinceData.name,
-        cityId:selectAddress.city.id,
-        cityName:cityData.name,
-        districtId:selectAddress.area.id,
-        districtName: properData.name,
-        skuId: good.skuId,
-        spuId: good.spuId,
+    const params = {
+      provinceId: selectAddress.province.id,
+      provinceName: provinceData.name,
+      cityId: selectAddress.city.id,
+      cityName: cityData.name,
+      districtId: selectAddress.area.id,
+      districtName: properData.name,
+      skuId: good.skuId,
+      spuId: good.spuId,
     }
-    cartApi.checkProvider(params).then(res=>{
+    cartApi.checkProvider(params).then(res => {
       this.saveInfo()
-    }).catch(error=>{
-        console.log('error',error)
-        showToast({ 
-            title: error.msg, 
-          })
+    }).catch(error => {
+      console.log('error', error)
+      showToast({
+        title: error.msg,
+      })
     })
   }
 })

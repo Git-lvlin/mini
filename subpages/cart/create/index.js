@@ -110,10 +110,12 @@ create.Page(store, {
   getStoreDeliveryStatus() {
     cartApi.getStoreDeliveryStatus()
       .then(res => {
-        this.setData({
-          sendStatus: res.sendStatus,
-          sendMoney: res.sendMoney,
-        })
+        if (res) {
+          this.setData({
+            sendStatus: res.sendStatus,
+            sendMoney: res.sendMoney,
+          })
+        }
       })
   },
 
@@ -891,6 +893,60 @@ create.Page(store, {
     return storeGoodsInfos;
   },
 
+  getOrderPayInfo(orderInfo) {
+    const {
+        id,
+    } = orderInfo;
+    cartApi.getOrderPayInfo({ id:id }).then(res=>{
+        if(res.contractParams){
+              const contractParams = res.contractParams
+              wx.showModal({
+                title: res.contractParams.title,
+                confirmText: res.contractParams.confirmBtnText,
+                cancelText: '关闭',
+                showCancel: true,
+                content: '你也可以在“约购APP-订单管理”当前订单详情中进行签署合同。',
+                success: function (res) {
+                  if (res.confirm) {
+                    cartApi.getFindCert({ businessId: id }).then(res=>{
+                      if (res.data) {
+                        cartApi.genContract({
+                          businessId: id,
+                          ext: contractParams.ext
+                        }).then(res => {
+                          router.push({
+                            name: "webview",
+                            data: {
+                              url: encodeURIComponent(res.signUrl),
+                              encode: true
+                            }
+                          });
+                        })  
+                      } else {
+                        cartApi.getVerifyUrl({
+                          businessId: id,
+                          ext: contractParams.ext
+                        }).then(res => {
+                          router.push({
+                            name: "webview",
+                            data: {
+                              url: encodeURIComponent(res.verifyUrl),
+                              encode: true
+                            }
+                          });
+                        })
+                      }
+                    })
+                  } else if (res.cancel) {
+                    console.log('用户点击取消')
+                  }
+            
+                }
+              })
+        }
+    })
+  },
+
   // 确认下单 跳转收银台
   onToCashier() {
     if ((this.orderType == 32 || this.orderType == 34) && !this.data.healthyCheck) {
@@ -909,8 +965,8 @@ create.Page(store, {
     } = this.data;
 
 
-    if (orderInfo.ext.serverArea && !serverAreaInfo) {
-      showToast({ title: "地址不能为空" });
+    if (orderInfo.ext && orderInfo.ext.serverArea && !serverAreaInfo) {
+      showToast({ title: `${orderInfo.ext.serverArea.title}不能为空` });
       return;
     }
 
@@ -926,7 +982,7 @@ create.Page(store, {
     }
 
 
-    if (orderInfo.ext.serverArea && serverAreaInfo) {
+    if (orderInfo.ext && orderInfo.ext.serverArea && serverAreaInfo) {
       postData.serverArea = {
         consignee: serverAreaInfo.consignee,
         phone: serverAreaInfo.phone,
@@ -1033,6 +1089,7 @@ create.Page(store, {
       app.trackEvent('goods_pay_success', {
         pay_method_name: '微信支付'
       });
+      this.getOrderPayInfo(orderInfo)
     });
   },
 

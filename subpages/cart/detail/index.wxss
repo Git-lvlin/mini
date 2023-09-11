@@ -679,7 +679,7 @@
 
 .to_buy_checkbox{
     margin: 4rpx 0;
-    font-size: 25rpx;
+    font-size: 30rpx;
 }
 .blue_text{
     color: blue;
@@ -777,7 +777,6 @@
 }
 
 .gray_buy_btn {
-  flex: 1;
   height: 76rpx;
   font-weight: 600;
   color: #ffffff;
@@ -786,6 +785,8 @@
   text-align: center;
   background-color: #ccc;
   border-radius: 38rpx;
+  width: 100%;
+  flex-shrink: 0;
 }
 
 
