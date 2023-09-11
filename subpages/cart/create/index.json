@@ -11,6 +11,8 @@
     "set-sku-num": "../components/set-sku-num/index",
     "healthy-bar": "/components/common/healthyBar/index",
     "down-app-code": "/components/common/default-down-app-code/index",
-    "van-dialog": "@vant/weapp/dialog/index"
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
+    "van-picker": "/miniprogram_npm/@vant/weapp/picker/index"
   }
 }

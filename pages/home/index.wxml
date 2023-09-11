@@ -193,4 +193,6 @@
 
   <!-- 底部占位 -->
   <view class="flex_fix bar_height" />
+
+  <privacy-popup></privacy-popup>
 </view>

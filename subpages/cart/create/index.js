@@ -72,7 +72,10 @@ create.Page(store, {
     healthyCheck: false,
     takeSpot: {},
     showSharePopup: false,
-    serverAreaInfo: null
+    serverAreaInfo: null,
+    serviceAreaShow: false,
+    columns: ['深圳市宝安区', '湖北省黄石市大业县', '深圳市南山区', '深圳市福田区'],
+    serviceAreaAdds: ''
   },
 
   tabChange(event) {
@@ -521,14 +524,18 @@ create.Page(store, {
       return
     }
 
-    router.push({
-      name: "serviceArea",
-      data: {
-        name: orderInfo.ext.serverArea.title,
-        subType: orderInfo.subType,
-        data: serverAreaInfo ? JSON.stringify(serverAreaInfo) : '',
-      }
+    this.setData({
+        serviceAreaShow: true
     })
+
+    // router.push({
+    //   name: "serviceArea",
+    //   data: {
+    //     name: orderInfo.ext.serverArea.title,
+    //     subType: orderInfo.subType,
+    //     data: serverAreaInfo ? JSON.stringify(serverAreaInfo) : '',
+    //   }
+    // })
   },
 
   // 跳转修改提货人
@@ -1053,5 +1060,17 @@ create.Page(store, {
     this.setData({
       showSharePopup: false,
     })
+  },
+  genderShowClose(){
+    this.setData({
+      serviceAreaShow: false,
+    })
+  },
+  genderConfirm({ detail }){
+      console.log('detail.value',detail.value)
+    this.setData({
+      serviceAreaAdds: detail.value,
+    })
+    this.genderShowClose()
   },
 })

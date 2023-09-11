@@ -20,6 +20,7 @@
     "seckill-v2": "/components/home/seckill-v2/index",
     "classgoods-v2": "/components/home/classgoods-v2/index",
     "classgoods-popup": "/components/home/classgoods-popup/index",
-    "fresh-cube": "/components/home/fresh-cube/index"
+    "fresh-cube": "/components/home/fresh-cube/index",
+    "privacy-popup": "/components/common/privacyPopup/privacyPopup"
   }
 }
