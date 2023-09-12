@@ -86,6 +86,10 @@ const Reqeust = (params) => {
           }
           // token 过期刷新token
           if(res.data.code === ACCESS_TOKEN_INVALID) {
+            const refreshToken = wx.getStorageSync("REFRESH_TOKEN");
+            if (!refreshToken) {
+              return
+            }
             let config = params;
             if (!isRefreshing) {
               isRefreshing = true;

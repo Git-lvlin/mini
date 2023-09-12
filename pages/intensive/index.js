@@ -389,6 +389,14 @@ create.Page(store, {
 
   // 购物车商品列表
   getCartList(params = {}) {
+    const refreshToken = wx.getStorageSync("REFRESH_TOKEN");
+    if (!refreshToken) {
+      this.setData({
+        cartList: []
+      })
+      return Promise.resolve([])
+    }
+
     return new Promise((resolve) => {
       cartApi.cartList(params, { showLoading: false }).then((res) => {
         console.log('购物车商品列表', res)
