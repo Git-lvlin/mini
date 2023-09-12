@@ -72,7 +72,10 @@ create.Page(store, {
     healthyCheck: false,
     takeSpot: {},
     showSharePopup: false,
-    serverAreaInfo: null
+    serverAreaInfo: null,
+    serviceAreaShow: false,
+    columns: ['深圳市宝安区', '湖北省黄石市大业县', '深圳市南山区', '深圳市福田区'],
+    serviceAreaAdds: ''
   },
 
   tabChange(event) {
@@ -522,6 +525,10 @@ create.Page(store, {
     if (orderInfo.ext&&orderInfo.ext.serverArea&&orderInfo.ext.serverArea.cityId) {
       return
     }
+
+    // this.setData({
+    //     serviceAreaShow: true
+    // })
 
     router.push({
       name: "serviceArea",
@@ -1110,5 +1117,17 @@ create.Page(store, {
     this.setData({
       showSharePopup: false,
     })
+  },
+  genderShowClose(){
+    this.setData({
+      serviceAreaShow: false,
+    })
+  },
+  genderConfirm({ detail }){
+      console.log('detail.value',detail.value)
+    this.setData({
+      serviceAreaAdds: detail.value,
+    })
+    this.genderShowClose()
   },
 })

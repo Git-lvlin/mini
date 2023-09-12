@@ -57,5 +57,7 @@
   <van-popup show="{{ showTreaty }}" custom-style="background-color: transparent;" bind:close="onCloseTreaty">
     <treaty-popup bind:close="onCloseTreaty"/>
   </van-popup>
+
+  <privacy-popup></privacy-popup>
 </view>
 

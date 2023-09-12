@@ -3,6 +3,7 @@
     "van-field": "/miniprogram_npm/@vant/weapp/field/index",
     "van-popup": "/miniprogram_npm/@vant/weapp/popup/index",
     "van-button": "/miniprogram_npm/@vant/weapp/button/index",
-    "address-popup": "/components/common/address-popup/index"
+    "address-popup": "/components/common/address-popup/index",
+    "privacy-popup": "/components/common/privacyPopup/privacyPopup"
   }
 }

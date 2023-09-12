@@ -16,6 +16,7 @@
     "van-tab": "@vant/weapp/tab/index",
     "van-tabs": "@vant/weapp/tabs/index",
     "nodata": "/components/common/nodata/index",
-    "spec-panel": "/components/cart/spec-panel/index"
+    "spec-panel": "/components/cart/spec-panel/index",
+    "privacy-popup": "/components/common/privacyPopup/privacyPopup"
   }
 }
