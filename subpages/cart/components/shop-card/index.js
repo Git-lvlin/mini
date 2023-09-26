@@ -69,12 +69,14 @@ create.Component(store, {
       } = this.data;
       let index = currentTarget.dataset.index;
       const good = data.goodsInfos[index];
-      this.store.data.skuNumData = {
-        data: good,
-        index,
-        pidx: idx,
+      if(good.buyMaxNum!=1){
+        this.store.data.skuNumData = {
+            data: good,
+            index,
+            pidx: idx,
+          }
+        this.store.setSkuNumPopup(true)
       }
-      this.store.setSkuNumPopup(true)
     },
 
     handleInput({

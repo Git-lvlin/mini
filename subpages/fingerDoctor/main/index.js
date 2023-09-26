@@ -308,7 +308,7 @@ create.Page(store, {
           if (res.type === 1) {
             getPayInfo({
               id: res.id,
-              payType: SYS_ENV === 'uat' ? 7 : 7,
+              payType: 7,
               pullPayment: true,
               message: false,
             }).then(_ => {

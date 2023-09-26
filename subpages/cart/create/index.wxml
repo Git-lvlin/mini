@@ -85,7 +85,7 @@
                     <view class="name">{{serverAreaInfo.consignee}}<text class="phone">{{serverAreaInfo.phone}}</text></view>
                     <view class="address_detail text_two_line">{{serverAreaInfo.areaStr}}</view>
                 </view>
-                <image wx:if="{{!orderInfo.ext.serverArea.cityId}}" class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
+                <image class="right_icon" src="{{tools.getImgUrl('miniprogram/common/right_jump.png')}}" />
             </view>
           </view>
       </view>   
@@ -215,7 +215,7 @@
   
   <van-popup show="{{ serviceAreaShow }}" round  position="bottom" z-index="4">
     <van-picker show-toolbar title="选择合作区域" columns="{{ columns }}"  bind:cancel="genderShowClose" bind:confirm="genderConfirm"/>
-</van-popup>
+  </van-popup>
 
   <view class="submit_order">
     <view class="submit_total_price">

@@ -74,7 +74,7 @@ create.Page(store, {
     showSharePopup: false,
     serverAreaInfo: null,
     serviceAreaShow: false,
-    columns: ['深圳市宝安区', '湖北省黄石市大业县', '深圳市南山区', '深圳市福田区'],
+    columns: [],
     serviceAreaAdds: ''
   },
 
@@ -399,6 +399,12 @@ create.Page(store, {
         this.getDeliveryDesc(postData);
       })
 
+      if(orderInfo.ext.serverAreas.length){
+          this.setData({
+            columns: orderInfo.ext.serverAreas.map(item=>({value:item.id,text:`${item.provinceName}${item.cityName}${item.districtName?item.districtName:''}`}))
+          })
+      }
+
       if (orderInfo.ext&&orderInfo.ext.serverArea&&orderInfo.ext.serverArea.cityId) {
         this.setData({
           serverAreaInfo: {
@@ -523,12 +529,11 @@ create.Page(store, {
     } = this.data;
 
     if (orderInfo.ext&&orderInfo.ext.serverArea&&orderInfo.ext.serverArea.cityId) {
+        this.setData({
+            serviceAreaShow: true
+        })
       return
     }
-
-    // this.setData({
-    //     serviceAreaShow: true
-    // })
 
     router.push({
       name: "serviceArea",
@@ -1124,9 +1129,15 @@ create.Page(store, {
     })
   },
   genderConfirm({ detail }){
-      console.log('detail.value',detail.value)
+    const {
+        orderInfo
+    } = this.data;
+    const serverArea=orderInfo.ext.serverAreas.filter(item=>item.id==detail.value.value)[0]
     this.setData({
-      serviceAreaAdds: detail.value,
+      serverAreaInfo: {
+        ...serverArea,
+        areaStr: `${serverArea.provinceName} ${serverArea.cityName} ${serverArea.districtName?serverArea.districtName:''}`
+      }
     })
     this.genderShowClose()
   },
